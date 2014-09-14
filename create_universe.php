@@ -65,4 +65,3 @@ else // If swordfish is set and matches (good pass)
         }
     }
 }
-?>

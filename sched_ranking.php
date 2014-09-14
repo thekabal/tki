@@ -32,4 +32,3 @@ while (!$res->EOF)
 }
 echo "<br>";
 $multiplier = 0;
-?>

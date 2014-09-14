@@ -32,4 +32,4 @@ echo $perf->HealthCheck();
 echo $perf->SuspiciousSQL(10);
 echo $perf->ExpensiveSQL(10);
 echo $perf->InvalidSQL(10);
-?>
+

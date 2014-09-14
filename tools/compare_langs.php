@@ -128,4 +128,3 @@ while (list ($var, $val) = each ($diff))
 //    echo '= "' . $trans->get ($val) . '";<br>';
 }
 echo "</pre>";
-?>

@@ -30,4 +30,3 @@ $debug = Bnt\Db::logDbErrors($db, $resa, __LINE__, __FILE__);
 is_query_ok($db, $debug);
 echo "<br>";
 $multiplier = 0;
-?>

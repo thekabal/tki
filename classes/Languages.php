@@ -67,4 +67,4 @@ class Languages
         return $list_of_langs;
     }
 }
-?>
+

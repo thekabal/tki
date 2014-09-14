@@ -54,4 +54,3 @@ do
 
 echo "<br>";
 $multiplier = 0; // No need to run this again
-?>

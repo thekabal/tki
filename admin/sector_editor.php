@@ -1,4 +1,4 @@
-<?php
+.<?php
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -127,4 +127,3 @@ $langvars['container'] = "langvar";
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
-?>

@@ -118,5 +118,3 @@ class Smarty
         echo $output;
     }
 }
-
-?>

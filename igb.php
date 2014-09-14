@@ -154,15 +154,9 @@ else
     echo "<br>&nbsp;</center></td>
             <td width='25%' valign='bottom' align='right'><a href=\"igb.php?command=login\">" . $langvars['l_ibank_login'] . "</a></td>";
 }
-?>
 
-</table>
-</td></tr>
-</table>
-</div>
-<?php
+echo "</table></td></tr></table></div>";
 echo '<img src="' . $template->getVariables('template_dir') . '/images/div2.png" alt="" style="width: 600px; height:21px">';
 echo '</center>';
 
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

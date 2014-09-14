@@ -179,4 +179,3 @@ $template->addVariables('langvars', $langvars);
 
 // Now we tell the Template API to output the page
 $template->display('ranking.tpl');
-?>

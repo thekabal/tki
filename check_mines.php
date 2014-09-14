@@ -180,4 +180,3 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
         Bnt\Mines::explode($db, $sector, $roll);
     }
 }
-?>

@@ -57,4 +57,3 @@ class PlayersGateway // Gateway for SQL calls related to Players
         return $playerinfo; // TODO: Eventually we want this to return a player object instead, for now, playerinfo array or false for no user found.
     }
 }
-?>

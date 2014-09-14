@@ -50,4 +50,4 @@ $db_type = 'mysqli';
 // names conflict with tables you already have in your db, you will
 // need to change this
 $db_prefix = 'bnt_';
-?>
+

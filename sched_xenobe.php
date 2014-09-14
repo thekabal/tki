@@ -312,4 +312,4 @@ echo "<br>";
 // Unlock the tables.
 $result = $db->Execute("UNLOCK TABLES");
 Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
-?>
+

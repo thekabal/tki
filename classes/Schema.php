@@ -138,4 +138,3 @@ class Schema
         return $create_table_results;
     }
 }
-?>

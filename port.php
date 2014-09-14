@@ -1015,4 +1015,3 @@ Bnt\Text::gotoMain($db, $lang, $langvars);
 echo "\n";
 
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

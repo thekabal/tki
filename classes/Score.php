@@ -130,4 +130,4 @@ class Score
         return $score;
     }
 }
-?>
+

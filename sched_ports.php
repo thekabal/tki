@@ -115,4 +115,3 @@ is_query_ok($db, $debug);
 $multiplier = 0;
 
 echo "<br>";
-?>

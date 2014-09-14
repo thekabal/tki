@@ -66,4 +66,4 @@ include './footer_t.php';
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/30.tpl');
-?>
+

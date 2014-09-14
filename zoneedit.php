@@ -275,4 +275,3 @@ echo "<form accept-charset='utf-8' action=zoneedit.php?command=change&zone=$zone
 echo "<a href=zoneinfo.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_ze_return'] . ".<p>";
 Bnt\Text::gotoMain($db, $lang, $langvars);
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

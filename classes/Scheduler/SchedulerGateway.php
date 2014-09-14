@@ -48,4 +48,3 @@ class SchedulerGateway // Gateway for SQL calls related to Players
         return false; // If anything goes wrong, db not active, etc, return false
     }
 }
-?>

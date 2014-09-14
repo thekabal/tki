@@ -123,4 +123,3 @@ $langvars = Bnt\Translate::load($pdo_db, $lang, array('main', 'report', 'device'
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('report.tpl');
-?>

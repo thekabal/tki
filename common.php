@@ -116,4 +116,3 @@ if (Bnt\Db::isActive($pdo_db))
         $lang = $playerinfo['lang'];
     }
 }
-?>

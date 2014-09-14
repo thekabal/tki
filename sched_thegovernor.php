@@ -360,4 +360,3 @@ if ($resl instanceof ADORecordSet)
 echo "The Governor has completed.<br>\n";
 
 $multiplier = 0;
-?>

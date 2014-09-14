@@ -55,4 +55,3 @@ require_once './footer_t.php';
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('emerwarp.tpl');
-?>

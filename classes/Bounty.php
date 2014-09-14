@@ -79,4 +79,4 @@ class Bounty
         Db::logDbErrors($db, $delete_bounty_on_res, __LINE__, __FILE__);
     }
 }
-?>
+

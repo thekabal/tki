@@ -40,4 +40,3 @@ class NewsGateway // Gateway for SQL calls related to Players
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }
-?>

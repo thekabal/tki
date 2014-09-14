@@ -96,4 +96,3 @@ class SetPaths
         return $gamedomain;
     }
 }
-?>

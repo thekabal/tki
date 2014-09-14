@@ -143,4 +143,3 @@ class Sessions
         $result = $stmt->execute();
     }
 }
-?>

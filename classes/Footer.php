@@ -37,4 +37,3 @@ class Footer
         $template->display('footer.tpl');
     }
 }
-?>
