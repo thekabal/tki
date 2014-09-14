@@ -1073,4 +1073,3 @@ class Ibank
         \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     }
 }
-?>

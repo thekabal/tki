@@ -53,4 +53,4 @@ class Header
         // Perhaps this should return the template instead of kicking off display. I'm not sure.
     }
 }
-?>
+

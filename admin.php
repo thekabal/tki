@@ -110,4 +110,3 @@ $langvars = Bnt\Translate::load($pdo_db, $lang, array('admin', 'common',
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('admin.tpl');
-?>

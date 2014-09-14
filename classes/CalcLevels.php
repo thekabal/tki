@@ -170,4 +170,4 @@ class CalcLevels
         return $shipavg;
     }
 }
-?>
+

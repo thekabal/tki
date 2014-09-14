@@ -1116,4 +1116,4 @@ class Planet
         \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 }
-?>
+

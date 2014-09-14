@@ -283,4 +283,4 @@ class Team
         echo "</tr></table>";
     }
 }
-?>
+

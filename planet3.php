@@ -168,4 +168,3 @@ if ($planetinfo['sells'] == 'Y')
 Bnt\Score::updateScore($db, $playerinfo['ship_id'], $bntreg);
 Bnt\Text::gotoMain($db, $lang, $langvars);
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

@@ -102,4 +102,3 @@ else
 
 /// Redirect to game (like login does)
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

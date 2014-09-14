@@ -59,4 +59,4 @@ class Move
         return $energyscooped;
     }
 }
-?>
+

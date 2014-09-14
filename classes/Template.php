@@ -179,4 +179,4 @@ class Template
 //        return $output; // Leaving this here because during debugging removing compression can be very helpful
     }
 }
-?>
+

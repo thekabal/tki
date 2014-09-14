@@ -32,4 +32,3 @@ Bnt\Db::logDbErrors($db, $ibank_result, __LINE__, __FILE__);
 echo "All IGB accounts updated ($multiplier times).<p>";
 
 $multiplier = 0;
-?>

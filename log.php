@@ -388,4 +388,3 @@ if ($mode != 'compat')
 
 echo "</table></center>";
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

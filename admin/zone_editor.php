@@ -110,4 +110,3 @@ $langvars['container'] = "langvar";
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
-?>

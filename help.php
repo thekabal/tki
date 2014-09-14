@@ -184,4 +184,3 @@ echo "<br><br>";
 
 Bnt\Text::gotoMain($db, $lang, $langvars);
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

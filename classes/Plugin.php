@@ -27,4 +27,3 @@ abstract class Plugin
     abstract protected function onEvent();
     abstract protected function initialize();
 }
-?>

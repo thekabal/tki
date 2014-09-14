@@ -65,4 +65,3 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
     }
 }
 echo "<br>";
-?>

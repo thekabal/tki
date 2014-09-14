@@ -353,4 +353,3 @@ elseif ($command == 'unbanip')
          "<input type=submit value=\"" . $langvars['l_admin_return_bans_menu'] . "\">" .
          "</form>";
 }
-?>

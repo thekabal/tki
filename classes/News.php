@@ -47,4 +47,4 @@ class News
         return date('Y/m/d', $day);
     }
 }
-?>
+

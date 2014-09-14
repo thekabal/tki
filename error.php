@@ -90,4 +90,3 @@ $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('error.tpl');
 die ();
-?>

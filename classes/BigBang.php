@@ -81,4 +81,3 @@ class BigBang
         return $bigbang_info;
     }
 }
-?>

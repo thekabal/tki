@@ -248,4 +248,3 @@ else
 }
 
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

@@ -71,4 +71,3 @@ while (!$res->EOF)
 }
 $resx = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE quantity <= 0");
 Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-?>

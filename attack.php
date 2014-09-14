@@ -891,4 +891,3 @@ $_SESSION['in_combat'] = (boolean) false;
 
 Bnt\Text::gotoMain($db, $lang, $langvars);
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

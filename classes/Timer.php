@@ -43,4 +43,3 @@ class Timer
         return round($this->t_elapsed, 2); // Round it down to two significant digits
     }
 }
-?>

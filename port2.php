@@ -750,4 +750,3 @@ if ($sectorinfo['port_type'] == "special")
 }
 
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

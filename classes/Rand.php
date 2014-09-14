@@ -139,4 +139,4 @@ class Rand
         return mt_rand($min, $max);
     }
 }
-?>
+

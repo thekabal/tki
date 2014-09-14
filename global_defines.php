@@ -81,4 +81,3 @@ define('24HR_BAN', 0x02, true);             // Player flagged with a 24 Hour Ban
 define('ID_BAN', 0x03, true);               // Player flagged as banned by ShipID.
 define('IP_BAN', 0x04, true);               // Player flagged as banned by IP Address.
 define('MULTI_BAN', 0x05, true);            // Player flagged as banned by either IP or ShipID.
-?>

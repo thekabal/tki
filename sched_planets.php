@@ -90,4 +90,3 @@ if ($bntreg->sched_planet_valid_credits)
 }
 
 echo "Planets updated.<br><br>";
-?>

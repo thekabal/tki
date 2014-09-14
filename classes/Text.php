@@ -27,4 +27,4 @@ class Text
         echo str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mmenu']);
     }
 }
-?>
+

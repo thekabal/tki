@@ -43,4 +43,4 @@ class Scan
         return $sc_error;
     }
 }
-?>
+

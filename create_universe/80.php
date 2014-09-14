@@ -68,7 +68,7 @@ $variables['update_turns_results']['elapsed'] = $local_table_timer->elapsed();
 
 // This is causing errors at the moment, disabling until we get clean solutions for it.
 $local_table_timer->start(); // Start benchmarking
-$resxx = $db->execute("INSERT INTO {$db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', $bntreg->sched_turns, 'sched_xenobe.php', ?)", array(time ()));
+$resxx = $db->execute("INSERT INTO {$db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', $bntreg->sched_turns, 'sched_xenobe.php', ?)", array(time()));
 $variables['update_xenobe_results']['result'] = Bnt\Db::logDbErrors($db, $resxx, __LINE__, __FILE__);
 //$variables['update_xenobe_results']['result'] = "DISABLED!";
 $variables['update_xenobe_results']['sched'] = $bntreg->sched_turns;
@@ -308,4 +308,3 @@ $template->addVariables('langvars', $langvars);
 include './footer_t.php';
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/80.tpl');
-?>

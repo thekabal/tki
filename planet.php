@@ -918,4 +918,3 @@ echo "<a href =\"bounty.php\">" . $langvars['l_by_placebounty'] . "</a><p>";
 
 Bnt\Text::gotoMain($db, $lang, $langvars);
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>

@@ -203,4 +203,3 @@ if ($num_defences > 0 && $total_sector_fighters > 0 && !$owner)
         Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 }
-?>

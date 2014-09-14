@@ -130,4 +130,4 @@ class Character
         return $player_insignia;
     }
 }
-?>
+

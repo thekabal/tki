@@ -232,4 +232,3 @@ while (!$sql->EOF)
 
 echo "--- <strong>End of News</strong> ---<br><br>\n";
 $multiplier = 0; // No need to run this again
-?>

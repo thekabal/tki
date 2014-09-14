@@ -392,4 +392,3 @@ Bnt\Text::gotoMain($db, $lang, $langvars);
 echo "</div>\n";
 
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
-?>
