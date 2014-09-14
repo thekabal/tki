@@ -674,10 +674,8 @@ if ($num_defences>0)
             echo "<div style='padding-top:4px; padding-bottom:4px; width:500px; margin:auto; background-color:#303030; text-align:center;'>" . $langvars['l_sector_def'] . "</div>\n";
             echo "<div style='width:498px; margin:auto; overflow:auto; height:125px; scrollbar-base-color: #303030; scrollbar-arrow-color: #fff; padding:0px; text-align:center;'>\n";
 }
-?>
-<table>
-<tr>
-<?php
+echo "<table><tr>";
+
 if ($num_defences > 0)
 {
     $totalcount = 0;
@@ -733,11 +731,7 @@ else
     echo "<td style='vertical-align:top; text-align:center;'>";
     echo "</td></tr></table>";
 }
-?>
-<br>
-<td style='width:200px; vertical-align:top;'>
-
-<?php
+echo "<br><td style='width:200px; vertical-align:top;'>";
 echo "<table style='width:140px; border:0; padding:0px; border-spacing:0px; margin-left:auto; margin-right:auto;'>\n";
 echo "  <tr style='vertical-align:top'>\n";
 echo "    <td style='padding:0px; width:8px; text-align:right;'><img style='width:8px; height:18px; border:0px; float:right;' src='" . $template->getVariables('template_dir') . "/images/lcorner.png' alt=''></td>\n";
@@ -795,13 +789,10 @@ echo "    <td style='padding:0px; white-space:nowrap; background-color:#400040; 
 echo "    <td style='padding:0px; width:8px; text-align:left'><img style='width:8px; height:18px; border:0px; float:left;' src='" . $template->getVariables('template_dir') . "/images/rcorner.png' alt=''></td>\n";
 echo "  </tr>\n";
 echo "</table>\n";
-?>
 
-<table style='width:150px; border:0px; padding:0px; border-spacing:0px; margin-left:auto; margin-right:auto;'>
-<tr><td  style='white-space:nowrap; border:#fff 1px solid; background-color:#500050; padding:0px;'>
-
-<table style="width:100%;">
-<?php
+echo "<table style='width:150px; border:0px; padding:0px; border-spacing:0px; margin-left:auto; margin-right:auto;'>";
+echo "<tr><td  style='white-space:nowrap; border:#fff 1px solid; background-color:#500050; padding:0px;'>";
+echo '<table style="width:100%;">';
 
 // Pull the presets for the player from the db.
 $i = 0;
@@ -837,21 +828,15 @@ else
         $debug_query->MoveNext();
     }
 }
-?>
-</table>
-</td></tr>
-<?php
+echo "</table></td></tr>";
 echo "  <tr>\n";
 echo "    <td style='white-space:nowrap; height:2px; background-color:transparent;'></td>\n";
 echo "  </tr>\n";
-?>
-<tr><td  style='white-space:nowrap; border:#fff 1px solid; background-color:#500050;'>
-&nbsp;<a class=mnu href="rsmove.php">=&gt;&nbsp;<?php echo $langvars['l_main_other'];?></a>&nbsp;<br>
-</td></tr>
-</table>
-<br>
-
-<?php
+echo "<tr><td  style='white-space:nowrap; border:#fff 1px solid; background-color:#500050;'>";
+echo '&nbsp;<a class=mnu href="rsmove.php">=&gt;&nbsp;';
+echo $langvars['l_main_other'];
+echo "</a>&nbsp;<br>";
+echo "</td></tr></table><br>";
 echo "<table style='width:140px; border:0px; padding:0px; border-spacing:0px;margin-left:auto; margin-right:auto;'>\n";
 echo "  <tr style='vertical-align:top'>\n";
 echo "    <td style='padding:0px; width:8px; float:right;'><img style='width:8px; height:18px; border:0px; float:right' src='" . $template->getVariables('template_dir') . "/images/lcorner.png' alt=''></td>\n";
@@ -859,13 +844,10 @@ echo "    <td style='padding:0px; white-space:nowrap; background-color:#400040; 
 echo "    <td style='padding:0px; width:8px; float:left;'><img style='width:8px; height:18px; border:0px; float:left;' src='" . $template->getVariables('template_dir') . "/images/rcorner.png' alt=''></td>\n";
 echo "  </tr>\n";
 echo "</table>\n";
-?>
 
-<table style='width:150px; border:0px; padding:0px; border-spacing:0px; margin-left:auto; margin-right:auto;'>
-<tr><td style='white-space:nowrap; border:#fff 1px solid; background-color:#500050; text-align:center; padding:0px;'>
-<div class=mnu>
-
-<?php
+echo "<table style='width:150px; border:0px; padding:0px; border-spacing:0px; margin-left:auto; margin-right:auto;'>";
+echo "<tr><td style='white-space:nowrap; border:#fff 1px solid; background-color:#500050; text-align:center; padding:0px;'>";
+echo "<div class=mnu>";
 
 if (!$num_links)
 {
@@ -893,14 +875,12 @@ echo "  </tr>\n";
 echo "<tr><td style='white-space:nowrap; border:#fff 1px solid; background-color:#500050; text-align:center;'>";
 echo "<div class=mnu>";
 echo "&nbsp;<a class=dis href=\"lrscan.php?sector=*\">[" . $langvars['l_fullscan'] . "]</a>&nbsp;<br>";
-?>
 
-</div>
+echo "</div>
 </td></tr>
 </table>
 </td>
 </tr>
-</table>
+</table>";
 
-<?php
 Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);

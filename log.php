@@ -86,12 +86,10 @@ $logline = str_replace("[player]", "$playerinfo[character_name]", $langvars['l_l
 
 echo "<tr><td><td width=100%><td></tr>";
 echo "<tr><td><td align='left' height=20 style='background-image: url(" . $template->getVariables('template_dir') . "/images/top_panel.png); background-repeat:no-repeat'>";
-?>
-<font size=2 color=#040658><strong>&nbsp;&nbsp;&nbsp;<?php echo $logline; ?></strong></font>
-</td><td><td></tr>
-<tr><td valign=bottom>
+echo "<font size=2 color=#040658><strong>&nbsp;&nbsp;&nbsp;" . $logline . "</strong></font>";
+echo "</td><td><td></tr>";
+echo "<tr><td valign=bottom>";
 
-<?php
 if ($mode == 'moz')
 {
     echo '<td colspan=2 style="border-width:1px 1px 1px 1px; border-color:#C6D6E7; border-style:solid;" bgcolor=#63639C>';
