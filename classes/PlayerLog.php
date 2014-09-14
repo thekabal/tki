@@ -17,7 +17,7 @@
 //
 // File: classes/PlayerLog.php
 
-namespace Bnt;
+namespace Tki;
 
 class PlayerLog
 {

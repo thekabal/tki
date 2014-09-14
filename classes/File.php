@@ -17,14 +17,14 @@
 //
 // File: classes/File.php
 //
-// This class handles direct file functions for BNT. Included is iniToDb, a function
+// This class handles direct file functions for TKI. Included is iniToDb, a function
 // for importing values from an INI file into the database.
 
-namespace Bnt;
+namespace Tki;
 
 class File
 {
-    public static function iniToDb($db, $ini_file, $ini_table, $section, $bntreg)
+    public static function iniToDb($db, $ini_file, $ini_table, $section, $tkireg)
     {
         // This is a loop, that reads a ini file, of the type variable = value.
         // It will loop thru the list of the ini variables, and push them into the db.
@@ -49,7 +49,7 @@ class File
                 {
                     // Import all the variables into the registry
                     settype($type_n_value['value'], $type_n_value['type']);
-                    $bntreg->$config_key = $type_n_value['value'];
+                    $tkireg->$config_key = $type_n_value['value'];
                 }
 
                 $stmt->bindParam(':config_key', $config_key);

@@ -224,7 +224,6 @@
     <input type=hidden name=fedsecs value={$variables['fedsecs']}>
     <input type=hidden name=loops value={$variables['loops']}>
     <input type=hidden name=swordfish value={$variables['swordfish']}>
-    <input type=hidden name=newlang value={$variables['newlang']}>
     <input type="hidden" name="autorun" value="{$variables['autorun']}">
   </table>
   </center>

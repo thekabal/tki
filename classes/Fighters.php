@@ -17,7 +17,7 @@
 //
 // File: classes/Fighters.php
 
-namespace Bnt;
+namespace Tki;
 
 class Fighters
 {

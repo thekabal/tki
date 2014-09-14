@@ -19,17 +19,17 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('readmail', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('readmail', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
 $title = $langvars['l_readm_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 if (!array_key_exists('action', $_GET))
@@ -40,19 +40,19 @@ if (!array_key_exists('action', $_GET))
 if ($_GET['action'] == "delete")
 {
     $resx = $db->Execute("DELETE FROM {$db->prefix}messages WHERE ID=? AND recp_id = ?;", array($ID, $playerinfo['ship_id']));
-    Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 }
 elseif ($_GET['action'] == "delete_all")
 {
     $resx = $db->Execute("DELETE FROM {$db->prefix}messages WHERE recp_id = ?;", array($playerinfo['ship_id']));
-    Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 }
 
 $cur_D = date("Y-m-d");
 $cur_T = date("H:i:s");
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}messages WHERE recp_id = ? ORDER BY sent DESC;", array($playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 ?>
 <div align="center">
   <table border="0" cellspacing="0" width="70%" bgcolor="silver" cellpadding="0">
@@ -100,7 +100,7 @@ else
     {
         $msg = $res->fields;
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($msg['sender_id']));
-        Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         $sender = $result->fields;
 //      $isAdmin = isAdmin($sender);
         ?>
@@ -206,5 +206,5 @@ else
 </div>
 <br>
 <?php
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

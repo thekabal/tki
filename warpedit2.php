@@ -19,13 +19,13 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $title = $langvars['l_warp_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('warpedit', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('warpedit', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -45,22 +45,22 @@ if (mb_strlen(trim($target_sector)) === 0)
 }
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_warp_turn'] . "<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 if ($playerinfo['dev_warpedit'] < 1)
 {
     echo $langvars['l_warp_none'] . "<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -69,50 +69,50 @@ if (is_null($target_sector))
     // This is the best that I can do without adding a new language variable.
     $langvars['l_warp_twoerror'] = str_replace('[target_sector]', $langvars['l_unknown'], $langvars['l_warp_twoerror']);
     echo $langvars['l_warp_twoerror'] ."<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($db, $lang, $langvars);
     die();
 }
 
 $res = $db->Execute("SELECT allow_warpedit,{$db->prefix}universe.zone_id FROM {$db->prefix}zones, {$db->prefix}universe WHERE sector_id=? AND {$db->prefix}universe.zone_id = {$db->prefix}zones.zone_id;", array($playerinfo['sector']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 $target_sector = round($target_sector);
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($target_sector));
-Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 $row = $result2->fields;
 if (!$row)
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($db, $lang, $langvars);
     die();
 }
 
 $res = $db->Execute("SELECT allow_warpedit,{$db->prefix}universe.zone_id FROM {$db->prefix}zones, {$db->prefix}universe WHERE sector_id=? AND {$db->prefix}universe.zone_id = {$db->prefix}zones.zone_id;", array($target_sector));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 if ($zoneinfo['allow_warpedit'] == 'N' && !$oneway)
 {
     $langvars['l_warp_twoerror'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_twoerror']);
     echo $langvars['l_warp_twoerror'] . "<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 $res = $db->Execute("SELECT COUNT(*) as count FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $row = $res->fields;
 $numlink_start = $row['count'];
 
@@ -120,13 +120,13 @@ if ($numlink_start >= $link_max)
 {
     $langvars['l_warp_sectex'] = str_replace("[link_max]", $link_max, $langvars['l_warp_sectex']);
     echo $langvars['l_warp_sectex'] . "<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
-Bnt\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
 if ($result3 instanceof ADORecordSet)
 {
     $flag = 0;
@@ -152,10 +152,10 @@ if ($result3 instanceof ADORecordSet)
     else
     {
         $insert1 = $db->Execute("INSERT INTO {$db->prefix}links SET link_start=?, link_dest = ?;", array($playerinfo['sector'], $target_sector));
-        Bnt\Db::logDbErrors($db, $insert1, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $insert1, __LINE__, __FILE__);
 
         $update1 = $db->Execute("UPDATE {$db->prefix}ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-        Bnt\Db::logDbErrors($db, $update1, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $update1, __LINE__, __FILE__);
 
         if (!is_null($oneway))
         {
@@ -164,7 +164,7 @@ if ($result3 instanceof ADORecordSet)
         else
         {
             $result4 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($target_sector));
-            Bnt\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
             if ($result4 instanceof ADORecordSet)
             {
                 $flag2 = 0;
@@ -181,12 +181,12 @@ if ($result3 instanceof ADORecordSet)
             if ($flag2 != 1)
             {
                 $insert2 = $db->Execute("INSERT INTO {$db->prefix}links SET link_start = ?, link_dest = ?;", array($target_sector, $playerinfo['sector']));
-                Bnt\Db::logDbErrors($db, $insert2, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $insert2, __LINE__, __FILE__);
             }
             echo $langvars['l_warp_ctwoway'] . " " . $target_sector . ".<br><br>";
         }
     }
 }
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

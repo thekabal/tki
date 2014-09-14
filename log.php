@@ -20,7 +20,7 @@
 require_once './common.php';
 require_once './config/admin_config.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Hack for log bug issue - this really needs to be fixed
 $log_list = array(null,
@@ -33,14 +33,14 @@ $log_list = array(null,
                 );
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('log', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('log', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
 
 $title = $langvars['l_log_titlet'];
 $body_class = 'log';
-Bnt\Header::display($pdo_db, $lang, $template, $title, $body_class);
+Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 $res = $db->Execute("SELECT character_name, ship_id FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -61,7 +61,7 @@ if ($swordfish == ADMIN_PW) // Check if called by admin script
     else
     {
         $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($player));
-        Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $targetname = $res->fields;
         $playerinfo['character_name'] = $targetname['character_name'];
     }
@@ -109,7 +109,7 @@ if (empty ($startdate))
 }
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$startdate%' ORDER BY time DESC, type DESC;", array($playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
 if ($res instanceof ADORecordSet)
 {
@@ -191,7 +191,7 @@ if ($mode != 'compat')
 
     unset($logs);
     $res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$yesterday%' ORDER BY time DESC, type DESC;", array($playerinfo['ship_id']));
-    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $logs[] = $res->fields;
@@ -236,7 +236,7 @@ if ($mode != 'compat')
 
     unset($logs);
     $res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$tomorrow%' ORDER BY time DESC, type DESC", array($playerinfo['ship_id']));
-    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $logs[] = $res->fields;
@@ -385,4 +385,4 @@ if ($mode != 'compat')
 }
 
 echo "</table></center>";
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

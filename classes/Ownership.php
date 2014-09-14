@@ -17,7 +17,7 @@
 //
 // File: classes/Ownership.php
 
-namespace Bnt;
+namespace Tki;
 
 class Ownership
 {

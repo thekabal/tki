@@ -25,9 +25,9 @@
     <meta name="Description" content="A free online game - Open source, web game, with multiplayer space exploration">
     <meta name="Keywords" content="Free, online, game, Open source, web game, multiplayer, space, exploration, 4X space game">
     <meta name="Rating" content="General">
-    <link rel="shortcut icon" href="{$template_dir}/images/bntfavicon.ico">
-    <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/bnt-prime.css.php">
-{if $variables['body_class'] != 'bnt'}
+    <link rel="shortcut icon" href="{$template_dir}/images/tkifavicon.ico">
+    <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/tki-prime.css.php">
+{if $variables['body_class'] != 'tki'}
     <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/{$variables['body_class']}.css.php">
 {else}
     <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/main.css.php">
@@ -46,7 +46,7 @@
 <!-- END OF HEADER -->
 
 {if !isset($variables['body_class'])}
-{$variables['body_class'] = "bnt"}
+{$variables['body_class'] = "tki"}
 {/if}
   <body class="{$variables['body_class']}">
 <div class="wrapper">

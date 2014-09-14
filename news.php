@@ -22,10 +22,10 @@ require_once './common.php';
 $link = null;
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('common', 'global_includes',
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'global_includes',
                                 'global_funcs', 'combat', 'footer', 'news'));
 $title = $langvars['l_news_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 $startdate = date('Y/m/d');
 if (array_key_exists('startdate', $_GET) && ($_GET['startdate'] !== null))
@@ -42,8 +42,8 @@ if ($validformat !=1 || checkdate($regs[2], $regs[3], $regs[1]) == false)
     $startdate = date('Y/m/d');
 }
 
-$previousday = Bnt\News::previousDay($startdate);
-$nextday = Bnt\News::nextDay($startdate);
+$previousday = Tki\News::previousDay($startdate);
+$nextday = Tki\News::nextDay($startdate);
 
 echo "<table width=\"73%\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\">\n";
 echo "  <tr>\n";
@@ -59,7 +59,7 @@ echo "    <td height=\"22\" width=\"73%\" bgcolor=\"#00001A\" align=\"right\"><a
 echo "  </tr>\n";
 
 // SQL call that selects all of the news items between the start date beginning of day, and the end of day.
-$news_gateway = new \Bnt\News\NewsGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
+$news_gateway = new \Tki\News\NewsGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
 $row = $news_gateway->selectNewsByDay($startdate);
 
 $news_ticker = array();
@@ -94,4 +94,4 @@ else
     echo str_replace('[here]', "<a href='main.php" . $link . "'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mmenu']);
 }
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

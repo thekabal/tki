@@ -22,74 +22,74 @@ require_once './common.php';
 $link = null;
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('settings', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'main', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('settings', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'main', 'regional'));
 $title = $langvars['l_settings'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
-$line_color = $bntreg->color_line1;
+$line_color = $tkireg->color_line1;
 
 function title($value, $align = "center")
 {
     echo "<tr bgcolor=\"$line_color\"><td colspan=\"2\" style='text-align:{$align};'>{$value}</td></tr>\n";
-    if ($line_color == $bntreg->color_line1)
+    if ($line_color == $tkireg->color_line1)
     {
-        $line_color = $bntreg->color_line2;
+        $line_color = $tkireg->color_line2;
     }
     else
     {
-        $line_color = $bntreg->color_line1;
+        $line_color = $tkireg->color_line1;
     }
 }
 
 function line($item, $value, $align = "left")
 {
     echo "<tr bgcolor=\"$line_color\"><td>&nbsp;{$item}</td><td style='text-align:{$align};'>{$value}&nbsp;</td></tr>\n";
-    if ($line_color == $bntreg->color_line1)
+    if ($line_color == $tkireg->color_line1)
     {
-        $line_color = $bntreg->color_line2;
+        $line_color = $tkireg->color_line2;
     }
     else
     {
-        $line_color = $bntreg->color_line1;
+        $line_color = $tkireg->color_line1;
     }
 }
 
 function line2($item, $value, $align = "left")
 {
     echo "<tr bgcolor=\"$line_color\"><td style='border-left:1px #FFCC00 solid;'>&nbsp;{$item}</td><td style='text-align:{$align}; border-right:1px #FFCC00 solid;'>{$value}&nbsp;</td></tr>\n";
-    if ($line_color == $bntreg->color_line1)
+    if ($line_color == $tkireg->color_line1)
     {
-        $line_color = $bntreg->color_line2;
+        $line_color = $tkireg->color_line2;
     }
     else
     {
-        $line_color = $bntreg->color_line1;
+        $line_color = $tkireg->color_line1;
     }
 }
 
 function line_a($value, $align = "left")
 {
     echo "<tr bgcolor=\"#FFCC00\"><td colspan=\"2\" style='text-align:{$align};'>{$value}</td></tr>\n";
-    if ($line_color == $bntreg->color_line1)
+    if ($line_color == $tkireg->color_line1)
     {
-        $line_color = $bntreg->color_line2;
+        $line_color = $tkireg->color_line2;
     }
     else
     {
-        $line_color = $bntreg->color_line1;
+        $line_color = $tkireg->color_line1;
     }
 }
 
 function line_spacer()
 {
     echo "<tr><td colspan='2' style='height:2px; padding:0px;'></td></tr>\n";
-    if ($line_color == $bntreg->color_line1)
+    if ($line_color == $tkireg->color_line1)
     {
-        $line_color = $bntreg->color_line2;
+        $line_color = $tkireg->color_line2;
     }
     else
     {
-        $line_color = $bntreg->color_line1;
+        $line_color = $tkireg->color_line1;
     }
 }
 
@@ -137,10 +137,10 @@ echo "<h1>" . $title . "</h1>\n";
 $title="Game Settings";
 echo "<h1>" . $title . "</h1>\n";
 echo "<table style='width:800px; font-size:14px; color:#fff; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
-line("Game version:", $bntreg->release_version, "right");
-line("Game name:", $bntreg->game_name, "right");
-line("Average tech level needed to hit mines", $bntreg->mine_hullsize, "right");
-line("Averaged Tech level When Emergency Warp Degrades", $bntreg->ewd_maxhullsize, "right");
+line("Game version:", $tkireg->release_version, "right");
+line("Game name:", $tkireg->game_name, "right");
+line("Average tech level needed to hit mines", $tkireg->mine_hullsize, "right");
+line("Averaged Tech level When Emergency Warp Degrades", $tkireg->ewd_maxhullsize, "right");
 
 $num = number_format($sector_max, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 line("Number of Sectors", $num, "right");
@@ -163,7 +163,7 @@ line("Tech Level upgrade for Bases", $base_defense, "right");
 $num = number_format($colonist_limit, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 line("Colonists Limit", $num, "right");
 
-$num = number_format($bntreg->max_turns, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+$num = number_format($tkireg->max_turns, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 line("Maximum number of accumulated turns", $num, "right");
 line("Maximum number of planets per sector", $max_planets_sector, "right");
 line("Maximum number of traderoutes per player", $max_traderoutes_player, "right");
@@ -206,11 +206,11 @@ echo "<br>\n";
 $title="Game Scheduler Settings";
 echo "<h1>" . $title . "</h1>\n";
 
-$line_color = $bntreg->color_line1;
+$line_color = $tkireg->color_line1;
 
 echo "<table style='width:800px; font-size:14px; color:#fff; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
 line("Ticks happen every", "{$sched_ticks} minutes", "right");
-line("{$bntreg->turns_per_tick} Turns will happen every", "{$bntreg->sched_turns} minutes", "right");
+line("{$tkireg->turns_per_tick} Turns will happen every", "{$tkireg->sched_turns} minutes", "right");
 line("Defenses will be checked every", "{$sched_turns} minutes", "right");
 line("Xenobes will play every", "{$sched_turns} minutes", "right");
 
@@ -243,4 +243,4 @@ else
     echo str_replace("[here]", "<a href='main.php" . $link . "'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
 }
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

@@ -19,15 +19,15 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $body_class = 'options';
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('options', 'common', 'global_includes', 'global_funcs', 'footer'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('options', 'common', 'global_includes', 'global_funcs', 'footer'));
 $title = $langvars['l_opt_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title, $body_class);
-$players_gateway = new \Bnt\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 echo "<body class='options'>\n";
@@ -55,7 +55,7 @@ echo "</tr>\n";
 echo "<tr>\n";
 echo "<td>" . $langvars['l_opt_select'] . "</td><td><select name=newlang>\n";
 
-$avail_langs = Bnt\Languages::listAvailable($pdo_db, $lang);
+$avail_langs = Tki\Languages::listAvailable($pdo_db, $lang);
 foreach($avail_langs as $language_list_item_name => $language_list_item)
 {
     if ($language_list_item_name == $playerinfo['lang'])
@@ -77,5 +77,5 @@ echo "<br>\n";
 echo "<input type=submit value=" . $langvars['l_opt_save'] . ">\n";
 echo "</form><br>\n";
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

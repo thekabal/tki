@@ -21,7 +21,7 @@ require_once './common.php';
 require_once './config/admin_config.php';
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('admin', 'common',
+$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
                                 'global_includes', 'global_funcs', 'combat',
                                 'footer', 'news', 'report', 'main', 'zoneedit',
                                 'planet'));
@@ -103,7 +103,7 @@ $variables['button_main'] = $button_main;
 
 // Pull in footer variables from footer_t.php
 require_once './footer_t.php';
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('admin', 'common',
+$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
                                 'global_includes', 'global_funcs', 'combat',
                                 'footer', 'news', 'report', 'main', 'zoneedit',
                                 'planet'));

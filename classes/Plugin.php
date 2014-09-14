@@ -17,7 +17,7 @@
 //
 // File: classes/Plugin.php
 
-namespace Bnt;
+namespace Tki;
 
 abstract class Plugin
 {

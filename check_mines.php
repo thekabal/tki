@@ -23,16 +23,16 @@ if (strpos($_SERVER['PHP_SELF'], 'check_mines.php')) // Prevent direct access to
 }
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('check_mines', 'common', 'global_includes', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('check_mines', 'common', 'global_includes', 'combat', 'footer', 'news'));
 
 // Put the sector information into the array "sectorinfo"
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?", array($sector));
-Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 $sectorinfo = $result2->fields;
 
 // Put the defence information into the array "defenceinfo"
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id=? and defence_type ='M'", array($sector));
-Bnt\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
 
 // Correct the targetship bug to reflect the player info
 $targetship = $playerinfo;
@@ -54,7 +54,7 @@ while (!$result3->EOF)
 }
 
 // Compute the ship average...if its too low then the ship will not hit mines...
-$shipavg = Bnt\CalcLevels::avgTech($targetship, "ship");
+$shipavg = Tki\CalcLevels::avgTech($targetship, "ship");
 
 // The mines will attack if 4 conditions are met
 //    1) There is at least 1 group of mines in the sector
@@ -67,7 +67,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
     // Find out if the mine owner and player are on the same team
     $fm_owner = $defences[0]['ship_id'];
     $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
-    Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 
     $mine_owner = $result2->fields;
     if ($mine_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
@@ -80,20 +80,20 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
         // I changed the behaivor so that rand will chose a % of mines to attack will
         // (it will always be at least 5% of the mines or at the very least 1 mine);
         // and if you are very unlucky they all will hit you
-        $pren = (Bnt\Rand::betterRand(5, 100)/100);
+        $pren = (Tki\Rand::betterRand(5, 100)/100);
         $roll = round($pren * $total_sector_mines - 1) + 1;
         $totalmines = $totalmines - $roll;
 
         // You are hit. Tell the player and put it in the log
         $langvars['l_chm_youhitsomemines'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_youhitsomemines']);
         echo $langvars['l_chm_youhitsomemines'] . "<br>";
-        Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_HIT_MINES, "$roll|$sector");
+        Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_HIT_MINES, "$roll|$sector");
 
         // Tell the owner that his mines where hit
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hehitminesinsector']);
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_roll]", "$roll", $langvars['l_chm_hehitminesinsector']);
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_sector]", $sector, $langvars['l_chm_hehitminesinsector']);
-        Bnt\SectorDefense::messageDefenseOwner($db, $sector, $langvars['l_chm_hehitminesinsector']);
+        Tki\SectorDefense::messageDefenseOwner($db, $sector, $langvars['l_chm_hehitminesinsector']);
 
         // If the player has enough mine deflectors then subtract the ammount and continue
         if ($playerinfo['dev_minedeflector'] >= $roll)
@@ -101,7 +101,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
             $langvars['l_chm_youlostminedeflectors'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_youlostminedeflectors']);
             echo $langvars['l_chm_youlostminedeflectors'] . "<br>";
             $result2 = $db->Execute("UPDATE {$db->prefix}ships SET dev_minedeflector = dev_minedeflector - ? WHERE ship_id = ?", array($roll, $playerinfo['ship_id']));
-            Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
         }
         else
         {
@@ -116,7 +116,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
 
             // Shields up
             $mines_left = $roll - $playerinfo['dev_minedeflector'];
-            $playershields = Bnt\CalcLevels::shields($playerinfo['shields'], $level_factor);
+            $playershields = Tki\CalcLevels::shields($playerinfo['shields'], $level_factor);
             if ($playershields > $playerinfo['ship_energy'])
             {
                 $playershields = $playerinfo['ship_energy'];
@@ -127,7 +127,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                 echo $langvars['l_chm_yourshieldshitforminesdmg'] . "<br>";
 
                 $result2 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ship_energy - ?, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
-                Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
                 if ($playershields == $mines_left)
                 {
                     echo $langvars['l_chm_yourshieldsaredown'] . "<br>";
@@ -143,7 +143,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                     $langvars['l_chm_yourarmorhitforminesdmg'] = str_replace("[chm_mines_left]", $mines_left, $langvars['l_chm_yourarmorhitforminesdmg']);
                     echo $langvars['l_chm_yourarmorhitforminesdmg'] . "<br>";
                     $result2 = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts = armor_pts - ?, ship_energy = 0, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
-                    Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
                     if ($playerinfo['armor_pts'] == $mines_left)
                     {
                         echo $langvars['l_chm_yourhullisbreached'] . "<br>";
@@ -153,10 +153,10 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                 {
                     // BOOM
                     $pod = $playerinfo['dev_escapepod'];
-                    Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_SHIP_DESTROYED_MINES, "$sector|$pod");
+                    Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_SHIP_DESTROYED_MINES, "$sector|$pod");
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hewasdestroyedbyyourmines']);
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_sector]", $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
-                    Bnt\SectorDefense::messageDefenseOwner($db, $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
+                    Tki\SectorDefense::messageDefenseOwner($db, $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
                     echo $langvars['l_chm_yourshiphasbeendestroyed'] . "<br><br>";
 
                     // Survival
@@ -164,19 +164,19 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                     {
                         $rating = round($playerinfo['rating'] / 2);
                         echo $langvars['l_chm_luckescapepod'] . "<br><br>";
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, sensors=0, computer=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_organics=0, ship_ore=0, ship_goods=0, ship_energy=?, ship_colonists=0, ship_fighters=100, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, on_planet='N', rating=?, cleared_defences=' ', dev_lssd='N' WHERE ship_id=?", array($bntreg->start_energy, $rating, $playerinfo['ship_id']));
-                        Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-                        Bnt\Bounty::cancel($db, $playerinfo['ship_id']);
+                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, sensors=0, computer=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_organics=0, ship_ore=0, ship_goods=0, ship_energy=?, ship_colonists=0, ship_fighters=100, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, on_planet='N', rating=?, cleared_defences=' ', dev_lssd='N' WHERE ship_id=?", array($tkireg->start_energy, $rating, $playerinfo['ship_id']));
+                        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                        Tki\Bounty::cancel($db, $playerinfo['ship_id']);
                     }
                     else
                     {
                         // Or they lose!
-                        Bnt\Bounty::cancel($db, $playerinfo['ship_id']);
-                        Bnt\Character::kill($db, $playerinfo['ship_id'], $langvars, $bntreg, false);
+                        Tki\Bounty::cancel($db, $playerinfo['ship_id']);
+                        Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     }
                 }
             }
         }
-        Bnt\Mines::explode($db, $sector, $roll);
+        Tki\Mines::explode($db, $sector, $roll);
     }
 }

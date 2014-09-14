@@ -19,25 +19,25 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('presets'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('presets'));
 $title = $langvars['l_pre_title'];
-$body_class = 'bnt';
-Bnt\Header::display($pdo_db, $lang, $template, $title, $body_class);
+$body_class = 'tki';
+Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('presets', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('presets', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 echo "<body class ='" . $body_class . "'>";
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 // Pull the presets for the player from the db.
 $i=0;
 $debug_query = $db->Execute("SELECT * FROM {$db->prefix}presets WHERE ship_id=?", array($playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $debug_query ,__LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $debug_query ,__LINE__, __FILE__);
 while (!$debug_query->EOF)
 {
     $presetinfo[$i] = $debug_query->fields;
@@ -53,7 +53,7 @@ if (array_key_exists('preset', $_POST))
     foreach ($_POST['preset'] as $key => $value)
     {
         // Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
-        $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $bntreg->sector_max)));
+        $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
     }
 }
 $change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
@@ -64,7 +64,7 @@ foreach ($preset_list as $index => $preset)
     {
         $change = 0;
         $result = str_replace("[preset]", $_POST['preset'][$index], $langvars['l_pre_exceed']);
-        $result = str_replace("[sector_max]", $bntreg->sector_max, $result);
+        $result = str_replace("[sector_max]", $tkireg->sector_max, $result);
         echo $result . "<br>\n";
     }
 }
@@ -73,7 +73,7 @@ echo "<br>\n";
 if ($change !== 1)
 {
     echo "<form accept-charset='utf-8' action='preset.php' method='post'>";
-    for ($x=0; $x<$bntreg->preset_max; $x++)
+    for ($x=0; $x<$tkireg->preset_max; $x++)
     {
         echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $presetinfo[$x]['preset'] . "'></div>";
     }
@@ -87,10 +87,10 @@ else
 {
     foreach ($_POST['preset'] as $key=>$value)
     {
-        if ($key < $bntreg->preset_max)
+        if ($key < $tkireg->preset_max)
         {
             $update = $db->Execute("UPDATE {$db->prefix}presets SET preset = ? WHERE preset_id = ?;", array($preset_list[$key], $presetinfo[$key]['preset_id']));
-            Bnt\Db::logDbErrors($db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
             $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);
             $preset_result_echo = str_replace("[num]", $key + 1, $preset_result_echo);
             echo $preset_result_echo . "<br>";
@@ -98,5 +98,5 @@ else
     }
 }
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

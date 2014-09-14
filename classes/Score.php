@@ -17,34 +17,34 @@
 //
 // File: classes/Score.php
 
-namespace Bnt;
+namespace Tki;
 
 class Score
 {
-    public static function updateScore($db, $ship_id, $bntreg)
+    public static function updateScore($db, $ship_id, $tkireg)
     {
-        $upgrade_factor = $bntreg->upgrade_factor;
-        $upgrade_cost = $bntreg->upgrade_cost;
-        $torpedo_price = $bntreg->torpedo_price;
-        $armor_price = $bntreg->armor_price;
-        $fighter_price = $bntreg->fighter_price;
-        $ore_price = $bntreg->ore_price;
-        $organics_price = $bntreg->organics_price;
-        $goods_price = $bntreg->goods_price;
-        $energy_price = $bntreg->energy_price;
-        $colonist_price = $bntreg->colonist_price;
-        $dev_genesis_price = $bntreg->dev_genesis_price;
-        $dev_beacon_price = $bntreg->dev_beacon_price;
-        $dev_emerwarp_price = $bntreg->dev_emerwarp_price;
-        $dev_warpedit_price = $bntreg->dev_warpedit_price;
-        $dev_minedeflector_price = $bntreg->dev_minedeflector_price;
-        $dev_escapepod_price = $bntreg->dev_escapepod_price;
-        $dev_fuelscoop_price = $bntreg->dev_fuelscoop_price;
-        $dev_lssd_price = $bntreg->dev_lssd_price;
-        $base_ore = $bntreg->base_ore;
-        $base_goods = $bntreg->base_goods;
-        $base_organics = $bntreg->base_organics;
-        $base_credits = $bntreg->base_credits;
+        $upgrade_factor = $tkireg->upgrade_factor;
+        $upgrade_cost = $tkireg->upgrade_cost;
+        $torpedo_price = $tkireg->torpedo_price;
+        $armor_price = $tkireg->armor_price;
+        $fighter_price = $tkireg->fighter_price;
+        $ore_price = $tkireg->ore_price;
+        $organics_price = $tkireg->organics_price;
+        $goods_price = $tkireg->goods_price;
+        $energy_price = $tkireg->energy_price;
+        $colonist_price = $tkireg->colonist_price;
+        $dev_genesis_price = $tkireg->dev_genesis_price;
+        $dev_beacon_price = $tkireg->dev_beacon_price;
+        $dev_emerwarp_price = $tkireg->dev_emerwarp_price;
+        $dev_warpedit_price = $tkireg->dev_warpedit_price;
+        $dev_minedeflector_price = $tkireg->dev_minedeflector_price;
+        $dev_escapepod_price = $tkireg->dev_escapepod_price;
+        $dev_fuelscoop_price = $tkireg->dev_fuelscoop_price;
+        $dev_lssd_price = $tkireg->dev_lssd_price;
+        $base_ore = $tkireg->base_ore;
+        $base_goods = $tkireg->base_goods;
+        $base_organics = $tkireg->base_organics;
+        $base_credits = $tkireg->base_credits;
 
         // These are all SQL Queries, so treat them like them.
         $calc_hull              = "ROUND(POW($upgrade_factor, hull))";

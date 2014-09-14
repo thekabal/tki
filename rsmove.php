@@ -16,30 +16,30 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: rsmove.php
-// External variables: $destination (from get or post), int, range 1 - $bntreg->sector_max)
+// External variables: $destination (from get or post), int, range 1 - $tkireg->sector_max)
 // $engage (from get), int, range 0 - 2)
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news', 'regional'));
 $title = $langvars['l_rs_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Get the players information.
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 echo "<h1>" . $title . "</h1>\n";
 
 // Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
-$destination  = filter_input(INPUT_GET, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $bntreg->sector_max)));
+$destination  = filter_input(INPUT_GET, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
 if ( is_null($destination))
 {
-    $destination  = filter_input(INPUT_POST, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $bntreg->sector_max)));
+    $destination  = filter_input(INPUT_POST, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
 }
 
 $engage  = filter_input(INPUT_GET, 'engage', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 2)));
@@ -51,7 +51,7 @@ if ($destination === false || $engage === false)
 
     echo $langvars['l_rs_invalid'] . ".<br><br>";
     $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defences=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-    Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 }
 else
 {
@@ -68,7 +68,7 @@ else
 
         echo "<form accept-charset='utf-8' action='rsmove.php' method='post'>\n";
         $langvars['l_rs_insector'] = str_replace("[sector]", $playerinfo['sector'], $langvars['l_rs_insector']);
-        $langvars['l_rs_insector'] = str_replace("[sector_max]", $bntreg->sector_max - 1, $langvars['l_rs_insector']);
+        $langvars['l_rs_insector'] = str_replace("[sector_max]", $tkireg->sector_max - 1, $langvars['l_rs_insector']);
         echo $langvars['l_rs_insector'] . "<br><br>\n";
         echo $langvars['l_rs_whichsector'] . ":  <input type='text' name='destination' size='10' maxlength='10'><br><br>\n";
         echo "<input type='submit' value='" . $langvars['l_rs_submit'] . "'><br><br>\n";
@@ -79,12 +79,12 @@ else
         // Ok, we have been given the destination value.
         // Get the players current sector information.
         $result2 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-        Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
         $start = $result2->fields;
 
         // Get the destination sector information.
         $result3 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($destination));
-        Bnt\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
         $finish = $result3->fields;
 
         // Calculate the distance.
@@ -101,7 +101,7 @@ else
         $distance = round(sqrt(pow($x, 2) + pow($y, 2)+pow($z, 2)));
 
         // Calculate the speed of the ship.
-        $shipspeed = pow($bntreg->level_factor, $playerinfo['engines']);
+        $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);
 
         // Calculate the trip time.
         $triptime = round($distance / $shipspeed);
@@ -120,7 +120,7 @@ else
         if (is_null($engage) || ($triptime > 100 && $engage == 1))
         {
             // Calculate the amount of fuel that was scooped during transit
-            $energyscooped = Bnt\Move::calcFuelScooped($playerinfo, $distance, $triptime, $bntreg);
+            $energyscooped = Tki\Move::calcFuelScooped($playerinfo, $distance, $triptime, $tkireg);
 
             // Output:
             // With your engines, it will take X turns to complete the journey.
@@ -152,7 +152,7 @@ else
         elseif ($engage > 0)
         {
             // Calculate the amount of fuel that was scooped during transit
-            $energyscooped = Bnt\Move::calcFuelScooped($playerinfo, $distance, $triptime, $bntreg);
+            $energyscooped = Tki\Move::calcFuelScooped($playerinfo, $distance, $triptime, $tkireg);
 
             if ($triptime > $playerinfo['turns'])
             {
@@ -164,7 +164,7 @@ else
                 echo $langvars['l_rs_movetime'] . "<br><br>";
                 echo $langvars['l_rs_noturns'] . "<br><br>";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defences=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
             }
             else
             {
@@ -177,11 +177,11 @@ else
                     // Output:
                     // You are now in sector X. You used Y turns, and gained Z energy units.
 
-                    $langvars = Bnt\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
+                    $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
                     $stamp = date("Y-m-d H:i:s");
                     $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
-                    Bnt\Db::logDbErrors($db, $update, __LINE__, __FILE__);
-                    Bnt\LogMove::writeLog($db, $playerinfo['ship_id'], $destination);
+                    Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
+                    Tki\LogMove::writeLog($db, $playerinfo['ship_id'], $destination);
                     $langvars['l_rs_ready'] = str_replace("[sector]", $destination, $langvars['l_rs_ready']);
                     $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                     $langvars['l_rs_ready'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
@@ -193,5 +193,5 @@ else
     }
 }
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

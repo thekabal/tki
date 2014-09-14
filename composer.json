@@ -18,7 +18,7 @@
     },
 
     "autoload": {
-        "psr-4": { "Bnt\\": "classes/", "Bad\\": "classes/" }
+        "psr-4": { "Tki\\": "classes/", "Bad\\": "classes/" }
     },
     "scripts": {
         "post-update-cmd": [

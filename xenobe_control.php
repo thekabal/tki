@@ -22,10 +22,10 @@ require_once './common.php';
 require_once './config/admin_config.php';
 
 $title = $langvars['l_ai_control'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('xenobe_control', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('xenobe_control', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 
 function checked($yesno)
@@ -154,7 +154,7 @@ else
             {
                 echo "<select size=20 name=user>";
                 $res = $db->Execute("SELECT email, character_name, ship_destroyed, active, sector FROM {$db->prefix}ships JOIN {$db->prefix}xenobe WHERE email = xenobe_id ORDER BY sector;");
-                Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                 while (!$res->EOF)
                 {
                     $row = $res->fields;
@@ -191,7 +191,7 @@ else
                 if (empty($operation))
                 {
                     $res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}xenobe WHERE email=xenobe_id AND email = ?;", array($user));
-                    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                     $row = $res->fields;
                     echo "<table border=0 cellspacing=0 cellpadding=5>";
                     echo "<tr><td>Xenobe name</td><td><input type=text name=character_name value=\"$row[character_name]\"></td></tr>";
@@ -300,7 +300,7 @@ else
                     echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #0f0;\">Log Data For This Xenobe</span><br>";
 
                     $logres = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? ORDER BY time DESC, type DESC", array($row['ship_id']));
-                    Bnt\Db::logDbErrors($db, $logres, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $logres, __LINE__, __FILE__);
                     while (!$logres->EOF)
                     {
                         $logrow = $logres->fields;
@@ -331,7 +331,7 @@ else
                     $_dev_fuelscoop = empty($dev_fuelscoop) ? "N" : "Y";
                     $_active = empty($active) ? "N" : "Y";
                     $result = $db->Execute("UPDATE {$db->prefix}ships SET character_name = ?, ship_name = ?, ship_destroyed = ?, hull = ?, engines = ?, power = ?, computer = ?, sensors = ?, armor = ?, shields = ?, beams = ?, torp_launchers = ?, cloak = ?, credits = ?, turns = ?, dev_warpedit = ?, dev_genesis = ?, dev_beacon = ?, dev_emerwarp = ?, dev_escapepod = ?, dev_fuelscoop = ?, dev_minedeflector = ?, sector = ?, ship_ore = ?, ship_organics = ?, ship_goods = ?, ship_energy = ?, ship_colonists = ?, ship_fighters = ?, torps = ?, armor_pts = ? WHERE email = ?;", array($character_name, $ship_name, $_ship_destroyed, $hull, $engines, $power, $computer, $sensors, $armor, $shields, $beams, $torp_launchers, $cloak, $credits, $turns, $dev_warpedit, $dev_genesis, $dev_beacon, $dev_emerwarp, $_dev_escapepod, $_dev_fuelscoop, $dev_minedeflector, $sector, $ship_ore, $ship_organics, $ship_goods, $ship_energy, $ship_colonists, $ship_fighters, $torps, $armor_pts, $user));
-                    Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
                     if (!$result)
                     {
                         echo "Changes to Xenobe ship record have FAILED Due to the following Error:<br><br>";
@@ -341,7 +341,7 @@ else
                     {
                         echo "Changes to Xenobe ship record have been saved.<br><br>";
                         $result2 = $db->Execute("UPDATE {$db->prefix}xenobe SET active = ?, orders = ?, aggression = ? WHERE xenobe_id = ?;", array($_active, $orders, $aggression, $user));
-                        Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
                         if (!$result2)
                         {
                             echo "Changes to Xenobe activity record have FAILED Due to the following Error:<br><br>";
@@ -381,12 +381,12 @@ else
                 // Delete all xenobe in the ships table
                 echo "Deleting xenobe records in the ships table...<br>";
                 $resx = $db->Execute("DELETE FROM {$db->prefix}ships WHERE email LIKE '%@xenobe'");
-                Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                 echo "deleted.<br>";
                 // Drop xenobe table
                 echo "Dropping xenobe table...<br>";
                 $resy = $db->Execute("DROP TABLE IF EXISTS {$db->prefix}xenobe");
-                Bnt\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
                 echo "dropped.<br>";
                 // Create xenobe table
                 echo "Re-Creating table: xenobe...<br>";
@@ -398,7 +398,7 @@ else
                                      "PRIMARY KEY (xenobe_id)," .
                                      "KEY xenobe_id (xenobe_id)" .
                                      ")");
-                Bnt\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
                 echo "created.<br>";
             }
             else
@@ -425,12 +425,12 @@ else
             elseif ($operation == "clearxenlog")
             {
                 $res = $db->Execute("SELECT email,ship_id FROM {$db->prefix}ships WHERE email LIKE '%@xenobe'");
-                Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                 while (!$res->EOF)
                 {
                     $row = $res->fields;
                     $resx = $db->Execute("DELETE FROM {$db->prefix}logs WHERE ship_id = ?;", array($row['ship_id']));
-                    Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                     echo "Log for ship_id $row[ship_id] cleared.<br>";
                     $res->MoveNext();
                 }
@@ -455,26 +455,26 @@ else
                 $Sylable1 = array("Ak","Al","Ar","B","Br","D","F","Fr","G","Gr","K","Kr","N","Ol","Om","P","Qu","R","S","Z");
                 $Sylable2 = array("a","ar","aka","aza","e","el","i","in","int","ili","ish","ido","ir","o","oi","or","os","ov","u","un");
                 $Sylable3 = array("ag","al","ak","ba","dar","g","ga","k","ka","kar","kil","l","n","nt","ol","r","s","ta","til","x");
-                $sy1roll = Bnt\Rand::betterRand(0, 19);
-                $sy2roll = Bnt\Rand::betterRand(0, 19);
-                $sy3roll = Bnt\Rand::betterRand(0, 19);
+                $sy1roll = Tki\Rand::betterRand(0, 19);
+                $sy2roll = Tki\Rand::betterRand(0, 19);
+                $sy3roll = Tki\Rand::betterRand(0, 19);
                 $character = $Sylable1[$sy1roll] . $Sylable2[$sy2roll] . $Sylable3[$sy3roll];
                 $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
                 $resultnm = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE character_name = ?;", array($character));
-                Bnt\Db::logDbErrors($db, $resultnm, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resultnm, __LINE__, __FILE__);
                 $namecheck = $resultnm->fields;
                 $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
                 $nametry = 1;
                 // If Name Exists Try Again - Up To Nine Times
                 while (($namecheck[0]) and ($nametry <= 9))
                 {
-                    $sy1roll = Bnt\Rand::betterRand(0, 19);
-                    $sy2roll = Bnt\Rand::betterRand(0, 19);
-                    $sy3roll = Bnt\Rand::betterRand(0, 19);
+                    $sy1roll = Tki\Rand::betterRand(0, 19);
+                    $sy2roll = Tki\Rand::betterRand(0, 19);
+                    $sy3roll = Tki\Rand::betterRand(0, 19);
                     $character = $Sylable1[$sy1roll] . $Sylable2[$sy2roll] . $Sylable3[$sy3roll];
                     $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
                     $resultnm = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE character_name = ?;", array($character));
-                    Bnt\Db::logDbErrors($db, $resultnm, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $resultnm, __LINE__, __FILE__);
                     $namecheck = $resultnm->fields;
                     $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
                     $nametry++;
@@ -484,7 +484,7 @@ else
                 $shipname = "Xenobe-" . $character;
 
                 // Select Random Sector
-                $sector = Bnt\Rand::betterRand(1, $sector_max);
+                $sector = Tki\Rand::betterRand(1, $sector_max);
 
                 // Display Confirmation form
                 echo "<td><table border=0 cellspacing=0 cellpadding=5>";
@@ -529,7 +529,7 @@ else
                 $emailname = str_replace(" ", "_", $character) . "@xenobe";
                 $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
                 $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
-                Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
                 if ($result instanceof ADORecordSet)
                 {
                     while (!$result->EOF)
@@ -565,13 +565,13 @@ else
                     $syllable_array = explode(",", $syllables);
                     for ($count = 1; $count <= 4; $count++)
                     {
-                        if (Bnt\Rand::betterRand() %10 == 1)
+                        if (Tki\Rand::betterRand() %10 == 1)
                         {
-                            $makepass .= sprintf("%0.0f", (Bnt\Rand::betterRand() %50) + 1);
+                            $makepass .= sprintf("%0.0f", (Tki\Rand::betterRand() %50) + 1);
                         }
                         else
                         {
-                            $makepass .= sprintf("%s", $syllable_array[Bnt\Rand::betterRand() %62]);
+                            $makepass .= sprintf("%s", $syllable_array[Tki\Rand::betterRand() %62]);
                         }
                     }
                     if ($xenlevel == null)
@@ -579,17 +579,17 @@ else
                         $xenlevel = 0;
                     }
 
-                    $maxenergy = Bnt\CalcLevels::energy($xenlevel, $level_factor);
-                    $maxarmor = Bnt\CalcLevels::armor($xenlevel, $level_factor);
-                    $maxfighters = Bnt\CalcLevels::fighters($xenlevel, $level_factor);
-                    $maxtorps = Bnt\CalcLevels::torpedoes($xenlevel, $level_factor);
+                    $maxenergy = Tki\CalcLevels::energy($xenlevel, $level_factor);
+                    $maxarmor = Tki\CalcLevels::armor($xenlevel, $level_factor);
+                    $maxfighters = Tki\CalcLevels::fighters($xenlevel, $level_factor);
+                    $maxtorps = Tki\CalcLevels::torpedoes($xenlevel, $level_factor);
                     $stamp = date("Y-m-d H:i:s");
 
                     // Add Xenobe record to ships table ... modify if the ships schema changes
                     $thesql = "INSERT INTO {$db->prefix}ships ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `last_login` , `rating` , `score` , `team` , `team_invite` , `interface` , `ip_address` , `planet_id` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defences` , `lang` , `dev_lssd` )
                                VALUES (NULL,'$shipname','N','$character','$makepass','$emailname',$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$maxtorps,$xenlevel,$xenlevel,$maxarmor,$xenlevel,$start_credits,$sector,0,0,0,$maxenergy,0,$maxfighters,0,$start_turns,'N',0,0,0,0,'N','N',0,0, '$stamp',0,0,0,0,'N','127.0.0.1',0,'Y','N','N','Y',NULL,'$default_lang','Y')";
                     $result2 = $db->Execute($thesql);
-                    Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
                     if (!$result2)
                     {
                         echo $db->ErrorMsg() . "<br>";
@@ -602,7 +602,7 @@ else
                     }
 
                     $result3 = $db->Execute("INSERT INTO {$db->prefix}xenobe (xenobe_id, active, aggression, orders) values(?,?,?,?)", array($emailname, $_active, $aggression, $orders));
-                    Bnt\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
                     if (!$result3)
                     {
                         echo $db->ErrorMsg() . "<br>";
@@ -640,4 +640,4 @@ else
         }
     }
 }
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

@@ -23,10 +23,10 @@ $link = null;
 
 $title = "The Kabal Invasion new player guide";
 $body_class = 'faq';
-Bnt\Header::display($pdo_db, $lang, $template, $title, $body_class);
+Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('global_funcs'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('global_funcs'));
 echo "<body class='" . $body_class . "'";
 
 ?>
@@ -188,4 +188,4 @@ else
     echo str_replace("[here]", "<a href='main.php" . $link . "'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
 }
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

@@ -19,21 +19,21 @@
 
 $online = (int) 0;
 
-if (Bnt\Db::isActive($pdo_db))
+if (Tki\Db::isActive($pdo_db))
 {
     $stamp = date("Y-m-d H:i:s", time()); // Now (as seen by PHP)
     $since_stamp = date("Y-m-d H:i:s", time() - 5 * 60); // Five minutes ago
-    $players_gateway = new \Bnt\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
     $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $stamp); // Online is the (int) count of the numbers of players currently logged in via SQL select
 }
 
 $elapsed = (int) 999; // Default value for elapsed, overridden with an actual value if its available
-if (isset ($bntreg))
+if (isset ($tkireg))
 {
-    if (property_exists($bntreg, 'bnttimer'))
+    if (property_exists($tkireg, 'tkitimer'))
     {
-        $bntreg->bnttimer->stop();
-        $elapsed = $bntreg->bnttimer->elapsed();
+        $tkireg->tkitimer->stop();
+        $elapsed = $tkireg->tkitimer->elapsed();
     }
 }
 
@@ -41,17 +41,17 @@ if (isset ($bntreg))
 $news_ticker_active = (!(preg_match("/index.php/i", $_SERVER['PHP_SELF']) || preg_match("/igb.php/i", $_SERVER['PHP_SELF']) || preg_match("/new.php/i", $_SERVER['PHP_SELF'])));
 
 // Suppress the news ticker if the database is not active
-if (!Bnt\Db::isActive($pdo_db))
+if (!Tki\Db::isActive($pdo_db))
 {
     $news_ticker_active = false;
 }
 
 // Update counter
-$scheduler_gateway = new \Bnt\Scheduler\SchedulerGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
+$scheduler_gateway = new \Tki\Scheduler\SchedulerGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
 $last_run = $scheduler_gateway->selectSchedulerLastRun(); // Last run is the (int) count of the numbers of players currently logged in via SQL select or false if DB is not active
 if ($last_run !== false)
 {
-    $seconds_left = ($bntreg->sched_ticks * 60) - (time() - $last_run);
+    $seconds_left = ($tkireg->sched_ticks * 60) - (time() - $last_run);
     $display_update_ticker = true;
 }
 else
@@ -61,7 +61,7 @@ else
 }
 // End update counter
 
-if ($bntreg->footer_show_debug == true) // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
+if ($tkireg->footer_show_debug == true) // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
 {
     $sf_logo_type = '14';
     $sf_logo_width = "150";
@@ -77,7 +77,7 @@ else
 if ($news_ticker_active == true)
 {
     // Database driven language entries
-    $langvars_temp = Bnt\Translate::load($pdo_db, $lang, array('news', 'common', 'footer', 'global_includes', 'logout'));
+    $langvars_temp = Tki\Translate::load($pdo_db, $lang, array('news', 'common', 'footer', 'global_includes', 'logout'));
 
     // Use Array merge so that we do not clobber the langvars array, and only add to it the items needed for footer
     $langvars = array_merge($langvars, $langvars_temp);
@@ -87,7 +87,7 @@ if ($news_ticker_active == true)
     // $langvars = array_unique ($langvars);
 
     // SQL call that selects all of the news items between the start date beginning of day, and the end of day.
-    $news_gateway = new \Bnt\News\NewsGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
+    $news_gateway = new \Tki\News\NewsGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
     $row = $news_gateway->selectNewsByDay(date('Y-m-d'));
 
     $news_ticker = array();
@@ -129,7 +129,7 @@ else
 }
 
 // Set array with all used variables in page
-$variables['update_ticker'] = array("display" => $display_update_ticker, "seconds_left" => $seconds_left, "sched_ticks" => $bntreg->sched_ticks);
+$variables['update_ticker'] = array("display" => $display_update_ticker, "seconds_left" => $seconds_left, "sched_ticks" => $tkireg->sched_ticks);
 $variables['players_online'] = $online;
 $variables['sf_logo_type'] = $sf_logo_type;
 $variables['sf_logo_height'] = $sf_logo_height;
@@ -137,5 +137,5 @@ $variables['sf_logo_width'] = $sf_logo_width;
 $variables['sf_logo_link'] = $sf_logo_link;
 $variables['elapsed'] = $elapsed;
 $variables['mem_peak_usage'] = $mem_peak_usage;
-$variables['footer_show_debug'] = $bntreg->footer_show_debug;
+$variables['footer_show_debug'] = $tkireg->footer_show_debug;
 $variables['cur_year'] = date('Y');

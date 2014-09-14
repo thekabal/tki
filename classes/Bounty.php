@@ -17,7 +17,7 @@
 //
 // File: classes/Bounty.php
 
-namespace Bnt;
+namespace Tki;
 
 class Bounty
 {

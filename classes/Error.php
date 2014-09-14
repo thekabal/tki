@@ -17,11 +17,11 @@
 //
 // File: classes/Error.php
 
-namespace Bnt;
+namespace Tki;
 
 class Error
 {
-    public static function respond($db, $pdo_db, $lang, $bntreg, $template)
+    public static function respond($db, $pdo_db, $lang, $tkireg, $template)
     {
         // Database driven language entries
         $langvars = Translate::load($pdo_db, $lang, array('footer', 'common', 'error', 'main'));
@@ -39,7 +39,7 @@ class Error
         $variables['error_page'] = $_SERVER['SCRIPT_NAME'];
         $variables['error_type'] = 'direct';
         $variables['request_uri'] = print_r($_SERVER['REQUEST_URI'], true);
-        $variables['linkforums']['link'] = $bntreg->link_forums;
+        $variables['linkforums']['link'] = $tkireg->link_forums;
         $variables['linkback']['link'] = 'index.php';
 
         // Now set a container for the variables and langvars and send them off to the template system

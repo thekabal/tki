@@ -17,7 +17,7 @@
 //
 // File: classes/Sessions.php
 
-namespace Bnt;
+namespace Tki;
 
 class Sessions
 {

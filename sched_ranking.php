@@ -24,10 +24,10 @@ if (strpos($_SERVER['PHP_SELF'], 'sched_rankings.php')) // Prevent direct access
 
 echo "<strong>Ranking</strong><br><br>";
 $res = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE ship_destroyed='N'");
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 while (!$res->EOF)
 {
-    Bnt\Score::updateScore($db, $res->fields['ship_id'], $bntreg);
+    Tki\Score::updateScore($db, $res->fields['ship_id'], $tkireg);
     $res->MoveNext();
 }
 echo "<br>";

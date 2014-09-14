@@ -17,7 +17,7 @@
 //
 // File: classes/Languages.php
 
-namespace Bnt;
+namespace Tki;
 
 class Languages
 {

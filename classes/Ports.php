@@ -17,7 +17,7 @@
 //
 // File: classes/Ports.php
 
-namespace Bnt;
+namespace Tki;
 
 class Ports
 {

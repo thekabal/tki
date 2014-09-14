@@ -23,17 +23,17 @@ require_once './common.php';
 // Always make sure we are using empty vars before use.
 $variables = null;
 
-$variables['body_class'] = 'bnt';
+$variables['body_class'] = 'tki';
 $variables['lang'] = $lang;
 $variables['link'] = 'ranking.php';
 
 // These should be set within the template config, and be css driven using nth + 1 selectors.
-$variables['color_header'] = $bntreg->color_header;
-$variables['color_line1'] = $bntreg->color_line1;
-$variables['color_line2'] = $bntreg->color_line2;
+$variables['color_header'] = $tkireg->color_header;
+$variables['color_line1'] = $tkireg->color_line1;
+$variables['color_line2'] = $tkireg->color_line2;
 
 // Load required language variables for the ranking page.
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams'));
 
 // Get requested ranking order.
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -71,8 +71,8 @@ switch ($sort)
 
 $variables['num_players'] = (int) 0;
 
-$rs = $db->SelectLimit("SELECT {$db->prefix}ships.ship_id, {$db->prefix}ships.email, {$db->prefix}ships.ip_address, {$db->prefix}ships.score, {$db->prefix}ships.character_name, {$db->prefix}ships.turns_used, {$db->prefix}ships.last_login,UNIX_TIMESTAMP({$db->prefix}ships.last_login) as online, {$db->prefix}ships.rating, {$db->prefix}teams.team_name, {$db->prefix}teams.admin AS team_admin, if ({$db->prefix}ships.turns_used<150,0,ROUND({$db->prefix}ships.score/{$db->prefix}ships.turns_used)) AS efficiency FROM {$db->prefix}ships LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team = {$db->prefix}teams.id  WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' AND turns_used >0 ORDER BY $by", $bntreg->max_ranks);
-Bnt\Db::logDbErrors($db, $rs, __LINE__, __FILE__);
+$rs = $db->SelectLimit("SELECT {$db->prefix}ships.ship_id, {$db->prefix}ships.email, {$db->prefix}ships.ip_address, {$db->prefix}ships.score, {$db->prefix}ships.character_name, {$db->prefix}ships.turns_used, {$db->prefix}ships.last_login,UNIX_TIMESTAMP({$db->prefix}ships.last_login) as online, {$db->prefix}ships.rating, {$db->prefix}teams.team_name, {$db->prefix}teams.admin AS team_admin, if ({$db->prefix}ships.turns_used<150,0,ROUND({$db->prefix}ships.score/{$db->prefix}ships.turns_used)) AS efficiency FROM {$db->prefix}ships LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team = {$db->prefix}teams.id  WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' AND turns_used >0 ORDER BY $by", $tkireg->max_ranks);
+Tki\Db::logDbErrors($db, $rs, __LINE__, __FILE__);
 if ($rs instanceof ADORecordSet)
 {
     $variables['num_players'] = (int) $rs->RecordCount();
@@ -114,11 +114,11 @@ if ($rs instanceof ADORecordSet)
             }
 
             // Set the characters Insignia.
-            $row['insignia'] = Bnt\Character::getInsignia($pdo_db, $row['email'], $langvars);
+            $row['insignia'] = Tki\Character::getInsignia($pdo_db, $row['email'], $langvars);
 
             // This is just to show that we can set the type of player.
             // like: banned, admin, player, npc etc.
-            if ($row['email'] == $bntreg->admin_mail || $row['team_admin'] === 'Y')
+            if ($row['email'] == $tkireg->admin_mail || $row['team_admin'] === 'Y')
             {
                 $row['type'] = 'admin';
             }
@@ -128,7 +128,7 @@ if ($rs instanceof ADORecordSet)
             }
 
             // Check for banned players.
-            $ban_result = Bnt\CheckBan::isBanned($pdo_db, $lang, null, $row);
+            $ban_result = Tki\CheckBan::isBanned($pdo_db, $lang, null, $row);
 
             if ($ban_result === false || (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
             {
@@ -168,10 +168,10 @@ $variables['container'] = 'variable';
 $template->addVariables('variables', $variables);
 
 // Load required language variables for the ranking page.
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams', 'news'));
 
 // Modify the requires language variables here.
-$langvars['l_ranks_title'] = str_replace('[max_ranks]', $bntreg->max_ranks, $langvars['l_ranks_title']);
+$langvars['l_ranks_title'] = str_replace('[max_ranks]', $tkireg->max_ranks, $langvars['l_ranks_title']);
 
 // Now add the loaded language variables into the Template API.
 $langvars['container'] = 'langvar';

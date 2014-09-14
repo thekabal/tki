@@ -17,7 +17,7 @@
 //
 // File: classes/BigBang.php
 
-namespace Bnt;
+namespace Tki;
 
 class BigBang
 {

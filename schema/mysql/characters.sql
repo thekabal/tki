@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_characters (
+CREATE TABLE IF NOT EXISTS tki_characters (
   character_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   character_name varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   credits int(20) NOT NULL DEFAULT '0',

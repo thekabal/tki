@@ -17,7 +17,7 @@
 //
 // File: classes/Defense.php
 
-namespace Bnt;
+namespace Tki;
 
 class Defense
 {

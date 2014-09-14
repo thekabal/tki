@@ -17,19 +17,19 @@
 //
 // File: classes/Game.php
 
-namespace Bnt;
+namespace Tki;
 
 class Game
 {
-    public static function isGameClosed($pdo_db, $bntreg, $lang, $template, $langvars)
+    public static function isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars)
     {
 
-        if ($bntreg->game_closed)
+        if ($tkireg->game_closed)
         {
             $title = $langvars['l_login_closed_message'];
             Header::display($pdo_db, $lang, $template, $title);
             echo $langvars['l_login_closed_message'];
-            Footer::display($pdo_db, $lang, $bntreg, $template);
+            Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
         else

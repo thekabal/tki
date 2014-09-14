@@ -38,7 +38,7 @@ $variables['sector'] = $_POST['sector'];
 if ($_POST['sector'] === null)
 {
     $res = $db->Execute("SELECT sector_id FROM {$db->prefix}universe ORDER BY sector_id");
-    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $sectors[] = $res->fields;
@@ -51,13 +51,13 @@ else
     if ($_POST['operation'] === null)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($_POST['sector']));
-        Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $row = $res->fields;
 
         $variables['sector_name'] = $row['sector_name'];
 
         $ressubb = $db->Execute("SELECT zone_id,zone_name FROM {$db->prefix}zones ORDER BY zone_name");
-        Bnt\Db::logDbErrors($db, $ressubb, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $ressubb, __LINE__, __FILE__);
         while (!$ressubb->EOF)
         {
             $rowsubb = $ressubb->fields;
@@ -98,7 +98,7 @@ else
     {
         // Update database
         $secupdate = $db->Execute("UPDATE {$db->prefix}universe SET sector_name=?, zone_id=?, beacon=?, port_type=?, port_organics=?, port_ore=?, port_goods=?, port_energy=?, distance=?, angle1=?, angle2=? WHERE sector_id=?;", array($_POST['sector_name'], $_POST['zone_id'], $_POST['beacon'], $_POST['port_type'], $_POST['port_organics'], $_POST['port_ore'], $_POST['port_goods'], $_POST['port_energy'], $_POST['distance'], $_POST['angle1'], $_POST['angle2'], $_POST['sector']));
-        Bnt\Db::logDbErrors($db, $secupdate, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $secupdate, __LINE__, __FILE__);
 
         if (!$secupdate)
         {

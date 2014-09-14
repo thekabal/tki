@@ -21,7 +21,7 @@
 // Returns an array which contains the ban information when it has found something.
 // Calling code needs to act on the returned information (boolean false or array of ban info).
 
-namespace Bnt;
+namespace Tki;
 
 class CheckBan
 {

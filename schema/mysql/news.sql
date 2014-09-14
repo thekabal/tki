@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_news (
+CREATE TABLE IF NOT EXISTS tki_news (
   news_id int(11) NOT NULL AUTO_INCREMENT,
   headline varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   newstext text COLLATE utf8mb4_unicode_ci,

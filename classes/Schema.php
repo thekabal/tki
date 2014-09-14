@@ -17,7 +17,7 @@
 //
 // File: classes/Schema.php
 
-namespace Bnt;
+namespace Tki;
 
 class Schema
 {
@@ -108,8 +108,8 @@ class Schema
                 // Slurp the SQL call from schema, and turn it into an SQL string
                 $sql_query = file_get_contents('schema/mysql/' . $schema_filename);
 
-                // Replace the default prefix (bnt_) with the chosen table prefix from the game.
-                $sql_query = preg_replace('/bnt_/', $db_prefix, $sql_query);
+                // Replace the default prefix (tki_) with the chosen table prefix from the game.
+                $sql_query = preg_replace('/tki_/', $db_prefix, $sql_query);
 
                 // TODO: Remove all comments from SQL
 

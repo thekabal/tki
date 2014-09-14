@@ -66,16 +66,16 @@ require_once './common.php';
 require_once './config/admin_config.php';
 
 $title = $langvars['l_sys_update'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('admin', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'scheduler'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'scheduler'));
 echo "<h1>" . $title . "</h1>\n";
 
 // This isn't the right thing to do, but its better than creating an entire class for a 12 line function.
 function is_query_ok($db, $res)
 {
-    $test_result = Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    $test_result = Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     if ($test_result)
     {
         echo " ok.<br>";
@@ -117,15 +117,15 @@ else
     $schedCount = 0;
     $lastrunList = null;
     $sched_res = $db->Execute("SELECT * FROM {$db->prefix}scheduler");
-    Bnt\Db::logDbErrors($db, $sched_res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $sched_res, __LINE__, __FILE__);
     if ($sched_res)
     {
         while (!$sched_res->EOF)
         {
             $event = $sched_res->fields;
-            $multiplier = ($bntreg->sched_ticks / $event['ticks_full']) + ($event['ticks_left'] / $event['ticks_full']);
+            $multiplier = ($tkireg->sched_ticks / $event['ticks_full']) + ($event['ticks_left'] / $event['ticks_full']);
             $multiplier = (int) $multiplier;
-            $ticks_left = ($bntreg->sched_ticks + $event['ticks_left']) % $event['ticks_full'];
+            $ticks_left = ($tkireg->sched_ticks + $event['ticks_left']) % $event['ticks_full'];
             $lastRun += $event['last_run'];
             $schedCount += 1;
 
@@ -142,18 +142,18 @@ else
                 if ($event['spawn'] - $multiplier == 0)
                 {
                     $resx = $db->Execute("DELETE FROM {$db->prefix}scheduler WHERE sched_id = ?", array($event['sched_id']));
-                    Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                 }
                 else
                 {
                     $resy = $db->Execute("UPDATE {$db->prefix}scheduler SET ticks_left = ?, spawn = spawn - ? WHERE sched_id = ?", array($ticks_left, $multiplier, $event['sched_id']));
-                    Bnt\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
                 }
             }
             else
             {
                 $resz = $db->Execute("UPDATE {$db->prefix}scheduler SET ticks_left = ? WHERE sched_id = ?", array($ticks_left, $event['sched_id']));
-                Bnt\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
             }
 
             $sched_var_id = $event['sched_id'];
@@ -171,20 +171,20 @@ else
     }
 
     // Calculate the difference in time when the last good update happened.
-    $schedDiff = ($lastRun - (time() - ($bntreg->sched_ticks * 60)));
-    if (abs($schedDiff) > ($bntreg->sched_ticks * 60))
+    $schedDiff = ($lastRun - (time() - ($tkireg->sched_ticks * 60)));
+    if (abs($schedDiff) > ($tkireg->sched_ticks * 60))
     {
         // Hmmm, seems that we have missed at least 1 update, so log it to the admin.
-        Bnt\AdminLog::writeLog($db, 2468, "Detected Scheduler Issue|{$lastRun}|". time() ."|". (time() - ($bntreg->sched_ticks * 60)) ."|{$schedDiff}|". serialize($lastrunList));
+        Tki\AdminLog::writeLog($db, 2468, "Detected Scheduler Issue|{$lastRun}|". time() ."|". (time() - ($tkireg->sched_ticks * 60)) ."|{$schedDiff}|". serialize($lastrunList));
     }
 
     $runtime = time() - $starttime;
     echo "<p>The scheduler took $runtime seconds to execute.<p>";
 
     $res = $db->Execute("UPDATE {$db->prefix}scheduler SET last_run = ". time());
-    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 }
 
 echo "<br>";
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

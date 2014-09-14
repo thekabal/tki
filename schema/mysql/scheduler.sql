@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_scheduler (
+CREATE TABLE IF NOT EXISTS tki_scheduler (
   sched_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   run_once varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   ticks_left int(10) unsigned NOT NULL DEFAULT '0',

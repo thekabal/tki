@@ -21,7 +21,7 @@
 // This class is a drop-in replacement for mt_rand that uses openssl_random_psuedo_bytes or
 // mcrypt_create_iv if they are available (in that order), or if not, it falls back to mt_rand
 
-namespace Bnt;
+namespace Tki;
 
 class Rand
 {

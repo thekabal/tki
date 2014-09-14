@@ -34,7 +34,7 @@ class Planet
             $sql .= "LEFT JOIN {$db->prefix}ships ON {$db->prefix}ships.ship_id = {$db->prefix}planets.owner ";
             $sql .= "WHERE {$db->prefix}planets.planet_id=?;";
             $res = $db->Execute($sql, array($planet_id));
-            \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if ($res->RecordCount() > 0)
             {
                 $owner_info = (array) $res->fields;
@@ -52,23 +52,23 @@ class Planet
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
-            \Bnt\Text::gotoMain($db, $lang, $langvars);
-            \Bnt\Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+            \Tki\Text::gotoMain($db, $lang, $langvars);
+            \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
         echo $langvars['l_bombsaway'] . "<br><br>\n";
         $attackerfighterslost = 0;
         $planetfighterslost = 0;
-        $attackerfightercapacity = \Bnt\CalcLevels::fighters($playerinfo['computer'], $level_factor);
-        $ownerfightercapacity = \Bnt\CalcLevels::fighters($ownerinfo['computer'], $level_factor);
+        $attackerfightercapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $level_factor);
+        $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $level_factor);
         $beamsused = 0;
 
         $res = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE");
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
-        $planettorps = \Bnt\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $level_factor);
-        $planetbeams = \Bnt\CalcLevels::planetBeams($db, $ownerinfo, $base_defense, $planetinfo);
+        $planettorps = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $level_factor);
+        $planetbeams = \Tki\CalcLevels::planetBeams($db, $ownerinfo, $base_defense, $planetinfo);
 
         $planetfighters = $planetinfo['fighters'];
         $attackerfighters = $playerinfo['ship_fighters'];
@@ -121,13 +121,13 @@ class Planet
         }
 
         echo "<br><br>\n";
-        \Bnt\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
+        \Tki\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
         $res = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, ship_fighters = ship_fighters - ? WHERE ship_id = ?", array($attackerfighters, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $res = $db->Execute("UPDATE {$db->prefix}planets SET energy=energy - ?, fighters=fighters - ?, torps=torps - ? WHERE planet_id = ?", array($beamsused, $planetfighterslost, $planettorps, $planetinfo['planet_id']));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $res = $db->Execute("UNLOCK TABLES");
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     }
 
     public static function planetCombat($db, $langvars)
@@ -139,27 +139,27 @@ class Planet
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
-            \Bnt\Text::gotoMain($db, $lang, $langvars);
-            \Bnt\Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+            \Tki\Text::gotoMain($db, $lang, $langvars);
+            \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
         // Planetary defense system calculation
-        $planetbeams        = \Bnt\CalcLevels::planetBeams($db, $ownerinfo, $base_defense, $planetinfo);
+        $planetbeams        = \Tki\CalcLevels::planetBeams($db, $ownerinfo, $base_defense, $planetinfo);
         $planetfighters     = $planetinfo['fighters'];
-        $planetshields      = \Bnt\CalcLevels::planetShields($db, $ownerinfo, $base_defense, $planetinfo);
-        $planettorps        = \Bnt\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $level_factor);
+        $planetshields      = \Tki\CalcLevels::planetShields($db, $ownerinfo, $base_defense, $planetinfo);
+        $planettorps        = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $level_factor);
 
         // Attacking ship calculations
 
-        $attackerbeams      = \Bnt\CalcLevels::beams($playerinfo['beams'], $level_factor);
+        $attackerbeams      = \Tki\CalcLevels::beams($playerinfo['beams'], $level_factor);
         $attackerfighters   = $playerinfo['ship_fighters'];
-        $attackershields    = \Bnt\CalcLevels::shields($playerinfo['shields'], $level_factor);
+        $attackershields    = \Tki\CalcLevels::shields($playerinfo['shields'], $level_factor);
         $attackertorps      = round(pow($level_factor, $playerinfo['torp_launchers'])) * 2;
         $attackerarmor      = $playerinfo['armor_pts'];
 
         // Now modify player beams, shields and torpedos on available materiel
-        $bntreg->start_energy = $playerinfo['ship_energy'];
+        $tkireg->start_energy = $playerinfo['ship_energy'];
 
         // Beams
         if ($attackerbeams > $playerinfo['ship_energy'])
@@ -444,7 +444,7 @@ class Planet
         echo "</table></center>\n";
         // Send each docked ship in sequence to attack agressor
         $result4 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE planet_id=? AND on_planet='Y'", array($planetinfo['planet_id']));
-        \Bnt\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
         $shipsonplanet = $result4->RecordCount();
 
         if ($shipsonplanet > 0)
@@ -496,20 +496,20 @@ class Planet
             $free_organics = round($playerinfo['ship_organics'] / 2);
             $free_goods = round($playerinfo['ship_goods'] / 2);
             $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $playerinfo['hull'])) + round(pow($upgrade_factor, $playerinfo['engines'])) + round(pow($upgrade_factor, $playerinfo['power'])) + round(pow($upgrade_factor, $playerinfo['computer'])) + round(pow($upgrade_factor, $playerinfo['sensors'])) + round(pow($upgrade_factor, $playerinfo['beams'])) + round(pow($upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($upgrade_factor, $playerinfo['shields'])) + round(pow($upgrade_factor, $playerinfo['armor'])) + round(pow($upgrade_factor, $playerinfo['cloak'])));
-            $ship_salvage_rate = \Bnt\Rand::betterRand(0, 10);
+            $ship_salvage_rate = \Tki\Rand::betterRand(0, 10);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
             echo "<br><center><font size='+2' COLOR='red'><strong>" . $langvars['l_cmb_yourshipdestroyed'] . "</font></strong></center><br>";
             if ($playerinfo['dev_escapepod'] == "Y")
             {
                 echo "<center><font color='white'>" . $langvars['l_cmb_escapepod'] . "</font></center><br><br>";
-                $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id=?", array($bntreg->start_energy, $playerinfo['ship_id']));
-                \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-                \Bnt\Bounty::collect($db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
+                $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id=?", array($tkireg->start_energy, $playerinfo['ship_id']));
+                \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                \Tki\Bounty::collect($db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
             else
             {
-                \Bnt\Character::kill($db, $playerinfo['ship_id'], $langvars, $bntreg, false);
-                \Bnt\Bounty::collect($db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
+                \Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\Bounty::collect($db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
         }
         else
@@ -539,16 +539,16 @@ class Planet
             $langvars['l_cmb_youlostarmorpoints'] = str_replace("[cmb_attackerarmor]", $attackerarmor, $langvars['l_cmb_youlostarmorpoints']);
             echo $langvars['l_cmb_youlostarmorpoints'] . "<br>";
             $energy = $playerinfo['ship_energy'];
-            $energy_lost = $bntreg->start_energy - $playerinfo['ship_energy'];
+            $energy_lost = $tkireg->start_energy - $playerinfo['ship_energy'];
             $langvars['l_cmb_energyused'] = str_replace("[cmb_energy_lost]", $energy_lost, $langvars['l_cmb_energyused']);
-            $langvars['l_cmb_energyused'] = str_replace("[cmb_playerinfo_ship_energy]", $bntreg->start_energy, $langvars['l_cmb_energyused']);
+            $langvars['l_cmb_energyused'] = str_replace("[cmb_playerinfo_ship_energy]", $tkireg->start_energy, $langvars['l_cmb_energyused']);
             echo $langvars['l_cmb_energyused'] . "<br></center>";
             $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy=?,ship_fighters=ship_fighters-?, torps=torps-?,armor_pts=armor_pts-?, rating=rating-? WHERE ship_id=?", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
-            \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
         }
 
         $result4 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE planet_id=? AND on_planet='Y'", array($planetinfo['planet_id']));
-        \Bnt\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
         $shipsonplanet = $result4->RecordCount();
 
         if ($planetshields < 1 && $planetfighters < 1 && $attackerarmor > 0 && $shipsonplanet == 0)
@@ -556,10 +556,10 @@ class Planet
             echo "<br><br><center><font color='GREEN'><strong>" . $langvars['l_cmb_planetdefeated'] . "</strong></font></center><br><br>";
 
             // Patch to stop players dumping credits for other players.
-            $self_tech = \Bnt\CalcLevels::avgTech($playerinfo);
-            $target_tech = round(\Bnt\CalcLevels::avgTech($ownerinfo));
+            $self_tech = \Tki\CalcLevels::avgTech($playerinfo);
+            $target_tech = round(\Tki\CalcLevels::avgTech($ownerinfo));
 
-            $roll = \Bnt\Rand::betterRand(0, (int) $target_tech);
+            $roll = \Tki\Rand::betterRand(0, (int) $target_tech);
             if ($roll > $self_tech)
             {
                 // Reset Planet Assets.
@@ -567,13 +567,13 @@ class Planet
                 $sql .= "SET organics = '0', ore = '0', goods = '0', energy = '0', colonists = '2', credits = '0', fighters = '0', torps = '0', corp = '0', base = 'N', sells = 'N', prod_organics = '20', prod_ore = '20', prod_goods = '20', prod_energy = '20', prod_fighters = '10', prod_torp = '10' ";
                 $sql .= "WHERE planet_id = ? LIMIT 1;";
                 $resx = $db->Execute($sql, array($planetinfo['planet_id']));
-                \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                 echo "<div style='text-align:center; font-size:18px; color:#f00;'>The planet become unstable due to not being looked after, and all life and assets have been destroyed.</div>\n";
             }
 
             if ($min_value_capture != 0)
             {
-                $playerscore = \Bnt\Score::updateScore($db, $playerinfo['ship_id'], $bntreg);
+                $playerscore = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
                 $playerscore *= $playerscore;
 
                 $planetscore = $planetinfo['organics'] * $organics_price + $planetinfo['ore'] * $ore_price + $planetinfo['goods'] * $goods_price + $planetinfo['energy'] * $energy_price + $planetinfo['fighters'] * $fighter_price + $planetinfo['torps'] * $torpedo_price + $planetinfo['colonists'] * $colonist_price + $planetinfo['credits'];
@@ -583,32 +583,32 @@ class Planet
                 {
                     echo "<center>" . $langvars['l_cmb_citizenswanttodie'] . "</center><br><br>";
                     $resx = $db->Execute("DELETE FROM {$db->prefix}planets WHERE planet_id=?", array($planetinfo['planet_id']));
-                    \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-                    \Bnt\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
-                    \Bnt\AdminLog::writeLog($db, LOG_ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
-                    \Bnt\Score::updateScore($db, $ownerinfo['ship_id'], $bntreg);
+                    \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    \Tki\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                    \Tki\AdminLog::writeLog($db, LOG_ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
+                    \Tki\Score::updateScore($db, $ownerinfo['ship_id'], $tkireg);
                 }
                 else
                 {
                     $langvars['l_cmb_youmaycapture'] = str_replace("[capture]", "<a href='planet.php?planet_id=". $planetinfo['planet_id'] ."&amp;command=capture'>" . $langvars['l_planet_capture1'] . "</a>", $langvars['l_cmb_youmaycapture']);
                     echo "<center><font color=red>" . $langvars['l_cmb_youmaycapture'] . "</font></center><br><br>";
-                    \Bnt\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
-                    \Bnt\Score::updateScore($db, $ownerinfo['ship_id'], $bntreg);
+                    \Tki\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                    \Tki\Score::updateScore($db, $ownerinfo['ship_id'], $tkireg);
                     $update7a = $db->Execute("UPDATE {$db->prefix}planets SET owner=0, fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id=?", array($planettorps, $planetinfo['planet_id']));
-                    \Bnt\Db::logDbErrors($db, $update7a, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($db, $update7a, __LINE__, __FILE__);
                 }
             }
             else
             {
                 $langvars['l_cmb_youmaycapture'] = str_replace("[capture]", "<a href='planet.php?planet_id=". $planetinfo['planet_id'] ."&amp;command=capture'>" . $langvars['l_planet_capture1'] . "</a>", $langvars['l_cmb_youmaycapture']);
                 echo "<center>" . $langvars['l_cmb_youmaycapture'] . "</center><br><br>";
-                \Bnt\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
-                \Bnt\Score::updateScore($db, $ownerinfo['ship_id'], $bntreg);
+                \Tki\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                \Tki\Score::updateScore($db, $ownerinfo['ship_id'], $tkireg);
                 $update7a = $db->Execute("UPDATE {$db->prefix}planets SET owner=0,fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id=?", array($planettorps, $planetinfo['planet_id']));
-                \Bnt\Db::logDbErrors($db, $update7a, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($db, $update7a, __LINE__, __FILE__);
             }
 
-            \Bnt\Ownership::calc($db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);
+            \Tki\Ownership::calc($db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);
         }
         else
         {
@@ -618,13 +618,13 @@ class Planet
             $langvars['l_cmb_fighterloststat'] = str_replace("[cmb_planetinfo_fighters]", $planetinfo['fighters'], $langvars['l_cmb_fighterloststat']);
             $langvars['l_cmb_fighterloststat'] = str_replace("[cmb_planetfighters]", $planetfighters, $langvars['l_cmb_fighterloststat']);
             $energy = $planetinfo['energy'];
-            \Bnt\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
-            \Bnt\Score::updateScore($db, $ownerinfo['ship_id'], $bntreg);
+            \Tki\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
+            \Tki\Score::updateScore($db, $ownerinfo['ship_id'], $tkireg);
             $update7b = $db->Execute("UPDATE {$db->prefix}planets SET energy=?,fighters=fighters-?, torps=torps-?, ore=ore+?, goods=goods+?, organics=organics+?, credits=credits+? WHERE planet_id=?", array($energy, $fighters_lost, $planettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
-            \Bnt\Db::logDbErrors($db, $update7b, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $update7b, __LINE__, __FILE__);
         }
         $update = $db->Execute("UPDATE {$db->prefix}ships SET turns=turns-1, turns_used=turns_used+1 WHERE ship_id=?", array($playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $update, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
     }
 
     public static function shipToShip($db, $langvars, $ship_id)
@@ -633,10 +633,10 @@ class Planet
         global $torp_dmg_rate, $rating_combat_factor, $upgrade_factor, $upgrade_cost, $armor_lost, $fighters_lost, $playerinfo;
 
         $resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}sector_defence WRITE, {$db->prefix}universe WRITE, {$db->prefix}adodb_logsql WRITE, {$db->prefix}logs WRITE, {$db->prefix}bounty WRITE, {$db->prefix}news WRITE, {$db->prefix}zones READ");
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
         $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=?", array($ship_id));
-        \Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
         $targetinfo = $result2->fields;
 
         echo "<br><br>-=-=-=-=-=-=-=--<br>
@@ -649,13 +649,13 @@ class Planet
         " . $langvars['l_cmb_statattackerarmor'] . ": $attackerarmor<br>
         " . $langvars['l_cmb_statattackertorpdamage'] . ": $attackertorpdamage<br>";
 
-        $targetbeams = \Bnt\CalcLevels::beams($targetinfo['beams'], $level_factor);
+        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $level_factor);
         if ($targetbeams > $targetinfo['ship_energy'])
         {
             $targetbeams = $targetinfo['ship_energy'];
         }
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
-        $targetshields = \Bnt\CalcLevels::shields($targetinfo['shields'], $level_factor);
+        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $level_factor);
         if ($targetshields > $targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
@@ -1017,7 +1017,7 @@ class Planet
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
-                $free_holds = \Bnt\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {
                     $salv_goods = $free_goods;
@@ -1061,7 +1061,7 @@ class Planet
                     $salv_organics = 0;
                 }
                 $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $targetinfo['hull']))+round(pow($upgrade_factor, $targetinfo['engines']))+round(pow($upgrade_factor, $targetinfo['power']))+round(pow($upgrade_factor, $targetinfo['computer']))+round(pow($upgrade_factor, $targetinfo['sensors']))+round(pow($upgrade_factor, $targetinfo['beams']))+round(pow($upgrade_factor, $targetinfo['torp_launchers']))+round(pow($upgrade_factor, $targetinfo['shields']))+round(pow($upgrade_factor, $targetinfo['armor']))+round(pow($upgrade_factor, $targetinfo['cloak'])));
-                $ship_salvage_rate = \Bnt\Rand::betterRand(10, 20);
+                $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_ore]", $salv_ore, $langvars['l_cmb_yousalvaged']);
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_organics]", $salv_organics, $langvars['l_cmb_yousalvaged']);
@@ -1071,7 +1071,7 @@ class Planet
                 $langvars['l_cmb_yousalvaged2'] = str_replace("[cmb_number_rating_change]", number_format(abs($rating_change), 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_cmb_yousalvaged2']);
                 echo $langvars['l_cmb_yousalvaged'] . "<br>" . $langvars['l_cmb_yousalvaged2'];
                 $update3 = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=ship_ore+?, ship_organics=ship_organics+?, ship_goods=ship_goods+?, credits=credits+? WHERE ship_id=?", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id']));
-                \Bnt\Db::logDbErrors($db, $update3, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($db, $update3, __LINE__, __FILE__);
             }
 
             if ($targetinfo['dev_escapepod'] == "Y")
@@ -1079,16 +1079,16 @@ class Planet
                 $rating = round($targetinfo['rating'] / 2);
                 echo $langvars['l_cmb_escapepodlaunched'] . "<br><br>";
                 echo "<br><br>ship_id = $targetinfo[ship_id]<br><br>";
-                $test = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating=?,dev_lssd='N' WHERE ship_id=?", array($bntreg->start_energy, $rating, $targetinfo['ship_id']));
-                \Bnt\Db::logDbErrors($db, $test, __LINE__, __FILE__);
-                \Bnt\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
-                \Bnt\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                $test = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating=?,dev_lssd='N' WHERE ship_id=?", array($tkireg->start_energy, $rating, $targetinfo['ship_id']));
+                \Tki\Db::logDbErrors($db, $test, __LINE__, __FILE__);
+                \Tki\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
+                \Tki\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
             else
             {
-                \Bnt\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
-                \Bnt\Character::kill($db, $targetinfo['ship_id'], $langvars, $bntreg, false);
-                \Bnt\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                \Tki\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
+                \Tki\Character::kill($db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
         }
         else
@@ -1099,9 +1099,9 @@ class Planet
             $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $target_energy = $targetinfo['ship_energy'];
-            \Bnt\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
+            \Tki\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
             $update4 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy=?,ship_fighters=ship_fighters-?, armor_pts=armor_pts-?, torps=torps-? WHERE ship_id=?", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $targetinfo['ship_id']));
-            \Bnt\Db::logDbErrors($db, $update4, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $update4, __LINE__, __FILE__);
         }
         echo "<br>_+_+_+_+_+_+_<br>";
         echo $langvars['l_cmb_shiptoshipcombatstats'] . "<br>";
@@ -1113,7 +1113,7 @@ class Planet
         echo $langvars['l_cmb_statattackertorpdamage'] . ": $attackertorpdamage<br>";
         echo "_+_+_+_+_+_+<br>";
         $resx = $db->Execute("UNLOCK TABLES");
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 }
 

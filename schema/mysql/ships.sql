@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_ships (
+CREATE TABLE IF NOT EXISTS tki_ships (
   ship_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   ship_name varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   ship_destroyed varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
@@ -52,9 +52,9 @@ CREATE TABLE IF NOT EXISTS bnt_ships (
   lang varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'english.inc',
   dev_lssd varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Y',
   PRIMARY KEY (ship_id),
-  KEY bnt_email (email),
-  KEY bnt_sector (sector),
-  KEY bnt_ship_destroyed (ship_destroyed),
-  KEY bnt_on_planet (on_planet),
-  KEY bnt_team (team)
+  KEY tki_email (email),
+  KEY tki_sector (sector),
+  KEY tki_ship_destroyed (ship_destroyed),
+  KEY tki_on_planet (on_planet),
+  KEY tki_team (team)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;

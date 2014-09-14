@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_presets (
+CREATE TABLE IF NOT EXISTS tki_presets (
   preset_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   ship_id smallint(10) unsigned NOT NULL DEFAULT '0',
   preset int(10) unsigned NOT NULL DEFAULT '1',

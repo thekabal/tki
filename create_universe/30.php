@@ -22,10 +22,10 @@ if (strpos($_SERVER['PHP_SELF'], '/30.php')) // Prevent direct access to this fi
 }
 
 // Determine current step, next step, and number of steps
-$create_universe_info = Bnt\BigBang::findStep(__FILE__);
+$create_universe_info = Tki\BigBang::findStep(__FILE__);
 
 // Set variables
-$variables['templateset']            = $bntreg->default_template;
+$variables['templateset']            = $tkireg->default_template;
 $variables['body_class']             = 'create_universe';
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
@@ -43,11 +43,9 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-$variables['destroy_schema_results'] = Bnt\Schema::destroy($pdo_db, $pdo_db->prefix); // Delete all tables in the database
+$variables['destroy_schema_results'] = Tki\Schema::destroy($pdo_db, $pdo_db->prefix); // Delete all tables in the database
 $variables['table_count']            = count($variables['destroy_schema_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-$variables['newlang']                = filter_input(INPUT_POST, 'newlang', FILTER_SANITIZE_URL);
-$lang = $_POST['newlang']; // Set the language to the language chosen during create universe
 
 $destroy_array_size = count($variables['destroy_schema_results']);
 for ($i = 0; $i < $destroy_array_size; $i++)
@@ -59,7 +57,7 @@ for ($i = 0; $i < $destroy_array_size; $i++)
 }
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
 
 // Pull in footer variables from footer_t.php
 include './footer_t.php';

@@ -30,17 +30,17 @@ header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP co
 
 // Set cookies for cookie test
 SetCookie ("TestCookie", "", 0);
-SetCookie ("TestCookie", "Shuzbutt", time() + 3600, Bnt\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
+SetCookie ("TestCookie", "Shuzbutt", time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'index', 'options'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'index', 'options'));
 
 $variables = null;
 $variables['lang'] = $lang;
 $variables['link'] = 'http://kabal.tk/forums/';
-$variables['admin_mail'] = $bntreg->admin_mail;
-$variables['body_class'] = 'bnt';
-$variables['template'] = $bntreg->default_template; // Temporarily set the template to the default template until we have a user option
+$variables['admin_mail'] = $tkireg->admin_mail;
+$variables['body_class'] = 'tki';
+$variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
 
 // Now set a container for the variables and langvars and send them off to the template system
 $variables['container'] = "variable";
@@ -53,24 +53,24 @@ $variables['zend_version'] = zend_version();
 $variables['apache_version'] = apache_get_version();
 $variables['php_version'] = PHP_VERSION;
 $variables['php_sapi_name'] = php_sapi_name();
-$variables['game_path'] = Bnt\SetPaths::setGamepath();
+$variables['game_path'] = Tki\SetPaths::setGamepath();
 $variables['db_type'] = $db_type;
 $variables['db_name'] = $db_name;
 $variables['db_prefix'] = $db_prefix;
-$variables['admin_name'] = $bntreg->admin_name;
-$variables['admin_email'] = str_replace('@', ' AT ', $bntreg->admin_mail);
-$variables['release_version'] = $bntreg->release_version;
-$variables['turns_per_tick'] = $bntreg->turns_per_tick;
-$variables['sched_ticks'] = $bntreg->sched_ticks;
-$variables['sched_turns'] = $bntreg->sched_turns;
-$variables['sched_ports'] = $bntreg->sched_ports;
-$variables['sched_planets'] = $bntreg->sched_planets;
-$variables['sched_igb'] = $bntreg->sched_igb;
-$variables['sched_ranking'] = $bntreg->sched_ranking;
-$variables['sched_news'] = $bntreg->sched_news;
-$variables['sched_degrade'] = $bntreg->sched_degrade;
-$variables['sched_apocalypse'] = $bntreg->sched_apocalypse;
-$variables['sched_thegovernor'] = $bntreg->sched_thegovernor;
+$variables['admin_name'] = $tkireg->admin_name;
+$variables['admin_email'] = str_replace('@', ' AT ', $tkireg->admin_mail);
+$variables['release_version'] = $tkireg->release_version;
+$variables['turns_per_tick'] = $tkireg->turns_per_tick;
+$variables['sched_ticks'] = $tkireg->sched_ticks;
+$variables['sched_turns'] = $tkireg->sched_turns;
+$variables['sched_ports'] = $tkireg->sched_ports;
+$variables['sched_planets'] = $tkireg->sched_planets;
+$variables['sched_igb'] = $tkireg->sched_igb;
+$variables['sched_ranking'] = $tkireg->sched_ranking;
+$variables['sched_news'] = $tkireg->sched_news;
+$variables['sched_degrade'] = $tkireg->sched_degrade;
+$variables['sched_apocalypse'] = $tkireg->sched_apocalypse;
+$variables['sched_thegovernor'] = $tkireg->sched_thegovernor;
 $variables['hash'] = mb_strtoupper(md5_file(__FILE__));
 $variables['updated_on'] = date("l, F d, Y", filemtime(basename(__FILE__)));
 $variables['cookie_test'] = isset($_COOKIE['TestCookie']);

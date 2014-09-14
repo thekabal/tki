@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_players (
+CREATE TABLE IF NOT EXISTS tki_players (
   player_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   recovery_time int(20) DEFAULT NULL,

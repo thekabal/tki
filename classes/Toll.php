@@ -17,7 +17,7 @@
 //
 // File: classes/Toll.php
 
-namespace Bnt;
+namespace Tki;
 
 class Toll
 {

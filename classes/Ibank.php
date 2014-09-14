@@ -45,7 +45,7 @@ class Ibank
             Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notwoloans'], "igb.php?command=loans");
         }
 
-        $score = \Bnt\Score::updateScore($db, $playerinfo['ship_id'], $bntreg);
+        $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
         $maxtrans = $score * $score * $ibank_loanlimit;
 
         if ($amount > $maxtrans)
@@ -77,10 +77,10 @@ class Ibank
              "</tr>";
 
         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan = ?, loantime = NOW() WHERE ship_id = ?", array($amount3, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits + ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 
     public static function ibankLogin($langvars, $playerinfo, $account)
@@ -146,15 +146,15 @@ class Ibank
              "</tr>";
 
         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits + ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 
     public static function ibankTransfer($db, $langvars, $playerinfo, $ibank_min_turns)
     {
         $res = $db->Execute("SELECT character_name, ship_id FROM {$db->prefix}ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > ? ORDER BY character_name ASC", array($ibank_min_turns));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
         $ships = array();
         while (!$res->EOF)
@@ -164,7 +164,7 @@ class Ibank
         }
 
         $res = $db->Execute("SELECT name, planet_id, sector_id FROM {$db->prefix}planets WHERE owner=? ORDER BY sector_id ASC", array($playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         while (!$res->EOF)
         {
             $planets[] = $res->fields;
@@ -263,7 +263,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankLoans($db, $langvars, $bntreg, $playerinfo)
+    public static function ibankLoans($db, $langvars, $tkireg, $playerinfo)
     {
         global $ibank_loanlimit, $ibank_loanfactor, $ibank_loaninterest, $account;
 
@@ -275,7 +275,7 @@ class Ibank
         {
             $curtime = time();
             $res = $db->Execute("SELECT UNIX_TIMESTAMP(loantime) as time FROM {$db->prefix}ibank_accounts WHERE ship_id = ?", array($playerinfo['ship_id']));
-            \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res->EOF)
             {
                 $time = $res->fields;
@@ -315,7 +315,7 @@ class Ibank
         else
         {
             $percent = $ibank_loanlimit * 100;
-            $score = \Bnt\Score::updateScore($db, $playerinfo['ship_id'], $bntreg);
+            $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
             $maxloan = $score * $score * $ibank_loanlimit;
 
             $langvars['l_ibank_maxloanpercent'] = str_replace("[ibank_percent]", $percent, $langvars['l_ibank_maxloanpercent']);
@@ -390,9 +390,9 @@ class Ibank
              "</tr>";
 
         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan=loan - ?, loantime=? WHERE ship_id = ?", array($amount, $account['loantime'], $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits - ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 
     public static function ibankConsolidate($langvars)
@@ -432,7 +432,7 @@ class Ibank
         if (isset($ship_id)) // Ship transfer
         {
             $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=? AND ship_destroyed ='N' AND turns_used > ?;", array($ship_id, $ibank_min_turns));
-            \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
             if ($playerinfo['ship_id'] == $ship_id)
             {
@@ -464,7 +464,7 @@ class Ibank
                 $curtime = time();
                 $curtime -= $ibank_trate * 60;
                 $res = $db->Execute("SELECT UNIX_TIMESTAMP(time) as time FROM {$db->prefix}ibank_transfers WHERE UNIX_TIMESTAMP(time) > ? AND source_id = ? AND dest_id = ?", array($curtime, $playerinfo['ship_id'], $target['ship_id']));
-                \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                 if (!$res->EOF)
                 {
                     $time = $res->fields;
@@ -486,7 +486,7 @@ class Ibank
             else
             {
                 $percent = $ibank_svalue * 100;
-                $score = \Bnt\Score::updateScore($db, $playerinfo['ship_id'], $bntreg);
+                $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
                 $maxtrans = $score * $score * $ibank_svalue;
 
                 $langvars['l_ibank_maxtransferpercent'] = str_replace("[ibank_percent]", $percent, $langvars['l_ibank_maxtransferpercent']);
@@ -517,7 +517,7 @@ class Ibank
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($splanet_id));
-            \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
@@ -531,7 +531,7 @@ class Ibank
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id, base FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
-            \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
@@ -596,7 +596,7 @@ class Ibank
             // Need to check again to prevent cheating by manual posts
 
             $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ? AND ship_destroyed ='N' AND turns_used > ?", array($ship_id, $ibank_min_turns));
-            \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
             if ($playerinfo['ship_id'] == $ship_id)
             {
@@ -628,7 +628,7 @@ class Ibank
                 $curtime = time();
                 $curtime -= $ibank_trate * 60;
                 $res = $db->Execute("SELECT UNIX_TIMESTAMP(time) as time FROM {$db->prefix}ibank_transfers WHERE UNIX_TIMESTAMP(time) > ? AND source_id = ? AND dest_id = ?", array($curtime, $playerinfo['ship_id'], $target['ship_id']));
-                \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                 if (!$res->EOF)
                 {
                     $time = $res->fields;
@@ -658,7 +658,7 @@ class Ibank
             if ($ibank_svalue != 0)
             {
                 $percent = $ibank_svalue * 100;
-                $score = \Bnt\Score::updateScore($db, $playerinfo['ship_id'], $bntreg);
+                $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
                 $maxtrans = $score * $score * $ibank_svalue;
 
                 if ($amount > $maxtrans)
@@ -686,12 +686,12 @@ class Ibank
                  "</tr>";
 
             $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-            \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
             $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance + ? WHERE ship_id = ?", array($transfer, $target['ship_id']));
-            \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
             $resx = $db->Execute("INSERT INTO {$db->prefix}ibank_transfers VALUES (NULL, ?, ?, NOW(), ?)", array($playerinfo['ship_id'], $target['ship_id'], $transfer));
-            \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
         }
         else
         {
@@ -701,7 +701,7 @@ class Ibank
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($splanet_id));
-            \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
@@ -715,7 +715,7 @@ class Ibank
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
-            \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
@@ -762,9 +762,9 @@ class Ibank
                  "</tr>";
 
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits - ? WHERE planet_id = ?", array($amount, $splanet_id));
-            \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id = ?", array($transfer, $dplanet_id));
-            \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
         }
     }
 
@@ -816,9 +816,9 @@ class Ibank
              "</tr>";
 
         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance + ? WHERE ship_id=?", array($amount, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits - ? WHERE ship_id=?", array($amount, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 
     public static function ibankConsolidate2($db, $langvars, $playerinfo)
@@ -827,7 +827,7 @@ class Ibank
         global $dplanet_id, $minimum, $maximum, $ibank_tconsolidate, $ibank_paymentfee;
 
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
         if (!$res || $res->EOF)
         {
@@ -861,7 +861,7 @@ class Ibank
         }
 
         $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $amount = $res->fields;
 
         $fee = $ibank_paymentfee * $amount['total'];
@@ -916,14 +916,14 @@ class Ibank
              "<img width=600 height=21 src=" . $active_template . "/images/div2.png>" .
              "</center>";
 
-        \Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
         die();
     }
 
     public static function isLoanPending($db, $ship_id, $ibank_lrate)
     {
         $res = $db->Execute("SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$db->prefix}ibank_accounts WHERE ship_id = ?", array($ship_id));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         if ($res)
         {
             $account = $res->fields;
@@ -953,7 +953,7 @@ class Ibank
     public static function deposit($db, $pdo_db, $lang, $account, $playerinfo, $langvars)
     {
         // Database driven language entries
-        $langvars = \Bnt\Translate::load($pdo_db, $lang, array('igb'));
+        $langvars = \Tki\Translate::load($pdo_db, $lang, array('igb'));
 
         $max_credits_allowed = 18446744073709000000;
         $credit_space = ($max_credits_allowed - $account['balance']);
@@ -994,7 +994,7 @@ class Ibank
         global $dplanet_id, $minimum, $maximum, $ibank_tconsolidate, $ibank_paymentfee;
 
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         if (!$res || $res->EOF)
         {
             Ibank::ibankError($active_template, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
@@ -1028,7 +1028,7 @@ class Ibank
         }
 
         $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $amount = $res->fields;
 
         $fee = $ibank_paymentfee * $amount['total'];
@@ -1066,10 +1066,10 @@ class Ibank
         }
 
         $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $res = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id=?", array($transfer, $dplanet_id));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $res = $db->Execute("UPDATE {$db->prefix}ships SET turns=turns - ? WHERE ship_id=?", array($tcost, $playerinfo['ship_id']));
-        \Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     }
 }

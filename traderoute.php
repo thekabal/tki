@@ -18,29 +18,29 @@
 // File: traderoute.php
 
 require_once './common.php';
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'bounty', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'bounty', 'regional'));
 $title = $langvars['l_tdr_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 $portfull = null; // This fixes an error of undefined variables on 1518
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE owner = ?;", array($playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $num_traderoutes = $result->RecordCount();
 
 if (isset($traderoutes))
 {
-    Bnt\AdminLog::writeLog($db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
-    Bad\Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $bntreg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
+    Tki\AdminLog::writeLog($db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
+    Bad\Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
 }
 
 $traderoutes = array();
@@ -53,34 +53,34 @@ while (!$result->EOF)
     $result->MoveNext();
 }
 
-$freeholds = Bnt\CalcLevels::holds($playerinfo['hull'], $bntreg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
-$maxholds = Bnt\CalcLevels::holds($playerinfo['hull'], $bntreg->level_factor);
-$maxenergy = Bnt\CalcLevels::energy($playerinfo['power'], $bntreg->level_factor);
+$freeholds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+$maxholds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
+$maxenergy = Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor);
 if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playerinfo['ship_organics'] < 0 || $playerinfo['ship_goods'] < 0 || $playerinfo['ship_energy'] < 0 || $freeholds < 0)
 {
     if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_colonists'] > $maxholds)
     {
-        Bnt\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
+        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
         $playerinfo['ship_colonists'] = 0;
     }
     if ($playerinfo['ship_ore'] < 0 || $playerinfo['ship_ore'] > $maxholds)
     {
-        Bnt\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
+        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
         $playerinfo['ship_ore'] = 0;
     }
     if ($playerinfo['ship_organics'] < 0 || $playerinfo['ship_organics'] > $maxholds)
     {
-        Bnt\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
+        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
         $playerinfo['ship_organics'] = 0;
     }
     if ($playerinfo['ship_goods'] < 0 || $playerinfo['ship_goods'] > $maxholds)
     {
-        Bnt\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
+        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
         $playerinfo['ship_goods'] = 0;
     }
     if ($playerinfo['ship_energy'] < 0 || $playerinfo['ship_energy'] > $maxenergy)
     {
-        Bnt\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
+        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
         $playerinfo['ship_energy'] = 0;
     }
     if ($freeholds < 0)
@@ -89,7 +89,7 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
     }
 
     $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=?, ship_organics=?, ship_goods=?, ship_energy=?, ship_colonists=? WHERE ship_id=?;", array($playerinfo['ship_ore'], $playerinfo['ship_organics'], $playerinfo['ship_goods'], $playerinfo['ship_energy'], $playerinfo['ship_colonists'], $playerinfo['ship_id']));
-    Bnt\Db::logDbErrors($db, $update1, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $update1, __LINE__, __FILE__);
 }
 
 // Default to 1 run if we don't get a valid repeat value.
@@ -114,32 +114,32 @@ if (mb_strlen(trim($command)) === 0)
 if ($command == 'new')
 {
     // Displays new trade route form
-    Bad\Traderoute::traderouteNew($pdo_db, $lang, $langvars, $bntreg, null, $template, $num_traderoutes, $playerinfo, $color_line1, $color_line2, $color_header);
+    Bad\Traderoute::traderouteNew($pdo_db, $lang, $langvars, $tkireg, null, $template, $num_traderoutes, $playerinfo, $color_line1, $color_line2, $color_header);
 }
 elseif ($command == 'create')
 {
     // Enters new route in db
-    Bad\Traderoute::traderouteCreate($db, $pdo_db, $lang, $langvars, $bntreg, $template);
+    Bad\Traderoute::traderouteCreate($db, $pdo_db, $lang, $langvars, $tkireg, $template);
 }
 elseif ($command == 'edit')
 {
     // Displays new trade route form, edit
-    Bad\Traderoute::traderouteNew($pdo_db, $lang, $langvars, $bntreg, $traderoute_id, $template, $num_traderoutes, $playerinfo, $color_line1, $color_line2, $color_header);
+    Bad\Traderoute::traderouteNew($pdo_db, $lang, $langvars, $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo, $color_line1, $color_line2, $color_header);
 }
 elseif ($command == 'delete')
 {
     // Displays delete info
-    Bad\Traderoute::traderouteDelete($db, $lang, $langvars, $bntreg, $template, $playerinfo, $confirm, $num_traderoutes, $traderoute_id, $traderoutes);
+    Bad\Traderoute::traderouteDelete($db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $num_traderoutes, $traderoute_id, $traderoutes);
 }
 elseif ($command == 'settings')
 {
     // Global traderoute settings form
-    Bad\Traderoute::traderouteSettings($db, $pdo_db, $lang, $langvars, $bntreg, $template, $playerinfo);
+    Bad\Traderoute::traderouteSettings($db, $pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo);
 }
 elseif ($command == 'setsettings')
 {
     // Enters settings in db
-    Bad\Traderoute::traderouteSetsettings($db, $pdo_db, $lang, $langvars, $bntreg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
+    Bad\Traderoute::traderouteSetsettings($db, $pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
 }
 elseif (isset ($engage))
 {
@@ -148,7 +148,7 @@ elseif (isset ($engage))
     while ($i > 0)
     {
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
-        Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
         Bad\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars);
         $i--;
@@ -175,7 +175,7 @@ if ($num_traderoutes == 0)
 else
 {
     echo '<table border=1 cellspacing=1 cellpadding=2 width="100%" align="center">' .
-         '<tr bgcolor=' . $bntreg->color_line2 . '><td align="center" colspan=7><strong><font color=white>
+         '<tr bgcolor=' . $tkireg->color_line2 . '><td align="center" colspan=7><strong><font color=white>
          ';
 
     if ($command != 'delete')
@@ -189,7 +189,7 @@ else
 
     echo "</font></strong>" .
          "</td></tr>" .
-         "<tr align='center' bgcolor=$bntreg->color_line2>" .
+         "<tr align='center' bgcolor=$tkireg->color_line2>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_tdr_src'] . "</strong></font></td>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_tdr_srctype'] . "</strong></font></td>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_tdr_dest'] . "</strong></font></td>" .
@@ -200,17 +200,17 @@ else
          "</tr>";
 
     $i = 0;
-    $curcolor = $bntreg->color_line1;
+    $curcolor = $tkireg->color_line1;
     while ($i < $num_traderoutes)
     {
         echo "<tr bgcolor=$curcolor>";
-        if ($curcolor == $bntreg->color_line1)
+        if ($curcolor == $tkireg->color_line1)
         {
-            $curcolor = $bntreg->color_line2;
+            $curcolor = $tkireg->color_line2;
         }
         else
         {
-            $curcolor = $bntreg->color_line1;
+            $curcolor = $tkireg->color_line1;
         }
 
         echo "<td><font size=2 color=white>";
@@ -221,7 +221,7 @@ else
         else
         {
             $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['source_id']));
-            Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
             if ($result)
             {
                 $planet1 = $result->fields;
@@ -237,9 +237,9 @@ else
         if ($traderoutes[$i]['source_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($traderoutes[$i]['source_id']));
-            Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
             $port1 = $result->fields;
-            echo "&nbsp;" . Bnt\Ports::getType($port1['port_type'], $langvars) . "</font></td>";
+            echo "&nbsp;" . Tki\Ports::getType($port1['port_type'], $langvars) . "</font></td>";
         }
         else
         {
@@ -261,7 +261,7 @@ else
         else
         {
             $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['dest_id']));
-            Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
             if ($result)
             {
                 $planet2 = $result->fields;
@@ -277,9 +277,9 @@ else
         if ($traderoutes[$i]['dest_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($traderoutes[$i]['dest_id']));
-            Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
             $port2 = $result->fields;
-            echo "&nbsp;" . Bnt\Ports::getType($port2['port_type'], $langvars) . "</font></td>";
+            echo "&nbsp;" . Tki\Ports::getType($port2['port_type'], $langvars) . "</font></td>";
         }
         else
         {
@@ -388,7 +388,7 @@ else
 }
 
 echo "<div style='text-align:left;'>\n";
-Bnt\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($db, $lang, $langvars);
 echo "</div>\n";
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

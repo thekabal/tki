@@ -17,7 +17,7 @@
 //
 // File: classes/Players/PlayersGateway.php
 
-namespace Bnt\Players; // Domain Entity organization pattern, Players objects
+namespace Tki\Players; // Domain Entity organization pattern, Players objects
 
 class PlayersGateway // Gateway for SQL calls related to Players
 {
@@ -37,7 +37,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
                "WHERE {$this->pdo_db->prefix}ships.last_login BETWEEN timestamp '"
                . $since_stamp . "' AND timestamp '" . $stamp . "' AND email NOT LIKE '%@xenobe'";
         $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
-        \Bnt\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
+        \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
         $row = $stmt->fetchObject(); // Fetch the associated object from the select
         $online = (int) $row->loggedin; // Set online variable to the int value of the loggedin count from SQL
         return $online;
@@ -50,7 +50,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':email', $email);
         $res = $stmt->execute();
-        \Bnt\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
+        \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 
         // A little magic here. If it couldn't select a user, the following call will return false - which is what we want for "no user found".
         $playerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);

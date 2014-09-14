@@ -19,13 +19,13 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $title = $langvars['l_planet2_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('main', 'report', 'planet', 'bounty', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'planet', 'bounty', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 
 // Needs to be validated and type cast into their correct types.
 // [GET]
@@ -153,26 +153,26 @@ $playerinfo         = null;
 if ($planet_id <= 0)
 {
     echo "Invalid Planet<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 // Get the Player Info
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 // Get the Planet Info
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ? AND planet_id > 0;", array($planet_id));
-Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 $planetinfo = $result2->fields;
 
 // Check to see if it returned valid planet info.
 if ($planetinfo == false)
 {
     echo "Invalid Planet<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($db, $lang, $langvars);
     die();
 }
 
@@ -180,7 +180,7 @@ if ($planetinfo == false)
 if ($planetinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_planet2_sector'] . "<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($db, $lang, $langvars);
     die();
 }
 
@@ -191,10 +191,10 @@ if ($playerinfo['turns'] < 1)
 }
 else
 {
-    $free_holds = Bnt\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
-    $free_power = Bnt\CalcLevels::energy($playerinfo['power'], $level_factor) - $playerinfo['ship_energy'];
-    $fighter_max = Bnt\CalcLevels::fighters($playerinfo['computer'], $level_factor) - $playerinfo['ship_fighters'];
-    $torpedo_max = Bnt\CalcLevels::torpedoes($playerinfo['torp_launchers'], $level_factor) - $playerinfo['torps'];
+    $free_holds = Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+    $free_power = Tki\CalcLevels::energy($playerinfo['power'], $level_factor) - $playerinfo['ship_energy'];
+    $fighter_max = Tki\CalcLevels::fighters($playerinfo['computer'], $level_factor) - $playerinfo['ship_fighters'];
+    $torpedo_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $level_factor) - $playerinfo['torps'];
 
     // First setup the tp flags
     if ($tpore != -1)
@@ -619,9 +619,9 @@ else
                 }
 
                 $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ?, ship_colonists = ship_colonists + ?, torps = torps + ?, ship_fighters = ship_fighters + ?, credits = credits + ?, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($transfer_ore, $transfer_organics, $transfer_goods, $transfer_energy, $transfer_colonists, $transfer_torps, $transfer_fighters, $transfer_credits, $playerinfo['ship_id']));
-                Bnt\Db::logDbErrors($db, $update1, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $update1, __LINE__, __FILE__);
                 $update2 = $db->Execute("UPDATE {$db->prefix}planets SET ore = ore - ?, organics = organics - ?, goods = goods - ?, energy = energy - ?, colonists = colonists - ?, torps = torps - ?, fighters = fighters - ?, credits = credits - ? WHERE planet_id = ?;", array($transfer_ore, $transfer_organics, $transfer_goods, $transfer_energy, $transfer_colonists, $transfer_torps, $transfer_fighters, $transfer_credits, $planet_id));
-                Bnt\Db::logDbErrors($db, $update2, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $update2, __LINE__, __FILE__);
                 echo $langvars['l_planet2_compl'] . "<br><a href=planet.php?planet_id=$planet_id>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "<br><br>";
             }
             else
@@ -636,5 +636,5 @@ else
     }
 }
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

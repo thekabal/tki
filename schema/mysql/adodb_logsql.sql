@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_adodb_logsql (
+CREATE TABLE IF NOT EXISTS tki_adodb_logsql (
   created datetime NOT NULL,
   sql0 varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   sql1 text COLLATE utf8mb4_unicode_ci,

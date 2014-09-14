@@ -21,21 +21,21 @@ require_once './common.php';
 
 // TODO: This should not be hard-coded, but for now, I need to be able to clear the errors
 $active_template = 'classic';
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('igb', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('igb', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
 
 $title = $langvars['l_ibank_title'];
 $body_class = 'igb';
-Bnt\Header::display($pdo_db, $lang, $template, $title, $body_class);
+Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $account = $result->fields;
 
 echo "<body class='" . $body_class . "'>";
@@ -46,7 +46,7 @@ echo '<table style="width:600px; height:350px;" border="0px">';
 echo '<tr><td style="background-image:URL(' . $template->getVariables('template_dir') . '/images/igbscreen.png); background-repeat:no-repeat;" align="center">';
 echo '<table style="width:550px; height:300px;" border="0px">';
 
-if (!$bntreg->allow_ibank)
+if (!$tkireg->allow_ibank)
 {
     Bad\Ibank::ibankError($template->getVariables('template_dir'), $langvars, $langvars['l_ibank_malfunction'], "main.php");
 }
@@ -89,7 +89,7 @@ elseif ($command == 'deposit2') //deposit operation
 }
 elseif ($command == 'transfer') //main transfer menu
 {
-    Bad\Ibank::ibankTransfer($db, $langvars, $playerinfo, $bntreg->ibank_min_turns);
+    Bad\Ibank::ibankTransfer($db, $langvars, $playerinfo, $tkireg->ibank_min_turns);
 }
 elseif ($command == 'transfer2') //specific transfer menu (ship or planet)
 {
@@ -101,7 +101,7 @@ elseif ($command == 'transfer3') //transfer operation
 }
 elseif ($command == 'loans') //loans menu
 {
-    Bad\Ibank::ibankLoans($db, $langvars, $bntreg, $playerinfo);
+    Bad\Ibank::ibankLoans($db, $langvars, $tkireg, $playerinfo);
 }
 elseif ($command == 'borrow') //borrow operation
 {
@@ -159,4 +159,4 @@ echo "</table></td></tr></table></div>";
 echo '<img src="' . $template->getVariables('template_dir') . '/images/div2.png" alt="" style="width: 600px; height:21px">';
 echo '</center>';
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

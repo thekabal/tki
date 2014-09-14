@@ -23,7 +23,7 @@ if (strpos($_SERVER['PHP_SELF'], 'log_viewer.php')) // Prevent direct access to 
 }
 
 $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships ORDER BY character_name ASC");
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 while (!$res->EOF)
 {
     $players[] = $res->fields;

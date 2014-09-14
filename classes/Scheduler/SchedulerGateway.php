@@ -17,7 +17,7 @@
 //
 // File: classes/Scheduler/SchedulerGateway.php
 
-namespace Bnt\Scheduler; // Domain Entity organization pattern, Players objects
+namespace Tki\Scheduler; // Domain Entity organization pattern, Players objects
 
 class SchedulerGateway // Gateway for SQL calls related to Players
 {
@@ -31,13 +31,13 @@ class SchedulerGateway // Gateway for SQL calls related to Players
     public function selectSchedulerLastRun()
     {
         // It is possible to have this call run before the game is setup, so we need to test to ensure the db is active
-        if (\Bnt\Db::isActive($this->pdo_db))
+        if (\Tki\Db::isActive($this->pdo_db))
         {
             // SQL call that selects the last run of the scheduler, and only one record
             $sql = "SELECT last_run FROM {$this->pdo_db->prefix}scheduler LIMIT 1";
             $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
             $row = $stmt->fetchObject();
-            \Bnt\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
+            \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 
             if (is_object($row))
             {

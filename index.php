@@ -22,7 +22,7 @@ require_once './common.php';
 
 $link = null;
 
-if (!Bnt\Db::isActive($pdo_db))
+if (!Tki\Db::isActive($pdo_db))
 {
     // If DB is not active, redirect to create universe to run install
     header('Location: create_universe.php');
@@ -30,21 +30,21 @@ if (!Bnt\Db::isActive($pdo_db))
 }
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'footer','global_includes'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'footer','global_includes'));
 
 $variables = null;
 $variables['lang'] = $lang;
 $variables['link'] = $link;
-$variables['title'] = $langvars['l_welcome_bnt'];
-$variables['link_forums'] = $bntreg->link_forums;
-$variables['admin_mail'] = $bntreg->admin_mail;
+$variables['title'] = $langvars['l_welcome_tki'];
+$variables['link_forums'] = $tkireg->link_forums;
+$variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'index';
 
 // Get list of available languages
-$variables['list_of_langs'] = Bnt\Languages::listAvailable($pdo_db, $lang);
+$variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 
 // Temporarily set the template to the default template until we have a user option
-$variables['template'] = $bntreg->default_template;
+$variables['template'] = $tkireg->default_template;
 
 // Now set a container for the variables and langvars and send them off to the template system
 $variables['container'] = 'variable';

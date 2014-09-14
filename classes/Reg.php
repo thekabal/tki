@@ -17,7 +17,7 @@
 //
 // File: classes/Reg.php
 
-namespace Bnt;
+namespace Tki;
 
 class Reg
 {

@@ -20,10 +20,10 @@
 require_once './common.php';
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'options', 'pwreset'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'options', 'pwreset'));
 $title = $langvars['l_pwr_title'];
 $body_class = 'options';
-Bnt\Header::display($pdo_db, $lang, $template, $title, $body_class);
+Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<h1>" . $title . "</h1>\n";
 
@@ -37,7 +37,7 @@ $reset_code  = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
 // because 8 characters is 4,294,967,296 combinations, and that should be sufficiently secure
 
 $result = $db->SelectLimit("SELECT character_name, email, recovery_time FROM {$db->prefix}ships WHERE substr(MD5(password),6,8) = ?", 1, -1, array('password' => $reset_code));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF && $result != false)
 {
@@ -84,21 +84,21 @@ else
 
 /// Send email to user & admin notifying of password change
 //$langvars['l_mail_message'] = str_replace ("[ip]", $_SERVER['REMOTE_ADDR'], $langvars['l_mail_message']);
-//$langvars['l_mail_message'] = str_replace ("[game_name]", $bntreg->game_name, $langvars['l_mail_message']);
+//$langvars['l_mail_message'] = str_replace ("[game_name]", $tkireg->game_name, $langvars['l_mail_message']);
 
 /// Some reason \r\n is broken, so replace them now.
 //$langvars['l_mail_message'] = str_replace ('\r\n', "\r\n", $langvars['l_mail_message']);
 
 /// Need to set the topic with the game name.
-//$langvars['l_mail_topic'] = str_replace ("[game_name]", $bntreg->game_name, $langvars['l_mail_topic']);
+//$langvars['l_mail_topic'] = str_replace ("[game_name]", $tkireg->game_name, $langvars['l_mail_topic']);
 
-//mail ($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'], "From: {$bntreg->admin_mail}\r\nReply-To: {$bntreg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
+//mail ($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'], "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
 
 /// Reset recovery_time to zero
 //$recovery_update_result = $db->Execute ("UPDATE {$db->prefix}ships SET recovery_time = null WHERE email = ?;", array($playerinfo['email']));
-//var_dump (Bnt\Db::logDbErrors ($db, $recovery_update_result, __LINE__, __FILE__));
+//var_dump (Tki\Db::logDbErrors ($db, $recovery_update_result, __LINE__, __FILE__));
 
 /// Log user in (like login does)
 
 /// Redirect to game (like login does)
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

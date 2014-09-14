@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_zones (
+CREATE TABLE IF NOT EXISTS tki_zones (
   zone_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   zone_name varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `owner` int(10) unsigned NOT NULL DEFAULT '0',

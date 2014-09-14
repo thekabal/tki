@@ -19,10 +19,10 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $title = $langvars['l_help'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 echo "<h1>" . $title . "</h1>\n";
 
 echo "Greetings and welcome to The Kabal Invasion!";
@@ -44,7 +44,7 @@ echo "Move from one sector to another through warp links, by clicking on the sec
 echo "<br><br>";
 echo "<strong>Long-range scan:</strong><br>";
 echo "Scan a neighboring sector with your long range scanners without actually moving there.";
-if ($bntreg->allow_fullscan)
+if ($tkireg->allow_fullscan)
 {
     echo " A full scan will give you an outlook on all the neighboring sectors in one wide sweep of your ";
     echo "sensors.";
@@ -60,7 +60,7 @@ echo "<br><br>";
 echo "<strong>Planets:</strong><br>";
 echo "Access the planet menu by clicking on a planet's name when you enter a sector where one is present.";
 echo "<br><br>";
-if ($bntreg->allow_navcomp)
+if ($tkireg->allow_navcomp)
 {
     echo "<strong>Navigation computer:</strong><br>";
     echo "Use your computer to find a route to a specific sector. The navigation computer's power depends on ";
@@ -69,7 +69,7 @@ if ($bntreg->allow_navcomp)
 }
 echo "<strong>RealSpace:</strong><br>";
 echo "Use your ship's engines to get to a specific sector. Upgrade your engines' tech level to use RealSpace ";
-echo "moves effectively. By clicking on the 'Presets' link you can memorize up to " . $bntreg->preset_max . " sector numbers for quick ";
+echo "moves effectively. By clicking on the 'Presets' link you can memorize up to " . $tkireg->preset_max . " sector numbers for quick ";
 echo "movement or you can target any sector using the 'Other' link.";
 echo "<br><br>";
 echo "<strong>Trade routes:</strong><br>";
@@ -182,5 +182,5 @@ echo "maximum allowed level for that specific zone. Attacking other players and 
 echo "be disallowed in some zones.";
 echo "<br><br>";
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

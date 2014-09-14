@@ -19,22 +19,22 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $title = $langvars['l_corpm_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('corp', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('corp', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $planet_id = preg_replace('/[^0-9]/', '', $planet_id);
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?", array($planet_id));
-Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 if ($result2)
 {
     $planetinfo = $result2->fields;
@@ -47,8 +47,8 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $p
     {
         echo $langvars['l_corpm_tocorp'] . "<br>";
         $result = $db->Execute("UPDATE {$db->prefix}planets SET corp=?, owner=? WHERE planet_id = ?;", array($playerinfo['team'], $playerinfo['ship_id'], $planet_id));
-        Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
-        $ownership = Bnt\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
+        Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+        $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
 
         if (!empty($ownership))
         {
@@ -60,23 +60,23 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $p
     {
         echo $langvars['l_corpm_topersonal'] . "<br>";
         $result = $db->Execute("UPDATE {$db->prefix}planets SET corp='0', owner = ? WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
-        Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
-        $ownership = Bnt\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
+        Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+        $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
 
         // Kick other players off the planet
         $result = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = ? AND ship_id <> ?;", array($planet_id, $playerinfo['ship_id']));
-        Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         if (!empty($ownership))
         {
             echo "<p>" . $ownership . "<p>";
         }
     }
-    Bnt\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($db, $lang, $langvars);
 }
 else
 {
     echo "<br>" . $langvars['l_corpm_exploit'] . "<br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($db, $lang, $langvars);
 }
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

@@ -19,12 +19,12 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('combat', 'common', 'main', 'modify_defences', 'admin','footer','global_includes', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common', 'main', 'modify_defences', 'admin','footer','global_includes', 'regional'));
 $title = $langvars['l_main_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 $stylefontsize = "12pt";
 $picsperrow = 7;
@@ -43,7 +43,7 @@ if (!array_key_exists('command', $_GET))
 
 if ($_GET['command'] == "score")
 {
-    $playerinfo['score'] = Bnt\Score::updateScore($db, $playerinfo['ship_id'], $bntreg);
+    $playerinfo['score'] = Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
 }
 
 if ($playerinfo['cleared_defences'] > ' ')
@@ -64,7 +64,7 @@ $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($playerinfo['on_planet'] == "Y")
 {
     $res2 = $db->Execute("SELECT planet_id, owner FROM {$pdo_db->prefix}planets WHERE planet_id = ?;", array($playerinfo['planet_id']));
-    Bnt\Db::logDbErrors($db, $res2, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $res2, __LINE__, __FILE__);
     if ($res2->RecordCount() != 0)
     {
         echo "<a href=planet.php?planet_id=$playerinfo[planet_id]>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "    <br>";
@@ -79,7 +79,7 @@ if ($playerinfo['on_planet'] == "Y")
 }
 
 $res = $db->Execute("SELECT * FROM {$pdo_db->prefix}links WHERE link_start=? ORDER BY link_dest ASC;", array($playerinfo['sector']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
 $i = 0;
 if ($res != false)
@@ -94,7 +94,7 @@ if ($res != false)
 $num_links = $i;
 
 $res = $db->Execute("SELECT * FROM {$pdo_db->prefix}planets WHERE sector_id = ?;", array($playerinfo['sector']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
 $i = 0;
 if ($res != false)
@@ -109,7 +109,7 @@ if ($res != false)
 $num_planets = $i;
 
 $res = $db->Execute("SELECT * FROM {$pdo_db->prefix}sector_defence, {$pdo_db->prefix}ships WHERE {$pdo_db->prefix}sector_defence.sector_id = ? AND {$pdo_db->prefix}ships.ship_id = {$pdo_db->prefix}sector_defence.ship_id;", array($playerinfo['sector']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
 $i = 0;
 if ($res != false)
@@ -143,13 +143,13 @@ $planettypes[2]= "mediumplanet.png";
 $planettypes[3]= "largeplanet.png";
 $planettypes[4]= "hugeplanet.png";
 
-$signame = Bnt\Character::getInsignia($pdo_db, $_SESSION['username'], $langvars);
+$signame = Tki\Character::getInsignia($pdo_db, $_SESSION['username'], $langvars);
 echo "<div style='width:90%; margin:auto; background-color:#400040; color:#C0C0C0; text-align:center; border:#fff 1px solid; padding:4px;'>\n";
 echo "{$signame} <span style='color:#fff; font-weight:bold;'>{$playerinfo['character_name']}</span>{$langvars['l_aboard']} <span style='color:#fff; font-weight:bold;'><a class='new_link' style='font-size:14px;' href='report.php'>{$playerinfo['ship_name']}</a></span>\n";
 echo "</div>\n";
 
 $result = $db->Execute("SELECT * FROM {$pdo_db->prefix}messages WHERE recp_id = ? AND notified = ?;", array($playerinfo['ship_id'], "N"));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 
 if ($result->RecordCount() > 0)
 {
@@ -159,7 +159,7 @@ if ($result->RecordCount() > 0)
     echo "</script>\n";
 
     $res = $db->Execute("UPDATE {$pdo_db->prefix}messages SET notified='Y' WHERE recp_id = ?;", array($playerinfo['ship_id']));
-    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 }
 
 $ply_turns     = number_format($playerinfo['turns'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
@@ -206,7 +206,7 @@ echo "  <tr>\n";
 // Left Side.
 echo "    <td style='width:200px; vertical-align:top; text-align:center;'>\n";
 
-if ($bntreg->enable_gravatars)
+if ($tkireg->enable_gravatars)
 {
     $gravatar_id = md5($playerinfo['email']);
 
@@ -243,7 +243,7 @@ echo "<table style='width:150px; margin:auto; text-align:center; border:0px; pad
 echo "  <tr>\n";
 echo "    <td style='white-space:nowrap; border:#fff 1px solid; background-color:#500050;'>\n";
 
-if ($playerinfo['email'] == $bntreg->admin_mail)
+if ($playerinfo['email'] == $tkireg->admin_mail)
 {
     echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='admin.php'>{$langvars['l_admin_menu']}</a></div>\n";
 }
@@ -261,7 +261,7 @@ echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href=
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='options.php'>{$langvars['l_options']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='navcomp.php'>{$langvars['l_navcomp']}</a></div>\n";
 
-if ($bntreg->allow_ksm == true)
+if ($tkireg->allow_ksm == true)
 {
     echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='galaxy.php'>{$langvars['l_map']}</a></div>\n";
 }
@@ -278,7 +278,7 @@ echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href=
 #echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='maint_info.php' title='This will display the Scheduled Maintenance information for this game or Core Code.'><span style='font-size:8px; color:#ff0; font-style:normal;'>NEW</span> Maint Info</a></div>\n";
 #echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='rules.php' title='These are our Rules that you have agreed to.'><span style='font-size:8px; color:#ff0; font-style:normal;'>NEW</span> Our Rules</a></div>\n";
 #echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='mail.php?mail={$_SESSION['username']}' title='Request your login information to be emailed to you.'><span style='font-size:8px; color:#ff0; font-style:normal;'>TMP</span> REQ Password</a></div>\n";
-echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='//" . $bntreg->link_forums . "'>{$langvars['l_forums']}</a></div>\n";
+echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='//" . $tkireg->link_forums . "'>{$langvars['l_forums']}</a></div>\n";
 echo "    </td>\n";
 echo "  </tr>\n";
 echo "  <tr>\n";
@@ -307,7 +307,7 @@ $num_traderoutes = 0;
 
 // Traderoute querry
 $tr_result = $db->Execute("SELECT * FROM {$pdo_db->prefix}traderoutes WHERE source_type = ? AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array("P", $playerinfo['sector'], $playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $tr_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $tr_result, __LINE__, __FILE__);
 while (!$tr_result->EOF)
 {
     $traderoutes[$i] = $tr_result->fields;
@@ -318,7 +318,7 @@ while (!$tr_result->EOF)
 
 // Sector Defense Trade route query - this is still under developement
 $sd_tr_result = $db->Execute("SELECT * FROM {$pdo_db->prefix}traderoutes WHERE source_type='D' AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array($playerinfo['sector'], $playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $sd_tr_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $sd_tr_result, __LINE__, __FILE__);
 while (!$sd_tr_result->EOF)
 {
     $traderoutes[$i] = $sd_tr_result->fields;
@@ -329,7 +329,7 @@ while (!$sd_tr_result->EOF)
 
 // Personal planet traderoute type query
 $ppl_tr_result = $db->Execute("SELECT * FROM {$pdo_db->prefix}planets, {$pdo_db->prefix}traderoutes WHERE source_type = 'L' AND source_id = {$pdo_db->prefix}planets.planet_id AND {$pdo_db->prefix}planets.sector_id = ? AND {$pdo_db->prefix}traderoutes.owner = ?;", array($playerinfo['sector'], $playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $ppl_tr_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $ppl_tr_result, __LINE__, __FILE__);
 while (!$ppl_tr_result->EOF)
 {
     $traderoutes[$i] = $ppl_tr_result->fields;
@@ -340,7 +340,7 @@ while (!$ppl_tr_result->EOF)
 
 // Team planet traderoute type query
 $tmpl_tr_result = $db->Execute("SELECT * FROM {$pdo_db->prefix}planets, {$pdo_db->prefix}traderoutes WHERE source_type = 'C' AND source_id = {$pdo_db->prefix}planets.planet_id AND {$pdo_db->prefix}planets.sector_id = ? AND {$pdo_db->prefix}traderoutes.owner = ?;", array($playerinfo['sector'], $playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $tmpl_tr_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $tmpl_tr_result, __LINE__, __FILE__);
 while (!$tmpl_tr_result->EOF)
 {
     $traderoutes[$i] = $tmpl_tr_result->fields;
@@ -373,7 +373,7 @@ else
         else
         {
             $pl_result = $db->Execute("SELECT name FROM {$pdo_db->prefix}planets WHERE planet_id = ?;", array($traderoutes[$i]['source_id']));
-            Bnt\Db::logDbErrors($db, $pl_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $pl_result, __LINE__, __FILE__);
             if (!$pl_result || $pl_result->RecordCount() == 0)
             {
                 echo $langvars['l_unknown'];
@@ -412,7 +412,7 @@ else
         else
         {
             $pl_dest_result = $db->Execute("SELECT name FROM {$pdo_db->prefix}planets WHERE planet_id = ?;", array($traderoutes[$i]['dest_id']));
-            Bnt\Db::logDbErrors($db, $pl_dest_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $pl_dest_result, __LINE__, __FILE__);
 
             if (!$pl_dest_result || $pl_dest_result->RecordCount() == 0)
             {
@@ -455,7 +455,7 @@ echo "<td style='vertical-align:top;'>\n";
 if ($sectorinfo['port_type'] != "none" && mb_strlen($sectorinfo['port_type']) >0)
 {
     echo "<div style='color:#fff; text-align:center; font-size:14px;'>\n";
-    echo "{$langvars['l_tradingport']}:&nbsp;<span style='color:#0f0;'>". ucfirst(Bnt\Ports::getType($sectorinfo['port_type'], $langvars)) ."</span>\n";
+    echo "{$langvars['l_tradingport']}:&nbsp;<span style='color:#0f0;'>". ucfirst(Tki\Ports::getType($sectorinfo['port_type'], $langvars)) ."</span>\n";
     echo "<br><br>\n";
     echo "<a class='new_link' style='font-size:14px;' href='port.php' title='Dock with Space Port'><img style='width:100px; height:70px;' class='mnu' src='" . $template->getVariables('template_dir') . "/images/space_station_port.png' alt='Space Station Port'></a>\n";
     echo "</div>\n";
@@ -484,9 +484,9 @@ if ($num_planets > 0)
         if ($planets[$i]['owner'] != 0)
         {
             $result5 = $db->Execute("SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id = ?;", array($planets[$i]['owner']));
-            Bnt\Db::logDbErrors($db, $result5, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result5, __LINE__, __FILE__);
             $planet_owner = $result5->fields;
-            $planetavg = Bnt\CalcLevels::avgTech($planet_owner, "planet");
+            $planetavg = Tki\CalcLevels::avgTech($planet_owner, "planet");
 
             if ($planetavg < 8)
             {
@@ -572,7 +572,7 @@ if ($playerinfo['sector'] != 0)
     $sql .= "WHERE {$pdo_db->prefix}ships.ship_id <> ? AND {$pdo_db->prefix}ships.sector = ? AND {$pdo_db->prefix}ships.on_planet='N' ";
     $sql .= "ORDER BY " . $db->random;
     $result4 = $db->Execute($sql, array($playerinfo['ship_id'], $playerinfo['sector']));
-    Bnt\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
 
     if ($result4 != false)
     {
@@ -581,7 +581,7 @@ if ($playerinfo['sector'] != 0)
         while (!$result4->EOF)
         {
             $row=$result4->fields;
-            $success = Bnt\Scan::success($playerinfo['sensors'], $row['cloak']);
+            $success = Tki\Scan::success($playerinfo['sensors'], $row['cloak']);
             if ($success < 5)
             {
                 $success = 5;
@@ -590,11 +590,11 @@ if ($playerinfo['sector'] != 0)
             {
                 $success = 95;
             }
-            $roll = Bnt\Rand::betterRand(1, 100);
+            $roll = Tki\Rand::betterRand(1, 100);
 
             if ($roll < $success)
             {
-                $shipavg = Bnt\CalcLevels::avgTech($row, "ship");
+                $shipavg = Tki\CalcLevels::avgTech($row, "ship");
 
                 if ($shipavg < 8)
                 {
@@ -797,7 +797,7 @@ echo '<table style="width:100%;">';
 // Pull the presets for the player from the db.
 $i = 0;
 $debug_query = $db->Execute("SELECT * FROM {$pdo_db->prefix}presets WHERE ship_id=?", array($playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $debug_query, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $debug_query, __LINE__, __FILE__);
 while (!$debug_query->EOF)
 {
     $presetinfo[$i] = $debug_query->fields;
@@ -807,7 +807,7 @@ while (!$debug_query->EOF)
 
 if ($i==0)
 {
-    for ($x=0; $x<$bntreg->preset_max; $x++)
+    for ($x=0; $x<$tkireg->preset_max; $x++)
     {
         $i++;
         echo "<tr>\n";
@@ -883,4 +883,4 @@ echo "</div>
 </tr>
 </table>";
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

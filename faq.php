@@ -19,11 +19,11 @@
 
 require_once './common.php';
 
-$lang = $bntreg->default_lang;
+$lang = $tkireg->default_lang;
 $link = null;
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('common', 'faq', 'global_funcs'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'faq', 'global_funcs'));
 
 $variables = null;
 $variables['lang'] = $lang;

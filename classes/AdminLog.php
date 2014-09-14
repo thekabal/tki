@@ -19,7 +19,7 @@
 // Todo: Recode adminlog to be smart about whether there is a db
 // and if not, log to a file that will be slurped into the db when there is.
 
-namespace Bnt;
+namespace Tki;
 
 use PDO;
 

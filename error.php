@@ -20,7 +20,7 @@
 require_once './common.php';
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('footer', 'common', 'error', 'main'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('footer', 'common', 'error', 'main'));
 // Always make sure we are using empty vars before use.
 $variables = null;
 
@@ -77,7 +77,7 @@ else
 }
 
 $variables['request_uri'] = print_r($_SERVER['REQUEST_URI'], true);
-$variables['linkforums']['link'] = $bntreg->link_forums;
+$variables['linkforums']['link'] = $tkireg->link_forums;
 $variables['linkback']['link'] = 'index.php';
 
 // Now set a container for the variables and langvars and send them off to the template system
