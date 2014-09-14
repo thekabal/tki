@@ -20,18 +20,7 @@
 $index_page = true;
 require_once './common.php';
 
-// If language has not been selected, give default
-if (!array_key_exists('lang', $_GET))
-{
-    $_GET['lang'] = null;
-    $lang = $bntreg->default_lang;
-    $link = null;
-}
-else // Else set the language as requested by player
-{
-    $lang = $_GET['lang'];
-    $link = '?lang=' . $lang;
-}
+$link = null;
 
 if (!Bnt\Db::isActive($pdo_db))
 {

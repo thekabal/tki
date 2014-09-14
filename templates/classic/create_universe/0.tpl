@@ -36,20 +36,6 @@
       <td colspan="2" style="text-align:left; width:700px; background-color:#C0C0C0; color:#000; height:0.8em; font-size: 0.8em">{$langvars['l_cu_allow_create']}</td>
     </tr>
     <tr>
-        <td style="text-align:left; background-color:#ccccff; width:600px; font-size: 0.8em; color:#000">{$langvars['l_cu_choose_lang']}</td>
-        <td style="background-color:#C0C0C0; width:100px; font-size: 0.8em; color:#000">
-            <select name=newlang>
-            {for $i=0 to $variables['lang_list']['size']}
-                {if ($variables['lang_list'][$i]['file'] == $variables['lang_list'][$i]['selected'])}
-                {assign var="selected" value=" selected"}
-                {else}
-                {assign var="selected" value=''}
-                {/if}
-                <option value={$variables['lang_list'][$i]['file']}{$selected}>{$variables['lang_list'][$i]['value']}</option>
-            {/for}
-            </select>
-        </td>
-    <tr>
         <td style="text-align:left; background-color:#ccccff; width:600px; font-size: 0.8em; color:#000">{$langvars['l_cu_pw_to_continue']}</td>
         <td style="background-color:#C0C0C0; width:100px; font-size: 0.8em; color:#000"><input autofocus type=password name=swordfish size=20></td>
     </tr>

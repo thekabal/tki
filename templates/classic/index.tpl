@@ -23,12 +23,6 @@
 {block name=body}
 <div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$variables['template']}/images/header1.png" alt="{$langvars['l_bnt']}"></div>
 
-<div class="index-flags">
-{foreach from=$variables['list_of_langs'] key=lang_file item=language}
-<a href="index.php?lang={$lang_file}"><img width="24" height="16" src="templates/{$variables['template']}/images/flags/{$language['flag']}.png" alt="{$language['lang_name']}"></a>
-{/foreach}
-</div>
-
 <div class="index-header-text">{$langvars['l_bnt']}</div>
 <br>
 <h2 style="display:none">{$langvars['l_navigation']}</h2>
