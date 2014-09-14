@@ -1,0 +1,104 @@
+The Kabal Invasion
+
+REQUIREMENTS:
+- MySQL version 5.5.3 minimum is required (needed for utf8mb4 schemas).
+- PHP's mbstring extension must be installed (used in common.php)
+- PHP's pdo extension must be installed (used in create_universe, and soon the rest of the game)
+- Web browser - Recent versons of Firefox, Safari, and Chrome are best, but we also support Internet Explorer 9 or above - Older versions of Internet Explorer will have degraded functionality.
+- Apache version 2.2.22+ is supported, we have not determined a required minimum.
+- IIS is not supported, and TKI will likely not work correctly on it in future versions.
+- Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc)
+- PHP version 5.5 is suggested. PHP 5.3 is end of life, and no longer supported by the PHP team. Despite those issues, it is possible to run TKI on 5.3.7 and above. 
+(For Smarty, password_hash for login, directoryIterator, and many other features). Any version below 5.3.7 is not supported and is unlikely to work.
+
+INSTALLATION
+
+1. Untar the distribution (be sure to untar the subdirectories) -- This is for a release version of TKI, *not* a development snapshot:
+   tar xvf tki-x.x.x.tar
+
+2. chmod 777 the directories templates/_cache and templates/_compile . This allows the Smarty
+   template system to write its cached and compiled versions of templates.
+
+3. Open the file <www.your-host>/<install-dir>/setup_info.php in your browser. This
+   file will help you understand what settings you should use in your db_config.php file.
+
+4. Edit the config/db_config.php and config/admin_config.php files to your own settings 
+   and manually update your cron file.
+
+   PLEASE make sure to edit your game_name (in config/classic_set_config.ini.php) to be something unique!
+
+5. Contact your hosting provider, and determine which command-line web fetching program they make
+   available to you, and where it is located. This is to help set up a background task that will be called
+   every X minutes.
+   You can set this to any interval you want, but 5 or 6 minutes are good standard values.
+   This task needs to call the web page scheduler.php passing the admin password to it, eg by accessing:
+
+   http://localhost/tki/scheduler.php?swordfish=password
+   
+   On UNIX and Linux, you can achieve this by using cron to call lynx to access 
+   the pages at specified times. Lynx is just one of many programs you can use to access the page. It
+   may not be available on your server, and you will need to substitute a different program. Please check
+   your hosting provider documentation to determine which program is available.
+
+   A sample crontab follows:
+
+*/6 * * * * /usr/bin/lynx --dump http://localhost/tki/scheduler.php?swordfish=password > /dev/null
+
+A few alternatives:
+
+*/6 * * * * /usr/bin/GET http://localhost/tki/scheduler.php?swordfish=password > /dev/null
+
+*/6 * * * * /usr/bin/wget "http://localhost/tki/scheduler.php?swordfish=password" > /dev/null
+
+   Please note that your hosting provider may have these programs at a different location than /usr/bin, requiring
+   you to change the location to match their documentation.
+
+   You may need to alter the URL to point to your exact domain name 
+   and path. You will also need to change the password to your admin password. 
+
+   To specify how fast-paced you want the game to be, you will need to
+   edit the file config.php and select how many minutes you want between
+   different events, eg turns or port regeneration.
+
+5. Create the database:
+   mysqladmin -uuser -ppass create dbname
+
+6. Open the file <www.your-host>/<install-dir>/create_universe.php in
+   your browser.  You'll need to enter your admin password to access this
+   page.  Change the settings to suit the universe you'd like to create -
+   and go for it.
+
+7. Open the file <www.your-host>/<install-dir>/index.php in your browser
+   - you should now be able to log-in.
+
+8. chmod 000 setup_info.php - it contains information that might be a security risk.
+
+9. If you'd like additional security, we have included .htaccess files for some protection.
+   Some systems do not ship with .htaccess enabled. You'll need to edit your Apache config 
+   (either httpd.conf or the correct file for your host/directory), and set it to AllowOverrides Limits
+   (it is often set to AllowOverrides None). Don't forget to reload Apache's config if you make this change.
+
+10. Hopefully - it works now. :)
+
+Join the TKI forums to stay informed of updates, patches and new releases. 
+
+BUG REPORTS AND SUPPORT
+
+Bug reports, patches, and requests for support should be submitted on the GitHub project for TKI: https://github.com/thekabal/tki
+
+Regards,
+
+The Kabal Invasion development team
+
+
+------------------------------
+ADDITIONAL FEDORA/REDHAT NOTES
+
+For Fedora/Redhat to be able to sendmail from Apache, you'll need to set:
+
+setsebool -P httpd_can_sendmail=1
+
+To allow the web server to talk to the MySQL server. Issue this command: 
+
+setsebool -P httpd_can_network_connect_db 1 
+

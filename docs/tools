@@ -1,0 +1,12 @@
+We have committed a number of additional tools that are useful to development in the tools/ directory.
+
+phpcs is PHP Code Sniffer. It examines code against a set of standards. The usage we are closest to so far is php tools/phpcs.phar --standard=PSR1 classes/ 
+Please note that running it against the main TKI directory will usually result in an out of memory error. Instead create a subdirectory, move some files there,
+and test them. We have a *long* way to go on these standards, but are slowly making progress towards some of them. Please note that we do not intend to meet all
+of the standards. The bracket rules in the PSR standards, for example, is not something we will be complying with.
+
+php-cs-fixer strives to automatically correct code for specific items in the PSR standard. We do not currently use it, but may in the future use it as a pre-commit hook.
+
+phpmd is PHP Mess Detector. It examines code for a variety of issues, almost all of which are guidelines that have to be interpreted. However, we have made 
+excellent progress towards the usage: php tools/phpmd.phar classes/ text unusedcode
+There are other command-line options (try them!), with varying levels of usefulness to our project.
