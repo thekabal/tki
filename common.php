@@ -95,24 +95,4 @@ if (!isset($index_page))
     }
 }
 
-if (isset($bntreg->default_lang))
-{
-    $lang = $bntreg->default_lang;
-}
-
-if (Bnt\Db::isActive($pdo_db))
-{
-    if (empty($_SESSION['username']))              // If the user has not logged in
-    {
-        if (array_key_exists('lang', $_GET))       // And the user has chosen a language on index.php
-        {
-            $lang = $_GET['lang'];                 // Set $lang to the language the user has chosen
-        }
-    }
-    else // The user has logged in, so use his preference from the database
-    {
-        $players_gateway = new \Bnt\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
-        $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
-        $lang = $playerinfo['lang'];
-    }
-}
+$lang = $bntreg->default_lang;

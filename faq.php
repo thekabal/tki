@@ -19,17 +19,8 @@
 
 require_once './common.php';
 
-if (!array_key_exists('lang', $_GET))
-{
-    $_GET['lang'] = null;
-    $lang = $bntreg->default_lang;
-    $link = null;
-}
-else
-{
-    $lang = $_GET['lang'];
-    $link = "?lang=" . $lang;
-}
+$lang = $bntreg->default_lang;
+$link = null;
 
 // Database driven language entries
 $langvars = Bnt\Translate::load($pdo_db, $lang, array('common', 'faq', 'global_funcs'));

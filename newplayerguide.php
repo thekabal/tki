@@ -19,17 +19,7 @@
 
 require_once './common.php';
 
-if (!array_key_exists('lang', $_GET))
-{
-    $_GET['lang'] = null;
-    $lang = $default_lang;
-    $link = null;
-}
-else
-{
-    $lang = $_GET['lang'];
-    $link = "?lang=" . $lang;
-}
+$link = null;
 
 $title = "The Kabal Invasion new player guide";
 $body_class = 'faq';

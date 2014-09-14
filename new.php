@@ -19,17 +19,7 @@
 
 require_once './common.php';
 
-if (!array_key_exists('lang', $_GET))
-{
-    $_GET['lang'] = null;
-    $lang = $bntreg->default_lang;
-    $link = null;
-}
-else
-{
-    $lang = $_GET['lang'];
-    $link = "?lang=" . $lang;
-}
+$link = null;
 
 // Database driven language entries
 $langvars = Bnt\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'index', 'options'));
@@ -44,32 +34,6 @@ $variables['template'] = $bntreg->default_template; // Temporarily set the templ
 // Now set a container for the variables and langvars and send them off to the template system
 $variables['container'] = "variable";
 $langvars['container'] = "langvars";
-
-$variables['selected_lang'] = null;
-$lang_dir = new DirectoryIterator('languages/');
-foreach ($lang_dir as $file_info) // Get a list of the files in the languages directory
-{
-    // If it is a PHP file, add it to the list of accepted language files
-    if ($file_info->isFile() && $file_info->getExtension() == 'php') // If it is a PHP file, add it to the list of accepted make galaxy files
-    {
-        $lang_file = mb_substr($file_info->getFilename(), 0, -8); // The actual file name
-
-        // Select from the database and return the localized name of the language
-        $result = $db->Execute("SELECT value FROM {$db->prefix}languages WHERE category = 'regional' AND section = ? AND name = 'local_lang_name';", array($lang_file));
-        Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
-        while ($result && !$result->EOF)
-        {
-            $row = $result->fields;
-            if ($lang_file == $_GET['lang'])
-            {
-                $variables['selected_lang'] = $lang_file;
-            }
-            $variables['lang_name'][] = $row['value'];
-            $variables['lang_file'][] = $lang_file;
-            $result->MoveNext();
-        }
-    }
-}
 
 // Pull in footer variables from footer_t.php
 require_once './footer_t.php';
