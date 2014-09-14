@@ -17,7 +17,7 @@
 //
 // File: classes/Text.php
 
-namespace Bnt;
+namespace Tki;
 
 class Text
 {

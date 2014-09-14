@@ -20,11 +20,11 @@
 // TODO: This file should only be used when we have not converted a file to use templates.
 // Once they use templates, the footer will be loaded correctly by layout.tpl
 
-namespace Bnt;
+namespace Tki;
 
 class Footer
 {
-    public static function display($pdo_db, $lang, $bntreg, $template)
+    public static function display($pdo_db, $lang, $tkireg, $template)
     {
         // Now set a container for the variables and langvars and send them off to the template system
         $variables['container'] = 'variable';

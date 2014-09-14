@@ -19,18 +19,18 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('feedback', 'galaxy', 'common', 'global_includes', 'global_funcs', 'footer'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('feedback', 'galaxy', 'common', 'global_includes', 'global_funcs', 'footer'));
 
 $title = $langvars['l_feedback_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -56,8 +56,8 @@ if ($content === false || $content === null)
 }
 else
 {
-    $link_to_game = "http://" . $_SERVER['HTTP_HOST'] . Bnt\SetPaths::setGamepath();
-    mail("$bntreg->admin_mail", $langvars['l_feedback_subj'], "IP address - " . $_SERVER['REMOTE_ADDR'] . "\r\nGame Name - {$playerinfo['character_name']}\r\nServer URL - {$link_to_game}\r\n\r\n{$_POST['content']}", "From: {$playerinfo['email']}\r\nX-Mailer: PHP/" . phpversion());
+    $link_to_game = "http://" . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
+    mail("$tkireg->admin_mail", $langvars['l_feedback_subj'], "IP address - " . $_SERVER['REMOTE_ADDR'] . "\r\nGame Name - {$playerinfo['character_name']}\r\nServer URL - {$link_to_game}\r\n\r\n{$_POST['content']}", "From: {$playerinfo['email']}\r\nX-Mailer: PHP/" . phpversion());
     echo $langvars['l_feedback_messent'] . "<br><br>";
 }
 
@@ -68,7 +68,7 @@ if (empty ($_SESSION['username']))
 }
 else
 {
-    Bnt\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($db, $lang, $langvars);
 }
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

@@ -17,7 +17,7 @@
 //
 // File: classes/Mines.php
 
-namespace Bnt;
+namespace Tki;
 
 class Mines
 {

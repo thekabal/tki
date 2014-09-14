@@ -22,18 +22,18 @@ require_once './common.php';
 $variables = null;
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
 
 if (array_key_exists('username', $_SESSION))
 {
     $current_score = 0;
     $result = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-    Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
     $playerinfo = $result->fields;
-    $current_score = Bnt\Score::updateScore($db, $playerinfo['ship_id'], $bntreg);
+    $current_score = Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
 
-    $langvars = Bnt\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
-    Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_LOGOUT, $_SERVER['REMOTE_ADDR']);
+    $langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
+    Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_LOGOUT, $_SERVER['REMOTE_ADDR']);
     $langvars['l_logout_text'] = str_replace("[name]", $_SESSION['username'], $langvars['l_logout_text']);
     $langvars['l_logout_text'] = str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_logout_text']);
 
@@ -58,7 +58,7 @@ setcookie('tki_session', '', 0, '/');
 // Destroy the session entirely
 session_destroy();
 
-$variables['body_class'] = 'bnt'; // No special CSS for this page yet, so use standard bnt-prime CSS
+$variables['body_class'] = 'tki'; // No special CSS for this page yet, so use standard tki-prime CSS
 $variables['lang'] = $lang;
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
 

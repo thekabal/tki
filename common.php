@@ -66,23 +66,23 @@ header('Vary: Accept-Encoding, Accept-Language');  // Tell CDN's or proxies to k
                                                    // for example.
 header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP connections (15sec), which give better
                                                    // per-client performance, but can be worse (for a server) for many
-ob_start(array('Bnt\Compress', 'compress'));       // Start a buffer, and when it closes (at the end of a request),
-                                                   // call the callback function 'bnt\Compress' to properly handle
+ob_start(array('Tki\Compress', 'compress'));       // Start a buffer, and when it closes (at the end of a request),
+                                                   // call the callback function 'Tki\Compress' to properly handle
                                                    // detection of compression.
 
-$pdo_db = new Bnt\Db;
+$pdo_db = new Tki\Db;
 $pdo_db = $pdo_db->initDb('pdo');                  // Connect to db using pdo
-$db = new Bnt\Db;
+$db = new Tki\Db;
 $db = $db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
 
-$bntreg = new Bnt\Reg($pdo_db);                    // TKI Registry object -  passing config variables via classes
-$bntreg->bnttimer = new Bnt\Timer;                 // Create a benchmark timer to get benchmarking data for everything
-$bntreg->bnttimer->start();                        // Start benchmarking immediately
+$tkireg = new Tki\Reg($pdo_db);                    // TKI Registry object -  passing config variables via classes
+$tkireg->tkitimer = new Tki\Timer;                 // Create a benchmark timer to get benchmarking data for everything
+$tkireg->tkitimer->start();                        // Start benchmarking immediately
 $langvars = null;                                  // Language variables in every page, set them to a null value first
-$template = new \Bnt\Template();                   // Template API.
-$template->setTheme($bntreg->default_template);    // Set the name of the theme, temporary until we have a theme picker
+$template = new \Tki\Template();                   // Template API.
+$template->setTheme($tkireg->default_template);    // Set the name of the theme, temporary until we have a theme picker
 
-$bnt_session = new Bnt\Sessions($pdo_db);
+$tki_session = new Tki\Sessions($pdo_db);
 
 if (!isset($index_page))
 {
@@ -95,4 +95,4 @@ if (!isset($index_page))
     }
 }
 
-$lang = $bntreg->default_lang;
+$lang = $tkireg->default_lang;

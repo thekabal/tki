@@ -17,7 +17,7 @@
 //
 // File: classes/CalcLevels.php
 
-namespace Bnt;
+namespace Tki;
 
 class CalcLevels
 {

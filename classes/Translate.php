@@ -17,7 +17,7 @@
 //
 // File: classes/Translate.php
 
-namespace Bnt;
+namespace Tki;
 
 use PDO;
 

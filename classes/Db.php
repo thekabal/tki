@@ -17,9 +17,9 @@
 //
 // File: classes/Db.php
 //
-// Class for managing the database inside BNT
+// Class for managing the database inside TKI
 
-namespace Bnt;
+namespace Tki;
 
 use PDO;
 

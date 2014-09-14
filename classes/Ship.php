@@ -17,11 +17,11 @@
 //
 // File: classes/Ship.php
 
-namespace Bnt;
+namespace Tki;
 
 class Ship
 {
-    public static function isDestroyed($pdo_db, $lang, $bntreg, $langvars, $template, $playerinfo)
+    public static function isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo)
     {
         // Check for destroyed ship
         if ($playerinfo['ship_destroyed'] === 'Y')
@@ -56,7 +56,7 @@ class Ship
                 $title = $langvars['l_error'];
                 Header::display($pdo_db, $lang, $template, $title);
                 echo $error_status;
-                Footer::display($pdo_db, $lang, $bntreg, $template);
+                Footer::display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
         }

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_ibank_accounts (
+CREATE TABLE IF NOT EXISTS tki_ibank_accounts (
   ship_id int(11) NOT NULL DEFAULT '0',
   balance int(20) DEFAULT '0',
   loan int(20) DEFAULT '0',

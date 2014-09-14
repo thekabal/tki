@@ -19,20 +19,20 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('main', 'port', 'galaxy', 'common', 'global_includes', 'global_funcs', 'footer'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'port', 'galaxy', 'common', 'global_includes', 'global_funcs', 'footer'));
 $title = $langvars['l_map_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 $result3 = $db->Execute("SELECT distinct {$db->prefix}movement_log.sector_id, port_type, beacon FROM {$db->prefix}movement_log,{$db->prefix}universe WHERE ship_id = ? AND {$db->prefix}movement_log.sector_id={$db->prefix}universe.sector_id order by sector_id ASC", array($playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
 $row = $result3->fields;
 
 $tile['special'] = "port-special.png";
@@ -50,7 +50,7 @@ $div_w = 20; // Only this width to match the included images
 $div_h = 20; // Only this height to match the included images
 $div_border = 2; // CSS border is 1 so this should be 2
 $div_xmax = 50; // Where to wrap to next line
-$div_ymax = $bntreg->sector_max / $div_xmax;
+$div_ymax = $tkireg->sector_max / $div_xmax;
 $map_width = ($div_w + $div_border) * $div_xmax;  // Define the containing div to be the right width to wrap at $div_xmax
 
 // Setup containing div to hold the width of the images
@@ -100,7 +100,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
 }
 
 // This is the row numbers on the side of the map
-for ($a = 1; $a < ($bntreg->sector_max/50 +1); $a++)
+for ($a = 1; $a < ($tkireg->sector_max/50 +1); $a++)
 {
     echo "\n<div style='position:absolute;left:" . ($map_width + 10)."px;top:".(($a - 1) * ($div_h + $div_border))."px;'>".(($a * 50) - 1)."</div>";
 }
@@ -115,5 +115,5 @@ echo "    <div><img style='height:20px; width:20px' alt='" . $langvars['l_port']
 echo "    <div><img style='height:20px; width:20px' alt='" . $langvars['l_port'] . ": " . $langvars['l_unexplored'] . "' src='" . $template->getVariables('template_dir') . "/images/{$tile['unknown']}'> &lt;- " . $langvars['l_unexplored'] . "</div>\n";
 
 echo "<br><br>";
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

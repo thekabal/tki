@@ -19,17 +19,17 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('defence_report', 'planet_report', 'main', 'device', 'port', 'modify_defences', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('defence_report', 'planet_report', 'main', 'device', 'port', 'modify_defences', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 $title = $langvars['l_sdf_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 $query = "SELECT * FROM {$db->prefix}sector_defence WHERE ship_id = ?";
@@ -55,7 +55,7 @@ if (!empty($sort))
 }
 
 $res = $db->Execute($query, array($playerinfo['ship_id']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
 $i = 0;
 if ($res)
@@ -117,5 +117,5 @@ else
 }
 
 echo "<br><br>";
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

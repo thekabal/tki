@@ -19,13 +19,13 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('main', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $shiptypes[0] = "tinyship.png";
@@ -34,7 +34,7 @@ $shiptypes[2] = "mediumship.png";
 $shiptypes[3] = "largeship.png";
 $shiptypes[4] = "hugeship.png";
 
-$shipavg = Bnt\CalcLevels::avgTech($playerinfo, "ship");
+$shipavg = Tki\CalcLevels::avgTech($playerinfo, "ship");
 
 if ($shipavg < 8)
 {
@@ -58,22 +58,22 @@ else
 }
 
 $holds_used = $playerinfo['ship_ore'] + $playerinfo['ship_organics'] + $playerinfo['ship_goods'] + $playerinfo['ship_colonists'];
-$holds_max = Bnt\CalcLevels::holds($playerinfo['hull'], $bntreg->level_factor);
-$armor_pts_max = Bnt\CalcLevels::armor($playerinfo['armor'], $bntreg->level_factor);
-$ship_fighters_max = Bnt\CalcLevels::fighters($playerinfo['computer'], $bntreg->level_factor);
-$torps_max = Bnt\CalcLevels::torpedoes($playerinfo['torp_launchers'], $bntreg->level_factor);
-$energy_max = Bnt\CalcLevels::energy($playerinfo['power'], $bntreg->level_factor);
+$holds_max = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
+$armor_pts_max = Tki\CalcLevels::armor($playerinfo['armor'], $tkireg->level_factor);
+$ship_fighters_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor);
+$torps_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg->level_factor);
+$energy_max = Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor);
 $escape_pod = ($playerinfo['dev_escapepod'] == 'Y') ? $langvars['l_yes'] : $langvars['l_no'];
 $fuel_scoop = ($playerinfo['dev_fuelscoop'] == 'Y') ? $langvars['l_yes'] : $langvars['l_no'];
 $lssd = ($playerinfo['dev_lssd'] == 'Y') ? $langvars['l_yes'] : $langvars['l_no'];
 
 // Clear variables array before use, and set array with all used variables in page
 $variables = null;
-$variables['body_class'] = 'bnt'; // No special CSS
+$variables['body_class'] = 'tki'; // No special CSS
 $variables['lang'] = $lang;
-$variables['color_header'] = $bntreg->color_header;
-$variables['color_line1'] = $bntreg->color_line1;
-$variables['color_line2'] = $bntreg->color_line2;
+$variables['color_header'] = $tkireg->color_header;
+$variables['color_line1'] = $tkireg->color_line1;
+$variables['color_line2'] = $tkireg->color_line2;
 $variables['playerinfo_character_name'] = $playerinfo['character_name'];
 $variables['playerinfo_ship_name'] = $playerinfo['ship_name'];
 $variables['playerinfo_credits'] = $playerinfo['credits'];
@@ -119,7 +119,7 @@ $langvars['container'] = "langvar";
 
 // Pull in footer variables from footer_t.php
 require_once './footer_t.php';
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('main', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'footer', 'regional', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'footer', 'regional', 'news'));
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('report.tpl');

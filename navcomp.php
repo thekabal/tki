@@ -19,20 +19,20 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('navcomp', 'common', 'global_includes', 'global_funcs', 'footer'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('navcomp', 'common', 'global_includes', 'global_funcs', 'footer'));
 $title = $langvars['l_nav_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
-if (!$bntreg->allow_navcomp)
+if (!$tkireg->allow_navcomp)
 {
     echo $langvars['l_nav_nocomp'] . '<br><br>';
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die ();
 }
 
@@ -53,14 +53,14 @@ if (mb_strlen(trim($stop_sector)) === 0)
 }
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $current_sector = $playerinfo['sector'];
 $computer_tech  = $playerinfo['computer'];
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($current_sector));
-Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 $sectorinfo = $result2->fields;
 
 if ($state == 0)
@@ -142,7 +142,7 @@ elseif ($state == 1)
         $db->SetFetchMode(ADODB_FETCH_NUM);
 
         $search_result = $db->Execute($search_query) or die("Invalid Query");
-        Bnt\Db::logDbErrors($db, $search_result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $search_result, __LINE__, __FILE__);
         $found = $search_result->RecordCount();
         if ($found > 0)
         {
@@ -173,5 +173,5 @@ elseif ($state == 1)
 
 $db->SetFetchMode(ADODB_FETCH_ASSOC);
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

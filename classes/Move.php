@@ -17,11 +17,11 @@
 //
 // File: classes/Move.php
 
-namespace Bnt;
+namespace Tki;
 
 class Move
 {
-    public static function calcFuelScooped($playerinfo, $distance, $triptime, $bntreg)
+    public static function calcFuelScooped($playerinfo, $distance, $triptime, $tkireg)
     {
         // Check if we have a fuel scoop
         if ($playerinfo['dev_fuelscoop'] == 'Y')
@@ -42,7 +42,7 @@ class Move
         }
 
         // Calculate the free power for the ship.
-        $free_power = CalcLevels::energy($playerinfo['power'], $bntreg->level_factor) - $playerinfo['ship_energy'];
+        $free_power = CalcLevels::energy($playerinfo['power'], $tkireg->level_factor) - $playerinfo['ship_energy'];
         if ($free_power < $energyscooped)
         {
             // Limit the energy scooped to the maximum free power available.

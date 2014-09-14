@@ -19,24 +19,24 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $title = $langvars['l_title_port'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('port', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 $sectorinfo = $result2->fields;
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 
 if ($zoneinfo['allow_trade'] == 'N')
@@ -44,8 +44,8 @@ if ($zoneinfo['allow_trade'] == 'N')
     $title = $langvars['l_no_trade'];
     echo "<h1>" . $title . "</h1>\n";
     echo $langvars['l_no_trade_info'] . "<p>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 elseif ($zoneinfo['allow_trade'] == 'L')
@@ -53,7 +53,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
     if ($zoneinfo['corp_zone'] == 'N')
     {
         $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
-        Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $ownerinfo = $res->fields;
 
         if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
@@ -61,8 +61,8 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             $title = $langvars['l_no_trade'];
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
-            Bnt\Text::gotoMain($db, $lang, $langvars);
-            Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+            Tki\Text::gotoMain($db, $lang, $langvars);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -73,8 +73,8 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             $title = $langvars['l_no_trade'];
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
-            Bnt\Text::gotoMain($db, $lang, $langvars);
-            Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+            Tki\Text::gotoMain($db, $lang, $langvars);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -140,25 +140,25 @@ else
         // Kami multi-browser window upgrade fix
         if (array_key_exists('port_shopping', $_SESSION) == false || $_SESSION['port_shopping'] != true)
         {
-            Bnt\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
+            Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
             echo "<META HTTP-EQUIV='Refresh' CONTENT='2; URL=main.php'>";
             echo "<div style='color:#f00; font-size:18px;'>Your last Sales Transaction has already been delivered, Please enter the Special Port and select your order.</div>\n";
             echo "<br>\n";
             echo "<div style='color:#fff; font-size:12px;'>Auto redirecting in 2 seconds.</div>\n";
             echo "<br>\n";
 
-            Bnt\Text::gotoMain($db, $lang, $langvars);
-            Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+            Tki\Text::gotoMain($db, $lang, $langvars);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
         unset ($_SESSION['port_shopping']);
 
-        if (Bad\Ibank::isLoanPending($db, $playerinfo['ship_id'], $bntreg->ibank_lrate))
+        if (Bad\Ibank::isLoanPending($db, $playerinfo['ship_id'], $tkireg->ibank_lrate))
         {
             echo $langvars['l_port_loannotrade'] . "<p>";
             echo "<a href=igb.php>" . $langvars['l_ibank_term'] . "</a><p>";
-            Bnt\Text::gotoMain($db, $lang, $langvars);
-            Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+            Tki\Text::gotoMain($db, $lang, $langvars);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
@@ -254,7 +254,7 @@ else
         }
 
         $fighter_number = round(abs($fighter_number));
-        $fighter_max = Bnt\CalcLevels::fighters($playerinfo['computer'], $bntreg->level_factor) - $playerinfo['ship_fighters'];
+        $fighter_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor) - $playerinfo['ship_fighters'];
         if ($fighter_max < 0)
         {
             $fighter_max = 0;
@@ -265,14 +265,14 @@ else
             $fighter_number = $fighter_max;
         }
 
-        $fighter_cost    = $fighter_number * $bntreg->fighter_price;
+        $fighter_cost    = $fighter_number * $tkireg->fighter_price;
         if ($torpedo_number < 0)
         {
             $torpedo_number = 0;
         }
 
         $torpedo_number = round(abs($torpedo_number));
-        $torpedo_max = Bnt\CalcLevels::torpedoes($playerinfo['torp_launchers'], $bntreg->level_factor) - $playerinfo['torps'];
+        $torpedo_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg->level_factor) - $playerinfo['torps'];
         if ($torpedo_max < 0)
         {
             $torpedo_max = 0;
@@ -283,14 +283,14 @@ else
             $torpedo_number = $torpedo_max;
         }
 
-        $torpedo_cost = $torpedo_number * $bntreg->torpedo_price;
+        $torpedo_cost = $torpedo_number * $tkireg->torpedo_price;
         if ($armor_number < 0)
         {
             $armor_number = 0;
         }
 
         $armor_number = round(abs($armor_number));
-        $armor_max = Bnt\CalcLevels::armor($playerinfo['armor'], $bntreg->level_factor) - $playerinfo['armor_pts'];
+        $armor_max = Tki\CalcLevels::armor($playerinfo['armor'], $tkireg->level_factor) - $playerinfo['armor_pts'];
         if ($armor_max < 0)
         {
             $armor_max = 0;
@@ -301,14 +301,14 @@ else
             $armor_number = $armor_max;
         }
 
-        $armor_cost     = $armor_number * $bntreg->armor_price;
+        $armor_cost     = $armor_number * $tkireg->armor_price;
         if ($colonist_number < 0)
         {
             $colonist_number = 0;
         }
 
         $colonist_number = round(abs($colonist_number));
-        $colonist_max    = Bnt\CalcLevels::holds($playerinfo['hull'], $bntreg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+        $colonist_max    = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
 
         if ($colonist_max < 0)
         {
@@ -320,22 +320,22 @@ else
             $colonist_number = $colonist_max;
         }
 
-        $colonist_cost = $colonist_number * $bntreg->colonist_price;
+        $colonist_cost = $colonist_number * $tkireg->colonist_price;
 
-        $dev_genesis_number = min(round(abs($dev_genesis_number)), $bntreg->max_genesis - $playerinfo['dev_genesis']);
-        $dev_genesis_cost = $dev_genesis_number * $bntreg->dev_genesis_price;
+        $dev_genesis_number = min(round(abs($dev_genesis_number)), $tkireg->max_genesis - $playerinfo['dev_genesis']);
+        $dev_genesis_cost = $dev_genesis_number * $tkireg->dev_genesis_price;
 
-        $dev_beacon_number = min(round(abs($dev_beacon_number)), $bntreg->max_beacons - $playerinfo['dev_beacon']);
-        $dev_beacon_cost = $dev_beacon_number * $bntreg->dev_beacon_price;
+        $dev_beacon_number = min(round(abs($dev_beacon_number)), $tkireg->max_beacons - $playerinfo['dev_beacon']);
+        $dev_beacon_cost = $dev_beacon_number * $tkireg->dev_beacon_price;
 
-        $dev_emerwarp_number = min(round(abs($dev_emerwarp_number)), $bntreg->max_emerwarp - $playerinfo['dev_emerwarp']);
-        $dev_emerwarp_cost = $dev_emerwarp_number * $bntreg->dev_emerwarp_price;
+        $dev_emerwarp_number = min(round(abs($dev_emerwarp_number)), $tkireg->max_emerwarp - $playerinfo['dev_emerwarp']);
+        $dev_emerwarp_cost = $dev_emerwarp_number * $tkireg->dev_emerwarp_price;
 
-        $dev_warpedit_number = min(round(abs($dev_warpedit_number)), $bntreg->max_warpedit - $playerinfo['dev_warpedit']);
-        $dev_warpedit_cost = $dev_warpedit_number * $bntreg->dev_warpedit_price;
+        $dev_warpedit_number = min(round(abs($dev_warpedit_number)), $tkireg->max_warpedit - $playerinfo['dev_warpedit']);
+        $dev_warpedit_cost = $dev_warpedit_number * $tkireg->dev_warpedit_price;
 
         $dev_minedeflector_number = round(abs($dev_minedeflector_number));
-        $dev_minedeflector_cost = $dev_minedeflector_number * $bntreg->dev_minedeflector_price;
+        $dev_minedeflector_cost = $dev_minedeflector_number * $tkireg->dev_minedeflector_price;
 
         $dev_escapepod_cost = 0;
         $dev_fuelscoop_cost = 0;
@@ -532,7 +532,7 @@ else
 
             $query = $query . ", turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id=$playerinfo[ship_id]";
             $purchase = $db->Execute("$query");
-            Bnt\Db::logDbErrors($db, $purchase, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $purchase, __LINE__, __FILE__);
 
             $hull_upgrade = 0;
             echo "</table>";
@@ -540,13 +540,13 @@ else
             echo "<div style='font-size:16px; color:#fff;'><br>[<span style='color:#0f0;'>Border Patrol</span>]<br>\n";
             echo "Halt, while we scan your cargo...<br>\n";
 
-            if ((Bnt\CalcLevels::holds($playerinfo['hull'], $bntreg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists']) < 0)
+            if ((Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists']) < 0)
             {
                 // build_two_col("<span style='color:#f00;'>Detected Illegal Cargo</span>", "<span style='color:#0f0;'>Fixed</span>", "left", "right");
                 echo "<span style='color:#f00; font-weight:bold;'>Detected illegal cargo, as a penalty, we are confiscating all of your cargo, you may now continue.</span>\n";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=0, ship_organics=0, ship_goods=0, ship_energy=0, ship_colonists =0 WHERE ship_id = ? LIMIT 1;", array($playerinfo['ship_id']));
-                Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-                Bnt\AdminLog::writeLog($db, 5001, "Detected illegal cargo on shipID: {$playerinfo['ship_id']}");
+                Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                Tki\AdminLog::writeLog($db, 5001, "Detected illegal cargo on shipID: {$playerinfo['ship_id']}");
             }
             else
             {
@@ -616,24 +616,24 @@ else
         $trade_goods    = round(abs($trade_goods));
         $trade_energy   = round(abs($trade_energy));
 
-        $trade_ore       =  trade($bntreg->ore_price, $bntreg->ore_delta, $sectorinfo['port_ore'], $bntreg->ore_limit, $bntreg->inventory_factor, "ore", $trade_ore, $price_array, $sectorinfo);
-        $trade_organics  =  trade($bntreg->organics_price, $bntreg->organics_delta, $sectorinfo['port_organics'], $bntreg->organics_limit, $bntreg->inventory_factor, "organics", $trade_organics, $price_array, $sectorinfo);
-        $trade_goods     =  trade($bntreg->goods_price, $bntreg->goods_delta, $sectorinfo['port_goods'], $bntreg->goods_limit, $bntreg->inventory_factor, "goods", $trade_goods, $price_array, $sectorinfo);
-        $trade_energy    =  trade($bntreg->energy_price, $bntreg->energy_delta, $sectorinfo['port_energy'], $bntreg->energy_limit, $bntreg->inventory_factor, "energy", $trade_energy, $price_array, $sectorinfo);
+        $trade_ore       =  trade($tkireg->ore_price, $tkireg->ore_delta, $sectorinfo['port_ore'], $tkireg->ore_limit, $tkireg->inventory_factor, "ore", $trade_ore, $price_array, $sectorinfo);
+        $trade_organics  =  trade($tkireg->organics_price, $tkireg->organics_delta, $sectorinfo['port_organics'], $tkireg->organics_limit, $tkireg->inventory_factor, "organics", $trade_organics, $price_array, $sectorinfo);
+        $trade_goods     =  trade($tkireg->goods_price, $tkireg->goods_delta, $sectorinfo['port_goods'], $tkireg->goods_limit, $tkireg->inventory_factor, "goods", $trade_goods, $price_array, $sectorinfo);
+        $trade_energy    =  trade($tkireg->energy_price, $tkireg->energy_delta, $sectorinfo['port_energy'], $tkireg->energy_limit, $tkireg->inventory_factor, "energy", $trade_energy, $price_array, $sectorinfo);
 
-//        $bntreg->ore_price       =  $price_array['ore'];
-//        $bntreg->organics_price  =  $price_array['organics'];
-//        $bntreg->goods_price     =  $price_array['goods'];
-//        $bntreg->energy_price    =  $price_array['energy'];
+//        $tkireg->ore_price       =  $price_array['ore'];
+//        $tkireg->organics_price  =  $price_array['organics'];
+//        $tkireg->goods_price     =  $price_array['goods'];
+//        $tkireg->energy_price    =  $price_array['energy'];
 
         $cargo_exchanged = $trade_ore + $trade_organics + $trade_goods;
 
-        $free_holds = Bnt\CalcLevels::holds($playerinfo['hull'], $bntreg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
-        $free_power = Bnt\CalcLevels::energy($playerinfo['power'], $bntreg->level_factor) - $playerinfo['ship_energy'];
-        $total_cost = $trade_ore * $bntreg->ore_price + $trade_organics * $bntreg->organics_price + $trade_goods * $bntreg->goods_price + $trade_energy * $bntreg->energy_price;
+        $free_holds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+        $free_power = Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor) - $playerinfo['ship_energy'];
+        $total_cost = $trade_ore * $tkireg->ore_price + $trade_organics * $tkireg->organics_price + $trade_goods * $tkireg->goods_price + $trade_energy * $tkireg->energy_price;
 
         // Debug info
-        // echo "$trade_ore * $bntreg->ore_price + $trade_organics * $bntreg->organics_price + $trade_goods * $bntreg->goods_price + $trade_energy * $bntreg->energy_price = $total_cost";
+        // echo "$trade_ore * $tkireg->ore_price + $trade_organics * $tkireg->organics_price + $trade_goods * $tkireg->goods_price + $trade_energy * $tkireg->energy_price = $total_cost";
 
         if ($free_holds < $cargo_exchanged)
         {
@@ -708,23 +708,23 @@ else
                     <tr>
                         <td colspan=99 align=center><strong><font style='color:{$trade_color};'>". $trade_result ." " . number_format(abs($total_cost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_credits'] . "</font></strong></td>
                     </tr>
-                    <tr bgcolor=$bntreg->color_line1>
+                    <tr bgcolor=$tkireg->color_line1>
                         <td><strong><font size=2 color=white>" . $langvars['l_traded_ore'] . ": </font><strong></td><td align=right><strong><font size=2 color=white>" . number_format($trade_ore, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</font></strong></td>
                     </tr>
-                   <tr bgcolor=$bntreg->color_line2>
+                   <tr bgcolor=$tkireg->color_line2>
                         <td><strong><font size=2 color=white>" . $langvars['l_traded_organics'] . ": </font><strong></td><td align=right><strong><font size=2 color=white>" . number_format($trade_organics, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</font></strong></td>
                     </tr>
-                    <tr bgcolor=$bntreg->color_line1>
+                    <tr bgcolor=$tkireg->color_line1>
                         <td><strong><font size=2 color=white>" . $langvars['l_traded_goods'] . ": </font><strong></td><td align=right><strong><font size=2 color=white>" . number_format($trade_goods, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</font></strong></td>
                     </tr>
-                    <tr bgcolor=$bntreg->color_line2>
+                    <tr bgcolor=$tkireg->color_line2>
                         <td><strong><font size=2 color=white>" . $langvars['l_traded_energy'] . ": </font><strong></td><td align=right><strong><font size=2 color=white>" . number_format($trade_energy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</font></strong></td>
                     </tr>
                     </table>";
 
             // Update ship cargo, credits and turns
             $trade_result     = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, rating = rating + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
-            Bnt\Db::logDbErrors($db, $trade_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $trade_result, __LINE__, __FILE__);
 
             // Make all trades positive to change port values
             $trade_ore        = round(abs($trade_ore));
@@ -734,7 +734,7 @@ else
 
             // Decrease supply and demand on port
             $trade_result2    = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_organics = port_organics - ?, port_goods = port_goods - ?, port_energy = port_energy - ? WHERE sector_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $sectorinfo['sector_id']));
-            Bnt\Db::logDbErrors($db, $trade_result2, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $trade_result2, __LINE__, __FILE__);
 
             echo $langvars['l_trade_complete'] . ".<br><br>";
         }
@@ -742,11 +742,11 @@ else
 }
 
 echo "<br><br>";
-Bnt\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($db, $lang, $langvars);
 
 if ($sectorinfo['port_type'] == "special")
 {
     echo "<br><br>Click <a href=port.php>here</a> to return to the supply depot.";
 }
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

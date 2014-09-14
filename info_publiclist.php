@@ -21,8 +21,8 @@ require_once './common.php';
 
 $info = array();
 
-$info['GAMENAME'] = $bntreg->game_name;
-$info['GAMEID'] = md5($bntreg->game_name . $bntreg->bnt_ls_key);
+$info['GAMENAME'] = $tkireg->game_name;
+$info['GAMEID'] = md5($tkireg->game_name . $tkireg->tki_ls_key);
 
 $xsql = "SELECT UNIX_TIMESTAMP(time) as x FROM {$db->prefix}movement_log WHERE event_id = 1";
 $res = $db->Execute($xsql);
@@ -67,86 +67,86 @@ while (!$res->EOF)
     $res->MoveNext();
 }
 
-$info['G-TURNS-START'] = $bntreg->start_turns;
-$info['G-TURNS-MAX'] = $bntreg->max_turns;
+$info['G-TURNS-START'] = $tkireg->start_turns;
+$info['G-TURNS-MAX'] = $tkireg->max_turns;
 
-$info['G-SCHED-TICKS'] = $bntreg->sched_ticks;
-$info['G-SCHED-TYPE'] = $bntreg->sched_type;
+$info['G-SCHED-TICKS'] = $tkireg->sched_ticks;
+$info['G-SCHED-TYPE'] = $tkireg->sched_type;
 
-$info['G-SPEED-TURNS'] = $bntreg->sched_turns;
-$info['G-SPEED-PORTS'] = $bntreg->sched_ports;
-$info['G-SPEED-PLANETS'] = $bntreg->sched_planets;
-$info['G-SPEED-IGB'] = $bntreg->sched_igb;
+$info['G-SPEED-TURNS'] = $tkireg->sched_turns;
+$info['G-SPEED-PORTS'] = $tkireg->sched_ports;
+$info['G-SPEED-PLANETS'] = $tkireg->sched_planets;
+$info['G-SPEED-IGB'] = $tkireg->sched_igb;
 
-$info['G-SIZE-SECTOR'] = $bntreg->sector_max;
-$info['G-SIZE-UNIVERSE'] = $bntreg->universe_size;
-$info['G-SIZE-PLANETS'] = $bntreg->max_planets_sector;
-$info['G-SIZE-PLANETS-TO-OWN'] = $bntreg->min_bases_to_own;
+$info['G-SIZE-SECTOR'] = $tkireg->sector_max;
+$info['G-SIZE-UNIVERSE'] = $tkireg->universe_size;
+$info['G-SIZE-PLANETS'] = $tkireg->max_planets_sector;
+$info['G-SIZE-PLANETS-TO-OWN'] = $tkireg->min_bases_to_own;
 
-$info['G-COLONIST-LIMIT'] = $bntreg->colonist_limit;
-$info['G-DOOMSDAY-VALUE'] = $bntreg->doomsday_value;
+$info['G-COLONIST-LIMIT'] = $tkireg->colonist_limit;
+$info['G-DOOMSDAY-VALUE'] = $tkireg->doomsday_value;
 
-$info['G-MONEY-IGB'] = $bntreg->ibank_interest;
-$info['G-MONEY-PLANET'] = round($bntreg->interest_rate - 1, 4);
+$info['G-MONEY-IGB'] = $tkireg->ibank_interest;
+$info['G-MONEY-PLANET'] = round($tkireg->interest_rate - 1, 4);
 
-$info['G-PORT-LIMIT-ORE'] = $bntreg->ore_limit;
-$info['G-PORT-RATE-ORE'] = $bntreg->ore_delta;
-$info['G-PORT-DELTA-ORE'] = $bnteg->ore_delta;
+$info['G-PORT-LIMIT-ORE'] = $tkireg->ore_limit;
+$info['G-PORT-RATE-ORE'] = $tkireg->ore_delta;
+$info['G-PORT-DELTA-ORE'] = $tkireg->ore_delta;
 
-$info['G-PORT-LIMIT-ORGANICS'] = $bntreg->organics_limit;
-$info['G-PORT-RATE-ORGANICS'] = $bntreg->organics_rate;
-$info['G-PORT-DELTA-ORGANICS'] = $bntreg->organics_delta;
+$info['G-PORT-LIMIT-ORGANICS'] = $tkireg->organics_limit;
+$info['G-PORT-RATE-ORGANICS'] = $tkireg->organics_rate;
+$info['G-PORT-DELTA-ORGANICS'] = $tkireg->organics_delta;
 
-$info['G-PORT-LIMIT-GOODS'] = $bntreg->goods_limit;
-$info['G-PORT-RATE-GOODS'] = $bntreg->goods_rate;
-$info['G-PORT-DELTA-GOODS'] = $bntreg->goods_delta;
+$info['G-PORT-LIMIT-GOODS'] = $tkireg->goods_limit;
+$info['G-PORT-RATE-GOODS'] = $tkireg->goods_rate;
+$info['G-PORT-DELTA-GOODS'] = $tkireg->goods_delta;
 
-$info['G-PORT-LIMIT-ENERGY'] = $bntreg->energy_limit;
-$info['G-PORT-RATE-ENERGY'] = $bntreg->energy_rate;
-$info['G-PORT-DELTA-ENERGY'] = $bntreg->energy_delta;
+$info['G-PORT-LIMIT-ENERGY'] = $tkireg->energy_limit;
+$info['G-PORT-RATE-ENERGY'] = $tkireg->energy_rate;
+$info['G-PORT-DELTA-ENERGY'] = $tkireg->energy_delta;
 
-$info['G-SOFA'] = ($bntreg->allow_sofa===true ? "1" : "0");
-$info['G-KSM'] = ($bntreg->allow_ksm ? "1" : "0");
+$info['G-SOFA'] = ($tkireg->allow_sofa===true ? "1" : "0");
+$info['G-KSM'] = ($tkireg->allow_ksm ? "1" : "0");
 
-$info['S-CLOSED'] = ($bntreg->game_closed ? "1" : "0");
-$info['S-CLOSED-ACCOUNTS'] = ($bntreg->account_creation_closed ? "1" : "0");
+$info['S-CLOSED'] = ($tkireg->game_closed ? "1" : "0");
+$info['S-CLOSED-ACCOUNTS'] = ($tkireg->account_creation_closed ? "1" : "0");
 
-$info['ALLOW_FULLSCAN'] = ($bntreg->allow_fullscan ? "1" : "0");
-$info['ALLOW_NAVCOMP'] = ($bntreg->allow_navcomp ? "1" : "0");
-$info['ALLOW_IBANK'] = ($bntreg->allow_ibank ? "1" : "0");
-$info['ALLOW_GENESIS_DESTROY'] = ($bntreg->allow_genesis_destroy ? "1" : "0");
+$info['ALLOW_FULLSCAN'] = ($tkireg->allow_fullscan ? "1" : "0");
+$info['ALLOW_NAVCOMP'] = ($tkireg->allow_navcomp ? "1" : "0");
+$info['ALLOW_IBANK'] = ($tkireg->allow_ibank ? "1" : "0");
+$info['ALLOW_GENESIS_DESTROY'] = ($tkireg->allow_genesis_destroy ? "1" : "0");
 
-$info['INVENTORY_FACTOR'] = $bntreg->inventory_factor;
-$info['UPGRADE_COST'] = $bntreg->upgrade_cost;
-$info['UPGRADE_FACTOR'] = $bntreg->upgrade_factor;
-$info['LEVEL_FACTOR'] = $bntreg->level_factor;
+$info['INVENTORY_FACTOR'] = $tkireg->inventory_factor;
+$info['UPGRADE_COST'] = $tkireg->upgrade_cost;
+$info['UPGRADE_FACTOR'] = $tkireg->upgrade_factor;
+$info['LEVEL_FACTOR'] = $tkireg->level_factor;
 
-$info['DEV_GENESIS_PRICE'] = $bntreg->dev_genesis_price;
-$info['DEV_BEACON_PRICE'] = $bntreg->dev_beacon_price;
-$info['DEV_EMERWARP_PRICE'] = $bntreg->dev_emerwarp_price;
-$info['DEV_WARPEDIT_PRICE'] = $bntreg->dev_warpedit_price;
-$info['DEV_MINEDEFLECTOR_PRICE'] = $bntreg->dev_minedeflector_price;
-$info['DEV_ESCAPEPOD_PRICE'] = $bntreg->dev_escapepod_price;
-$info['DEV_FUELSCOOP_PRICE'] = $bntreg->dev_fuelscoop_price;
-$info['DEV_LSSD_PRICE'] = $bntreg->dev_lssd_price;
+$info['DEV_GENESIS_PRICE'] = $tkireg->dev_genesis_price;
+$info['DEV_BEACON_PRICE'] = $tkireg->dev_beacon_price;
+$info['DEV_EMERWARP_PRICE'] = $tkireg->dev_emerwarp_price;
+$info['DEV_WARPEDIT_PRICE'] = $tkireg->dev_warpedit_price;
+$info['DEV_MINEDEFLECTOR_PRICE'] = $tkireg->dev_minedeflector_price;
+$info['DEV_ESCAPEPOD_PRICE'] = $tkireg->dev_escapepod_price;
+$info['DEV_FUELSCOOP_PRICE'] = $tkireg->dev_fuelscoop_price;
+$info['DEV_LSSD_PRICE'] = $tkireg->dev_lssd_price;
 
-$info['FIGHTER_PRICE'] = $bntreg->fighter_price;
-$info['TORPEDO_PRICE'] = $bntreg->torpedo_price;
-$info['ARMOR_PRICE'] = $bntreg->armor_price;
-$info['COLONIST_PRICE'] = $bntreg->colonist_price;
+$info['FIGHTER_PRICE'] = $tkireg->fighter_price;
+$info['TORPEDO_PRICE'] = $tkireg->torpedo_price;
+$info['ARMOR_PRICE'] = $tkireg->armor_price;
+$info['COLONIST_PRICE'] = $tkireg->colonist_price;
 
-$info['BASE_DEFENSE'] = $bntreg->base_defense;
+$info['BASE_DEFENSE'] = $tkireg->base_defense;
 
-$info['COLONIST_PRODUCTION_RATE'] = $bntreg->colonist_production_rate;
-$info['COLONIST_REPRODUCTION_RATE'] = $bntreg->colonist_reproduction_rate;
-$info['ORGANICS_CONSUMPTION'] = $bntreg->organics_consumption;
-$info['STARVATION_DEATH_RATE'] = $bntreg->starvation_death_rate;
+$info['COLONIST_PRODUCTION_RATE'] = $tkireg->colonist_production_rate;
+$info['COLONIST_REPRODUCTION_RATE'] = $tkireg->colonist_reproduction_rate;
+$info['ORGANICS_CONSUMPTION'] = $tkireg->organics_consumption;
+$info['STARVATION_DEATH_RATE'] = $tkireg->starvation_death_rate;
 
-$info['CORP_PLANET_TRANSFERS'] = ($bntreg->corp_planet_transfers ? "1" : "0");
-$info['MAX_TEAM_MEMBERS'] = $bntreg->max_team_members;
+$info['CORP_PLANET_TRANSFERS'] = ($tkireg->corp_planet_transfers ? "1" : "0");
+$info['MAX_TEAM_MEMBERS'] = $tkireg->max_team_members;
 
-$info['ADMIN_MAIL'] = $bntreg->admin_mail;
-$info['LINK_FORUMS'] = $bntreg->link_forums;
+$info['ADMIN_MAIL'] = $tkireg->admin_mail;
+$info['LINK_FORUMS'] = $tkireg->link_forums;
 
 foreach ($info as $key => $value)
 {

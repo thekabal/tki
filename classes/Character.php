@@ -17,11 +17,11 @@
 //
 // File: classes/Character.php
 
-namespace Bnt;
+namespace Tki;
 
 class Character
 {
-    public static function kill($db, $ship_id, $langvars, $bntreg, $remove_planets = false)
+    public static function kill($db, $ship_id, $langvars, $tkireg, $remove_planets = false)
     {
         $update_ships_res = $db->Execute("UPDATE {$db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defences=' ' WHERE ship_id=?", array($ship_id));
         Db::logDbErrors($db, $update_ships_res, __LINE__, __FILE__);
@@ -60,7 +60,7 @@ class Character
         {
             foreach ($sectors as $sector)
             {
-                Ownership::calc($db, $sector, $bntreg->min_bases_to_own, $langvars);
+                Ownership::calc($db, $sector, $tkireg->min_bases_to_own, $langvars);
             }
         }
 

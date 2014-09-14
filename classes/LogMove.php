@@ -17,7 +17,7 @@
 //
 // File: classes/LogMove.php
 
-namespace Bnt;
+namespace Tki;
 
 class LogMove
 {

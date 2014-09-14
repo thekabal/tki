@@ -19,13 +19,13 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $title = $langvars['l_pr_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('planet_report', 'rsmove', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('planet_report', 'rsmove', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
 echo '<h1>' . $title . '</h1>';
 
 echo '<br>';
@@ -54,5 +54,5 @@ else
 }
 
 echo '<br><br>';
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

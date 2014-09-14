@@ -17,7 +17,7 @@
 //
 // File: classes/Smarty.php
 
-namespace Bnt;
+namespace Tki;
 
 class Smarty
 {

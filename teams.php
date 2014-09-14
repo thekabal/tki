@@ -22,12 +22,12 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('teams', 'common', 'global_includes', 'global_funcs', 'main', 'footer'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('teams', 'common', 'global_includes', 'global_funcs', 'main', 'footer'));
 $title = $langvars['l_team_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
@@ -96,7 +96,7 @@ $result = $db->Execute("SELECT {$db->prefix}ships.*, {$db->prefix}teams.team_nam
             FROM {$db->prefix}ships
             LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team = {$db->prefix}teams.id
             WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username'])) or die ($db->ErrorMsg());
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo=$result->fields;
 
 // We do not want to query the database, if it is not necessary.
@@ -107,7 +107,7 @@ if ($playerinfo['team_invite'] != 0)
             FROM {$db->prefix}ships
             LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team_invite = {$db->prefix}teams.id
             WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username'])) or die ($db->ErrorMsg());
-    Bnt\Db::logDbErrors($db, $invite, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $invite, __LINE__, __FILE__);
     $invite_info=$invite->fields;
 }
 else
@@ -119,13 +119,13 @@ else
 if (!is_null($whichteam))
 {
     $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($whichteam)) or die ($db->ErrorMsg());
-    Bnt\Db::logDbErrors($db, $result_team, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $result_team, __LINE__, __FILE__);
     $team = $result_team->fields;
 }
 else
 {
     $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team'])) or die ($db->ErrorMsg());
-    Bnt\Db::logDbErrors($db, $result_team, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $result_team, __LINE__, __FILE__);
     $team = $result_team->fields;
 }
 
@@ -161,16 +161,16 @@ switch ($teamwhat)
                 }
 
                 $resx = $db->Execute("DELETE FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
-                Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
                 $resy = $db->Execute("UPDATE {$db->prefix}ships SET team='0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                Bnt\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
 
                 $resz = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE team_invite = ?;", array($whichteam));
-                Bnt\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
 
                 $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y';", array($playerinfo['ship_id']));
-                Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                 $i=0;
                 while (!$res->EOF)
                 {
@@ -181,20 +181,20 @@ switch ($teamwhat)
                 }
 
                 $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
-                Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                 if (!empty ($sectors))
                 {
                     foreach ($sectors as $sector)
                     {
-                        Bnt\Ownership::calc($db, $sector, $min_bases_to_own, $langvars);
+                        Tki\Ownership::calc($db, $sector, $min_bases_to_own, $langvars);
                     }
                 }
-                Bnt\Defense::defenceVsDefence($db, $playerinfo['ship_id'], $langvars);
-                Bnt\Ship::leavePlanet($db, $playerinfo['ship_id']);
+                Tki\Defense::defenceVsDefence($db, $playerinfo['ship_id'], $langvars);
+                Tki\Ship::leavePlanet($db, $playerinfo['ship_id']);
 
                 $langvars['l_team_onlymember'] = str_replace("[team_name]", "<strong>$team[team_name]</strong>", $langvars['l_team_onlymember']);
                 echo $langvars['l_team_onlymember'] . "<br><br>";
-                Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
+                Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
             }
             else
             {
@@ -206,7 +206,7 @@ switch ($teamwhat)
                     echo "<tr><td>" . $langvars['l_team_newc'] . "</td><td><select name=newcreator>";
 
                     $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team = ? ORDER BY character_name ASC;", array($whichteam));
-                    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                     while (!$res->EOF)
                     {
                         $row = $res->fields;
@@ -224,12 +224,12 @@ switch ($teamwhat)
                 else
                 {
                     $resx = $db->Execute("UPDATE {$db->prefix}ships SET team='0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                    Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                     $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whichteam));
-                    Bnt\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
 
                     $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND corp != 0;", array($playerinfo['ship_id']));
-                    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                     $i=0;
                     while (!$res->EOF)
                     {
@@ -239,20 +239,20 @@ switch ($teamwhat)
                     }
 
                     $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
-                    Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                     if (!empty ($sectors))
                     {
                         foreach ($sectors as $sector)
                         {
-                            Bnt\Ownership::calc($db, $sector, $min_bases_to_own, $langvars);
+                            Tki\Ownership::calc($db, $sector, $min_bases_to_own, $langvars);
                         }
                     }
 
                     echo $langvars['l_team_youveleft'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
-                    Bnt\Defense::defenceVsDefence($db, $playerinfo['ship_id'], $langvars);
-                    Bnt\Ship::leavePlanet($db, $playerinfo['ship_id']);
-                    Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
-                    Bnt\PlayerLog::writeLog($db, $team['creator'], LOG_TEAM_NOT_LEAVE, $playerinfo['character_name']);
+                    Tki\Defense::defenceVsDefence($db, $playerinfo['ship_id'], $langvars);
+                    Tki\Ship::leavePlanet($db, $playerinfo['ship_id']);
+                    Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
+                    Tki\PlayerLog::writeLog($db, $team['creator'], LOG_TEAM_NOT_LEAVE, $playerinfo['character_name']);
                 }
             }
         }
@@ -260,21 +260,21 @@ switch ($teamwhat)
         {
             // owner of a team is leaving and set a new owner
             $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($newcreator));
-            Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             $newcreatorname = $res->fields;
             echo $langvars['l_team_youveleft'] . " <strong>" . $team['team_name'] . "</strong> " . $langvars['l_team_relto'] . " " . $newcreatorname['character_name'] . ".<br><br>";
 
             $resx = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
             $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = ? WHERE team = ?;", array($newcreator, $whichteam));
-            Bnt\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
 
             $resz = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1, creator = ? WHERE id = ?;", array($newcreator, $whichteam));
-            Bnt\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
 
             $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND corp != 0;", array($playerinfo['ship_id']));
-            Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             $i=0;
             while (!$res->EOF)
             {
@@ -284,17 +284,17 @@ switch ($teamwhat)
             }
 
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
-            Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
             if (!empty ($sectors))
             {
                 foreach ($sectors as $sector)
                 {
-                    Bnt\Ownership::calc($db, $sector, $min_bases_to_own, $langvars);
+                    Tki\Ownership::calc($db, $sector, $min_bases_to_own, $langvars);
                 }
             }
 
-            Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_NEWLEAD, $team['team_name'] ."|". $newcreatorname['character_name']);
-            Bnt\PlayerLog::writeLog($db, $newcreator, LOG_TEAM_LEAD, $team['team_name']);
+            Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_NEWLEAD, $team['team_name'] ."|". $newcreatorname['character_name']);
+            Tki\PlayerLog::writeLog($db, $newcreator, LOG_TEAM_LEAD, $team['team_name']);
         }
 
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
@@ -310,14 +310,14 @@ switch ($teamwhat)
             if ($playerinfo['team_invite'] == $whichteam)
             {
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET team = ?, team_invite = 0 WHERE ship_id = ?;", array($whichteam, $playerinfo['ship_id']));
-                Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
                 $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members + 1 WHERE id = ?;", array($whichteam));
-                Bnt\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
 
                 echo $langvars['l_team_welcome'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
-                Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_JOIN, $team['team_name']);
-                Bnt\PlayerLog::writeLog($db, $team['creator'], LOG_TEAM_NEWMEMBER, $team['team_name'] ."|". $playerinfo['character_name']);
+                Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_JOIN, $team['team_name']);
+                Tki\PlayerLog::writeLog($db, $team['creator'], LOG_TEAM_NEWMEMBER, $team['team_name'] ."|". $playerinfo['character_name']);
             }
             else
             {
@@ -348,7 +348,7 @@ switch ($teamwhat)
         {
             $who = preg_replace('/[^0-9]/', '', $who);
             $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
-            Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
             $whotoexpel = $result->fields;
 
             if (is_null($confirmed))
@@ -361,15 +361,15 @@ switch ($teamwhat)
                 // should go here if ($whotoexpel[team] ==
 
                 $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp='0' WHERE owner = ?;", array($who));
-                Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
                 $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($who));
-                Bnt\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
 
                 // No more necessary due to COUNT(*) in previous SQL statement
                 $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whotoexpel['team']));
 
-                Bnt\PlayerLog::writeLog($db, $who, LOG_TEAM_KICK, $team['team_name']);
+                Tki\PlayerLog::writeLog($db, $who, LOG_TEAM_KICK, $team['team_name']);
                 echo $whotoexpel['character_name'] . " " . $langvars['l_team_ejected'] . "<br>";
             }
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
@@ -409,13 +409,13 @@ switch ($teamwhat)
             }
 
             $res = $db->Execute("INSERT INTO {$db->prefix}teams (id, creator, team_name, number_of_members, description) VALUES (?, ?, ?, '1', ?);", array($playerinfo['ship_id'], $playerinfo['ship_id'], $teamname, $teamdesc));
-            Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES(NULL, ?, ?, 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array("{$teamname}\'s Empire", $playerinfo['ship_id']));
-            Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
             $resy = $db->Execute("UPDATE {$db->prefix}ships SET team=? WHERE ship_id = ?;", array($playerinfo['ship_id'], $playerinfo['ship_id']));
-            Bnt\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
             echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hcreated'] . ".<br><br>";
-            Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_CREATE, $teamname);
+            Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_CREATE, $teamname);
         }
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         break;
@@ -435,7 +435,7 @@ switch ($teamwhat)
             echo "<tr><td>" . $langvars['l_team_selectp'] . ":</td><td><select name=who style='width:200px;'>";
 
             $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team <> ? AND ship_destroyed ='N' AND turns_used > 0 ORDER BY character_name ASC;", array($whichteam));
-            Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             while (!$res->EOF)
             {
                 $row = $res->fields;
@@ -462,7 +462,7 @@ switch ($teamwhat)
                             break;
                 }
                 $res = $db->Execute("SELECT character_name,team_invite FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
-                Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                 $newpl = $res->fields;
                 if ($newpl['team_invite'])
                 {
@@ -472,9 +472,9 @@ switch ($teamwhat)
                 else
                 {
                     $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = ? WHERE ship_id = ?;", array($whichteam, $who));
-                    Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                     echo $langvars['l_team_plinvted'] . "<br>" . $langvars['l_team_plinvted2'] . "<br>";
-                    Bnt\PlayerLog::writeLog($db, $who, LOG_TEAM_INVITE, $team['team_name']);
+                    Tki\PlayerLog::writeLog($db, $who, LOG_TEAM_INVITE, $team['team_name']);
                 }
             }
             else
@@ -488,8 +488,8 @@ switch ($teamwhat)
     case 8: // REFUSE invitation
         echo $langvars['l_team_refuse'] . " <strong>" . $invite_info['team_name'] . "</strong>.<br><br>";
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-        Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-        Bnt\PlayerLog::writeLog($db, $team['creator'], LOG_TEAM_REJECT, $playerinfo['character_name'] ."|". $invite_info['team_name']);
+        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        Tki\PlayerLog::writeLog($db, $team['creator'], LOG_TEAM_REJECT, $playerinfo['character_name'] ."|". $invite_info['team_name']);
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         break;
 
@@ -533,17 +533,17 @@ switch ($teamwhat)
             }
 
             $res = $db->Execute("UPDATE {$db->prefix}teams SET team_name = ?, description = ? WHERE id = ?;", array($teamname, $teamdesc, $whichteam)) or die ("<font color=red>error: " . $db->ErrorMSG() . "</font>");
-            Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hasbeenr'] . "<br><br>";
 
             // Adding a log entry to all members of the renamed team
             $result_team_name = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE team = ? AND ship_id <> ?;", array($whichteam, $playerinfo['ship_id'])) or die ("<font color=red>error: " . $db->ErrorMsg() . "</font>");
-            Bnt\Db::logDbErrors($db, $result_team_name, __LINE__, __FILE__);
-            Bnt\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_RENAME, $teamname);
+            Tki\Db::logDbErrors($db, $result_team_name, __LINE__, __FILE__);
+            Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_RENAME, $teamname);
             while (!$result_team_name->EOF)
             {
                 $teamname_array = $result_team_name->fields;
-                Bnt\PlayerLog::writeLog($db, $teamname_array['ship_id'], LOG_TEAM_M_RENAME, $teamname);
+                Tki\PlayerLog::writeLog($db, $teamname_array['ship_id'], LOG_TEAM_M_RENAME, $teamname);
                 $result_team_name->MoveNext();
             }
         }
@@ -562,19 +562,19 @@ switch ($teamwhat)
             {
                 $playerinfo['team'] = -$playerinfo['team'];
                 $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
-                Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
                 $whichteam = $result->fields;
                 echo $langvars['l_team_urejected'] . " <strong>" . $whichteam['team_name'] . "</strong><br><br>";
                 echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
                 break;
             }
             $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
-            Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
             $whichteam = $result->fields;
             if ($playerinfo['team_invite'])
             {
                 $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team_invite']));
-                Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
                 $whichinvitingteam = $result->fields;
             }
             $isowner = Bad\Team::isTeamOwner($whichteam, $playerinfo);
@@ -582,7 +582,7 @@ switch ($teamwhat)
         }
 
         $res= $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
-        Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $num_res = $res->fields;
 
         if ($num_res['total'] > 0)
@@ -597,5 +597,5 @@ switch ($teamwhat)
 }
 
 echo "<br><br>";
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

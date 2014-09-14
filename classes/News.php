@@ -19,7 +19,7 @@
 //
 // Todo: Add validity checking for the format of $day
 
-namespace Bnt;
+namespace Tki;
 
 class News
 {

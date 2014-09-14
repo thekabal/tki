@@ -21,9 +21,9 @@
 {extends file="layout.tpl"}
 
 {block name=body}
-<div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$variables['template']}/images/header1.png" alt="{$langvars['l_bnt']}"></div>
+<div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$variables['template']}/images/header1.png" alt="{$langvars['l_tki']}"></div>
 
-<div class="index-header-text">{$langvars['l_bnt']}</div>
+<div class="index-header-text">{$langvars['l_tki']}</div>
 <br>
 <h2 style="display:none">{$langvars['l_navigation']}</h2>
 <div class="navigation" role="navigation">
@@ -37,8 +37,8 @@
 </ul></div><br style="clear:both">
 <div><p></p></div>
 <div class="index-welcome">
-<h1 class="index-h1">{$langvars['l_welcome_bnt']}</h1>
-<p>{$langvars['l_bnt_description']}<br></p>
+<h1 class="index-h1">{$langvars['l_welcome_tki']}</h1>
+<p>{$langvars['l_tki_description']}<br></p>
 <form accept-charset="utf-8" action="login2.php{$variables['link']}" method="post">
 <dl class="twocolumn-form">
 <dt><label for="email">{$langvars['l_login_email']}</label></dt>

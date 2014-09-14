@@ -17,20 +17,20 @@
 //
 // File: classes/Login.php
 
-namespace Bnt;
+namespace Tki;
 
 class Login
 {
-    public static function checkLogin($pdo_db, $lang, $langvars, $bntreg, $template)
+    public static function checkLogin($pdo_db, $lang, $langvars, $tkireg, $template)
     {
         // Database driven language entries
         $langvars = Translate::load($pdo_db, $lang, array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
 
         // Check if game is closed - Ignore the false return if it is open
-        Game::isGameClosed($pdo_db, $bntreg, $lang, $template, $langvars);
+        Game::isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars);
 
         // Handle authentication check - Will die if fails, or return correct playerinfo
-        $playerinfo = Player::HandleAuth($pdo_db, $lang, $langvars, $bntreg, $template);
+        $playerinfo = Player::HandleAuth($pdo_db, $lang, $langvars, $tkireg, $template);
 
         // Establish timestamp for interval in checking bans
         $stamp = date('Y-m-d H:i:s');
@@ -41,7 +41,7 @@ class Login
         Player::HandleBan($pdo_db, $lang, $timestamp, $template, $playerinfo);
 
         // Check for destroyed ship - Ignore the false return if not
-        Ship::isDestroyed($pdo_db, $lang, $bntreg, $langvars, $template, $playerinfo);
+        Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo);
 
         return true;
     }

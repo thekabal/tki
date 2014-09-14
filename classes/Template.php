@@ -17,7 +17,7 @@
 //
 // File: classes/Template.php
 
-namespace Bnt;
+namespace Tki;
 
 define('TEMPLATE_USE_SMARTY', 0x00000000, true);
 

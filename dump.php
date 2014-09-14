@@ -19,13 +19,13 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $title = $langvars['l_dump_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('dump', 'main', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('dump', 'main', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
 $playerinfo = $result->fields;
@@ -37,8 +37,8 @@ echo "<h1>" . $title . "</h1>\n";
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_dump_turn']  . "<br><br>";
-    Bnt\Text::gotoMain($db, $lang, $langvars);
-    Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die ();
 }
 
@@ -56,5 +56,5 @@ else
     echo $langvars['l_dump_nono'] . "<br><br>";
 }
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

@@ -17,7 +17,7 @@
 //
 // File: classes/Timer.php
 
-namespace Bnt;
+namespace Tki;
 
 class Timer
 {

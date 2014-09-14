@@ -21,7 +21,7 @@
 // If it does not work, please comment this out and set it in db_config.php instead.
 // But PLEASE also report that it did not work for you at the github project page ()
 
-namespace Bnt;
+namespace Tki;
 
 class SetPaths
 {

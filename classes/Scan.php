@@ -17,7 +17,7 @@
 //
 // File: classes/Scan.php
 
-namespace Bnt;
+namespace Tki;
 
 class Scan
 {

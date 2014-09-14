@@ -17,7 +17,7 @@
 //
 // File: classes/SectorDefense.php
 
-namespace Bnt;
+namespace Tki;
 
 class SectorDefense
 {

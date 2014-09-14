@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_planets (
+CREATE TABLE IF NOT EXISTS tki_planets (
   planet_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   sector_id int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -22,6 +22,6 @@ CREATE TABLE IF NOT EXISTS bnt_planets (
   prod_torp int(11) NOT NULL DEFAULT '0',
   defeated varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   PRIMARY KEY (planet_id),
-  KEY bnt_owner (`owner`),
-  KEY bnt_corp (corp)
+  KEY tki_owner (`owner`),
+  KEY tki_corp (corp)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;

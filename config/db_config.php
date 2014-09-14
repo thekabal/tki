@@ -33,11 +33,11 @@ $db_port = null;
 $db_host = '127.0.0.1';
 
 // Username and password to connect to the database:
-$db_user = 'bnt';
-$db_pwd = 'bnt';
+$db_user = 'tki';
+$db_pwd = 'tki';
 
 // Name of the SQL database:
-$db_name = 'bnt';
+$db_name = 'tki';
 
 // Type of the SQL database.
 // "mysqli" for MySQLi - needed for transaction support or "postgres9" for PostgreSQL ver 9 and up
@@ -49,5 +49,5 @@ $db_type = 'mysqli';
 // one game of TKI on the same database, or if the current table
 // names conflict with tables you already have in your db, you will
 // need to change this
-$db_prefix = 'bnt_';
+$db_prefix = 'tki_';
 

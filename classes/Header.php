@@ -20,18 +20,18 @@
 // TODO: This file should only be used when we have not converted a file to use templates.
 // Once they use templates, the header will be loaded correctly by layout.tpl
 
-namespace Bnt;
+namespace Tki;
 
 class Header
 {
-    public static function display($pdo_db, $lang, $template, $title = null, $body_class = 'bnt', $include_ckeditor = false)
+    public static function display($pdo_db, $lang, $template, $title = null, $body_class = 'tki', $include_ckeditor = false)
     {
         $langvars = Translate::load($pdo_db, $lang, array('common'));
 
         $variables = null;
         $variables['lang'] = $lang;
 
-        // Body class defines a css file for a specific page, if one isn't defined, it defaults to bnt, which is
+        // Body class defines a css file for a specific page, if one isn't defined, it defaults to tki, which is
         // nulled by the template.
         $variables['body_class'] = $body_class;
 

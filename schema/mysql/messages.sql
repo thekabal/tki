@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_messages (
+CREATE TABLE IF NOT EXISTS tki_messages (
   ID int(11) NOT NULL AUTO_INCREMENT,
   sender_id int(11) NOT NULL DEFAULT '0',
   recp_id int(11) NOT NULL DEFAULT '0',

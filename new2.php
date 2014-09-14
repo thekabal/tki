@@ -20,13 +20,13 @@
 require_once './common.php';
 
 $title = $langvars['l_new_title2'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'combat', 'footer', 'news'));
 echo '<h1>' . $title . '</h1>';
 
-if ($bntreg->account_creation_closed)
+if ($tkireg->account_creation_closed)
 {
     die ($langvars['l_new_closed_message']); // This should ideally use a class based error handler instead
 }
@@ -77,11 +77,11 @@ if ($newlang !== null && $newlang !== null)
 }
 else
 {
-    $lang = $bntreg->default_lang;
+    $lang = $tkireg->default_lang;
 }
 
 $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email=? || character_name=? || ship_name=?;", array($username, $character, $shipname));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $flag = 0;
 
 if ($username === null || $character === null || $shipname === null)
@@ -118,22 +118,22 @@ if ($flag == 0)
     // Insert code to add player to database
     $stamp = date('Y-m-d H:i:s');
     $query = $db->Execute("SELECT MAX(turns_used + turns) AS mturns FROM {$db->prefix}ships;");
-    Bnt\Db::logDbErrors($db, $query, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $query, __LINE__, __FILE__);
     $res = $query->fields;
 
     $mturns = $res['mturns'];
 
-    if ($mturns > $bntreg->max_turns)
+    if ($mturns > $tkireg->max_turns)
     {
-        $mturns = $bntreg->max_turns;
+        $mturns = $tkireg->max_turns;
     }
 
     // Hash the password.  $hashed_pass will be a 60-character string.
     $hashed_pass = password_hash($filtered_post_password, PASSWORD_DEFAULT); // PASSWORD_DEFAULT is the strongest algorithm available to PHP at the current time - today, it is BCRYPT.
 
     $result2 = $db->Execute("INSERT INTO {$db->prefix}ships (ship_name, ship_destroyed, character_name, password, email, armor_pts, credits, ship_energy, ship_fighters, turns, on_planet, dev_warpedit, dev_genesis, dev_beacon, dev_emerwarp, dev_escapepod, dev_fuelscoop, dev_minedeflector, last_login, ip_address, trade_colonists, trade_fighters, trade_torps, trade_energy, cleared_defences, lang, dev_lssd)
-                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, $bntreg->start_armor, $bntreg->start_credits, $bntreg->start_energy, $bntreg->start_fighters, $mturns, 'N', $bntreg->start_editors, $bntreg->start_genesis, $bntreg->start_beacon, $bntreg->start_emerwarp, $bntreg->start_escape_pod, $bntreg->start_scoop, $bntreg->start_minedeflectors, $stamp, $_SERVER['REMOTE_ADDR'], 'Y', 'N', 'N', 'Y', NULL, $lang, $bntreg->start_lssd));
-    Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, $tkireg->start_armor, $tkireg->start_credits, $tkireg->start_energy, $tkireg->start_fighters, $mturns, 'N', $tkireg->start_editors, $tkireg->start_genesis, $tkireg->start_beacon, $tkireg->start_emerwarp, $tkireg->start_escape_pod, $tkireg->start_scoop, $tkireg->start_minedeflectors, $stamp, $_SERVER['REMOTE_ADDR'], 'Y', 'N', 'N', 'Y', NULL, $lang, $tkireg->start_lssd));
+    Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 
     if (!$result2)
     {
@@ -142,7 +142,7 @@ if ($flag == 0)
     else
     {
         $result2 = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($username));
-        Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 
         $shipid = $result2->fields;
 
@@ -153,23 +153,23 @@ if ($flag == 0)
         // Some reason \r\n is broken, so replace them now.
         $langvars['l_new_message'] = str_replace('\r\n', "\r\n", $langvars['l_new_message']);
 
-        $link_to_game = 'http://' . $_SERVER['HTTP_HOST'] . Bnt\SetPaths::setGamepath();
+        $link_to_game = 'http://' . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
         $langvars['l_new_message'] = str_replace('[website]', $link_to_game, $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[npg]', $link_to_game . 'newplayerguide.php', $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[faq]', $link_to_game . 'faq.php', $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[forums]', 'http://kabal.tk/forums/', $langvars['l_new_message']);
 
-        mail("$username", $langvars['l_new_topic'], $langvars['l_new_message'] . "\r\n\r\n" . $link_to_game, 'From: ' . $bntreg->admin_mail . "\r\nReply-To: " . $bntreg->admin_mail . "\r\nX-Mailer: PHP/" . phpversion());
+        mail("$username", $langvars['l_new_topic'], $langvars['l_new_message'] . "\r\n\r\n" . $link_to_game, 'From: ' . $tkireg->admin_mail . "\r\nReply-To: " . $tkireg->admin_mail . "\r\nX-Mailer: PHP/" . phpversion());
 
-        Bnt\LogMove::writeLog($db, $shipid['ship_id'], 0); // A new player is placed into sector 0. Make sure his movement log shows it, so they see it on the galaxy map.
+        Tki\LogMove::writeLog($db, $shipid['ship_id'], 0); // A new player is placed into sector 0. Make sure his movement log shows it, so they see it on the galaxy map.
         $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES (NULL, ?, ?, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array($character ."\'s Territory", $shipid['ship_id']));
-        Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
         $resx = $db->Execute("INSERT INTO {$db->prefix}ibank_accounts (ship_id,balance,loan) VALUES (?,0,0);", array($shipid['ship_id']));
-        Bnt\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
         // Add presets for new player
-        for ($zz=0; $zz<$bntreg->preset_max; $zz++)
+        for ($zz=0; $zz<$tkireg->preset_max; $zz++)
         {
             $sql = "INSERT INTO {$pdo_db->prefix}presets (ship_id, preset, type) " .
                    "VALUES (:ship_id, :preset, :type)";
@@ -188,7 +188,7 @@ if ($flag == 0)
         $_SESSION['logged_in'] = true;
         $_SESSION['password'] = $filtered_post_password;
         $_SESSION['username'] = $username;
-        Bnt\Text::gotoMain($db, $lang, $langvars);
+        Tki\Text::gotoMain($db, $lang, $langvars);
         header('Refresh: 2;url=main.php');
     }
 }
@@ -198,4 +198,4 @@ else
     echo $langvars['l_new_err'];
 }
 
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

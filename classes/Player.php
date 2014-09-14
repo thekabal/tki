@@ -17,11 +17,11 @@
 //
 // File: classes/Player.php
 
-namespace Bnt;
+namespace Tki;
 
 class Player
 {
-    public static function HandleAuth($pdo_db, $lang, $langvars, $bntreg, $template)
+    public static function HandleAuth($pdo_db, $lang, $langvars, $tkireg, $template)
     {
         $flag = true;
         $error_status = null;
@@ -81,7 +81,7 @@ class Player
             $title = $langvars['l_error'];
             Header::display($pdo_db, $lang, $template, $title);
             echo $error_status;
-            Footer::display($pdo_db, $lang, $bntreg, $template);
+            Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
         else
@@ -136,7 +136,7 @@ class Player
                 $title = $langvars['l_error'];
                 Header::display($pdo_db, $lang, $template, $title);
                 echo $error_status;
-                Footer::display($pdo_db, $lang, $bntreg, $template);
+                Footer::display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
         }

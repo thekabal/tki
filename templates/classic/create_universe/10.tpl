@@ -96,7 +96,6 @@
       <td width="100%" colspan="2" bgcolor="#9999cc" align="left"><font color="#000000" size="1"> </font></td>
     </tr>
     <input type=hidden name=step value={$variables['next_step']}>
-    <input type=hidden name=newlang value={$variables['newlang']}>
     <input type=hidden name=swordfish value={$variables['swordfish']}>
   </table>
   </center>

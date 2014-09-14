@@ -19,13 +19,13 @@
 
 require_once './common.php';
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('device', 'common', 'global_includes', 'global_funcs', 'report', 'footer', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('device', 'common', 'global_includes', 'global_funcs', 'report', 'footer', 'regional'));
 $title = $langvars['l_device_title'];
 $body_class = 'device';
-Bnt\Header::display($pdo_db, $lang, $template, $title, $body_class);
+Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<body class=" . $body_class . "><br>";
 echo "<h1>" . $title . "</h1>\n";
@@ -69,5 +69,5 @@ echo "</tr>";
 echo "</table>";
 echo "<br>";
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

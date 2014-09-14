@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bnt_universe (
+CREATE TABLE IF NOT EXISTS tki_universe (
   sector_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   sector_name varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   zone_id int(11) NOT NULL DEFAULT '0',
@@ -13,6 +13,6 @@ CREATE TABLE IF NOT EXISTS bnt_universe (
   distance int(20) unsigned NOT NULL DEFAULT '0',
   fighters int(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (sector_id),
-  KEY bnt_zone_id (zone_id),
-  KEY bnt_port_type (port_type)
+  KEY tki_zone_id (zone_id),
+  KEY tki_port_type (port_type)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;

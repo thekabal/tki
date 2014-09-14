@@ -22,10 +22,10 @@ if (strpos($_SERVER['PHP_SELF'], '/20.php')) // Prevent direct access to this fi
 }
 
 // Determine current step, next step, and number of steps
-$create_universe_info = Bnt\BigBang::findStep(__FILE__);
+$create_universe_info = Tki\BigBang::findStep(__FILE__);
 
 // Set variables
-$variables['templateset']  = $bntreg->default_template;
+$variables['templateset']  = $tkireg->default_template;
 $variables['body_class']   = 'create_universe';
 $variables['steps']        = $create_universe_info['steps'];
 $variables['current_step'] = $create_universe_info['current_step'];
@@ -44,11 +44,9 @@ $variables['fedsecs']      = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE
 $variables['loops']        = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']    = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
 $variables['autorun']      = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-$variables['newlang']      = filter_input(INPUT_POST, 'newlang', FILTER_SANITIZE_URL);
-$lang = $_POST['newlang']; // Set the language to the language chosen during create universe
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
 $template->addVariables('langvars', $langvars);
 
 // Pull in footer variables from footer_t.php

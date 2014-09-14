@@ -20,22 +20,22 @@
 require_once './common.php';
 
 // Database driven language entries
-$langvars = Bnt\Translate::load($pdo_db, $lang, array('beacon', 'common',
+$langvars = Tki\Translate::load($pdo_db, $lang, array('beacon', 'common',
                                 'global_includes', 'global_funcs', 'combat',
                                 'footer', 'news'));
 $title = $langvars['l_beacon_title'];
-Bnt\Header::display($pdo_db, $lang, $template, $title);
+Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
-Bnt\Login::checkLogin($pdo_db, $lang, $langvars, $bntreg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Bnt\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Bnt\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 $sectorinfo = $result2->fields;
 
 $allowed_rsw = "N";
@@ -51,7 +51,7 @@ if (mb_strlen(trim($beacon_text)) === 0)
 if ($playerinfo['dev_beacon'] > 0)
 {
     $res = $db->Execute("SELECT allow_beacon FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-    Bnt\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     $zoneinfo = $res->fields;
     if ($zoneinfo['allow_beacon'] == 'N')
     {
@@ -60,10 +60,10 @@ if ($playerinfo['dev_beacon'] > 0)
     elseif ($zoneinfo['allow_beacon'] == 'L')
     {
         $result3 = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-        Bnt\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
         $zoneowner_info = $result3->fields;
         $result5 = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneowner_info['owner']));
-        Bnt\Db::logDbErrors($db, $result5, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($db, $result5, __LINE__, __FILE__);
         $zoneteam = $result5->fields;
 
         if ($zoneowner_info['owner'] != $playerinfo['ship_id'])
@@ -111,9 +111,9 @@ if ($playerinfo['dev_beacon'] > 0)
             $beacon_text = trim(htmlentities($beacon_text, ENT_HTML5, 'UTF-8'));
             echo $langvars['l_beacon_nowreads'] . ": " . $beacon_text . ".<br><br>";
             $update = $db->Execute("UPDATE {$db->prefix}universe SET beacon = ? WHERE sector_id = ?;", array($beacon_text, $sectorinfo['sector_id']));
-            Bnt\Db::logDbErrors($db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
             $update = $db->Execute("UPDATE {$db->prefix}ships SET dev_beacon=dev_beacon-1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Bnt\Db::logDbErrors($db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
         }
     }
 }
@@ -122,5 +122,5 @@ else
     echo $langvars['l_beacon_donthave'] . "<br><br>";
 }
 
-Bnt\Text::gotoMain($db, $lang, $langvars);
-Bnt\Footer::display($pdo_db, $lang, $bntreg, $template);
+Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

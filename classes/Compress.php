@@ -18,7 +18,7 @@
 // File: classes/Compress.php
 //
 
-namespace Bnt;
+namespace Tki;
 
 class Compress
 {
