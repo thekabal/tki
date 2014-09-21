@@ -26,7 +26,7 @@ if (strpos($_SERVER['PHP_SELF'], 'db_config.php')) // Prevent direct access to t
 // Adodb is automatically configured to be run from vendor/adodb.
 // We are migrating away from adodb, switching to pure PDO instead.
 
-// Port to connect to database on. Note : if you do not know the port, set this to '' for default. Ex, MySQL default is 3306
+// Port to connect to database on. Note : if you do not know the port, set this to '' for default. Ex, MySQL default is 3306, PgSQL is 5432
 $db_port = null;
 
 // Hostname of the database server:
@@ -44,6 +44,7 @@ $db_name = 'tki';
 // NOTE: only mysqli works as of this release.
 // $db_type = 'postgres9';
 $db_type = 'mysqli';
+//$db_type = 'postgres9';
 
 // Table prefix for the database. If you want to run more than
 // one game of TKI on the same database, or if the current table

@@ -1,6 +1,7 @@
-TheKabal - September 13, 2016
+TheKabal - September 20, 2016
 -------------------------------
 Change the copyright notice, add a copyright page, clarify further
+Add support for Postgresql at the DB driver level - very first step of many, many more.
 
 TheKabal - September 13, 2016
 -------------------------------
