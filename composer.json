@@ -16,7 +16,6 @@
         "swiftmailer/swiftmailer": "v5.2.1",
         "adodb/adodb-php": "v5.19"
     },
-
     "autoload": {
         "psr-4": { "Tki\\": "classes/", "Bad\\": "classes/" }
     },
