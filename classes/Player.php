@@ -96,7 +96,7 @@ class Player
         if ($timestamp['now'] >= ($timestamp['last'] + 60))
         {
             $ban_result = CheckBan::isBanned($pdo_db, $lang, null, $playerinfo);
-            if ($ban_result===false|| (array_key_exists('ban_type', $ban_result)&&$ban_result['ban_type']===ID_WATCH))
+            if ($ban_result === false || (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
             {
                 return false;
             }
