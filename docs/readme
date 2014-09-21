@@ -17,12 +17,11 @@ Requirements:
 - MySQL version 5.5.3 minimum is required (needed for utf8mb4 schemas).
 - PHP's mbstring extension must be installed (used in common.php)
 - PHP's pdo extension must be installed (used in create_universe, and soon the rest of the game)
-- Web browser - Recent versons of Firefox, Safari, and Chrome are best, but we also support Internet Explorer 9 or above - Older versions of Internet Explorer will have degraded functionality.
-- Apache version 2.2.22+ is supported, we have not determined a required minimum.
-- IIS is not supported, and TKI will likely not work correctly on it in future versions.
+- Web browser - Firefox and Chrome (v30+ for both) are best, while Safari (v6+) is also good. Internet Explorer needs to be at least (v9+).
+- Apache version 2.2.22+ is supported, we have not determined a required minimum. TKI will likely run on lighttpd and nginix, but has not been tested on either.
+- IIS is NOT supported, please do not ask!
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc)
-- PHP version 5.5 is suggested. PHP 5.3 is end of life, and no longer supported by the PHP team. Despite those issues, it is possible to run TKI on 5.3.7 and above.
-(For Smarty, password_hash for login, directoryIterator, and many other features). Any version below 5.3.7 is not supported and is unlikely to work.
+- PHP version 5.5 is required. 
 
 Download:
     You can get the newest version at https://github.com/thekabal/tki
