@@ -40,6 +40,6 @@ class Timer
 
         $this->t_elapsed = $this->t_stop - $this->t_start;
 
-        return round($this->t_elapsed, 2); // Round it down to two significant digits
+        return round($this->t_elapsed, 3); // Round it down to three significant digits
     }
 }

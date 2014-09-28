@@ -1,0 +1,1 @@
+ALTER SEQUENCE tki_traderoutes_traderoute_id_seq OWNED BY tki_traderoutes.traderoute_id;

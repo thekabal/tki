@@ -43,7 +43,7 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-$variables['destroy_schema_results'] = Tki\Schema::destroy($pdo_db, $pdo_db->prefix); // Delete all tables in the database
+$variables['destroy_schema_results'] = Tki\Schema::destroy($pdo_db, $pdo_db->prefix, $pdo_db->type); // Delete all tables in the database
 $variables['table_count']            = count($variables['destroy_schema_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 

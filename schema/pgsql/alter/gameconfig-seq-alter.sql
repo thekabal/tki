@@ -1,0 +1,1 @@
+ALTER SEQUENCE tki_gameconfig_config_id_seq OWNED BY tki_gameconfig.config_id;

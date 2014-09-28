@@ -1,0 +1,1 @@
+CREATE SEQUENCE tki_traderoutes_traderoute_id_seq;

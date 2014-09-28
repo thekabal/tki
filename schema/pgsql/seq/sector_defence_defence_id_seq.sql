@@ -1,0 +1,1 @@
+CREATE SEQUENCE tki_sector_defence_defence_id_seq;

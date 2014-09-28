@@ -43,7 +43,7 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-$variables['create_schema_results']  = Tki\Schema::create($pdo_db, $pdo_db->prefix); // Create all tables in the database
+$variables['create_schema_results']  = Tki\Schema::create($pdo_db, $pdo_db->prefix, $pdo_db->type); // Create all tables in the database
 $variables['table_count']            = count($variables['create_schema_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
@@ -64,4 +64,3 @@ $template->addVariables('langvars', $langvars);
 include './footer_t.php';
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/40.tpl');
-

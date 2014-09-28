@@ -1,0 +1,1 @@
+ALTER SEQUENCE tki_characters_character_id_seq OWNED BY tki_characters.character_id;

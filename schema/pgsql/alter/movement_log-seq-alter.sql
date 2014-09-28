@@ -1,0 +1,1 @@
+ALTER SEQUENCE tki_movement_log_event_id_seq OWNED BY tki_movement_log.event_id;

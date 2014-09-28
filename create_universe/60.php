@@ -202,11 +202,12 @@ $start = 1;
 
 $local_table_timer->start(); // Start benchmarking
 
-$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' ORDER BY RAND() DESC LIMIT :limit";
+$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':limit', $variables['spp']);
 $stmt->execute();
-$sql_query = $stmt->fetchAll();
+$sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
+shuffle($sql_query);
 
 // TODO: This select should have an error check that is reflected in the template
 $catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
@@ -215,10 +216,10 @@ $z++;
 for ($i = 1; $i <= $loops; $i++)
 {
     $update = "UPDATE {$pdo_db->prefix}universe SET zone_id='3',port_type='special' WHERE ";
+
     for ($j = $start; $j < $finish; $j++)
     {
-        $result = $sql_query[$j];
-        $update .= "(port_type='none' and sector_id=$result[sector_id])";
+        $update .= "(port_type='none' and sector_id=$sql_query[$j])";
         if ($j < ($finish - 1))
         {
             $update .= " or ";
@@ -272,14 +273,15 @@ $start = 0;
 
 $local_table_timer->start(); // Start benchmarking
 
-$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' ORDER BY RAND() DESC LIMIT :limit";
+$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':limit', $variables['oep']);
 $stmt->execute();
-$sql_query = $stmt->fetchAll();
+$sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
+shuffle($sql_query);
 
 // TODO: This select should have an error check that is reflected in the template
-$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
+//$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
 $z++;
 $update = "UPDATE {$pdo_db->prefix}universe SET port_type='ore',port_ore=$initsore,port_organics=$initborganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
 
@@ -288,8 +290,7 @@ for ($i = 1; $i <= $loops; $i++)
     $update = "UPDATE {$pdo_db->prefix}universe SET port_type='ore',port_ore=$initsore,port_organics=$initborganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
     for ($j = $start; $j < $finish; $j++)
     {
-        $result = $sql_query[$j];
-        $update .= "(port_type='none' and sector_id=$result[sector_id])";
+        $update .= "(port_type='none' and sector_id=$sql_query[$j])";
         if ($j < ($finish - 1))
         {
             $update .= " or ";
@@ -343,14 +344,15 @@ $start = 0;
 
 $local_table_timer->start(); // Start benchmarking
 
-$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' ORDER BY RAND() DESC LIMIT :limit";
+$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':limit', $variables['ogp']);
 $stmt->execute();
-$sql_query = $stmt->fetchAll();
+$sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
+shuffle($sql_query);
 
 // TODO: This select should have an error check that is reflected in the template
-$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
+//$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
 $z++;
 $update = "UPDATE {$pdo_db->prefix}universe SET port_type='organics',port_ore=$initsore,port_organics=$initborganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
 
@@ -359,8 +361,7 @@ for ($i = 1; $i <= $loops; $i++)
     $update = "UPDATE {$pdo_db->prefix}universe SET port_type='organics',port_ore=$initbore,port_organics=$initsorganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
     for ($j = $start; $j < $finish; $j++)
     {
-        $result = $sql_query[$j];
-        $update .= "(port_type='none' and sector_id=$result[sector_id])";
+        $update .= "(port_type='none' and sector_id=$sql_query[$j])";
         if ($j < ($finish - 1))
         {
             $update .= " or ";
@@ -414,14 +415,15 @@ $start = 0;
 
 $local_table_timer->start(); // Start benchmarking
 
-$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' ORDER BY RAND() DESC LIMIT :limit";
+$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':limit', $variables['gop']);
 $stmt->execute();
-$sql_query = $stmt->fetchAll();
+$sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
+shuffle($sql_query);
 
 // TODO: This select should have an error check that is reflected in the template
-$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
+//$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
 $z++;
 $update = "UPDATE {$pdo_db->prefix}universe SET port_type='goods',port_ore=$initbore,port_organics=$initborganics,port_goods=$initsgoods,port_energy=$initbenergy WHERE ";
 
@@ -430,8 +432,7 @@ for ($i = 1; $i <= $loops; $i++)
     $update = "UPDATE {$pdo_db->prefix}universe SET port_type='goods',port_ore=$initbore,port_organics=$initborganics,port_goods=$initsgoods,port_energy=$initbenergy WHERE ";
     for ($j = $start; $j < $finish; $j++)
     {
-        $result = $sql_query[$j];
-        $update .= "(port_type='none' and sector_id=$result[sector_id])";
+        $update .= "(port_type='none' and sector_id=$sql_query[$j])";
         if ($j < ($finish - 1))
         {
             $update .= " or ";
@@ -486,14 +487,15 @@ $start = 1;
 
 $local_table_timer->start(); // Start benchmarking
 
-$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' ORDER BY RAND() DESC LIMIT :limit";
+$sql = "SELECT sector_id FROM {$pdo_db->prefix}universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':limit', $variables['enp']);
 $stmt->execute();
-$sql_query = $stmt->fetchAll();
+$sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
+shuffle($sql_query);
 
 // TODO: This select should have an error check that is reflected in the template
-$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
+//$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
 $z++;
 $update = "UPDATE {$pdo_db->prefix}universe SET port_type='energy',port_ore=$initbore,port_organics=$initborganics,port_goods=$initsgoods,port_energy=$initbenergy WHERE ";
 
@@ -502,8 +504,7 @@ for ($i = 1; $i <= $loops; $i++)
     $update = "UPDATE {$pdo_db->prefix}universe SET port_type='energy',port_ore=$initbore,port_organics=$initborganics,port_goods=$initsgoods,port_energy=$initbenergy WHERE ";
     for ($j = $start; $j < $finish; $j++)
     {
-        $result = $sql_query[$j];
-        $update .= "(port_type='none' and sector_id=$result[sector_id])";
+        $update .= "(port_type='none' and sector_id=$sql_query[$j])";
         if ($j < ($finish - 1))
         {
             $update .= " or ";
@@ -533,13 +534,13 @@ for ($i = 1; $i <= $loops; $i++)
     }
 }
 
-for ($t = 0; $t < $z; $t++)
-{
-    if ($catch_results[$t] !== true)
-    {
+//for ($t = 0; $t < $z; $t++)
+//{
+//    if ($catch_results[$t] !== true)
+//    {
         $variables['autorun'] = false; // We disable autorun if any errors occur in processing
-    }
-}
+//    }
+//}
 
 $template->addVariables('langvars', $langvars);
 

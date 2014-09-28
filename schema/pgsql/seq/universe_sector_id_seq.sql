@@ -1,0 +1,1 @@
+CREATE SEQUENCE tki_universe_sector_id_seq;
