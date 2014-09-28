@@ -25,7 +25,7 @@ namespace Tki;
 
 class CheckBan
 {
-    public static function isBanned($pdo_db, $lang, $langvars, $playerinfo = false)
+    public static function isBanned($pdo_db, $playerinfo = false)
     {
         // Check to see if we have valid player info.
         if (is_bool($playerinfo) && $playerinfo == false)

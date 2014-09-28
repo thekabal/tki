@@ -43,14 +43,27 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-$variables['destroy_schema_results'] = Tki\Schema::destroy($pdo_db, $pdo_db->prefix, $pdo_db->type); // Delete all tables in the database
-$variables['table_count']            = count($variables['destroy_schema_results']) - 1;
+$variables['drop_tables_results']    = Tki\Schema::dropTables($pdo_db, $pdo_db->prefix, $pdo_db->type); // Delete all tables in the database
+$variables['drop_tables_count']      = count($variables['drop_tables_results']) - 1;
+$variables['drop_seq_results']       = Tki\Schema::dropSequences($pdo_db, $pdo_db->prefix, $pdo_db->type); // Delete all sequences in the database
+$variables['drop_seq_count']         = count($variables['drop_seq_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
-$destroy_array_size = count($variables['destroy_schema_results']);
+// Check for failures in drop tables
+$destroy_array_size = count($variables['drop_tables_results']);
 for ($i = 0; $i < $destroy_array_size; $i++)
 {
-    if ($variables['destroy_schema_results'][$i]['result'] !== true)
+    if ($variables['drop_tables_results'][$i]['result'] !== true)
+    {
+        $variables['autorun'] = false; // We disable autorun if any errors occur in processing
+    }
+}
+
+// Check for failures in drop sequences
+$destroy_array_size = count($variables['drop_seq_results']);
+for ($i = 0; $i < $destroy_array_size; $i++)
+{
+    if ($variables['drop_seq_results'][$i]['result'] !== true)
     {
         $variables['autorun'] = false; // We disable autorun if any errors occur in processing
     }

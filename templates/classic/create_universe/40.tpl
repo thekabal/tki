@@ -27,20 +27,37 @@
     <tr>
       <th width="700" colspan="2" bgcolor="#9999cc" align="left"><h1 style="color:#000; height: 0.8em; font-size: 0.8em;font-weight: normal;">{$langvars['l_cu_create_tables']}</h1></th>
     </tr>
-    {for $i=0 to $variables['table_count']}
-    {if $variables['create_schema_results'][$i]['result'] === true}
+
+    {for $i=0 to $variables['create_seq_count']}
+    {if $variables['create_seq_results'][$i]['result'] === true}
     <tr title='{$langvars['l_cu_no_errors_found']}'>
     {else}
-    <tr title="{$variables['create_schema_results'][$i]['result']}">
+    <tr title="{$variables['create_seq_results'][$i]['result']}">
     {/if}
-      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_creating_tables']} {$variables['create_schema_results'][$i]['name']} - {$langvars['l_cu_completed_in']|replace:'[time]':$variables['create_schema_results'].$i.time} </font></td>
-      {if $variables['create_schema_results'][$i]['result'] === true}
+      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_creating_seq']} {$variables['create_seq_results'][$i]['name']} - {$langvars['l_cu_completed_in']|replace:'[time]':$variables['create_seq_results'].$i.time} </font></td>
+      {if $variables['create_seq_results'][$i]['result'] === true}
           <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="blue">{$langvars['l_cu_passed']}</font></td>
       {else}
           <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="red">{$langvars['l_cu_failed']}</font></td>
       {/if}
     </tr>
     {/for}
+
+    {for $i=0 to $variables['create_tables_count']}
+    {if $variables['create_tables_results'][$i]['result'] === true}
+    <tr title='{$langvars['l_cu_no_errors_found']}'>
+    {else}
+    <tr title="{$variables['create_tables_results'][$i]['result']}">
+    {/if}
+      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_creating_tables']} {$variables['create_tables_results'][$i]['name']} - {$langvars['l_cu_completed_in']|replace:'[time]':$variables['create_tables_results'].$i.time} </font></td>
+      {if $variables['create_tables_results'][$i]['result'] === true}
+          <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="blue">{$langvars['l_cu_passed']}</font></td>
+      {else}
+          <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="red">{$langvars['l_cu_failed']}</font></td>
+      {/if}
+    </tr>
+    {/for}
+
     <tr>
       <th width="700" colspan="2" bgcolor="#9999cc" align="left"><h2 style="color:#000; height: 0.8em; font-size: 0.8em;font-weight: normal;">{$langvars['l_cu_hover_for_more']}</h2></th>
     </tr>
