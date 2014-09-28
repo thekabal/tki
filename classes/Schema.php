@@ -21,7 +21,7 @@ namespace Tki;
 
 class Schema
 {
-    public static function destroy($db, $db_prefix, $dbtype)
+    public static function dropTables($db, $db_prefix, $dbtype)
     {
         // Need to set this or all hell breaks loose.
         $db->inactive = true;
@@ -51,7 +51,7 @@ class Schema
                 if (!$persist_file)
                 {
                     $drop_res = $db->exec('DROP TABLE ' . $db_prefix . $tablename);
-//                    Db::logDbErrors($db, $drop_res, __LINE__, __FILE__);
+//                    Db::logDbErrors($db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                     if ($drop_res !== false)
                     {
@@ -75,6 +75,17 @@ class Schema
             }
         }
 
+        return $destroy_table_results;
+    }
+
+    public static function dropSequences($db, $db_prefix, $dbtype)
+    {
+        // Need to set this or all hell breaks loose.
+        $db->inactive = true;
+
+        $i = 0;
+        $destroy_table_results = array();
+
         $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
         foreach ($seq_files as $seq_filename)
         {
@@ -85,7 +96,7 @@ class Schema
             {
                 $seqname = mb_substr($seq_filename, 0, -4);
                 $drop_res = $db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
-//                Db::logDbErrors($db, $drop_res, __LINE__, __FILE__);
+//                Db::logDbErrors($db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                 if ($drop_res !== false)
                 {
@@ -107,9 +118,8 @@ class Schema
         return $destroy_table_results;
     }
 
-    public static function create($db, $db_prefix, $dbtype)
+    public static function createSequences($db, $db_prefix, $dbtype)
     {
-        // New SQL Schema table creation
         $create_table_results = array();
         $i = 0;
         define('PDO_SUCCESS', (string) '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
@@ -124,7 +134,7 @@ class Schema
             {
                 $seqname = mb_substr($seq_filename, 0, -4);
                 $drop_res = $db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
-//                Db::logDbErrors($db, $drop_res, __LINE__, __FILE__);
+//                Db::logDbErrors($db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                 if ($drop_res !== false)
                 {
@@ -143,6 +153,14 @@ class Schema
             }
         }
 
+        return $create_table_results;
+    }
+
+    public static function createTables($db, $db_prefix, $dbtype)
+    {
+        $create_table_results = array();
+        $i = 0;
+
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)
         {
@@ -151,7 +169,7 @@ class Schema
 
             if ($schema_filename->isFile() && $schema_filename->getExtension() == 'sql')
             {
-                // Routine to handle persistent database tables. If a SQL schema file starts with persist-, then it is a persistent table. Fix the name.
+                // Routine to handle persistent database tables. If a SQL schema file starts with persist-, then it is a persistent table
                 $persist_file = (mb_substr($schema_filename, 0, 8) === 'persist-');
                 if ($persist_file)
                 {
@@ -165,14 +183,16 @@ class Schema
                 // Slurp the SQL call from schema, and turn it into an SQL string
                 $sql_query = file_get_contents('schema/' . $dbtype . '/' . $schema_filename);
 
-                // Replace the default prefix (tki_) with the chosen table prefix from the game.
+                // Replace the default prefix (tki_) with the chosen table prefix from the game
                 $sql_query = preg_replace('/tki_/', $db_prefix, $sql_query);
 
-                // TODO: Remove all comments from SQL
+                // Remove comments from SQL
+                $RXSQLComments = '@(--[^\r\n]*)|(\#[^\r\n]*)|(/\*[\w\W]*?(?=\*/)\*/)@ms';
+                $sql_query = (($sql_query == '') ?  '' : preg_replace($RXSQLComments, '', $sql_query));
 
                 // TODO: Test handling invalid SQL to ensure it hits the error logger below AND the visible output during running
                 $sth = $db->prepare($sql_query);
-                $execute_res = $sth->execute();
+                $sth->execute();
 
                 if ($db->errorCode() !== PDO_SUCCESS)
                 {
@@ -184,7 +204,7 @@ class Schema
                     $create_table_results[$i]['result'] = true;
                 }
 
-//                Db::logDbErrors($db, $execute_res, __LINE__, __FILE__);
+//                Db::logDbErrors($db, $execute_res, __LINE__, __FILE__); // Triggers errors because there is no DB
                 $create_table_results[$i]['name'] = $db_prefix . $tablename;
                 $table_timer->stop();
                 $create_table_results[$i]['time'] = $table_timer->elapsed();

@@ -48,7 +48,6 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
 
-$p_skip = 0;
 $z = 0;
 
 $local_table_timer = new Tki\Timer;
@@ -117,9 +116,7 @@ $variables['setup_unowned_results']['elapsed'] = $local_table_timer->elapsed();
 $variables['setup_unowned_results']['nump'] = $variables['nump'];
 
 // Adds Sector Size * 2 amount of links to the links table
-// Warning: Do no alter loopsize - This should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
+$loopsize = 1000;
 $loops = round($tkireg->sector_max / $loopsize);
 if ($loops <= 0)
 {
@@ -175,9 +172,6 @@ for ($i = 1; $i <= $loops; $i++)
 }
 
 // Adds Sector Size amount of links to the links table
-// Warning: Do not alter loopsize - This should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
 $loops = round($tkireg->sector_max / $loopsize);
 if ($loops <= 0)
 {
@@ -234,9 +228,6 @@ for ($i = 1; $i <= $loops; $i++)
 }
 
 // Adds (sector size * 2) amount of links to the links table ##
-// Warning: Do not alter loopsize - This should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
 $loops = round($tkireg->sector_max / $loopsize);
 if ($loops <= 0)
 {

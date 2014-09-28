@@ -74,9 +74,7 @@ $z++;
 $local_table_timer->stop();
 $variables['create_ac_results']['time'] = $local_table_timer->elapsed();
 
-// Warning: Do not alter loopsize - This should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
+$loopsize = 1000;
 $loops = round($tkireg->sector_max / $loopsize);
 if ($loops <= 0)
 {
@@ -180,9 +178,6 @@ $variables['create_fed_sectors_results']['time'] = $local_table_timer->elapsed()
 // Finding random sectors where port=none and getting their sector ids in one sql query
 
 /// Insert special ports
-// Warning: Do not alter loopsize - this should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
 $loops = round($variables['spp'] / $loopsize);
 if ($loops <= 0)
 {
@@ -252,9 +247,6 @@ for ($i = 1; $i <= $loops; $i++)
 // For Ore Ports
 
 /// Insert ore ports
-// Warning: Do not alter loopsize - This should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
 $loops = round($variables['oep'] / $loopsize);
 if ($loops <= 0)
 {
@@ -323,9 +315,6 @@ for ($i = 1; $i <= $loops; $i++)
 // For Organic Ports
 
 /// Insert organics ports
-// Warning: Do not alter loopsize - This should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
 $loops = round($variables['ogp'] / $loopsize);
 if ($loops <= 0)
 {
@@ -394,9 +383,6 @@ for ($i = 1; $i <= $loops; $i++)
 // For Goods Ports
 
 /// Insert goods ports
-// Warning: Do not alter loop size - This should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
 $loops = round($variables['gop'] / $loopsize);
 if ($loops <= 0)
 {
@@ -465,9 +451,6 @@ for ($i = 1; $i <= $loops; $i++)
 // For Energy Ports
 
 /// Insert energy ports
-// Warning: Do not alter loop size - This should be balanced 50%/50% PHP/MySQL load :)
-
-$loopsize = 500;
 $loops = round($variables['enp'] / $loopsize);
 if ($loops <= 0)
 {
@@ -497,7 +480,6 @@ shuffle($sql_query);
 // TODO: This select should have an error check that is reflected in the template
 //$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
 $z++;
-$update = "UPDATE {$pdo_db->prefix}universe SET port_type='energy',port_ore=$initbore,port_organics=$initborganics,port_goods=$initsgoods,port_energy=$initbenergy WHERE ";
 
 for ($i = 1; $i <= $loops; $i++)
 {

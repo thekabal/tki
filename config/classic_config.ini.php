@@ -191,7 +191,7 @@ xen_planets                = 5;                                // Percent of cre
 [MISC]
 mine_hullsize              = 8;                                // Minimum size hull has to be to hit mines
 ewd_maxhullsize            = 15;                               // Max hull size before EWD degrades
-sector_max                 = 1000;                             // Number of sectors you'd like your universe to have
+sector_max                 = 100000;                           // Number of sectors you'd like your universe to have
 link_max                   = 10;                               // Maximum number of links in a sector
 universe_size              = 200;                              // This increases the distance between sectors, which increases the cost of realspace movement
 fed_max_hull               = 8;                                // The maximum hull size you can have before being towed out of fed space
