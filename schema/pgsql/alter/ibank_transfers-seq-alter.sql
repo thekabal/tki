@@ -1,0 +1,1 @@
+ALTER SEQUENCE tki_ibank_transfers_transfer_id_seq OWNED BY tki_ibank_transfers.transfer_id;

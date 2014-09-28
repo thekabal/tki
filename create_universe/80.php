@@ -64,11 +64,9 @@ $variables['update_turns_results']['sched'] = $tkireg->sched_turns;
 $local_table_timer->stop();
 $variables['update_turns_results']['elapsed'] = $local_table_timer->elapsed();
 
-// This is causing errors at the moment, disabling until we get clean solutions for it.
 $local_table_timer->start(); // Start benchmarking
 $resxx = $db->execute("INSERT INTO {$db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', $tkireg->sched_turns, 'sched_xenobe.php', ?)", array(time()));
 $variables['update_xenobe_results']['result'] = Tki\Db::logDbErrors($db, $resxx, __LINE__, __FILE__);
-//$variables['update_xenobe_results']['result'] = "DISABLED!";
 $variables['update_xenobe_results']['sched'] = $tkireg->sched_turns;
 $local_table_timer->stop();
 $variables['update_xenobe_results']['elapsed'] = $local_table_timer->elapsed();
@@ -92,6 +90,7 @@ $sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_news);
 $stmt->bindParam(':sched_file', $sched_file);
+$stmt->bindParam(':last_run', $now);
 $resxx = $stmt->execute();
 $variables['update_news_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
 $variables['update_news_results']['sched'] = $tkireg->sched_news;
@@ -287,6 +286,7 @@ $allow_defenses = 'Y';
 $max_hull = '0';
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_name', $tkireg->admin_zone_name);
+$stmt->bindValue(':owner', 0);
 $stmt->bindParam(':corp_zone', $corp_zone);
 $stmt->bindParam(':allow_beacon', $allow_beacon);
 $stmt->bindParam(':allow_attack', $allow_attack);

@@ -21,15 +21,15 @@ namespace Tki;
 
 class Schema
 {
-    public static function destroy($db, $db_prefix)
+    public static function destroy($db, $db_prefix, $dbtype)
     {
         // Need to set this or all hell breaks loose.
         $db->inactive = true;
 
         $i = 0;
-        $schema_files = new \DirectoryIterator('schema/mysql'); // TODO: This is hardcoded for mysql right now, but needs to be extended to handle pgsql also
         $destroy_table_results = array();
 
+        $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)
         {
             $table_timer = new Timer;
@@ -51,7 +51,7 @@ class Schema
                 if (!$persist_file)
                 {
                     $drop_res = $db->exec('DROP TABLE ' . $db_prefix . $tablename);
-                    Db::logDbErrors($db, $drop_res, __LINE__, __FILE__);
+//                    Db::logDbErrors($db, $drop_res, __LINE__, __FILE__);
 
                     if ($drop_res !== false)
                     {
@@ -75,18 +75,75 @@ class Schema
             }
         }
 
+        $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
+        foreach ($seq_files as $seq_filename)
+        {
+            $table_timer = new Timer;
+            $table_timer->start(); // Start benchmarking
+
+            if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
+            {
+                $seqname = mb_substr($seq_filename, 0, -4);
+                $drop_res = $db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
+//                Db::logDbErrors($db, $drop_res, __LINE__, __FILE__);
+
+                if ($drop_res !== false)
+                {
+                    $destroy_table_results[$i]['result'] = true;
+                }
+                else
+                {
+                    $errorinfo = $db->errorInfo();
+                    $destroy_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                }
+
+                $destroy_table_results[$i]['name'] = $db_prefix . $seqname;
+                $table_timer->stop();
+                $destroy_table_results[$i]['time'] = $table_timer->elapsed();
+                $i++;
+            }
+        }
+
         return $destroy_table_results;
     }
 
-    public static function create($db, $db_prefix)
+    public static function create($db, $db_prefix, $dbtype)
     {
-        $i = 0;
-        define('PDO_SUCCESS', (string) '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
-        $schema_files = new \DirectoryIterator('schema/mysql/'); // TODO: This is hardcoded for mysql right now, but needs to be extended to handle pgsql also
-
         // New SQL Schema table creation
         $create_table_results = array();
+        $i = 0;
+        define('PDO_SUCCESS', (string) '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
+        $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
+        foreach ($seq_files as $seq_filename)
+        {
+            $table_timer = new Timer;
+            $table_timer->start(); // Start benchmarking
+
+            if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
+            {
+                $seqname = mb_substr($seq_filename, 0, -4);
+                $drop_res = $db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
+//                Db::logDbErrors($db, $drop_res, __LINE__, __FILE__);
+
+                if ($drop_res !== false)
+                {
+                    $create_table_results[$i]['result'] = true;
+                }
+                else
+                {
+                    $errorinfo = $db->errorInfo();
+                    $create_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                }
+
+                $create_table_results[$i]['name'] = $db_prefix . $seqname;
+                $table_timer->stop();
+                $create_table_results[$i]['time'] = $table_timer->elapsed();
+                $i++;
+            }
+        }
+
+        $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)
         {
             $table_timer = new Timer;
@@ -106,7 +163,7 @@ class Schema
                 }
 
                 // Slurp the SQL call from schema, and turn it into an SQL string
-                $sql_query = file_get_contents('schema/mysql/' . $schema_filename);
+                $sql_query = file_get_contents('schema/' . $dbtype . '/' . $schema_filename);
 
                 // Replace the default prefix (tki_) with the chosen table prefix from the game.
                 $sql_query = preg_replace('/tki_/', $db_prefix, $sql_query);
@@ -127,7 +184,7 @@ class Schema
                     $create_table_results[$i]['result'] = true;
                 }
 
-                Db::logDbErrors($db, $execute_res, __LINE__, __FILE__);
+//                Db::logDbErrors($db, $execute_res, __LINE__, __FILE__);
                 $create_table_results[$i]['name'] = $db_prefix . $tablename;
                 $table_timer->stop();
                 $create_table_results[$i]['time'] = $table_timer->elapsed();

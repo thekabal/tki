@@ -1,0 +1,1 @@
+CREATE SEQUENCE tki_links_link_id_seq;

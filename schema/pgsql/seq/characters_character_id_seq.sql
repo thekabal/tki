@@ -1,0 +1,1 @@
+CREATE SEQUENCE tki_characters_character_id_seq;

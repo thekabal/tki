@@ -1,0 +1,1 @@
+CREATE SEQUENCE tki_planets_planet_id_seq;

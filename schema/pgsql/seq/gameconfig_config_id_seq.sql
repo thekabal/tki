@@ -1,0 +1,1 @@
+CREATE SEQUENCE tki_gameconfig_config_id_seq;
