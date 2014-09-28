@@ -54,7 +54,7 @@ elseif ($preptype == 0)                  // For typing in manually to get a repo
 {
     $title = $title . ": Menu";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::planetReportMenu($playerinfo);
+    Bad\PlanetReport::planetReportMenu($playerinfo, $langvars);
 }
 else                                  // Display the menu if no valid options are passed in
 {

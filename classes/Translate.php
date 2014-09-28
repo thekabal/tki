@@ -38,7 +38,7 @@ class Translate
             // Slurp in language variables from the ini file directly
             $ini_file = './languages/' . $language . '.ini.php';
             $ini_keys = parse_ini_file($ini_file, true);
-            foreach ($ini_keys as $config_category => $config_line)
+            foreach ($ini_keys as $config_line)
             {
                 foreach ($config_line as $config_key => $config_value)
                 {

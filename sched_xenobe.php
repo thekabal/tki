@@ -312,4 +312,3 @@ echo "<br>";
 // Unlock the tables.
 $result = $db->Execute("UNLOCK TABLES");
 Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
-

@@ -384,7 +384,7 @@ switch ($teamwhat)
             continue;
         }
 
-        if (is_null ($teamname))
+        if (is_null($teamname))
         {
             echo "<form accept-charset='utf-8' action='teams.php' method='post'>\n";
             echo $langvars['l_team_entername'] . ": ";

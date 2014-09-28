@@ -57,7 +57,7 @@ class Sessions
         session_write_close();
     }
 
-    public function open($path, $name)
+    public function open()
     {
         return true;
     }
@@ -120,7 +120,7 @@ class Sessions
         return $result;
     }
 
-    public function gc($maxlifetime)
+    public function gc()
     {
         $table = $this->pdo_db->prefix . 'sessions';
         $qry = 'DELETE from ' . $table . ' where expiry>:expiry';
@@ -140,6 +140,6 @@ class Sessions
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':newkey', $new_id);
         $stmt->bindParam(':sesskey', $old_id);
-        $result = $stmt->execute();
+        $stmt->execute();
     }
 }
