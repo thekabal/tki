@@ -25,7 +25,7 @@ namespace Bad;
 
 class PlanetReport
 {
-    public static function planetReportMenu($playerinfo)
+    public static function planetReportMenu($playerinfo, $langvars)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -326,9 +326,6 @@ class PlanetReport
             $total_colonists = 0;
             $total_credits = 0;
             $total_corp = 0;
-
-            $temp_var = 0;
-
             $color = $color_line1;
 
             for ($i = 0; $i < $num_planets; $i++)

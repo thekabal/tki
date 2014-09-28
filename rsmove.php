@@ -37,9 +37,9 @@ echo "<h1>" . $title . "</h1>\n";
 
 // Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
 $destination  = filter_input(INPUT_GET, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
-if ( is_null($destination))
+if (is_null($destination))
 {
-    $destination  = filter_input(INPUT_POST, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
+    $destination = filter_input(INPUT_POST, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
 }
 
 $engage  = filter_input(INPUT_GET, 'engage', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 2)));

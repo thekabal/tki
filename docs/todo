@@ -2,6 +2,7 @@ This file is used to keep track of things that we intend on doing, and all accep
 
 TODO denotes an item that we intend to work on. FREQ indicates a feature request.
 
+TODO: Add total time to Create Universe
 TODO: Remove hard-coding force to mysql, so that we can do postgresql
 TODO: Remove abstraction from templates, Smarty only. Consider whether we'd want Twig instead, however
 TODO: Add isset & filter_input combo to *all* inputs

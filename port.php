@@ -642,14 +642,13 @@ elseif ($sectorinfo['port_type'] == "special")
     $onchange =  "ONCHANGE=\"count_total()\"";
     $onclick =  "ONCLICK=\"count_total()\"";
 
-    $temp_devices = $tkireg->max_upgrades_devices;
     // Create dropdowns when called
-    function dropdown($element_name, $current_value, $onchange, $temp_devices, $tkireg)
+    function dropdown($element_name, $current_value, $onchange, $temp_devices)
     {
         $i = $current_value;
         $dropdownvar = "<select size='1' name='$element_name'";
         $dropdownvar = "$dropdownvar $onchange>\n";
-        while ($i <= (int) $tkireg->max_upgrades_devices)
+        while ($i <= (int) $temp_devices)
         {
             if ($current_value == $i)
             {
@@ -720,7 +719,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts1' name=hull_costper value='0' tabindex='0' $onblur></td>\n";
     echo "    <td>" . number_format($playerinfo['hull'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("hull_upgrade", $playerinfo['hull'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("hull_upgrade", $playerinfo['hull'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "   </tr>\n";
     echo "   <tr>\n";
@@ -750,7 +749,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts2' size=10 name=engine_costper value='0' tabindex='0' $onblur></td>\n";
     echo "    <td>" . number_format($playerinfo['engines'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("engine_upgrade", $playerinfo['engines'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("engine_upgrade", $playerinfo['engines'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "   </tr>\n";
     echo "   <tr>\n";
@@ -775,7 +774,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts1' name=power_costper value='0' tabindex='0' $onblur></td>\n";
     echo "    <td>" . number_format($playerinfo['power'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("power_upgrade", $playerinfo['power'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("power_upgrade", $playerinfo['power'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "  </tr>\n";
     echo "  <tr>\n";
@@ -805,7 +804,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts2' name=computer_costper value='0' tabindex='0' $onblur></td>\n";
     echo "    <td>" . number_format($playerinfo['computer'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("computer_upgrade", $playerinfo['computer'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("computer_upgrade", $playerinfo['computer'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "  </tr>\n";
     echo "  <tr>\n";
@@ -818,7 +817,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts1' name=sensors_costper value='0' tabindex='0' $onblur></td>\n";
     echo "    <td>" . number_format($playerinfo['sensors'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("sensors_upgrade", $playerinfo['sensors'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("sensors_upgrade", $playerinfo['sensors'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "  </tr>";
     echo "  <tr>\n";
@@ -831,7 +830,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts2' name=beams_costper value='0' tabindex='0' $onblur></td>";
     echo "    <td>" . number_format($playerinfo['beams'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("beams_upgrade", $playerinfo['beams'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("beams_upgrade", $playerinfo['beams'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "  </tr>\n";
     echo "  <tr>\n";
@@ -854,7 +853,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts1' name=armor_costper value='0' tabindex='0' $onblur></td>\n";
     echo "    <td>" . number_format($playerinfo['armor'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("armor_upgrade", $playerinfo['armor'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("armor_upgrade", $playerinfo['armor'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "  </tr>\n";
     echo "  <tr>\n";
@@ -877,7 +876,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts2' name=cloak_costper value='0' tabindex='0' $onblur $onfocus></td>\n";
     echo "    <td>" . number_format($playerinfo['cloak'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("cloak_upgrade", $playerinfo['cloak'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("cloak_upgrade", $playerinfo['cloak'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "  </tr>\n";
     echo "  <tr>\n";
@@ -900,7 +899,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts1' name=torp_launchers_costper value='0' tabindex='0' $onblur></td>\n";
     echo "    <td>" . number_format($playerinfo['torp_launchers'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("torp_launchers_upgrade", $playerinfo['torp_launchers'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("torp_launchers_upgrade", $playerinfo['torp_launchers'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "  </tr>\n";
     echo "  <tr>\n";
@@ -913,7 +912,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "    <td><input type=text readonly class='portcosts2' name=shields_costper value='0' tabindex='0' $onblur></td>\n";
     echo "    <td>" . number_format($playerinfo['shields'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>\n       ";
-    echo dropdown("shields_upgrade", $playerinfo['shields'], $onchange, $tkireg->max_upgrades_devices, $tkireg);
+    echo dropdown("shields_upgrade", $playerinfo['shields'], $onchange, $tkireg->max_upgrades_devices);
     echo "    </td>\n";
     echo "  </tr>\n";
     echo " </table>\n";

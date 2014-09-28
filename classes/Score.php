@@ -41,9 +41,10 @@ class Score
         $dev_escapepod_price = $tkireg->dev_escapepod_price;
         $dev_fuelscoop_price = $tkireg->dev_fuelscoop_price;
         $dev_lssd_price = $tkireg->dev_lssd_price;
-        $base_ore = $tkireg->base_ore;
-        $base_goods = $tkireg->base_goods;
-        $base_organics = $tkireg->base_organics;
+//      Not currently used in calculation!
+//        $base_ore = $tkireg->base_ore;
+//        $base_goods = $tkireg->base_goods;
+//        $base_organics = $tkireg->base_organics;
         $base_credits = $tkireg->base_credits;
 
         // These are all SQL Queries, so treat them like them.

@@ -35,7 +35,7 @@ class Languages
         $list_of_langs = array();
         if (is_array($lang_rs) === true && count($lang_rs) >= 2)
         {
-            foreach ($lang_rs as $id => $langinfo)
+            foreach ($lang_rs as $langinfo)
             {
                 if (array_key_exists($langinfo['section'], $list_of_langs) === false)
                 {

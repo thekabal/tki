@@ -356,7 +356,7 @@ class Log
                 // Invalid login try (wrong password etc)
                 if (count(explode("|", $entry['data'])) == 3)
                 {
-                    list ($ship_ip, $ship_email, $used_password)= explode("|", $entry['data']);
+                    list ($ship_ip, $ship_email)= explode("|", $entry['data']);
                     $retvalue['text'] = "Someone using IP: <span style='color:#ff0;'>{$ship_ip}</span> tried to login into Account: '<span style='color:#ff0;'>{$ship_email}</span>' with a non-blank password.";
                 }
                 else
