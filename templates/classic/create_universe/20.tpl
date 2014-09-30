@@ -25,9 +25,9 @@
 <center>
 <table border="0" cellpadding="1" width="700" cellspacing="1" bgcolor="#000000">
     <tr>
-      <th width="700" colspan="2" bgcolor="#9999cc" align="left"><h1 style="color:#000; height: 0.8em; font-size: 0.8em;font-weight: normal;">{$langvars['l_cu_confirm_settings']|replace:'[sector_max]':$variables['sector_max']}</h1></th>
+      <th width="700" colspan="2" bgcolor="#9999cc" align="left"><h1 style="color:#000; height: 0.8em; font-size: 0.8em;font-weight: normal;">{$langvars['l_cu_confirm_settings']|replace:'[max_sectors]':$variables['max_sectors']}</h1></th>
     </tr>
-    {if $variables['fedsecs'] > $variables['sector_max']}
+    {if $variables['fedsecs'] > $variables['max_sectors']}
     <tr>
       <td width="700" colspan="2" bgcolor="#C0C0C0" align="left"><font color="#000000" size="1"><font color=red>{$langvars['l_cu_fedsec_smaller']}</font></font></td>
     </tr>
@@ -111,7 +111,7 @@
     <input type=hidden name=nump value={$variables['nump']}>
     <input type=hidden name=fedsecs value={$variables['fedsecs']}>
     <input type=hidden name=loops value={$variables['loops']}>
-    <input type=hidden name=sector_max value={$variables['sector_max']}>
+    <input type=hidden name=max_sectors value={$variables['max_sectors']}>
     <input type=hidden name=swordfish value={$variables['swordfish']}>
     <input type="hidden" name="autorun" value="{$variables['autorun']}">
     {/if}

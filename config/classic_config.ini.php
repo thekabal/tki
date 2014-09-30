@@ -141,7 +141,7 @@ torpedo_prate              = '0.025';                          // The rate of pr
 credits_prate              = '3.0';                            // The rate of production for credits on a planet times production, times player/planet setting for 100% minus all prates
 colonist_production_rate   = '0.005';                          // The rate of production for colonists on a planet prior to consideration of organics
 colonist_reproduction_rate = '0.0005';                         // The rate of reproduction for colonists on a planet after consideration of starvation due to organics
-interest_rate              = '1.0005';                         // The interest rate offered by the IGB
+interest_rate              = '1.0005';                         // The interest rate offered on planets
 
 [BASE_BUILD_COSTS]
 base_ore                   = 10000;                            // The amount of ore required to be placed on a planet to create a base.
@@ -155,7 +155,7 @@ color_line1                = '#300030';                        // GUI colors - s
 color_line2                = '#400040';                        // GUI colors - soon to be moved into templates
 
 [NEWBIE_NICE]
-newbie_nice                = true;                            // If a ship is destroyed without a EWD, *and* is below a certain level for all items, then regen their ship
+newbie_nice                = true;                             // If a ship is destroyed without a EWD, *and* is below a certain level for all items, then regen their ship
 newbie_hull                = '8';                              // If a destroyed player has a hull less than newbie hull, he will be regen'd to play more
 newbie_engines             = '8';                              // If a destroyed player has a engines less than newbie engines, he will be regen'd to play more
 newbie_power               = '8';                              // If a destroyed player has a power less than newbie power, he will be regen'd to play more
@@ -174,7 +174,7 @@ level_factor               = '1.45';                           // How effective 
 inventory_factor           = 1;                                // The number of units that a single hull can hold
 
 [BOUNTY_SETTINGS]
-bounty_maxvalue            = '0.15';                           // Max amount a player can place as bounty - good idea to make it the same as $ibank_svalue. 0=disable
+max_bountyvalue            = '0.15';                           // Max amount a player can place as bounty - good idea to make it the same as $ibank_svalue. 0=disable
 bounty_ratio               = '0.75';                           // Ratio of players networth before attacking results in a bounty. 0=disable
 bounty_minturns            = 500;                              // Minimum number of turns a target must have had before attacking them may not get you a bounty. 0=disable
 
@@ -190,11 +190,11 @@ xen_planets                = 5;                                // Percent of cre
 
 [MISC]
 mine_hullsize              = 8;                                // Minimum size hull has to be to hit mines
-ewd_maxhullsize            = 15;                               // Max hull size before EWD degrades
-sector_max                 = 100000;                           // Number of sectors you'd like your universe to have
-link_max                   = 10;                               // Maximum number of links in a sector
+max_ewdhullsize            = 15;                               // Max hull size before EWD degrades
+max_sectors                = 100000;                           // Number of sectors you'd like your universe to have
+max_links                  = 10;                               // Maximum number of links in a sector
 universe_size              = 200;                              // This increases the distance between sectors, which increases the cost of realspace movement
-fed_max_hull               = 8;                                // The maximum hull size you can have before being towed out of fed space
+max_fed_hull               = 8;                                // The maximum hull size you can have before being towed out of fed space
 max_ranks                  = 100;                              // The maximum number of ranks displayed on ranking.php
 rating_combat_factor       = '0.8';                            // Amount of rating gained from combat
 base_defense               = 1;                                // Additional factor added to tech levels by having a base on your planet. All your base are belong to us.
@@ -227,4 +227,4 @@ admin_ship_name            = "Game Admin's ship";              // The title for 
 admin_zone_name            = "Game Admin's zone";              // The title for the administrators zone
 enable_gravatars           = false;                            // True if you'd like to enable gravatars for players
 default_template           = 'classic';                        // Used for players and the admin until/unless they choose another
-preset_max                 = 5;                                // The number of presets available to players
+max_presets                = 5;                                // The number of presets available to players

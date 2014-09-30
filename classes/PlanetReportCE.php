@@ -97,7 +97,7 @@ class PlanetReportCE
         }
     }
 
-    public static function collectCredits($db, $langvars, $planetarray, $sector_max)
+    public static function collectCredits($db, $langvars, $planetarray, $max_sectors)
     {
         $CS = "GO"; // Current State
 
@@ -117,7 +117,7 @@ class PlanetReportCE
             \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
             // Only add to array if the player owns the planet.
-            if ($res->fields['owner'] == $playerinfo['ship_id'] && $res->fields['sector_id'] < $sector_max)
+            if ($res->fields['owner'] == $playerinfo['ship_id'] && $res->fields['sector_id'] < $max_sectors)
             {
                 $s_p_pair[$i]= array($res->fields['sector_id'], $planetarray[$i]);
             }

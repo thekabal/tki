@@ -15,232 +15,88 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: settings.php
+// File: copyright.php
 
+$index_page = true;
 require_once './common.php';
 
 $link = null;
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('settings', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'main', 'regional'));
-$title = $langvars['l_settings'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'settings', 'footer','global_includes'));
 
-$line_color = $tkireg->color_line1;
+$variables = null;
+$variables['lang'] = $lang;
+$variables['link'] = $link;
+$variables['title'] = $langvars['l_set_settings'];
+$variables['link_forums'] = $tkireg->link_forums;
+$variables['admin_mail'] = $tkireg->admin_mail;
+$variables['body_class'] = 'faq';
+$variables['release_version'] = $tkireg->release_version;
+$variables['game_name'] = $tkireg->game_name;
+$variables['mine_hullsize'] = $tkireg->mine_hullsize;
+$variables['max_ewdhullsize'] = $tkireg->max_ewdhullsize;
+$variables['max_sectors'] = number_format($tkireg->max_sectors, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+$variables['max_links'] = $tkireg->max_links;
+$variables['max_fed_hull'] = $tkireg->max_fed_hull;
+$variables['allow_ibank'] = (bool) $tkireg->allow_ibank;
+$variables['ibank_interest'] = $tkireg->ibank_interest * 100;
+$variables['ibank_loaninterest'] = $tkireg->ibank_loaninterest * 100;
+$variables['base_defense'] = $tkireg->base_defense;
+$variables['colonist_limit'] = number_format($tkireg->colonist_limit, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+$variables['max_turns'] = number_format($tkireg->max_turns, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+$variables['max_planets_sector'] = $tkireg->max_planets_sector;
+$variables['max_traderoutes_player'] = $tkireg->max_traderoutes_player;
+$variables['colonist_production_rate'] = $tkireg->colonist_production_rate;
+$variables['energy_per_fighter'] = $tkireg->energy_per_fighter;
+$variables['defence_degrade_rate'] = $tkireg->defence_degrade_rate * 100;
+$variables['min_bases_to_own'] = $tkireg->min_bases_to_own;
+$variables['interest_rate'] = number_format(($tkireg->interest_rate - 1) * 100, 3, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+$variables['sched_ticks'] = $tkireg->sched_ticks;
+$variables['sched_turns'] = $tkireg->sched_turns;
+$variables['sched_igb'] = $tkireg->sched_igb;
+$variables['sched_news'] = $tkireg->sched_news;
+$variables['sched_planets'] = $tkireg->sched_planets;
+$variables['max_credits_without_base'] = $tkireg->max_credits_without_base;
+$variables['sched_ports'] = $tkireg->sched_ports;
+$variables['sched_ranking'] = $tkireg->sched_ranking;
+$variables['sched_degrade'] = $tkireg->sched_degrade;
+$variables['sched_apocalypse'] = $tkireg->sched_apocalypse;
+$variables['port_regenrate'] = $tkireg->port_regenrate;
 
-function title($value, $align = "center")
-{
-    echo "<tr bgcolor=\"$line_color\"><td colspan=\"2\" style='text-align:{$align};'>{$value}</td></tr>\n";
-    if ($line_color == $tkireg->color_line1)
-    {
-        $line_color = $tkireg->color_line2;
-    }
-    else
-    {
-        $line_color = $tkireg->color_line1;
-    }
-}
+// Colonists needed to produce 1 Fighter each turn
+$variables['cols_needed_fit'] = number_format((1 / $tkireg->colonist_production_rate) / $tkireg->fighter_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 
-function line($item, $value, $align = "left")
-{
-    echo "<tr bgcolor=\"$line_color\"><td>&nbsp;{$item}</td><td style='text-align:{$align};'>{$value}&nbsp;</td></tr>\n";
-    if ($line_color == $tkireg->color_line1)
-    {
-        $line_color = $tkireg->color_line2;
-    }
-    else
-    {
-        $line_color = $tkireg->color_line1;
-    }
-}
+// Colonists needed to produce 1 Torpedo each turn
+$variables['cols_needed_torp'] = number_format((1 / $tkireg->colonist_production_rate) / $tkireg->torpedo_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 
-function line2($item, $value, $align = "left")
-{
-    echo "<tr bgcolor=\"$line_color\"><td style='border-left:1px #FFCC00 solid;'>&nbsp;{$item}</td><td style='text-align:{$align}; border-right:1px #FFCC00 solid;'>{$value}&nbsp;</td></tr>\n";
-    if ($line_color == $tkireg->color_line1)
-    {
-        $line_color = $tkireg->color_line2;
-    }
-    else
-    {
-        $line_color = $tkireg->color_line1;
-    }
-}
+// Colonists needed to produce 1 Ore each turn
+$variables['cols_needed_ore'] = number_format((1 / $tkireg->colonist_production_rate) / $tkireg->ore_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 
-function line_a($value, $align = "left")
-{
-    echo "<tr bgcolor=\"#FFCC00\"><td colspan=\"2\" style='text-align:{$align};'>{$value}</td></tr>\n";
-    if ($line_color == $tkireg->color_line1)
-    {
-        $line_color = $tkireg->color_line2;
-    }
-    else
-    {
-        $line_color = $tkireg->color_line1;
-    }
-}
+// Colonists needed to produce 1 Organics each turn
+$variables['cols_needed_org'] = number_format((1 / $tkireg->colonist_production_rate) / $tkireg->organics_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 
-function line_spacer()
-{
-    echo "<tr><td colspan='2' style='height:2px; padding:0px;'></td></tr>\n";
-    if ($line_color == $tkireg->color_line1)
-    {
-        $line_color = $tkireg->color_line2;
-    }
-    else
-    {
-        $line_color = $tkireg->color_line1;
-    }
-}
+// Colonists needed to produce 1 Goods each turn
+$variables['cols_needed_goods'] = number_format((1 / $tkireg->colonist_production_rate) / $tkireg->goods_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 
-/*
-$title="Game Reset Information";
-echo "<h1>" . $title . "</h1>\n";
-echo "<table style='width:800px; font-size:14px; color:#fff; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
-line("Last Reset:", "<span style='color:#ff0; font-size:14px;'>~ {$last_reset}</span>", "right");
-line("Next Reset:", "<span style='color:#ff0; font-size:14px;'>~ {$next_reset}</span>", "right");
-line("Game Duration:", "<span style='color:#0f0; font-size:14px;'>$duration</span>", "right");
-line("Game Status:", "<span style='color:#0f0; font-size:14px;'>". ucfirst($status['status']) ."</span>", "right");
-line("Game Type:", "<span style='color:#0f0; font-size:14px;'>". ucfirst($status['type']) ."</span>", "right");
-echo "</table>\n";
-echo "<br>\n";
-echo "<br>\n";
-*/
+// Colonists needed to produce 1 Energy each turn
+$variables['cols_needed_ene'] = number_format((1 / $tkireg->colonist_production_rate) / $tkireg->energy_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 
-$title="Game Administrators";
-echo "<h1>" . $title . "</h1>\n";
-$found_blues = 0;
-$admin_list = array(); // Define admins here for now, but this needs to be a setting from the admin panel
-foreach ($admin_list as $key => $admin)
-{
-    if ($admin['role'] === "developer" || $admin['role'] === "admin")
-    {
-        echo "<table style='width:800px; font-size:14px; color:#fff; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
-        line("Admin Name:",  "<span style='color:#ff0; font-size:14px;'>{$admin['name']}</span>", "right");
-        line("Character:",  "<span style='color:#09f; font-size:14px;'>{$admin['character']}</span>", "right");
-        line("Admin Level:", "<span style='color:#09f; font-size:14px;'>{$admin['level']}</span>", "right");
-        line("Online:", "<span style='color:#99FF00; font-size:14px;'>Not Enabled</span>", "right");
-        echo "</table>\n";
-        echo "<br>\n";
-        $found_blues +=1;
-    }
-}
+// Colonists needed to produce 1 Credits each turn
+$variables['cols_needed_cred'] = number_format((1 / $tkireg->colonist_production_rate) / $tkireg->credits_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
 
-if ($found_blues === 0)
-{
-    echo "<div style='width:798px; font-size:14px; color:#fff; background-color:#500050; padding-top:2px; padding-bottom:2px; border:#fff 1px solid;'>&nbsp;No Admins or Developers Found.</div>\n";
-}
-echo "<br>\n";
+// Get list of available languages
+$variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 
-echo "<h1>" . $title . "</h1>\n";
+// Temporarily set the template to the default template until we have a user option
+$variables['template'] = $tkireg->default_template;
 
-$title="Game Settings";
-echo "<h1>" . $title . "</h1>\n";
-echo "<table style='width:800px; font-size:14px; color:#fff; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
-line("Game version:", $tkireg->release_version, "right");
-line("Game name:", $tkireg->game_name, "right");
-line("Average tech level needed to hit mines", $tkireg->mine_hullsize, "right");
-line("Averaged Tech level When Emergency Warp Degrades", $tkireg->ewd_maxhullsize, "right");
+// Now set a container for the variables and langvars and send them off to the template system
+$variables['container'] = 'variable';
+$langvars['container'] = 'langvars';
 
-$num = number_format($sector_max, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Number of Sectors", $num, "right");
-line("Maximum Links per sector", $link_max, "right");
-line("Maximum average tech level for Federation Sectors", $fed_max_hull, "right");
-
-$bank_enabled = $allow_ibank ? "Yes" : "No";
-line("Intergalactic Bank Enabled", $bank_enabled, "right");
-
-if ($allow_ibank)
-{
-    $rate = $ibank_interest * 100;
-    line("IGB Interest rate per update", $rate, "right");
-
-    $rate = $ibank_loaninterest * 100;
-    line("IGB Loan rate per update", $rate, "right");
-}
-line("Tech Level upgrade for Bases", $base_defense, "right");
-
-$num = number_format($colonist_limit, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Colonists Limit", $num, "right");
-
-$num = number_format($tkireg->max_turns, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Maximum number of accumulated turns", $num, "right");
-line("Maximum number of planets per sector", $max_planets_sector, "right");
-line("Maximum number of traderoutes per player", $max_traderoutes_player, "right");
-line("Colonist Production Rate", $colonist_production_rate, "right");
-line("Unit of Energy used per sector fighter", $energy_per_fighter, "right");
-
-$rate = $defence_degrade_rate * 100;
-line("Sector fighter degradation percentage rate", $rate, "right");
-line("Number of planets with bases need for sector ownership&nbsp;", $min_bases_to_own, "right");
-
-$rate = number_format(($interest_rate - 1) * 100, 3, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Planet interest rate", $rate, "right");
-
-$rate = 1 / $colonist_production_rate;
-
-$num = number_format($rate / $fighter_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Colonists needed to produce 1 Fighter each turn", $num, "right");
-
-$num = number_format($rate/$torpedo_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Colonists needed to produce 1 Torpedo each turn", $num, "right");
-
-$num = number_format($rate/$ore_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Colonists needed to produce 1 Ore each turn", $num, "right");
-
-$num = number_format($rate/$organics_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Colonists needed to produce 1 Organics each turn", $num, "right");
-
-$num = number_format($rate/$goods_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Colonists needed to produce 1 Goods each turn", $num, "right");
-
-$num = number_format($rate/$energy_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Colonists needed to produce 1 Energy each turn", $num, "right");
-
-$num = number_format($rate/$credits_prate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-line("Colonists needed to produce 1 Credits each turn", $num, "right");
-echo "</table>\n";
-echo "<br>\n";
-echo "<br>\n";
-
-$title="Game Scheduler Settings";
-echo "<h1>" . $title . "</h1>\n";
-
-$line_color = $tkireg->color_line1;
-
-echo "<table style='width:800px; font-size:14px; color:#fff; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
-line("Ticks happen every", "{$sched_ticks} minutes", "right");
-line("{$tkireg->turns_per_tick} Turns will happen every", "{$tkireg->sched_turns} minutes", "right");
-line("Defenses will be checked every", "{$sched_turns} minutes", "right");
-line("Xenobes will play every", "{$sched_turns} minutes", "right");
-
-if ($allow_ibank)
-{
-    line("Interests on IGB accounts will be accumulated every&nbsp;", "{$sched_igb} minutes", "right");
-}
-
-line("News will be generated every", "{$sched_news} minutes", "right");
-line("Planets will generate production every", "{$sched_planets} minutes", "right");
-$use_new_sched_planet = true; // We merged this change in, so all new versions use this
-line(" -> Using new Planet Update Code", ($use_new_sched_planet?"<span style='color:#0f0;'>Yes</span>":"<span style='color:#ff0;'>No</span>"), "right");
-line(" -> Limit captured planets Max Credits to ". number_format($max_credits_without_base, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), ($sched_planet_valid_credits?"<span style='color:#0f0;'>Yes</span>":"<span style='color:#ff0;'>No</span>"), "right");
-line("Ports will regenerate x {$port_regenrate} every", "{$sched_ports} minutes", "right");
-line("Ships will be towed from fed sectors every", "{$sched_turns} minutes", "right");
-line("Rankings will be generated every", "{$sched_ranking} minutes", "right");
-line("Sector Defences will degrade every", "{$sched_degrade} minutes", "right");
-line("The planetary apocalypse will occur every&nbsp;", "{$sched_apocalypse} minutes", "right");
-
-echo "</table>";
-echo "<br>\n";
-echo "<br>\n";
-
-if (empty ($_SESSION['username']))
-{
-    echo str_replace("[here]", "<a href='index.php" . $link . "'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
-}
-else
-{
-    echo str_replace("[here]", "<a href='main.php" . $link . "'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
-}
-
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+// Pull in footer variables from footer_t.php
+require_once './footer_t.php';
+$template->addVariables('langvars', $langvars);
+$template->addVariables('variables', $variables);
+$template->display('settings.tpl');

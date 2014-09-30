@@ -2039,7 +2039,7 @@ class Traderoute
         if ($ptype1 == 'port')
         {
             // Check for valid Source Port
-            if ($port_id1 >= $tkireg->sector_max)
+            if ($port_id1 >= $tkireg->max_sectors)
             {
                 Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_invalidspoint'], $template);
             }
@@ -2071,7 +2071,7 @@ class Traderoute
             }
 
             // Check for valid Source Planet
-            if ($source['sector_id'] >= $tkireg->sector_max)
+            if ($source['sector_id'] >= $tkireg->max_sectors)
             {
                 Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
             }
@@ -2106,7 +2106,7 @@ class Traderoute
         if ($ptype2 == 'port')
         {
             // Check for valid Dest Port
-            if ($port_id2 >= $tkireg->sector_max)
+            if ($port_id2 >= $tkireg->max_sectors)
             {
                 Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_invaliddport'], $template);
             }
@@ -2138,7 +2138,7 @@ class Traderoute
             }
 
             // Check for valid Dest Planet
-            if ($destination['sector_id'] >= $tkireg->sector_max)
+            if ($destination['sector_id'] >= $tkireg->max_sectors)
             {
                 Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_invaliddplanet'], $template);
             }

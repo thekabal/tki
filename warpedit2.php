@@ -116,9 +116,9 @@ Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 $row = $res->fields;
 $numlink_start = $row['count'];
 
-if ($numlink_start >= $link_max)
+if ($numlink_start >= $max_links)
 {
-    $langvars['l_warp_sectex'] = str_replace("[link_max]", $link_max, $langvars['l_warp_sectex']);
+    $langvars['l_warp_sectex'] = str_replace("[link_max]", $max_links, $langvars['l_warp_sectex']);
     echo $langvars['l_warp_sectex'] . "<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

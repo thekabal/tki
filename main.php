@@ -807,7 +807,7 @@ while (!$debug_query->EOF)
 
 if ($i==0)
 {
-    for ($x=0; $x<$tkireg->preset_max; $x++)
+    for ($x=0; $x<$tkireg->max_presets; $x++)
     {
         $i++;
         echo "<tr>\n";

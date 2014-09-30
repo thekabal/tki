@@ -30,14 +30,14 @@ $variables['body_class']             = 'create_universe';
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
 $variables['next_step']              = $create_universe_info['next_step'];
-$variables['sector_max']             = (int) filter_input(INPUT_POST, 'sektors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
+$variables['max_sectors']             = (int) filter_input(INPUT_POST, 'sektors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
 $variables['spp']                    = filter_input(INPUT_POST, 'spp', FILTER_SANITIZE_NUMBER_INT);
 $variables['oep']                    = filter_input(INPUT_POST, 'oep', FILTER_SANITIZE_NUMBER_INT);
 $variables['ogp']                    = filter_input(INPUT_POST, 'ogp', FILTER_SANITIZE_NUMBER_INT);
 $variables['gop']                    = filter_input(INPUT_POST, 'gop', FILTER_SANITIZE_NUMBER_INT);
 $variables['enp']                    = filter_input(INPUT_POST, 'enp', FILTER_SANITIZE_NUMBER_INT);
 $variables['nump']                   = filter_input(INPUT_POST, 'nump', FILTER_SANITIZE_NUMBER_INT);
-$variables['empty']                  = $variables['sector_max'] - $variables['spp'] - $variables['oep'] - $variables['ogp'] - $variables['gop'] - $variables['enp'];
+$variables['empty']                  = $variables['max_sectors'] - $variables['spp'] - $variables['oep'] - $variables['ogp'] - $variables['gop'] - $variables['enp'];
 $variables['initscommod']            = filter_input(INPUT_POST, 'initscommod', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
@@ -117,7 +117,7 @@ $variables['setup_unowned_results']['nump'] = $variables['nump'];
 
 // Adds Sector Size * 2 amount of links to the links table
 $loopsize = 1000;
-$loops = round($tkireg->sector_max / $loopsize);
+$loops = round($tkireg->max_sectors / $loopsize);
 if ($loops <= 0)
 {
     $loops = 1;
@@ -126,9 +126,9 @@ if ($loops <= 0)
 $variables['insert_link_loops'] = $loops;
 
 $finish = $loopsize;
-if ($finish > $tkireg->sector_max)
+if ($finish > $tkireg->max_sectors)
 {
-    $finish = ($tkireg->sector_max);
+    $finish = ($tkireg->max_sectors);
 }
 
 $start = 1;
@@ -165,14 +165,14 @@ for ($i = 1; $i <= $loops; $i++)
 
     $start = $finish + 1;
     $finish += $loopsize;
-    if ($finish > $tkireg->sector_max)
+    if ($finish > $tkireg->max_sectors)
     {
-        $finish = $tkireg->sector_max;
+        $finish = $tkireg->max_sectors;
     }
 }
 
 // Adds Sector Size amount of links to the links table
-$loops = round($tkireg->sector_max / $loopsize);
+$loops = round($tkireg->max_sectors / $loopsize);
 if ($loops <= 0)
 {
     $loops = 1;
@@ -180,9 +180,9 @@ if ($loops <= 0)
 
 $variables['insert_oneway_loops'] = $loops;
 $finish = $loopsize;
-if ($finish > $tkireg->sector_max)
+if ($finish > $tkireg->max_sectors)
 {
-    $finish = ($tkireg->sector_max);
+    $finish = ($tkireg->max_sectors);
 }
 
 $start = 1;
@@ -193,8 +193,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = intval(Tki\Rand::betterRand(1, $tkireg->sector_max - 1));
-        $link2 = intval(Tki\Rand::betterRand(1, $tkireg->sector_max - 1));
+        $link1 = intval(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
+        $link2 = intval(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
         $insert .= "($link1, $link2)";
         if ($j <= ($finish - 1))
         {
@@ -221,14 +221,14 @@ for ($i = 1; $i <= $loops; $i++)
 
     $start = $finish + 1;
     $finish += $loopsize;
-    if ($finish > $tkireg->sector_max)
+    if ($finish > $tkireg->max_sectors)
     {
-        $finish = ($tkireg->sector_max);
+        $finish = ($tkireg->max_sectors);
     }
 }
 
 // Adds (sector size * 2) amount of links to the links table ##
-$loops = round($tkireg->sector_max / $loopsize);
+$loops = round($tkireg->max_sectors / $loopsize);
 if ($loops <= 0)
 {
     $loops = 1;
@@ -236,9 +236,9 @@ if ($loops <= 0)
 
 $variables['insert_twoway_loops'] = $loops;
 $finish = $loopsize;
-if ($finish > $tkireg->sector_max)
+if ($finish > $tkireg->max_sectors)
 {
-    $finish = ($tkireg->sector_max);
+    $finish = ($tkireg->max_sectors);
 }
 
 $start = 1;
@@ -249,8 +249,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = intval(Tki\Rand::betterRand(1, $tkireg->sector_max - 1));
-        $link2 = intval(Tki\Rand::betterRand(1, $tkireg->sector_max - 1));
+        $link1 = intval(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
+        $link2 = intval(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
         $insert .= "($link1, $link2), ($link2, $link1)";
         if ($j <= ($finish - 1))
         {
@@ -276,17 +276,17 @@ for ($i = 1; $i <= $loops; $i++)
 
     $start = $finish + 1;
     $finish += $loopsize;
-    if ($finish > $tkireg->sector_max)
+    if ($finish > $tkireg->max_sectors)
     {
-        $finish = ($tkireg->sector_max);
+        $finish = ($tkireg->max_sectors);
     }
 }
 
 $local_table_timer->start(); // Start benchmarking
 $sql = "DELETE FROM {$pdo_db->prefix}links WHERE link_start = :linkstart OR link_dest = :linkdest";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':linkstart', $tkireg->sector_max);
-$stmt->bindParam(':linkdest', $tkireg->sector_max);
+$stmt->bindParam(':linkstart', $tkireg->max_sectors);
+$stmt->bindParam(':linkdest', $tkireg->max_sectors);
 $resx = $stmt->execute();
 
 $variables['remove_links_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);

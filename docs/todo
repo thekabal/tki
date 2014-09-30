@@ -3,11 +3,10 @@ This file is used to keep track of things that we intend on doing, and all accep
 TODO denotes an item that we intend to work on. FREQ indicates a feature request.
 
 TODO: Add total time to Create Universe
-TODO: Remove hard-coding force to mysql, so that we can do postgresql
 TODO: Remove abstraction from templates, Smarty only. Consider whether we'd want Twig instead, however
 TODO: Add isset & filter_input combo to *all* inputs
 TODO: Make config variables relating to max value have a consistent naming scheme (max_ v. _max)
-TODO: Scheduler should have a check to ensure that each player does not have more presets (total/count) than preset_max
+TODO: Scheduler should have a check to ensure that each player does not have more presets (total/count) than max_presets
 TODO: Sector fighter should be redone so that it is class driven, but its going to take extensive testing to do so
 TODO: CU, admin, and scheduler should all be class-driven, and should have a database entry for active/inactive on each sub-item. This will also eliminate the need for direct access checks.
 TODO: ship.php could have a better error message for handling when you navigate to it directly (instead of from main, when a ship has been detected)

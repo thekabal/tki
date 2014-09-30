@@ -78,7 +78,7 @@ $info['G-SPEED-PORTS'] = $tkireg->sched_ports;
 $info['G-SPEED-PLANETS'] = $tkireg->sched_planets;
 $info['G-SPEED-IGB'] = $tkireg->sched_igb;
 
-$info['G-SIZE-SECTOR'] = $tkireg->sector_max;
+$info['G-SIZE-SECTOR'] = $tkireg->max_sectors;
 $info['G-SIZE-UNIVERSE'] = $tkireg->universe_size;
 $info['G-SIZE-PLANETS'] = $tkireg->max_planets_sector;
 $info['G-SIZE-PLANETS-TO-OWN'] = $tkireg->min_bases_to_own;

@@ -66,7 +66,7 @@
     </tr>
     <tr>
       <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_sector_total']} (<strong>[{$langvars['l_cu_override_config']}]</strong>)</font></td>
-      <td width="100" bgcolor="#C0C0C0"><font size="1" color="#000000"><input type=text name=sektors size=10 maxlength=10 value={$variables['sector_max']}></font></td>
+      <td width="100" bgcolor="#C0C0C0"><font size="1" color="#000000"><input type=text name=sektors size=10 maxlength=10 value={$variables['max_sectors']}></font></td>
     </tr>
     <tr>
       <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_fed_sectors']}</font></td>

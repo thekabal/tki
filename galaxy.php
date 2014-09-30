@@ -50,7 +50,7 @@ $div_w = 20; // Only this width to match the included images
 $div_h = 20; // Only this height to match the included images
 $div_border = 2; // CSS border is 1 so this should be 2
 $div_xmax = 50; // Where to wrap to next line
-$div_ymax = $tkireg->sector_max / $div_xmax;
+$div_ymax = $tkireg->max_sectors / $div_xmax;
 $map_width = ($div_w + $div_border) * $div_xmax;  // Define the containing div to be the right width to wrap at $div_xmax
 
 // Setup containing div to hold the width of the images
@@ -100,7 +100,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
 }
 
 // This is the row numbers on the side of the map
-for ($a = 1; $a < ($tkireg->sector_max/50 +1); $a++)
+for ($a = 1; $a < ($tkireg->max_sectors/50 +1); $a++)
 {
     echo "\n<div style='position:absolute;left:" . ($map_width + 10)."px;top:".(($a - 1) * ($div_h + $div_border))."px;'>".(($a * 50) - 1)."</div>";
 }

@@ -16,7 +16,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: rsmove.php
-// External variables: $destination (from get or post), int, range 1 - $tkireg->sector_max)
+// External variables: $destination (from get or post), int, range 1 - $tkireg->max_sectors)
 // $engage (from get), int, range 0 - 2)
 
 require_once './common.php';
@@ -36,10 +36,10 @@ $playerinfo = $res->fields;
 echo "<h1>" . $title . "</h1>\n";
 
 // Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
-$destination  = filter_input(INPUT_GET, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
+$destination  = filter_input(INPUT_GET, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
 if (is_null($destination))
 {
-    $destination = filter_input(INPUT_POST, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
+    $destination = filter_input(INPUT_POST, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
 }
 
 $engage  = filter_input(INPUT_GET, 'engage', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 2)));
@@ -68,7 +68,7 @@ else
 
         echo "<form accept-charset='utf-8' action='rsmove.php' method='post'>\n";
         $langvars['l_rs_insector'] = str_replace("[sector]", $playerinfo['sector'], $langvars['l_rs_insector']);
-        $langvars['l_rs_insector'] = str_replace("[sector_max]", $tkireg->sector_max - 1, $langvars['l_rs_insector']);
+        $langvars['l_rs_insector'] = str_replace("[max_sectors]", $tkireg->max_sectors - 1, $langvars['l_rs_insector']);
         echo $langvars['l_rs_insector'] . "<br><br>\n";
         echo $langvars['l_rs_whichsector'] . ":  <input type='text' name='destination' size='10' maxlength='10'><br><br>\n";
         echo "<input type='submit' value='" . $langvars['l_rs_submit'] . "'><br><br>\n";
