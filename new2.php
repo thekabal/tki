@@ -169,7 +169,7 @@ if ($flag == 0)
         Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
         // Add presets for new player
-        for ($zz=0; $zz<$tkireg->preset_max; $zz++)
+        for ($zz=0; $zz<$tkireg->max_presets; $zz++)
         {
             $sql = "INSERT INTO {$pdo_db->prefix}presets (ship_id, preset, type) " .
                    "VALUES (:ship_id, :preset, :type)";

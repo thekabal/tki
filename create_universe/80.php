@@ -30,14 +30,14 @@ $variables['body_class']             = 'create_universe';
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
 $variables['next_step']              = $create_universe_info['next_step'];
-$variables['sector_max']             = (int) filter_input(INPUT_POST, 'sektors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
-$variables['spp']                    = round($variables['sector_max'] * filter_input(INPUT_POST, 'special', FILTER_SANITIZE_NUMBER_INT) / 100);
-$variables['oep']                    = round($variables['sector_max'] * filter_input(INPUT_POST, 'ore', FILTER_SANITIZE_NUMBER_INT) / 100);
-$variables['ogp']                    = round($variables['sector_max'] * filter_input(INPUT_POST, 'organics', FILTER_SANITIZE_NUMBER_INT) / 100);
-$variables['gop']                    = round($variables['sector_max'] * filter_input(INPUT_POST, 'goods', FILTER_SANITIZE_NUMBER_INT) / 100);
-$variables['enp']                    = round($variables['sector_max'] * filter_input(INPUT_POST, 'energy', FILTER_SANITIZE_NUMBER_INT) / 100);
-$variables['nump']                   = round($variables['sector_max'] * filter_input(INPUT_POST, 'planets', FILTER_SANITIZE_NUMBER_INT) / 100);
-$variables['empty']                  = $variables['sector_max'] - $variables['spp'] - $variables['oep'] - $variables['ogp'] - $variables['gop'] - $variables['enp'];
+$variables['max_sectors']             = (int) filter_input(INPUT_POST, 'sektors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
+$variables['spp']                    = round($variables['max_sectors'] * filter_input(INPUT_POST, 'special', FILTER_SANITIZE_NUMBER_INT) / 100);
+$variables['oep']                    = round($variables['max_sectors'] * filter_input(INPUT_POST, 'ore', FILTER_SANITIZE_NUMBER_INT) / 100);
+$variables['ogp']                    = round($variables['max_sectors'] * filter_input(INPUT_POST, 'organics', FILTER_SANITIZE_NUMBER_INT) / 100);
+$variables['gop']                    = round($variables['max_sectors'] * filter_input(INPUT_POST, 'goods', FILTER_SANITIZE_NUMBER_INT) / 100);
+$variables['enp']                    = round($variables['max_sectors'] * filter_input(INPUT_POST, 'energy', FILTER_SANITIZE_NUMBER_INT) / 100);
+$variables['nump']                   = round($variables['max_sectors'] * filter_input(INPUT_POST, 'planets', FILTER_SANITIZE_NUMBER_INT) / 100);
+$variables['empty']                  = $variables['max_sectors'] - $variables['spp'] - $variables['oep'] - $variables['ogp'] - $variables['gop'] - $variables['enp'];
 $variables['initscommod']            = filter_input(INPUT_POST, 'initscommod', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
@@ -256,7 +256,7 @@ $variables['admin_pass'] = ADMIN_PW;
 $local_table_timer->stop();
 $variables['admin_account_results']['elapsed'] = $local_table_timer->elapsed();
 
-for ($zz=0; $zz<$tkireg->preset_max; $zz++)
+for ($zz=0; $zz<$tkireg->max_presets; $zz++)
 {
     $local_table_timer->start(); // Start benchmarking for admin preset #$zz
     $sql = "INSERT INTO {$pdo_db->prefix}presets (ship_id, preset, type) " .

@@ -42,7 +42,7 @@ $variables['swordfish']  = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE
 $variables['steps'] = $create_universe_info['steps'];
 $variables['current_step'] = $create_universe_info['current_step'];
 $variables['next_step'] = $create_universe_info['next_step'];
-$variables['sector_max'] = $tkireg->sector_max;
+$variables['max_sectors'] = $tkireg->max_sectors;
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));

@@ -484,7 +484,7 @@ else
                 $shipname = "Xenobe-" . $character;
 
                 // Select Random Sector
-                $sector = Tki\Rand::betterRand(1, $sector_max);
+                $sector = Tki\Rand::betterRand(1, $tkireg->max_sectors);
 
                 // Display Confirmation form
                 echo "<td><table border=0 cellspacing=0 cellpadding=5>";

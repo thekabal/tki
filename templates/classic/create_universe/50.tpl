@@ -91,7 +91,7 @@
     <input type=hidden name=nump value={$variables['nump']}>
     <input type=hidden name=fedsecs value={$variables['fedsecs']}>
     <input type=hidden name=loops value={$variables['loops']}>
-    <input type=hidden name=sector_max value={$variables['sector_max']}>
+    <input type=hidden name=max_sectors value={$variables['max_sectors']}>
     <input type=hidden name=swordfish value={$variables['swordfish']}>
     <input type="hidden" name="autorun" value="{$variables['autorun']}">
   </table>

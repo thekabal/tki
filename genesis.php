@@ -71,7 +71,7 @@ elseif ($num_planets >= $tkireg->max_planets_sector)
 {
     echo $langvars['l_gns_full'];
 }
-elseif ($sectorinfo['sector_id'] >= $tkireg->sector_max)
+elseif ($sectorinfo['sector_id'] >= $tkireg->max_sectors)
 {
     echo "Invalid sector<br>\n";
 }

@@ -149,9 +149,9 @@ else
         // If scan succeeds, show results and inform target.
         $shipavg = Tki\CalcLevels::avgTech($targetinfo, "ship");
 
-        if ($shipavg > $ewd_maxhullsize)
+        if ($shipavg > $tkireg->max_ewdhullsize)
         {
-            $chance = ($shipavg - $ewd_maxhullsize) * 10;
+            $chance = ($shipavg - $tkireg->max_ewdhullsize) * 10;
         }
         else
         {
@@ -163,7 +163,7 @@ else
         {
             // Need to change warp destination to random sector in universe
             $rating_change = round($targetinfo['rating'] * .1);
-            $dest_sector = Tki\Rand::betterRand(1, $sector_max - 1);
+            $dest_sector = Tki\Rand::betterRand(1, $tkireg->max_sectors - 1);
             $resx = $db->Execute(
                 "UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, " .
                 "rating = rating - ? " .
@@ -209,7 +209,7 @@ else
 
                 if ($btyamount <= 0)
                 {
-                    $bounty = round($playerscore * $bounty_maxvalue);
+                    $bounty = round($playerscore * $max_bountyvalue);
                     $insert = $db->Execute(
                         "INSERT INTO {$db->prefix}bounty (bounty_on,placed_by,amount) values " .
                         "(?,?,?);",

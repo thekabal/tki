@@ -53,7 +53,7 @@ if (array_key_exists('preset', $_POST))
     foreach ($_POST['preset'] as $key => $value)
     {
         // Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
-        $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->sector_max)));
+        $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
     }
 }
 $change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
@@ -64,7 +64,7 @@ foreach ($preset_list as $index => $preset)
     {
         $change = 0;
         $result = str_replace("[preset]", $_POST['preset'][$index], $langvars['l_pre_exceed']);
-        $result = str_replace("[sector_max]", $tkireg->sector_max, $result);
+        $result = str_replace("[max_sectors]", $tkireg->max_sectors, $result);
         echo $result . "<br>\n";
     }
 }
@@ -73,7 +73,7 @@ echo "<br>\n";
 if ($change !== 1)
 {
     echo "<form accept-charset='utf-8' action='preset.php' method='post'>";
-    for ($x=0; $x<$tkireg->preset_max; $x++)
+    for ($x=0; $x<$tkireg->max_presets; $x++)
     {
         echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $presetinfo[$x]['preset'] . "'></div>";
     }
@@ -87,7 +87,7 @@ else
 {
     foreach ($_POST['preset'] as $key => $value)
     {
-        if ($key < $tkireg->preset_max)
+        if ($key < $tkireg->max_presets)
         {
             $update = $db->Execute("UPDATE {$db->prefix}presets SET preset = ? WHERE preset_id = ?;", array($preset_list[$key], $presetinfo[$key]['preset_id']));
             Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);

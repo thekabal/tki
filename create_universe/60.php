@@ -30,14 +30,14 @@ $variables['body_class']             = 'create_universe';
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
 $variables['next_step']              = $create_universe_info['next_step'];
-$variables['sector_max']             = (int) filter_input(INPUT_POST, 'sektors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
+$variables['max_sectors']             = (int) filter_input(INPUT_POST, 'sektors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
 $variables['spp']                    = filter_input(INPUT_POST, 'spp', FILTER_SANITIZE_NUMBER_INT);
 $variables['oep']                    = filter_input(INPUT_POST, 'oep', FILTER_SANITIZE_NUMBER_INT);
 $variables['ogp']                    = filter_input(INPUT_POST, 'ogp', FILTER_SANITIZE_NUMBER_INT);
 $variables['gop']                    = filter_input(INPUT_POST, 'gop', FILTER_SANITIZE_NUMBER_INT);
 $variables['enp']                    = filter_input(INPUT_POST, 'enp', FILTER_SANITIZE_NUMBER_INT);
 $variables['nump']                   = filter_input(INPUT_POST, 'nump', FILTER_SANITIZE_NUMBER_INT);
-$variables['empty']                  = $variables['sector_max'] - $variables['spp'] - $variables['oep'] - $variables['ogp'] - $variables['gop'] - $variables['enp'];
+$variables['empty']                  = $variables['max_sectors'] - $variables['spp'] - $variables['oep'] - $variables['ogp'] - $variables['gop'] - $variables['enp'];
 $variables['initscommod']            = filter_input(INPUT_POST, 'initscommod', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
@@ -75,7 +75,7 @@ $local_table_timer->stop();
 $variables['create_ac_results']['time'] = $local_table_timer->elapsed();
 
 $loopsize = 1000;
-$loops = round($tkireg->sector_max / $loopsize);
+$loops = round($tkireg->max_sectors / $loopsize);
 if ($loops <= 0)
 {
     $loops = 1;
@@ -84,9 +84,9 @@ if ($loops <= 0)
 $variables['insert_sector_loops'] = $loops;
 
 $finish = $loopsize;
-if ($finish > ($tkireg->sector_max))
+if ($finish > ($tkireg->max_sectors))
 {
-    $finish = ($tkireg->sector_max);
+    $finish = ($tkireg->max_sectors);
 }
 
 $start = 3; // We added sol (1), and alpha centauri (2), so start at 3.
@@ -127,9 +127,9 @@ for ($i = 1; $i <= $loops; $i++)
 
     $start = $finish + 1;
     $finish += $loopsize;
-    if ($finish > ($tkireg->sector_max))
+    if ($finish > ($tkireg->max_sectors))
     {
-        $finish = ($tkireg->sector_max);
+        $finish = ($tkireg->max_sectors);
     }
 }
 
@@ -144,7 +144,7 @@ $local_table_timer->stop();
 $variables['create_unchartered_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
-$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, corp_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Federation space', 0, 'N', 'N', 'N', 'N', 'N', 'N',  'Y', 'N', '$tkireg->fed_max_hull')");
+$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, corp_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Federation space', 0, 'N', 'N', 'N', 'N', 'N', 'N',  'Y', 'N', '$tkireg->max_fed_hull')");
 $variables['create_fedspace_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
 $catch_results[$z] = $variables['create_fedspace_results']['result'];
 $z++;

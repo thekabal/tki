@@ -235,12 +235,12 @@ switch ($response) {
             die();
         }
 
-        if ($bounty_maxvalue != 0)
+        if ($tkireg->max_bountyvalue != 0)
         {
-            $percent = $bounty_maxvalue * 100;
+            $percent = $tkireg->max_bountyvalue * 100;
 
             $score = Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
-            $maxtrans = $score * $score * $bounty_maxvalue;
+            $maxtrans = $score * $score * $tkireg->max_bountyvalue;
             $previous_bounty = 0;
             $pb = $db->Execute("SELECT SUM(amount) AS totalbounty FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = ?;", array($bounty_on, $playerinfo['ship_id']));
             Tki\Db::logDbErrors($db, $pb, __LINE__, __FILE__);
