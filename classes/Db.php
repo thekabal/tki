@@ -180,9 +180,8 @@ class Db
         if ($db instanceof PDO)
         {
 //            echo "PDO<br>";
-            $errorinfo = $db->errorInfo();
-            $error = $errorinfo[1];
-            $db_error = $errorinfo[2];
+            $error = $db->errorInfo()[1];
+            $db_error = $db->errorInfo()[2];
             $db_log = true; // We need to create a method for disabling db logging on PDO
         }
         else
