@@ -82,17 +82,10 @@ $langvars = null;                                  // Language variables in ever
 $template = new \Tki\Template();                   // Template API.
 $template->setTheme($tkireg->default_template);    // Set the name of the theme, temporary until we have a theme picker
 
-$tki_session = new Tki\Sessions($pdo_db);
-
-if (!isset($index_page))
+if (Tki\Db::isActive($pdo_db))
 {
-    $index_page = false;
-    // Ensure that we do not start sessions on the index page (or pages likely to have no db),
-    // until the player chooses to allow them or until the db exists.
-    if (!isset($_SESSION))
-    {
-        session_start();
-    }
+    $tki_session = new Tki\Sessions($pdo_db);
+    session_start();
 }
 
 $lang = $tkireg->default_lang;

@@ -81,33 +81,36 @@ class Sessions
 
     public function write($sesskey, $sessdata)
     {
-        $err_mode = $this->pdo_db->getAttribute(\PDO::ATTR_ERRMODE);
-        // Set the error mode to be exceptions, so that we can catch them -- This fucks everything in game except for sessions
-        $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        if (Db::isActive($this->pdo_db))
+        {
+            $err_mode = $this->pdo_db->getAttribute(\PDO::ATTR_ERRMODE);
+            // Set the error mode to be exceptions, so that we can catch them -- This fucks everything in game except for sessions
+            $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-        $table = $this->pdo_db->prefix . 'sessions';
-        try
-        {
-            // Try to insert the record. This will fail if the record already exists, which will trigger catch below..
-            $qry = 'INSERT into ' . $table . ' (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)';
-            $stmt = $this->pdo_db->prepare($qry);
-            $stmt->bindParam(':sesskey', $sesskey);
-            $stmt->bindParam(':sessdata', $sessdata);
-            $stmt->bindParam(':expiry', $this->expiry);
-            $result = $stmt->execute();
+            $table = $this->pdo_db->prefix . 'sessions';
+            try
+            {
+                // Try to insert the record. This will fail if the record already exists, which will trigger catch below..
+                $qry = 'INSERT into ' . $table . ' (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)';
+                $stmt = $this->pdo_db->prepare($qry);
+                $stmt->bindParam(':sesskey', $sesskey);
+                $stmt->bindParam(':sessdata', $sessdata);
+                $stmt->bindParam(':expiry', $this->expiry);
+                $result = $stmt->execute();
+            }
+            catch (\PDOException $e)
+            {
+                // Insert didn't work, use update instead
+                $qry = 'UPDATE ' . $table . ' SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey';
+                $stmt = $this->pdo_db->prepare($qry);
+                $stmt->bindParam(':sesskey', $sesskey);
+                $stmt->bindParam(':sessdata', $sessdata);
+                $stmt->bindParam(':expiry', $this->expiry);
+                $result = $stmt->execute();
+            }
+            $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, $err_mode);
+            return $result;
         }
-        catch (\PDOException $e)
-        {
-            // Insert didn't work, use update instead
-            $qry = 'UPDATE ' . $table . ' SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey';
-            $stmt = $this->pdo_db->prepare($qry);
-            $stmt->bindParam(':sesskey', $sesskey);
-            $stmt->bindParam(':sessdata', $sessdata);
-            $stmt->bindParam(':expiry', $this->expiry);
-            $result = $stmt->execute();
-        }
-        $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, $err_mode);
-        return $result;
     }
 
     public function destroy($sesskey)
