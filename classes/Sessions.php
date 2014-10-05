@@ -84,7 +84,7 @@ class Sessions
         if (Db::isActive($this->pdo_db))
         {
             $err_mode = $this->pdo_db->getAttribute(\PDO::ATTR_ERRMODE);
-            // Set the error mode to be exceptions, so that we can catch them -- This fucks everything in game except for sessions
+            // Set the error mode to be exceptions, so that we can catch them -- This breaks everything in game except for sessions
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
             $table = $this->pdo_db->prefix . 'sessions';
