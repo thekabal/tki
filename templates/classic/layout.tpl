@@ -63,37 +63,35 @@
 <script type="text/javascript" src="{$template_dir}/javascript/newsticker.js.php"></script>
 <p id="news_ticker" class="faderlines" style="width:602px; margin:auto; text-align:center;">{$langvars['l_news_broken']}</p>
 <script>
-// News Ticker Constructor.
-news = new newsTicker();
+    // News Ticker Constructor.
+    news = new newsTicker();
 
-// I have put in some safaty precautions, but just in case always check the return value from initTicker().
-if (news.initTicker("news_ticker") == true)
-{
-    // Set the width of the Ticker (in pixles)
-    news.Width(500);
+    // I have put in some safaty precautions, but just in case always check the return value from initTicker().
+    if (news.initTicker("news_ticker") == true)
+    {
+        // Set the width of the Ticker (in pixles)
+        news.Width(500);
 
-    // Sets the Interval/Update Time in seconds.
-    news.Interval(5);
+        // Sets the Interval/Update Time in seconds.
+        news.Interval(5);
 
-    // I have decided on adding single news articles at a time due to it makes it more easier to add when using PHP or XSL.
-    // We can supply the information by either of the following ways:
-    // 1: Supply the information from a Database and inserting it with PHP.
-    // 2: Supply the information from a Database and convert it into XML (for formatting) and have the XSLT Stylesheet extract the information and insert it.
-{* Cycle through the player list *}
-{foreach $news as $article}
-    news.addArticle('{$article['url']}', '{$article['text']}', '{$article['type']}', {$article['delay']});
-{/foreach}
+        // I have decided on adding single news articles at a time due to it makes it more easier to add when using PHP or XSL.
+        // We can supply the information by either of the following ways:
+        // 1: Supply the information from a Database and inserting it with PHP.
+        // 2: Supply the information from a Database and convert it into XML (for formatting) and have the XSLT Stylesheet extract the information and insert it.
+        {* Cycle through the player list *}
+        {foreach $news as $article}
+            news.addArticle('{$article['url']}', '{$article['text']}', '{$article['type']}', {$article['delay']});
+        {/foreach}
 
-    // Starts the Ticker.
-    news.startTicker();
+        // Starts the Ticker.
+        news.startTicker();
 
-    // If for some reason you need to stop the Ticker use the following line.
-    // news.stopTicker();
-}
+        // If for some reason you need to stop the Ticker use the following line.
+        // news.stopTicker();
+    }
 </script>
-
 {/if}
-<br>
 
 {* Items to the left (SF logo) and to the right (mem, copyright, news) *}
     <p style='float:left; text-align:left'><a class="new_link" href='https://github.com/thekabal/tki'>Github project page for The Kabal Invasion</a>
@@ -119,7 +117,6 @@ if (news.initTicker("news_ticker") == true)
     </script>
     <span id=update_ticker>{$langvars['l_please_wait']}</span>
 {/if}
-
 {* End of Servers Update Ticker *}
 
 <br>

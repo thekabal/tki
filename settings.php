@@ -23,7 +23,7 @@ require_once './common.php';
 $link = null;
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'settings', 'footer','global_includes'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'settings', 'footer','global_includes', 'global_funcs'));
 
 $variables = null;
 $variables['lang'] = $lang;
@@ -31,7 +31,7 @@ $variables['link'] = $link;
 $variables['title'] = $langvars['l_set_settings'];
 $variables['link_forums'] = $tkireg->link_forums;
 $variables['admin_mail'] = $tkireg->admin_mail;
-$variables['body_class'] = 'faq';
+$variables['body_class'] = 'settings';
 $variables['release_version'] = $tkireg->release_version;
 $variables['game_name'] = $tkireg->game_name;
 $variables['mine_hullsize'] = $tkireg->mine_hullsize;
@@ -90,6 +90,18 @@ $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 
 // Temporarily set the template to the default template until we have a user option
 $variables['template'] = $tkireg->default_template;
+
+
+if (empty ($_SESSION['username']))
+{
+    $variables['loggedin'] = (boolean) true;
+    $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');
+}
+else
+{
+    $variables['loggedin'] = (boolean) false;
+    $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
+}
 
 // Now set a container for the variables and langvars and send them off to the template system
 $variables['container'] = 'variable';
