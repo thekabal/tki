@@ -40,13 +40,13 @@ if ($result2)
     $planetinfo = $result2->fields;
 }
 
-if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $playerinfo['team'] && $playerinfo['team'] > 0))
+if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $playerinfo['team'] && $playerinfo['team'] > 0))
 {
     echo "<h1>" . $title . "</h1>\n";
-    if ($action == "planetcorp")
+    if ($action == "planetteam")
     {
         echo $langvars['l_teamm_toteam'] . "<br>";
-        $result = $db->Execute("UPDATE {$db->prefix}planets SET corp=?, owner=? WHERE planet_id = ?;", array($playerinfo['team'], $playerinfo['ship_id'], $planet_id));
+        $result = $db->Execute("UPDATE {$db->prefix}planets SET team=?, owner=? WHERE planet_id = ?;", array($playerinfo['team'], $playerinfo['ship_id'], $planet_id));
         Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
 
@@ -59,7 +59,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $p
     if ($action == "planetpersonal")
     {
         echo $langvars['l_teamm_topersonal'] . "<br>";
-        $result = $db->Execute("UPDATE {$db->prefix}planets SET corp='0', owner = ? WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
+        $result = $db->Execute("UPDATE {$db->prefix}planets SET team='0', owner = ? WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
         Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
 

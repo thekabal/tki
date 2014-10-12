@@ -40,7 +40,7 @@ if ($playerinfo['team'] == 0)
     return;
 }
 
-$query = "SELECT * FROM {$db->prefix}planets WHERE corp=$playerinfo[team]";
+$query = "SELECT * FROM {$db->prefix}planets WHERE team=$playerinfo[team]";
 if (!empty ($sort))
 {
     $query .= " ORDER BY";

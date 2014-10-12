@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS tki_planets (
   fighters int(20) NOT NULL DEFAULT '0',
   torps int(20) NOT NULL DEFAULT '0',
   `owner` int(10) unsigned NOT NULL DEFAULT '0',
-  corp int(10) unsigned NOT NULL DEFAULT '0',
+  team int(10) unsigned NOT NULL DEFAULT '0',
   base varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   sells varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   prod_organics int(11) NOT NULL DEFAULT '20',
@@ -23,5 +23,5 @@ CREATE TABLE IF NOT EXISTS tki_planets (
   defeated varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   PRIMARY KEY (planet_id),
   KEY tki_owner (`owner`),
-  KEY tki_corp (corp)
+  KEY tki_team (team)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;

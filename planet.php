@@ -174,7 +174,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
             }
         }
 
-        if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $playerinfo['team'] && $playerinfo['team'] > 0))
+        if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['tea,'] == $playerinfo['team'] && $playerinfo['team'] > 0))
         {
             // Owner menu
             echo $langvars['l_turns_have'] . " " . $playerinfo['turns'] . "<p>";
@@ -237,9 +237,9 @@ if (!is_bool($planetinfo) && $planetinfo != false)
             {
                 if ($playerinfo['team'] != 0)
                 {
-                    if ($planetinfo['corp'] == 0)
+                    if ($planetinfo['team'] == 0)
                     {
-                        $langvars['l_planet_mteam_linkC'] = "<a href=team.php?planet_id=$planet_id&action=planetcorp>" . $langvars['l_planet_mteam_linkC'] . "</a>";
+                        $langvars['l_planet_mteam_linkC'] = "<a href=team.php?planet_id=$planet_id&action=planetteam>" . $langvars['l_planet_mteam_linkC'] . "</a>";
                         $langvars['l_planet_mteam'] = str_replace("[planet]", $langvars['l_planet_mteam_linkC'], $langvars['l_planet_mteam']);
                         echo $langvars['l_planet_mteam'] . "<br>";
                     }
@@ -293,8 +293,8 @@ if (!is_bool($planetinfo) && $planetinfo != false)
                 echo $langvars['l_planet_not_selling'] . ".<br>";
             }
 
-            // Fix for corp member leaving a non corp planet
-            if (($planetinfo['planet_id'] == $playerinfo['planet_id'] && $playerinfo['on_planet'] == "Y") && $planetinfo['corp'] == 0)
+            // Fix for team member leaving a non team planet
+            if (($planetinfo['planet_id'] == $playerinfo['planet_id'] && $playerinfo['on_planet'] == "Y") && $planetinfo['team'] == 0)
             {
                 $langvars['l_planet_leave_link'] = "<a href=planet.php?planet_id=$planet_id&command=leave>Leave Friendly Planet</a>";
                 echo "<p>" . $langvars['l_planet_leave_link'] . "</p>\n";
@@ -325,7 +325,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
             }
         }
     }
-    elseif ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $playerinfo['team'] && $playerinfo['team'] > 0))
+    elseif ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $playerinfo['team'] && $playerinfo['team'] > 0))
     {
         // Player owns planet and there is a command
         if ($command == "sell")
@@ -489,7 +489,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
             echo $langvars['l_command_no'] . "<br>";
         }
     }
-    elseif (($planetinfo['planet_id'] == $playerinfo['planet_id'] && $playerinfo['on_planet'] == "Y") && $planetinfo['corp'] == 0) // Fix for corp member leaving a non corp planet
+    elseif (($planetinfo['planet_id'] == $playerinfo['planet_id'] && $playerinfo['on_planet'] == "Y") && $planetinfo['team'] == 0) // Fix for team member leaving a non team planet
     {
         if ($command == "leave")
         {
@@ -860,7 +860,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
         elseif ($command == "capture" &&  $planetinfo['owner'] == 0)
         {
             echo $langvars['l_planet_captured'] . "<br>";
-            $update = $db->Execute("UPDATE {$db->prefix}planets SET corp = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
+            $update = $db->Execute("UPDATE {$db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
             Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
             $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
 

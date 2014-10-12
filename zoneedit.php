@@ -114,7 +114,7 @@ $curzone = $res->fields;
 // Sanitize ZoneName.
 $curzone['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $curzone['zone_name']);
 
-if ($curzone['corp_zone'] == 'N')
+if ($curzone['team_zone'] == 'N')
 {
     $result = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
     Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
@@ -127,7 +127,7 @@ else
     $ownerinfo = $result->fields;
 }
 
-if (($curzone['corp_zone'] == 'N' && $curzone['owner'] != $ownerinfo['ship_id']) || ($curzone['corp_zone'] == 'Y' && $curzone['owner'] != $ownerinfo['id'] && $row['owner'] == $ownerinfo['creator']))
+if (($curzone['team_zone'] == 'N' && $curzone['owner'] != $ownerinfo['ship_id']) || ($curzone['team_zone'] == 'Y' && $curzone['owner'] != $ownerinfo['id'] && $row['owner'] == $ownerinfo['creator']))
 {
     echo "<p>" . $langvars['l_ze_notowner'] . "<p>";
     Tki\Text::gotoMain($db, $lang, $langvars);

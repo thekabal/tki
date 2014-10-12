@@ -136,7 +136,7 @@ for ($i = 1; $i <= $loops; $i++)
 /// Insert zones - Unchartered, fed, free trade, war & Fed space
 
 $local_table_timer->start(); // Start benchmarking
-$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, corp_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Unchartered space', 0, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '0' )");
+$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Unchartered space', 0, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '0' )");
 $variables['create_unchartered_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
 $catch_results[$z] = $variables['create_unchartered_results']['result'];
 $z++;
@@ -144,7 +144,7 @@ $local_table_timer->stop();
 $variables['create_unchartered_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
-$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, corp_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Federation space', 0, 'N', 'N', 'N', 'N', 'N', 'N',  'Y', 'N', '$tkireg->max_fed_hull')");
+$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Federation space', 0, 'N', 'N', 'N', 'N', 'N', 'N',  'Y', 'N', '$tkireg->max_fed_hull')");
 $variables['create_fedspace_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
 $catch_results[$z] = $variables['create_fedspace_results']['result'];
 $z++;
@@ -152,7 +152,7 @@ $local_table_timer->stop();
 $variables['create_fedspace_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
-$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, corp_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Free-Trade space', 0, 'N', 'N', 'Y', 'N', 'N', 'N','Y', 'N', '0')");
+$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Free-Trade space', 0, 'N', 'N', 'Y', 'N', 'N', 'N','Y', 'N', '0')");
 $variables['create_free_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
 $catch_results[$z] = $variables['create_free_results']['result'];
 $z++;
@@ -160,7 +160,7 @@ $local_table_timer->stop();
 $variables['create_free_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
-$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, corp_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('War Zone', 0, 'N', 'Y', 'Y', 'Y', 'Y', 'Y','N', 'Y', '0')");
+$replace = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('War Zone', 0, 'N', 'Y', 'Y', 'Y', 'Y', 'Y','N', 'Y', '0')");
 $variables['create_warzone_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
 $catch_results[$z] = $variables['create_warzone_results']['result'];
 $z++;

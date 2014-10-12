@@ -38,7 +38,7 @@ class PlanetReport
         if ($playerinfo['team'] > 0)
         {
             echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> " .
-                 "Commondity Report (like Planet Status) for planets marked Corporate by you and/or your fellow team member<br><br>";
+                 "Commondity Report (like Planet Status) for planets marked Team by you and/or your fellow team member<br><br>";
         }
         echo "</div>\n";
     }
@@ -128,7 +128,7 @@ class PlanetReport
             echo "<td align=right><strong>" . $langvars['l_base'] . "?</strong></td>";
             if ($playerinfo['team'] > 0)
             {
-                echo "<td align=right><strong>Corp?</strong></td>";
+                echo "<td align=right><strong>Team?</strong></td>";
             }
             echo "<td align=right><strong>" . $langvars['l_selling'] . "?</strong></td>";
 
@@ -143,7 +143,7 @@ class PlanetReport
             $total_fighters = 0;
             $total_torp = 0;
             $total_base = 0;
-            $total_corp = 0;
+            $total_team = 0;
             $total_selling = 0;
             $color = $color_line1;
             for ($i = 0; $i < $num_planets; $i++)
@@ -160,9 +160,9 @@ class PlanetReport
                 {
                     $total_base += 1;
                 }
-                if ($planet[$i]['corp'] > 0)
+                if ($planet[$i]['team'] > 0)
                 {
-                    $total_corp += 1;
+                    $total_team += 1;
                 }
                 if ($planet[$i]['sells'] == "Y")
                 {
@@ -188,7 +188,7 @@ class PlanetReport
                 echo "<td align=center>" . base_build_check($langvars, $planet, $i) . "</td>";
                 if ($playerinfo['team'] > 0)
                 {
-                    echo "<td align=center>" . ($planet[$i]['corp'] > 0  ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
+                    echo "<td align=center>" . ($planet[$i]['team'] > 0  ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
                 }
 
                 echo "<td align=center>" . ($planet[$i]['sells'] == 'Y' ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
@@ -219,7 +219,7 @@ class PlanetReport
             echo "<td align=center>" . number_format($total_base, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
             if ($playerinfo['team'] > 0)
             {
-                echo "<td align=center>" . number_format($total_corp, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td align=center>" . number_format($total_team, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
             }
 
             echo "<td align=center>" . number_format($total_selling, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
@@ -318,14 +318,14 @@ class PlanetReport
             //    echo "<td align='center'><strong>" . $langvars['l_base'] . "?</strong></td>\n";
             if ($playerinfo['team'] > 0)
             {
-                echo "<td align='center'><strong>Corp?</strong></td>\n";
+                echo "<td align='center'><strong>Team?</strong></td>\n";
             }
             echo "<td align='center'><strong>" . $langvars['l_selling'] . "?</strong></td>\n";
             echo "</tr>\n";
 
             $total_colonists = 0;
             $total_credits = 0;
-            $total_corp = 0;
+            $total_team = 0;
             $color = $color_line1;
 
             for ($i = 0; $i < $num_planets; $i++)
@@ -350,7 +350,7 @@ class PlanetReport
                 echo "<td align=center>" . "<input size=6 type=text name=\"prod_torp["     . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_torp']     . "\">" . "</td>\n";
                 if ($playerinfo['team'] > 0)
                 {
-                    echo "<td align=center>" . corp_planet_checkboxes($planet, $i) . "</td>\n";
+                    echo "<td align=center>" . team_planet_checkboxes($planet, $i) . "</td>\n";
                 }
 
                 echo "<td align=center>" . selling_checkboxes($planet, $i)     . "</td>\n";
@@ -395,15 +395,15 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function corpPlanetCheckboxes($planet, $i)
+    public static function teamPlanetCheckboxes($planet, $i)
     {
-        if ($planet[$i]['corp'] <= 0)
+        if ($planet[$i]['team'] <= 0)
         {
-            return ("<input type='checkbox' name='corp[{$i}]' value='{$planet[$i]['planet_id']}' />");
+            return ("<input type='checkbox' name='team[{$i}]' value='{$planet[$i]['planet_id']}' />");
         }
-        elseif ($planet[$i]['corp'] > 0)
+        elseif ($planet[$i]['team'] > 0)
         {
-            return ("<input type='checkbox' name='corp[{$i}]' value='{$planet[$i]['planet_id']}' checked />");
+            return ("<input type='checkbox' name='team[{$i}]' value='{$planet[$i]['planet_id']}' checked />");
         }
     }
 

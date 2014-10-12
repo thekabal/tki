@@ -87,7 +87,7 @@ else
         echo "<td align='right'><tt>" . $langvars['l_ore'] . "</tt></td><td><input type='text' size='9' name='ore' value=\"" . $row['ore'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_goods'] . "</tt></td><td><input type='text' size='9' name='goods' value=\"" . $row['goods'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_energy'] . "</tt></td><td><input type='text' size='9' name='energy' value=\"" . $row['energy'] . "\"></td></tr>";
-        echo "<tr><td><tt>" . $langvars['l_admin_planet_team'] . "</tt></td><td><input type='text' size=5 name='corp' value=\"" . $row['corp'] . "\"></td>";
+        echo "<tr><td><tt>" . $langvars['l_admin_planet_team'] . "</tt></td><td><input type='text' size=5 name='team' value=\"" . $row['team'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_colonists'] . "</tt></td><td><input type='text' size='9' name='colonists' value=\"" . $row['colonists'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_credits'] . "</tt></td><td><input type='text' size='9' name='credits' value=\"" . $row['credits'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_fighters'] . "</tt></td><td><input type='text' size='9' name='fighters' value=\"" . $row['fighters'] . "\"></td>";
@@ -114,7 +114,7 @@ else
         $_defeated = empty($defeated) ? "N" : "Y";
         $_base = empty($base) ? "N" : "Y";
         $_sells = empty($sells) ? "N" : "Y";
-        $planupdate = $db->Execute("UPDATE {$db->prefix}planets SET sector_id = ?, defeated = ?, name = ?, base = ?, sells = ?, owner = ?, organics = ?, ore = ?, goods = ?, energy = ?, corp = ?, colonists = ?,credits = ? ,fighters = ?, torps = ?, prod_organics= ? , prod_ore = ?, prod_goods = ?, prod_energy = ?, prod_fighters = ?, prod_torp = ? WHERE planet_id = ?", array($sector_id, $_defeated, $name, $_base, $_sells, $owner, $organics, $ore, $goods, $energy, $corp, $colonists, $credits, $fighters, $torps, $prod_organics, $prod_ore, $prod_goods, $prod_energy, $prod_fighters, $prod_torp, $planet));
+        $planupdate = $db->Execute("UPDATE {$db->prefix}planets SET sector_id = ?, defeated = ?, name = ?, base = ?, sells = ?, owner = ?, organics = ?, ore = ?, goods = ?, energy = ?, team = ?, colonists = ?,credits = ? ,fighters = ?, torps = ?, prod_organics= ? , prod_ore = ?, prod_goods = ?, prod_energy = ?, prod_fighters = ?, prod_torp = ? WHERE planet_id = ?", array($sector_id, $_defeated, $name, $_base, $_sells, $owner, $organics, $ore, $goods, $energy, $team, $colonists, $credits, $fighters, $torps, $prod_organics, $prod_ore, $prod_goods, $prod_energy, $prod_fighters, $prod_torp, $planet));
         Tki\Db::logDbErrors($db, $planupdate, __LINE__, __FILE__);
         if (!$planupdate)
         {

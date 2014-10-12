@@ -142,7 +142,7 @@ $info['COLONIST_REPRODUCTION_RATE'] = $tkireg->colonist_reproduction_rate;
 $info['ORGANICS_CONSUMPTION'] = $tkireg->organics_consumption;
 $info['STARVATION_DEATH_RATE'] = $tkireg->starvation_death_rate;
 
-$info['CORP_PLANET_TRANSFERS'] = ($tkireg->corp_planet_transfers ? "1" : "0");
+$info['TEAM_PLANET_TRANSFERS'] = ($tkireg->team_planet_transfers ? "1" : "0");
 $info['MAX_TEAM_MEMBERS'] = $tkireg->max_team_members;
 
 $info['ADMIN_MAIL'] = $tkireg->admin_mail;

@@ -74,7 +74,7 @@ else
         // Sanitize ZoneName.
         $row['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $row['zone_name']);
 
-        if ($row['corp_zone'] == 'N')
+        if ($row['team_zone'] == 'N')
         {
             $result = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['owner']));
             Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
@@ -173,7 +173,7 @@ else
         $hull = $row['max_hull'];
     }
 
-    if (($row['corp_zone'] == 'N' && $row['owner'] == $playerinfo['ship_id']) || ($row['corp_zone'] == 'Y' && $row['owner'] == $playerinfo['team'] && $playerinfo['ship_id'] == $ownerinfo['creator']))
+    if (($row['team_zone'] == 'N' && $row['owner'] == $playerinfo['ship_id']) || ($row['team_zone'] == 'Y' && $row['owner'] == $playerinfo['team'] && $playerinfo['ship_id'] == $ownerinfo['creator']))
     {
         echo "<center>" . $langvars['l_zi_control'] . ". <a href=zoneedit.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_zi_tochange'] . "</center><p>";
     }
