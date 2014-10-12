@@ -15,17 +15,17 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: corp.php
+// File: team.php
 
 require_once './common.php';
 
 Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
-$title = $langvars['l_corpm_title'];
+$title = $langvars['l_teamm_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('corp', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('team', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
 Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
@@ -45,7 +45,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $p
     echo "<h1>" . $title . "</h1>\n";
     if ($action == "planetcorp")
     {
-        echo $langvars['l_corpm_tocorp'] . "<br>";
+        echo $langvars['l_teamm_toteam'] . "<br>";
         $result = $db->Execute("UPDATE {$db->prefix}planets SET corp=?, owner=? WHERE planet_id = ?;", array($playerinfo['team'], $playerinfo['ship_id'], $planet_id));
         Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
@@ -58,7 +58,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $p
 
     if ($action == "planetpersonal")
     {
-        echo $langvars['l_corpm_topersonal'] . "<br>";
+        echo $langvars['l_teamm_topersonal'] . "<br>";
         $result = $db->Execute("UPDATE {$db->prefix}planets SET corp='0', owner = ? WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
         Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
@@ -75,7 +75,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $p
 }
 else
 {
-    echo "<br>" . $langvars['l_corpm_exploit'] . "<br>";
+    echo "<br>" . $langvars['l_team_exploit'] . "<br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
 }
 

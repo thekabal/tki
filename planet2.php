@@ -501,7 +501,7 @@ else
 
     if ($playerinfo['ship_id'] != $planetinfo['owner'] && $transfer_credits != 0 && !$corp_planet_transfers)
     {
-        echo $langvars['l_planet2_nocorptransfer'] . "<p>";
+        echo $langvars['l_planet2_noteamtransfer'] . "<p>";
         echo "<a href=planet.php?planet_id=$planet_id>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "<br><br>";
     }
     elseif ($total_holds_needed > $free_holds)

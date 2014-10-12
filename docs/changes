@@ -1,12 +1,16 @@
-TheKabal - September 27, 2016
+TheKabal - October 12, 2014
+-------------------------------
+Migrate much of "corp" to be "team"
+
+TheKabal - September 27, 2014
 -------------------------------
 Repair the create universe process to allow Postgresql as a database to work.
 
-TheKabal - September 20, 2016
+TheKabal - September 20, 2014
 -------------------------------
 Change the copyright notice, add a copyright page, clarify further
 Add support for Postgresql at the DB driver level - very first step of many, many more.
 
-TheKabal - September 13, 2016
+TheKabal - September 13, 2014
 -------------------------------
 Initial commit
