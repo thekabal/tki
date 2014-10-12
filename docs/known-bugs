@@ -3,7 +3,5 @@ This file can be used to track bugs that need to be addressed
 BUG: KB-0001: When resetting a password successfully, it sends a second email (it shouldn't) with a broken [link] replacement.
 BUG: KB-0002: The new player signup needs to have an activation step before you can play.
 BUG: KB-0003: Creating a new team fails
-BUG: KB-0004: lrscan, images are not sourced from the template
 BUG: KB-0005: traderoutes, create a new port<->port traderoute does not work
 BUG: KB-0006: Admin, user editor, forces a password change even if you do not enter one, and the changed password isn't accessible (encrypted).
-BUG: KB-0007: Settings page is riddled with errors

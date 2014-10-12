@@ -130,14 +130,14 @@ if ($sector == "*")
         {
             $icon_alt_text = ucfirst(Tki\Ports::getType($port_type, $langvars));
             $icon_port_type_name = $port_type . ".png";
-            $image_string = "<img align=absmiddle height=12 width=12 alt=\"$icon_alt_text\" src=\"images/$icon_port_type_name\">&nbsp;";
+            $image_string = "<img align=absmiddle height=12 width=12 alt=\"$icon_alt_text\" src=\"". $template->getVariables('template_dir') . "/images/$icon_port_type_name\">&nbsp;";
         }
         else
         {
             $image_string = "&nbsp;";
         }
 
-        echo "<tr bgcolor=\"$tkireg->color\"><td><a href=move.php?sector=$row[link_dest]>$row[link_dest]</a></td><td><a href=lrscan.php?sector=$row[link_dest]>Scan</a></td><td>$num_links</td><td>$num_ships</td><td width=12>$image_string</td><td>" . Tki\Ports::getType($port_type, $langvars) . "</td><td>$has_planet</td><td>$has_mines</td><td>$has_fighters</td>";
+        echo "<tr bgcolor=\"$tkireg->color\"><td><a href='move.php?sector=" . $row['link_dest'] . "'>" . $row['link_dest'] . "</a></td><td><a href='lrscan.php?sector=" . $row['link_dest'] . "'>Scan</a></td><td>$num_links</td><td>$num_ships</td><td width=12>$image_string</td><td>" . Tki\Ports::getType($port_type, $langvars) . "</td><td>$has_planet</td><td>$has_mines</td><td>$has_fighters</td>";
         if ($playerinfo['dev_lssd'] == 'Y')
         {
             $resx = $db->SelectLimit("SELECT * from {$db->prefix}movement_log WHERE ship_id <> ? AND sector_id = ? ORDER BY time DESC", 1, -1, array('ship_id' => $playerinfo['ship_id'], 'sector_id' => $row['link_dest']));
@@ -413,7 +413,7 @@ else
     }
     echo "</td></tr>";
     echo "</table><br>";
-    echo "<a href=move.php?sector=$sector>" . $langvars['l_clickme'] . "</a> " . $langvars['l_lrs_moveto'] . " " . $sector;
+    echo "<a href='move.php?sector=" . $sector . "'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_lrs_moveto'] . " " . $sector;
 }
 
 echo "<br><br>";

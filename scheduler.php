@@ -162,7 +162,7 @@ else
             $sched_i = 0;
             while ($sched_i < $multiplier)
             {
-                include_once './'. $event['sched_file'];
+                include_once './scheduler/'. $event['sched_file'];
                 $sched_i++;
             }
             $sched_res->MoveNext();
