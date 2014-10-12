@@ -589,7 +589,7 @@ class Xenobe
                 \Tki\PlayerLog::writeLog($db, $planetinfo['owner'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
                 // Update planet
-                $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, corp=0 WHERE planet_id=?", array($planetinfo['planet_id']));
+                $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id=?", array($planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($db, $resi, __LINE__, __FILE__);
 
                 \Tki\Ownership::cancel($db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);

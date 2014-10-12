@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS tki_planets (
   fighters integer NOT NULL DEFAULT '0',
   torps integer NOT NULL DEFAULT '0',
   "owner" integer NOT NULL DEFAULT '0',
-  corp integer NOT NULL DEFAULT '0',
+  team integer NOT NULL DEFAULT '0',
   base character varying(1) NOT NULL DEFAULT 'N',
   sells character varying(1) NOT NULL DEFAULT 'N',
   prod_organics integer NOT NULL DEFAULT '20',

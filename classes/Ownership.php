@@ -23,7 +23,7 @@ class Ownership
 {
     public static function calc($db, $sector, $min_bases_to_own, $langvars)
     {
-        $bases_res = $db->Execute("SELECT owner, corp FROM {$db->prefix}planets WHERE sector_id=? AND base='Y'", array($sector));
+        $bases_res = $db->Execute("SELECT owner, team FROM {$db->prefix}planets WHERE sector_id=? AND base='Y'", array($sector));
         Db::logDbErrors($db, $bases_res, __LINE__, __FILE__);
         $num_bases = $bases_res->RecordCount();
 
@@ -46,18 +46,18 @@ class Ownership
 
         foreach ($bases as $curbase)
         {
-            $curcorp = -1;
+            $curteam = -1;
             $curship = -1;
             $loop = 0;
             while ($loop < $owner_num)
             {
-                if ($curbase['corp'] != 0)
+                if ($curbase['team'] != 0)
                 {
                     if ($owners[$loop]['type'] == 'C')
                     {
-                        if ($owners[$loop]['id'] == $curbase['corp'])
+                        if ($owners[$loop]['id'] == $curbase['team'])
                         {
-                            $curcorp = $loop;
+                            $curteam = $loop;
                             $owners[$loop]['num']++;
                         }
                     }
@@ -75,15 +75,15 @@ class Ownership
                 $loop++;
             }
 
-            if ($curcorp == -1)
+            if ($curteam == -1)
             {
-                if ($curbase['corp'] != 0)
+                if ($curbase['team'] != 0)
                 {
-                    $curcorp = $owner_num;
+                    $curteam = $owner_num;
                     $owner_num++;
-                    $owners[$curcorp]['type'] = 'C';
-                    $owners[$curcorp]['num'] = 1;
-                    $owners[$curcorp]['id'] = $curbase['corp'];
+                    $owners[$curteam]['type'] = 'C';
+                    $owners[$curteam]['num'] = 1;
+                    $owners[$curteam]['id'] = $curbase['team'];
                 }
             }
 
@@ -103,13 +103,13 @@ class Ownership
         // We've got all the contenders with their bases.
         // Time to test for conflict
         $loop = 0;
-        $nbcorps = 0;
+        $nbteams = 0;
         $nbships = 0;
         while ($loop < $owner_num)
         {
             if ($owners[$loop]['type'] == 'C')
             {
-                $nbcorps++;
+                $nbteams++;
             }
             else
             {
@@ -119,15 +119,15 @@ class Ownership
                 {
                     $curship = $team_res->fields;
                     $ships[$nbships] = $owners[$loop]['id'];
-                    $scorps[$nbships] = $curship['team'];
+                    $steams[$nbships] = $curship['team'];
                     $nbships++;
                 }
             }
             $loop++;
         }
 
-        // More than one corp, war
-        if ($nbcorps > 1)
+        // More than one team, war
+        if ($nbteams > 1)
         {
             $setzone_res = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
             Db::logDbErrors($db, $setzone_res, __LINE__, __FILE__);
@@ -137,9 +137,9 @@ class Ownership
 
         // More than one unallied ship, war
         $numunallied = 0;
-        foreach ($scorps as $corp)
+        foreach ($steams as $team)
         {
-            if ($corp == 0)
+            if ($team == 0)
             {
                 $numunallied++;
             }
@@ -153,8 +153,8 @@ class Ownership
             return $langvars['l_global_warzone'];
         }
 
-        // Unallied ship, another corp present, war
-        if ($numunallied > 0 && $nbcorps > 0)
+        // Unallied ship, another team present, war
+        if ($numunallied > 0 && $nbteams > 0)
         {
             $setzone_resc = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
             Db::logDbErrors($db, $setzone_resc, __LINE__, __FILE__);
@@ -162,7 +162,7 @@ class Ownership
             return $langvars['l_global_warzone'];
         }
 
-        // Unallied ship, another ship in a corp, war
+        // Unallied ship, another ship in a team, war
         if ($numunallied > 0)
         {
             $query = "SELECT team FROM {$db->prefix}ships WHERE (";
@@ -223,18 +223,18 @@ class Ownership
 
         if ($owners[$winner]['type'] == 'C')
         {
-            $setzone_resf = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE corp_zone='Y' AND owner=?", array($owners[$winner]['id']));
+            $setzone_resf = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE team_zone='Y' AND owner=?", array($owners[$winner]['id']));
             Db::logDbErrors($db, $setzone_resf, __LINE__, __FILE__);
             $zone = $setzone_resf->fields;
 
             $setzone_resg = $db->Execute("SELECT team_name FROM {$db->prefix}teams WHERE id=?", array($owners[$winner]['id']));
             Db::logDbErrors($db, $setzone_resg, __LINE__, __FILE__);
-            $corp = $setzone_resg->fields;
+            $team = $setzone_resg->fields;
 
             $update_res = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=? WHERE sector_id=?", array($zone['zone_id'], $sector));
             Db::logDbErrors($db, $update_res, __LINE__, __FILE__);
 
-            return $langvars['l_global_team'] . ' ' . $corp['team_name'] . '!';
+            return $langvars['l_global_team'] . ' ' . $team['team_name'] . '!';
         }
         else
         {
@@ -259,7 +259,7 @@ class Ownership
             else
             {
 
-                $setzone_resi = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE corp_zone='N' AND owner=?", array($owners[$winner]['id']));
+                $setzone_resi = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE team_zone='N' AND owner=?", array($owners[$winner]['id']));
                 Db::logDbErrors($db, $setzone_resi, __LINE__, __FILE__);
                 $zone = $setzone_resi->fields;
 

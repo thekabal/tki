@@ -50,7 +50,7 @@ if ($zoneinfo['allow_trade'] == 'N')
 }
 elseif ($zoneinfo['allow_trade'] == 'L')
 {
-    if ($zoneinfo['corp_zone'] == 'N')
+    if ($zoneinfo['team_zone'] == 'N')
     {
         $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
         Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);

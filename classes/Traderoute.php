@@ -92,7 +92,7 @@ class Traderoute
         }
         elseif ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')  // Get data from planet table
         {
-            $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id=? AND (owner = ? OR (corp <> 0 AND corp = ?));", array($traderoute['source_id'], $playerinfo['ship_id'], $playerinfo['team']));
+            $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id=? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['source_id'], $playerinfo['ship_id'], $playerinfo['team']));
             \Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
             if (!$result || $result->EOF)
             {
@@ -119,14 +119,14 @@ class Traderoute
                     Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
                 }
             }
-            elseif ($traderoute['source_type'] == 'C')   // Check to make sure player and planet are in the same corp.
+            elseif ($traderoute['source_type'] == 'C')   // Check to make sure player and planet are in the same team.
             {
-                if ($source['corp'] != $playerinfo['team'])
+                if ($source['team'] != $playerinfo['team'])
                 {
                     // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $source[name], $langvars['l_tdr_notyourplanet']);
                     // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $source[sector_id], $langvars['l_tdr_notyourplanet']);
-                    // $not_corp_planet = "$source[name] in $source[sector_id] not a Copporate Planet";
-                    // Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $not_corp_planet, $template);
+                    // $not_team_planet = "$source[name] in $source[sector_id] not a Copporate Planet";
+                    // Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $not_team_planet, $template);
                     Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
                 }
             }
@@ -159,8 +159,8 @@ class Traderoute
         elseif (($traderoute['dest_type'] == 'L') || ($traderoute['dest_type'] == 'C'))  // Get data from planet table
         {
             // Check for valid Owned Source Planet
-            // This now only returns Planets that the player owns or planets that belong to the team and set as corp planets..
-            $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id=? AND (owner = ? OR (corp <> 0 AND corp = ?));", array($traderoute['dest_id'], $playerinfo['ship_id'], $playerinfo['team']));
+            // This now only returns Planets that the player owns or planets that belong to the team and set as team planets..
+            $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id=? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['dest_id'], $playerinfo['ship_id'], $playerinfo['team']));
             \Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
@@ -179,9 +179,9 @@ class Traderoute
                     Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_notyourplanet'], $template);
                 }
             }
-            elseif ($traderoute['dest_type'] == 'C')   // Check to make sure player and planet are in the same corp.
+            elseif ($traderoute['dest_type'] == 'C')   // Check to make sure player and planet are in the same team.
             {
-                if ($dest['corp'] != $playerinfo['team'])
+                if ($dest['team'] != $playerinfo['team'])
                 {
                     $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $dest['name'], $langvars['l_tdr_notyourplanet']);
                     $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $dest['sector_id'], $langvars['l_tdr_notyourplanet']);
@@ -311,7 +311,7 @@ class Traderoute
             }
             elseif ($zoneinfo['allow_trade'] == 'L')
             {
-                if ($zoneinfo['corp_zone'] == 'N')
+                if ($zoneinfo['team_zone'] == 'N')
                 {
                     $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id=?", array($zoneinfo['owner']));
                     \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
@@ -344,7 +344,7 @@ class Traderoute
             }
             elseif ($zoneinfo['allow_trade'] == 'L')
             {
-                if ($zoneinfo['corp_zone'] == 'N')
+                if ($zoneinfo['team_zone'] == 'N')
                 {
                     $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id=?", array($zoneinfo['owner']));
                     \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
@@ -754,7 +754,7 @@ class Traderoute
             if ($traderoute['dest_type'] == 'P')
             {
                 // Pick stuff up to sell at port
-                if (($playerinfo['ship_id'] == $source['owner']) || ($playerinfo['team'] == $source['corp']))
+                if (($playerinfo['ship_id'] == $source['owner']) || ($playerinfo['team'] == $source['team']))
                 {
                     if ($source['goods'] > 0 && $free_holds > 0 && $dest['port_type'] != 'goods')
                     {
@@ -1467,7 +1467,7 @@ class Traderoute
 
         echo $langvars['l_tdr_traderoute'] . "</strong></font><p>";
 
-        // Get Planet info Corp and Personal
+        // Get Planet info Team and Personal
 
         $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner=? ORDER BY sector_id", array($playerinfo['ship_id']));
         \Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
@@ -1487,18 +1487,18 @@ class Traderoute
             $result->MoveNext();
         }
 
-        $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE corp=? AND corp!=0 AND owner<>? ORDER BY sector_id", array($playerinfo['team'], $playerinfo['ship_id']));
+        $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE team=? AND team!=0 AND owner<>? ORDER BY sector_id", array($playerinfo['team'], $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 
-        $num_corp_planets = $result->RecordCount();
+        $num_team_planets = $result->RecordCount();
         $i = 0;
         while (!$result->EOF)
         {
-            $planets_corp[$i] = $result->fields;
+            $planets_team[$i] = $result->fields;
 
-            if ($planets_corp[$i]['name'] === null)
+            if ($planets_team[$i]['name'] === null)
             {
-                $planets_corp[$i]['name'] = $langvars['l_tdr_unnamed'];
+                $planets_team[$i]['name'] = $langvars['l_tdr_unnamed'];
             }
 
             $i++;
@@ -1575,11 +1575,11 @@ class Traderoute
             }
         }
 
-        // Corp Planet
+        // Team Planet
         echo "
             </tr><tr>
-            <td align=right><font size=2>Corporate " . $langvars['l_tdr_planet'] . " : </font></td>
-            <td><input type=radio name=\"ptype1\" value=\"corp_planet\"
+            <td align=right><font size=2>Team " . $langvars['l_tdr_planet'] . " : </font></td>
+            <td><input type=radio name=\"ptype1\" value=\"team_planet\"
             ";
 
         if (!is_null($editroute) && $editroute['source_type'] == 'C')
@@ -1589,26 +1589,26 @@ class Traderoute
 
         echo '
             ></td>
-            <td>&nbsp;&nbsp;<select name=corp_planet_id1>
+            <td>&nbsp;&nbsp;<select name=team_planet_id1>
             ';
 
-        if ($num_corp_planets == 0)
+        if ($num_team_planets == 0)
         {
             echo "<option value=none>" . $langvars['l_tdr_none'] . "</option>";
         }
         else
         {
             $i = 0;
-            while ($i < $num_corp_planets)
+            while ($i < $num_team_planets)
             {
                 echo "<option ";
 
-                if ($planets_corp[$i]['planet_id'] == $editroute['source_id'])
+                if ($planets_team[$i]['planet_id'] == $editroute['source_id'])
                 {
                     echo "selected ";
                 }
 
-                echo "value=" . $planets_corp[$i]['planet_id'] . ">" . $planets_corp[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_corp[$i]['sector_id'] . "</option>";
+                echo "value=" . $planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1684,11 +1684,11 @@ class Traderoute
             }
         }
 
-        // Corp Planet
+        // Team Planet
         echo "
             </tr><tr>
-            <td align=right><font size=2>Corporate " . $langvars['l_tdr_planet'] . " : </font></td>
-            <td><input type=radio name=\"ptype2\" value=\"corp_planet\"
+            <td align=right><font size=2>Team " . $langvars['l_tdr_planet'] . " : </font></td>
+            <td><input type=radio name=\"ptype2\" value=\"team_planet\"
             ";
 
         if (!is_null($editroute) && $editroute['dest_type'] == 'C')
@@ -1698,26 +1698,26 @@ class Traderoute
 
         echo '
             ></td>
-            <td>&nbsp;&nbsp;<select name=corp_planet_id2>
+            <td>&nbsp;&nbsp;<select name=team_planet_id2>
             ';
 
-        if ($num_corp_planets == 0)
+        if ($num_team_planets == 0)
         {
             echo "<option value=none>" . $langvars['l_tdr_none'] . "</option>";
         }
         else
         {
             $i = 0;
-            while ($i < $num_corp_planets)
+            while ($i < $num_team_planets)
             {
                 echo "<option ";
 
-                if ($planets_corp[$i]['planet_id'] == $editroute['dest_id'])
+                if ($planets_team[$i]['planet_id'] == $editroute['dest_id'])
                 {
                     echo "selected ";
                 }
 
-                echo "value=" . $planets_corp[$i]['planet_id'] . ">" . $planets_corp[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_corp[$i]['sector_id'] . "</option>";
+                echo "value=" . $planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1856,12 +1856,12 @@ class Traderoute
         {
             if ($src['port_type'] == 'special')
             {
-                if (($type2 != 'planet') && ($type2 != 'corp_planet'))
+                if (($type2 != 'planet') && ($type2 != 'team_planet'))
                 {
                     Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_sportissrc'], $template);
                 }
 
-                if ($dest['owner'] != $playerinfo['ship_id'] && ($dest['corp'] == 0 || ($dest['corp'] != $playerinfo['team'])))
+                if ($dest['owner'] != $playerinfo['ship_id'] && ($dest['team'] == 0 || ($dest['team'] != $playerinfo['team'])))
                 {
                     Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_notownplanet'], $template);
                 }
@@ -2023,8 +2023,8 @@ class Traderoute
         global $port_id2;
         global $planet_id1;
         global $planet_id2;
-        global $corp_planet_id1;
-        global $corp_planet_id2;
+        global $team_planet_id1;
+        global $team_planet_id2;
         global $move_type;
         global $circuit_type;
         global $editing;
@@ -2078,7 +2078,7 @@ class Traderoute
 
             if ($source['owner'] != $playerinfo['ship_id'])
             {
-                if (($playerinfo['team'] == 0 || $playerinfo['team'] != $source['corp']) && $source['sells'] == 'N')
+                if (($playerinfo['team'] == 0 || $playerinfo['team'] != $source['team']) && $source['sells'] == 'N')
                 {
                     // $langvars['l_tdr_errnotownnotsell'] = str_replace("[tdr_source_name]", $source[name], $langvars['l_tdr_errnotownnotsell']);
                     // $langvars['l_tdr_errnotownnotsell'] = str_replace("[tdr_source_sector_id]", $source[sector_id], $langvars['l_tdr_errnotownnotsell']);
@@ -2180,9 +2180,9 @@ class Traderoute
         {
             $src_id = $planet_id1;
         }
-        elseif ($ptype1 == 'corp_planet')
+        elseif ($ptype1 == 'team_planet')
         {
-            $src_id = $corp_planet_id1;
+            $src_id = $team_planet_id1;
         }
 
         if ($ptype2 == 'port')
@@ -2193,9 +2193,9 @@ class Traderoute
         {
             $dest_id = $planet_id2;
         }
-        elseif ($ptype2 == 'corp_planet')
+        elseif ($ptype2 == 'team_planet')
         {
-            $dest_id = $corp_planet_id2;
+            $dest_id = $team_planet_id2;
         }
 
         if ($ptype1 == 'port')
@@ -2206,7 +2206,7 @@ class Traderoute
         {
             $src_type = 'L';
         }
-        elseif ($ptype1 == 'corp_planet')
+        elseif ($ptype1 == 'team_planet')
         {
             $src_type = 'C';
         }
@@ -2219,7 +2219,7 @@ class Traderoute
         {
             $dest_type = 'L';
         }
-        elseif ($ptype2 == 'corp_planet')
+        elseif ($ptype2 == 'team_planet')
         {
             $dest_type = 'C';
         }

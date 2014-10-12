@@ -180,7 +180,7 @@ switch ($teamwhat)
                     $res->MoveNext();
                 }
 
-                $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
+                $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
                 Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                 if (!empty ($sectors))
                 {
@@ -228,7 +228,7 @@ switch ($teamwhat)
                     $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whichteam));
                     Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
 
-                    $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND corp != 0;", array($playerinfo['ship_id']));
+                    $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
                     Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                     $i=0;
                     while (!$res->EOF)
@@ -238,7 +238,7 @@ switch ($teamwhat)
                         $res->MoveNext();
                     }
 
-                    $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
+                    $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
                     Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                     if (!empty ($sectors))
                     {
@@ -273,7 +273,7 @@ switch ($teamwhat)
             $resz = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1, creator = ? WHERE id = ?;", array($newcreator, $whichteam));
             Tki\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
 
-            $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND corp != 0;", array($playerinfo['ship_id']));
+            $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
             Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             $i=0;
             while (!$res->EOF)
@@ -283,7 +283,7 @@ switch ($teamwhat)
                 $res->MoveNext();
             }
 
-            $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
+            $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
             Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
             if (!empty ($sectors))
             {
@@ -360,7 +360,7 @@ switch ($teamwhat)
                 // check whether the player we are ejecting might have already left in the meantime
                 // should go here if ($whotoexpel[team] ==
 
-                $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp='0' WHERE owner = ?;", array($who));
+                $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = '0' WHERE owner = ?;", array($who));
                 Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 
                 $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($who));

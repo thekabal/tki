@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS tki_zones (
   zone_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   zone_name varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `owner` int(10) unsigned NOT NULL DEFAULT '0',
-  corp_zone varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
+  team_zone varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   allow_beacon varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Y',
   allow_attack varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Y',
   allow_planetattack varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Y',

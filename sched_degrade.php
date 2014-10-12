@@ -32,7 +32,7 @@ while (!$res->EOF)
     $res3 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['ship_id']));
     Tki\Db::logDbErrors($db, $res3, __LINE__, __FILE__);
     $sched_playerinfo = $res3->fields;
-    $res2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE (owner = ? OR (corp = ? AND ? <> 0)) AND sector_id = ? AND energy > 0;", array($row['ship_id'], $sched_playerinfo['team'], $sched_playerinfo['team'], $row['sector_id']));
+    $res2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE (owner = ? OR (team = ? AND ? <> 0)) AND sector_id = ? AND energy > 0;", array($row['ship_id'], $sched_playerinfo['team'], $sched_playerinfo['team'], $row['sector_id']));
     Tki\Db::logDbErrors($db, $res2, __LINE__, __FILE__);
     if ($res2->EOF)
     {
@@ -44,7 +44,7 @@ while (!$res->EOF)
     else
     {
         $energy_required = round($row['quantity'] * $energy_per_fighter);
-        $res4 = $db->Execute("SELECT IFNULL(SUM(energy),0) AS energy_available FROM {$db->prefix}planets WHERE (owner = ? OR (corp = ? AND ? <> 0)) AND sector_id = ?", array($row['ship_id'], $sched_playerinfo['team'], $sched_playerinfo['team'], $row['sector_id']));
+        $res4 = $db->Execute("SELECT IFNULL(SUM(energy),0) AS energy_available FROM {$db->prefix}planets WHERE (owner = ? OR (team = ? AND ? <> 0)) AND sector_id = ?", array($row['ship_id'], $sched_playerinfo['team'], $sched_playerinfo['team'], $row['sector_id']));
         Tki\Db::logDbErrors($db, $res4, __LINE__, __FILE__);
         $planet_energy = $res4->fields;
         $energy_available = $planet_energy['energy_available'];

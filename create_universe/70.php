@@ -74,7 +74,7 @@ shuffle($open_sectors_array); // Internally, shuffle uses rand() so it isn't ide
 
 // Prep the beginning of the insert SQL call
 $p_add = 0;
-$planet_insert_sql = "INSERT INTO {$pdo_db->prefix}planets (colonists, owner, corp, prod_ore, prod_organics, prod_goods, prod_energy, prod_fighters, prod_torp, sector_id) VALUES (2, 0, 0, $tkireg->default_prod_ore, $tkireg->default_prod_organics, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, $open_sectors_array[$p_add])";
+$planet_insert_sql = "INSERT INTO {$pdo_db->prefix}planets (colonists, owner, team, prod_ore, prod_organics, prod_goods, prod_energy, prod_fighters, prod_torp, sector_id) VALUES (2, 0, 0, $tkireg->default_prod_ore, $tkireg->default_prod_organics, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, $open_sectors_array[$p_add])";
 $p_add++;
 do
 {

@@ -205,7 +205,7 @@ max_planets_sector         = 5;                                // The maximum nu
 max_traderoutes_player     = 40;                               // The maximum number of saved traderoutes a player can have
 min_bases_to_own           = 3;                                // The minimum number of planets with bases in a sector that a player needs to have to take ownership of the zone
 default_lang               = 'english';                        // The default language the game displays in until a player chooses a language
-corp_planet_transfers      = false;                            // If transferring credits to/from corp planets is allowed.
+team_planet_transfers      = false;                            // If transferring credits to/from team planets is allowed.
 min_value_capture          = 0;                                // Percantage of planet's value a ship must be worth to be able to capture it. 0=disable
 defence_degrade_rate       = '0.05';                           // The percentage rate at which defenses fits, mines degrade during scheduler runs
 energy_per_fighter         = '0.10';                           // The amount of energy needed from planets in sector to maintain a fighter during scheduler runs

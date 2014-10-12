@@ -174,19 +174,19 @@ class PlanetReportCE
     {
     //  Declare default production values from the config.php file
     //
-    //  We need to track what the player_id is and what corp they belong to if they belong to a corp,
+    //  We need to track what the player_id is and what team they belong to if they belong to a team,
     //    these two values are not passed in as arrays
     //    ship_id = the owner of the planet          ($ship_id = $prodpercentarray['ship_id'])
-    //    team_id = the corperation creators ship_id ($team_id = $prodpercentarray['team_id'])
+    //    team_id = the team creators ship_id ($team_id = $prodpercentarray['team_id'])
     //
     //  First we generate a list of values based on the commodity
-    //    (ore, organics, goods, energy, fighters, torps, corp, team, sells)
+    //    (ore, organics, goods, energy, fighters, torps, team, sells)
     //
     //  Second we generate a second list of values based on the planet_id
     //  Because team and ship_id are not arrays we do not pass them through the second list command.
-    //  When we write the ore production percent we also clear the selling and corp values out of the db
-    //  When we pass through the corp array we set the value to $team we grabbed out of the array.
-    //  in the sells and corp the prodpercent = the planet_id.
+    //  When we write the ore production percent we also clear the selling and team values out of the db
+    //  When we pass through the team array we set the value to $team we grabbed out of the array.
+    //  in the sells and team the prodpercent = the planet_id.
     //
     //  We run through the database checking to see if any planet production is greater than 100, or possibly negative
     //    if so we set the planet to the default values and report it to the player.
@@ -235,7 +235,7 @@ class PlanetReportCE
                         $resy = $db->Execute("UPDATE {$db->prefix}planets SET sells='N' WHERE planet_id = ? AND owner = ?;", array($planet_id, $ship_id));
                         \Tki\Db::logDbErrors($db, $resy, __LINE__, __FILE__);
 
-                        $resz = $db->Execute("UPDATE {$db->prefix}planets SET corp=0 WHERE planet_id = ? AND owner = ?;", array($planet_id, $ship_id));
+                        $resz = $db->Execute("UPDATE {$db->prefix}planets SET team=0 WHERE planet_id = ? AND owner = ?;", array($planet_id, $ship_id));
                         \Tki\Db::logDbErrors($db, $resz, __LINE__, __FILE__);
                     }
                     elseif ($commod_type == "sells")
@@ -243,7 +243,7 @@ class PlanetReportCE
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET sells='Y' WHERE planet_id = ? AND owner = ?;", array($prodpercent, $ship_id));
                         \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                     }
-                    elseif ($commod_type == "corp")
+                    elseif ($commod_type == "team")
                     {
                         // Compare entered team_id and one in the db, if different then use one from db
                         $res = $db->Execute("SELECT {$db->prefix}ships.team as owner FROM {$db->prefix}ships, {$db->prefix}planets WHERE ( {$db->prefix}ships.ship_id = {$db->prefix}planets.owner ) AND ( {$db->prefix}planets.planet_id = ?);", array($prodpercent));
@@ -257,7 +257,7 @@ class PlanetReportCE
                             $team_id = 0;
                         }
 
-                        $resx = $db->Execute("UPDATE {$db->prefix}planets SET corp = ? WHERE planet_id = ? AND owner = ?;", array($team_id, $prodpercent, $ship_id));
+                        $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = ? WHERE planet_id = ? AND owner = ?;", array($team_id, $prodpercent, $ship_id));
                         \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
                         if (array_key_exists("team_id", $prodpercentarray) == true && $prodpercentarray['team_id'] != $team_id)
                         {

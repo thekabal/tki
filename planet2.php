@@ -499,7 +499,7 @@ else
 
     $total_holds_needed = $transfer_ore + $transfer_organics + $transfer_goods + $transfer_colonists;
 
-    if ($playerinfo['ship_id'] != $planetinfo['owner'] && $transfer_credits != 0 && !$corp_planet_transfers)
+    if ($playerinfo['ship_id'] != $planetinfo['owner'] && $transfer_credits != 0 && !$team_planet_transfers)
     {
         echo $langvars['l_planet2_noteamtransfer'] . "<p>";
         echo "<a href=planet.php?planet_id=$planet_id>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "<br><br>";
@@ -513,7 +513,7 @@ else
     {
         if (!empty ($planetinfo))
         {
-            if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['corp'] == $playerinfo['team'] && $playerinfo['team'] != 0))
+            if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $playerinfo['team'] && $playerinfo['team'] != 0))
             {
                 if ($transfer_ore < 0 && $playerinfo['ship_ore'] < abs($transfer_ore))
                 {

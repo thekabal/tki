@@ -81,7 +81,7 @@ elseif ($playerinfo['dev_genesis'] < 1)
 }
 else
 {
-    $res = $db->Execute("SELECT allow_planet, corp_zone, owner FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
+    $res = $db->Execute("SELECT allow_planet, team_zone, owner FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
     Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     $zoneinfo = $res->fields;
     if ($zoneinfo['allow_planet'] == 'N')
@@ -90,7 +90,7 @@ else
     }
     elseif ($zoneinfo['allow_planet'] == 'L')
     {
-        if ($zoneinfo['corp_zone'] == 'N')
+        if ($zoneinfo['team_zone'] == 'N')
         {
             if ($playerinfo['team'] == 0 && $zoneinfo['owner'] != $playerinfo['ship_id'])
             {

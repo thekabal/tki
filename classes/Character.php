@@ -52,7 +52,7 @@ class Character
         }
         else
         {
-            $up_pl_res = $db->Execute("UPDATE {$db->prefix}planets SET owner=0, corp=0, fighters=0, base='N' WHERE owner=?", array($ship_id));
+            $up_pl_res = $db->Execute("UPDATE {$db->prefix}planets SET owner=0, team=0, fighters=0, base='N' WHERE owner=?", array($ship_id));
             Db::logDbErrors($db, $up_pl_res, __LINE__, __FILE__);
         }
 
@@ -67,7 +67,7 @@ class Character
         $rm_def_res = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE ship_id=?", array($ship_id));
         Db::logDbErrors($db, $rm_def_res, __LINE__, __FILE__);
 
-        $zone_res = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE corp_zone='N' AND owner=?", array($ship_id));
+        $zone_res = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE team_zone='N' AND owner=?", array($ship_id));
         Db::logDbErrors($db, $zone_res, __LINE__, __FILE__);
         $zone = $zone_res->fields;
 

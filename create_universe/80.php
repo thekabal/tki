@@ -272,10 +272,10 @@ for ($zz=0; $zz<$tkireg->max_presets; $zz++)
 }
 
 $local_table_timer->start(); // Start benchmarking for admin zone ownership
-$sql = "INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, corp_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) " .
-       "VALUES (:zone_name, :owner, :corp_zone, :allow_beacon, :allow_attack, :allow_planetattack, :allow_warpedit, :allow_planet, :allow_trade, :allow_defenses, :max_hull)";
+$sql = "INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) " .
+       "VALUES (:zone_name, :owner, :team_zone, :allow_beacon, :allow_attack, :allow_planetattack, :allow_warpedit, :allow_planet, :allow_trade, :allow_defenses, :max_hull)";
 $owner = 1;
-$corp_zone = 'N';
+$team_zone = 'N';
 $allow_beacon = 'Y';
 $allow_attack = 'Y';
 $allow_planetattack = 'Y';
@@ -287,7 +287,7 @@ $max_hull = '0';
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_name', $tkireg->admin_zone_name);
 $stmt->bindValue(':owner', 0);
-$stmt->bindParam(':corp_zone', $corp_zone);
+$stmt->bindParam(':team_zone', $team_zone);
 $stmt->bindParam(':allow_beacon', $allow_beacon);
 $stmt->bindParam(':allow_attack', $allow_attack);
 $stmt->bindParam(':allow_planetattack', $allow_planetattack);
