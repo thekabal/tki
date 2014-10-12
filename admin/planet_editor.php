@@ -87,7 +87,7 @@ else
         echo "<td align='right'><tt>" . $langvars['l_ore'] . "</tt></td><td><input type='text' size='9' name='ore' value=\"" . $row['ore'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_goods'] . "</tt></td><td><input type='text' size='9' name='goods' value=\"" . $row['goods'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_energy'] . "</tt></td><td><input type='text' size='9' name='energy' value=\"" . $row['energy'] . "\"></td></tr>";
-        echo "<tr><td><tt>" . $langvars['l_admin_planet_corp'] . "</tt></td><td><input type='text' size=5 name='corp' value=\"" . $row['corp'] . "\"></td>";
+        echo "<tr><td><tt>" . $langvars['l_admin_planet_team'] . "</tt></td><td><input type='text' size=5 name='corp' value=\"" . $row['corp'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_colonists'] . "</tt></td><td><input type='text' size='9' name='colonists' value=\"" . $row['colonists'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_credits'] . "</tt></td><td><input type='text' size='9' name='credits' value=\"" . $row['credits'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_fighters'] . "</tt></td><td><input type='text' size='9' name='fighters' value=\"" . $row['fighters'] . "\"></td>";

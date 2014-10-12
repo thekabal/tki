@@ -58,7 +58,7 @@ l_admin_no_one                          = "No one";
 l_admin_operations                      = "Operations";
 l_admin_password                        = "Password";
 l_admin_perf_monitor                    = "Adodb performance monitor";
-l_admin_planet_corp                     = "Planet team";
+l_admin_planet_team                     = "Planet team";
 l_admin_planet_editor                   = "Planet editor";
 l_admin_planet_id                       = "Planet ID";
 l_admin_planet_name                     = "Planet name";
@@ -403,11 +403,11 @@ l_edit                                  = "Edit";
 l_save                                  = "Save";
 l_turns                                 = "Turns";
 
-[corp]
-l_corpm_title                           = "Corporation Menu";
-l_corpm_tocorp                          = "Planet is now a Corporate Planet!";
-l_corpm_topersonal                      = "Planet is now a Personal Planet!";
-l_corpm_exploit                         = "You intercept a garbled borg message on your scanner... you should probably start worrying...";
+[team]
+l_teamm_title                           = "Team Menu";
+l_teamm_toteam                          = "Planet is now a Team Planet!";
+l_teamm_topersonal                      = "Planet is now a Personal Planet!";
+l_team_exploit                          = "You intercept a garbled message on your scanner... you should probably start worrying...";
 
 [create_universe]
 l_cu_title                              = "Create universe";
@@ -1179,9 +1179,9 @@ l_planet_tsell                          = "Toggle planet [selling] commodities";
 l_planet_bbase_link                     = "build a base";
 l_planet_bbase                          = "With enough commodites and credits, you can [build] to help defend the planet.";
 l_planet_bbuild                         = "Base constructed";
-l_planet_mcorp_linkC                    = "Corporate Planet";
-l_planet_mcorp_linkP                    = "Personal Planet";
-l_planet_mcorp                          = "You can also make this planet a [planet].";
+l_planet_mteam_linkC                    = "Team Planet";
+l_planet_mteam_linkP                    = "Personal Planet";
+l_planet_mteam                          = "You can also make this planet a [planet].";
 l_planet_buy_link                       = "Buy";
 l_planet_buy                            = "[buy] commodities from Planet";
 l_planet_att_link                       = "Attack";
@@ -1220,7 +1220,7 @@ l_planet2_compl                         = "Transfer complete.";
 l_planet2_power                         = "power capacity";
 l_planet2_comp                          = "computer capacity";
 l_planet2_laun                          = "launcher capacity";
-l_planet2_nocorptransfer                = "You cannot transfer credits to or from corporate planets.";
+l_planet2_noteamtransfer                = "You cannot transfer credits to or from team planets.";
 l_planet2_baseexceeded                  = "Planets without a base can not hold that amount of credits.";
 l_planet3_title                         = "Trading at Planet";
 

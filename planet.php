@@ -239,15 +239,15 @@ if (!is_bool($planetinfo) && $planetinfo != false)
                 {
                     if ($planetinfo['corp'] == 0)
                     {
-                        $langvars['l_planet_mcorp_linkC'] = "<a href=corp.php?planet_id=$planet_id&action=planetcorp>" . $langvars['l_planet_mcorp_linkC'] . "</a>";
-                        $langvars['l_planet_mcorp'] = str_replace("[planet]", $langvars['l_planet_mcorp_linkC'], $langvars['l_planet_mcorp']);
-                        echo $langvars['l_planet_mcorp'] . "<br>";
+                        $langvars['l_planet_mteam_linkC'] = "<a href=team.php?planet_id=$planet_id&action=planetcorp>" . $langvars['l_planet_mteam_linkC'] . "</a>";
+                        $langvars['l_planet_mteam'] = str_replace("[planet]", $langvars['l_planet_mteam_linkC'], $langvars['l_planet_mteam']);
+                        echo $langvars['l_planet_mteam'] . "<br>";
                     }
                     else
                     {
-                        $langvars['l_planet_mcorp_linkP'] = "<a href=corp.php?planet_id=$planet_id&action=planetpersonal>" . $langvars['l_planet_mcorp_linkP'] . "</a>";
-                        $langvars['l_planet_mcorp'] = str_replace("[planet]", $langvars['l_planet_mcorp_linkP'], $langvars['l_planet_mcorp']);
-                        echo $langvars['l_planet_mcorp'] . "<br>";
+                        $langvars['l_planet_mteam_linkP'] = "<a href=team.php?planet_id=$planet_id&action=planetpersonal>" . $langvars['l_planet_mteam_linkP'] . "</a>";
+                        $langvars['l_planet_mteam'] = str_replace("[planet]", $langvars['l_planet_mteam_linkP'], $langvars['l_planet_mteam']);
+                        echo $langvars['l_planet_mteam'] . "<br>";
                     }
                 }
             }
