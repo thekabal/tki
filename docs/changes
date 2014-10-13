@@ -1,5 +1,6 @@
 TheKabal - October 12, 2014
 -------------------------------
+Template driven new player guide
 Moved scheduler files into its own directory
 Fixed bugs KB-0004 & KB-0006 - Settings page is now fully functional, and lrscan references images from the correct location
 Migrate much of "corp" to be "team"

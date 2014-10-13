@@ -1096,6 +1096,9 @@ l_new_err                               = "Please go back or click [here] and tr
 l_new_topic                             = "Welcome to The Kabal Invasion!";
 l_new_message                           = "Greetings,\r\n\r\nThank you for signing up to play The Kabal Invasion at [website]\r\n\r\nIf this is your first time playing, we recommend checking out a few resources:\r\n\r\nFor a good summary of how to get started, check out the new player guide: \r\n[npg]\r\n\r\nThe FAQ covers most of the common questions beyond that: \r\n[faq]\r\n\r\nThe Kabal Invasion is community developed, using free and open source software. That means that your ideas, feedback, art, or code contributions can help us make the game better. Please visit the github project page, to let us know how we are doing, and how we can make the game better: \r\n[forums]\r\n\r\nIn the meantime, get trading, and keep your shields up - it is a rough universe out there!\r\n\r\nThank you,\r\nThe Kabal Invasion development team.";
 
+[new_player_guide]
+l_npg_title                             = "The Kabal Invasion new player guide";
+
 [news]
 l_news_title                            = "Universe News";
 l_news_info_1                           = "BNN is among the galaxy's leaders";
