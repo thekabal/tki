@@ -30,9 +30,9 @@
     },
     "autoload": {
         "classmap": [
-            "distribution/libs/Smarty.class.php", 
-            "distribution/libs/SmartyBC.class.php",
-            "distribution/libs/sysplugins/smarty_security.php"
+            "libs/Smarty.class.php", 
+            "libs/SmartyBC.class.php",
+            "libs/sysplugins/smarty_security.php"
         ]
     },
     "repositories": [
@@ -44,11 +44,6 @@
                 "dist": {
                     "url": "http://www.smarty.net/files/Smarty-3.1.19.zip",
                     "type": "zip"
-                },
-                "source": {
-                    "url": "http://smarty-php.googlecode.com/svn/",
-                    "type": "svn",
-                    "reference": "tags/v3.1.19/distribution/"
                 }
             }
         }
