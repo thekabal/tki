@@ -278,8 +278,6 @@ else
             $targetarmor = $targetinfo['armor_pts'];
             $playerfighters = $playerinfo['ship_fighters'];
             $targetfighters = $targetinfo['ship_fighters'];
-            $targetdestroyed = 0;
-            $playerdestroyed = 0;
 
             echo $langvars['l_att_att'] . " " . $targetinfo['character_name'] . " " . $langvars['l_aboard'] . " " . $targetinfo['ship_name'] . ":<br><br>";
 

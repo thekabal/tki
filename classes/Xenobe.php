@@ -81,7 +81,7 @@ class Xenobe
 
         if ($playerinfo['credits'] < 0)
         {
-            $playerinfo['credits'] = $shipcredits = 0;
+            $playerinfo['credits'] = 0;
         }
 
         if ($sectorinfo['port_ore'] <= 0)
@@ -113,11 +113,6 @@ class Xenobe
         if ($playerinfo['ship_goods'] > 0)
         {
             $shipgoods = $playerinfo['ship_goods'];
-        }
-
-        if ($playerinfo['credits'] > 0)
-        {
-            $shipcredits = $playerinfo['credits'];
         }
 
         // Make sure we have cargo or credits
@@ -247,7 +242,7 @@ class Xenobe
     {
         // Xenobe planet attack code
         global $playerinfo, $planetinfo, $torp_dmg_rate, $level_factor;
-        global $rating_combat_factor, $upgrade_cost, $upgrade_factor, $max_sectors, $xenobeisdead;
+        global $rating_combat_factor, $upgrade_cost, $upgrade_factor, $xenobeisdead;
 
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::logDbErrors($db, $resh, __LINE__, __FILE__);
@@ -621,7 +616,6 @@ class Xenobe
         global $rating_combat_factor;
         global $upgrade_cost;
         global $upgrade_factor;
-        global $max_sectors;
         global $xenobeisdead;
 
         // Lookup target details
@@ -659,7 +653,7 @@ class Xenobe
         if ($targetinfo['dev_emerwarp'] > 0)
         {
             \Tki\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "Xenobe $playerinfo[character_name]");
-            $dest_sector = \Tki\Rand::betterRand(0, $max_sectors);
+            $dest_sector = \Tki\Rand::betterRand(0, $tkireg->max_sectors);
             $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $targetinfo['ship_id']));
             \Tki\Db::logDbErrors($db, $result_warp, __LINE__, __FILE__);
 
@@ -691,7 +685,6 @@ class Xenobe
         $attackertorpdamage = $torp_dmg_rate * $attackertorps;
         $attackerarmor = $playerinfo['armor_pts'];
         $attackerfighters = $playerinfo['ship_fighters'];
-        $playerdestroyed = 0;
 
         // Setup target variables
         $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $level_factor);
@@ -718,7 +711,6 @@ class Xenobe
         $targettorpdmg = $torp_dmg_rate * $targettorpnum;
         $targetarmor = $targetinfo['armor_pts'];
         $targetfighters = $targetinfo['ship_fighters'];
-        $targetdestroyed = 0;
 
         // Begin combat procedures
         if ($attackerbeams > 0 && $targetfighters > 0)                  // Attacker has beams - target has fighters - beams vs. fighters
@@ -1379,7 +1371,7 @@ class Xenobe
 
     public static function xenobeMove($db)
     {
-        global $playerinfo, $max_sectors, $targetlink, $xenobeisdead;
+        global $playerinfo, $targetlink, $xenobeisdead;
 
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1417,7 +1409,7 @@ class Xenobe
 
         if (!$targetlink > 0) // If there is no acceptable link, use a worm hole.
         {
-            $wormto = \Tki\Rand::betterRand(1, ($max_sectors - 15));  // Generate a random sector number
+            $wormto = \Tki\Rand::betterRand(1, ($tkireg->max_sectors - 15));  // Generate a random sector number
             $limitloop = 1;                             // Limit the number of loops
             while (!$targetlink > 0 && $limitloop < 15)
             {
