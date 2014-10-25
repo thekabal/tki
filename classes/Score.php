@@ -98,7 +98,7 @@ class Score
 
         $ship_score_res = $db->Execute("SELECT IF(COUNT(*)>0, $calc_levels + $calc_equip + $calc_dev + {$db->prefix}ships.credits, 0) AS ship_score FROM {$db->prefix}ships LEFT JOIN {$db->prefix}planets ON {$db->prefix}planets.owner=ship_id WHERE ship_id=? AND ship_destroyed='N'", array($ship_id));
         Db::logDbErrors($db, $ship_score_res, __LINE__, __FILE__);
-        if ($ship_score_res instanceof ADORecordSet)
+        if ($ship_score_res instanceof \ADORecordSet)
         {
             $ship_score = $ship_score_res->fields['ship_score'];
         }
