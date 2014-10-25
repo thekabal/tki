@@ -69,8 +69,8 @@ class Sessions
 
     public function read($sesskey)
     {
-//        $table = $this->pdo_db->prefix . 'sessions';
-        $qry = 'SELECT sessdata FROM ' . $this->pdo_db->prefix . 'sessions' . ' where sesskey=:sesskey and expiry>=:expiry';
+        $table = $this->pdo_db->prefix . 'sessions';
+        $qry = 'SELECT sessdata FROM ' . $table . ' where sesskey=:sesskey and expiry>=:expiry';
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':sesskey', $sesskey);
         $stmt->bindParam(':expiry', $this->currenttime);
