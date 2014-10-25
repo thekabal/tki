@@ -109,7 +109,7 @@ class Score
 
         $bank_score_res = $db->Execute("SELECT (balance - loan) AS bank_score FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($ship_id));
         Db::logDbErrors($db, $bank_score_res, __LINE__, __FILE__);
-        if ($bank_score_res instanceof ADORecordSet)
+        if ($bank_score_res instanceof \ADORecordSet)
         {
             $bank_score = $bank_score_res->fields['bank_score'];
         }

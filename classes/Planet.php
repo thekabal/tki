@@ -481,7 +481,7 @@ class Planet
                 }
 
                 echo "<br>-" . $onplanet['ship_name'] . " " . $langvars['l_cmb_approachattackvector'] . "-<br>";
-                BadPlanet::shipToShip($db, $onplanet['ship_id']);
+                \BadPlanet::shipToShip($db, $onplanet['ship_id']);
                 $result4->MoveNext();
             }
         }

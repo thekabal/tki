@@ -79,7 +79,7 @@ class Traderoute
 
             if (!$result || $result->EOF)
             {
-                BadTraderteou::traderouteDie($db, $lang, $langvars, $tkireg, $langvars['l_tdr_invalidspoint'], $template);
+                Traderoute::traderouteDie($db, $lang, $langvars, $tkireg, $langvars['l_tdr_invalidspoint'], $template);
             }
 
             $source = $result->fields;

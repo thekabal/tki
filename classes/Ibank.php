@@ -439,7 +439,7 @@ class Ibank
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_sendyourself'], "igb.php?command=transfer");
             }
 
-            if (!$res instanceof ADORecordSet || $res->EOF)
+            if (!$res instanceof \ADORecordSet || $res->EOF)
             {
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_unknowntargetship'], "igb.php?command=transfer");
             }

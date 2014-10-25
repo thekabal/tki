@@ -71,7 +71,7 @@ class Ship
         $own_pl_result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ?", array($ship_id));
         Db::logDbErrors($db, $own_pl_result, __LINE__, __FILE__);
 
-        if ($own_pl_result instanceof ADORecordSet)
+        if ($own_pl_result instanceof \ADORecordSet)
         {
             while (!$own_pl_result->EOF)
             {
