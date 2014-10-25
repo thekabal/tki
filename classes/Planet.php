@@ -224,9 +224,6 @@ class Planet
 
         // Begin actual combat calculations
 
-        $planetdestroyed   = 0;
-        $attackerdestroyed = 0;
-
         echo "<br><center><strong><font size='+2'>" . $langvars['l_cmb_combatflow'] . "</font></strong><br><br>\n";
         echo "<table width='75%' border='0'><tr align='center'><td><font color='red'>" . $langvars['l_cmb_you'] . "</font></td><td><font color='#6098F8'>" . $langvars['l_cmb_defender'] . "</font></td>\n";
         echo "<tr align='center'><td><font color='red'><strong>" . $langvars['l_cmb_attackingplanet'] . " " . $playerinfo['sector'] . "</strong></font></td><td></td>";
@@ -670,8 +667,6 @@ class Planet
         $targettorpdmg = $torp_dmg_rate * $targettorpnum;
         $targetarmor = $targetinfo['armor_pts'];
         $targetfighters = $targetinfo['ship_fighters'];
-        $targetdestroyed = 0;
-        $playerdestroyed = 0;
         echo "-->$targetinfo[ship_name] " . $langvars['l_cmb_isattackingyou'] . "<br><br>";
         echo $langvars['l_cmb_beamexchange'] . "<br>";
         if ($targetfighters > 0 && $attackerbeams > 0)
