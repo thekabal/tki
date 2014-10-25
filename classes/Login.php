@@ -38,7 +38,7 @@ class Login
         $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
 
         // Check for ban - Ignore the false return if not
-        Player::HandleBan($pdo_db, $lang, $timestamp, $template, $playerinfo);
+        Player::handleBan($pdo_db, $lang, $timestamp, $template, $playerinfo);
 
         // Check for destroyed ship - Ignore the false return if not
         Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo);
