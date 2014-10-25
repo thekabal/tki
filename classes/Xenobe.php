@@ -1576,7 +1576,7 @@ class Xenobe
             \Tki\Db::logDbErrors($db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
-            if ($resultf instanceof ADORecordSet)
+            if ($resultf instanceof \ADORecordSet)
             {
                 while (!$resultf->EOF)
                 {

@@ -92,7 +92,7 @@ class CalcLevels
         $res = $db->Execute("SELECT shields FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
         Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
-        if ($res instanceof ADORecordSet)
+        if ($res instanceof \ADORecordSet)
         {
             while (!$res->EOF)
             {
