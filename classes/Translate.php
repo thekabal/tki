@@ -53,7 +53,7 @@ class Translate
             // Populate the $langvars array
             foreach ($categories as $category)
             {
-                if ($db instanceof ADODB_mysqli)
+                if ($db instanceof \ADODB_mysqli)
                 {
                     // Select from the database and return the value of the language variables requested, but do not use caching
                     $query = "SELECT name, value FROM {$db->prefix}languages WHERE category = ? AND section = ?;";

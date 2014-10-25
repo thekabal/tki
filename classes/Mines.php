@@ -27,7 +27,7 @@ class Mines
         Db::logDbErrors($db, $secdef_result, __LINE__, __FILE__);
 
         // Put the defence information into the array "defenceinfo"
-        if ($secdef_result instanceof ADORecordSet)
+        if ($secdef_result instanceof \ADORecordSet)
         {
             while (!$secdef_result->EOF && $num_mines > 0)
             {

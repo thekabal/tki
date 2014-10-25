@@ -109,7 +109,7 @@ class Smarty
         {
             $output = $this->smarty->fetch($template_file);
         }
-        catch (exception $e)
+        catch (\exception $e)
         {
             // $output = $this->smarty->fetch ($template_file);
             $output  = 'The smarty template system is not working. We suggest checking the specific template you are using for an error in the page that you want to access.';

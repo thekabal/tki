@@ -27,7 +27,7 @@ class Fighters
         Db::logDbErrors($db, $secdef_res, __LINE__, __FILE__);
 
         // Put the defence information into the array "defenceinfo"
-        if ($secdef_res instanceof ADORecordSet)
+        if ($secdef_res instanceof \ADORecordSet)
         {
             while (!$secdef_res->EOF && $num_fighters > 0)
             {

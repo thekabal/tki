@@ -1591,7 +1591,7 @@ class Xenobe
             \Tki\Db::logDbErrors($db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
-            if ($resultm instanceof ADORecordSet)
+            if ($resultm instanceof \ADORecordSet)
             {
                 while (!$resultm->EOF)
                 {

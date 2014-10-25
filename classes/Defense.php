@@ -26,7 +26,7 @@ class Defense
         $secdef_result = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE ship_id = ?;", array($ship_id));
         Db::logDbErrors($db, $secdef_result, __LINE__, __FILE__);
 
-        if ($secdef_result instanceof ADORecordSet)
+        if ($secdef_result instanceof \ADORecordSet)
         {
             while (!$secdef_result->EOF)
             {

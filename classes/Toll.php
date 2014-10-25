@@ -27,7 +27,7 @@ class Toll
         Db::logDbErrors($db, $select_def_res, __LINE__, __FILE__);
 
         // Put the defence information into the array "defenceinfo"
-        if ($select_def_res instanceof ADORecordSet)
+        if ($select_def_res instanceof \ADORecordSet)
         {
             while (!$select_def_res->EOF)
             {

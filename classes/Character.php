@@ -35,7 +35,7 @@ class Character
 
         $sectors = null;
 
-        if ($sec_pl_res instanceof ADORecordSet)
+        if ($sec_pl_res instanceof \ADORecordSet)
         {
             while (!$sec_pl_res->EOF && $sec_pl_res)
             {
