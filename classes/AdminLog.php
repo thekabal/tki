@@ -52,7 +52,7 @@ class AdminLog
         {
             $query = "INSERT INTO {$db->prefix}logs VALUES (NULL, 0, :logtype, NOW(), :data)";
             $prep = $db->prepare($query);
-            if ($result !== false) // If the database is not live, this will return false
+            if ($prep !== false) // If the database is not live, this will return false
             {                      // so we should not attempt to write (or it will fail silently)
                 $prep->bindParam(':logtype', $log_type, PDO::PARAM_STR);
                 $prep->bindParam(':data', $data, PDO::PARAM_STR);
