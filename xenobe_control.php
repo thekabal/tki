@@ -466,7 +466,7 @@ else
                 $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
                 $nametry = 1;
                 // If Name Exists Try Again - Up To Nine Times
-                while (($namecheck[0]) and ($nametry <= 9))
+                while (($namecheck[0]) && ($nametry <= 9))
                 {
                     $sy1roll = Tki\Rand::betterRand(0, 19);
                     $sy2roll = Tki\Rand::betterRand(0, 19);
