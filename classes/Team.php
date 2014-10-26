@@ -149,7 +149,7 @@ class Team
         }
         $sql_query .= ";";
 
-        $res = $db->Execute($sql_query) or die ($db->ErrorMsg());
+        $res = $db->Execute($sql_query);
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $color = $color_line1;
 
@@ -161,7 +161,7 @@ class Team
             echo "<td>{$row['number_of_members']}</td>";
 
             // This fixes it so that it actually displays the coordinator, and not the first member of the team.
-            $res2 = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['creator'])) or die ($db->ErrorMsg());
+            $res2 = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['creator']));
             \Tki\Db::logDbErrors($db, $res2, __LINE__, __FILE__);
             while (!$res2->EOF)
             {

@@ -95,7 +95,7 @@ if (array_key_exists('who', $_REQUEST) == true)
 $result = $db->Execute("SELECT {$db->prefix}ships.*, {$db->prefix}teams.team_name, {$db->prefix}teams.description, {$db->prefix}teams.creator, {$db->prefix}teams.id
             FROM {$db->prefix}ships
             LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team = {$db->prefix}teams.id
-            WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username'])) or die ($db->ErrorMsg());
+            WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username']));
 Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 $playerinfo=$result->fields;
 
@@ -106,7 +106,7 @@ if ($playerinfo['team_invite'] != 0)
     $invite = $db->Execute(" SELECT {$db->prefix}ships.ship_id, {$db->prefix}ships.team_invite, {$db->prefix}teams.team_name,{$db->prefix}teams.id
             FROM {$db->prefix}ships
             LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team_invite = {$db->prefix}teams.id
-            WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username'])) or die ($db->ErrorMsg());
+            WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username']));
     Tki\Db::logDbErrors($db, $invite, __LINE__, __FILE__);
     $invite_info=$invite->fields;
 }
@@ -118,13 +118,13 @@ else
 // Get Team Info
 if (!is_null($whichteam))
 {
-    $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($whichteam)) or die ($db->ErrorMsg());
+    $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
     Tki\Db::logDbErrors($db, $result_team, __LINE__, __FILE__);
     $team = $result_team->fields;
 }
 else
 {
-    $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team'])) or die ($db->ErrorMsg());
+    $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
     Tki\Db::logDbErrors($db, $result_team, __LINE__, __FILE__);
     $team = $result_team->fields;
 }
@@ -532,12 +532,12 @@ switch ($teamwhat)
                 break;
             }
 
-            $res = $db->Execute("UPDATE {$db->prefix}teams SET team_name = ?, description = ? WHERE id = ?;", array($teamname, $teamdesc, $whichteam)) or die ("<font color=red>error: " . $db->ErrorMSG() . "</font>");
+            $res = $db->Execute("UPDATE {$db->prefix}teams SET team_name = ?, description = ? WHERE id = ?;", array($teamname, $teamdesc, $whichteam));
             Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hasbeenr'] . "<br><br>";
 
             // Adding a log entry to all members of the renamed team
-            $result_team_name = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE team = ? AND ship_id <> ?;", array($whichteam, $playerinfo['ship_id'])) or die ("<font color=red>error: " . $db->ErrorMsg() . "</font>");
+            $result_team_name = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE team = ? AND ship_id <> ?;", array($whichteam, $playerinfo['ship_id']));
             Tki\Db::logDbErrors($db, $result_team_name, __LINE__, __FILE__);
             Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_TEAM_RENAME, $teamname);
             while (!$result_team_name->EOF)
