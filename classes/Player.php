@@ -21,7 +21,7 @@ namespace Tki;
 
 class Player
 {
-    public static function handleAuth($pdo_db, $lang, $langvars, $tkireg, $template)
+    public static function handleAuth($pdo_db, $lang, $langvars, Reg $tkireg, $template)
     {
         $flag = true;
         $error_status = null;

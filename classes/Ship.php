@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ship
 {
-    public static function isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo)
+    public static function isDestroyed($pdo_db, $lang, Reg $tkireg, $langvars, $template, $playerinfo)
     {
         // Check for destroyed ship
         if ($playerinfo['ship_destroyed'] === 'Y')

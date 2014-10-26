@@ -263,7 +263,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankLoans($db, $langvars, $tkireg, $playerinfo)
+    public static function ibankLoans($db, $langvars, \Tki\Reg $tkireg, $playerinfo)
     {
         global $ibank_loanlimit, $ibank_loanfactor, $ibank_loaninterest, $account;
 

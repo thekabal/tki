@@ -1426,7 +1426,7 @@ class Traderoute
         }
     }
 
-    public static function traderouteNew($db, $pdo_db, $lang, $langvars, $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo, $color_line1, $color_line2, $color_header)
+    public static function traderouteNew($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo, $color_line1, $color_line2, $color_header)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
@@ -1803,7 +1803,7 @@ class Traderoute
         die ();
     }
 
-    public static function traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $error_msg, $template)
+    public static function traderouteDie($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $error_msg, $template)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2013,7 +2013,7 @@ class Traderoute
         return $retvalue;
     }
 
-    public static function traderouteCreate($db, $pdo_db, $lang, $langvars, $tkireg, $template)
+    public static function traderouteCreate($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $template)
     {
         global $playerinfo;
         global $num_traderoutes;
@@ -2251,7 +2251,7 @@ class Traderoute
         Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, null, $template);
     }
 
-    public static function traderouteDelete($db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $num_traderoutes, $traderoute_id, $traderoutes)
+    public static function traderouteDelete($db, $lang, $langvars, \Tki\Reg $tkireg, $template, $playerinfo, $confirm, $num_traderoutes, $traderoute_id, $traderoutes)
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id=?;", array($traderoute_id));
         \Tki\Db::logDbErrors($db, $query, __LINE__, __FILE__);
@@ -2284,7 +2284,7 @@ class Traderoute
         }
     }
 
-    public static function traderouteSettings($db, $pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo)
+    public static function traderouteSettings($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $template, $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2350,7 +2350,7 @@ class Traderoute
         Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, null, $template);
     }
 
-    public static function traderouteSetsettings($db, $pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy)
+    public static function traderouteSetsettings($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 

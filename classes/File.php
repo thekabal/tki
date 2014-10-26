@@ -24,7 +24,7 @@ namespace Tki;
 
 class File
 {
-    public static function iniToDb($db, $ini_file, $ini_table, $section, $tkireg)
+    public static function iniToDb($db, $ini_file, $ini_table, $section, Reg $tkireg)
     {
         // This is a loop, that reads a ini file, of the type variable = value.
         // It will loop thru the list of the ini variables, and push them into the db.
