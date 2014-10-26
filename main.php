@@ -82,7 +82,7 @@ $res = $db->Execute("SELECT * FROM {$pdo_db->prefix}links WHERE link_start=? ORD
 Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
 $i = 0;
-if ($res != false)
+if ($res !== false)
 {
     while (!$res->EOF)
     {
@@ -97,7 +97,7 @@ $res = $db->Execute("SELECT * FROM {$pdo_db->prefix}planets WHERE sector_id = ?;
 Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
 $i = 0;
-if ($res != false)
+if ($res !== false)
 {
     while (!$res->EOF)
     {
@@ -112,7 +112,7 @@ $res = $db->Execute("SELECT * FROM {$pdo_db->prefix}sector_defence, {$pdo_db->pr
 Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
 $i = 0;
-if ($res != false)
+if ($res !== false)
 {
     while (!$res->EOF)
     {
@@ -574,7 +574,7 @@ if ($playerinfo['sector'] != 0)
     $result4 = $db->Execute($sql, array($playerinfo['ship_id'], $playerinfo['sector']));
     Tki\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
 
-    if ($result4 != false)
+    if ($result4 !== false)
     {
         $ships_detected = 0;
         $ship_detected = null;

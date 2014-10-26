@@ -79,7 +79,7 @@ Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
 $planetinfo = $result3->fields;
 
 // Check to see if it returned valid planet info.
-if (!$result3 instanceof ADORecordSet || (is_bool($planetinfo) && $planetinfo == false))
+if (!$result3 instanceof ADORecordSet || (is_bool($planetinfo) && $planetinfo === false))
 {
     echo "Invalid Planet<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);

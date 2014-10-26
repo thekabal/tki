@@ -45,7 +45,7 @@ class Character
             }
         }
 
-        if ($remove_planets == true && $ship_id > 0)
+        if ($remove_planets === true && $ship_id > 0)
         {
             $rm_pl_res = $db->Execute("DELETE FROM {$db->prefix}planets WHERE owner = ?", array($ship_id));
             Db::logDbErrors($db, $rm_pl_res, __LINE__, __FILE__);
