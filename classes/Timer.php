@@ -21,9 +21,9 @@ namespace Tki;
 
 class Timer
 {
-    public $t_start = 0;
-    public $t_stop = 0;
-    public $t_elapsed = 0;
+    public $t_start = 0.0;
+    public $t_stop = 0.0;
+    public $t_elapsed = 0.0;
 
     public function start()
     {
