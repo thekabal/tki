@@ -110,6 +110,11 @@ class Rand
                 $bits .= fread($fp, $bytes);
                 fclose($fp);
             }
+            else
+            {
+                return false;
+            }
+
             $bitlength = mb_strlen($bits);
             for ($i = 0; $i < $bitlength; $i++)
             {
