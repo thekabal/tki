@@ -61,7 +61,7 @@ else
 }
 // End update counter
 
-if ($tkireg->footer_show_debug == true) // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
+if ($tkireg->footer_show_debug === true) // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
 {
     $sf_logo_type = '14';
     $sf_logo_width = "150";
@@ -74,7 +74,7 @@ else
     $sf_logo_height = "30";
 }
 
-if ($news_ticker_active == true)
+if ($news_ticker_active === true)
 {
     // Database driven language entries
     $langvars_temp = Tki\Translate::load($pdo_db, $lang, array('news', 'common', 'footer', 'global_includes', 'logout'));

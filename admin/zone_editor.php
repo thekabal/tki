@@ -30,7 +30,7 @@ if (!array_key_exists('zone', $_POST))
     $_POST['zone'] = null;
 }
 
-if ($_POST['zone'] == null)
+if ($_POST['zone'] === null)
 {
     $res = $db->Execute("SELECT zone_id, zone_name FROM {$db->prefix}zones ORDER BY zone_name");
     Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);

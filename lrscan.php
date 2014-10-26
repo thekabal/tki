@@ -232,7 +232,7 @@ else
 
     echo "<table border=0 cellspacing=0 cellpadding=0 width=\"100%\">";
     echo "<tr bgcolor=\"$tkireg->color_header\"><td><strong>" . $langvars['l_sector'] . " " . $sector;
-    if ($sectorinfo['sector_name'] != null)
+    if ($sectorinfo['sector_name'] !== null)
     {
         echo " ($sectorinfo[sector_name])";
     }

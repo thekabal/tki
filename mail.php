@@ -37,7 +37,7 @@ if (!$result->EOF)
         echo $langvars['l_mail_admin_denied'];
         echo "</div><br>\n";
 
-        if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true)
+        if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true)
         {
             echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
         }
@@ -84,7 +84,7 @@ else
     echo "<div style='color:#FFF; width:400px; text-align:left; font-size:12px; padding:6px;'>" . $langvars['l_mail_noplayer'] . "</div>\n";
 
     echo "<br>\n";
-    if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true)
+    if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true)
     {
         echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
     }
