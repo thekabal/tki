@@ -98,6 +98,9 @@ class Template
         }
     }
 
+    /**
+     * @param string $node
+     */
     public function addVariables($node, $variables)
     {
         $this->api[$this->api_class]->addVariables($node, $variables);
@@ -113,6 +116,9 @@ class Template
         return (boolean) false;
     }
 
+    /**
+     * @param string $template_file
+     */
     public function display($template_file = null)
     {
         $this->api[$this->api_class]->Display($template_file);

@@ -25,6 +25,9 @@ class Translate
 {
     private static $langvars = array();
 
+    /**
+     * @param string[] $categories
+     */
     public static function load($db = null, $language = null, $categories = null)
     {
         // Check if all supplied args are valid, if not return false.
