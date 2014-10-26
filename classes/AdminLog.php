@@ -58,6 +58,10 @@ class AdminLog
                 $prep->bindParam(':data', $data, PDO::PARAM_STR);
                 $result = $prep->execute();
             }
+            else
+            {
+                $result = false;
+            }
 
             return $result;
         }
