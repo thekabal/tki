@@ -102,19 +102,25 @@ class Rand
         $bits = null;
         $range = $max - $min;
         $bytes = ceil($range / 256);
-        $fp = @fopen('/dev/urandom', 'rb');
-        if ($fp)
+        if (is_readable('/dev/urandom'))
         {
-            $bits .= @fread($fp, $bytes);
-            @fclose($fp);
+            $fp = fopen('/dev/urandom', 'rb');
+            if ($fp)
+            {
+                $bits .= fread($fp, $bytes);
+                fclose($fp);
+            }
+            $bitlength = mb_strlen($bits);
+            for ($i = 0; $i < $bitlength; $i++)
+            {
+                $int =  1 + (ord($bits[$i]) % (($max - $min) + 1));
+            }
+            return $int;
         }
-        $bitlength = mb_strlen($bits);
-        for ($i = 0; $i < $bitlength; $i++)
+        else
         {
-            $int =  1 + (ord($bits[$i]) % (($max - $min) + 1));
+            return false;
         }
-
-        return $int;
     }
 
     public static function betterRand($min = 0, $max = null)
