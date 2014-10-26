@@ -17,7 +17,7 @@
 //
 // File: sched_xenobe.php
 //
-// Todo: SQL bind varibles
+// FUTURE: SQL bind varibles
 
 if (strpos($_SERVER['PHP_SELF'], 'sched_xenobe.php')) // Prevent direct access to this file
 {

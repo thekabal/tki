@@ -16,7 +16,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: xenobe_control.php
-// Todo: Change the table creation for Xenobes to use the new XML schema files
+// FUTURE: Change the table creation for Xenobes to use the new XML schema files
 
 require_once './common.php';
 require_once './config/admin_config.php';

@@ -17,7 +17,7 @@
 //
 // File: classes/News.php
 //
-// Todo: Add validity checking for the format of $day
+// FUTURE: Add validity checking for the format of $day
 
 namespace Tki;
 

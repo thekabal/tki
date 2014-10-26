@@ -16,7 +16,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: ranking.php
-// Todo: Remove color controls out to css
+// FUTURE: Remove color controls out to css
 
 require_once './common.php';
 
