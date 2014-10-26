@@ -23,8 +23,6 @@ define('TEMPLATE_USE_SMARTY', 0x00000000, true);
 
 class Template
 {
-    private $type = null;
-    private $initialiszd = null;
     private $api = null;
 
     public function __construct()

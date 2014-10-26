@@ -222,7 +222,6 @@ class PlanetReportCE
                         if ($res->fields['owned_planet'] == 0)
                         {
                             $ip = $_SERVER['REMOTE_ADDR'];
-                            $stamp = date("Y-m-d H:i:s");
                             $planet_hack = true;
                             $hack_id = 0x18582;
                             $hack_count[0]++;
@@ -263,7 +262,6 @@ class PlanetReportCE
                         {
                             // They are different so send admin a log
                             $ip = $_SERVER['REMOTE_ADDR'];
-                            $stamp = date("Y-m-d H:i:s");
                             $planet_hack = true;
                             $hack_id = 0x18531;
                             $hack_count[1]++;
@@ -273,7 +271,6 @@ class PlanetReportCE
                     else
                     {
                         $ip = $_SERVER['REMOTE_ADDR'];
-                        $stamp = date("Y-m-d H:i:s");
                         $planet_hack = true;
                         $hack_id = 0x18598;
                         $hack_count[2]++;
