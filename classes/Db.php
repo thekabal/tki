@@ -51,7 +51,7 @@ class Db
             // Get the config_values from the DB - Redo this to be db-layer-independent for both adodb and pdo
             $debug_query = $db->Execute("SELECT * FROM {$db->prefix}gameconfig");
 
-            if (($debug_query instanceof \adodb\ADORecordSet) && ($debug_query != false)) // Before DB is installed, debug_query will give false.
+            if (($debug_query instanceof \adodb\ADORecordSet) && ($debug_query !== false)) // Before DB is installed, debug_query will give false.
             {
                 return true;
             }
