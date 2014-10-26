@@ -1888,6 +1888,10 @@ class Traderoute
         }
     }
 
+    /**
+     * @param string $langvars
+     * @param string $type1
+     */
     public static function traderouteDistance($db, $langvars, $type1, $type2, $start, $dest, $circuit, $playerinfo, $sells = 'N')
     {
         $retvalue['triptime'] = 0;
@@ -2420,6 +2424,9 @@ class Traderoute
         // echo "<p><center><font size=3 color=white><strong>\n";
     }
 
+    /**
+     * @param double $total_profit
+     */
     public static function traderouteResultsDisplayTotals($db, $pdo_db, $lang, $langvars, $total_profit)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
@@ -2434,6 +2441,9 @@ class Traderoute
         }
     }
 
+    /**
+     * @param string $tdr_display_creds
+     */
     public static function traderouteResultsDisplaySummary($db, $pdo_db, $lang, $langvars, $tdr_display_creds, $dist, $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
