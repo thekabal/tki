@@ -103,7 +103,7 @@ class Rand
         $range = $max - $min;
         $bytes = ceil($range / 256);
         $fp = @fopen('/dev/urandom', 'rb');
-        if ($fp !== false)
+        if ($fp)
         {
             $bits .= @fread($fp, $bytes);
             @fclose($fp);
