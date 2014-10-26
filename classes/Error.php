@@ -21,7 +21,7 @@ namespace Tki;
 
 class Error
 {
-    public static function respond($pdo_db, $lang, $tkireg, $template)
+    public static function respond($pdo_db, $lang, Reg $tkireg, $template)
     {
         // Database driven language entries
         $langvars = Translate::load($pdo_db, $lang, array('footer', 'common', 'error', 'main'));
