@@ -67,7 +67,7 @@ if ($state == 0)
 {
     echo "<form accept-charset='utf-8' action=\"navcomp.php\" method=post>";
     echo $langvars['l_nav_query'] . " <input name=\"stop_sector\">&nbsp;<input type=submit value=" . $langvars['l_submit'] . "><br>\n";
-    echo "<input name=\"state\" value=1 TYPE=HIDDEN>";
+    echo "<input name=\"state\" value=1 type=hidden>";
     echo "</form>\n";
 }
 elseif ($state == 1)
@@ -141,12 +141,19 @@ elseif ($state == 1)
 
         $db->SetFetchMode(ADODB_FETCH_NUM);
 
-        $search_result = $db->Execute($search_query) or die("Invalid Query");
-        Tki\Db::logDbErrors($db, $search_result, __LINE__, __FILE__);
-        $found = $search_result->RecordCount();
-        if ($found > 0)
+        $search_result = $db->Execute($search_query);
+        if ($search_result === false)
         {
-            break;
+            die ('Invalid query');
+        }
+        else
+        {
+            Tki\Db::logDbErrors($db, $search_result, __LINE__, __FILE__);
+            $found = $search_result->RecordCount();
+            if ($found > 0)
+            {
+                break;
+            }
         }
     }
 
