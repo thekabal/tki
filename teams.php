@@ -35,55 +35,55 @@ $testing = false; // set to false to get rid of password when creating new team
 
 // Typecast into ints (this also removes all non numbers)
 $whichteam = null;
-if (array_key_exists('whichteam', $_REQUEST) == true)
+if (array_key_exists('whichteam', $_REQUEST) === true)
 {
     $whichteam = (int) $_REQUEST['whichteam'];
 }
 
 $teamwhat = null;
-if (array_key_exists('teamwhat', $_REQUEST) == true)
+if (array_key_exists('teamwhat', $_REQUEST) === true)
 {
     $teamwhat  = (int) $_REQUEST['teamwhat'];
 }
 
 $confirmleave = null;
-if (array_key_exists('confirmleave', $_REQUEST) == true)
+if (array_key_exists('confirmleave', $_REQUEST) === true)
 {
     $confirmleave = preg_replace('/[^0-9]/', '', $_REQUEST['confirmleave']);
 }
 
 $invited = null;
-if (array_key_exists('invited', $_REQUEST) == true)
+if (array_key_exists('invited', $_REQUEST) === true)
 {
     $invited = preg_replace('/[^0-9]/', '', $_REQUEST['invited']);
 }
 
 $teamname = null;
-if (array_key_exists('teamname', $_POST) == true)
+if (array_key_exists('teamname', $_POST) === true)
 {
     $teamname = $_POST['teamname'];
 }
 
 $teamdesc = null;
-if (array_key_exists('teamdesc', $_POST) == true)
+if (array_key_exists('teamdesc', $_POST) === true)
 {
     $teamname = $_POST['teamdesc'];
 }
 
 $confirmed = null;
-if (array_key_exists('confirmed', $_REQUEST) == true)
+if (array_key_exists('confirmed', $_REQUEST) === true)
 {
     $confirmed = preg_replace('/[^0-9]/', '', $_REQUEST['confirmed']);
 }
 
 $update = null;
-if (array_key_exists('update', $_POST) == true)
+if (array_key_exists('update', $_POST) === true)
 {
     $update = $_POST['update'];
 }
 
 $who = null;
-if (array_key_exists('who', $_REQUEST) == true)
+if (array_key_exists('who', $_REQUEST) === true)
 {
     $who  = (int) $_REQUEST['who'];
 }

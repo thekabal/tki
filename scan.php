@@ -52,7 +52,7 @@ $targetscore = $targetscore * $targetscore;
 echo "<h1>" . $title . "</h1>\n";
 
 // Kami Multi Browser Window Attack Fix
-if (array_key_exists('ship_selected', $_SESSION) == false || $_SESSION['ship_selected'] != $_GET['ship_id'])
+if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_selected'] != $_GET['ship_id'])
 {
     echo "You need to Click on the ship first.<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);

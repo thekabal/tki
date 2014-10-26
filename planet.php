@@ -400,7 +400,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
         }
         elseif ($command == "base")
         {
-            if (array_key_exists('planet_selected', $_SESSION) == false)
+            if (array_key_exists('planet_selected', $_SESSION) === false)
             {
                 $_SESSION['planet_selected'] = null;
             }
@@ -531,7 +531,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
         elseif ($command == "attac")
         {
             // Kami Multi Browser Window Attack Fix
-            if (array_key_exists('planet_selected', $_SESSION) == false || $_SESSION['planet_selected'] != $planet_id)
+            if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
                 Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to start an attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
@@ -578,7 +578,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
         elseif ($command == "attack")
         {
             // Kami Multi Browser Window Attack Fix
-            if (array_key_exists('planet_selected', $_SESSION) == false || $_SESSION['planet_selected'] != $planet_id)
+            if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
                 Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
@@ -631,7 +631,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
         elseif ($command == "scan")
         {
             // Kami Multi Browser Window Attack Fix
-            if (array_key_exists('planet_selected', $_SESSION) == false || $_SESSION['planet_selected'] != $planet_id)
+            if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
                 Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Scan without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";

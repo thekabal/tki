@@ -28,11 +28,11 @@ $title = $langvars['l_mines_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
 $op = null;
-if (array_key_exists('op', $_GET) == true)
+if (array_key_exists('op', $_GET) === true)
 {
     $op = $_GET['op'];
 }
-elseif (array_key_exists('op', $_POST) == true)
+elseif (array_key_exists('op', $_POST) === true)
 {
     $op = $_POST['op'];
 }

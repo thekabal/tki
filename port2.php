@@ -138,7 +138,7 @@ else
     if ($sectorinfo['port_type'] == "special")
     {
         // Kami multi-browser window upgrade fix
-        if (array_key_exists('port_shopping', $_SESSION) == false || $_SESSION['port_shopping'] != true)
+        if (array_key_exists('port_shopping', $_SESSION) === false || $_SESSION['port_shopping'] != true)
         {
             Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
             echo "<META HTTP-EQUIV='Refresh' CONTENT='2; URL=main.php'>";
