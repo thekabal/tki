@@ -261,7 +261,7 @@ echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href=
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='options.php'>{$langvars['l_options']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='navcomp.php'>{$langvars['l_navcomp']}</a></div>\n";
 
-if ($tkireg->allow_ksm == true)
+if ($tkireg->allow_ksm === true)
 {
     echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='galaxy.php'>{$langvars['l_map']}</a></div>\n";
 }

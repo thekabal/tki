@@ -48,13 +48,13 @@ if (mb_strlen(trim($response)) === 0)
 }
 
 $destination = null;
-if (array_key_exists('destination', $_REQUEST) == true)
+if (array_key_exists('destination', $_REQUEST) === true)
 {
     $destination = $_REQUEST['destination'];
 }
 
 $engage = null;
-if (array_key_exists('engage', $_REQUEST) == true)
+if (array_key_exists('engage', $_REQUEST) === true)
 {
     $engage = $_REQUEST['engage'];
 }

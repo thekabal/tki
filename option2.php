@@ -25,7 +25,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 $changed_language = false;
 
 // Get POST['newlang'] returns null if not found.
-if (array_key_exists('newlang', $_POST) == true)
+if (array_key_exists('newlang', $_POST) === true)
 {
     $lang_dir = new DirectoryIterator('languages/');
     foreach ($lang_dir as $file_info) // Get a list of the files in the languages directory

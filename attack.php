@@ -37,7 +37,7 @@ if (array_key_exists('ship_id', $_GET))
 }
 
 // Kami Multi Browser Window Attack Fix
-if (array_key_exists('ship_selected', $_SESSION) == false || $_SESSION['ship_selected'] != $ship_id)
+if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_selected'] != $ship_id)
 {
     echo "You need to click on the ship first.<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
@@ -440,7 +440,7 @@ else
                 }
             }
 
-            if ($bcs_stats_info == false)
+            if ($bcs_stats_info === false)
             {
                 echo "No information available.<br>\n";
             }
@@ -521,7 +521,7 @@ else
                 }
             }
 
-            if ($bcs_stats_info == false)
+            if ($bcs_stats_info === false)
             {
                 echo "No information available.<br>\n";
             }
@@ -591,7 +591,7 @@ else
                 }
             }
 
-            if ($bcs_stats_info == false)
+            if ($bcs_stats_info === false)
             {
                 echo "No information available.<br>\n";
             }

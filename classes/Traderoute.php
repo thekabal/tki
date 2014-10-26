@@ -1881,7 +1881,7 @@ class Traderoute
         }
         else
         {
-            if (array_key_exists('port_type', $dest) == true && $dest['port_type'] == 'special')
+            if (array_key_exists('port_type', $dest) === true && $dest['port_type'] == 'special')
             {
                 Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, $langvars['l_tdr_sportcom'], $template);
             }
@@ -2165,7 +2165,7 @@ class Traderoute
         }
 
         // Check destination - we cannot trade INTO a special port
-        if (array_key_exists('port_type', $destination) == true && $destination['port_type'] == 'special')
+        if (array_key_exists('port_type', $destination) === true && $destination['port_type'] == 'special')
         {
             Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, "You cannot create a traderoute into a special port!", $template);
         }
