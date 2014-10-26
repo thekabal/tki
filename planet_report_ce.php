@@ -34,7 +34,7 @@ echo '<br>';
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $tpcreds = null;
-$tpcreds = $_POST['tpcreds']; // TODO: tp creds is an array. Filtering will be tricky.
+$tpcreds = $_POST['tpcreds']; // FUTURE: tp creds is an array. Filtering will be tricky.
 if (mb_strlen(trim($tpcreds)) === 0)
 {
     $tpcreds = false;

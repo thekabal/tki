@@ -86,7 +86,7 @@ function is_query_ok($db, $res)
     }
 }
 
-// TODO: Add filtering to swordfish
+// FUTURE: Add filtering to swordfish
 if (array_key_exists('swordfish', $_GET))
 {
     $swordfish = $_GET['swordfish'];

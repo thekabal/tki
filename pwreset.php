@@ -80,7 +80,7 @@ else
 }
 
 // Set password based on user input
-// TODO
+// FUTURE
 
 /// Send email to user & admin notifying of password change
 //$langvars['l_mail_message'] = str_replace ("[ip]", $_SERVER['REMOTE_ADDR'], $langvars['l_mail_message']);

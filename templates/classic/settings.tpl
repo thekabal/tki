@@ -22,7 +22,7 @@
 
 {block name=body}
 <h1>{$langvars['l_set_game_admins']}</h1>
-{* TODO: Need an if statement here to detect if anyone is an admin or developer *}
+{* FUTURE: Need an if statement here to detect if anyone is an admin or developer *}
 <div class="special">{$langvars['l_set_no_admins']}</div>
 <br>
 <h1>{$langvars['l_set_settings']}</h1>

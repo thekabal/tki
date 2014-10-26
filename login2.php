@@ -207,7 +207,7 @@ if ($playerfound)
 }
 else
 {
-    // TODO: Add handling to pass the email address to the new signup.
+    // FUTURE: Add handling to pass the email address to the new signup.
     $langvars['l_login_noone'] = str_replace("[here]", "<a href='new.php" . $link . "'>" . $langvars['l_here'] . "</a>", $langvars['l_login_noone']);
     echo "<strong>" . $langvars['l_login_noone'] . "</strong><br>";
 }
