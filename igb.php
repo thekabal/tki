@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-// TODO: This should not be hard-coded, but for now, I need to be able to clear the errors
+// FUTURE: This should not be hard-coded, but for now, I need to be able to clear the errors
 $active_template = 'classic';
 Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 

@@ -190,7 +190,7 @@ class Schema
                 $RXSQLComments = '@(--[^\r\n]*)|(\#[^\r\n]*)|(/\*[\w\W]*?(?=\*/)\*/)@ms';
                 $sql_query = (($sql_query == '') ?  '' : preg_replace($RXSQLComments, '', $sql_query));
 
-                // TODO: Test handling invalid SQL to ensure it hits the error logger below AND the visible output during running
+                // FUTURE: Test handling invalid SQL to ensure it hits the error logger below AND the visible output during running
                 $sth = $db->prepare($sql_query);
                 $sth->execute();
 
