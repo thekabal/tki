@@ -25,6 +25,9 @@ use PDO;
 
 class AdminLog
 {
+    /**
+     * @param integer $log_type
+     */
     public static function writeLog($db, $log_type, $data = null)
     {
         if ($db instanceof \adodb\ADODB_mysqli)
