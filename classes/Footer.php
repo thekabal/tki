@@ -24,7 +24,7 @@ namespace Tki;
 
 class Footer
 {
-    public static function display($pdo_db, $lang, Reg $tkireg, $template)
+    public static function display($pdo_db, $lang, Reg $tkireg, Template $template)
     {
         // Now set a container for the variables and langvars and send them off to the template system
         $variables['container'] = 'variable';
