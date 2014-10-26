@@ -24,6 +24,9 @@ class Smarty
     private $smarty                            = null;
     private $parent                            = null;
 
+    /**
+     * @param Template $parent
+     */
     public function __construct($parent)
     {
         $this->parent = $parent;
@@ -65,6 +68,9 @@ class Smarty
         $this->addVariables('template_dir', "templates/{$themeName}");
     }
 
+    /**
+     * @param string $nodeName
+     */
     public function addVariables($nodeName, $variables)
     {
         // We don't require the container so remove it.
