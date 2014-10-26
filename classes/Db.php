@@ -172,6 +172,10 @@ class Db
         }
     }
 
+    /**
+     * @param integer $served_line
+     * @param string $served_page
+     */
     public static function logDbErrors($db, $query, $served_line, $served_page)
     {
         // Convert the content of PHP_SELF (in case it has been tainted) to the correct html entities
