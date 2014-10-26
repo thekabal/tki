@@ -17,7 +17,7 @@
 //
 // File: sched_news.php
 
-// Todo: Recode file so that news are generated in the server default language, and remove hard-coded (language) news text from the database
+// FUTURE: Recode file so that news are generated in the server default language, and remove hard-coded (language) news text from the database
 
 if (strpos($_SERVER['PHP_SELF'], 'sched_news.php')) // Prevent direct access to this file
 {
