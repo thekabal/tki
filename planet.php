@@ -170,7 +170,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
             }
             elseif ($tkireg->allow_genesis_destroy)
             {
-                echo "<A onclick=\"javascript: alert ('alert:" . $langvars['l_planet_warning'] . "');\" href=planet.php?planet_id=$planet_id&destroy=1>" . $langvars['l_planet_destroyplanet'] . "</a><br>";
+                echo "<a onclick=\"javascript: alert ('alert:" . $langvars['l_planet_warning'] . "');\" href=planet.php?planet_id=$planet_id&destroy=1>" . $langvars['l_planet_destroyplanet'] . "</a><br>";
             }
         }
 
