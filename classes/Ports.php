@@ -23,6 +23,7 @@ class Ports
 {
     public static function getType($ptype, $langvars)
     {
+        $ret = null;
         switch ($ptype)
         {
             case 'ore':

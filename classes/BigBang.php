@@ -28,6 +28,7 @@ class BigBang
         // Setup $bigbang_files as an array type.
         // We add a null value as index 0 due to we need to start from index 1.
         $bigbang_files = array(null);
+        $bigbang_info = array();
 
         // Setup $filelist as an array.
         $filelist = array();

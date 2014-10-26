@@ -99,6 +99,7 @@ class Character
         $res = $stmt->execute();
         Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $res = $stmt->fetch();
+        $playerinfo = array();
         $playerinfo['score'] = $res['score'];
 
         for ($i = 0; $i < 20; $i++)
