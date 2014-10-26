@@ -71,14 +71,14 @@ class Ship
         $own_pl_result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ?", array($ship_id));
         Db::logDbErrors($db, $own_pl_result, __LINE__, __FILE__);
 
-        if ($own_pl_result instanceof \ADORecordSet)
+        if ($own_pl_result instanceof \adodb\ADORecordSet)
         {
             while (!$own_pl_result->EOF)
             {
                 $row = $own_pl_result->fields;
                 $on_pl_result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE on_planet = 'Y' AND planet_id = ? AND ship_id <> ?", array($row['planet_id'], $ship_id));
                 Db::logDbErrors($db, $on_pl_result, __LINE__, __FILE__);
-                if ($on_pl_result instanceof \ADORecordSet)
+                if ($on_pl_result instanceof \adodb\ADORecordSet)
                 {
                     while (!$on_pl_result->EOF)
                     {

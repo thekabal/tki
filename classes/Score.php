@@ -87,7 +87,7 @@ class Score
 
         $pl_score_res = $db->Execute("SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_colonists + $calc_planet_defence + $calc_planet_credits, 0) AS planet_score FROM {$db->prefix}planets WHERE owner=?", array($ship_id));
         Db::logDbErrors($db, $pl_score_res, __LINE__, __FILE__);
-        if ($pl_score_res instanceof ADORecordSet)
+        if ($pl_score_res instanceof \adodb\ADORecordSet)
         {
             $planet_score = $pl_score_res->fields['planet_score'];
         }
@@ -98,7 +98,7 @@ class Score
 
         $ship_score_res = $db->Execute("SELECT IF(COUNT(*)>0, $calc_levels + $calc_equip + $calc_dev + {$db->prefix}ships.credits, 0) AS ship_score FROM {$db->prefix}ships LEFT JOIN {$db->prefix}planets ON {$db->prefix}planets.owner=ship_id WHERE ship_id=? AND ship_destroyed='N'", array($ship_id));
         Db::logDbErrors($db, $ship_score_res, __LINE__, __FILE__);
-        if ($ship_score_res instanceof \ADORecordSet)
+        if ($ship_score_res instanceof \adodb\ADORecordSet)
         {
             $ship_score = $ship_score_res->fields['ship_score'];
         }
@@ -109,7 +109,7 @@ class Score
 
         $bank_score_res = $db->Execute("SELECT (balance - loan) AS bank_score FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($ship_id));
         Db::logDbErrors($db, $bank_score_res, __LINE__, __FILE__);
-        if ($bank_score_res instanceof \ADORecordSet)
+        if ($bank_score_res instanceof \adodb\ADORecordSet)
         {
             $bank_score = $bank_score_res->fields['bank_score'];
         }
