@@ -26,7 +26,7 @@ class Defense
         $secdef_result = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE ship_id = ?;", array($ship_id));
         Db::logDbErrors($db, $secdef_result, __LINE__, __FILE__);
 
-        if ($secdef_result instanceof \ADORecordSet)
+        if ($secdef_result instanceof \adodb\ADORecordSet)
         {
             while (!$secdef_result->EOF)
             {
@@ -35,7 +35,7 @@ class Defense
                 $qty = $row['quantity'];
                 $other_secdef_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND ship_id <> ? ORDER BY quantity DESC", array($row['sector_id'], $ship_id));
                 Db::logDbErrors($db, $other_secdef_res, __LINE__, __FILE__);
-                if ($other_secdef_res instanceof \ADORecordSet)
+                if ($other_secdef_res instanceof \adodb\ADORecordSet)
                 {
                     while (!$other_secdef_res->EOF && $qty > 0)
                     {

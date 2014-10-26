@@ -27,7 +27,7 @@ class AdminLog
 {
     public static function writeLog($db, $log_type, $data = null)
     {
-        if ($db instanceof \ADODB_mysqli)
+        if ($db instanceof \adodb\ADODB_mysqli)
         {
             // Write log_entry to the admin log
             $res = false;

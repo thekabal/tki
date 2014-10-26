@@ -1144,7 +1144,7 @@ class Xenobe
             \Tki\Db::logDbErrors($db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
-            if ($resultf instanceof ADORecordSet)
+            if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
                 {
@@ -1159,7 +1159,7 @@ class Xenobe
             \Tki\Db::logDbErrors($db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
-            if ($resultm instanceof ADORecordSet)
+            if ($resultm instanceof \adodb\ADORecordSet)
             {
                 while (!$resultm->EOF)
                 {
@@ -1381,7 +1381,7 @@ class Xenobe
 
         $linkres = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start=?", array($playerinfo['sector']));
         \Tki\Db::logDbErrors($db, $linkres, __LINE__, __FILE__);
-        if ($linkres instanceof ADORecordSet)
+        if ($linkres instanceof \adodb\ADORecordSet)
         {
             while (!$linkres->EOF)
             {
@@ -1438,7 +1438,7 @@ class Xenobe
             \Tki\Db::logDbErrors($db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
-            if ($resultf instanceof ADORecordSet)
+            if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
                 {
@@ -1453,7 +1453,7 @@ class Xenobe
             \Tki\Db::logDbErrors($db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
-            if ($resultm instanceof ADORecordSet)
+            if ($resultm instanceof \adodb\ADORecordSet)
             {
                 while (!$resultm->EOF)
                 {
@@ -1568,7 +1568,7 @@ class Xenobe
             \Tki\Db::logDbErrors($db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
-            if ($resultf instanceof \ADORecordSet)
+            if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
                 {
@@ -1583,7 +1583,7 @@ class Xenobe
             \Tki\Db::logDbErrors($db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
-            if ($resultm instanceof \ADORecordSet)
+            if ($resultm instanceof \adodb\ADORecordSet)
             {
                 while (!$resultm->EOF)
                 {
