@@ -570,8 +570,8 @@ if ($playerinfo['sector'] != 0)
     $sql .= "SELECT {$pdo_db->prefix}ships.*, {$pdo_db->prefix}teams.team_name, {$pdo_db->prefix}teams.id ";
     $sql .= "FROM {$pdo_db->prefix}ships LEFT OUTER JOIN {$pdo_db->prefix}teams ON {$pdo_db->prefix}ships.team = {$pdo_db->prefix}teams.id ";
     $sql .= "WHERE {$pdo_db->prefix}ships.ship_id <> ? AND {$pdo_db->prefix}ships.sector = ? AND {$pdo_db->prefix}ships.on_planet='N' ";
-    $sql .= "ORDER BY " . $db->random;
-    $result4 = $db->Execute($sql, array($playerinfo['ship_id'], $playerinfo['sector']));
+    $sql .= "ORDER BY ?";
+    $result4 = $db->Execute($sql, array($playerinfo['ship_id'], $playerinfo['sector'], $db->random));
     Tki\Db::logDbErrors($db, $result4, __LINE__, __FILE__);
 
     if ($result4 !== false)
