@@ -2279,7 +2279,7 @@ class Shell
     public function testCommand($command)
     {
         if (self::TYPE_WINDOWS === $this->type) {
-            // todo: find a way to test if Windows command exists
+            // FUTURE: find a way to test if Windows command exists
             return false;
         }
 
@@ -2287,7 +2287,7 @@ class Shell
             return false;
         }
 
-        // todo: find a better way (command could not be available)
+        // FUTURE: find a better way (command could not be available)
         exec('command -v '.$command, $output, $code);
 
         return 0 === $code && count($output) > 0;
@@ -3417,7 +3417,7 @@ class BsdFindAdapter extends AbstractFindAdapter
         foreach ($contains as $contain) {
             $expr = Expression::create($contain);
 
-            // todo: avoid forking process for each $pattern by using multiple -e options
+            // FUTURE: avoid forking process for each $pattern by using multiple -e options
             $command
                 ->add('| grep -v \'^$\'')
                 ->add('| xargs -I{} grep -I')
@@ -3522,7 +3522,7 @@ class GnuFindAdapter extends AbstractFindAdapter
         foreach ($contains as $contain) {
             $expr = Expression::create($contain);
 
-            // todo: avoid forking process for each $pattern by using multiple -e options
+            // FUTURE: avoid forking process for each $pattern by using multiple -e options
             $command
                 ->add('| xargs -I{} -r grep -I')
                 ->add($expr->isCaseSensitive() ? null : '-i')
