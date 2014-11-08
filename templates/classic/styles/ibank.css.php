@@ -10,5 +10,5 @@ header ("Connection: Keep-Alive");
 header ("Cache-Control: public");
 header ('ETag: "' . $etag . '"');
 ?>
-body.igb { background-color:#929292; background-image:none; color:#f0f0f0; font-family: Courier New, Courier, monospace; font-size:0.8em}
-div.igb { color:#0f0}
+body.ibank { background-color:#929292; background-image:none; color:#f0f0f0; font-family: Courier New, Courier, monospace; font-size:0.8em}
+div.ibank { color:#0f0}
