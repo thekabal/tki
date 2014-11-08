@@ -650,7 +650,7 @@ l_insignia_18                           = "Vice Admiral";
 l_insignia_19                           = "Admiral";
 l_local_news                            = "Local News";
 
-[igb]
+[ibank]
 l_ibank_credit_symbol                     = "C";
 l_ibank_title                             = "The Intergalactic Bank";
 l_ibank_humor                             = "All your base are belong to us.";

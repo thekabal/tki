@@ -950,7 +950,7 @@ class Ibank
     public static function deposit($db, $pdo_db, $lang, $account, $playerinfo, $langvars)
     {
         // Database driven language entries
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('igb'));
+        $langvars = \Tki\Translate::load($pdo_db, $lang, array('ibank'));
 
         $max_credits_allowed = 18446744073709000000;
         $credit_space = ($max_credits_allowed - $account['balance']);

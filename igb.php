@@ -24,10 +24,10 @@ $active_template = 'classic';
 Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('igb', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('ibank', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
 
 $title = $langvars['l_ibank_title'];
-$body_class = 'igb';
+$body_class = 'ibank';
 Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
@@ -41,9 +41,9 @@ $account = $result->fields;
 echo "<body class='" . $body_class . "'>";
 echo "<center>";
 echo '<img src="' . $template->getVariables('template_dir') . '/images/div1.png" alt="" style="width: 600px; height:21px">';
-echo '<div style="width:600px; max-width:600px;" class="igb">';
+echo '<div style="width:600px; max-width:600px;" class="ibank">';
 echo '<table style="width:600px; height:350px;" border="0px">';
-echo '<tr><td style="background-image:URL(' . $template->getVariables('template_dir') . '/images/igbscreen.png); background-repeat:no-repeat;" align="center">';
+echo '<tr><td style="background-image:URL(' . $template->getVariables('template_dir') . '/images/ibankscreen.png); background-repeat:no-repeat;" align="center">';
 echo '<table style="width:550px; height:300px;" border="0px">';
 
 if (!$tkireg->allow_ibank)
