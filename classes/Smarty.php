@@ -74,7 +74,7 @@ class Smarty
     public function addVariables($nodeName, $variables)
     {
         // We don't require the container so remove it.
-        if (is_array($variables) && isset($variables['container']) == true)
+        if (is_array($variables) && isset($variables['container']) === true)
         {
             unset ($variables['container']);
         }

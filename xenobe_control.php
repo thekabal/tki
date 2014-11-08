@@ -574,7 +574,7 @@ else
                             $makepass .= sprintf("%s", $syllable_array[Tki\Rand::betterRand() %62]);
                         }
                     }
-                    if ($xenlevel == null)
+                    if ($xenlevel === null)
                     {
                         $xenlevel = 0;
                     }

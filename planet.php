@@ -86,7 +86,7 @@ if (!$result3 instanceof ADORecordSet || (is_bool($planetinfo) && $planetinfo ==
     die();
 }
 
-if (!is_bool($planetinfo) && $planetinfo != false)
+if (!is_bool($planetinfo) && $planetinfo !== false)
 // If there is a planet in the sector show appropriate menu
 {
     if ($playerinfo['sector'] != $planetinfo['sector_id'])
@@ -303,7 +303,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
             $retOwnerInfo = null;
 
             $owner_found = Bad\Planet::getOwner($db, $planetinfo['planet_id'], $retOwnerInfo);
-            if ($owner_found == true && !is_null($retOwnerInfo))
+            if ($owner_found === true && !is_null($retOwnerInfo))
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
@@ -554,7 +554,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
 
             $retOwnerInfo = null;
             $owner_found = Bad\Planet::getOwner($db, $planetinfo['planet_id'], $retOwnerInfo);
-            if ($owner_found == true && !is_null($retOwnerInfo))
+            if ($owner_found === true && !is_null($retOwnerInfo))
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
@@ -590,7 +590,7 @@ if (!is_bool($planetinfo) && $planetinfo != false)
 
             $retOwnerInfo = null;
             $owner_found = Bad\Planet::getOwner($db, $planetinfo['planet_id'], $retOwnerInfo);
-            if ($owner_found == true && !is_null($retOwnerInfo))
+            if ($owner_found === true && !is_null($retOwnerInfo))
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
@@ -905,7 +905,7 @@ else
     echo $langvars['l_planet_none'] . "<p>";
 }
 
-if ($command != null)
+if ($command !== null)
 {
     echo "<br><a href=planet.php?planet_id=$planet_id>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "<br><br>";
 }

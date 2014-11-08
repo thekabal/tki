@@ -39,7 +39,7 @@ $reset_code  = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
 $result = $db->SelectLimit("SELECT character_name, email, recovery_time FROM {$db->prefix}ships WHERE substr(MD5(password),6,8) = ?", 1, -1, array('password' => $reset_code));
 Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
 
-if (!$result->EOF && $result != false)
+if (!$result->EOF && $result !== false)
 {
     $recovery_time = $result->fields['recovery_time'];
     $expiration = $recovery_time + (90 * 60); // 90 minutes expiration for e-mailed password resets

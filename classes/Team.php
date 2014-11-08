@@ -224,7 +224,7 @@ class Team
                 echo $langvars['l_team_member'] . " ";
             }
             echo $langvars['l_options'] . " <br><font size=2>";
-            if (is_team_owner($team, $playerinfo) == true)
+            if (is_team_owner($team, $playerinfo) === true)
             {
                 echo "[<a href=teams.php?teamwhat=9&whichteam=$playerinfo[team]>" . $langvars['l_edit'] . "</a>] - ";
             }

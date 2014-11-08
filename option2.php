@@ -103,7 +103,7 @@ else
             Tki\Db::logDbErrors($db, $rs, __LINE__, __FILE__);
 
             // Now check to see if we have a valid update and have ONLY 1 changed record.
-            if ((is_bool($rs) && $rs == false) || $db->Affected_Rows() != 1)
+            if ((is_bool($rs) && $rs === false) || $db->Affected_Rows() != 1)
             {
                 // Either we got an error in the SQL Query or <> 1 records was changed.
                 echo $langvars['l_opt2_passchangeerr'] . "<br><br>";

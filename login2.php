@@ -91,7 +91,7 @@ $title = $langvars['l_login_title2'];
 // Check Banned
 $banned = 0;
 
-if (isset ($playerinfo) && $playerfound != false)
+if (isset ($playerinfo) && $playerfound !== false)
 {
     $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask OR ? LIKE ban_mask;", array($_SERVER['REMOTE_ADDR'], $playerinfo['ip_address']));
     Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);

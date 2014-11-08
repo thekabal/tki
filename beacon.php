@@ -91,7 +91,7 @@ if ($playerinfo['dev_beacon'] > 0)
     {
         if ($beacon_text === null)
         {
-            if ($sectorinfo['beacon'] != null)
+            if ($sectorinfo['beacon'] !== null)
             {
                 echo $langvars['l_beacon_reads'] . ": " . $sectorinfo['beacon'] . "<br><br>";
             }
