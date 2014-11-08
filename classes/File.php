@@ -24,7 +24,7 @@ namespace Tki;
 
 class File
 {
-    public static function iniToDb($db, $ini_file, $ini_table, $section, Reg $tkireg)
+    public static function iniToDb(\PDO $pdo_db, $ini_file, $ini_table, $section, Reg $tkireg)
     {
         // This is a loop, that reads a ini file, of the type variable = value.
         // It will loop thru the list of the ini variables, and push them into the db.
@@ -34,11 +34,11 @@ class File
 
         $status_array = array();
         $j = 0;
-        $start_tran_res = $db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
-        Db::logDbErrors($db, $start_tran_res, __LINE__, __FILE__);
+        $start_tran_res = $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
+        Db::logDbErrors($pdo_db, $start_tran_res, __LINE__, __FILE__);
 
-        $insert_sql = 'INSERT into ' . $db->prefix. $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
-        $stmt = $db->prepare($insert_sql);
+        $insert_sql = 'INSERT into ' . $pdo_db->prefix. $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
+        $stmt = $pdo_db->prepare($insert_sql);
 
         foreach($ini_keys as $config_category => $config_line)
         {
@@ -58,7 +58,7 @@ class File
                 $stmt->bindParam(':section', $section);
                 $stmt->bindParam(':type', $type_n_value['type']);
                 $result = $stmt->execute();
-                $status_array[$j] = Db::logDbErrors($db, $result, __LINE__, __FILE__);
+                $status_array[$j] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             }
         }
 
@@ -78,15 +78,15 @@ class File
         unset ($ini_keys);
         if ($final_result !== true) // If the final result is not true, rollback our transaction, and return false.
         {
-            $db->rollBack();
-            Db::logDbErrors($db, 'Rollback transaction on File::initodb', __LINE__, __FILE__);
+            $pdo_db->rollBack();
+            Db::logDbErrors($pdo_db, 'Rollback transaction on File::initodb', __LINE__, __FILE__);
 
             return false;
         }
         else // Else we process the transaction, and return true
         {
-            $db->commit(); // Complete the transaction
-            Db::logDbErrors($db, 'Complete transaction on File::initodb', __LINE__, __FILE__);
+            $pdo_db->commit(); // Complete the transaction
+            Db::logDbErrors($pdo_db, 'Complete transaction on File::initodb', __LINE__, __FILE__);
 
             return true;
         }
