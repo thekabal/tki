@@ -21,10 +21,10 @@ namespace Tki;
 
 class Schema
 {
-    public static function dropTables($db, $db_prefix, $dbtype)
+    public static function dropTables(\PDO $pdo_db, $db_prefix, $dbtype)
     {
         // Need to set this or all hell breaks loose.
-        $db->inactive = true;
+        $pdo_db->inactive = true;
 
         $i = 0;
         $destroy_table_results = array();
@@ -50,8 +50,8 @@ class Schema
 
                 if (!$persist_file)
                 {
-                    $drop_res = $db->exec('DROP TABLE ' . $db_prefix . $tablename);
-//                    Db::logDbErrors($db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+                    $drop_res = $pdo_db->exec('DROP TABLE ' . $db_prefix . $tablename);
+//                    Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                     if ($drop_res !== false)
                     {
@@ -59,7 +59,7 @@ class Schema
                     }
                     else
                     {
-                        $errorinfo = $db->errorInfo();
+                        $errorinfo = $pdo_db->errorInfo();
                         $destroy_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                     }
                 }
@@ -78,10 +78,10 @@ class Schema
         return $destroy_table_results;
     }
 
-    public static function dropSequences($db, $db_prefix, $dbtype)
+    public static function dropSequences(\PDO $pdo_db, $db_prefix, $dbtype)
     {
         // Need to set this or all hell breaks loose.
-        $db->inactive = true;
+        $pdo_db->inactive = true;
 
         $i = 0;
         $destroy_table_results = array();
@@ -95,8 +95,8 @@ class Schema
             if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
             {
                 $seqname = mb_substr($seq_filename, 0, -4);
-                $drop_res = $db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
-//                Db::logDbErrors($db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+                $drop_res = $pdo_db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
+//                Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                 if ($drop_res !== false)
                 {
@@ -104,7 +104,7 @@ class Schema
                 }
                 else
                 {
-                    $errorinfo = $db->errorInfo();
+                    $errorinfo = $pdo_db->errorInfo();
                     $destroy_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                 }
 
@@ -118,7 +118,7 @@ class Schema
         return $destroy_table_results;
     }
 
-    public static function createSequences($db, $db_prefix, $dbtype)
+    public static function createSequences(\PDO $pdo_db, $db_prefix, $dbtype)
     {
         $create_table_results = array();
         $i = 0;
@@ -133,8 +133,8 @@ class Schema
             if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
             {
                 $seqname = mb_substr($seq_filename, 0, -4);
-                $drop_res = $db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
-//                Db::logDbErrors($db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+                $drop_res = $pdo_db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
+//                Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                 if ($drop_res !== false)
                 {
@@ -142,7 +142,7 @@ class Schema
                 }
                 else
                 {
-                    $errorinfo = $db->errorInfo();
+                    $errorinfo = $pdo_db->errorInfo();
                     $create_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                 }
 
@@ -156,7 +156,7 @@ class Schema
         return $create_table_results;
     }
 
-    public static function createTables($db, $db_prefix, $dbtype)
+    public static function createTables(\PDO $pdo_db, $db_prefix, $dbtype)
     {
         $create_table_results = array();
         $i = 0;
@@ -191,12 +191,12 @@ class Schema
                 $sql_query = (($sql_query == '') ?  '' : preg_replace($RXSQLComments, '', $sql_query));
 
                 // FUTURE: Test handling invalid SQL to ensure it hits the error logger below AND the visible output during running
-                $sth = $db->prepare($sql_query);
+                $sth = $pdo_db->prepare($sql_query);
                 $sth->execute();
 
-                if ($db->errorCode() !== PDO_SUCCESS)
+                if ($pdo_db->errorCode() !== PDO_SUCCESS)
                 {
-                    $errorinfo = $db->errorInfo();
+                    $errorinfo = $pdo_db->errorInfo();
                     $create_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                 }
                 else
@@ -204,7 +204,7 @@ class Schema
                     $create_table_results[$i]['result'] = true;
                 }
 
-//                Db::logDbErrors($db, $execute_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+//                Db::logDbErrors($pdo_db, $execute_res, __LINE__, __FILE__); // Triggers errors because there is no DB
                 $create_table_results[$i]['name'] = $db_prefix . $tablename;
                 $table_timer->stop();
                 $create_table_results[$i]['time'] = $table_timer->elapsed();
