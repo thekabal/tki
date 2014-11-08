@@ -184,8 +184,7 @@ class Ibank
 
         echo "</select></td><td valign=center align=right>" .
              "<input class=term type=submit name=shipt value='" . $langvars['l_ibank_shiptransfer'] . "'>" .
-             "</form>" .
-             "</td></tr>" .
+             "</form></td></tr>" .
              "<tr valign=top>" .
              "<td><br>" . $langvars['l_ibank_fromplanet'] . " :<br><br>" .
              "<form accept-charset='utf-8' action='igb.php?command=transfer2' method=post>" .
@@ -227,8 +226,7 @@ class Ibank
 
         echo "</select></td><td valign=center align=right>" .
              "<br><input class=term type=submit name=planett value='" . $langvars['l_ibank_planettransfer'] . "'>" .
-             "</td></tr>" .
-             "</form>";
+             "</td></tr></form>";
 
         // ---- begin Consol Credits form    // ---- added by Torr
         echo "<tr valign=top>" .
@@ -259,8 +257,7 @@ class Ibank
         // ---- End Consol Credits form ---
 
         echo "</form><tr valign=bottom>" .
-             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
-             "</tr>";
+             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
     public static function ibankLoans($db, $langvars, \Tki\Reg $tkireg, $playerinfo)

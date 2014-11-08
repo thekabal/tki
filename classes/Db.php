@@ -85,10 +85,9 @@ class Db
                     $db = ADONewConnection('mysqli');
                 }
 
-                // The data field name "data" violates SQL reserved words - switch it to SESSDATA
-
                 // Adodb should not throw a warning here if the DB is unavailable, but it does, so we @.
                 $db_init_result = @$db->Connect($db_host, $db_user, $db_pwd, $db_name);
+
                 // Returns Boolean true or false.
                 // However ADOdb's postgres driver returns null if postgres insn't installed.
                 if ($db_init_result === false || $db_init_result === 0)
