@@ -337,7 +337,7 @@ switch ($teamwhat)
         // If not display "An error occured, You are not the leader of this Team." message.
         // Then show link back and break;
 
-        if (Bad\Team::isTeamOwner($team, $playerinfo) == false)
+        if (Bad\Team::isTeamOwner($team, $playerinfo) === false)
         {
             $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
             echo $langvars['l_team_error'];
@@ -421,7 +421,7 @@ switch ($teamwhat)
         break;
 
     case 7: // INVITE player
-        if (Bad\Team::isTeamMember($team, $playerinfo) == false)
+        if (Bad\Team::isTeamMember($team, $playerinfo) === false)
         {
             echo "<br>You are not in this team!<br>";
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
@@ -439,7 +439,7 @@ switch ($teamwhat)
             while (!$res->EOF)
             {
                 $row = $res->fields;
-                if (Bad\Team::isTeamOwner($team, $row) == false)
+                if (Bad\Team::isTeamOwner($team, $row) === false)
                 {
                     echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
                 }
@@ -498,7 +498,7 @@ switch ($teamwhat)
         // If not display "An error occured, You are not the leader of this Team." message.
         // Then show link back and break;
 
-        if (Bad\Team::isTeamOwner($team, $playerinfo) == false)
+        if (Bad\Team::isTeamOwner($team, $playerinfo) === false)
         {
             $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
             echo $langvars['l_team_error'];
@@ -525,7 +525,7 @@ switch ($teamwhat)
             $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
             $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
 
-            if (Bad\Team::validateTeam($db, $teamname, $teamdesc, $playerinfo['ship_id']) == false)
+            if (Bad\Team::validateTeam($db, $teamname, $teamdesc, $playerinfo['ship_id']) === false)
             {
                 echo "<span style='color:#f00;'>Team Edit Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
                 echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";

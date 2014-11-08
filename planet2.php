@@ -169,7 +169,7 @@ Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 $planetinfo = $result2->fields;
 
 // Check to see if it returned valid planet info.
-if ($planetinfo == false)
+if ($planetinfo === false)
 {
     echo "Invalid Planet<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);

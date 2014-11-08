@@ -301,7 +301,7 @@ while (!$tdres->EOF)
 }
 */
 
-if ($detected == false)
+if ($detected === false)
 {
     echo "<hr style='width:300px; height:1px; padding:0px; margin:0px; text-align:left;' />\n";
     echo "<span style='color:#0f0;'>No Flips or Overloads detected.</span><br>\n";

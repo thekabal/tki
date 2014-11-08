@@ -110,7 +110,7 @@ if (empty ($content))
         $res->MoveNext();
     }
 
-    while (!$res2->EOF && $res2->fields != null)
+    while (!$res2->EOF && $res2->fields !== null)
     {
         $row2 = $res2->fields;
         echo "          <option>" . $langvars['l_sendm_ally'] . " " . $row2['team_name'] . "</option>\n";

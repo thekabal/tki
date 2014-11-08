@@ -40,7 +40,7 @@ class Template
     // Needs to be updated to suit Smarty and XML Template Systems.
     public function initialize($type = null, $themeName = 'classic')
     {
-        if ($this->initialized != true)
+        if ($this->initialized !== true)
         {
             if ($type === TEMPLATE_USE_SMARTY)
             {
