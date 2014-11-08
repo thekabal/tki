@@ -145,11 +145,11 @@ class Team
         // Default is ordered by teams.team_name
         if ($order)
         {
-            $sql_query .= " ORDER BY " . $order . " $by";
+            $sql_query .= " ORDER BY ? ?";
         }
         $sql_query .= ";";
 
-        $res = $db->Execute($sql_query);
+        $res = $db->Execute($sql_query, array($order, $by));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $color = $color_line1;
 
