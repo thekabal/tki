@@ -113,7 +113,7 @@ elseif ($command == 'borrow') //borrow operation
 }
 elseif ($command == 'repay') //repay operation
 {
-    Bad\Ibank::ibankRepay($db, $langvars, $playerinfo, $account, $amount);
+    Bad\Ibank::ibankRepay($db, $langvars, $playerinfo, $account, $amount, $active_template);
 }
 elseif ($command == 'consolidate') //consolidate menu
 {
