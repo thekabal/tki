@@ -257,10 +257,8 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
-    public static function ibankLoans($db, $langvars, \Tki\Reg $tkireg, $playerinfo)
+    public static function ibankLoans($pdo_db, $db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account, $ibank_loanlimit, $ibank_loanfactor, $ibank_loaninterest)
     {
-        global $ibank_loanlimit, $ibank_loanfactor, $ibank_loaninterest, $account;
-
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_currentloan'] . " :</td><td align=right>" . number_format($account['loan'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
@@ -268,8 +266,10 @@ class Ibank
         if ($account['loan'] != 0)
         {
             $curtime = time();
+
             $res = $db->Execute("SELECT UNIX_TIMESTAMP(loantime) as time FROM {$db->prefix}ibank_accounts WHERE ship_id = ?", array($playerinfo['ship_id']));
             \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+
             if (!$res->EOF)
             {
                 $time = $res->fields;

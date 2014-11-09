@@ -105,7 +105,7 @@ elseif ($command == 'transfer3') //transfer operation
 }
 elseif ($command == 'loans') //loans menu
 {
-    Bad\Ibank::ibankLoans($db, $langvars, $tkireg, $playerinfo);
+    Bad\Ibank::ibankLoans($pdo_db, $db, $langvars, $tkireg, $playerinfo, $account, $ibank_loanlimit, $ibank_loanfactor, $ibank_loaninterest);
 }
 elseif ($command == 'borrow') //borrow operation
 {
