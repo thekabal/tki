@@ -24,7 +24,7 @@ namespace Bad;
 
 class Xenobe
 {
-    public static function xenobeTrade($db, $playerinfo, $tkireg, $xenobeisdead)
+    public static function xenobeTrade($db, $playerinfo, \Tki\Reg $tkireg, $xenobeisdead)
     {
         // We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
         $tkireg->ore_price = 11;
