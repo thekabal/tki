@@ -25,10 +25,8 @@ namespace Bad;
 
 class Ibank
 {
-    public static function ibankBorrow($db, $langvars, $playerinfo, $active_template)
+    public static function ibankBorrow($db, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount)
     {
-        global $account, $amount, $ibank_loanlimit, $ibank_loanfactor, $ibank_lrate;
-
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
@@ -46,18 +44,18 @@ class Ibank
         }
 
         $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
-        $maxtrans = $score * $score * $ibank_loanlimit;
+        $maxtrans = $score * $score * $tkireg->ibank_loanlimit;
 
         if ($amount > $maxtrans)
         {
             Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_loantoobig'], "ibank.php?command=loans");
         }
 
-        $amount2 = $amount * $ibank_loanfactor;
+        $amount2 = $amount * $tkireg->ibank_loanfactor;
         $amount3 = $amount + $amount2;
 
-        $hours = $ibank_lrate / 60;
-        $mins = $ibank_lrate % 60;
+        $hours = $tkireg->ibank_lrate / 60;
+        $mins = $tkireg->ibank_lrate % 60;
 
         $langvars['l_ibank_loanreminder'] = str_replace("[hours]", $hours, $langvars['l_ibank_loanreminder']);
         $langvars['l_ibank_loanreminder'] = str_replace("[mins]", $mins, $langvars['l_ibank_loanreminder']);
@@ -279,13 +277,13 @@ class Ibank
 
             echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_loantimeleft'] . " :</td>";
 
-            if ($difftime > $ibank_lrate)
+            if ($difftime > $tkireg->ibank_lrate)
             {
                 echo "<td align=right>" . $langvars['l_ibank_loanlate'] . "</td></tr>";
             }
             else
             {
-                $difftime = $ibank_lrate - $difftime;
+                $difftime = $tkireg->ibank_lrate - $difftime;
                 $hours = $difftime / 60;
                 $hours = (int) $hours;
                 $mins = $difftime % 60;
@@ -914,7 +912,7 @@ class Ibank
         die();
     }
 
-    public static function isLoanPending($db, $ship_id, $ibank_lrate)
+    public static function isLoanPending($db, $ship_id, $tkireg)
     {
         $res = $db->Execute("SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$db->prefix}ibank_accounts WHERE ship_id = ?", array($ship_id));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
@@ -929,7 +927,7 @@ class Ibank
 
             $curtime = time();
             $difftime = ($curtime - $account['time']) / 60;
-            if ($difftime > $ibank_lrate)
+            if ($difftime > $tkireg->ibank_lrate)
             {
                 return true;
             }
