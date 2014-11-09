@@ -43,7 +43,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport($db, $langvars, $playerinfo, $sort, $tkireg)
+    public static function standardReport($db, $langvars, $playerinfo, $sort, \Tki\Reg $tkireg)
     {
         global $color;
 
@@ -232,7 +232,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function planetProductionChange($db, $langvars, $playerinfo, $sort, $tkireg)
+    public static function planetProductionChange($db, $langvars, $playerinfo, $sort, \Tki\Reg $tkireg)
     {
         global $color;
 

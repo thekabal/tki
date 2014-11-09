@@ -2346,7 +2346,7 @@ class Traderoute
         Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, null, $template);
     }
 
-    public static function traderouteResultsTableTop($db, $pdo_db, $lang, $langvars, $tkireg)
+    public static function traderouteResultsTableTop($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2364,7 +2364,7 @@ class Traderoute
         echo "    <td width='50%'><font size='2' color='white'><strong>";
     }
 
-    public static function traderouteResultsDestination($tkireg)
+    public static function traderouteResultsDestination(\Tki\Reg $tkireg)
     {
         echo "</strong></font></td>\n";
         echo "  </tr>\n";
@@ -2378,7 +2378,7 @@ class Traderoute
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
-    public static function traderouteResultsShowCost($tkireg)
+    public static function traderouteResultsShowCost(\Tki\Reg $tkireg)
     {
         echo "</font></td>\n";
         echo "  </tr>\n";
