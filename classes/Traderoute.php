@@ -339,7 +339,7 @@ class Traderoute
             }
         }
 
-        Traderoute::traderouteResultsTableTop($db, $pdo_db, $lang, $langvars, $tkireg);
+        Traderoute::traderouteResultsTableTop($pdo_db, $lang, $langvars, $tkireg);
         // Determine if Source is Planet or Port
         if ($traderoute['source_type'] == 'P')
         {
@@ -1363,7 +1363,7 @@ class Traderoute
         Traderoute::traderouteResultsCloseTable();
 
         $total_profit = $sourcecost + $destcost;
-        Traderoute::traderouteResultsDisplayTotals($db, $pdo_db, $lang, $langvars, $total_profit);
+        Traderoute::traderouteResultsDisplayTotals($pdo_db, $lang, $langvars, $total_profit);
 
         if ($traderoute['circuit'] == '1')
         {
@@ -1379,7 +1379,7 @@ class Traderoute
         $playerinfo['turns']-= $dist['triptime'];
 
         $tdr_display_creds = number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-        Traderoute::traderouteResultsDisplaySummary($db, $pdo_db, $lang, $langvars, $tdr_display_creds, $dist, $playerinfo);
+        Traderoute::traderouteResultsDisplaySummary($pdo_db, $lang, $langvars, $tdr_display_creds, $dist, $playerinfo);
         // echo $j." -- ";
         if ($traderoute['circuit'] == 2)
         {
@@ -2344,7 +2344,7 @@ class Traderoute
         Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, null, $template);
     }
 
-    public static function traderouteResultsTableTop($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg)
+    public static function traderouteResultsTableTop($pdo_db, $lang, $langvars, \Tki\Reg $tkireg)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2401,7 +2401,7 @@ class Traderoute
     /**
      * @param double $total_profit
      */
-    public static function traderouteResultsDisplayTotals($db, $pdo_db, $lang, $langvars, $total_profit)
+    public static function traderouteResultsDisplayTotals($pdo_db, $lang, $langvars, $total_profit)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2418,7 +2418,7 @@ class Traderoute
     /**
      * @param string $tdr_display_creds
      */
-    public static function traderouteResultsDisplaySummary($db, $pdo_db, $lang, $langvars, $tdr_display_creds, $dist, $playerinfo)
+    public static function traderouteResultsDisplaySummary($pdo_db, $lang, $langvars, $tdr_display_creds, $dist, $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
