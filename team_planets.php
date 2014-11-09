@@ -92,7 +92,7 @@ else
 {
     echo $langvars['l_pr_clicktosort'] . "<br><br>";
     echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=2>";
-    echo "<tr bgcolor=\"$color_header\">";
+    echo "<tr bgcolor=\"$tkireg->color_header\">";
     echo "<td><strong><a href=team_planets.php?sort=sector>" . $langvars['l_sector'] . "</a></strong></td>";
     echo "<td><strong><a href=team_planets.php?sort=name>" . $langvars['l_name'] . "</a></strong></td>";
     echo "<td><strong><a href=team_planets.php?sort=ore>" . $langvars['l_ore'] . "</a></strong></td>";
@@ -116,7 +116,7 @@ else
     $total_torp = 0;
     $total_base = 0;
     $total_selling = 0;
-    $color = $color_line1;
+    $color = $tkireg->color_line1;
     for ($i = 0; $i < $num_planets; $i++)
     {
         $total_organics += $planet[$i]['organics'];
@@ -162,13 +162,13 @@ else
         echo "<td>" . $player                        . "</td>";
         echo "</tr>";
 
-        if ($color == $color_line1)
+        if ($color == $tkireg->color_line1)
         {
-            $color = $color_line2;
+            $color = $tkireg->color_line2;
         }
         else
         {
-            $color = $color_line1;
+            $color = $tkireg->color_line1;
         }
     }
 

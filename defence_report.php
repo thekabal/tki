@@ -77,13 +77,13 @@ else
 {
     echo $langvars['l_pr_clicktosort'] . "<br><br>";
     echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=2>";
-    echo "<tr bgcolor=\"$color_header\">";
+    echo "<tr bgcolor=\"$tkireg->color_header\">";
     echo "<td><strong><a href=defence_report.php?sort=sector>" . $langvars['l_sector'] . "</a></strong></td>";
     echo "<td><strong><a href=defence_report.php?sort=quantity>" . $langvars['l_qty'] . "</a></strong></td>";
     echo "<td><strong><a href=defence_report.php?sort=type>" . $langvars['l_sdf_type'] . "</a></strong></td>";
     echo "<td><strong><a href=defence_report.php?sort=mode>" . $langvars['l_sdf_mode'] . "</a></strong></td>";
     echo "</tr>";
-    $color = $color_line1;
+    $color = $tkireg->color_line1;
     for ($i = 0; $i < $num_sectors; $i++)
     {
         echo "<tr bgcolor=\"$color\">";
@@ -104,13 +104,13 @@ else
         echo "<td> " . $mode . " </td>";
         echo "</tr>";
 
-        if ($color == $color_line1)
+        if ($color == $tkireg->color_line1)
         {
-            $color = $color_line2;
+            $color = $tkireg->color_line2;
         }
         else
         {
-            $color = $color_line1;
+            $color = $tkireg->color_line1;
         }
     }
     echo "</table>";

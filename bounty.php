@@ -99,12 +99,12 @@ switch ($response) {
         {
             echo $langvars['l_by_bountyon'] . " " . $bounty_details[0]['character_name'];
             echo '<table border=1 cellspacing=1 cellpadding=2 width="50%" align=center>';
-            echo "<tr bgcolor=\"$color_header\">";
+            echo "<tr bgcolor=\"$tkireg->color_header\">";
             echo "<td><strong>" . $langvars['l_amount'] . "</td>";
             echo "<td><strong>" . $langvars['l_by_placedby'] . "</td>";
             echo "<td><strong>" . $langvars['l_by_action'] . "</td>";
             echo "</tr>";
-            $color = $color_line1;
+            $color = $tkireg->color_line1;
             for ($j = 0; $j < $num_details; $j++)
             {
                 $someres = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounty_details[$j]['placed_by']));
@@ -131,13 +131,13 @@ switch ($response) {
 
                 echo "</tr>";
 
-                if ($color == $color_line1)
+                if ($color == $tkireg->color_line1)
                 {
-                    $color = $color_line2;
+                    $color = $tkireg->color_line2;
                 }
                 else
                 {
-                    $color = $color_line1;
+                    $color = $tkireg->color_line1;
                 }
             }
             echo "</table>";
@@ -323,11 +323,11 @@ switch ($response) {
         {
             echo $langvars['l_by_moredetails'] . "<br><br>";
             echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=2>";
-            echo "<tr bgcolor=\"$color_header\">";
+            echo "<tr bgcolor=\"$tkireg->color_header\">";
             echo "<td><strong>" . $langvars['l_by_bountyon'] . "</strong></td>";
             echo "<td><strong>" . $langvars['l_amount'] . "</td>";
             echo "</tr>";
-            $color = $color_line1;
+            $color = $tkireg->color_line1;
             for ($i = 0; $i < $num_bounties; $i++)
             {
                 $someres = $db->execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounties[$i]['bounty_on']));
@@ -338,13 +338,13 @@ switch ($response) {
                 echo "<td>" . $bounties[$i]['total_bounty'] . "</td>";
                 echo "</tr>";
 
-                if ($color == $color_line1)
+                if ($color == $tkireg->color_line1)
                 {
-                    $color = $color_line2;
+                    $color = $tkireg->color_line2;
                 }
                 else
                 {
-                    $color = $color_line1;
+                    $color = $tkireg->color_line1;
                 }
             }
             echo "</table>";
