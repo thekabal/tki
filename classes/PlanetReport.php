@@ -43,9 +43,8 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport($db, $langvars, $playerinfo)
+    public static function standardReport($db, $langvars, $playerinfo, $sort)
     {
-        global $sort;
         global $color_header, $color, $color_line1, $color_line2;
 
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
@@ -233,9 +232,8 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function planetProductionChange($db, $langvars, $playerinfo)
+    public static function planetProductionChange($db, $langvars, $playerinfo, $sort)
     {
-        global $sort;
         global $color_header, $color, $color_line1, $color_line2;
 
         $query = "SELECT * FROM {$db->prefix}planets WHERE owner=? AND base='Y'";
@@ -416,24 +414,6 @@ class PlanetReport
         elseif ($planet[$i]['sells'] == 'Y')
         {
             return ("<input type='checkbox' name='sells[{$i}]' value='{$planet[$i]['planet_id']}' checked />");
-        }
-    }
-
-    public static function baseBuildCheck($langvars, $planet, $i)
-    {
-        global $base_ore, $base_organics, $base_goods, $base_credits;
-
-        if ($planet[$i]['base'] == 'Y')
-        {
-            return ($langvars['l_yes']);
-        }
-        elseif ($planet[$i]['ore'] >= $base_ore && $planet[$i]['organics'] >= $base_organics && $planet[$i]['goods'] >= $base_goods && $planet[$i]['credits'] >= $base_credits)
-        {
-            return ("<a href=\"planet_report_ce.php?buildp=" . $planet[$i]['planet_id'] . "&amp;builds=" . $planet[$i]['sector_id'] . "\">Build</a>");
-        }
-        else
-        {
-            return ($langvars['l_no']);
         }
     }
 }
