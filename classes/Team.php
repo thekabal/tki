@@ -107,13 +107,13 @@ class Team
     }
 
     // Rewritten display of teams list
-    public static function displayAllTeams($db, $langvars)
+    public static function displayAllTeams($db, $langvars, \Tki\Reg $tkireg)
     {
-        global $color, $color_line1, $color_line2, $color_header, $order, $type;
+        global $color, $order, $type;
 
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
         echo "<table style='width:100%; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
-        echo "<tr bgcolor=\"$color_header\">";
+        echo "<tr bgcolor=\"$tkireg->color_header\">";
 
         if ($type == "d")
         {
@@ -151,7 +151,7 @@ class Team
 
         $res = $db->Execute($sql_query, array($order, $by));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
-        $color = $color_line1;
+        $color = $tkireg->color_line1;
 
         while (!$res->EOF)
         {
@@ -173,13 +173,13 @@ class Team
             echo "<td><a href='mailto.php?name={$row2['character_name']}'>{$row2['character_name']}</a></td>";
             echo "<td>{$row['total_score']}</td>";
             echo "</tr>";
-            if ($color == $color_line1)
+            if ($color == $tkireg->color_line1)
             {
-                $color = $color_line2;
+                $color = $tkireg->color_line2;
             }
             else
             {
-                $color = $color_line1;
+                $color = $tkireg->color_line1;
             }
 
             $res->MoveNext();
@@ -203,10 +203,8 @@ class Team
         }
     }
 
-    public static function showInfo($db, $langvars, $whichteam, $isowner, $playerinfo, $invite_info, $team)
+    public static function showInfo($db, $langvars, $whichteam, $isowner, $playerinfo, $invite_info, $team, \Tki\Reg $tkireg)
     {
-        global $color_line2;
-
         // Heading
         echo "<div align=center>";
         echo "<h3><font color=white><strong>$team[team_name]</strong>";
@@ -236,7 +234,7 @@ class Team
         echo "<table border=2 cellspacing=2 cellpadding=2 bgcolor=\"#400040\" width=\"75%\" align=center>";
         echo "<tr>";
         echo "<td><font color=white>" . $langvars['l_team_members'] . "</font></td>";
-        echo "</tr><tr bgcolor=$color_line2>";
+        echo "</tr><tr bgcolor=$tkireg->color_line2>";
         $result  = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE team = ?;", array($whichteam));
         \Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         while (!$result->EOF)
@@ -254,23 +252,23 @@ class Team
                     echo " - " . $langvars['l_team_coord'] . " </td>";
                 }
             }
-            echo "</tr><tr bgcolor=$color_line2>";
+            echo "</tr><tr bgcolor=$tkireg->color_line2>";
             $result->MoveNext();
         }
 
         // Displays for members name
         $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE team_invite = ?;", array($whichteam));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
-        echo "<td bgcolor=$color_line2><font color=white>" . $langvars['l_team_pending'] . " <strong>" . $team['team_name'] . "</strong></font></td>";
+        echo "<td bgcolor=$tkireg->color_line2><font color=white>" . $langvars['l_team_pending'] . " <strong>" . $team['team_name'] . "</strong></font></td>";
         echo "</tr><tr>";
         if ($res->RecordCount() > 0)
         {
-            echo "</tr><tr bgcolor=$color_line2>";
+            echo "</tr><tr bgcolor=$tkireg->color_line2>";
             while (!$res->EOF)
             {
                 $who = $res->fields;
                 echo "<td> - $who[character_name]</td>";
-                echo "</tr><tr bgcolor=$color_line2>";
+                echo "</tr><tr bgcolor=$tkireg->color_line2>";
                 $res->MoveNext();
             }
         }
