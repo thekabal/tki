@@ -154,25 +154,19 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankTransfer($db, $langvars, $playerinfo, $ibank_min_turns)
+    public static function ibankTransfer(\PDO $pdo_db, $langvars, $playerinfo, $ibank_min_turns)
     {
-        $res = $db->Execute("SELECT character_name, ship_id FROM {$db->prefix}ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > ? ORDER BY character_name ASC", array($ibank_min_turns));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC");
+        $stmt->bindParam(':ibank_min_turns', $ibank_min_turns);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $ships = array();
-        while (!$res->EOF)
-        {
-            $ships[] = $res->fields;
-            $res->MoveNext();
-        }
-
-        $res = $db->Execute("SELECT name, planet_id, sector_id FROM {$db->prefix}planets WHERE owner=? ORDER BY sector_id ASC", array($playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
-        while (!$res->EOF)
-        {
-            $planets[] = $res->fields;
-            $res->MoveNext();
-        }
+        $stmt = $pdo_db->prepare("SELECT name, planet_id, sector_id FROM {$pdo_db->prefix}planets WHERE owner=:owner ORDER BY sector_id ASC");
+        $stmt->bindParam(':owner', $playerinfo['ship_id']);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfertype'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .

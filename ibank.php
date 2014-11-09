@@ -93,7 +93,7 @@ elseif ($command == 'deposit2') //deposit operation
 }
 elseif ($command == 'transfer') //main transfer menu
 {
-    Bad\Ibank::ibankTransfer($db, $langvars, $playerinfo, $tkireg->ibank_min_turns);
+    Bad\Ibank::ibankTransfer($pdo_db, $langvars, $playerinfo, $tkireg->ibank_min_turns);
 }
 elseif ($command == 'transfer2') //specific transfer menu (ship or planet)
 {
