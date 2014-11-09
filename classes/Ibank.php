@@ -341,7 +341,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay($db, $langvars, $playerinfo, $account, $amount)
+    public static function ibankRepay($db, $langvars, $playerinfo, $account, $amount, $active_template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
