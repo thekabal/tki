@@ -24,10 +24,8 @@ namespace Bad;
 
 class Traderoute
 {
-    public static function traderouteEngage($db, $pdo_db, $lang, $j, $langvars, \Tki\Reg $tkireg)
+    public static function traderouteEngage($db, $pdo_db, $lang, $j, $langvars, \Tki\Reg $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull)
     {
-        global $playerinfo, $engage, $dist, $traderoutes, $portfull;
-
         foreach ($traderoutes as $testroute)
         {
             if ($testroute['traderoute_id'] == $engage)

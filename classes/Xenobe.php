@@ -146,7 +146,7 @@ class Xenobe
             $amount_goods = $playerinfo['ship_goods'];
 
             // Since we sell all other holds we set amount to be our total hold limit
-            $amount_ore = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor);
+            $amount_ore = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
 
             // We adjust this to make sure it does not exceed what the port has to sell
             $amount_ore = min($amount_ore, $sectorinfo['port_ore']);
@@ -179,7 +179,7 @@ class Xenobe
             $amount_goods = $playerinfo['ship_goods'];
 
             // SINCE WE SELL ALL OTHER HOLDS WE SET AMOUNT TO BE OUR TOTAL HOLD LIMIT
-            $amount_organics = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor);
+            $amount_organics = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
 
             // WE ADJUST THIS TO MAKE SURE IT DOES NOT EXCEED WHAT THE PORT HAS TO SELL
             $amount_organics = min($amount_organics, $sectorinfo['port_organics']);
@@ -212,7 +212,7 @@ class Xenobe
             $amount_organics = $playerinfo['ship_organics'];
 
             // Since we sell all other holds we set amount to be our total hold limit
-            $amount_goods = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor);
+            $amount_goods = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
 
             // We adjust this to make sure it does not exceed what the port has to sell
             $amount_goods = min($amount_goods, $sectorinfo['port_goods']);
@@ -234,11 +234,10 @@ class Xenobe
         }
     }
 
-    public static function xenobeToPlanet($db, $planet_id)
+    public static function xenobeToPlanet($db, $planet_id, \Tki\Reg $tkireg, $playerinfo)
     {
         // Xenobe planet attack code
-        global $playerinfo, $planetinfo, $torp_dmg_rate, $level_factor;
-        global $rating_combat_factor, $upgrade_cost, $upgrade_factor, $xenobeisdead;
+        global $planetinfo, $torp_dmg_rate, $tkireg->level_factor, $xenobeisdead;
 
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::logDbErrors($db, $resh, __LINE__, __FILE__);
@@ -254,7 +253,7 @@ class Xenobe
         $base_factor = ($planetinfo['base'] == 'Y') ? $base_defense : 0;
 
         // Planet beams
-        $targetbeams = \Tki\CalcLevels::beams($ownerinfo['beams'] + $base_factor, $level_factor);
+        $targetbeams = \Tki\CalcLevels::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
         if ($targetbeams > $planetinfo['energy'])
         {
             $targetbeams = $planetinfo['energy'];
@@ -262,7 +261,7 @@ class Xenobe
         $planetinfo['energy'] -= $targetbeams;
 
         // Planet shields
-        $targetshields = \Tki\CalcLevels::shields($ownerinfo['shields'] + $base_factor, $level_factor);
+        $targetshields = \Tki\CalcLevels::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
         if ($targetshields > $planetinfo['energy'])
         {
             $targetshields = $planetinfo['energy'];
@@ -270,7 +269,7 @@ class Xenobe
         $planetinfo['energy'] -= $targetshields;
 
         // Planet torps
-        $torp_launchers = round(pow($level_factor, ($ownerinfo['torp_launchers'])+ $base_factor)) * 10;
+        $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers'])+ $base_factor)) * 10;
         $torps = $planetinfo['torps'];
         $targettorps = $torp_launchers;
 
@@ -285,7 +284,7 @@ class Xenobe
         $targetfighters = $planetinfo['fighters'];
 
         // Attacker beams
-        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $level_factor);
+        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
         if ($attackerbeams > $playerinfo['ship_energy'])
         {
             $attackerbeams = $playerinfo['ship_energy'];
@@ -293,7 +292,7 @@ class Xenobe
         $playerinfo['ship_energy'] -= $attackerbeams;
 
         // Attacker shields
-        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $level_factor);
+        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
         if ($attackershields > $playerinfo['ship_energy'])
         {
             $attackershields = $playerinfo['ship_energy'];
@@ -301,7 +300,7 @@ class Xenobe
         $playerinfo['ship_energy'] -= $attackershields;
 
         // Attacker torps
-        $attackertorps = round(pow($level_factor, $playerinfo['torp_launchers'])) * 2;
+        $attackertorps = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
         if ($attackertorps > $playerinfo['torps'])
         {
             $attackertorps = $playerinfo['torps'];
@@ -522,7 +521,7 @@ class Xenobe
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
             $free_goods = round($playerinfo['ship_goods'] / 2);
-            $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $playerinfo['hull'])) + round(pow($upgrade_factor, $playerinfo['engines']))+round(pow($upgrade_factor, $playerinfo['power'])) + round(pow($upgrade_factor, $playerinfo['computer'])) + round(pow($upgrade_factor, $playerinfo['sensors']))+round(pow($upgrade_factor, $playerinfo['beams'])) + round(pow($upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($upgrade_factor, $playerinfo['shields'])) + round(pow($upgrade_factor, $playerinfo['armor'])) + round(pow($upgrade_factor, $playerinfo['cloak'])));
+            $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines']))+round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors']))+round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
             $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
             $fighters_lost = $planetinfo['fighters'] - $targetfighters;
@@ -563,7 +562,7 @@ class Xenobe
                 while (!$resultps->EOF && $xenobeisdead < 1)
                 {
                     $onplanet = $resultps->fields;
-                    Xenobe::xenobeToShip($db, $onplanet['ship_id']);
+                    Xenobe::xenobeToShip($db, $onplanet['ship_id'], $tkireg, $playerinfo);
                     $resultps->MoveNext();
                 }
             }
@@ -599,7 +598,7 @@ class Xenobe
         \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 
-    public static function xenobeToShip($db, $ship_id)
+    public static function xenobeToShip($db, $ship_id, \Tki\Reg $tkireg, $playerinfo)
     {
         // Setup general variables
         global $attackerbeams;
@@ -608,10 +607,6 @@ class Xenobe
         global $attackertorps;
         global $attackerarmor;
         global $attackertorpdamage;
-        global $playerinfo;
-        global $rating_combat_factor;
-        global $upgrade_cost;
-        global $upgrade_factor;
         global $xenobeisdead;
 
         // Lookup target details
@@ -657,21 +652,21 @@ class Xenobe
         }
 
         // Setup attacker variables
-        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $level_factor);
+        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
         if ($attackerbeams > $playerinfo['ship_energy'])
         {
             $attackerbeams = $playerinfo['ship_energy'];
         }
 
         $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $attackerbeams;
-        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $level_factor);
+        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
         if ($attackershields > $playerinfo['ship_energy'])
         {
             $attackershields = $playerinfo['ship_energy'];
         }
 
         $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $attackershields;
-        $attackertorps = round(pow($level_factor, $playerinfo['torp_launchers'])) * 2;
+        $attackertorps = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
         if ($attackertorps > $playerinfo['torps'])
         {
             $attackertorps = $playerinfo['torps'];
@@ -683,21 +678,21 @@ class Xenobe
         $attackerfighters = $playerinfo['ship_fighters'];
 
         // Setup target variables
-        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $level_factor);
+        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $tkireg->level_factor);
         if ($targetbeams > $targetinfo['ship_energy'])
         {
             $targetbeams = $targetinfo['ship_energy'];
         }
 
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
-        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $level_factor);
+        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg->level_factor);
         if ($targetshields>$targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
         }
 
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
-        $targettorpnum = round(pow($level_factor, $targetinfo['torp_launchers']))*2;
+        $targettorpnum = round(pow($tkireg->level_factor, $targetinfo['torp_launchers']))*2;
         if ($targettorpnum > $targetinfo['torps'])
         {
             $targettorpnum = $targetinfo['torps'];
@@ -967,11 +962,11 @@ class Xenobe
             if ($attackerarmor>0)
             {
                 // Attacker still alive to salvage target
-                $rating_change=round($targetinfo['rating'] * $rating_combat_factor);
+                $rating_change=round($targetinfo['rating'] * $tkireg->rating_combat_factor);
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what we can carry
                     $salv_goods = $free_goods;
@@ -1017,7 +1012,7 @@ class Xenobe
                     $salv_organics = 0;
                 }
 
-                $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $targetinfo['hull']))+round(pow($upgrade_factor, $targetinfo['engines']))+round(pow($upgrade_factor, $targetinfo['power']))+round(pow($upgrade_factor, $targetinfo['computer']))+round(pow($upgrade_factor, $targetinfo['sensors']))+round(pow($upgrade_factor, $targetinfo['beams']))+round(pow($upgrade_factor, $targetinfo['torp_launchers']))+round(pow($upgrade_factor, $targetinfo['shields']))+round(pow($upgrade_factor, $targetinfo['armor']))+round(pow($upgrade_factor, $targetinfo['cloak'])));
+                $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull']))+round(pow($tkireg->upgrade_factor, $targetinfo['engines']))+round(pow($tkireg->upgrade_factor, $targetinfo['power']))+round(pow($tkireg->upgrade_factor, $targetinfo['computer']))+round(pow($tkireg->upgrade_factor, $targetinfo['sensors']))+round(pow($tkireg->upgrade_factor, $targetinfo['beams']))+round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $targetinfo['shields']))+round(pow($tkireg->upgrade_factor, $targetinfo['armor']))+round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
                 $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
@@ -1059,11 +1054,11 @@ class Xenobe
             if ($targetarmor > 0)
             {
                 // Target still alive to salvage attacker
-                $rating_change = round($playerinfo['rating'] * $rating_combat_factor);
+                $rating_change = round($playerinfo['rating'] * $tkireg->rating_combat_factor);
                 $free_ore = round($playerinfo['ship_ore'] / 2);
                 $free_organics = round($playerinfo['ship_organics'] / 2);
                 $free_goods = round($playerinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $level_factor) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $tkireg->level_factor) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what target can carry
                     $salv_goods = $free_goods;
@@ -1109,7 +1104,7 @@ class Xenobe
                     $salv_organics = 0;
                 }
 
-                $ship_value = $upgrade_cost*(round(pow($upgrade_factor, $playerinfo['hull']))+round(pow($upgrade_factor, $playerinfo['engines']))+round(pow($upgrade_factor, $playerinfo['power']))+round(pow($upgrade_factor, $playerinfo['computer']))+round(pow($upgrade_factor, $playerinfo['sensors']))+round(pow($upgrade_factor, $playerinfo['beams']))+round(pow($upgrade_factor, $playerinfo['torp_launchers']))+round(pow($upgrade_factor, $playerinfo['shields']))+round(pow($upgrade_factor, $playerinfo['armor']))+round(pow($upgrade_factor, $playerinfo['cloak'])));
+                $ship_value = $tkireg->upgrade_cost*(round(pow($tkireg->upgrade_factor, $playerinfo['hull']))+round(pow($tkireg->upgrade_factor, $playerinfo['engines']))+round(pow($tkireg->upgrade_factor, $playerinfo['power']))+round(pow($tkireg->upgrade_factor, $playerinfo['computer']))+round(pow($tkireg->upgrade_factor, $playerinfo['sensors']))+round(pow($tkireg->upgrade_factor, $playerinfo['beams']))+round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $playerinfo['shields']))+round(pow($tkireg->upgrade_factor, $playerinfo['armor']))+round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
                 $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$armor_lost|$fighters_lost");
@@ -1127,12 +1122,8 @@ class Xenobe
         \Tki\Db::logDbErrors($db, $resj, __LINE__, __FILE__);
     }
 
-    public static function xenobeToSecDef($db, $langvars)
+    public static function xenobeToSecDef($db, $langvars, $playerinfo, $targetlink, $xenobeisdead, \Tki\Reg $tkireg)
     {
-        // Xenobe to sector defense
-
-        global $playerinfo, $targetlink, $xenobeisdead;
-
         // Check for sector defenses
         if ($targetlink > 0)
         {
@@ -1170,20 +1161,20 @@ class Xenobe
             {
                 \Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENCES $total_sector_fighters fighters and $total_sector_mines mines.");
                 $targetfighters = $total_sector_fighters;
-                $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $level_factor);
+                $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
                 if ($playerbeams > $playerinfo['ship_energy'])
                 {
                     $playerbeams = $playerinfo['ship_energy'];
                 }
 
                 $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
-                $playershields = \Tki\CalcLevels::shields($playerinfo['shields'], $level_factor);
+                $playershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
                 if ($playershields > $playerinfo['ship_energy'])
                 {
                     $playershields = $playerinfo['ship_energy'];
                 }
 
-                $playertorpnum = round(pow($level_factor, $playerinfo['torp_launchers'])) * 2;
+                $playertorpnum = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
                 if ($playertorpnum > $playerinfo['torps'])
                 {
                     $playertorpnum = $playerinfo['torps'];
@@ -1365,10 +1356,8 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove($db)
+    public static function xenobeMove($db, $playerinfo, $targetlink, $xenobeisdead)
     {
-        global $playerinfo, $targetlink, $xenobeisdead;
-
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
         {
@@ -1464,7 +1453,7 @@ class Xenobe
             {
                 if ($playerinfo['aggression'] == 2 || $playerinfo['aggression'] == 1)
                 {
-                    Xenobe::xenobeToSecDef($db, $langvars); // Attack sector defences
+                    Xenobe::xenobeToSecDef($db, $langvars, $playerinfo, $targetlink, $xenobeisdead, $tkireg); // Attack sector defences
 
                     return;
                 }
@@ -1495,11 +1484,8 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter($db)
+    public static function xenobeHunter($db, $playerinfo, $targetlink, $xenobeisdead)
     {
-        // Setup general Variables
-        global $playerinfo, $targetlink, $xenobeisdead;
-
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
         \Tki\Db::logDbErrors($db, $rescount, __LINE__, __FILE__);
         $rowcount = $rescount->fields;
@@ -1594,7 +1580,7 @@ class Xenobe
             {
                 // Attack sector defences
                 $targetlink = $targetinfo['sector'];
-                Xenobe::xenobeToSecDef($db, $langvars);
+                Xenobe::xenobeToSecDef($db, $langvars, $playerinfo, $targetlink, $xenobeisdead, $tkireg);
             }
 
             if ($xenobeisdead > 0)
@@ -1606,11 +1592,11 @@ class Xenobe
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                Xenobe::xenobeToPlanet($db, $targetinfo['planet_id']); // Yes, so move to that planet
+                Xenobe::xenobeToPlanet($db, $targetinfo['planet_id'], $tkireg, $playerinfo); // Yes, so move to that planet
             }
             else
             {
-                Xenobe::xenobeToShip($db, $targetinfo['ship_id']); // Not on a planet, so move to the ship
+                Xenobe::xenobeToShip($db, $targetinfo['ship_id'], $tkireg, $playerinfo); // Not on a planet, so move to the ship
             }
         }
         else
@@ -1619,20 +1605,18 @@ class Xenobe
         }
     }
 
-    public static function xenobeRegen($db, $playerinfo)
+    public static function xenobeRegen($db, $playerinfo, $xen_unemployment, $xenobeisdead, $tkireg)
     {
-        global $xen_unemployment, $xenobeisdead;
-
         // Xenobe Unempoyment Check
         $playerinfo['credits'] = $playerinfo['credits'] + $xen_unemployment;
-        $maxenergy = \Tki\CalcLevels::energy($playerinfo['power'], $level_factor); // Regenerate energy
+        $maxenergy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor); // Regenerate energy
         if ($playerinfo['ship_energy'] <= ($maxenergy - 50))  // Stop regen when within 50 of max
         {
             $playerinfo['ship_energy'] = $playerinfo['ship_energy'] + round(($maxenergy - $playerinfo['ship_energy']) / 2); // Regen half of remaining energy
             $gene = "regenerated Energy to $playerinfo[ship_energy] units,";
         }
 
-        $maxarmor = \Tki\CalcLevels::armor($playerinfo['armor'], $level_factor); // Regenerate armor
+        $maxarmor = \Tki\CalcLevels::armor($playerinfo['armor'], $tkireg->level_factor); // Regenerate armor
         if ($playerinfo['armor_pts'] <= ($maxarmor - 50))  // Stop regen when within 50 of max
         {
             $playerinfo['armor_pts'] = $playerinfo['armor_pts'] + round(($maxarmor - $playerinfo['armor_pts']) / 2); // Regen half of remaining armor
@@ -1640,7 +1624,7 @@ class Xenobe
         }
 
         // Buy fighters & torpedos at 6 credits per fighter
-        $available_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $level_factor) - $playerinfo['ship_fighters'];
+        $available_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor) - $playerinfo['ship_fighters'];
         if (($playerinfo['credits'] > 5) && ($available_fighters > 0))
         {
             if (round($playerinfo['credits'] / 6) > $available_fighters)
@@ -1661,7 +1645,7 @@ class Xenobe
         }
 
         // Xenobe pay 3 credits per torpedo
-        $available_torpedoes = \Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $level_factor) - $playerinfo['torps'];
+        $available_torpedoes = \Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg->level_factor) - $playerinfo['torps'];
         if (($playerinfo['credits'] > 2) && ($available_torpedoes > 0))
         {
             if (round($playerinfo['credits'] / 3) > $available_torpedoes)
