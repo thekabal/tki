@@ -113,7 +113,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw2($pdo_db, $langvars, $playerinfo, $amount, $account)
+    public static function ibankWithdraw2(\PDO $pdo_db, $langvars, $playerinfo, $amount, $account)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -768,7 +768,7 @@ class Ibank
         }
     }
 
-    public static function ibankDeposit2($pdo_db, $langvars, $playerinfo, $amount, $account)
+    public static function ibankDeposit2(\PDO $pdo_db, $langvars, $playerinfo, $amount, $account)
     {
         $max_credits_allowed = 18446744073709000000;
 
@@ -952,7 +952,7 @@ class Ibank
         }
     }
 
-    public static function ibankDeposit($pdo_db, $lang, $account, $playerinfo, $langvars)
+    public static function ibankDeposit(\PDO $pdo_db, $lang, $account, $playerinfo, $langvars)
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('ibank'));
