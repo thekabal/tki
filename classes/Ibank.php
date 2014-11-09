@@ -25,7 +25,7 @@ namespace Bad;
 
 class Ibank
 {
-    public static function ibankBorrow($db, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount)
+    public static function ibankBorrow($db, $langvars, \Tki\Reg $tkireg, $playerinfo, $active_template, $account, $amount)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -152,7 +152,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankTransfer(\PDO $pdo_db, $langvars, $playerinfo, $tkireg)
+    public static function ibankTransfer(\PDO $pdo_db, $langvars, $playerinfo, \Tki\Reg $tkireg)
     {
         $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC");
         $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
@@ -387,7 +387,7 @@ class Ibank
         \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate($langvars, $tkireg, $dplanet_id)
+    public static function ibankConsolidate($langvars, \Tki\Reg $tkireg, $dplanet_id)
     {
         $percent = $tkireg->ibank_paymentfee * 100;
 
@@ -414,7 +414,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankTransfer2($db, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id)
+    public static function ibankTransfer2($db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id)
     {
         if (isset($ship_id)) // Ship transfer
         {
@@ -805,7 +805,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate2($db, $langvars, $playerinfo, $tkireg, $account, $dplanet_id, $minimum, $maximum)
+    public static function ibankConsolidate2($db, $langvars, $playerinfo, \Tki\Reg $tkireg, $account, $dplanet_id, $minimum, $maximum)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
@@ -901,7 +901,7 @@ class Ibank
         die();
     }
 
-    public static function isLoanPending($db, $ship_id, $tkireg)
+    public static function isLoanPending($db, $ship_id, \Tki\Reg $tkireg)
     {
         $res = $db->Execute("SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$db->prefix}ibank_accounts WHERE ship_id = ?", array($ship_id));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
@@ -970,7 +970,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankConsolidate3($db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum)
+    public static function ibankConsolidate3($db, $langvars, $playerinfo, \Tki\Reg $tkireg, $dplanet_id, $minimum, $maximum)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
