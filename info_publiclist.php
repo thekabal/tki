@@ -76,7 +76,7 @@ $info['G-SCHED-TYPE'] = $tkireg->sched_type;
 $info['G-SPEED-TURNS'] = $tkireg->sched_turns;
 $info['G-SPEED-PORTS'] = $tkireg->sched_ports;
 $info['G-SPEED-PLANETS'] = $tkireg->sched_planets;
-$info['G-SPEED-IGB'] = $tkireg->sched_igb;
+$info['G-SPEED-IBANK'] = $tkireg->sched_ibank;
 
 $info['G-SIZE-SECTOR'] = $tkireg->max_sectors;
 $info['G-SIZE-UNIVERSE'] = $tkireg->universe_size;
@@ -86,7 +86,7 @@ $info['G-SIZE-PLANETS-TO-OWN'] = $tkireg->min_bases_to_own;
 $info['G-COLONIST-LIMIT'] = $tkireg->colonist_limit;
 $info['G-DOOMSDAY-VALUE'] = $tkireg->doomsday_value;
 
-$info['G-MONEY-IGB'] = $tkireg->ibank_interest;
+$info['G-MONEY-IBANK'] = $tkireg->ibank_interest;
 $info['G-MONEY-PLANET'] = round($tkireg->interest_rate - 1, 4);
 
 $info['G-PORT-LIMIT-ORE'] = $tkireg->ore_limit;

@@ -39,7 +39,7 @@ sched_ticks                = 1;                                // Set this to ho
 sched_turns                = 2;                                // New turns rate also includes towing, xenobe
 sched_ports                = 1;                                // How often port production occurs
 sched_planets              = 2;                                // How often planet production occurs
-sched_igb                  = 2;                                // How often IGB interests are added
+sched_ibank                = 2;                                // How often IBANK interests are added
 sched_ranking              = 30;                               // How often rankings will be generated
 sched_news                 = 15;                               // How often news are generated
 sched_degrade              = 6;                                // How often sector fighters degrade when unsupported by a planet
@@ -51,7 +51,7 @@ max_turns                  = 2500;                             // The maximum nu
 [OPTIONAL_FEATURES]
 allow_fullscan             = true;                             // Allow players to use full long range scan during this game?
 allow_navcomp              = true;                             // Allow players to use the Navigation computer during this game?
-allow_ibank                = true;                             // Allow players to use the Intergalactic Bank IGB during this game?
+allow_ibank                = true;                             // Allow players to use the Intergalactic Bank during this game?
 allow_genesis_destroy      = false;                            // Allow players to use genesis torps to destroy planets?
 allow_sofa                 = false;                            // Allow the sub-orbital fighter sofa attack in this game?
 allow_ksm                  = true;                             // Allow the known space map in this game?

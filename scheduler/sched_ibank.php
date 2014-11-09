@@ -15,9 +15,9 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: sched_igb.php
+// File: sched_ibank.php
 
-if (strpos($_SERVER['PHP_SELF'], 'sector_igb.php')) // Prevent direct access to this file
+if (strpos($_SERVER['PHP_SELF'], 'sector_ibank.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }
@@ -29,6 +29,6 @@ echo "<strong>IBANK</strong><p>";
 
 $ibank_result = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance * ?, loan = loan * ?", array($exponinter, $expoloan));
 Tki\Db::logDbErrors($db, $ibank_result, __LINE__, __FILE__);
-echo "All IGB accounts updated ($multiplier times).<p>";
+echo "All IBANK accounts updated ($multiplier times).<p>";
 
 $multiplier = 0;

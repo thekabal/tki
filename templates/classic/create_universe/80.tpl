@@ -52,14 +52,14 @@
       <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="red">{$langvars['l_error']}</font></td>
     </tr>
     {/if}
-    {if $variables['update_igb_results']['result'] === true}
+    {if $variables['update_ibank_results']['result'] === true}
     <tr title="{$langvars['l_cu_no_errors_found']}">
-      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_igb_interest']|replace:'[sched]':$variables['update_igb_results'].sched} - {$langvars['l_cu_completed_in']|replace:'[time]':$variables['update_igb_results'].elapsed}</font></td>
+      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_ibank_interest']|replace:'[sched]':$variables['update_ibank_results'].sched} - {$langvars['l_cu_completed_in']|replace:'[time]':$variables['update_ibank_results'].elapsed}</font></td>
       <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="Blue">{$langvars['l_cu_inserted']}</font></td>
     </tr>
     {else}
-    <tr title="{$variables['update_igb_results']['result']}">
-      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_igb_interest']|replace:'[sched]':$variables['update_igb_results'].sched}</font></td>
+    <tr title="{$variables['update_ibank_results']['result']}">
+      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_ibank_interest']|replace:'[sched]':$variables['update_ibank_results'].sched}</font></td>
       <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="red">{$langvars['l_error']}</font></td>
     </tr>
     {/if}

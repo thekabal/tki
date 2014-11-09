@@ -25,7 +25,7 @@ $title = $langvars['l_planet_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'port', 'igb', 'main', 'planet', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'combat', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'port', 'ibank', 'main', 'planet', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'combat', 'regional'));
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $destroy = null;
@@ -912,7 +912,7 @@ if ($command !== null)
 
 if ($tkireg->allow_ibank)
 {
-    echo $langvars['l_ifyouneedplan'] . " <a href=\"igb.php?planet_id=$planet_id\">" . $langvars['l_ibank_term'] . "</a>.<br><br>";
+    echo $langvars['l_ifyouneedplan'] . " <a href=\"ibank.php?planet_id=$planet_id\">" . $langvars['l_ibank_term'] . "</a>.<br><br>";
 }
 echo "<a href =\"bounty.php\">" . $langvars['l_by_placebounty'] . "</a><p>";
 

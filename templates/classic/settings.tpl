@@ -40,10 +40,10 @@
     <tr><td>{$langvars['l_set_max_fed']}</td><td style="text-align:right;">{$variables['max_fed_hull']}</td></tr>
 
 {if $variables['allow_ibank'] === true}
-    <tr><td>{$langvars['l_set_igb_enabled']}</td><td style="text-align:right;">{$langvars['l_yes']}</td></tr>
+    <tr><td>{$langvars['l_set_ibank_enabled']}</td><td style="text-align:right;">{$langvars['l_yes']}</td></tr>
 {/if}
-    <tr><td>{$langvars['l_set_igb_interest_rate']}</td><td style="text-align:right;">{$variables['ibank_interest']}</td></tr>
-    <tr><td>{$langvars['l_set_igb_loan_rate']}</td><td style="text-align:right;">{$variables['ibank_loaninterest']}</td></tr>
+    <tr><td>{$langvars['l_set_ibank_interest_rate']}</td><td style="text-align:right;">{$variables['ibank_interest']}</td></tr>
+    <tr><td>{$langvars['l_set_ibank_loan_rate']}</td><td style="text-align:right;">{$variables['ibank_loaninterest']}</td></tr>
     <tr><td>{$langvars['l_set_base_level']}</td><td style="text-align:right;">{$variables['base_defense']}</td></tr>
     <tr><td>{$langvars['l_set_colonists']}</td><td style="text-align:right;">{$variables['colonist_limit']}</td></tr>
     <tr><td>{$langvars['l_set_max_turns']}</td><td style="text-align:right;">{$variables['max_turns']}</td></tr>
@@ -72,7 +72,7 @@
     <tr><td>{$langvars['l_set_sched_turns']}</td><td style="text-align:right;">{$variables['sched_turns']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_defense']}</td><td style="text-align:right;">{$variables['sched_turns']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_xenobe']}</td><td style="text-align:right;">{$variables['sched_turns']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
-    <tr><td>{$langvars['l_set_sched_igb_interest']}</td><td style="text-align:right;">{$variables['sched_igb']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
+    <tr><td>{$langvars['l_set_sched_ibank_interest']}</td><td style="text-align:right;">{$variables['sched_ibank']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_news']}</td><td style="text-align:right;">{$variables['sched_news']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_planet_prod']}</td><td style="text-align:right;">{$variables['sched_planets']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_limit_cap']} {$variables['max_credits_without_base']}</td><td style="text-align:right;"><span style="color:#0f0;">{$langvars['l_yes']}</span></td></tr>

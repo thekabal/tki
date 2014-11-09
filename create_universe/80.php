@@ -71,18 +71,18 @@ $variables['update_xenobe_results']['sched'] = $tkireg->sched_turns;
 $local_table_timer->stop();
 $variables['update_xenobe_results']['elapsed'] = $local_table_timer->elapsed();
 
-$local_table_timer->start(); // Start benchmarking for IGB scheduler
-$sched_file = 'sched_igb.php';
+$local_table_timer->start(); // Start benchmarking for Ibank scheduler
+$sched_file = 'sched_ibank.php';
 $sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_igb);
+$stmt->bindParam(':ticks_full', $tkireg->sched_ibank);
 $stmt->bindParam(':sched_file', $sched_file);
 $stmt->bindParam(':last_run', $now);
 $resxx = $stmt->execute();
-$variables['update_igb_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_igb_results']['sched'] = $tkireg->sched_igb;
+$variables['update_ibank_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
+$variables['update_ibank_results']['sched'] = $tkireg->sched_ibank;
 $local_table_timer->stop();
-$variables['update_igb_results']['elapsed'] = $local_table_timer->elapsed();
+$variables['update_ibank_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for news scheduler
 $sched_file = 'sched_news.php';

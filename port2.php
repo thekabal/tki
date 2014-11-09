@@ -156,7 +156,7 @@ else
         if (Bad\Ibank::isLoanPending($db, $playerinfo['ship_id'], $tkireg->ibank_lrate))
         {
             echo $langvars['l_port_loannotrade'] . "<p>";
-            echo "<a href=igb.php>" . $langvars['l_ibank_term'] . "</a><p>";
+            echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
             Tki\Text::gotoMain($db, $lang, $langvars);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
