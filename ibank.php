@@ -109,7 +109,7 @@ elseif ($command == 'loans') //loans menu
 }
 elseif ($command == 'borrow') //borrow operation
 {
-    Bad\Ibank::ibankBorrow($db, $langvars, $playerinfo, $active_template);
+    Bad\Ibank::ibankBorrow($db, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount);
 }
 elseif ($command == 'repay') //repay operation
 {

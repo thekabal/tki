@@ -291,7 +291,7 @@ elseif ($sectorinfo['port_type'] == "special")
     // Kami Multi-browser window upgrade fix
     $_SESSION['port_shopping'] = true;
 
-    if (Bad\Ibank::isLoanPending($db, $playerinfo['ship_id'], $tkireg->ibank_lrate))
+    if (Bad\Ibank::isLoanPending($db, $playerinfo['ship_id'], $tkireg))
     {
         echo $langvars['l_port_loannotrade'] . "<p>";
         echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
