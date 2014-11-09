@@ -77,7 +77,7 @@ if ($command == 'login') //main menu
 }
 elseif ($command == 'withdraw') //withdraw menu
 {
-    Bad\Ibank::ibankWithdraw($langvars, $playerinfo, $account);
+    Bad\Ibank::ibankWithdraw($langvars, $account);
 }
 elseif ($command == 'withdraw2') //withdraw operation
 {

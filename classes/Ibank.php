@@ -96,7 +96,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw($langvars, $playerinfo, $account)
+    public static function ibankWithdraw($langvars, $account)
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_withdrawfunds'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
@@ -737,8 +737,6 @@ class Ibank
             {
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits2'], "ibank.php?command=transfer");
             }
-
-            $percent = $ibank_paymentfee * 100;
 
             $source['credits'] -= $amount;
             $amount2 = $amount * $ibank_paymentfee;
