@@ -152,10 +152,10 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankTransfer(\PDO $pdo_db, $langvars, $playerinfo, $ibank_min_turns)
+    public static function ibankTransfer(\PDO $pdo_db, $langvars, $playerinfo, $tkireg)
     {
         $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC");
-        $stmt->bindParam(':ibank_min_turns', $ibank_min_turns);
+        $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -387,14 +387,12 @@ class Ibank
         \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate($langvars)
+    public static function ibankConsolidate($langvars, $tkireg, $dplanet_id)
     {
-        global $dplanet_id, $ibank_tconsolidate, $ibank_paymentfee;
-
-        $percent = $ibank_paymentfee * 100;
+        $percent = $tkireg->ibank_paymentfee * 100;
 
         $langvars['l_ibank_transferrate3'] = str_replace("[ibank_num_percent]", number_format($percent, 1, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_ibank_transferrate3']);
-        $langvars['l_ibank_transferrate3'] = str_replace("[nbplanets]", $ibank_tconsolidate, $langvars['l_ibank_transferrate3']);
+        $langvars['l_ibank_transferrate3'] = str_replace("[nbplanets]", $tkireg->ibank_tconsolidate, $langvars['l_ibank_transferrate3']);
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_planetconsolidate'] . "<br>---------------------------------</td></tr>" .
              "<form accept-charset='utf-8' action='ibank.php?command=consolidate2' method=post>" .
@@ -416,14 +414,11 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankTransfer2($db, $langvars)
+    public static function ibankTransfer2($db, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id)
     {
-        global $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $ibank_min_turns, $ibank_svalue;
-        global $ibank_paymentfee, $ibank_trate;
-
         if (isset($ship_id)) // Ship transfer
         {
-            $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=? AND ship_destroyed ='N' AND turns_used > ?;", array($ship_id, $ibank_min_turns));
+            $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=? AND ship_destroyed ='N' AND turns_used > ?;", array($ship_id, $tkireg->ibank_min_turns));
             \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
             if ($playerinfo['ship_id'] == $ship_id)
@@ -438,23 +433,23 @@ class Ibank
 
             $target = $res->fields;
 
-            if ($target['turns_used'] < $ibank_min_turns)
+            if ($target['turns_used'] < $tkireg->ibank_min_turns)
             {
-                $langvars['l_ibank_min_turns'] = str_replace("[ibank_min_turns]", $ibank_min_turns, $langvars['l_ibank_min_turns']);
+                $langvars['l_ibank_min_turns'] = str_replace("[ibank_min_turns]", $tkireg->ibank_min_turns, $langvars['l_ibank_min_turns']);
                 $langvars['l_ibank_min_turns'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_min_turns']);
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns'], "ibank.php?command=transfer");
             }
 
-            if ($playerinfo['turns_used'] < $ibank_min_turns)
+            if ($playerinfo['turns_used'] < $tkireg->ibank_min_turns)
             {
-                $langvars['l_ibank_min_turns2'] = str_replace("[ibank_min_turns]", $ibank_min_turns, $langvars['l_ibank_min_turns2']);
+                $langvars['l_ibank_min_turns2'] = str_replace("[ibank_min_turns]", $tkireg->ibank_min_turns, $langvars['l_ibank_min_turns2']);
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns2'], "ibank.php?command=transfer");
             }
 
-            if ($ibank_trate > 0)
+            if ($tkireg->ibank_trate > 0)
             {
                 $curtime = time();
-                $curtime -= $ibank_trate * 60;
+                $curtime -= $tkireg->ibank_trate * 60;
                 $res = $db->Execute("SELECT UNIX_TIMESTAMP(time) as time FROM {$db->prefix}ibank_transfers WHERE UNIX_TIMESTAMP(time) > ? AND source_id = ? AND dest_id = ?", array($curtime, $playerinfo['ship_id'], $target['ship_id']));
                 \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                 if (!$res->EOF)
@@ -462,7 +457,7 @@ class Ibank
                     $time = $res->fields;
                     $difftime = ($time['time'] - $curtime) / 60;
                     $langvars['l_ibank_mustwait'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait']);
-                    $langvars['l_ibank_mustwait'] = str_replace("[ibank_trate]", number_format($ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
+                    $langvars['l_ibank_mustwait'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
                     $langvars['l_ibank_mustwait'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
                     Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_mustwait'], "ibank.php?command=transfer");
                 }
@@ -471,21 +466,21 @@ class Ibank
             echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_shiptransfer'] . "<br>---------------------------------</td></tr>" .
                  "<tr valign=top><td>" . $langvars['l_ibank_ibankaccount'] . " :</td><td align=right>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
 
-            if ($ibank_svalue == 0)
+            if ($tkireg->ibank_svalue == 0)
             {
                 echo "<tr valign=top><td>" . $langvars['l_ibank_maxtransfer'] . " :</td><td align=right>" . $langvars['l_ibank_unlimited'] . "</td></tr>";
             }
             else
             {
-                $percent = $ibank_svalue * 100;
+                $percent = $tkireg->ibank_svalue * 100;
                 $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
-                $maxtrans = $score * $score * $ibank_svalue;
+                $maxtrans = $score * $score * $tkireg->ibank_svalue;
 
                 $langvars['l_ibank_maxtransferpercent'] = str_replace("[ibank_percent]", $percent, $langvars['l_ibank_maxtransferpercent']);
                 echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_maxtransferpercent'] . " :</td><td align=right>" . number_format($maxtrans, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
             }
 
-            $percent = $ibank_paymentfee * 100;
+            $percent = $tkireg->ibank_paymentfee * 100;
 
             $langvars['l_ibank_transferrate'] = str_replace("[ibank_num_percent]", number_format($percent, 1, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_transferrate']);
             echo "<tr valign=top><td>" . $langvars['l_ibank_recipient'] . " :</td><td align=right>" . $target['character_name'] . "&nbsp;&nbsp;</td></tr>" .
@@ -546,7 +541,7 @@ class Ibank
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer");
             }
 
-            $percent = $ibank_paymentfee * 100;
+            $percent = $tkireg->ibank_paymentfee * 100;
 
             $langvars['l_ibank_transferrate2'] = str_replace("[ibank_num_percent]", number_format($percent, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_transferrate2']);
             echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_planettransfer'] . "<br>---------------------------------</td></tr>" .
@@ -571,11 +566,8 @@ class Ibank
         }
     }
 
-    public static function ibankTransfer3($db, $langvars)
+    public static function ibankTransfer3($db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount)
     {
-        global $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $ibank_min_turns, $ibank_svalue;
-        global $ibank_paymentfee, $amount, $ibank_trate;
-
         $amount = preg_replace("/[^0-9]/", '', $amount);
 
         if ($amount < 0)
@@ -587,7 +579,7 @@ class Ibank
         {
             // Need to check again to prevent cheating by manual posts
 
-            $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ? AND ship_destroyed ='N' AND turns_used > ?", array($ship_id, $ibank_min_turns));
+            $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ? AND ship_destroyed ='N' AND turns_used > ?", array($ship_id, $tkireg->ibank_min_turns));
             \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
             if ($playerinfo['ship_id'] == $ship_id)
@@ -602,23 +594,23 @@ class Ibank
 
             $target = $res->fields;
 
-            if ($target['turns_used'] < $ibank_min_turns)
+            if ($target['turns_used'] < $tkireg->ibank_min_turns)
             {
-                $langvars['l_ibank_min_turns3'] = str_replace("[ibank_min_turns]", $ibank_min_turns, $langvars['l_ibank_min_turns3']);
+                $langvars['l_ibank_min_turns3'] = str_replace("[ibank_min_turns]", $tkireg->ibank_min_turns, $langvars['l_ibank_min_turns3']);
                 $langvars['l_ibank_min_turns3'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_min_turns3']);
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns3'], "ibank.php?command=transfer");
             }
 
-            if ($playerinfo['turns_used'] < $ibank_min_turns)
+            if ($playerinfo['turns_used'] < $tkireg->ibank_min_turns)
             {
-                $langvars['l_ibank_min_turns4'] = str_replace("[ibank_min_turns]", $ibank_min_turns, $langvars['l_ibank_min_turns4']);
+                $langvars['l_ibank_min_turns4'] = str_replace("[ibank_min_turns]", $tkireg->ibank_min_turns, $langvars['l_ibank_min_turns4']);
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns4'], "ibank.php?command=transfer");
             }
 
-            if ($ibank_trate > 0)
+            if ($tkireg->ibank_trate > 0)
             {
                 $curtime = time();
-                $curtime -= $ibank_trate * 60;
+                $curtime -= $tkireg->ibank_trate * 60;
                 $res = $db->Execute("SELECT UNIX_TIMESTAMP(time) as time FROM {$db->prefix}ibank_transfers WHERE UNIX_TIMESTAMP(time) > ? AND source_id = ? AND dest_id = ?", array($curtime, $playerinfo['ship_id'], $target['ship_id']));
                 \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
                 if (!$res->EOF)
@@ -626,7 +618,7 @@ class Ibank
                     $time = $res->fields;
                     $difftime = ($time['time'] - $curtime) / 60;
                     $langvars['l_ibank_mustwait2'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait2']);
-                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_trate]", number_format($ibank_trate, 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_ibank_mustwait2']);
+                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_ibank_mustwait2']);
                     $langvars['l_ibank_mustwait2'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_ibank_mustwait2']);
                     Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_mustwait2'], "ibank.php?command=transfer");
                 }
@@ -647,11 +639,11 @@ class Ibank
                 Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=transfer");
             }
 
-            if ($ibank_svalue != 0)
+            if ($tkireg->ibank_svalue != 0)
             {
-                $percent = $ibank_svalue * 100;
+                $percent = $tkireg->ibank_svalue * 100;
                 $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
-                $maxtrans = $score * $score * $ibank_svalue;
+                $maxtrans = $score * $score * $tkireg->ibank_svalue;
 
                 if ($amount > $maxtrans)
                 {
@@ -660,7 +652,7 @@ class Ibank
             }
 
             $account['balance'] -= $amount;
-            $amount2 = $amount * $ibank_paymentfee;
+            $amount2 = $amount * $tkireg->ibank_paymentfee;
             $transfer = $amount - $amount2;
 
             echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .
@@ -731,7 +723,7 @@ class Ibank
             }
 
             $source['credits'] -= $amount;
-            $amount2 = $amount * $ibank_paymentfee;
+            $amount2 = $amount * $tkireg->ibank_paymentfee;
             $transfer = $amount - $amount2;
             $dest['credits'] += $transfer;
 
@@ -813,11 +805,8 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate2($db, $langvars, $playerinfo)
+    public static function ibankConsolidate2($db, $langvars, $playerinfo, $tkireg, $account, $dplanet_id, $minimum, $maximum)
     {
-        global $account;
-        global $dplanet_id, $minimum, $maximum, $ibank_tconsolidate, $ibank_paymentfee;
-
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
@@ -856,9 +845,9 @@ class Ibank
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $amount = $res->fields;
 
-        $fee = $ibank_paymentfee * $amount['total'];
+        $fee = $tkireg->ibank_paymentfee * $amount['total'];
 
-        $tcost = ceil($amount['count'] / $ibank_tconsolidate);
+        $tcost = ceil($amount['count'] / $tkireg->ibank_tconsolidate);
         $transfer = $amount['total'] - $fee;
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_planetconsolidate'] . "<br>---------------------------------</td></tr>" .
@@ -981,10 +970,8 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankConsolidate3($db, $langvars, $playerinfo)
+    public static function ibankConsolidate3($db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum)
     {
-        global $dplanet_id, $minimum, $maximum, $ibank_tconsolidate, $ibank_paymentfee;
-
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         if (!$res || $res->EOF)
@@ -1023,9 +1010,9 @@ class Ibank
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         $amount = $res->fields;
 
-        $fee = $ibank_paymentfee * $amount['total'];
+        $fee = $tkireg->ibank_paymentfee * $amount['total'];
 
-        $tcost = ceil($amount['count'] / $ibank_tconsolidate);
+        $tcost = ceil($amount['count'] / $tkireg->ibank_tconsolidate);
         $transfer = $amount['total'] - $fee;
 
         $cplanet = $transfer + $dest['credits'];
