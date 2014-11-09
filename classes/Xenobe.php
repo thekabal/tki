@@ -237,7 +237,7 @@ class Xenobe
     public static function xenobeToPlanet($db, $planet_id, \Tki\Reg $tkireg, $playerinfo)
     {
         // Xenobe planet attack code
-        global $planetinfo, $torp_dmg_rate, $tkireg->level_factor, $xenobeisdead;
+        global $planetinfo, $torp_dmg_rate, $xenobeisdead;
 
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::logDbErrors($db, $resh, __LINE__, __FILE__);
