@@ -107,10 +107,8 @@ class Team
     }
 
     // Rewritten display of teams list
-    public static function displayAllTeams($db, $langvars, \Tki\Reg $tkireg)
+    public static function displayAllTeams($db, $langvars, \Tki\Reg $tkireg, $order, $type)
     {
-        global $color, $order, $type;
-
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
         echo "<table style='width:100%; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
         echo "<tr bgcolor=\"$tkireg->color_header\">";
