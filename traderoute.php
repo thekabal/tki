@@ -150,7 +150,7 @@ elseif (isset ($engage))
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
         Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
-        Bad\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars);
+        Bad\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars, $tkireg);
         $i--;
     }
 }
