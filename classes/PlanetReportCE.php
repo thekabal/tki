@@ -25,7 +25,7 @@ namespace Bad;
 
 class PlanetReportCE
 {
-    public static function buildBase($db, $langvars, $planet_id, $sector_id, $tkireg)
+    public static function buildBase($db, $langvars, $planet_id, $sector_id, \Tki\Reg $tkireg)
     {
         echo "<br>";
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_status']);
