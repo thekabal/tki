@@ -203,9 +203,8 @@ class Team
         }
     }
 
-    public static function showInfo($db, $langvars, $whichteam, $isowner, $playerinfo)
+    public static function showInfo($db, $langvars, $whichteam, $isowner, $playerinfo, $invite_info, $team)
     {
-        global $invite_info, $team;
         global $color_line2;
 
         // Heading
