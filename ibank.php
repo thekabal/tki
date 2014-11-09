@@ -101,7 +101,7 @@ elseif ($command == 'transfer2') //specific transfer menu (ship or planet)
 }
 elseif ($command == 'transfer3') //transfer operation
 {
-    Bad\Ibank::ibankTransfer3($db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount)
+    Bad\Ibank::ibankTransfer3($db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount);
 }
 elseif ($command == 'loans') //loans menu
 {
