@@ -24,7 +24,7 @@ namespace Bad;
 
 class Traderoute
 {
-    public static function traderouteEngage($db, $pdo_db, $lang, $j, $langvars)
+    public static function traderouteEngage($db, $pdo_db, $lang, $j, $langvars, \Tki\Reg $tkireg)
     {
         global $playerinfo, $color_line1, $color_line2, $color_header;
         global $engage, $dist;
@@ -50,7 +50,6 @@ class Traderoute
         global $energy_limit;
         global $mine_hullsize;
         global $portfull;
-        global $level_factor;
 
         foreach ($traderoutes as $testroute)
         {
@@ -405,7 +404,7 @@ class Traderoute
 
                 if ($playerinfo['trade_colonists'] == 'Y')
                 {
-                    $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                    $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                     $colonists_buy = $free_holds;
 
                     if ($playerinfo['credits'] < $colonist_price * $colonists_buy)
@@ -428,7 +427,7 @@ class Traderoute
 
                 if ($playerinfo['trade_fighters'] == 'Y')
                 {
-                    $free_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $level_factor) - $playerinfo['ship_fighters'];
+                    $free_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor) - $playerinfo['ship_fighters'];
                     $fighters_buy = $free_fighters;
 
                     if ($total_credits < $fighters_buy * $fighter_price)
@@ -451,7 +450,7 @@ class Traderoute
 
                 if ($playerinfo['trade_torps'] == 'Y')
                 {
-                    $free_torps = \Tki\CalcLevels::fighters($playerinfo['torp_launchers'], $level_factor) - $playerinfo['torps'];
+                    $free_torps = \Tki\CalcLevels::fighters($playerinfo['torp_launchers'], $tkireg->level_factor) - $playerinfo['torps'];
                     $torps_buy = $free_torps;
 
                     if ($total_credits < $torps_buy * $torpedo_price)
@@ -606,7 +605,7 @@ class Traderoute
                     $playerinfo['ship_energy'] -= $energy_buy;
                 }
 
-                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
 
                 // Time to buy
                 if ($source['port_type'] == 'ore')
@@ -700,7 +699,7 @@ class Traderoute
                 if ($source['port_type'] == 'energy')
                 {
                     $energy_price1 = $energy_price - $energy_delta * $source['port_energy'] / $energy_limit * $inventory_factor;
-                    $energy_buy = \Tki\CalcLevels::energy($playerinfo['power'], $level_factor) - $playerinfo['ship_energy'] - $dist['scooped1'];
+                    $energy_buy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor) - $playerinfo['ship_energy'] - $dist['scooped1'];
 
                     if ($playerinfo['credits'] + $sourcecost < $energy_buy * $energy_price1)
                     {
@@ -729,9 +728,9 @@ class Traderoute
                 if ($dist['scooped1'] > 0)
                 {
                     $playerinfo['ship_energy']+= $dist['scooped1'];
-                    if ($playerinfo['ship_energy'] > \Tki\CalcLevels::energy($playerinfo['power'], $level_factor))
+                    if ($playerinfo['ship_energy'] > \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor))
                     {
-                        $playerinfo['ship_energy'] = \Tki\CalcLevels::energy($playerinfo['power'], $level_factor);
+                        $playerinfo['ship_energy'] = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor);
                     }
                 }
 
@@ -750,7 +749,7 @@ class Traderoute
         // Source is planet
         elseif (($traderoute['source_type'] == 'L') || ($traderoute['source_type'] == 'C'))
         {
-            $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+            $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
             if ($traderoute['dest_type'] == 'P')
             {
                 // Pick stuff up to sell at port
@@ -857,7 +856,7 @@ class Traderoute
                     $colonists_buy = 0;
                 }
 
-                $free_torps = \Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $level_factor) - $playerinfo['torps'];
+                $free_torps = \Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg->level_factor) - $playerinfo['torps'];
                 if ($source['torps'] > 0 && $free_torps > 0 && $playerinfo['trade_torps'] == 'Y')
                 {
                     if ($source['torps'] > $free_torps)
@@ -878,7 +877,7 @@ class Traderoute
                     $torps_buy = 0;
                 }
 
-                $free_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $level_factor) - $playerinfo['ship_fighters'];
+                $free_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor) - $playerinfo['ship_fighters'];
                 if ($source['fighters'] > 0 && $free_fighters > 0 && $playerinfo['trade_fighters'] == 'Y')
                 {
                     if ($source['fighters'] > $free_fighters)
@@ -1056,7 +1055,7 @@ class Traderoute
                     $energy_buy = 0;
                 }
 
-                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
 
                 // Time to buy
                 if ($dest['port_type'] == 'ore')
@@ -1176,7 +1175,7 @@ class Traderoute
                     }
                     else
                     {
-                        $energy_buy = \Tki\CalcLevels::energy($playerinfo['power'], $level_factor) - $playerinfo['ship_energy'] - $dist['scooped1'];
+                        $energy_buy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor) - $playerinfo['ship_energy'] - $dist['scooped1'];
                         if ($playerinfo['credits'] + $destcost < $energy_buy * $energy_price1)
                         {
                             $energy_buy = ($playerinfo['credits'] + $destcost) / $energy_price1;
@@ -1213,9 +1212,9 @@ class Traderoute
                 {
                     $playerinfo['ship_energy']+= $dist['scooped2'];
 
-                    if ($playerinfo['ship_energy'] > \Tki\CalcLevels::energy($playerinfo['power'], $level_factor))
+                    if ($playerinfo['ship_energy'] > \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor))
                     {
-                        $playerinfo['ship_energy'] = \Tki\CalcLevels::energy($playerinfo['power'], $level_factor);
+                        $playerinfo['ship_energy'] = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor);
                     }
                 }
                 $reso = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=?, ship_goods=?, ship_organics=?, ship_energy=? WHERE ship_id=?", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_energy'], $playerinfo['ship_id']));
