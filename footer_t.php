@@ -37,8 +37,8 @@ if (isset ($tkireg))
     }
 }
 
-// Suppress the news ticker on the IGB and index pages
-$news_ticker_active = (!(preg_match("/index.php/i", $_SERVER['PHP_SELF']) || preg_match("/igb.php/i", $_SERVER['PHP_SELF']) || preg_match("/new.php/i", $_SERVER['PHP_SELF'])));
+// Suppress the news ticker on the IBANK and index pages
+$news_ticker_active = (!(preg_match("/index.php/i", $_SERVER['PHP_SELF']) || preg_match("/ibank.php/i", $_SERVER['PHP_SELF']) || preg_match("/new.php/i", $_SERVER['PHP_SELF'])));
 
 // Suppress the news ticker if the database is not active
 if (!Tki\Db::isActive($pdo_db))

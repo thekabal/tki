@@ -15,7 +15,7 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: igb.php
+// File: ibank.php
 
 require_once './common.php';
 
@@ -156,7 +156,7 @@ else
     echo "(tm)<br>";
     echo $langvars['l_ibank_humor'];
     echo "<br>&nbsp;</center></td>
-            <td width='25%' valign='bottom' align='right'><a href=\"igb.php?command=login\">" . $langvars['l_ibank_login'] . "</a></td>";
+            <td width='25%' valign='bottom' align='right'><a href=\"ibank.php?command=login\">" . $langvars['l_ibank_login'] . "</a></td>";
 }
 
 echo "</table></td></tr></table></div>";

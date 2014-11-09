@@ -294,7 +294,7 @@ elseif ($sectorinfo['port_type'] == "special")
     if (Bad\Ibank::isLoanPending($db, $playerinfo['ship_id'], $tkireg->ibank_lrate))
     {
         echo $langvars['l_port_loannotrade'] . "<p>";
-        echo "<a href=igb.php>" . $langvars['l_ibank_term'] . "</a><p>";
+        echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
         Tki\Text::gotoMain($db, $lang, $langvars);
         Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
         die();
@@ -396,7 +396,7 @@ elseif ($sectorinfo['port_type'] == "special")
                 {
                     // Translation needed
                     echo "Sorry you don't have enough funds in the bank.<br>\n";
-                    echo "Try doing some trading then transfer your funds over to the <a href='igb.php'>Intergalactic Bank</a><br>\n";
+                    echo "Try doing some trading then transfer your funds over to the <a href='ibank.php'>Intergalactic Bank</a><br>\n";
                     echo "<br>\n";
 
                     Tki\Text::gotoMain($db, $lang, $langvars);
@@ -671,8 +671,8 @@ elseif ($sectorinfo['port_type'] == "special")
     echo $langvars['l_creds_to_spend'] . "<br>\n";
     if ($tkireg->allow_ibank)
     {
-        $igblink = "\n<a href=igb.php>" . $langvars['l_ibank_term'] . "</a>";
-        $langvars['l_ifyouneedmore'] = str_replace("[ibank]", $igblink, $langvars['l_ifyouneedmore']);
+        $ibanklink = "\n<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a>";
+        $langvars['l_ifyouneedmore'] = str_replace("[ibank]", $ibanklink, $langvars['l_ifyouneedmore']);
 
         echo $langvars['l_ifyouneedmore'] . "<br>";
     }

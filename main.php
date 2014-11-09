@@ -249,7 +249,7 @@ if ($playerinfo['email'] == $tkireg->admin_mail)
 }
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='device.php'>{$langvars['l_devices']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='planet_report.php'>{$langvars['l_planets']}</a></div>\n";
-echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='igb.php'>{$langvars['l_igb']}</a></div>\n";
+echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='ibank.php'>{$langvars['l_ibank']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='log.php'>{$langvars['l_log']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='defence_report.php'>{$langvars['l_sector_def']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='readmail.php'>{$langvars['l_read_msg']}</a></div>\n";

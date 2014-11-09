@@ -32,17 +32,17 @@ class Ibank
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "igb.php?command=loans");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans");
         }
 
         if ($amount <= 0)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "igb.php?command=loans");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans");
         }
 
         if ($account['loan'] != 0)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notwoloans'], "igb.php?command=loans");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notwoloans'], "ibank.php?command=loans");
         }
 
         $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
@@ -50,7 +50,7 @@ class Ibank
 
         if ($amount > $maxtrans)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_loantoobig'], "igb.php?command=loans");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_loantoobig'], "ibank.php?command=loans");
         }
 
         $amount2 = $amount * $ibank_loanfactor;
@@ -73,7 +73,7 @@ class Ibank
              "<tr valign=top>" .
              "<td colspan=2 align=center>---------------------------------<br><br>" . $langvars['l_ibank_loanreminder'] . "<br><br>\"" . $langvars['l_ibank_loanreminder2'] ."\"</td>" .
              "<tr valign=top>" .
-             "<td nowrap><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan = ?, loantime = NOW() WHERE ship_id = ?", array($amount3, $playerinfo['ship_id']));
@@ -90,9 +90,9 @@ class Ibank
              "<td width=150 align=right>" . $langvars['l_ibank_accountholder'] . " :<br><br>" . $langvars['l_ibank_shipaccount'] . " :<br>" . $langvars['l_ibank_ibankaccount'] . "&nbsp;&nbsp;:</td>" .
              "<td style='max-width:550px; padding-right:4px;' align=right>" . $playerinfo['character_name'] . "&nbsp;&nbsp;<br><br>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_ibank_credit_symbol'] . "<br>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_ibank_credit_symbol'] . "<br></td>" .
              "</tr>" .
-             "<tr><td colspan=2 align=center>" . $langvars['l_ibank_operations'] . "<br>---------------------------------<br><br><a href=\"igb.php?command=withdraw\">" . $langvars['l_ibank_withdraw'] . "</a><br><a href=\"igb.php?command=deposit\">" . $langvars['l_ibank_deposit'] . "</a><br><a href=\"igb.php?command=transfer\">" . $langvars['l_ibank_transfer'] . "</a><br><a href=\"igb.php?command=loans\">" . $langvars['l_ibank_loans'] . "</a><br>&nbsp;</td></tr>" .
+             "<tr><td colspan=2 align=center>" . $langvars['l_ibank_operations'] . "<br>---------------------------------<br><br><a href=\"ibank.php?command=withdraw\">" . $langvars['l_ibank_withdraw'] . "</a><br><a href=\"ibank.php?command=deposit\">" . $langvars['l_ibank_deposit'] . "</a><br><a href=\"ibank.php?command=transfer\">" . $langvars['l_ibank_transfer'] . "</a><br><a href=\"ibank.php?command=loans\">" . $langvars['l_ibank_loans'] . "</a><br>&nbsp;</td></tr>" .
              "<tr valign=bottom>" .
-             "<td align='left'><a href='igb.php'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td align='left'><a href='ibank.php'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
     }
 
@@ -104,12 +104,12 @@ class Ibank
              "<td align=right>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) ." C<br></td>" .
              "</tr><tr valign=top>" .
              "<td>" . $langvars['l_ibank_selwithdrawamount'] . ":</td><td align=right>" .
-             "<form accept-charset='utf-8' action='igb.php?command=withdraw2' method=post>" .
+             "<form accept-charset='utf-8' action='ibank.php?command=withdraw2' method=post>" .
              "<input class=term type=text size=15 maxlength=20 name=amount value=0>" .
              "<br><br><input class=term type=submit value='" . $langvars['l_ibank_withdraw'] . "'>" .
              "</form></td></tr>" .
              "<tr valign=bottom>" .
-             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
     }
 
@@ -118,17 +118,17 @@ class Ibank
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidwithdrawinput'], "igb.php?command=withdraw");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidwithdrawinput'], "ibank.php?command=withdraw");
         }
 
         if ($amount == 0)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_nozeroamount3'], "igb.php?command=withdraw");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_nozeroamount3'], "ibank.php?command=withdraw");
         }
 
         if ($amount > $account['balance'])
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits'], "igb.php?command=withdraw");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=withdraw");
         }
 
         $account['balance'] -= $amount;
@@ -142,7 +142,7 @@ class Ibank
              "<td>Ship Account :<br>" . $langvars['l_ibank_ibankaccount'] . " :</td>" .
              "<td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</tr>" .
              "<tr valign=bottom>" .
-             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance - :amount WHERE ship_id=:ship_id");
@@ -176,7 +176,7 @@ class Ibank
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfertype'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
-             "<form accept-charset='utf-8' action='igb.php?command=transfer2' method=post>" .
+             "<form accept-charset='utf-8' action='ibank.php?command=transfer2' method=post>" .
              "<td>" . $langvars['l_ibank_toanothership'] . " :<br><br>" .
              "<select class=term name=ship_id style='width:200px;'>";
 
@@ -190,7 +190,7 @@ class Ibank
              "</form></td></tr>" .
              "<tr valign=top>" .
              "<td><br>" . $langvars['l_ibank_fromplanet'] . " :<br><br>" .
-             "<form accept-charset='utf-8' action='igb.php?command=transfer2' method=post>" .
+             "<form accept-charset='utf-8' action='ibank.php?command=transfer2' method=post>" .
              $langvars['l_ibank_source'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class=term name=splanet_id>";
 
         if (isset($planets))
@@ -234,7 +234,7 @@ class Ibank
         // ---- begin Consol Credits form    // ---- added by Torr
         echo "<tr valign=top>" .
              "<td><br>" . $langvars['l_ibank_conspl'] . " :<br><br>" .
-             "<form accept-charset='utf-8' action='igb.php?command=consolidate' method=post>" .
+             "<form accept-charset='utf-8' action='ibank.php?command=consolidate' method=post>" .
              $langvars['l_ibank_destination'] . " <select class=term name=dplanet_id>";
 
         if (isset($planets))
@@ -260,7 +260,7 @@ class Ibank
         // ---- End Consol Credits form ---
 
         echo "</form><tr valign=bottom>" .
-             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
+             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
     public static function ibankLoans($db, $langvars, \Tki\Reg $tkireg, $playerinfo)
@@ -304,7 +304,7 @@ class Ibank
             $langvars['l_ibank_loanrates'] = str_replace("[factor]", $factor, $langvars['l_ibank_loanrates']);
             $langvars['l_ibank_loanrates'] = str_replace("[interest]", $interest, $langvars['l_ibank_loanrates']);
 
-            echo "<form accept-charset='utf-8' action='igb.php?command=repay' method=post>" .
+            echo "<form accept-charset='utf-8' action='ibank.php?command=repay' method=post>" .
                  "<tr valign=top>" .
                  "<td><br>" . $langvars['l_ibank_repayamount'] . " :</td>" .
                  "<td align=right><br><input class=term type=text size=15 maxlength=20 name=amount value=0><br>" .
@@ -327,7 +327,7 @@ class Ibank
             $langvars['l_ibank_loanrates'] = str_replace("[factor]", $factor, $langvars['l_ibank_loanrates']);
             $langvars['l_ibank_loanrates'] = str_replace("[interest]", $interest, $langvars['l_ibank_loanrates']);
 
-            echo "<form accept-charset='utf-8' action='igb.php?command=borrow' method=post>" .
+            echo "<form accept-charset='utf-8' action='ibank.php?command=borrow' method=post>" .
                  "<tr valign=top>" .
                  "<td><br>" . $langvars['l_ibank_loanamount'] . " :</td>" .
                  "<td align=right><br><input class=term type=text size=15 maxlength=20 name=amount value=0><br>" .
@@ -337,7 +337,7 @@ class Ibank
         }
 
         echo "<tr valign=bottom>" .
-             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
     }
 
@@ -346,17 +346,17 @@ class Ibank
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "igb.php?command=loans");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans");
         }
 
         if ($amount <= 0)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "igb.php?command=loans");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans");
         }
 
         if ($account['loan'] == 0)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notrepay'], "igb.php?command=loans");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notrepay'], "ibank.php?command=loans");
         }
 
         if ($amount > $account['loan'])
@@ -366,7 +366,7 @@ class Ibank
 
         if ($amount > $playerinfo['credits'])
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughrepay'], "igb.php?command=loans");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughrepay'], "ibank.php?command=loans");
         }
 
         $playerinfo['credits'] -= $amount;
@@ -386,7 +386,7 @@ class Ibank
              "<tr valign=top>" .
              "<td colspan=2 align=center>---------------------------------</td>" .
              "<tr valign=top>" .
-             "<td nowrap><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan=loan - ?, loantime=? WHERE ship_id = ?", array($amount, $account['loantime'], $playerinfo['ship_id']));
@@ -405,7 +405,7 @@ class Ibank
         $langvars['l_ibank_transferrate3'] = str_replace("[nbplanets]", $ibank_tconsolidate, $langvars['l_ibank_transferrate3']);
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_planetconsolidate'] . "<br>---------------------------------</td></tr>" .
-             "<form accept-charset='utf-8' action='igb.php?command=consolidate2' method=post>" .
+             "<form accept-charset='utf-8' action='ibank.php?command=consolidate2' method=post>" .
              "<tr valign=top>" .
              "<td colspan=2>" . $langvars['l_ibank_consolrates'] . " :</td>" .
              "<tr valign=top>" .
@@ -420,7 +420,7 @@ class Ibank
              "<tr><td colspan=2 align=center>" .
              $langvars['l_ibank_transferrate3'] .
              "<tr valign=bottom>" .
-             "<td><a href='igb.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td><a href='ibank.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
     }
 
@@ -436,12 +436,12 @@ class Ibank
 
             if ($playerinfo['ship_id'] == $ship_id)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_sendyourself'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_sendyourself'], "ibank.php?command=transfer");
             }
 
             if (!$res instanceof \adodb\ADORecordSet || $res->EOF)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_unknowntargetship'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_unknowntargetship'], "ibank.php?command=transfer");
             }
 
             $target = $res->fields;
@@ -450,13 +450,13 @@ class Ibank
             {
                 $langvars['l_ibank_min_turns'] = str_replace("[ibank_min_turns]", $ibank_min_turns, $langvars['l_ibank_min_turns']);
                 $langvars['l_ibank_min_turns'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_min_turns']);
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns'], "ibank.php?command=transfer");
             }
 
             if ($playerinfo['turns_used'] < $ibank_min_turns)
             {
                 $langvars['l_ibank_min_turns2'] = str_replace("[ibank_min_turns]", $ibank_min_turns, $langvars['l_ibank_min_turns2']);
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns2'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns2'], "ibank.php?command=transfer");
             }
 
             if ($ibank_trate > 0)
@@ -472,7 +472,7 @@ class Ibank
                     $langvars['l_ibank_mustwait'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait']);
                     $langvars['l_ibank_mustwait'] = str_replace("[ibank_trate]", number_format($ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
                     $langvars['l_ibank_mustwait'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
-                    Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_mustwait'], "igb.php?command=transfer");
+                    Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_mustwait'], "ibank.php?command=transfer");
                 }
             }
 
@@ -497,7 +497,7 @@ class Ibank
 
             $langvars['l_ibank_transferrate'] = str_replace("[ibank_num_percent]", number_format($percent, 1, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_transferrate']);
             echo "<tr valign=top><td>" . $langvars['l_ibank_recipient'] . " :</td><td align=right>" . $target['character_name'] . "&nbsp;&nbsp;</td></tr>" .
-                 "<form accept-charset='utf-8' action='igb.php?command=transfer3' method=post>" .
+                 "<form accept-charset='utf-8' action='ibank.php?command=transfer3' method=post>" .
                  "<tr valign=top>" .
                  "<td><br>" . $langvars['l_ibank_seltransferamount'] . " :</td>" .
                  "<td align=right><br><input class=term type=text size=15 maxlength=20 name=amount value=0><br>" .
@@ -506,21 +506,21 @@ class Ibank
                  "</form>" .
                  "<tr><td colspan=2 align=center>" . $langvars['l_ibank_transferrate'] .
                  "<tr valign=bottom>" .
-                 "<td><a href='igb.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+                 "<td><a href='ibank.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
         }
         else
         {
             if ($splanet_id == $dplanet_id)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errplanetsrcanddest'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errplanetsrcanddest'], "ibank.php?command=transfer");
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($splanet_id));
             \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer");
             }
 
             $source = $res->fields;
@@ -534,7 +534,7 @@ class Ibank
             \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer");
             }
 
             $dest = $res->fields;
@@ -546,12 +546,12 @@ class Ibank
 
             if ($dest['base'] == 'N')
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnobase'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnobase'], "ibank.php?command=transfer");
             }
 
             if ($source['owner'] != $playerinfo['ship_id'] || $dest['owner'] != $playerinfo['ship_id'])
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer");
             }
 
             $percent = $ibank_paymentfee * 100;
@@ -564,7 +564,7 @@ class Ibank
                  "<tr valign=top>" .
                  "<td>" . $langvars['l_ibank_destplanet'] . " " . $dest['name'] . " " . $langvars['l_ibank_in'] . " " . $dest['sector_id'] . " :" .
                  "<td align=right>" . number_format($dest['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C" .
-                 "<form accept-charset='utf-8' action='igb.php?command=transfer3' method=post>" .
+                 "<form accept-charset='utf-8' action='ibank.php?command=transfer3' method=post>" .
                  "<tr valign=top>" .
                  "<td><br>" . $langvars['l_ibank_seltransferamount'] . " :</td>" .
                  "<td align=right><br><input class=term type=text size=15 maxlength=20 name=amount value=0><br>" .
@@ -574,7 +574,7 @@ class Ibank
                  "</form>" .
                  "<tr><td colspan=2 align=center>" . $langvars['l_ibank_transferrate2'] .
                  "<tr valign=bottom>" .
-                 "<td><a href='igb.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+                 "<td><a href='ibank.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
         }
     }
@@ -600,12 +600,12 @@ class Ibank
 
             if ($playerinfo['ship_id'] == $ship_id)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errsendyourself'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errsendyourself'], "ibank.php?command=transfer");
             }
 
             if (!$res || $res->EOF)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_unknowntargetship'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_unknowntargetship'], "ibank.php?command=transfer");
             }
 
             $target = $res->fields;
@@ -614,13 +614,13 @@ class Ibank
             {
                 $langvars['l_ibank_min_turns3'] = str_replace("[ibank_min_turns]", $ibank_min_turns, $langvars['l_ibank_min_turns3']);
                 $langvars['l_ibank_min_turns3'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_min_turns3']);
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns3'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns3'], "ibank.php?command=transfer");
             }
 
             if ($playerinfo['turns_used'] < $ibank_min_turns)
             {
                 $langvars['l_ibank_min_turns4'] = str_replace("[ibank_min_turns]", $ibank_min_turns, $langvars['l_ibank_min_turns4']);
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns4'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_min_turns4'], "ibank.php?command=transfer");
             }
 
             if ($ibank_trate > 0)
@@ -636,23 +636,23 @@ class Ibank
                     $langvars['l_ibank_mustwait2'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait2']);
                     $langvars['l_ibank_mustwait2'] = str_replace("[ibank_trate]", number_format($ibank_trate, 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_ibank_mustwait2']);
                     $langvars['l_ibank_mustwait2'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_ibank_mustwait2']);
-                    Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_mustwait2'], "igb.php?command=transfer");
+                    Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_mustwait2'], "ibank.php?command=transfer");
                 }
             }
 
             if (($amount * 1) != $amount)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidtransferinput'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidtransferinput'], "ibank.php?command=transfer");
             }
 
             if ($amount == 0)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_nozeroamount'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_nozeroamount'], "ibank.php?command=transfer");
             }
 
             if ($amount > $account['balance'])
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=transfer");
             }
 
             if ($ibank_svalue != 0)
@@ -663,7 +663,7 @@ class Ibank
 
                 if ($amount > $maxtrans)
                 {
-                    Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_amounttoogreat'], "igb.php?command=transfer");
+                    Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_amounttoogreat'], "ibank.php?command=transfer");
                 }
             }
 
@@ -682,7 +682,7 @@ class Ibank
                  "<tr valign=top>" .
                  "<td>" . $langvars['l_ibank_ibankaccount'] . " :</td><td align=right>" . number_format($account['balance'], 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
                  "<tr valign=bottom>" .
-                 "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+                 "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
 
             $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
@@ -697,14 +697,14 @@ class Ibank
         {
             if ($splanet_id == $dplanet_id)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errplanetsrcanddest'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errplanetsrcanddest'], "ibank.php?command=transfer");
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($splanet_id));
             \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer");
             }
 
             $source = $res->fields;
@@ -718,7 +718,7 @@ class Ibank
             \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer");
             }
 
             $dest = $res->fields;
@@ -730,12 +730,12 @@ class Ibank
 
             if ($source['owner'] != $playerinfo['ship_id'] || $dest['owner'] != $playerinfo['ship_id'])
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer");
             }
 
             if ($amount > $source['credits'])
             {
-                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits2'], "igb.php?command=transfer");
+                Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits2'], "ibank.php?command=transfer");
             }
 
             $percent = $ibank_paymentfee * 100;
@@ -758,7 +758,7 @@ class Ibank
                  "<tr valign=top>" .
                  "<td>" . $langvars['l_ibank_destplanet'] . " " . $dest['name'] . " " . $langvars['l_ibank_in'] . " " . $dest['sector_id'] . " :</td><td align=right>" . number_format($dest['credits'], 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
                  "<tr valign=bottom>" .
-                 "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+                 "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
 
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits - ? WHERE planet_id = ?", array($amount, $splanet_id));
@@ -776,17 +776,17 @@ class Ibank
 
         if (($amount * 1) != $amount)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invaliddepositinput'], "igb.php?command=deposit");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invaliddepositinput'], "ibank.php?command=deposit");
         }
 
         if ($amount == 0)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_nozeroamount2'], "igb.php?command=deposit");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_nozeroamount2'], "ibank.php?command=deposit");
         }
 
         if ($amount > $playerinfo['credits'])
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits'], "igb.php?command=deposit");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=deposit");
         }
 
         $tmpcredits = $max_credits_allowed - $account['balance'];
@@ -797,7 +797,7 @@ class Ibank
 
         if ($amount > $tmpcredits)
         {
-            Ibank::ibankError($active_template, $langvars, "<center>Error You cannot deposit that much into your bank,<br> (Max Credits Reached)</center>", "igb.php?command=deposit");
+            Ibank::ibankError($active_template, $langvars, "<center>Error You cannot deposit that much into your bank,<br> (Max Credits Reached)</center>", "ibank.php?command=deposit");
         }
 
         $account['balance'] += $amount;
@@ -811,7 +811,7 @@ class Ibank
              "<td>" . $langvars['l_ibank_shipaccount'] . " :<br>" . $langvars['l_ibank_ibankaccount'] . " :</td>" .
              "<td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</tr>" .
              "<tr valign=bottom>" .
-             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id");
@@ -833,7 +833,7 @@ class Ibank
 
         if (!$res || $res->EOF)
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer");
         }
         $dest = $res->fields;
 
@@ -844,7 +844,7 @@ class Ibank
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "igb.php?command=transfer");
+            Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer");
         }
 
         $minimum = preg_replace("/[^0-9]/", '', $minimum);
@@ -891,14 +891,14 @@ class Ibank
              "<td>" . $langvars['l_ibank_amounttransferred'] . ":</td>" .
              "<td align=right>" . number_format($transfer, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td>" .
              "<tr valign=top><td colspan=2 align=right>" .
-             "<form accept-charset='utf-8' action='igb.php?command=consolidate3' method=post>" .
+             "<form accept-charset='utf-8' action='ibank.php?command=consolidate3' method=post>" .
              "<input type=hidden name=minimum value=" . $minimum . "><br>" .
              "<input type=hidden name=maximum value=" . $maximum . "><br>" .
              "<input type=hidden name=dplanet_id value=" . $dplanet_id . ">" .
              "<input class=term type=submit value=\"" . $langvars['l_ibank_consolidate'] . "\"></td>" .
              "</form>" .
              "<tr valign=bottom>" .
-             "<td><a href='igb.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td><a href='ibank.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
     }
 
@@ -976,7 +976,7 @@ class Ibank
              "<td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) ." C<br></td>" .
              "</tr><tr valign=top>" .
              "<td height=90>" . $langvars['l_ibank_seldepositamount'] . " :</td><td align=right>" .
-             "<form accept-charset='utf-8' action='igb.php?command=deposit2' method=post>" .
+             "<form accept-charset='utf-8' action='ibank.php?command=deposit2' method=post>" .
              "<input class=term type=text size=15 maxlength=20 name=amount value=0>" .
              "<br><br><input class=term type=submit value=" . $langvars['l_ibank_deposit'] . ">" .
              "</form>" .
@@ -987,7 +987,7 @@ class Ibank
              "  </td>" .
              "</tr>" .
              "<tr valign=bottom>" .
-             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
+             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
     }
 
@@ -999,7 +999,7 @@ class Ibank
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
         if (!$res || $res->EOF)
         {
-            Ibank::ibankError($active_template, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "igb.php?command=transfer");
+            Ibank::ibankError($active_template, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer");
         }
 
         $dest = $res->fields;
@@ -1011,7 +1011,7 @@ class Ibank
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            Ibank::ibankError($active_template, $active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "igb.php?command=transfer");
+            Ibank::ibankError($active_template, $active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer");
         }
 
         $minimum = preg_replace("/[^0-9]/", '', $minimum);
@@ -1042,7 +1042,7 @@ class Ibank
 
         if ($tcost > $playerinfo['turns'])
         {
-            Ibank::ibankError($active_template, $active_template, $langvars, $langvars['l_ibank_notenturns'], "igb.php?command=transfer");
+            Ibank::ibankError($active_template, $active_template, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer");
         }
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .
@@ -1052,7 +1052,7 @@ class Ibank
              "<td align=right>" . number_format($cplanet, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br><br>" .
              number_format($tcost, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>" .
              "<tr valign=bottom>" .
-             "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout ']. "</a></td>" .
+             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout ']. "</a></td>" .
              "</tr>";
 
         $query = "UPDATE {$db->prefix}planets SET credits=0 WHERE owner=? AND credits != 0 AND planet_id != ?";

@@ -221,7 +221,7 @@ while (!$tdres->EOF)
     $tdres->MoveNext();
 }
 
-echo "Validating IGB Balance and Loan Credits...<br>\n";
+echo "Validating IBANK Balance and Loan Credits...<br>\n";
 $tdres = $db->Execute("SELECT ship_id, balance, loan FROM {$db->prefix}ibank_accounts");
 Tki\Db::logDbErrors($db, $tdres, __LINE__, __FILE__);
 
@@ -229,10 +229,10 @@ while (!$tdres->EOF)
 {
     $bankinfo = $tdres->fields;
 
-    // Checking IGB Balance Credits
+    // Checking IBANK Balance Credits
     if ($bankinfo['balance'] < 0)
     {
-        echo "'-> <span style='color:#f00;'>Detected Balance Credits Flip on IGB Account: {$bankinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
+        echo "'-> <span style='color:#f00;'>Detected Balance Credits Flip on IBANK Account: {$bankinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
         $resi = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = ? WHERE ship_id = ? LIMIT 1;", array(0, $bankinfo['ship_id']));
         Tki\Db::logDbErrors($db, $resi, __LINE__, __FILE__);
 
@@ -246,7 +246,7 @@ while (!$tdres->EOF)
 
     if ($bankinfo['balance'] > 100000000000000000000)
     {
-        echo "'-> <span style='color:#f00;'>Detected Balance Credits Overflow on IGB Account: {$bankinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
+        echo "'-> <span style='color:#f00;'>Detected Balance Credits Overflow on IBANK Account: {$bankinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
         $resj = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = ? WHERE ship_id = ? LIMIT 1;", array(100000000000000000000, $bankinfo['ship_id']));
         Tki\Db::logDbErrors($db, $resj, __LINE__, __FILE__);
 
@@ -258,10 +258,10 @@ while (!$tdres->EOF)
         // Tki\AdminLog::writeLog ($db, 960, "20|{$bankinfo['ship_id']}|{$bankinfo['balance']}");
     }
 
-    // Checking IGB Loan Credits
+    // Checking IBANK Loan Credits
     if ($bankinfo['loan'] < 0)
     {
-        echo "'-> <span style='color:#f00;'>Detected Loan Credits Flip on IGB Account: {$bankinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
+        echo "'-> <span style='color:#f00;'>Detected Loan Credits Flip on IBANK Account: {$bankinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
         $resk = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan = ? WHERE ship_id = ? LIMIT 1;", array(0, $bankinfo['ship_id']));
         Tki\Db::logDbErrors($db, $resk, __LINE__, __FILE__);
 
@@ -276,7 +276,7 @@ while (!$tdres->EOF)
     $tdres->MoveNext();
 }
 
-echo "Validating IGB Transfer Amount Credits...<br>\n";
+echo "Validating IBANK Transfer Amount Credits...<br>\n";
 $tdres = $db->Execute("SELECT transfer_id, source_id, dest_id, amount FROM {$db->prefix}ibank_transfers");
 Tki\Db::logDbErrors($db, $tdres, __LINE__, __FILE__);
 
@@ -285,10 +285,10 @@ while (!$tdres->EOF)
 {
     $transferinfo = $tdres->fields;
 
-    // Checking IGB Transfer Amount Credits
+    // Checking IBANK Transfer Amount Credits
     if ($transferinfo['amount'] < 0)
     {
-        echo "'-> <span style='color:#f00;'>Detected Transfer Amount Credits Flip on IGB Transfer: {$transferinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
+        echo "'-> <span style='color:#f00;'>Detected Transfer Amount Credits Flip on IBANK Transfer: {$transferinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
         $db->Execute ("UPDATE {$db->prefix}ibank_transfers SET amount = ? WHERE transfer_id = ? LIMIT 1;", array(0, $transferinfo['transfer_id']));
         if ($db->ErrorNo() >0)
         {

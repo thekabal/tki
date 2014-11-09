@@ -7,7 +7,7 @@ files are being converted to use templates for output.. the list goes on.
 
 With that out of the way, here is a general guide to most of the code:
 
-For any given file, which represents a location in game (igb, main menu, planet, etc), a file will (usually)
+For any given file, which represents a location in game (ibank, main menu, planet, etc), a file will (usually)
 include common.php.
 
 common.php will in turn include the database settings, the global defines, and the autoloader.

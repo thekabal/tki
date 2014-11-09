@@ -306,9 +306,9 @@ This information will help us to help you much faster and will help improve our 
       <td width="10%" bgcolor="#ccccff" align="center" valign="top"><font color="#000"><strong>{$variables['sched_planets']} Minutes</strong></font></td>
     </tr>
     <tr>
-      <td width="25%" bgcolor="#ccccff" align="left" valign="top"><font color="#000">Scheduler IGB</font></td>
-      <td width="65%" bgcolor="#C0C0C0" align="left" valign="top"><font color="#000">Interests on IGB accounts will be accumulated every</font></td>
-      <td width="10%" bgcolor="#ccccff" align="center" valign="top"><font color="#000"><strong>{$variables['sched_igb']} Minutes</strong></font></td>
+      <td width="25%" bgcolor="#ccccff" align="left" valign="top"><font color="#000">Scheduler IBANK</font></td>
+      <td width="65%" bgcolor="#C0C0C0" align="left" valign="top"><font color="#000">Interests on IBANK accounts will be accumulated every</font></td>
+      <td width="10%" bgcolor="#ccccff" align="center" valign="top"><font color="#000"><strong>{$variables['sched_ibank']} Minutes</strong></font></td>
     </tr>
     <tr>
       <td width="25%" bgcolor="#ccccff" align="left" valign="top"><font color="#000">Scheduler Rankings</font></td>
