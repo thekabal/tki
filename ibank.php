@@ -97,7 +97,7 @@ elseif ($command == 'transfer') // Main transfer menu
 }
 elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 {
-    Bad\Ibank::ibankTransfer2($db, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id);
+    Bad\Ibank::ibankTransfer2($db, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id);
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
