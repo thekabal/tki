@@ -132,7 +132,7 @@ else
 switch ($teamwhat)
 {
     case 1: // INFO on single team
-        Bad\Team::showInfo($db, $langvars, $whichteam, 0, $playerinfo);
+        Bad\Team::showInfo($db, $langvars, $whichteam, 0, $playerinfo, $invite_info, $team);
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         break;
 
@@ -578,7 +578,7 @@ switch ($teamwhat)
                 $whichinvitingteam = $result->fields;
             }
             $isowner = Bad\Team::isTeamOwner($whichteam, $playerinfo);
-            Bad\Team::showInfo($db, $langvars, $playerinfo['team'], $isowner, $playerinfo);
+            Bad\Team::showInfo($db, $langvars, $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team);
         }
 
         $res= $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
