@@ -43,9 +43,9 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport($db, $langvars, $playerinfo, $sort)
+    public static function standardReport($db, $langvars, $playerinfo, $sort, $tkireg)
     {
-        global $color_header, $color, $color_line1, $color_line2;
+        global $color;
 
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -112,7 +112,7 @@ class PlanetReport
             echo $langvars['l_pr_clicktosort'] . "<br><br>";
             echo "<strong>WARNING:</strong> \"Build\" and \"Take Credits\" will cause your ship to move. <br><br>";
             echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=2>";
-            echo "<tr bgcolor=\"$color_header\" valign=bottom>";
+            echo "<tr bgcolor=\"$tkireg->color_header\" valign=bottom>";
             echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=sector_id\">" . $langvars['l_sector'] . "</a></strong></td>";
             echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=name\">" . $langvars['l_name'] . "</a></strong></td>";
             echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=ore\">" . $langvars['l_ore'] . "</a></strong></td>";
@@ -144,7 +144,7 @@ class PlanetReport
             $total_base = 0;
             $total_team = 0;
             $total_selling = 0;
-            $color = $color_line1;
+            $color = $tkireg->color_line1;
             for ($i = 0; $i < $num_planets; $i++)
             {
                 $total_organics += $planet[$i]['organics'];
@@ -193,13 +193,13 @@ class PlanetReport
                 echo "<td align=center>" . ($planet[$i]['sells'] == 'Y' ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
                 echo "</tr>";
 
-                if ($color == $color_line1)
+                if ($color == $tkireg->color_line1)
                 {
-                    $color = $color_line2;
+                    $color = $tkireg->color_line2;
                 }
                 else
                 {
-                    $color = $color_line1;
+                    $color = $tkireg->color_line1;
                 }
             }
 
@@ -232,9 +232,9 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function planetProductionChange($db, $langvars, $playerinfo, $sort)
+    public static function planetProductionChange($db, $langvars, $playerinfo, $sort, $tkireg)
     {
-        global $color_header, $color, $color_line1, $color_line2;
+        global $color;
 
         $query = "SELECT * FROM {$db->prefix}planets WHERE owner=? AND base='Y'";
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
@@ -302,7 +302,7 @@ class PlanetReport
             // Next block of echo 's creates the header of the table
             echo $langvars['l_pr_clicktosort'] . "<br><br>\n";
             echo "<table width='100%' border='0' cellspacing='0' cellpadding='2'>\n";
-            echo "<tr bgcolor='{$color_header}' valign='bottom'>\n";
+            echo "<tr bgcolor='{$tkireg->color_header}' valign='bottom'>\n";
             echo "<td align='left'>  <strong><a href='planet_report.php?preptype=2&amp;sort=sector_id'>" . $langvars['l_sector'] . "</a></strong></td>\n";
             echo "<td align='left'>  <strong><a href='planet_report.php?preptype=2&amp;sort=name'>" . $langvars['l_name'] . "</a></strong></td>\n";
             echo "<td align='center'><strong><a href='planet_report.php?preptype=2&amp;sort=ore'>" . $langvars['l_ore'] . "</a></strong></td>\n";
@@ -324,7 +324,7 @@ class PlanetReport
             $total_colonists = 0;
             $total_credits = 0;
             $total_team = 0;
-            $color = $color_line1;
+            $color = $tkireg->color_line1;
 
             for ($i = 0; $i < $num_planets; $i++)
             {
@@ -354,13 +354,13 @@ class PlanetReport
                 echo "<td align=center>" . selling_checkboxes($planet, $i)     . "</td>\n";
                 echo "</tr>\n";
 
-                if ($color == $color_line1)
+                if ($color == $tkireg->color_line1)
                 {
-                    $color = $color_line2;
+                    $color = $tkireg->color_line2;
                 }
                 else
                 {
-                    $color = $color_line1;
+                    $color = $tkireg->color_line1;
                 }
             }
 

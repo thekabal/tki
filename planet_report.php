@@ -42,13 +42,13 @@ if ($preptype == 1 || !isset($preptype)) // Display the commodities on the plane
 {
     $title = $title .": Status";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::standardReport($db, $langvars, $playerinfo, $sort);
+    Bad\PlanetReport::standardReport($db, $langvars, $playerinfo, $sort, $tkireg);
 }
 elseif ($preptype == 2)                  // Display the production values of your planets and allow changing
 {
     $title = $title .": Production";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::planetProductionChange($db, $langvars, $playerinfo, $sort);
+    Bad\PlanetReport::planetProductionChange($db, $langvars, $playerinfo, $sort, $tkireg);
 }
 elseif ($preptype == 0)                  // For typing in manually to get a report menu
 {
