@@ -29,7 +29,7 @@ class Ibank
     {
         global $account, $amount, $ibank_loanlimit, $ibank_loanfactor, $ibank_lrate;
 
-        $amount = preg_replace("/[^0-9]/", "", $amount);
+        $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
             Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "igb.php?command=loans");
@@ -113,9 +113,9 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw2($db, $langvars, $playerinfo, $amount, $account)
+    public static function ibankWithdraw2($pdo_db, $langvars, $playerinfo, $amount, $account)
     {
-        $amount = preg_replace("/[^0-9]/", "", $amount);
+        $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
             Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidwithdrawinput'], "igb.php?command=withdraw");
@@ -145,10 +145,13 @@ class Ibank
              "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits + ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance - :amount WHERE ship_id=:ship_id");
+        $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+
+        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits + :amount WHERE ship_id=:ship_id");
+        $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
     public static function ibankTransfer($db, $langvars, $playerinfo, $ibank_min_turns)
@@ -340,7 +343,7 @@ class Ibank
 
     public static function ibankRepay($db, $langvars, $playerinfo, $account, $amount)
     {
-        $amount = preg_replace("/[^0-9]/", "", $amount);
+        $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
             Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_invalidamount'], "igb.php?command=loans");
@@ -581,7 +584,7 @@ class Ibank
         global $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $ibank_min_turns, $ibank_svalue;
         global $ibank_paymentfee, $amount, $ibank_trate;
 
-        $amount = preg_replace("/[^0-9]/", "", $amount);
+        $amount = preg_replace("/[^0-9]/", '', $amount);
 
         if ($amount < 0)
         {
@@ -765,12 +768,11 @@ class Ibank
         }
     }
 
-    public static function ibankDeposit2($db, $langvars, $playerinfo, $amount, $account)
+    public static function ibankDeposit2($pdo_db, $langvars, $playerinfo, $amount, $account)
     {
-
         $max_credits_allowed = 18446744073709000000;
 
-        $amount = preg_replace("/[^0-9]/", "", $amount);
+        $amount = preg_replace("/[^0-9]/", '', $amount);
 
         if (($amount * 1) != $amount)
         {
@@ -812,10 +814,13 @@ class Ibank
              "<td><a href='igb.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance + ? WHERE ship_id=?", array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits - ? WHERE ship_id=?", array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id");
+        $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+
+        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits - :amount WHERE ship_id=:ship_id");
+        $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
     public static function ibankConsolidate2($db, $langvars, $playerinfo)
@@ -842,8 +847,8 @@ class Ibank
             Ibank::ibankError($active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "igb.php?command=transfer");
         }
 
-        $minimum = preg_replace("/[^0-9]/", "", $minimum);
-        $maximum = preg_replace("/[^0-9]/", "", $maximum);
+        $minimum = preg_replace("/[^0-9]/", '', $minimum);
+        $maximum = preg_replace("/[^0-9]/", '', $maximum);
 
         $query = "SELECT SUM(credits) AS total, COUNT(*) AS count FROM {$db->prefix}planets WHERE owner=? AND credits != 0 AND planet_id != ?";
 
@@ -947,7 +952,7 @@ class Ibank
         }
     }
 
-    public static function deposit($db, $pdo_db, $lang, $account, $playerinfo, $langvars)
+    public static function ibankDeposit($pdo_db, $lang, $account, $playerinfo, $langvars)
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('ibank'));
@@ -1009,8 +1014,8 @@ class Ibank
             Ibank::ibankError($active_template, $active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "igb.php?command=transfer");
         }
 
-        $minimum = preg_replace("/[^0-9]/", "", $minimum);
-        $maximum = preg_replace("/[^0-9]/", "", $maximum);
+        $minimum = preg_replace("/[^0-9]/", '', $minimum);
+        $maximum = preg_replace("/[^0-9]/", '', $maximum);
 
         $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM {$db->prefix}planets WHERE owner=? AND credits != 0 AND planet_id != ?";
 

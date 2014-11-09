@@ -30,13 +30,17 @@ $title = $langvars['l_ibank_title'];
 $body_class = 'ibank';
 Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
-$result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
-$playerinfo = $result->fields;
+$stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email");
+$stmt->bindParam(':email', $_SESSION['username']);
+$result = $stmt->execute();
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result = $db->Execute("SELECT * FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($playerinfo['ship_id']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
-$account = $result->fields;
+$stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id=:ship_id");
+$stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+$result = $stmt->execute();
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+$account = $stmt->fetch(PDO::FETCH_ASSOC);
 
 echo "<body class='" . $body_class . "'>";
 echo "<center>";
@@ -77,15 +81,15 @@ elseif ($command == 'withdraw') //withdraw menu
 }
 elseif ($command == 'withdraw2') //withdraw operation
 {
-    Bad\Ibank::ibankWithdraw2($db, $langvars, $playerinfo, $amount, $account);
+    Bad\Ibank::ibankWithdraw2($pdo_db, $langvars, $playerinfo, $amount, $account);
 }
 elseif ($command == 'deposit') //deposit menu
 {
-    Bad\Ibank::deposit($db, $pdo_db, $lang, $account, $playerinfo, $langvars);
+    Bad\Ibank::ibankDeposit($pdo_db, $lang, $account, $playerinfo, $langvars);
 }
 elseif ($command == 'deposit2') //deposit operation
 {
-    Bad\Ibank::ibankDeposit2($db, $langvars, $playerinfo, $amount, $account);
+    Bad\Ibank::ibankDeposit2($pdo_db, $langvars, $playerinfo, $amount, $account);
 }
 elseif ($command == 'transfer') //main transfer menu
 {
