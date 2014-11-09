@@ -293,21 +293,21 @@ else
 
             echo "<div style='width:800px; margin:auto; text-align:center; color:#fff;'>\n";
 
-            echo "  <div style='text-align:center; font-size:24px; font-weight:bold; padding:4px; background-color:{$color_header}; border:#FFCC00 1px solid;'>The Kabal Invasion Combat System. " .
+            echo "  <div style='text-align:center; font-size:24px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>The Kabal Invasion Combat System. " .
                  "(<span style='color:#0f0;'>BETA</span>)</div>\n";
             echo "  <div style='height:1px;'></div>\n";
 
             echo "<table style='width:100%; border:none; background-color:#FFCC00;' cellpadding='0' cellspacing='1'>\n";
 
-            echo "  <tr style='background-color:{$color_header}; font-size:16px;'>\n";
-            echo "    <td style='text-align:center; font-weight:bold;background-color:{$color_header};'>Stats</td>\n";
-            echo "    <td style='width:33%; text-align:center; font-weight:bold;background-color:{$color_header};'>You [<span style='color:#0f0; font-size:12px; font-weight:normal;'>" .
+            echo "  <tr style='background-color:{$tkireg->color_header}; font-size:16px;'>\n";
+            echo "    <td style='text-align:center; font-weight:bold;background-color:{$tkireg->color_header};'>Stats</td>\n";
+            echo "    <td style='width:33%; text-align:center; font-weight:bold;background-color:{$tkireg->color_header};'>You [<span style='color:#0f0; font-size:12px; font-weight:normal;'>" .
                  "{$playerinfo['character_name']}</span>]</td>\n";
-            echo "    <td style='width:33%; text-align:center; font-weight:bold;background-color:{$color_header};'>Target [<span style='color:#0f0; font-size:12px; font-weight:normal;'>" .
+            echo "    <td style='width:33%; text-align:center; font-weight:bold;background-color:{$tkireg->color_header};'>Target [<span style='color:#0f0; font-size:12px; font-weight:normal;'>" .
                  "{$targetinfo['character_name']}</span>]</td>\n";
             echo "  </tr>\n";
 
-            $color = $color_line1;
+            $color = $tkireg->color_line1;
 
             $temp_count = count($bcs_info);
             for ($bcs_index = 0; $bcs_index < $temp_count; $bcs_index++)
@@ -318,20 +318,20 @@ else
                 echo "    <td style='width:33%; text-align:right; padding:4px;background-color:{$color};'>{$bcs_info[$bcs_index][2]}</td>\n";
                 echo "  </tr>\n";
 
-                if ($color == $color_line1)
+                if ($color == $tkireg->color_line1)
                 {
-                    $color = $color_line2;
+                    $color = $tkireg->color_line2;
                 }
                 else
                 {
-                    $color = $color_line1;
+                    $color = $tkireg->color_line1;
                 }
             }
             echo "</table>\n";
             echo "  <div style='height:4px;'></div>\n";
-            echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$color_header}; border:#FFCC00 1px solid;'>Beams</div>\n";
+            echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>Beams</div>\n";
             echo "  <div style='height:1px;'></div>\n";
-            echo "  <div style='text-align:left; font-size:12px; padding:4px; background-color:{$color_line1}; border:#FFCC00 1px solid;'>\n";
+            echo "  <div style='text-align:left; font-size:12px; padding:4px; background-color:{$tkireg->color_line1}; border:#FFCC00 1px solid;'>\n";
 
             $bcs_stats_info = false;
 
@@ -447,9 +447,9 @@ else
 
             echo "  </div>\n";
             echo "  <div style='height:4px;'></div>\n";
-            echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$color_header}; border:#FFCC00 1px solid;'>Torpedos</div>\n";
+            echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>Torpedos</div>\n";
             echo "  <div style='height:1px;'></div>\n";
-            echo "  <div style='text-align:left; font-size:12px; padding:4px; background-color:{$color_line1}; border:#FFCC00 1px solid;'>\n";
+            echo "  <div style='text-align:left; font-size:12px; padding:4px; background-color:{$tkireg->color_line1}; border:#FFCC00 1px solid;'>\n";
             $bcs_stats_info = false;
 
             if ($targetfighters > 0 && $playertorpdmg > 0)
@@ -528,9 +528,9 @@ else
 
             echo "  </div>\n";
             echo "  <div style='height:4px;'></div>\n";
-            echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$color_header}; border:#FFCC00 1px solid;'>Fighters</div>\n";
+            echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>Fighters</div>\n";
             echo "  <div style='height:1px;'></div>\n";
-            echo "  <div style='text-align:left; font-size:12px; padding:4px; background-color:{$color_line1}; border:#FFCC00 1px solid;'>\n";
+            echo "  <div style='text-align:left; font-size:12px; padding:4px; background-color:{$tkireg->color_line1}; border:#FFCC00 1px solid;'>\n";
             $bcs_stats_info = false;
 
             if ($playerfighters > 0 && $targetfighters > 0)
@@ -597,9 +597,9 @@ else
             }
             echo "  </div>\n";
             echo "  <div style='height:4px;'></div>\n";
-            echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$color_header}; border:#FFCC00 1px solid;'>Outcome</div>\n";
+            echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>Outcome</div>\n";
             echo "  <div style='height:1px;'></div>\n";
-            echo "  <div style='text-align:left; font-size:12px; padding:4px; background-color:{$color_line1}; border:#FFCC00 1px solid;'>\n";
+            echo "  <div style='text-align:left; font-size:12px; padding:4px; background-color:{$tkireg->color_line1}; border:#FFCC00 1px solid;'>\n";
 
             if ($targetarmor < 1)
             {
@@ -877,7 +877,7 @@ else
 
             echo "  </div>\n";
             echo "  <div style='height:1px;'></div>\n";
-            echo "  <div style='text-align:right; font-size:10px; padding:4px; background-color:{$color_header}; border:#FFCC00 1px solid;'></div>\n";
+            echo "  <div style='text-align:right; font-size:10px; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'></div>\n";
             echo "</div>\n";
         }
     }

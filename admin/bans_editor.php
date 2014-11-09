@@ -47,29 +47,29 @@ if (empty($command))
     else
     {
         echo "<table border=1 cellspacing=1 cellpadding=2 width=100% align=center>" .
-             "<tr bgcolor=$color_line2><td align=center colspan=7><strong><font color=white>" .
+             "<tr bgcolor=$tkireg->color_line2><td align=center colspan=7><strong><font color=white>" .
              $langvars['l_admin_active_bans'] .
              "</font></strong>" .
              "</td></tr>" .
-             "<tr align=center bgcolor=$color_line2>" .
+             "<tr align=center bgcolor=$tkireg->color_line2>" .
              "<td><font size=2 color=white><strong>" . $langvars['l_admin_ban_mask'] . "</strong></font></td>" .
              "<td><font size=2 color=white><strong>" . $langvars['l_admin_affected_players'] . "</strong></font></td>" .
              "<td><font size=2 color=white><strong>" . $langvars['l_admin_email'] . "</strong></font></td>" .
              "<td><font size=2 color=white><strong>" . $langvars['l_admin_operation'] . "</strong></font></td>" .
              "</tr>";
 
-        $curcolor = $color_line1;
+        $curcolor = $tkireg->color_line1;
 
         foreach ($bans as $ban)
         {
             echo "<tr bgcolor=" . $curcolor . ">";
-            if ($curcolor == $color_line1)
+            if ($curcolor == $tkireg->color_line1)
             {
-                $curcolor = $color_line2;
+                $curcolor = $tkireg->color_line2;
             }
             else
             {
-                $curcolor = $color_line1;
+                $curcolor = $tkireg->color_line1;
             }
 
             $printban = str_replace("%", "*", $ban);
@@ -135,29 +135,29 @@ elseif ($command == 'showips')
     }
 
     echo "<table border=1 cellspacing=1 cellpadding=2 width=100% align=center>" .
-         "<tr bgcolor=" . $color_line2 . "><td align=center colspan=7><strong><font color=white>" .
+         "<tr bgcolor=" . $tkireg->color_line2 . "><td align=center colspan=7><strong><font color=white>" .
          $langvars['l_admin_players_sorted'] .
          "</font></strong>" .
          "</td></tr>" .
-         "<tr align=center bgcolor=" . $color_line2 . ">" .
+         "<tr align=center bgcolor=" . $tkireg->color_line2 . ">" .
          "<td><font size=2 color=white><strong>" . $langvars['l_admin_ip_address'] . "</strong></font></td>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_admin_players'] . "</strong></font></td>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_admin_email'] . "</strong></font></td>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_admin_operations'] . "</strong></font></td>" .
          "</tr>";
 
-    $curcolor = $color_line1;
+    $curcolor = $tkireg->color_line1;
 
     foreach ($ips as $ip)
     {
         echo "<tr bgcolor=$curcolor>";
-        if ($curcolor == $color_line1)
+        if ($curcolor == $tkireg->color_line1)
         {
-            $curcolor = $color_line2;
+            $curcolor = $tkireg->color_line2;
         }
         else
         {
-            $curcolor = $color_line1;
+            $curcolor = $tkireg->color_line1;
         }
 
         echo "<td align=center><font size=2 color=white>" . $ip . "</td>" .
