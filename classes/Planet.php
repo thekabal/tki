@@ -44,10 +44,8 @@ class Planet
         return false;
     }
 
-    public static function planetBombing($db, $langvars, \Tki\Reg $tkireg)
+    public static function planetBombing($db, $langvars, \Tki\Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $attackerfighters, $planettorps)
     {
-        global $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $attackerfighters, $planettorps;
-
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";

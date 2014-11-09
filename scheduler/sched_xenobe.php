@@ -49,7 +49,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
     $xenobeisdead = 0;
     $playerinfo = $res->fields;
     // Regenerate / Buy stats
-    Bad\Xenobe::xenobeRegen($db, $playerinfo);
+    Bad\Xenobe::xenobeRegen($db, $playerinfo, $xen_unemployment, $xenobeisdead, $tkireg);
 
     // Run through orders
     $furcount++;
@@ -77,7 +77,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     {
                         $furcount0a++;
                         Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo0[character_name]");
-                        Bad\Xenobe::xenobeToShip($db, $rowo0['ship_id']);
+                        Bad\Xenobe::xenobeToShip($db, $rowo0['ship_id'], $tkireg, $playerinfo);
                         if ($xenobeisdead > 0)
                         {
                             $res->MoveNext();
@@ -89,7 +89,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 {
                     $furcount0a++;
                     Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo0[character_name]");
-                    Bad\Xenobe::xenobeToShip($db, $rowo0['ship_id']);
+                    Bad\Xenobe::xenobeToShip($db, $rowo0['ship_id'], $tkireg, $playerinfo);
                     if ($xenobeisdead > 0)
                     {
                         $res->MoveNext();
@@ -103,7 +103,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Bad\Xenobe::xenobeMove($db);
+            Bad\Xenobe::xenobeMove($db, $playerinfo, $targetlink, $xenobeisdead);
             if ($xenobeisdead > 0)
             {
                 $res->MoveNext();
@@ -126,7 +126,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     {
                         $furcount1a++;
                         Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
-                        Bad\Xenobe::xenobeToShip($db, $rowo1['ship_id']);
+                        Bad\Xenobe::xenobeToShip($db, $rowo1['ship_id'], $tkireg, $playerinfo);
                         if ($xenobeisdead > 0)
                         {
                             $res->MoveNext();
@@ -140,11 +140,11 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
                     if (!$rowo1['planet_id'] == 0)
                     {              // Is on planet
-                        Bad\Xenobe::xenobeToPlanet($db, $rowo1['planet_id']);
+                        Bad\Xenobe::xenobeToPlanet($db, $rowo1['planet_id'], $tkireg, $playerinfo);
                     }
                     else
                     {
-                        Bad\Xenobe::xenobeToShip($db, $rowo1['ship_id']);
+                        Bad\Xenobe::xenobeToShip($db, $rowo1['ship_id'], $tkireg, $playerinfo);
                     }
 
                     if ($xenobeisdead > 0)
@@ -161,7 +161,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Bad\Xenobe::xenobeMove($db);
+            Bad\Xenobe::xenobeMove($db, $playerinfo, $targetlink, $xenobeisdead);
             if ($xenobeisdead > 0)
             {
                 $res->MoveNext();
@@ -188,7 +188,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     {
                         $furcount2a++;
                         Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
-                        Bad\Xenobe::xenobeToShip($db, $rowo2['ship_id']);
+                        Bad\Xenobe::xenobeToShip($db, $rowo2['ship_id'], $tkireg, $playerinfo);
                         if ($xenobeisdead > 0)
                         {
                             $res->MoveNext();
@@ -202,11 +202,11 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
                     if (!$rowo2['planet_id'] == 0)
                     {              // IS ON PLANET
-                        Bad\Xenobe::xenobeToPlanet($db, $rowo2['planet_id']);
+                        Bad\Xenobe::xenobeToPlanet($db, $rowo2['planet_id'], $tkireg, $playerinfo);
                     }
                     else
                     {
-                        Bad\Xenobe::xenobeToShip($db, $rowo2['ship_id']);
+                        Bad\Xenobe::xenobeToShip($db, $rowo2['ship_id'], $tkireg, $playerinfo);
                     }
 
                     if ($xenobeisdead > 0)
@@ -228,7 +228,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             if ($hunt == 0)
             {
                 $furcount3h++;
-                Bad\Xenobe::xenobeHunter($db);
+                Bad\Xenobe::xenobeHunter($db, $playerinfo, $targetlink, $xenobeisdead);
                 if ($xenobeisdead > 0)
                 {
                     $res->MoveNext();
@@ -238,7 +238,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Bad\Xenobe::xenobeMove($db);
+                Bad\Xenobe::xenobeMove($db, $playerinfo, $targetlink, $xenobeisdead);
                 if ($xenobeisdead > 0)
                 {
                     $res->MoveNext();
@@ -263,7 +263,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         {
                             $furcount3a++;
                             Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
-                            Bad\Xenobe::xenobeToShip($db, $rowo3['ship_id']);
+                            Bad\Xenobe::xenobeToShip($db, $rowo3['ship_id'], $tkireg, $playerinfo);
                             if ($xenobeisdead > 0)
                             {
                                 $res->MoveNext();
@@ -277,11 +277,11 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
                         if (!$rowo3['planet_id'] == 0)
                         {              // IS ON PLANET
-                            Bad\Xenobe::xenobeToPlanet($db, $rowo3['planet_id']);
+                            Bad\Xenobe::xenobeToPlanet($db, $rowo3['planet_id'], $tkireg, $playerinfo);
                         }
                         else
                         {
-                            Bad\Xenobe::xenobeToShip($db, $rowo3['ship_id']);
+                            Bad\Xenobe::xenobeToShip($db, $rowo3['ship_id'], $tkireg, $playerinfo);
                         }
 
                         if ($xenobeisdead > 0)
