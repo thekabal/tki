@@ -223,7 +223,7 @@ class Ibank
              "<br><input class=term type=submit name=planett value='" . $langvars['l_ibank_planettransfer'] . "'>" .
              "</td></tr></form>";
 
-        // ---- begin Consol Credits form    // ---- added by Torr
+        // Begin consolidate credits form
         echo "<tr valign=top>" .
              "<td><br>" . $langvars['l_ibank_conspl'] . " :<br><br>" .
              "<form accept-charset='utf-8' action='ibank.php?command=consolidate' method=post>" .
@@ -249,7 +249,7 @@ class Ibank
              "<br><input class=term type=submit name=planetc value='" . $langvars['l_ibank_consolidate'] . "'>" .
              "</td></tr>" .
              "</form>";
-        // ---- End Consol Credits form ---
+        // End consolidate credits form
 
         echo "</form><tr valign=bottom>" .
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
@@ -575,7 +575,7 @@ class Ibank
             $amount = 0;
         }
 
-        if (isset($ship_id)) //ship transfer
+        if (isset($ship_id)) // Ship transfer
         {
             // Need to check again to prevent cheating by manual posts
 
@@ -641,7 +641,6 @@ class Ibank
 
             if ($tkireg->ibank_svalue != 0)
             {
-                $percent = $tkireg->ibank_svalue * 100;
                 $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
                 $maxtrans = $score * $score * $tkireg->ibank_svalue;
 
@@ -805,7 +804,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate2($db, $langvars, $playerinfo, \Tki\Reg $tkireg, $account, $dplanet_id, $minimum, $maximum)
+    public static function ibankConsolidate2($db, $langvars, $playerinfo, \Tki\Reg $tkireg, $dplanet_id, $minimum, $maximum)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
