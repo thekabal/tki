@@ -49,7 +49,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
         $sql = "SELECT * FROM {$this->pdo_db->prefix}ships WHERE email = :email";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':email', $email);
-        $res = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 
         // A little magic here. If it couldn't select a user, the following call will return false - which is what we want for "no user found".

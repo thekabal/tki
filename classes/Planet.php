@@ -1090,7 +1090,6 @@ class Planet
         {
             $langvars['l_cmb_youdidntdestroyhim'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_youdidntdestroyhim']);
             echo $langvars['l_cmb_youdidntdestroyhim'] . "<br>";
-            $target_rating_change = round($targetinfo['rating'] * .1);
             $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $target_energy = $targetinfo['ship_energy'];
