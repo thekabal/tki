@@ -257,7 +257,7 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
-    public static function ibankLoans($pdo_db, $db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account, $ibank_loanlimit, $ibank_loanfactor, $ibank_loaninterest)
+    public static function ibankLoans($pdo_db, $db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account)
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
@@ -292,8 +292,8 @@ class Ibank
                 echo "<td align=right>{$hours}h {$mins}m</td></tr>";
             }
 
-            $factor = $ibank_loanfactor *= 100;
-            $interest = $ibank_loaninterest *= 100;
+            $factor = $tkireg->ibank_loanfactor *= 100;
+            $interest = $tkireg->ibank_loaninterest *= 100;
 
             $langvars['l_ibank_loanrates'] = str_replace("[factor]", $factor, $langvars['l_ibank_loanrates']);
             $langvars['l_ibank_loanrates'] = str_replace("[interest]", $interest, $langvars['l_ibank_loanrates']);
@@ -308,15 +308,15 @@ class Ibank
         }
         else
         {
-            $percent = $ibank_loanlimit * 100;
+            $percent = $tkireg->ibank_loanlimit * 100;
             $score = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
-            $maxloan = $score * $score * $ibank_loanlimit;
+            $maxloan = $score * $score * $tkireg->ibank_loanlimit;
 
             $langvars['l_ibank_maxloanpercent'] = str_replace("[ibank_percent]", $percent, $langvars['l_ibank_maxloanpercent']);
             echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_maxloanpercent'] . " :</td><td align=right>" . number_format($maxloan, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
 
-            $factor = $ibank_loanfactor *= 100;
-            $interest = $ibank_loaninterest *= 100;
+            $factor = $tkireg->ibank_loanfactor *= 100;
+            $interest = $tkireg->ibank_loaninterest *= 100;
 
             $langvars['l_ibank_loanrates'] = str_replace("[factor]", $factor, $langvars['l_ibank_loanrates']);
             $langvars['l_ibank_loanrates'] = str_replace("[interest]", $interest, $langvars['l_ibank_loanrates']);
