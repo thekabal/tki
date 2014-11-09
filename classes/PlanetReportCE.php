@@ -25,10 +25,8 @@ namespace Bad;
 
 class PlanetReportCE
 {
-    public static function buildBase($db, $langvars, $planet_id, $sector_id)
+    public static function buildBase($db, $langvars, $planet_id, $sector_id, $tkireg)
     {
-        global $base_ore, $base_organics, $base_goods, $base_credits;
-
         echo "<br>";
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_status']);
         echo "<br><br>";
@@ -70,10 +68,10 @@ class PlanetReportCE
         echo str_replace("[here]", "<a href='planet.php?planet_id=$planet_id'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_planet']);
         echo "<br><br>";
 
-        if ($planetinfo['ore'] >= $base_ore && $planetinfo['organics'] >= $base_organics && $planetinfo['goods'] >= $base_goods && $planetinfo['credits'] >= $base_credits)
+        if ($planetinfo['ore'] >= $tkireg->base_ore && $planetinfo['organics'] >= $tkireg->base_organics && $planetinfo['goods'] >= $tkireg->base_goods && $planetinfo['credits'] >= $tkireg->base_credits)
         {
             // Create The Base
-            $update1 = $db->Execute("UPDATE {$db->prefix}planets SET base='Y', ore= ? - ?, organics = ? - ?, goods = ? - ?, credits = ? - ? WHERE planet_id = ?;", array($planetinfo['ore'], $base_ore, $planetinfo['organics'], $base_organics, $planetinfo['goods'], $base_goods, $planetinfo['credits'], $base_credits, $planet_id));
+            $update1 = $db->Execute("UPDATE {$db->prefix}planets SET base='Y', ore= ? - ?, organics = ? - ?, goods = ? - ?, credits = ? - ? WHERE planet_id = ?;", array($planetinfo['ore'], $tkireg->base_ore, $planetinfo['organics'], $tkireg->base_organics, $planetinfo['goods'], $tkireg->base_goods, $planetinfo['credits'], $tkireg->base_credits, $planet_id));
             \Tki\Db::logDbErrors($db, $update1, __LINE__, __FILE__);
 
             // Update User Turns

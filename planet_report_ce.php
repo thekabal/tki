@@ -46,7 +46,7 @@ if ($tpcreds !== null && $tpcreds !== false)
 }
 elseif (isset($buildp) && isset($builds))
 {
-    Bad\PlanetReportCE::buildBase($db, $langvars, $buildp, $builds);
+    Bad\PlanetReportCE::buildBase($db, $langvars, $buildp, $builds, $tkireg);
 }
 else
 {
