@@ -475,7 +475,7 @@ class Planet
                 }
 
                 echo "<br>-" . $onplanet['ship_name'] . " " . $langvars['l_cmb_approachattackvector'] . "-<br>";
-                \BadPlanet::shipToShip($db, $onplanet['ship_id'], $tkireg);
+                \BadPlanet::shipToShip($db, $onplanet['ship_id'], $tkireg, $playerinfo);
                 $result4->MoveNext();
             }
         }
@@ -621,10 +621,9 @@ class Planet
         \Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
     }
 
-    public static function shipToShip($db, $langvars, $ship_id, \Tki\Reg $tkireg)
+    public static function shipToShip($db, $langvars, $ship_id, \Tki\Reg $tkireg, $playerinfo)
     {
-        global $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage;
-        global $armor_lost, $fighters_lost, $playerinfo;
+        global $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage, $armor_lost, $fighters_lost;
 
         $resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}sector_defence WRITE, {$db->prefix}universe WRITE, {$db->prefix}adodb_logsql WRITE, {$db->prefix}logs WRITE, {$db->prefix}bounty WRITE, {$db->prefix}news WRITE, {$db->prefix}zones READ");
         \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);

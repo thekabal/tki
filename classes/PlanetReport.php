@@ -45,8 +45,6 @@ class PlanetReport
 
     public static function standardReport($db, $langvars, $playerinfo, $sort, \Tki\Reg $tkireg)
     {
-        global $color;
-
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
         echo "Planetary report descriptions and <strong><a href=\"planet_report.php?preptype=0\">menu</a></strong><br><br>" .
@@ -234,8 +232,6 @@ class PlanetReport
 
     public static function planetProductionChange($db, $langvars, $playerinfo, $sort, \Tki\Reg $tkireg)
     {
-        global $color;
-
         $query = "SELECT * FROM {$db->prefix}planets WHERE owner=? AND base='Y'";
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
