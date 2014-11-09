@@ -598,7 +598,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 }
                 else
                 {
-                    BadPlanet::planetCombat($db);
+                    BadPlanet::planetCombat($db, $langvars, $tkireg);
                 }
             }
         }
@@ -626,7 +626,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
         }
         elseif ($command == "bomb" && $tkireg->allow_sofa)
         {
-            BadPlanet::planetBombing($db);
+            BadPlanet::planetBombing($db, $langvars, $tkireg);
         }
         elseif ($command == "scan")
         {

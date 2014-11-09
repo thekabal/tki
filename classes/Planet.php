@@ -44,10 +44,9 @@ class Planet
         return false;
     }
 
-    public static function planetBombing($db, $langvars)
+    public static function planetBombing($db, $langvars, \Tki\Reg $tkireg)
     {
-        global $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $attackerfighters;
-        global $planettorps, $torp_dmg_rate;
+        global $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $attackerfighters, $planettorps;
 
         if ($playerinfo['turns'] < 1)
         {
@@ -60,14 +59,14 @@ class Planet
         echo $langvars['l_bombsaway'] . "<br><br>\n";
         $attackerfighterslost = 0;
         $planetfighterslost = 0;
-        $attackerfightercapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $level_factor);
-        $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $level_factor);
+        $attackerfightercapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor);
+        $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $tkireg->level_factor);
         $beamsused = 0;
 
         $res = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE");
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 
-        $planettorps = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $level_factor);
+        $planettorps = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $tkireg->level_factor);
         $planetbeams = \Tki\CalcLevels::planetBeams($db, $ownerinfo, $base_defense, $planetinfo);
 
         $planetfighters = $planetinfo['fighters'];
@@ -95,7 +94,7 @@ class Planet
         }
         else
         {
-            $attackerfighterslost += $planettorps * $torp_dmg_rate;
+            $attackerfighterslost += $planettorps * $tkireg->torp_dmg_rate;
 
             if ($attackerfighters <= $attackerfighterslost)
             {
@@ -130,11 +129,11 @@ class Planet
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
     }
 
-    public static function planetCombat($db, $langvars)
+    public static function planetCombat($db, $langvars, \Tki\Reg $tkireg)
     {
-        global $playerinfo, $ownerinfo, $planetinfo, $torpedo_price, $colonist_price, $ore_price, $organics_price, $goods_price, $energy_price;
-        global $planetbeams, $planetfighters, $planetshields, $planettorps, $attackerbeams, $attackerfighters, $attackershields, $upgrade_factor, $upgrade_cost;
-        global $attackertorps, $attackerarmor, $torp_dmg_rate, $level_factor, $attackertorpdamage, $min_value_capture;
+        global $playerinfo, $ownerinfo, $planetinfo;
+        global $planetbeams, $planetfighters, $planetshields, $planettorps, $attackerbeams, $attackerfighters, $attackershields;
+        global $attackertorps, $attackerarmor, $attackertorpdamage;
 
         if ($playerinfo['turns'] < 1)
         {
@@ -148,14 +147,14 @@ class Planet
         $planetbeams        = \Tki\CalcLevels::planetBeams($db, $ownerinfo, $base_defense, $planetinfo);
         $planetfighters     = $planetinfo['fighters'];
         $planetshields      = \Tki\CalcLevels::planetShields($db, $ownerinfo, $base_defense, $planetinfo);
-        $planettorps        = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $level_factor);
+        $planettorps        = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $tkireg->level_factor);
 
         // Attacking ship calculations
 
-        $attackerbeams      = \Tki\CalcLevels::beams($playerinfo['beams'], $level_factor);
+        $attackerbeams      = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
         $attackerfighters   = $playerinfo['ship_fighters'];
-        $attackershields    = \Tki\CalcLevels::shields($playerinfo['shields'], $level_factor);
-        $attackertorps      = round(pow($level_factor, $playerinfo['torp_launchers'])) * 2;
+        $attackershields    = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
+        $attackertorps      = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
         $attackerarmor      = $playerinfo['armor_pts'];
 
         // Now modify player beams, shields and torpedos on available materiel
@@ -183,8 +182,8 @@ class Planet
         $playerinfo['torps'] = $playerinfo['torps'] - $attackertorps;
 
         // Setup torp damage rate for both Planet and Ship
-        $planettorpdamage   = $torp_dmg_rate * $planettorps;
-        $attackertorpdamage = $torp_dmg_rate * $attackertorps;
+        $planettorpdamage   = $tkireg->torp_dmg_rate * $planettorps;
+        $attackertorpdamage = $tkireg->torp_dmg_rate * $attackertorps;
 
         echo "
         <center>
@@ -478,7 +477,7 @@ class Planet
                 }
 
                 echo "<br>-" . $onplanet['ship_name'] . " " . $langvars['l_cmb_approachattackvector'] . "-<br>";
-                \BadPlanet::shipToShip($db, $onplanet['ship_id']);
+                \BadPlanet::shipToShip($db, $onplanet['ship_id'], $tkireg);
                 $result4->MoveNext();
             }
         }
@@ -492,7 +491,7 @@ class Planet
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
             $free_goods = round($playerinfo['ship_goods'] / 2);
-            $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $playerinfo['hull'])) + round(pow($upgrade_factor, $playerinfo['engines'])) + round(pow($upgrade_factor, $playerinfo['power'])) + round(pow($upgrade_factor, $playerinfo['computer'])) + round(pow($upgrade_factor, $playerinfo['sensors'])) + round(pow($upgrade_factor, $playerinfo['beams'])) + round(pow($upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($upgrade_factor, $playerinfo['shields'])) + round(pow($upgrade_factor, $playerinfo['armor'])) + round(pow($upgrade_factor, $playerinfo['cloak'])));
+            $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
             $ship_salvage_rate = \Tki\Rand::betterRand(0, 10);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
             echo "<br><center><font size='+2' COLOR='red'><strong>" . $langvars['l_cmb_yourshipdestroyed'] . "</font></strong></center><br>";
@@ -568,13 +567,13 @@ class Planet
                 echo "<div style='text-align:center; font-size:18px; color:#f00;'>The planet become unstable due to not being looked after, and all life and assets have been destroyed.</div>\n";
             }
 
-            if ($min_value_capture != 0)
+            if ($tkireg->min_value_capture != 0)
             {
                 $playerscore = \Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
                 $playerscore *= $playerscore;
 
-                $planetscore = $planetinfo['organics'] * $organics_price + $planetinfo['ore'] * $ore_price + $planetinfo['goods'] * $goods_price + $planetinfo['energy'] * $energy_price + $planetinfo['fighters'] * $fighter_price + $planetinfo['torps'] * $torpedo_price + $planetinfo['colonists'] * $colonist_price + $planetinfo['credits'];
-                $planetscore = $planetscore * $min_value_capture / 100;
+                $planetscore = $planetinfo['organics'] * $tkireg->organics_price + $planetinfo['ore'] * $tkireg->ore_price + $planetinfo['goods'] * $tkireg->goods_price + $planetinfo['energy'] * $tkireg->energy_price + $planetinfo['fighters'] * $fighter_price + $planetinfo['torps'] * $tkireg->torpedo_price + $planetinfo['colonists'] * $tkireg->colonist_price + $planetinfo['credits'];
+                $planetscore = $planetscore * $tkireg->min_value_capture / 100;
 
                 if ($playerscore < $planetscore)
                 {
@@ -624,10 +623,10 @@ class Planet
         \Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
     }
 
-    public static function shipToShip($db, $langvars, $ship_id)
+    public static function shipToShip($db, $langvars, $ship_id, \Tki\Reg $tkireg)
     {
-        global $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage, $level_factor;
-        global $torp_dmg_rate, $rating_combat_factor, $upgrade_factor, $upgrade_cost, $armor_lost, $fighters_lost, $playerinfo;
+        global $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage;
+        global $armor_lost, $fighters_lost, $playerinfo;
 
         $resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}sector_defence WRITE, {$db->prefix}universe WRITE, {$db->prefix}adodb_logsql WRITE, {$db->prefix}logs WRITE, {$db->prefix}bounty WRITE, {$db->prefix}news WRITE, {$db->prefix}zones READ");
         \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
@@ -646,25 +645,25 @@ class Planet
         " . $langvars['l_cmb_statattackerarmor'] . ": $attackerarmor<br>
         " . $langvars['l_cmb_statattackertorpdamage'] . ": $attackertorpdamage<br>";
 
-        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $level_factor);
+        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $tkireg->level_factor);
         if ($targetbeams > $targetinfo['ship_energy'])
         {
             $targetbeams = $targetinfo['ship_energy'];
         }
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
-        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $level_factor);
+        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg->level_factor);
         if ($targetshields > $targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
         }
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
 
-        $targettorpnum = round(pow($level_factor, $targetinfo['torp_launchers'])) * 2;
+        $targettorpnum = round(pow($tkireg->level_factor, $targetinfo['torp_launchers'])) * 2;
         if ($targettorpnum > $targetinfo['torps'])
         {
             $targettorpnum = $targetinfo['torps'];
         }
-        $targettorpdmg = $torp_dmg_rate * $targettorpnum;
+        $targettorpdmg = $tkireg->torp_dmg_rate * $targettorpnum;
         $targetarmor = $targetinfo['armor_pts'];
         $targetfighters = $targetinfo['ship_fighters'];
         echo "-->$targetinfo[ship_name] " . $langvars['l_cmb_isattackingyou'] . "<br><br>";
@@ -1008,11 +1007,11 @@ class Planet
             echo "<br>" . $langvars['l_cmb_hehasbeendestroyed'] . "<br>";
             if ($attackerarmor > 0)
             {
-                $rating_change=round($targetinfo['rating'] * $rating_combat_factor);
+                $rating_change=round($targetinfo['rating'] * $tkireg->rating_combat_factor);
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {
                     $salv_goods = $free_goods;
@@ -1055,7 +1054,7 @@ class Planet
                 {
                     $salv_organics = 0;
                 }
-                $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $targetinfo['hull']))+round(pow($upgrade_factor, $targetinfo['engines']))+round(pow($upgrade_factor, $targetinfo['power']))+round(pow($upgrade_factor, $targetinfo['computer']))+round(pow($upgrade_factor, $targetinfo['sensors']))+round(pow($upgrade_factor, $targetinfo['beams']))+round(pow($upgrade_factor, $targetinfo['torp_launchers']))+round(pow($upgrade_factor, $targetinfo['shields']))+round(pow($upgrade_factor, $targetinfo['armor']))+round(pow($upgrade_factor, $targetinfo['cloak'])));
+                $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull']))+round(pow($tkireg->upgrade_factor, $targetinfo['engines']))+round(pow($tkireg->upgrade_factor, $targetinfo['power']))+round(pow($tkireg->upgrade_factor, $targetinfo['computer']))+round(pow($tkireg->upgrade_factor, $targetinfo['sensors']))+round(pow($tkireg->upgrade_factor, $targetinfo['beams']))+round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $targetinfo['shields']))+round(pow($tkireg->upgrade_factor, $targetinfo['armor']))+round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
                 $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_ore]", $salv_ore, $langvars['l_cmb_yousalvaged']);
