@@ -24,16 +24,12 @@ namespace Bad;
 
 class Xenobe
 {
-    public static function xenobeTrade($db)
+    public static function xenobeTrade($db, $playerinfo, $tkireg, $xenobeisdead)
     {
-        // Setup general variables
-        global $playerinfo, $inventory_factor, $ore_price, $ore_delta, $ore_limit, $goods_price;
-        global $goods_delta, $goods_limit, $organics_price, $organics_delta, $organics_limit, $xenobeisdead;
-
         // We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
-        $ore_price = 11;
-        $organics_price = 5;
-        $goods_price = 15;
+        $tkireg->ore_price = 11;
+        $tkireg->organics_price = 5;
+        $tkireg->goods_price = 15;
 
         // Obtain sector information
         $sectres = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
@@ -141,9 +137,9 @@ class Xenobe
         if ($sectorinfo['port_type'] == "ore") // Port ore
         {
             // Set the prices
-            $ore_price = $ore_price - $ore_delta * $sectorinfo['port_ore'] / $ore_limit * $inventory_factor;
-            $organics_price = $organics_price + $organics_delta * $sectorinfo['port_organics'] / $organics_limit * $inventory_factor;
-            $goods_price = $goods_price + $goods_delta * $sectorinfo['port_goods'] / $goods_limit * $inventory_factor;
+            $tkireg->ore_price = $tkireg->ore_price - $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limitt * $tkireg->inventory_factor;
+            $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+            $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
 
             //  Set cargo buy/sell
             $amount_organics = $playerinfo['ship_organics'];
@@ -156,10 +152,10 @@ class Xenobe
             $amount_ore = min($amount_ore, $sectorinfo['port_ore']);
 
             // We adjust this to make sure it does not exceed what we can afford to buy
-            $amount_ore = min($amount_ore, floor(($playerinfo['credits'] + $amount_organics * $organics_price + $amount_goods * $goods_price) / $ore_price));
+            $amount_ore = min($amount_ore, floor(($playerinfo['credits'] + $amount_organics * $tkireg->organics_price + $amount_goods * $tkireg->goods_price) / $tkireg->ore_price));
 
             // Buy / sell cargo
-            $total_cost = round(($amount_ore * $ore_price) - ($amount_organics * $organics_price + $amount_goods * $goods_price));
+            $total_cost = round(($amount_ore * $tkireg->ore_price) - ($amount_organics * $tkireg->organics_price + $amount_goods * $tkireg->goods_price));
             $newcredits = max(0, $playerinfo['credits'] - $total_cost);
             $newore = $playerinfo['ship_ore'] + $amount_ore;
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
@@ -174,9 +170,9 @@ class Xenobe
         if ($sectorinfo['port_type'] == "organics") // Port organics
         {
             // Set the prices
-            $organics_price = $organics_price - $organics_delta * $sectorinfo['port_organics'] / $organics_limit * $inventory_factor;
-            $ore_price = $ore_price + $ore_delta * $sectorinfo['port_ore'] / $ore_limit * $inventory_factor;
-            $goods_price = $goods_price + $goods_delta * $sectorinfo['port_goods'] / $goods_limit * $inventory_factor;
+            $tkireg->organics_price = $tkireg->organics_price - $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+            $tkireg->ore_price = $tkireg->ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limitt * $tkireg->inventory_factor;
+            $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
 
             // Set cargo buy / sell
             $amount_ore = $playerinfo['ship_ore'];
@@ -189,10 +185,10 @@ class Xenobe
             $amount_organics = min($amount_organics, $sectorinfo['port_organics']);
 
             // WE ADJUST THIS TO MAKE SURE IT DOES NOT EXCEES WHAT WE CAN AFFORD TO BUY
-            $amount_organics = min($amount_organics, floor(($playerinfo['credits'] + $amount_ore * $ore_price + $amount_goods * $goods_price) / $organics_price));
+            $amount_organics = min($amount_organics, floor(($playerinfo['credits'] + $amount_ore * $tkireg->ore_price + $amount_goods * $tkireg->goods_price) / $tkireg->organics_price));
 
             // Buy / sell cargo
-            $total_cost = round(($amount_organics * $organics_price) - ($amount_ore * $ore_price + $amount_goods * $goods_price));
+            $total_cost = round(($amount_organics * $tkireg->organics_price) - ($amount_ore * $tkireg->ore_price + $amount_goods * $tkireg->goods_price));
             $newcredits = max(0, $playerinfo['credits'] - $total_cost);
             $newore = max(0, $playerinfo['ship_ore'] - $amount_ore);
             $neworganics = $playerinfo['ship_organics'] + $amount_organics;
@@ -207,9 +203,9 @@ class Xenobe
         if ($sectorinfo['port_type']=="goods") // Port goods
         {
             // Set the prices
-            $goods_price = $goods_price - $goods_delta * $sectorinfo['port_goods'] / $goods_limit * $inventory_factor;
-            $ore_price = $ore_price + $ore_delta * $sectorinfo['port_ore'] / $ore_limit * $inventory_factor;
-            $organics_price = $organics_price + $organics_delta * $sectorinfo['port_organics'] / $organics_limit * $inventory_factor;
+            $tkireg->goods_price = $tkireg->goods_price - $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+            $tkireg->ore_price = $tkireg->ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limitt * $tkireg->inventory_factor;
+            $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
 
             // Set cargo buy / sell
             $amount_ore = $playerinfo['ship_ore'];
@@ -222,10 +218,10 @@ class Xenobe
             $amount_goods = min($amount_goods, $sectorinfo['port_goods']);
 
             // We adjust this to make sure it does not exceed what we can afford to buy
-            $amount_goods = min($amount_goods, floor(($playerinfo['credits'] + $amount_ore * $ore_price + $amount_organics * $organics_price) / $goods_price));
+            $amount_goods = min($amount_goods, floor(($playerinfo['credits'] + $amount_ore * $tkireg->ore_price + $amount_organics * $tkireg->organics_price) / $tkireg->goods_price));
 
             // Buy / sell cargo
-            $total_cost = round(($amount_goods * $goods_price) - ($amount_organics * $organics_price + $amount_ore * $ore_price));
+            $total_cost = round(($amount_goods * $tkireg->goods_price) - ($amount_organics * $tkireg->organics_price + $amount_ore * $tkireg->ore_price));
             $newcredits = max(0, $playerinfo['credits'] - $total_cost);
             $newore = max(0, $playerinfo['ship_ore'] - $amount_ore);
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
