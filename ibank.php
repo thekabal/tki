@@ -52,7 +52,7 @@ echo '<table style="width:550px; height:300px;" border="0px">';
 
 if (!$tkireg->allow_ibank)
 {
-    Bad\Ibank::ibankError($template->getVariables('template_dir'), $langvars, $langvars['l_ibank_malfunction'], "main.php");
+    Bad\Ibank::ibankError($pdo_db, $template->getVariables('template_dir'), $langvars, $langvars['l_ibank_malfunction'], "main.php");
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -97,11 +97,11 @@ elseif ($command == 'transfer') // Main transfer menu
 }
 elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 {
-    Bad\Ibank::ibankTransfer2($db, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id);
+    Bad\Ibank::ibankTransfer2($db, $pdo_db, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id);
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
-    Bad\Ibank::ibankTransfer3($db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount);
+    Bad\Ibank::ibankTransfer3($db, $pdo_db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount);
 }
 elseif ($command == 'loans') // Loans menu
 {
@@ -109,7 +109,7 @@ elseif ($command == 'loans') // Loans menu
 }
 elseif ($command == 'borrow') // Borrow operation
 {
-    Bad\Ibank::ibankBorrow($db, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount);
+    Bad\Ibank::ibankBorrow($db, $pdo_db, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount);
 }
 elseif ($command == 'repay') // Repay operation
 {
@@ -125,7 +125,7 @@ elseif ($command == 'consolidate2') // Consolidate compute
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Bad\Ibank::ibankConsolidate3($db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum);
+    Bad\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum);
 }
 else
 {

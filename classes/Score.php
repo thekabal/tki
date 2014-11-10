@@ -21,7 +21,7 @@ namespace Tki;
 
 class Score
 {
-    public static function updateScore($db, $ship_id, Reg $tkireg)
+    public static function updateScore($db, \PDO $pdo_db, $ship_id, Reg $tkireg)
     {
         $upgrade_factor = $tkireg->upgrade_factor;
         $upgrade_cost = $tkireg->upgrade_cost;

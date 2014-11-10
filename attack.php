@@ -65,8 +65,8 @@ $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", a
 Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
 $targetinfo = $result2->fields;
 
-$playerscore = Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
-$targetscore = Tki\Score::updateScore($db, $targetinfo['ship_id'], $tkireg);
+$playerscore = Tki\Score::updateScore($db, $pdo_db, $playerinfo['ship_id'], $tkireg);
+$targetscore = Tki\Score::updateScore($db, $pdo_db, $targetinfo['ship_id'], $tkireg);
 $playerscore = $playerscore * $playerscore;
 $targetscore = $targetscore * $targetscore;
 
