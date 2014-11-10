@@ -30,7 +30,7 @@ if (array_key_exists('username', $_SESSION))
     $result = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
     Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
     $playerinfo = $result->fields;
-    $current_score = Tki\Score::updateScore($db, $playerinfo['ship_id'], $tkireg);
+    $current_score = Tki\Score::updateScore($db, $pdo_db, $playerinfo['ship_id'], $tkireg);
 
     $langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
     Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_LOGOUT, $_SERVER['REMOTE_ADDR']);
