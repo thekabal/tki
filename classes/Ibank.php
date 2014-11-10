@@ -255,7 +255,7 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
-    public static function ibankLoans($pdo_db, $db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account)
+    public static function ibankLoans(\PDO $pdo_db, $db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account)
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
@@ -333,7 +333,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay($db, $langvars, $playerinfo, $account, $amount, $active_template)
+    public static function ibankRepay(\PDO $pdo_db, $langvars, $playerinfo, $account, $amount, $active_template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -381,10 +381,18 @@ class Ibank
              "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan=loan - ?, loantime=? WHERE ship_id = ?", array($amount, $account['loantime'], $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits - ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ibank_accounts SET loan = loan - :loanamount, loantime=:loantime WHERE ship_id=:ship_id");
+        $stmt->bindParam(':loanamount', $amount);
+        $stmt->bindParam(':loantime', $account['loantime']);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+
+        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits - :amount WHERE ship_id=:ship_id");
+        $stmt->bindParam(':loanamount', $amount);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
     public static function ibankConsolidate($langvars, \Tki\Reg $tkireg, $dplanet_id)
