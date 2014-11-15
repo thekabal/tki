@@ -63,22 +63,28 @@ class Ibank
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_takenaloan'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td colspan=2 align=center>" . $langvars['l_ibank_loancongrats'] . "<br><br></tr>" .
              "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_loantransferred'] . " :</td><td nowrap align=right>" . number_format($amount, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+             "<td>" . $langvars['l_ibank_loantransferred'] . " :</td><td nowrap align=right>" . number_format($amount, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
              "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_loanfee'] . " :</td><td nowrap align=right>" . number_format($amount2, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+             "<td>" . $langvars['l_ibank_loanfee'] . " :</td><td nowrap align=right>" . number_format($amount2, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
              "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_amountowned'] . " :</td><td nowrap align=right>" . number_format($amount3, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+             "<td>" . $langvars['l_ibank_amountowned'] . " :</td><td nowrap align=right>" . number_format($amount3, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
              "<tr valign=top>" .
              "<td colspan=2 align=center>---------------------------------<br><br>" . $langvars['l_ibank_loanreminder'] . "<br><br>\"" . $langvars['l_ibank_loanreminder2'] ."\"</td>" .
              "<tr valign=top>" .
              "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan = ?, loantime = NOW() WHERE ship_id = ?", array($amount3, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ibank_accounts SET loan = :amount, loantime=NOW() WHERE ship_id=:ship_id");
+        $stmt->bindParam(':amount', $amount3);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits + ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits + :amount WHERE ship_id=:ship_id");
+        $stmt->bindParam(':amount', $amount);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
     public static function ibankLogin($langvars, $playerinfo, $account)
@@ -265,15 +271,14 @@ class Ibank
         {
             $curtime = time();
 
-            $res = $db->Execute("SELECT UNIX_TIMESTAMP(loantime) as time FROM {$db->prefix}ibank_accounts WHERE ship_id = ?", array($playerinfo['ship_id']));
-            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            $sql = "SELECT UNIX_TIMESTAMP(loantime) as time FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $result = $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            $time = $stmt->fetch(\PDO::FETCH_COLUMN);
 
-            if (!$res->EOF)
-            {
-                $time = $res->fields;
-            }
-
-            $difftime = ($curtime - $time['time']) / 60;
+            $difftime = ($curtime - $time) / 60;
 
             echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_loantimeleft'] . " :</td>";
 
@@ -370,11 +375,11 @@ class Ibank
              "<tr valign=top>" .
              "<td colspan=2 align=center>---------------------------------</td>" .
              "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_shipaccount'] . " :</td><td nowrap align=right>" . number_format($playerinfo['credits'], 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+             "<td>" . $langvars['l_ibank_shipaccount'] . " :</td><td nowrap align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
              "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_payloan'] . " :</td><td nowrap align=right>" . number_format($amount, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+             "<td>" . $langvars['l_ibank_payloan'] . " :</td><td nowrap align=right>" . number_format($amount, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
              "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_currentloan'] . " :</td><td nowrap align=right>" . number_format($account['loan'], 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+             "<td>" . $langvars['l_ibank_currentloan'] . " :</td><td nowrap align=right>" . number_format($account['loan'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
              "<tr valign=top>" .
              "<td colspan=2 align=center>---------------------------------</td>" .
              "<tr valign=top>" .
@@ -389,7 +394,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits - :amount WHERE ship_id=:ship_id");
-        $stmt->bindParam(':loanamount', $amount);
+        $stmt->bindParam(':amount', $amount);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
@@ -888,7 +893,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankError($pdo_db, $active_template, $langvars, $errmsg, $backlink, $title = "Error!")
+    public static function ibankError($pdo_db, $active_template, $langvars, $errmsg, $backlink, $title = "Error!", $lang, $tkireg, $template)
     {
         $title = $langvars['l_ibank_ibankerrreport'];
         echo "<tr><td colspan=2 align=center valign=top>" . $title . "<br>---------------------------------</td></tr>" .
