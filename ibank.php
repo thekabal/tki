@@ -105,11 +105,11 @@ elseif ($command == 'transfer3') // Transfer operation
 }
 elseif ($command == 'loans') // Loans menu
 {
-    Bad\Ibank::ibankLoans($pdo_db, $db, $langvars, $tkireg, $playerinfo, $account);
+    Bad\Ibank::ibankLoans($pdo_db, $langvars, $tkireg, $playerinfo, $account);
 }
 elseif ($command == 'borrow') // Borrow operation
 {
-    Bad\Ibank::ibankBorrow($db, $pdo_db, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount);
+    Bad\Ibank::ibankBorrow($pdo_db, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount);
 }
 elseif ($command == 'repay') // Repay operation
 {
