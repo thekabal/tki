@@ -33,13 +33,13 @@ Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email");
 $stmt->bindParam(':email', $_SESSION['username']);
 $result = $stmt->execute();
-Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id=:ship_id");
 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
 $result = $stmt->execute();
-Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 
 echo "<body class='" . $body_class . "'>";

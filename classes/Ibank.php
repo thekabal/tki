@@ -78,13 +78,13 @@ class Ibank
         $stmt->bindParam(':amount', $amount3);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits + :amount WHERE ship_id=:ship_id");
         $stmt->bindParam(':amount', $amount);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
     }
 
     public static function ibankLogin($langvars, $playerinfo, $account)
@@ -151,11 +151,11 @@ class Ibank
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance - :amount WHERE ship_id=:ship_id");
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits + :amount WHERE ship_id=:ship_id");
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
     }
 
     public static function ibankTransfer(\PDO $pdo_db, $langvars, $playerinfo, \Tki\Reg $tkireg)
@@ -163,13 +163,13 @@ class Ibank
         $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC");
         $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
         $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $stmt = $pdo_db->prepare("SELECT name, planet_id, sector_id FROM {$pdo_db->prefix}planets WHERE owner=:owner ORDER BY sector_id ASC");
         $stmt->bindParam(':owner', $playerinfo['ship_id']);
         $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
         $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfertype'] . "<br>---------------------------------</td></tr>" .
@@ -275,7 +275,7 @@ class Ibank
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $result = $stmt->execute();
-            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
             $time = $stmt->fetch(\PDO::FETCH_COLUMN);
 
             $difftime = ($curtime - $time) / 60;
@@ -391,13 +391,13 @@ class Ibank
         $stmt->bindParam(':loantime', $account['loantime']);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits - :amount WHERE ship_id=:ship_id");
         $stmt->bindParam(':amount', $amount);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
     }
 
     public static function ibankConsolidate($langvars, \Tki\Reg $tkireg, $dplanet_id)
@@ -432,7 +432,7 @@ class Ibank
         if (isset($ship_id)) // Ship transfer
         {
             $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=? AND ship_destroyed ='N' AND turns_used > ?;", array($ship_id, $tkireg->ibank_min_turns));
-            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
             if ($playerinfo['ship_id'] == $ship_id)
             {
@@ -464,7 +464,7 @@ class Ibank
                 $curtime = time();
                 $curtime -= $tkireg->ibank_trate * 60;
                 $res = $db->Execute("SELECT UNIX_TIMESTAMP(time) as time FROM {$db->prefix}ibank_transfers WHERE UNIX_TIMESTAMP(time) > ? AND source_id = ? AND dest_id = ?", array($curtime, $playerinfo['ship_id'], $target['ship_id']));
-                \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
                 if (!$res->EOF)
                 {
                     $time = $res->fields;
@@ -517,7 +517,7 @@ class Ibank
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($splanet_id));
-            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
                 Ibank::ibankError($pdo_db, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
@@ -531,7 +531,7 @@ class Ibank
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id, base FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
-            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
                 Ibank::ibankError($pdo_db, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
@@ -593,7 +593,7 @@ class Ibank
             // Need to check again to prevent cheating by manual posts
 
             $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ? AND ship_destroyed ='N' AND turns_used > ?", array($ship_id, $tkireg->ibank_min_turns));
-            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
             if ($playerinfo['ship_id'] == $ship_id)
             {
@@ -625,7 +625,7 @@ class Ibank
                 $curtime = time();
                 $curtime -= $tkireg->ibank_trate * 60;
                 $res = $db->Execute("SELECT UNIX_TIMESTAMP(time) as time FROM {$db->prefix}ibank_transfers WHERE UNIX_TIMESTAMP(time) > ? AND source_id = ? AND dest_id = ?", array($curtime, $playerinfo['ship_id'], $target['ship_id']));
-                \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
                 if (!$res->EOF)
                 {
                     $time = $res->fields;
@@ -682,12 +682,12 @@ class Ibank
                  "</tr>";
 
             $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?", array($amount, $playerinfo['ship_id']));
-            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
             $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance + ? WHERE ship_id = ?", array($transfer, $target['ship_id']));
-            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 
             $resx = $db->Execute("INSERT INTO {$db->prefix}ibank_transfers VALUES (NULL, ?, ?, NOW(), ?)", array($playerinfo['ship_id'], $target['ship_id'], $transfer));
-            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
         }
         else
         {
@@ -697,7 +697,7 @@ class Ibank
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($splanet_id));
-            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
                 Ibank::ibankError($pdo_db, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
@@ -711,7 +711,7 @@ class Ibank
             }
 
             $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
-            \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
             if (!$res || $res->EOF)
             {
                 Ibank::ibankError($pdo_db, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
@@ -756,9 +756,9 @@ class Ibank
                  "</tr>";
 
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits - ? WHERE planet_id = ?", array($amount, $splanet_id));
-            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id = ?", array($transfer, $dplanet_id));
-            \Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
         }
     }
 
@@ -810,17 +810,17 @@ class Ibank
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id");
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
 
         $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET credits = credits - :amount WHERE ship_id=:ship_id");
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
     }
 
     public static function ibankConsolidate2($db, $langvars, $playerinfo, \Tki\Reg $tkireg, $dplanet_id, $minimum, $maximum)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
         if (!$res || $res->EOF)
         {
@@ -854,7 +854,7 @@ class Ibank
         }
 
         $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $amount = $res->fields;
 
         $fee = $tkireg->ibank_paymentfee * $amount['total'];
@@ -918,7 +918,7 @@ class Ibank
         $stmt = $pdo_db->prepare("SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id");
         $stmt->bindParam(':ship_id', $ship_id);
         $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
         $account = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if ($account['loan'] > 0)
@@ -978,7 +978,7 @@ class Ibank
     public static function ibankConsolidate3($db, \PDO $pdo_db, $langvars, $playerinfo, \Tki\Reg $tkireg, $dplanet_id, $minimum, $maximum)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         if (!$res || $res->EOF)
         {
             Ibank::ibankError($pdo_db, $active_template, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer");
@@ -1012,7 +1012,7 @@ class Ibank
         }
 
         $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $amount = $res->fields;
 
         $fee = $tkireg->ibank_paymentfee * $amount['total'];
@@ -1050,10 +1050,10 @@ class Ibank
         }
 
         $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $res = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id=?", array($transfer, $dplanet_id));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $res = $db->Execute("UPDATE {$db->prefix}ships SET turns=turns - ? WHERE ship_id=?", array($tcost, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
     }
 }

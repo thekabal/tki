@@ -31,7 +31,7 @@ class Translate
     public static function load(\PDO $pdo_db = null, $language = null, $categories = null)
     {
         // Check if all supplied args are valid, if not return false.
-        if (is_null($db) || is_null($language) || !is_array($categories))
+        if (is_null($pdo_db) || is_null($language) || !is_array($categories))
         {
             return false;
         }
@@ -57,15 +57,15 @@ class Translate
             foreach ($categories as $category)
             {
                 // Select from the database and return the value of the language variables requested, but do not use caching
-                $query = "SELECT name, value FROM {$db->prefix}languages WHERE category = :category AND section = :language;";
-                $result = $db->prepare($query);
-                Db::logDbErrors($db, $query, __LINE__, __FILE__);
+                $query = "SELECT name, value FROM {$pdo_db->prefix}languages WHERE category = :category AND section = :language;";
+                $result = $pdo_db->prepare($query);
+                Db::logDbErrors($pdo_db, $pdo_db, $query, __LINE__, __FILE__);
 
                 // It is possible to use a single prepare, and multiple executes, but it makes the logic of this section much less clear.
                 $result->bindParam(':category', $category, PDO::PARAM_STR);
                 $result->bindParam(':language', $language, PDO::PARAM_STR);
                 $final_result = $result->execute();
-                Db::logDbErrors($db, $query, __LINE__, __FILE__);
+                Db::logDbErrors($pdo_db, $pdo_db, $query, __LINE__, __FILE__);
 
                 while (($row = $result->fetch()) !== false)
                 {

@@ -24,7 +24,7 @@ class LogMove
     public static function writeLog($db, $ship_id, $sector_id)
     {
         $res = $db->Execute("INSERT INTO {$db->prefix}movement_log (ship_id, sector_id, time) VALUES (?, ?, NOW())", array($ship_id, $sector_id));
-        Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
     }
 }
 

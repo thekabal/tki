@@ -36,7 +36,7 @@ class NewsGateway // Gateway for SQL calls related to Players
         $stmt->bindValue(':start', $day . ' 00:00:00');
         $stmt->bindValue(':end', $day . ' 23:59:59');
         $stmt->execute();
-        \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log errors, if there are any
+        \Tki\Db::logDbErrors($this->pdo_db, $this->pdo_db, $sql, __LINE__, __FILE__); // Log errors, if there are any
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -59,7 +59,7 @@ $sth->execute();
 
 // Place those id's into an array.
 $open_sectors_result = $sth->fetchAll();
-$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $open_sectors_result, __LINE__, __FILE__);
+$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $pdo_db, $open_sectors_result, __LINE__, __FILE__);
 $z++;
 
 $i = 0;
@@ -107,7 +107,7 @@ while ($p_add < $variables['nump']); // Only add as many planets as requested
 
 // Insert all of the planets in one mega sql shot
 $insert = $pdo_db->exec($planet_insert_sql);
-$variables['setup_unowned_results']['result'] = Tki\Db::logDbErrors($pdo_db, $insert, __LINE__, __FILE__);
+$variables['setup_unowned_results']['result'] = Tki\Db::logDbErrors($pdo_db, $pdo_db, $insert, __LINE__, __FILE__);
 $catch_results[$z] = $variables['setup_unowned_results']['result'];
 $z++;
 
@@ -152,7 +152,7 @@ for ($i = 1; $i <= $loops; $i++)
     }
 
     $resx = $pdo_db->exec($update);
-    $variables['insert_loop_sectors_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    $variables['insert_loop_sectors_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $pdo_db, $resx, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_loop_sectors_results'][$i]['result'];
     $z++;
 
@@ -207,7 +207,7 @@ for ($i = 1; $i <= $loops; $i++)
     }
 
     $resx = $pdo_db->exec($insert);
-    $variables['insert_random_oneway_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    $variables['insert_random_oneway_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $pdo_db, $resx, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_random_oneway_results'][$i]['result'];
     $z++;
 
@@ -263,7 +263,7 @@ for ($i = 1; $i <= $loops; $i++)
     }
 
     $resx = $pdo_db->exec($insert);
-    $variables['insert_random_twoway_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    $variables['insert_random_twoway_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $pdo_db, $resx, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_random_twoway_results'][$i]['result'];
     $z++;
 
@@ -289,7 +289,7 @@ $stmt->bindParam(':linkstart', $tkireg->max_sectors);
 $stmt->bindParam(':linkdest', $tkireg->max_sectors);
 $resx = $stmt->execute();
 
-$variables['remove_links_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+$variables['remove_links_results']['result'] = Tki\Db::logDbErrors($pdo_db, $pdo_db, $resx, __LINE__, __FILE__);
 $catch_results[$z] = $variables['remove_links_results']['result'];
 $z++;
 

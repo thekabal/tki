@@ -28,7 +28,7 @@ class AdminLog
     /**
      * @param integer $log_type
      */
-    public static function writeLog($db, $log_type, $data = null)
+    public static function writeLog(\PDO $pdo_db, $db, $log_type, $data = null)
     {
         if ($db instanceof \adodb\ADODB_mysqli)
         {
@@ -46,7 +46,7 @@ class AdminLog
                     "?)",
                     array($log_type, $data)
                 );
-                Db::logDbErrors($db, $res, __LINE__, __FILE__);
+                Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
             }
 
             return $res;

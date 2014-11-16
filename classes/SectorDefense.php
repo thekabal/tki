@@ -24,7 +24,7 @@ class SectorDefense
     public static function messageDefenseOwner($db, $sector, $message)
     {
         $res = $db->Execute("SELECT ship_id FROM {$db->prefix}sector_defence WHERE sector_id = ?;", array($sector));
-        Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
         if ($res instanceof \adodb\ADORecordSet)
         {
