@@ -165,6 +165,6 @@ if ($planetinfo['sells'] == 'Y')
     }
 }
 
-Tki\Score::updateScore($db, $pdo_db, $playerinfo['ship_id'], $tkireg);
+Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg);
 Tki\Text::gotoMain($db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
