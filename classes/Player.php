@@ -81,7 +81,7 @@ class Player
             $title = $langvars['l_error'];
             Header::display($pdo_db, $lang, $template, $title);
             echo $error_status;
-            Footer::display($pdo_db, $lang, $tkireg, $template);
+            Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
         else

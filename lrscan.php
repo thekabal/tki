@@ -49,7 +49,7 @@ if ($sector == "*")
     {
         echo $langvars['l_lrs_nofull'] . "<br><br>";
         Tki\Text::gotoMain($db, $lang, $langvars);
-        Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
         die();
     }
 
@@ -58,7 +58,7 @@ if ($sector == "*")
         $langvars['l_lrs_noturns'] = str_replace("[turns]", $tkireg->fullscan_cost, $langvars['l_lrs_noturns']);
         echo $langvars['l_lrs_noturns'] . "<br><br>";
         Tki\Text::gotoMain($db, $lang, $langvars);
-        Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
         die();
     }
 
@@ -419,4 +419,4 @@ else
 echo "<br><br>";
 Tki\Text::gotoMain($db, $lang, $langvars);
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

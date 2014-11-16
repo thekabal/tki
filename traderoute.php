@@ -391,4 +391,4 @@ echo "<div style='text-align:left;'>\n";
 Tki\Text::gotoMain($db, $lang, $langvars);
 echo "</div>\n";
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

@@ -50,7 +50,7 @@ class Planet
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
             \Tki\Text::gotoMain($db, $lang, $langvars);
-            \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
 
@@ -137,7 +137,7 @@ class Planet
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
             \Tki\Text::gotoMain($db, $lang, $langvars);
-            \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
 

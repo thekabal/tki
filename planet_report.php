@@ -65,4 +65,4 @@ else                                  // Display the menu if no valid options ar
 
 echo "<br><br>";
 Tki\Text::gotoMain($db, $lang, $langvars);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
