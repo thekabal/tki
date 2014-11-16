@@ -36,7 +36,7 @@ class Translate
             return false;
         }
 
-        if (!Db::isActive($db))
+        if (!Db::isActive($pdo_db))
         {
             // Slurp in language variables from the ini file directly
             $ini_file = './languages/' . $language . '.ini.php';
