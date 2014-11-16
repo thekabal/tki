@@ -41,7 +41,7 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
 {
     echo "You need to click on the ship first.<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
 unset ($_SESSION['ship_selected']);
@@ -888,4 +888,4 @@ Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
 $_SESSION['in_combat'] = (boolean) false;
 
 Tki\Text::gotoMain($db, $lang, $langvars);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

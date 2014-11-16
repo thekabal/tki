@@ -45,7 +45,7 @@ if ($zoneinfo['allow_trade'] == 'N')
     echo "<h1>" . $title . "</h1>\n";
     echo $langvars['l_no_trade_info'] . "<p>";
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
 elseif ($zoneinfo['allow_trade'] == 'L')
@@ -62,7 +62,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
             Tki\Text::gotoMain($db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
     }
@@ -74,7 +74,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
             Tki\Text::gotoMain($db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
     }
@@ -148,17 +148,17 @@ else
             echo "<br>\n";
 
             Tki\Text::gotoMain($db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
         unset ($_SESSION['port_shopping']);
 
-        if (Bad\Ibank::isLoanPending($db, $playerinfo['ship_id'], $tkireg))
+        if (Bad\Ibank::isLoanPending($pdo_db, $playerinfo['ship_id'], $tkireg))
         {
             echo $langvars['l_port_loannotrade'] . "<p>";
             echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
             Tki\Text::gotoMain($db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
 
@@ -749,4 +749,4 @@ if ($sectorinfo['port_type'] == "special")
     echo "<br><br>Click <a href=port.php>here</a> to return to the supply depot.";
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

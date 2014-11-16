@@ -116,4 +116,4 @@ echo "    <div><img style='height:20px; width:20px' alt='" . $langvars['l_port']
 
 echo "<br><br>";
 Tki\Text::gotoMain($db, $lang, $langvars);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

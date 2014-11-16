@@ -31,7 +31,7 @@ if (!isset($defence_id))
 {
     echo $langvars['l_md_invalid'] . "<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die ();
 }
 
@@ -55,7 +55,7 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_md_noturn'] . "<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die ();
 }
 
@@ -75,7 +75,7 @@ if ($defenceinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_md_nothere'] . "<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
 
@@ -112,7 +112,7 @@ switch ($response)
         {
             echo $langvars['l_md_yours'] . "<br><br>";
             Tki\Text::gotoMain($db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
 
@@ -158,7 +158,7 @@ switch ($response)
         {
              echo $langvars['l_md_notyours'] . "<br><br>";
              Tki\Text::gotoMain($db, $lang, $langvars);
-             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+             Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
              die();
         }
         $quantity = preg_replace('/[^0-9]/', '', $quantity);
@@ -217,7 +217,7 @@ switch ($response)
         {
             echo $langvars['l_md_notyours'] . "<br><br>";
             Tki\Text::gotoMain($db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
 
@@ -289,4 +289,4 @@ switch ($response)
 }
 
 Tki\Text::gotoMain($db, $lang, $langvars);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

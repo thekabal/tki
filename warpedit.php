@@ -40,7 +40,7 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_warp_turn'] . "<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
 
@@ -48,7 +48,7 @@ if ($playerinfo['dev_warpedit'] < 1)
 {
     echo $langvars['l_warp_none'] . ".<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
 
@@ -59,7 +59,7 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
 
@@ -79,7 +79,7 @@ if ($zoneinfo['allow_warpedit'] == 'L')
         {
             echo $langvars['l_warp_forbid'] . "<br><br>";
             Tki\Text::gotoMain($db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
     }
@@ -119,4 +119,4 @@ echo "<input type=\"submit\" value=\"" . $langvars['l_submit'] . "\"><input type
 echo "</form>";
 
 Tki\Text::gotoMain($db, $lang, $langvars);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

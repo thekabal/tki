@@ -66,7 +66,7 @@ if ($planet_id <= 0)
 {
     echo 'Invalid Planet<br><br>';
     Tki\Text::gotoMain($db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die ();
 }
 
@@ -99,7 +99,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
 
         echo $langvars['l_planet_none'] . " <p>";
         Tki\Text::gotoMain($db, $lang, $langvars);
-        Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
         die();
     }
 
@@ -114,7 +114,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
         echo $langvars['l_planet_capture2'] . ".<br><br>";
         echo "<br>";
         Tki\Text::gotoMain($db, $lang, $langvars);
-        Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
         die();
     }
 
@@ -411,7 +411,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to create a base without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($db, $lang, $langvars);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+                Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
                 die();
             }
             unset($_SESSION['planet_selected']);
@@ -536,7 +536,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to start an attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($db, $lang, $langvars);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+                Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
                 die();
             }
 
@@ -583,7 +583,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($db, $lang, $langvars);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+                Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
                 die();
             }
             unset($_SESSION['planet_selected']);
@@ -636,7 +636,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Scan without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($db, $lang, $langvars);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+                Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
                 die ();
             }
             unset($_SESSION['planet_selected']);
@@ -646,7 +646,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             {
                 echo $langvars['l_plant_scn_turn'] . "<br><br>";
                 Tki\Text::gotoMain($db, $lang, $langvars);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+                Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
                 die();
             }
 
@@ -668,7 +668,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 echo $langvars['l_planet_noscan'] . "<br><br>";
                 Tki\Text::gotoMain($db, $lang, $langvars);
                 Tki\PlayerLog::writeLog($db, $ownerinfo['ship_id'], LOG_PLANET_SCAN_FAIL, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+                Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
                 die();
             }
             else
@@ -917,4 +917,4 @@ if ($tkireg->allow_ibank)
 echo "<a href =\"bounty.php\">" . $langvars['l_by_placebounty'] . "</a><p>";
 
 Tki\Text::gotoMain($db, $lang, $langvars);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
