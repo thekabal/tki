@@ -909,32 +909,25 @@ class Ibank
              "<img width=600 height=21 src=" . $active_template . "/images/div2.png>" .
              "</center>";
 
-        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
         die();
     }
 
-    public static function isLoanPending($db, $ship_id, \Tki\Reg $tkireg)
+    public static function isLoanPending(\PDO $pdo_db, $ship_id, \Tki\Reg $tkireg)
     {
-        $res = $db->Execute("SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$db->prefix}ibank_accounts WHERE ship_id = ?", array($ship_id));
-        \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
-        if ($res)
+        $stmt = $pdo_db->prepare("SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id");
+        $stmt->bindParam(':ship_id', $ship_id);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        $account = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($account['loan'] > 0)
         {
-            $account = $res->fields;
-
-            if ($account['loan'] == 0)
-            {
-                return false;
-            }
-
             $curtime = time();
             $difftime = ($curtime - $account['time']) / 60;
             if ($difftime > $tkireg->ibank_lrate)
             {
                 return true;
-            }
-            else
-            {
-                return false;
             }
         }
         else
@@ -982,7 +975,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, \Tki\Reg $tkireg, $dplanet_id, $minimum, $maximum)
+    public static function ibankConsolidate3($db, \PDO $pdo_db, $langvars, $playerinfo, \Tki\Reg $tkireg, $dplanet_id, $minimum, $maximum)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
