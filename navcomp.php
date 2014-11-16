@@ -53,14 +53,14 @@ if (mb_strlen(trim($stop_sector)) === 0)
 }
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $current_sector = $playerinfo['sector'];
 $computer_tech  = $playerinfo['computer'];
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($current_sector));
-Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
 $sectorinfo = $result2->fields;
 
 if ($state == 0)
@@ -148,7 +148,7 @@ elseif ($state == 1)
         }
         else
         {
-            Tki\Db::logDbErrors($db, $search_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $search_result, __LINE__, __FILE__);
             $found = $search_result->RecordCount();
             if ($found > 0)
             {

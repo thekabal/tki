@@ -30,7 +30,7 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 echo "<h1>" . $title . "</h1>\n";
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.

@@ -30,7 +30,7 @@ Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 echo "<body class=" . $body_class . "><br>";
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 // Fix negative quantities. How do the quantities acutally get negative?
@@ -38,65 +38,65 @@ $playerinfo = $res->fields;
 if ($playerinfo['ship_ore'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $fixres, __LINE__, __FILE__);
     $playerinfo['ship_ore'] = 0;
 }
 
 if ($playerinfo['ship_organics'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}ships SET ship_organics = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $fixres, __LINE__, __FILE__);
     $playerinfo['ship_organics'] = 0;
 }
 
 if ($playerinfo['ship_energy'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $fixres, __LINE__, __FILE__);
     $playerinfo['ship_energy'] = 0;
 }
 
 if ($playerinfo['ship_goods'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}ships SET ship_goods = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $fixres, __LINE__, __FILE__);
     $playerinfo['ship_goods'] = 0;
 }
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $sectorinfo = $res->fields;
 
 if ($sectorinfo['port_ore'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::logDbErrors($db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $fixres, __LINE__, __FILE__);
     $sectorinfo['port_ore'] = 0;
 }
 
 if ($sectorinfo['port_goods'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}universe SET port_goods = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::logDbErrors($db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $fixres, __LINE__, __FILE__);
     $sectorinfo['port_goods'] = 0;
 }
 
 if ($sectorinfo['port_organics'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}universe SET port_organics = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::logDbErrors($db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $fixres, __LINE__, __FILE__);
     $sectorinfo['port_organics'] = 0;
 }
 
 if ($sectorinfo['port_energy'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}universe SET port_energy = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::logDbErrors($db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $fixres, __LINE__, __FILE__);
     $sectorinfo['port_energy'] = 0;
 }
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 
 if ($zoneinfo['zone_id'] == 4)
@@ -123,7 +123,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
     if ($zoneinfo['team_zone'] == 'N')
     {
         $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
-        Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $ownerinfo = $res->fields;
 
         if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
@@ -303,12 +303,12 @@ elseif ($sectorinfo['port_type'] == "special")
     if ($tkireg->bounty_all_special)
     {
         $res2 = $db->Execute("SELECT SUM(amount) as total_bounty FROM {$db->prefix}bounty WHERE placed_by = 0 AND bounty_on = ?;", array($playerinfo['ship_id']));
-        Tki\Db::logDbErrors($db, $res2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $db, $res2, __LINE__, __FILE__);
     }
     else
     {
         $res2 = $db->Execute("SELECT SUM(amount) as total_bounty FROM {$db->prefix}bounty WHERE placed_by = 0 AND bounty_on = ? AND ?=2;", array($playerinfo['ship_id'], $sectorinfo['zone_id']));
-        Tki\Db::logDbErrors($db, $res2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $db, $res2, __LINE__, __FILE__);
     }
 
     if ($res2)
@@ -317,7 +317,7 @@ elseif ($sectorinfo['port_type'] == "special")
         if ($bty['total_bounty'] > 0)
         {
             $bank_res = $db->Execute("SELECT * FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::logDbErrors($db, $bank_res, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $bank_res, __LINE__, __FILE__);
             $bank_row = $bank_res->fields;
 
             if (isset ($pay) && $pay == 1)
@@ -332,10 +332,10 @@ elseif ($sectorinfo['port_type'] == "special")
                 else
                 {
                     $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits - ? WHERE ship_id = ?;", array($bty['total_bounty'], $playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 
                     $resx = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0;", array($playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 
                     $langvars['l_port_bountypaid'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port_bountypaid']);
                     echo $langvars['l_port_bountypaid'] . "<br>";
@@ -345,7 +345,7 @@ elseif ($sectorinfo['port_type'] == "special")
             elseif (isset($pay) && $pay == 2)
             {
                 $bank_res = $db->Execute("SELECT * FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                Tki\Db::logDbErrors($db, $bank_res, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $db, $bank_res, __LINE__, __FILE__);
                 $bank_row = $bank_res->fields;
 
                 $bounty_payment = $bank_row['balance'];
@@ -363,10 +363,10 @@ elseif ($sectorinfo['port_type'] == "special")
                         $bounty_payment = $bty['total_bounty'];
 
                         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 
                         $resx = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0;", array($playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 
                         $langvars['l_port_bountypaid'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port_bountypaid']);
                         echo $langvars['l_port_bountypaid'] . "<br>";
@@ -382,9 +382,9 @@ elseif ($sectorinfo['port_type'] == "special")
                         echo "<br>\n";
 
                         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
                         $resx = $db->Execute("UPDATE {$db->prefix}bounty SET amount = amount - ?  WHERE bounty_on = ? AND placed_by = 0;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
                         echo "You have paid part of the bounty.<br>\n";
                         echo "<br>\n";
 

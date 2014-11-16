@@ -94,7 +94,7 @@ $banned = 0;
 if (isset ($playerinfo) && $playerfound !== false)
 {
     $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask OR ? LIKE ban_mask;", array($_SERVER['REMOTE_ADDR'], $playerinfo['ip_address']));
-    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
     if ($res->RecordCount() != 0)
     {
         $banned = 1;
@@ -115,10 +115,10 @@ if ($playerfound)
             if ($playerinfo['ship_destroyed'] == "N")
             {
                 // Player's ship has not been destroyed
-                Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_LOGIN, $_SERVER['REMOTE_ADDR']);
+                Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_LOGIN, $_SERVER['REMOTE_ADDR']);
                 $stamp = date("Y-m-d H:i:s");
                 $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, ip_address = ? WHERE ship_id = ?;", array($stamp, $_SERVER['REMOTE_ADDR'], $playerinfo['ship_id']));
-                Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
 
                 $_SESSION['logged_in'] = true;
                 $_SESSION['password'] = $filtered_post_password;
@@ -135,7 +135,7 @@ if ($playerfound)
                 if ($playerinfo['dev_escapepod'] == "Y")
                 {
                     $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, computer=0, sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=1, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, on_planet='N', dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', dev_lssd='N' WHERE ship_id = ?", array($playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
                     $langvars['l_login_died'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_login_died']);
                     echo $langvars['l_login_died'];
                 }
@@ -147,14 +147,14 @@ if ($playerfound)
                     if ($tkireg->newbie_nice)
                     {
                         $newbie_info = $db->Execute("SELECT hull, engines, power, computer, sensors, armor, shields, beams, torp_launchers, cloak FROM {$db->prefix}ships WHERE ship_id = ? AND hull <= ? AND engines <= ? AND power <= ? AND computer <= ? AND sensors <= ? AND armor <= ? AND shields <= ? AND beams <= ? AND torp_launchers <= ? AND cloak <= ?;", array($playerinfo['ship_id'], $newbie_hull, $newbie_engines, $newbie_power, $newbie_computer, $newbie_sensors, $newbie_armor, $newbie_shields, $newbie_beams, $newbie_torp_launchers, $newbie_cloak));
-                        Tki\Db::logDbErrors($db, $newbie_info, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $db, $newbie_info, __LINE__, __FILE__);
                         $num_rows = $newbie_info->RecordCount();
 
                         if ($num_rows)
                         {
                             echo "<br><br>" . $langvars['l_login_newbie'] . "<br><br>";
                             $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, computer=0, sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, credits=1000, on_planet='N', dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', dev_lssd='N' WHERE ship_id = ?", array($playerinfo['ship_id']));
-                            Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+                            Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 
                             $langvars['l_login_newlife'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_login_newlife']);
                             echo $langvars['l_login_newlife'];
@@ -201,8 +201,8 @@ if ($playerfound)
     {
         // password is incorrect
         echo $langvars['l_login_4gotpw1a'] . "<br><br>" . $langvars['l_login_4gotpw1b'] . " <a href='mail.php?mail=" . $email . "'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw2a'] . "<br><br>" . $langvars['l_login_4gotpw2b'] . " <a href='index.php'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw3'] . " " . $_SERVER['REMOTE_ADDR'] . "...";
-        Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_BADLOGIN, $_SERVER['REMOTE_ADDR']);
-        Tki\AdminLog::writeLog($db, (1000 + LOG_BADLOGIN), "{$_SERVER['REMOTE_ADDR']}|{$email}|{$filtered_post_password}");
+        Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_BADLOGIN, $_SERVER['REMOTE_ADDR']);
+        Tki\AdminLog::writeLog($pdo_db, $db, (1000 + LOG_BADLOGIN), "{$_SERVER['REMOTE_ADDR']}|{$email}|{$filtered_post_password}");
     }
 }
 else

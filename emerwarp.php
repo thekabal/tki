@@ -28,14 +28,14 @@ $variables = null;
 $langvars = Tki\Translate::load($pdo_db, $lang, array('emerwarp', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 if ($playerinfo['dev_emerwarp'] > 0)
 {
     $dest_sector = Tki\Rand::betterRand(0, $max_sectors - 1);
     $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $playerinfo['ship_id']));
-    Tki\Db::logDbErrors($db, $result_warp, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $result_warp, __LINE__, __FILE__);
     Tki\LogMove::writeLog($db, $playerinfo['ship_id'], $dest_sector);
     $langvars['l_ewd_used'] = str_replace("[sector]", $dest_sector, $langvars['l_ewd_used']);
     $variables['dest_sector'] = $dest_sector;

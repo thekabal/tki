@@ -30,16 +30,16 @@ echo "<h1>" . $title . "</h1>\n";
 $portfull = null; // This fixes an error of undefined variables on 1518
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE owner = ?;", array($playerinfo['ship_id']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $num_traderoutes = $result->RecordCount();
 
 if (isset($traderoutes))
 {
-    Tki\AdminLog::writeLog($db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
+    Tki\AdminLog::writeLog($pdo_db, $db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
     Bad\Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
 }
 
@@ -60,27 +60,27 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
 {
     if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_colonists'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
+        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
         $playerinfo['ship_colonists'] = 0;
     }
     if ($playerinfo['ship_ore'] < 0 || $playerinfo['ship_ore'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
+        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
         $playerinfo['ship_ore'] = 0;
     }
     if ($playerinfo['ship_organics'] < 0 || $playerinfo['ship_organics'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
+        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
         $playerinfo['ship_organics'] = 0;
     }
     if ($playerinfo['ship_goods'] < 0 || $playerinfo['ship_goods'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
+        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
         $playerinfo['ship_goods'] = 0;
     }
     if ($playerinfo['ship_energy'] < 0 || $playerinfo['ship_energy'] > $maxenergy)
     {
-        Tki\AdminLog::writeLog($db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
+        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
         $playerinfo['ship_energy'] = 0;
     }
     if ($freeholds < 0)
@@ -89,7 +89,7 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
     }
 
     $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=?, ship_organics=?, ship_goods=?, ship_energy=?, ship_colonists=? WHERE ship_id=?;", array($playerinfo['ship_ore'], $playerinfo['ship_organics'], $playerinfo['ship_goods'], $playerinfo['ship_energy'], $playerinfo['ship_colonists'], $playerinfo['ship_id']));
-    Tki\Db::logDbErrors($db, $update1, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $update1, __LINE__, __FILE__);
 }
 
 // Default to 1 run if we don't get a valid repeat value.
@@ -148,7 +148,7 @@ elseif (isset ($engage))
     while ($i > 0)
     {
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
-        Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
         Bad\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull);
         $i--;
@@ -221,7 +221,7 @@ else
         else
         {
             $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['source_id']));
-            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
             if ($result)
             {
                 $planet1 = $result->fields;
@@ -237,7 +237,7 @@ else
         if ($traderoutes[$i]['source_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($traderoutes[$i]['source_id']));
-            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
             $port1 = $result->fields;
             echo "&nbsp;" . Tki\Ports::getType($port1['port_type'], $langvars) . "</font></td>";
         }
@@ -261,7 +261,7 @@ else
         else
         {
             $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['dest_id']));
-            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
             if ($result)
             {
                 $planet2 = $result->fields;
@@ -277,7 +277,7 @@ else
         if ($traderoutes[$i]['dest_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($traderoutes[$i]['dest_id']));
-            Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
             $port2 = $result->fields;
             echo "&nbsp;" . Tki\Ports::getType($port2['port_type'], $langvars) . "</font></td>";
         }

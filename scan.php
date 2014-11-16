@@ -28,7 +28,7 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('scan', 'common', 'bounty', 'report', 'main', 'global_includes', 'global_funcs', 'footer', 'news', 'planet', 'regional'));
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -40,7 +40,7 @@ if (mb_strlen(trim($filtered_ship_id)) === 0)
 }
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=?", array($filtered_ship_id));
-Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
 $targetinfo = $result2->fields;
 
 $playerscore = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg);
@@ -90,7 +90,7 @@ else
         {
             // If scan fails - inform both player and target.
             echo $langvars['l_planet_noscan'];
-            Tki\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_SHIP_SCAN_FAIL, $playerinfo['character_name']);
+            Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_SHIP_SCAN_FAIL, $playerinfo['character_name']);
         }
         else
         {
@@ -99,7 +99,7 @@ else
             // Get total bounty on this player, if any
             $btyamount = 0;
             $hasbounty = $db->Execute("SELECT SUM(amount) AS btytotal FROM {$db->prefix}bounty WHERE bounty_on = ?", array($targetinfo['ship_id']));
-            Tki\Db::logDbErrors($db, $hasbounty, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $hasbounty, __LINE__, __FILE__);
 
             if ($hasbounty)
             {
@@ -113,7 +113,7 @@ else
 
                     // Check for Federation bounty
                     $hasfedbounty = $db->Execute("SELECT SUM(amount) AS btytotal FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0", array($targetinfo['ship_id']));
-                    Tki\Db::logDbErrors($db, $hasfedbounty, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $db, $hasfedbounty, __LINE__, __FILE__);
                     if ($hasfedbounty)
                     {
                         $resy = $hasfedbounty->fields;
@@ -449,11 +449,11 @@ else
             }
 
             echo "</table><br>";
-            Tki\PlayerLog::writeLog($db, $targetinfo['ship_id'], LOG_SHIP_SCAN, "$playerinfo[character_name]");
+            Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_SHIP_SCAN, "$playerinfo[character_name]");
         }
 
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id=?", array($playerinfo['ship_id']));
-        Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
     }
 }
 

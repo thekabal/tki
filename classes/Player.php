@@ -63,7 +63,7 @@ class Player
                         $stmt->bindParam(':ip_address', $_SERVER['REMOTE_ADDR']);
                         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
                         $stmt->execute();
-                        Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                        Db::logDbErrors($pdo_db, $pdo_db, $sql, __LINE__, __FILE__);
 
                         // Reset the last activity time on the session so that the session renews - this is the
                         // replacement for the (now removed) update_cookie function.

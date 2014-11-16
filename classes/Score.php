@@ -97,7 +97,7 @@ class Score
         $stmt->bindParam(':score', $score);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
 
         return $score;
     }

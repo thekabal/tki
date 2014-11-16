@@ -28,7 +28,7 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('team_planets', 'planet_report', 'planet', 'main', 'port', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 if ($playerinfo['team'] == 0)
@@ -64,7 +64,7 @@ if (!empty ($sort))
 }
 
 $res = $db->Execute($query);
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 echo "<h1>" . $title . "</h1>\n";
 
 echo "<br>";
@@ -143,7 +143,7 @@ else
 
         $owner = $planet[$i]['owner'];
         $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id=$owner");
-        Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $player = $res->fields['character_name'];
 
         echo "<tr bgcolor=\"$color\">";

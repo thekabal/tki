@@ -26,13 +26,13 @@ class Reg
         // Get the config_values from the DB - This is a pdo operation
         $stmt = "SELECT name,value,type FROM {$pdo_db->prefix}gameconfig";
         $result = $pdo_db->query($stmt);
-        Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $pdo_db, $stmt, __LINE__, __FILE__);
 //        $no_langs_yet = true;
 
         if ($result !== false) // If the database is not live, this will give false, and db calls will fail silently
         {
             $big_array = $result->fetchAll();
-            Db::logDbErrors($pdo_db, 'fetchAll from gameconfig', __LINE__, __FILE__);
+            Db::logDbErrors($pdo_db, $pdo_db, 'fetchAll from gameconfig', __LINE__, __FILE__);
             if (!empty ($big_array))
             {
                 foreach ($big_array as $row)

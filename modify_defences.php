@@ -44,11 +44,11 @@ if (mb_strlen(trim($response)) === 0)
 }
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $sectorinfo = $res->fields;
 
 if ($playerinfo['turns'] < 1)
@@ -60,7 +60,7 @@ if ($playerinfo['turns'] < 1)
 }
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE defence_id = ?;", array($defence_id));
-Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
 // Put the defence information into the array "defenceinfo"
 
 if (!$result3 instanceof ADORecordSet) // Not too sure, may need more checks on this.

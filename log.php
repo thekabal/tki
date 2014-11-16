@@ -40,7 +40,7 @@ $body_class = 'log';
 Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 $res = $db->Execute("SELECT character_name, ship_id FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -61,7 +61,7 @@ if ($swordfish == ADMIN_PW) // Check if called by admin script
     else
     {
         $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($player));
-        Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $targetname = $res->fields;
         $playerinfo['character_name'] = $targetname['character_name'];
     }
@@ -109,7 +109,7 @@ if (empty ($startdate))
 }
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$startdate%' ORDER BY time DESC, type DESC;", array($playerinfo['ship_id']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
 if ($res instanceof ADORecordSet)
 {
@@ -191,7 +191,7 @@ if ($mode != 'compat')
 
     unset($logs);
     $res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$yesterday%' ORDER BY time DESC, type DESC;", array($playerinfo['ship_id']));
-    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $logs[] = $res->fields;
@@ -236,7 +236,7 @@ if ($mode != 'compat')
 
     unset($logs);
     $res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$tomorrow%' ORDER BY time DESC, type DESC", array($playerinfo['ship_id']));
-    Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $logs[] = $res->fields;

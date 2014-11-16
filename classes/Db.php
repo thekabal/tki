@@ -25,35 +25,23 @@ use PDO;
 
 class Db
 {
-    public static function isActive($db)
+    public static function isActive(\PDO $pdo_db)
     {
-        if ($db instanceof PDO)
+        // Get the config_values from the DB
+        $results = $pdo_db->query("SELECT * FROM {$pdo_db->prefix}gameconfig LIMIT 1");
+        if (!$results)
         {
-            $results = $db->query("SELECT * FROM {$db->prefix}gameconfig LIMIT 1");
-            if (!$results)
-            {
-                return false;
-            }
-            else
-            {
-                if ($results->rowCount()>0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+            return false;
         }
         else
         {
-            // Get the config_values from the DB - Redo this to be db-layer-independent for both adodb and pdo
-            $debug_query = $db->Execute("SELECT * FROM {$db->prefix}gameconfig");
-
-            if (($debug_query instanceof \adodb\ADORecordSet) && ($debug_query !== false)) // Before DB is installed, debug_query will give false.
+            if ($results->rowCount()>0)
             {
                 return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
@@ -175,7 +163,7 @@ class Db
      * @param integer $served_line
      * @param string $served_page
      */
-    public static function logDbErrors($db, $query, $served_line, $served_page)
+    public static function logDbErrors(\PDO $pdo_db, $db, $query, $served_line, $served_page)
     {
         // Convert the content of PHP_SELF (in case it has been tainted) to the correct html entities
         $safe_script_name = htmlentities($_SERVER['PHP_SELF'], ENT_HTML5, 'UTF-8');
@@ -217,11 +205,11 @@ class Db
                           ' (called from: ' . $safe_script_name . ' the error message was: ' . $db_error .
                           'and the query was ' . $query;
 
-            if (!Db::isActive($db))
+            if (!Db::isActive($pdo_db))
             {
                 if ($db_log)
                 {
-                    AdminLog::writeLog($db, LOG_RAW, $text_error);
+                    AdminLog::writeLog($pdo_db, $db, LOG_RAW, $text_error);
                 }
             }
 

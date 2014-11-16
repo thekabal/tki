@@ -24,7 +24,7 @@ class Bounty
     public static function cancel($db, $bounty_on)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}bounty,{$db->prefix}ships WHERE bounty_on = ? AND bounty_on = ship_id", array($bounty_on));
-        Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         if ($res)
         {
             while (!$res->EOF)
@@ -33,12 +33,12 @@ class Bounty
                 if ($bountydetails['placed_by'] != 0)
                 {
                     $update_creds_res = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits + ? WHERE ship_id = ?", array($bountydetails['amount'], $bountydetails['placed_by']));
-                    Db::logDbErrors($db, $update_creds_res, __LINE__, __FILE__);
-                    PlayerLog::writeLog($db, $bountydetails['placed_by'], LOG_BOUNTY_CANCELLED, "$bountydetails[amount]|$bountydetails[character_name]");
+                    Db::logDbErrors($pdo_db, $db, $update_creds_res, __LINE__, __FILE__);
+                    PlayerLog::writeLog($pdo_db, $db, $bountydetails['placed_by'], LOG_BOUNTY_CANCELLED, "$bountydetails[amount]|$bountydetails[character_name]");
                 }
 
                  $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_id = ?", array($bountydetails['bounty_id']));
-                 Db::logDbErrors($db, $delete_bounty_res, __LINE__, __FILE__);
+                 Db::logDbErrors($pdo_db, $db, $delete_bounty_res, __LINE__, __FILE__);
                  $res->MoveNext();
             }
         }
@@ -47,7 +47,7 @@ class Bounty
     public static function collect($db, $langvars, $attacker, $bounty_on)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}bounty,{$db->prefix}ships WHERE bounty_on = ? AND bounty_on = ship_id and placed_by <> 0", array($bounty_on));
-        Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
         if ($res)
         {
@@ -61,22 +61,22 @@ class Bounty
                 else
                 {
                     $pl_bounty_res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?", array($bountydetails['placed_by']));
-                    Db::logDbErrors($db, $pl_bounty_res, __LINE__, __FILE__);
+                    Db::logDbErrors($pdo_db, $db, $pl_bounty_res, __LINE__, __FILE__);
                     $placed = $pl_bounty_res->fields['character_name'];
                 }
 
                 $update_creds_res = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits + ? WHERE ship_id = ?", array($bountydetails['amount'], $attacker));
-                Db::logDbErrors($db, $update_creds_res, __LINE__, __FILE__);
+                Db::logDbErrors($pdo_db, $db, $update_creds_res, __LINE__, __FILE__);
                 $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_id = ?", array($bountydetails['bounty_id']));
-                Db::logDbErrors($db, $delete_bounty_res, __LINE__, __FILE__);
+                Db::logDbErrors($pdo_db, $db, $delete_bounty_res, __LINE__, __FILE__);
 
-                PlayerLog::writeLog($db, $attacker, LOG_BOUNTY_CLAIMED, "$bountydetails[amount]|$bountydetails[character_name]|$placed");
-                PlayerLog::writeLog($db, $bountydetails['placed_by'], LOG_BOUNTY_PAID, "$bountydetails[amount]|$bountydetails[character_name]");
+                PlayerLog::writeLog($pdo_db, $db, $attacker, LOG_BOUNTY_CLAIMED, "$bountydetails[amount]|$bountydetails[character_name]|$placed");
+                PlayerLog::writeLog($pdo_db, $db, $bountydetails['placed_by'], LOG_BOUNTY_PAID, "$bountydetails[amount]|$bountydetails[character_name]");
                 $res->MoveNext();
             }
         }
         $delete_bounty_on_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_on = ?", array($bounty_on));
-        Db::logDbErrors($db, $delete_bounty_on_res, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $db, $delete_bounty_on_res, __LINE__, __FILE__);
     }
 }
 

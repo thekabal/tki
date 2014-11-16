@@ -29,7 +29,7 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 echo "<h1>" . $title . "</h1>\n";
 
 $result = $db->Execute("SELECT ship_id,character_name FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 if (array_key_exists('sure', $_GET))
@@ -59,8 +59,8 @@ elseif ($sure == 2)
     echo $langvars['l_die_please'] . "<br>";
     Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, true);
     Tki\Bounty::cancel($db, $playerinfo['ship_id']);
-    Tki\AdminLog::writeLog($db, LOG_ADMIN_HARAKIRI, "$playerinfo[character_name]|" . $_SERVER['REMOTE_ADDR'] . "");
-    Tki\PlayerLog::writeLog($db, $playerinfo['ship_id'], LOG_HARAKIRI, $_SERVER['REMOTE_ADDR']);
+    Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_HARAKIRI, "$playerinfo[character_name]|" . $_SERVER['REMOTE_ADDR'] . "");
+    Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_HARAKIRI, $_SERVER['REMOTE_ADDR']);
     echo "Due to nobody looking after your Planets, all your Planets have reduced into dust and ruble. Your Planets are no more.<br>\n";
 }
 else

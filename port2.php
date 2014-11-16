@@ -28,15 +28,15 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
 $sectorinfo = $result2->fields;
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 
 if ($zoneinfo['allow_trade'] == 'N')
@@ -53,7 +53,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
     if ($zoneinfo['team_zone'] == 'N')
     {
         $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
-        Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $ownerinfo = $res->fields;
 
         if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
@@ -140,7 +140,7 @@ else
         // Kami multi-browser window upgrade fix
         if (array_key_exists('port_shopping', $_SESSION) === false || $_SESSION['port_shopping'] !== true)
         {
-            Tki\AdminLog::writeLog($db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
+            Tki\AdminLog::writeLog($pdo_db, $db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
             echo "<META HTTP-EQUIV='Refresh' CONTENT='2; URL=main.php'>";
             echo "<div style='color:#f00; font-size:18px;'>Your last Sales Transaction has already been delivered, Please enter the Special Port and select your order.</div>\n";
             echo "<br>\n";
@@ -532,7 +532,7 @@ else
 
             $query = $query . ", turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id=$playerinfo[ship_id]";
             $purchase = $db->Execute("$query");
-            Tki\Db::logDbErrors($db, $purchase, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $purchase, __LINE__, __FILE__);
 
             $hull_upgrade = 0;
             echo "</table>";
@@ -545,8 +545,8 @@ else
                 // build_two_col("<span style='color:#f00;'>Detected Illegal Cargo</span>", "<span style='color:#0f0;'>Fixed</span>", "left", "right");
                 echo "<span style='color:#f00; font-weight:bold;'>Detected illegal cargo, as a penalty, we are confiscating all of your cargo, you may now continue.</span>\n";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=0, ship_organics=0, ship_goods=0, ship_energy=0, ship_colonists =0 WHERE ship_id = ? LIMIT 1;", array($playerinfo['ship_id']));
-                Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
-                Tki\AdminLog::writeLog($db, 5001, "Detected illegal cargo on shipID: {$playerinfo['ship_id']}");
+                Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                Tki\AdminLog::writeLog($pdo_db, $db, 5001, "Detected illegal cargo on shipID: {$playerinfo['ship_id']}");
             }
             else
             {
@@ -724,7 +724,7 @@ else
 
             // Update ship cargo, credits and turns
             $trade_result     = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, rating = rating + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
-            Tki\Db::logDbErrors($db, $trade_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $trade_result, __LINE__, __FILE__);
 
             // Make all trades positive to change port values
             $trade_ore        = round(abs($trade_ore));
@@ -734,7 +734,7 @@ else
 
             // Decrease supply and demand on port
             $trade_result2    = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_organics = port_organics - ?, port_goods = port_goods - ?, port_energy = port_energy - ? WHERE sector_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $sectorinfo['sector_id']));
-            Tki\Db::logDbErrors($db, $trade_result2, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $trade_result2, __LINE__, __FILE__);
 
             echo $langvars['l_trade_complete'] . ".<br><br>";
         }

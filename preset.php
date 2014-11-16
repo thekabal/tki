@@ -31,13 +31,13 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('presets', 'common', 'glob
 echo "<h1>" . $title . "</h1>\n";
 echo "<body class ='" . $body_class . "'>";
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 // Pull the presets for the player from the db.
 $i=0;
 $debug_query = $db->Execute("SELECT * FROM {$db->prefix}presets WHERE ship_id=?", array($playerinfo['ship_id']));
-Tki\Db::logDbErrors($db, $debug_query, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $db, $debug_query, __LINE__, __FILE__);
 while (!$debug_query->EOF)
 {
     $presetinfo[$i] = $debug_query->fields;
@@ -90,7 +90,7 @@ else
         if ($key < $tkireg->max_presets)
         {
             $update = $db->Execute("UPDATE {$db->prefix}presets SET preset = ? WHERE preset_id = ?;", array($preset_list[$key], $presetinfo[$key]['preset_id']));
-            Tki\Db::logDbErrors($db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
             $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);
             $preset_result_echo = str_replace("[num]", $key + 1, $preset_result_echo);
             echo $preset_result_echo . "<br>";
