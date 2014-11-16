@@ -55,7 +55,7 @@ echo "<h1>" . $title . "</h1>\n";
 if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_selected'] != $_GET['ship_id'])
 {
     echo "You need to Click on the ship first.<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -458,5 +458,5 @@ else
 }
 
 echo "<br><br>";
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

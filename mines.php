@@ -108,7 +108,7 @@ echo "<h1>" . $title . "</h1>\n";
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_mines_noturn'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die ();
 }
@@ -135,7 +135,7 @@ else
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
                 echo $langvars['l_mines_nodeploy'] . "<br>";
-                Tki\Text::gotoMain($db, $lang, $langvars);
+                Tki\Text::gotoMain($pdo_db, $lang, $langvars);
                 die();
             }
         }
@@ -153,7 +153,7 @@ else
             if ($zoneowner_info['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
                 echo $langvars['l_mines_nopermit'] . "<br><br>";
-                Tki\Text::gotoMain($db, $lang, $langvars);
+                Tki\Text::gotoMain($pdo_db, $lang, $langvars);
                 die();
             }
         }
@@ -259,5 +259,5 @@ else
     }
 }
 
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

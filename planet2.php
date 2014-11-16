@@ -153,7 +153,7 @@ $playerinfo         = null;
 if ($planet_id <= 0)
 {
     echo "Invalid Planet<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -172,7 +172,7 @@ $planetinfo = $result2->fields;
 if ($planetinfo === false)
 {
     echo "Invalid Planet<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     die();
 }
 
@@ -180,7 +180,7 @@ if ($planetinfo === false)
 if ($planetinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_planet2_sector'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     die();
 }
 
@@ -636,5 +636,5 @@ else
     }
 }
 
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

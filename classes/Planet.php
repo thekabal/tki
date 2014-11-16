@@ -49,7 +49,7 @@ class Planet
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
-            \Tki\Text::gotoMain($db, $lang, $langvars);
+            \Tki\Text::gotoMain($pdo_db, $lang, $langvars);
             \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
@@ -136,7 +136,7 @@ class Planet
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
-            \Tki\Text::gotoMain($db, $lang, $langvars);
+            \Tki\Text::gotoMain($pdo_db, $lang, $langvars);
             \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }

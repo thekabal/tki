@@ -30,7 +30,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('modify_defences', 'common
 if (!isset($defence_id))
 {
     echo $langvars['l_md_invalid'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die ();
 }
@@ -54,7 +54,7 @@ $sectorinfo = $res->fields;
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_md_noturn'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die ();
 }
@@ -66,7 +66,7 @@ Tki\Db::logDbErrors($db, $result3, __LINE__, __FILE__);
 if (!$result3 instanceof ADORecordSet) // Not too sure, may need more checks on this.
 {
     echo $langvars['l_md_nolonger'] . "<br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     die();
 }
 
@@ -74,7 +74,7 @@ $defenceinfo = $result3->fields;
 if ($defenceinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_md_nothere'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -111,7 +111,7 @@ switch ($response)
         if ($defenceinfo['ship_id'] == $playerinfo['ship_id'])
         {
             echo $langvars['l_md_yours'] . "<br><br>";
-            Tki\Text::gotoMain($db, $lang, $langvars);
+            Tki\Text::gotoMain($pdo_db, $lang, $langvars);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
@@ -148,7 +148,7 @@ switch ($response)
             $langvars['l_md_msgdownerb'] = str_replace("[mines]", $playerbeams, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[name]", $char_name, $langvars['l_md_msgdownerb']);
             Tki\SectorDefense::messageDefenseOwner($db, $sector, $langvars['l_md_msgdownerb']);
-            Tki\Text::gotoMain($db, $lang, $langvars);
+            Tki\Text::gotoMain($pdo_db, $lang, $langvars);
             die();
         }
         break;
@@ -157,7 +157,7 @@ switch ($response)
         if ($defenceinfo['ship_id'] != $playerinfo['ship_id'])
         {
              echo $langvars['l_md_notyours'] . "<br><br>";
-             Tki\Text::gotoMain($db, $lang, $langvars);
+             Tki\Text::gotoMain($pdo_db, $lang, $langvars);
              Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
              die();
         }
@@ -207,7 +207,7 @@ switch ($response)
         $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($stamp, $playerinfo['sector'], $playerinfo['ship_id']));
         echo "<h1>" . $title . "</h1>\n";
         echo $langvars['l_md_retr'] . " " . $quantity . " " . $defence_type . ".<br>";
-        Tki\Text::gotoMain($db, $lang, $langvars);
+        Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
         break;
 
@@ -216,7 +216,7 @@ switch ($response)
         if ($defenceinfo['ship_id'] != $playerinfo['ship_id'])
         {
             echo $langvars['l_md_notyours'] . "<br><br>";
-            Tki\Text::gotoMain($db, $lang, $langvars);
+            Tki\Text::gotoMain($pdo_db, $lang, $langvars);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
             die();
         }
@@ -235,7 +235,7 @@ switch ($response)
 
         $langvars['l_md_mode'] = str_replace("[mode]", $mode, $langvars['l_md_mode']);
         echo $langvars['l_md_mode'] . "<br>";
-        Tki\Text::gotoMain($db, $lang, $langvars);
+        Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
         break;
 
@@ -283,10 +283,10 @@ switch ($response)
             }
         }
 
-        Tki\Text::gotoMain($db, $lang, $langvars);
+        Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
         break;
 }
 
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
