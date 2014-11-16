@@ -25,7 +25,7 @@ namespace Bad;
 
 class Ibank
 {
-    public static function ibankBorrow($db, \PDO $pdo_db, $langvars, \Tki\Reg $tkireg, $playerinfo, $active_template, $account, $amount)
+    public static function ibankBorrow(\PDO $pdo_db, $langvars, \Tki\Reg $tkireg, $playerinfo, $active_template, $account, $amount)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -261,7 +261,7 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
-    public static function ibankLoans(\PDO $pdo_db, $db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account)
+    public static function ibankLoans(\PDO $pdo_db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account)
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
