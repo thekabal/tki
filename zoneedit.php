@@ -105,7 +105,7 @@ Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 if ($res->EOF)
 {
     echo "<p>" . $langvars['l_zi_nexist'] . "<p>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -130,7 +130,7 @@ else
 if (($curzone['team_zone'] == 'N' && $curzone['owner'] != $ownerinfo['ship_id']) || ($curzone['team_zone'] == 'Y' && $curzone['owner'] != $ownerinfo['id'] && $row['owner'] == $ownerinfo['creator']))
 {
     echo "<p>" . $langvars['l_ze_notowner'] . "<p>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -149,7 +149,7 @@ if ($command == 'change')
     Tki\Db::logDbErrors($db, $resx, __LINE__, __FILE__);
     echo $langvars['l_ze_saved'] . "<p>";
     echo "<a href=zoneinfo.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_ze_return'] . ".<p>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -273,5 +273,5 @@ echo "<form accept-charset='utf-8' action=zoneedit.php?command=change&zone=$zone
      "</form>";
 
 echo "<a href=zoneinfo.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_ze_return'] . ".<p>";
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

@@ -77,5 +77,5 @@ echo "<br>\n";
 echo "<input type=submit value=" . $langvars['l_opt_save'] . ">\n";
 echo "</form><br>\n";
 
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

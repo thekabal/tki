@@ -35,7 +35,7 @@ if ($playerinfo['team'] == 0)
 {
     echo "<br>" . $langvars['l_teamplanet_notally'];
     echo "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     return;
 }
@@ -191,5 +191,5 @@ else
 }
 
 echo "<br><br>";
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

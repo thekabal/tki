@@ -51,7 +51,7 @@ $playerinfo = $result->fields;
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_warp_turn'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -59,7 +59,7 @@ if ($playerinfo['turns'] < 1)
 if ($playerinfo['dev_warpedit'] < 1)
 {
     echo $langvars['l_warp_none'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -68,7 +68,7 @@ if (is_null($target_sector))
 {
     // This is the best that I can do without adding a new language variable.
     echo $langvars['l_warp_nosector'] ."<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     die();
 }
 
@@ -78,7 +78,7 @@ $zoneinfo = $res->fields;
 if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -95,7 +95,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 {
     $langvars['l_warp_forbidtwo'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_forbidtwo']);
     echo $langvars['l_warp_forbidtwo'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
     die();
 }
@@ -106,7 +106,7 @@ $row = $result2->fields;
 if (!$row)
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
-    Tki\Text::gotoMain($db, $lang, $langvars);
+    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     die();
 }
 
@@ -149,5 +149,5 @@ if ($result3 instanceof ADORecordSet)
     }
 }
 
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

@@ -188,7 +188,7 @@ if ($flag == 0)
         $_SESSION['logged_in'] = true;
         $_SESSION['password'] = $filtered_post_password;
         $_SESSION['username'] = $username;
-        Tki\Text::gotoMain($db, $lang, $langvars);
+        Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         header('Refresh: 2;url=main.php');
     }
 }

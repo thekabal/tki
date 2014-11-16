@@ -21,9 +21,9 @@ namespace Tki;
 
 class Text
 {
-    public static function gotoMain($db, $lang, $langvars)
+    public static function gotoMain(\PDO $pdo_db, $lang, $langvars)
     {
-        $langvars = Translate::load($db, $lang, array('global_funcs', 'common'));
+        $langvars = Translate::load($pdo_db, $lang, array('global_funcs', 'common'));
         echo str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mmenu']);
     }
 }

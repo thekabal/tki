@@ -69,5 +69,5 @@ echo "</tr>";
 echo "</table>";
 echo "<br>";
 
-Tki\Text::gotoMain($db, $lang, $langvars);
+Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
