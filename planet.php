@@ -871,7 +871,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
 
             if ($planetinfo['owner'] != 0)
             {
-                Tki\Score::updateScore($db, $pdo_db, $planetinfo['owner'], $tkireg);
+                Tki\Score::updateScore($pdo_db, $planetinfo['owner'], $tkireg);
             }
 
             if ($planetinfo['owner'] != 0)

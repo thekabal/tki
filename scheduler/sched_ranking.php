@@ -27,7 +27,7 @@ $res = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE ship_destroyed
 Tki\Db::logDbErrors($db, $res, __LINE__, __FILE__);
 while (!$res->EOF)
 {
-    Tki\Score::updateScore($db, $pdo_db, $res->fields['ship_id'], $tkireg);
+    Tki\Score::updateScore($pdo_db, $res->fields['ship_id'], $tkireg);
     $res->MoveNext();
 }
 echo "<br>";
