@@ -42,7 +42,7 @@ do
             $query = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, cleared_defences=' ' WHERE ship_id=?", array($newsector, $row['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $db, $query, __LINE__, __FILE__);
             Tki\PlayerLog::writeLog($pdo_db, $db, $row['ship_id'], LOG_TOW, "$row[sector]|$newsector|$row[max_hull]");
-            Tki\LogMove::writeLog($pdo_db, $db, $row['ship_id'], $newsector);
+            Tki\LogMove::writeLog($pdo_db, $row['ship_id'], $newsector);
             $res->MoveNext();
         }
     }
