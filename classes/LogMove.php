@@ -21,10 +21,12 @@ namespace Tki;
 
 class LogMove
 {
-    public static function writeLog($db, $ship_id, $sector_id)
+    public static function writeLog(\PDO $pdo_db, $ship_id, $sector_id)
     {
-        $res = $db->Execute("INSERT INTO {$db->prefix}movement_log (ship_id, sector_id, time) VALUES (?, ?, NOW())", array($ship_id, $sector_id));
-        Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+        $stmt = $pdo_db->prepare("INSERT INTO {$pdo_db->prefix}movement_log (ship_id, sector_id, time) VALUES (:ship_id, :sector_id, NOW())");
+        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':sector_id', $sector_id);
+        $result = $stmt->execute();
+        Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
     }
 }
-

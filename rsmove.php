@@ -181,7 +181,7 @@ else
                     $stamp = date("Y-m-d H:i:s");
                     $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
                     Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
-                    Tki\LogMove::writeLog($db, $playerinfo['ship_id'], $destination);
+                    Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $destination);
                     $langvars['l_rs_ready'] = str_replace("[sector]", $destination, $langvars['l_rs_ready']);
                     $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                     $langvars['l_rs_ready'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);

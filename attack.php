@@ -179,7 +179,7 @@ else
                 array($targetinfo['ship_id'])
             );
             Tki\Db::logDbErrors($pdo_db, $db, $result_warp, __LINE__, __FILE__);
-            Tki\LogMove::writeLog($pdo_db, $db, $targetinfo['ship_id'], $dest_sector);
+            Tki\LogMove::writeLog($pdo_db, $targetinfo['ship_id'], $dest_sector);
             echo $langvars['l_att_ewd'] . "<br><br>";
         }
         else

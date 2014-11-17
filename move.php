@@ -80,7 +80,7 @@ if ($flag == 1)
     if ($ok > 0)
     {
         $stamp = date("Y-m-d H:i:s");
-        Tki\LogMove::writeLog($db, $playerinfo['ship_id'], $sector);
+        Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $sector);
         $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($stamp, $sector, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $db, $move_result, __LINE__, __FILE__);
         if (!$move_result)
