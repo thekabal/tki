@@ -19,7 +19,6 @@
 
 $index_page = true; // This prevents sessions from being started before DB exists
 require_once './common.php';
-require_once './config/admin_config.php';
 
 // Set timelimit to infinite
 set_time_limit(0);
@@ -45,7 +44,7 @@ if ($swordfish === null || $swordfish === false) // If no swordfish password has
     $step = "1";
 }
 
-if (($swordfish !== null) && (ADMIN_PW != $swordfish)) // If a swordfish password is not null and it does not match (bad pass), redirect to step 1 (default or 0.php)
+if (($swordfish !== null) && (\Tki\SecureConfig::ADMINPW != $swordfish)) // If a swordfish password is not null and it does not match (bad pass), redirect to step 1 (default or 0.php)
 {
     $variables['goodpass'] = false;
     include_once 'create_universe/0.php';

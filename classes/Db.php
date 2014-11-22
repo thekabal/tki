@@ -48,7 +48,14 @@ class Db
 
     public function initDb($db_layer)
     {
-        require './config/db_config.php';
+        $db_port = \Tki\SecureConfig::PORT;
+        $db_host = \Tki\SecureConfig::HOST;
+        $db_user = \Tki\SecureConfig::USER;
+        $db_pwd = \Tki\SecureConfig::PASS;
+        $db_name = \Tki\SecureConfig::NAME;
+        $db_type = \Tki\SecureConfig::TYPE;
+        $db_prefix = \Tki\SecureConfig::PREFIX;
+
         if ($db_layer == 'adodb')
         {
             // Add MD5 encryption for sessions, and then compress it before storing it in the database

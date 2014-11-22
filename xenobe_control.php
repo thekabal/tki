@@ -19,7 +19,6 @@
 // FUTURE: Change the table creation for Xenobes to use the new XML schema files
 
 require_once './common.php';
-require_once './config/admin_config.php';
 
 $title = $langvars['l_ai_control'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
@@ -54,7 +53,7 @@ if (mb_strlen(trim($swordfish)) === 0)
     $swordfish = false;
 }
 
-if ($swordfish != ADMIN_PW)
+if ($swordfish != \Tki\SecureConfig::ADMINPW)
 {
     echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
     echo "password: <input type=password name=swordfish size=20><br><br>";

@@ -18,7 +18,6 @@
 // File: log.php
 
 require_once './common.php';
-require_once './config/admin_config.php';
 
 Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
 
@@ -51,7 +50,7 @@ if (mb_strlen(trim($swordfish)) === 0)
     $swordfish = false;
 }
 
-if ($swordfish == ADMIN_PW) // Check if called by admin script
+if ($swordfish == \Tki\SecureConfig::ADMINPW) // Check if called by admin script
 {
     $playerinfo['ship_id'] = $player;
     if ($player == 0)
@@ -315,7 +314,7 @@ $nonext = 0;
 //    $nonext = 0;
 //}
 
-if ($swordfish == ADMIN_PW) // Fix for admin log view
+if ($swordfish == \Tki\SecureConfig::ADMINPW) // Fix for admin log view
 {
     $postlink = "&swordfish=" . urlencode($swordfish) . "&player=$player";
 }
@@ -364,7 +363,7 @@ else
     echo "&nbsp;&nbsp;&nbsp;";
 }
 
-if ($swordfish == ADMIN_PW)
+if ($swordfish == \Tki\SecureConfig::ADMINPW)
 {
     echo "<tr><td><td>" .
          "<form accept-charset='utf-8' action=admin.php method=post>" .

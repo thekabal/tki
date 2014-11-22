@@ -20,10 +20,9 @@ INSTALLATION
    template system to write its cached and compiled versions of templates.
 
 3. Open the file <www.your-host>/<install-dir>/setup_info.php in your browser. This
-   file will help you understand what settings you should use in your db_config.php file.
+   file will help you understand what settings you should use in your config/SecureConfig.php file.
 
-4. Edit the config/db_config.php and config/admin_config.php files to your own settings 
-   and manually update your cron file.
+4. Edit the config/SecureConfig.php files to your own settings and manually update your cron file.
 
    PLEASE make sure to edit your game_name (in config/classic_set_config.ini.php) to be something unique!
 
@@ -57,7 +56,7 @@ A few alternatives:
    and path. You will also need to change the password to your admin password. 
 
    To specify how fast-paced you want the game to be, you will need to
-   edit the file config.php and select how many minutes you want between
+   edit the file config/SecureConfig.php and select how many minutes you want between
    different events, eg turns or port regeneration.
 
 5. Create the database:

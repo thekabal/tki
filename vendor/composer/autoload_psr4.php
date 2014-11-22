@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Tki\\' => array($baseDir . '/classes'),
+    'Tki\\' => array($baseDir . '/classes', $baseDir . '/config'),
     'Bad\\' => array($baseDir . '/classes'),
 );

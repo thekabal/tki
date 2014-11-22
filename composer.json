@@ -17,7 +17,7 @@
         "adodb/adodb-php": "v5.19"
     },
     "autoload": {
-        "psr-4": { "Tki\\": "classes/", "Bad\\": "classes/" }
+        "psr-4": { "Tki\\": ["classes/", "config/"], "Bad\\": "classes/"}
     },
     "scripts": {
         "post-update-cmd": [
