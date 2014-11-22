@@ -63,7 +63,6 @@
 
 $index_page = true; // Ensure that we do not set sessions
 require_once './common.php';
-require_once './config/admin_config.php';
 
 $title = $langvars['l_sys_update'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
@@ -103,7 +102,7 @@ else
     }
 }
 
-if ($swordfish != ADMIN_PW)
+if ($swordfish != \Tki\SecureConfig::ADMINPW)
 {
     echo "<form accept-charset='utf-8' action='scheduler.php' method='post'>";
     echo "Password: <input type='password' name='swordfish' size='20' maxlength='20'><br><br>";

@@ -18,7 +18,6 @@
 // File: admin.php
 
 require_once './common.php';
-require_once './config/admin_config.php';
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
@@ -45,7 +44,7 @@ $variables = null;
 $variables['is_admin'] = false;
 $variables['module'] = null;
 
-if ($swordfish == ADMIN_PW)
+if ($swordfish == \Tki\SecureConfig::ADMINPW)
 {
     $i = 0;
     $variables['is_admin'] = true;
