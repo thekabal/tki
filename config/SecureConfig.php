@@ -27,7 +27,8 @@ class SecureConfig
     // Adodb is automatically configured to be run from vendor/adodb.
     // We are migrating away from adodb, switching to pure PDO instead.
 
-    // Port to connect to database on. Note : if you do not know the port, set this to '' for default. Ex, MySQL default is 3306, PgSQL is 5432
+    // Port to connect to database on. Note : if you do not know the port, set this to '' for default.
+    // Ex, MySQL default is 3306, PgSQL is 5432
     const PORT = null;
 
     // Hostname of the database server:
