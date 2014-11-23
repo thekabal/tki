@@ -18,10 +18,11 @@
     File: newplayerguide.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}{$langvars['l_npg_title']}{/block}
-
-{block name=body}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
 
 <table>
   <tbody>
@@ -176,4 +177,3 @@
 {else}
     {$langvars['l_global_mmenu']|replace:"[here]":"<a href='main.php'>{$langvars['l_here']}</a>"}
 {/if}
-{/block}

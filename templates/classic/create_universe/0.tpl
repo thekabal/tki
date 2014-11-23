@@ -18,15 +18,18 @@
     File: create_universe/0.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
+
 {if $variables['goodpass'] === true}
 {$langvars['l_cu_step_title']|replace:'[current]':$variables['current_step']|replace:'[total]':$variables['steps']} - {$langvars['l_cu_welcome']}
 {else}
 {$langvars['l_cu_welcome']} - {$langvars['l_cu_badpass_title']}
 {/if}
-{/block}
-{block name=body}
+
 <form accept-charset='utf-8' name='create_universe' action='create_universe.php' method='post'><div style="text-align:center">
 <table style="border-spacing:1px; width:700px; background-color:#000; border:0px; margin-left:auto; margin-right:auto">
     <tr>
@@ -55,4 +58,3 @@
 </table>
 </div><p>
 </form>
-{/block}

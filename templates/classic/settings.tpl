@@ -18,9 +18,12 @@
     File: settings.tpl
 *}
 
-{extends file="layout.tpl"}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
 
-{block name=body}
 <h1>{$langvars['l_set_game_admins']}</h1>
 {* FUTURE: Need an if statement here to detect if anyone is an admin or developer *}
 <div class="special">{$langvars['l_set_no_admins']}</div>
@@ -84,4 +87,3 @@
   </tbody>
 </table>
 <br><br>{$variables['linkback']['caption']|replace:"[here]":"<a href='{$variables['linkback']['link']}'>{$langvars['l_here']}</a>"}
-{/block}

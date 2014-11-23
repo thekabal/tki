@@ -18,9 +18,12 @@
     File: setup_info.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}Setup Information System{/block}
-{block name=body}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
+
 <div align="center">
 <table style="border:0px; border-spacing:0px; font-size:100%; line-height:1.125em;">
   <tr>
@@ -356,4 +359,3 @@ This information will help us to help you much faster and will help improve our 
   </table>
   </center>
 </div>
-{/block}

@@ -18,11 +18,12 @@
     File: ranking.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}{$langvars['l_ranks_title']}{/block}
-{block name=body_title}<h1>{$langvars['l_ranks_title']}</h1>{/block}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
 
-{block name=body}
 {if $variables['num_players'] > 0}
     <br>
     {$langvars['l_ranks_pnum']}: {$variables['num_players']|number_format}<br>
@@ -102,4 +103,3 @@
 
 <!-- Display link back (index, main) -->
     {$variables['linkback']['caption']|replace:"[here]":"<a href='{$variables['linkback']['link']}'>{$langvars['l_here']}</a>"}
-{/block}

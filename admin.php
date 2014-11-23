@@ -43,6 +43,7 @@ $variables = null;
 
 $variables['is_admin'] = false;
 $variables['module'] = null;
+$variables['title'] = $langvars['l_admin_title'];
 
 if ($swordfish == \Tki\SecureConfig::ADMINPW)
 {
@@ -96,12 +97,15 @@ $variables['filename'] = $filename;
 $variables['menu_location'] = $menu_location;
 $variables['button_main'] = $button_main;
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
 $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
                                 'global_includes', 'global_funcs', 'combat',
                                 'footer', 'news', 'report', 'main', 'zoneedit',
                                 'planet'));
+
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('admin.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

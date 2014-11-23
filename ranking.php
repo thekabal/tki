@@ -26,6 +26,7 @@ $variables = null;
 $variables['body_class'] = 'tki';
 $variables['lang'] = $lang;
 $variables['link'] = 'ranking.php';
+$variables['title'] = $langvars['l_ranks_title'];
 
 // These should be set within the template config, and be css driven using nth + 1 selectors.
 $variables['color_header'] = $tkireg->color_header;
@@ -161,8 +162,7 @@ else
     $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
 }
 
-// Now we include the Footer Logic.
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('variables', $variables);
 
@@ -177,3 +177,5 @@ $template->addVariables('langvars', $langvars);
 
 // Now we tell Smarty to output the page
 $template->display('ranking.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

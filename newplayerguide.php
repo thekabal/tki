@@ -34,9 +34,12 @@ else
 $variables['body_class'] = 'faq';
 $variables['lang'] = $lang;
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
+$variables['title'] = $langvars['l_npg_title'];
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('newplayerguide.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

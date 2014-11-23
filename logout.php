@@ -61,9 +61,12 @@ session_destroy();
 $variables['body_class'] = 'tki'; // No special CSS for this page yet, so use standard tki-prime CSS
 $variables['lang'] = $lang;
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
+$variables['title'] = $langvars['l_logout_title'];
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('logout.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

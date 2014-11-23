@@ -18,9 +18,12 @@
     File: copyright.tpl
 *}
 
-{extends file="layout.tpl"}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
 
-{block name=body}
 <div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$variables['template']}/images/header1.png" alt="{$langvars['l_tki']}"></div>
 
 <div class="index-header-text">{$langvars['l_tki']}</div>
@@ -37,4 +40,3 @@ The Kabal Invasion development team is deeply appreciative for all of the contri
 <br style="clear:both">
 </div>
 <br>
-{/block}

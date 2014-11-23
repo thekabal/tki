@@ -18,11 +18,12 @@
     File: report.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}{$langvars['l_report_title']}{/block}
-{block name=body_title}<h1>{$langvars['l_report_title']}</h1>{/block}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
 
-{block name=body}
 <div style="width:90%; margin:auto; font-size:14px;">
     <table border=0 cellspacing=0 cellpadding=0 width="100%">
         <tr bgcolor="{$variables['color_header']}">
@@ -181,4 +182,3 @@
 </div>
 <p align=center><img src="{$variables['ship_img']}" style="border:0px; width:80px; height:60px"></p>
 {$variables['linkback']['fulltext']|replace:"[here]":"<a href='{$variables['linkback']['link']}'>{$langvars['l_here']}</a>"}
-{/block}

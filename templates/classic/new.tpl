@@ -18,10 +18,12 @@
     File: index.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}{$langvars['l_welcome_tki']}{/block}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
 
-{block name=body}
 <div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$variables['template']}/images/header1.png" alt="{$langvars['l_tki']}"></div>
 
 <div class="index-header-text">{$langvars['l_tki']}</div>
@@ -49,4 +51,3 @@
 <br>
         {$langvars['l_new_info']}<br></div>
 <br>
-{/block}

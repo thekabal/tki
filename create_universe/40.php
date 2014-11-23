@@ -27,6 +27,7 @@ $create_universe_info = Tki\BigBang::findStep(__FILE__);
 // Set variables
 $variables['templateset']            = $tkireg->default_template;
 $variables['body_class']             = 'create_universe';
+$variables['title']                  = $langvars['l_cu_title'];
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
 $variables['next_step']              = $create_universe_info['next_step'];
@@ -69,9 +70,8 @@ for ($i = 0; $i < $create_array_size; $i++)
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
-
-// Pull in footer variables from footer_t.php
-include './footer_t.php';
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/40.tpl');
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

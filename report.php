@@ -112,10 +112,13 @@ $variables['fuel_scoop'] = $fuel_scoop;
 $variables['lssd'] = $lssd;
 $variables['ship_img'] = $template->getVariables('template_dir') . "/images/" . $shiptypes[$shiplevel];
 $variables['linkback'] = array("fulltext"=>$langvars['l_global_mmenu'], "link"=>"main.php");
+$variables['title'] = $langvars['l_report_title'];
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
 $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'footer', 'regional', 'news'));
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('report.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

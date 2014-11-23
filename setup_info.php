@@ -33,7 +33,7 @@ SetCookie('TestCookie', '', 0);
 SetCookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'index', 'options'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'index', 'options', 'setup_info'));
 
 $variables = null;
 $variables['lang'] = $lang;
@@ -76,6 +76,7 @@ $variables['php_module_pdo'] = extension_loaded('pdo_mysql');
 $variables['php_module_mysqli'] = extension_loaded('mysqli');
 $variables['adodb_path_test'] = file_exists(realpath("vendor/adodb/adodb-php/adodb.inc.php"));
 $variables['smarty_path_test'] = file_exists(realpath("vendor/smarty/smarty/distribution/libs/Smarty.class.php"));
+$variables['title'] = $langvars['l_setup_info_title'];
 
 // Test Smarty
 $test_smarty = new \Smarty;
@@ -151,8 +152,10 @@ else
     $variables['db_addr'] = $db_host;
 }
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/setup_info.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

@@ -103,8 +103,10 @@ else
     $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
 }
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('settings.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
