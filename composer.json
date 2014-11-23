@@ -10,9 +10,9 @@
     "license": "AGPL-3.0",
     "minimum-stability": "alpha",
     "require": {
-        "smarty/smarty": "v3.1.19",
+        "smarty/smarty": "v3.1.21",
         "ezyang/htmlpurifier": "v4.6.0",
-        "ircmaxell/password-compat": "1.0.3",
+        "ircmaxell/password-compat": "1.0.4",
         "swiftmailer/swiftmailer": "v5.3.0",
         "adodb/adodb-php": "v5.19"
     },
