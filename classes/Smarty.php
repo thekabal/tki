@@ -21,7 +21,7 @@ namespace Tki;
 
 class Smarty
 {
-    private $smarty                            = null;
+    private $smarty = null;
 
     public function __construct()
     {
@@ -126,49 +126,9 @@ class Smarty
         }
         catch (\exception $e)
         {
-            $output = $this->smarty->fetch ($template_file);
-            //$output  = 'The smarty template system is not working. We suggest checking the specific template you are using for an error in the page that you want to access.';
+            $output  = 'The smarty template system is not working. We suggest checking the specific template you are using for an error in the page that you want to access.';
         }
 
         echo $output;
-    }
-
-    public function handleCompression($output = null)
-    {
-        // Check to see if we have data, if not error out.
-        if (is_null($output))
-        {
-            return $output;
-        }
-
-        // Handle the supported compressions.
-        $supported_enc = array();
-        if (array_key_exists('HTTP_ACCEPT_ENCODING', $_SERVER))
-        {
-            $supported_enc = explode(',', $_SERVER['HTTP_ACCEPT_ENCODING']);
-        }
-
-        if (in_array('gzip', $supported_enc) === true)
-        {
-            header('Vary: Accept-Encoding');
-            header('Content-Encoding: gzip');
-            header('DEBUG: gzip found');
-
-            return gzencode($output, 9);
-        }
-        elseif (in_array('deflate', $supported_enc) === true)
-        {
-            header('Vary: Accept-Encoding');
-            header('Content-Encoding: deflate');
-            header('DEBUG: deflate found');
-
-            return gzdeflate($output, 9);
-        }
-        else
-        {
-            header('DEBUG: None found');
-
-            return $output;
-        }
     }
 }

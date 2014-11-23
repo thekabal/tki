@@ -16,7 +16,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: classes/Compress.php
-//
 
 namespace Tki;
 
@@ -32,7 +31,6 @@ class Compress
 
     public static function compress($output)
     {
-
         // Check to see if we have data, if not, then return null
         if (is_null($output))
         {
@@ -50,22 +48,16 @@ class Compress
         {
             header('Vary: Accept-Encoding');
             header('Content-Encoding: gzip');
-            header('DEBUG: gzip found');
-
             return gzencode($output, 9);
         }
         elseif (in_array('deflate', $supported_enc) === true)
         {
             header('Vary: Accept-Encoding');
             header('Content-Encoding: deflate');
-            header('DEBUG: deflate found');
-
             return gzdeflate($output, 9);
         }
         else
         {
-            header('DEBUG: None found');
-
             return $output;
         }
     }
