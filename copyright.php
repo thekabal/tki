@@ -39,10 +39,6 @@ $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 // Temporarily set the template to the default template until we have a user option
 $variables['template'] = $tkireg->default_template;
 
-// Now set a container for the variables and langvars and send them off to the template system
-$variables['container'] = 'variable';
-$langvars['container'] = 'langvars';
-
 // Pull in footer variables from footer_t.php
 require_once './footer_t.php';
 $template->addVariables('langvars', $langvars);

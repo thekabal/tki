@@ -113,10 +113,6 @@ $variables['lssd'] = $lssd;
 $variables['ship_img'] = $template->getVariables('template_dir') . "/images/" . $shiptypes[$shiplevel];
 $variables['linkback'] = array("fulltext"=>$langvars['l_global_mmenu'], "link"=>"main.php");
 
-// Now set a container for the variables and langvars and send them off to the template system
-$variables['container'] = "variable";
-$langvars['container'] = "langvar";
-
 // Pull in footer variables from footer_t.php
 require_once './footer_t.php';
 $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'footer', 'regional', 'news'));

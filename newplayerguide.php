@@ -35,10 +35,6 @@ $variables['body_class'] = 'faq';
 $variables['lang'] = $lang;
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
 
-// Now set a container for the variables and langvars and send them off to the template system
-$variables['container'] = "variable";
-$langvars['container'] = "langvar";
-
 // Pull in footer variables from footer_t.php
 require_once './footer_t.php';
 $template->addVariables('langvars', $langvars);
