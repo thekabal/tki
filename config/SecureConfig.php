@@ -45,7 +45,7 @@ class SecureConfig
     // "mysqli" for MySQLi - needed for transaction support or "postgres9" for PostgreSQL ver 9 and up
     // NOTE: only mysqli works as of this release.
     const TYPE = 'mysqli';
-    // $db_type = 'postgres9';
+    // const TYPE = 'postgres9';
 
     // Table prefix for the database. If you want to run more than
     // one game of TKI on the same database, or if the current table
