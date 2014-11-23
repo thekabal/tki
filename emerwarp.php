@@ -45,10 +45,6 @@ $variables['body_class'] = 'tki'; // No special css used for this page yet
 $variables['playerinfo_dev_emerwarp'] = $playerinfo['dev_emerwarp'];
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link" => "main.php");
 
-// Now set a container for the variables and langvars and send them off to the template system
-$variables['container'] = "variable";
-$langvars['container'] = "langvar";
-
 // Pull in footer variables from footer_t.php
 require_once './footer_t.php';
 

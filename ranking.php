@@ -164,7 +164,6 @@ else
 // Now we include the Footer Logic.
 require_once './footer_t.php';
 
-$variables['container'] = 'variable';
 $template->addVariables('variables', $variables);
 
 // Load required language variables for the ranking page.
@@ -173,9 +172,8 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'ranking', 'common
 // Modify the requires language variables here.
 $langvars['l_ranks_title'] = str_replace('[max_ranks]', $tkireg->max_ranks, $langvars['l_ranks_title']);
 
-// Now add the loaded language variables into the Template API.
-$langvars['container'] = 'langvar';
+// Now add the loaded language variables into Smarty.
 $template->addVariables('langvars', $langvars);
 
-// Now we tell the Template API to output the page
+// Now we tell Smarty to output the page
 $template->display('ranking.tpl');

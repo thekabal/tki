@@ -24,7 +24,7 @@ namespace Tki;
 
 class Header
 {
-    public static function display($pdo_db, $lang, Template $template, $title = null, $body_class = 'tki', $include_ckeditor = false)
+    public static function display($pdo_db, $lang, Smarty $template, $title = null, $body_class = 'tki', $include_ckeditor = false)
     {
         $langvars = Translate::load($pdo_db, $lang, array('common'));
 
@@ -42,10 +42,6 @@ class Header
 
         // Some pages (like mailto) include ckeditor js, check if this is one of those.
         $variables['include_ckeditor'] = $include_ckeditor;
-
-        // Now set a container for the variables and langvars and send them off to the template system
-        $variables['container'] = 'variable';
-        $langvars['container'] = 'langvars';
 
         $template->addVariables('langvars', $langvars);
         $template->addVariables('variables', $variables);

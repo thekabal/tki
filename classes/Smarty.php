@@ -22,23 +22,10 @@ namespace Tki;
 class Smarty
 {
     private $smarty                            = null;
-    private $parent                            = null;
 
-    /**
-     * @param Template $parent
-     */
-    public function __construct($parent)
+    public function __construct()
     {
-        $this->parent = $parent;
         $this->smarty = new \Smarty();
-    }
-
-    public function __destruct()
-    {
-    }
-
-    public function initialize()
-    {
         // Setup all Smarty's Path locations.
         $this->smarty->setCompileDir('templates/_compile/');
         $this->smarty->setCacheDir('templates/_cache/');
@@ -60,6 +47,34 @@ class Smarty
 
         // Smarty Caching.
         $this->smarty->caching = false;
+
+        $smarty_errors = null;
+        if (!is_dir('templates'))
+        {
+            $smarty_errors.='The Kabal Invasion smarty error: The templates/ subdirectory under the main TKI directory does not exist. Please create it.<br>';
+        }
+
+        $cache_perms = is_writable('templates/_cache');
+        $compile_perms = is_writable('templates/_compile');
+
+        if (!$cache_perms)
+        {
+            $smarty_errors.= 'The Kabal Invasion smarty error: The templates/_cache directory needs to have its permissions set to be writable by the web server user, OR 777, or ugo+rwx.<br>';
+        }
+
+        if (!$compile_perms)
+        {
+            $smarty_errors.= 'The Kabal invasion smarty error: The templates/_compile directory needs to have its permissions set to be writable by the web server user, OR 777, or ugo+rwx.<br>';
+        }
+
+        if ($smarty_errors !== null)
+        {
+            die ($smarty_errors);
+        }
+    }
+
+    public function __destruct()
+    {
     }
 
     public function setTheme($themeName = null)
@@ -73,12 +88,6 @@ class Smarty
      */
     public function addVariables($nodeName, $variables)
     {
-        // We don't require the container so remove it.
-        if (is_array($variables) && isset($variables['container']) === true)
-        {
-            unset ($variables['container']);
-        }
-
         $tmpNode = $this->smarty->getTemplateVars($nodeName);
 
         if (!is_null($tmpNode))
@@ -117,10 +126,49 @@ class Smarty
         }
         catch (\exception $e)
         {
-            // $output = $this->smarty->fetch ($template_file);
-            $output  = 'The smarty template system is not working. We suggest checking the specific template you are using for an error in the page that you want to access.';
+            $output = $this->smarty->fetch ($template_file);
+            //$output  = 'The smarty template system is not working. We suggest checking the specific template you are using for an error in the page that you want to access.';
         }
 
         echo $output;
+    }
+
+    public function handleCompression($output = null)
+    {
+        // Check to see if we have data, if not error out.
+        if (is_null($output))
+        {
+            return $output;
+        }
+
+        // Handle the supported compressions.
+        $supported_enc = array();
+        if (array_key_exists('HTTP_ACCEPT_ENCODING', $_SERVER))
+        {
+            $supported_enc = explode(',', $_SERVER['HTTP_ACCEPT_ENCODING']);
+        }
+
+        if (in_array('gzip', $supported_enc) === true)
+        {
+            header('Vary: Accept-Encoding');
+            header('Content-Encoding: gzip');
+            header('DEBUG: gzip found');
+
+            return gzencode($output, 9);
+        }
+        elseif (in_array('deflate', $supported_enc) === true)
+        {
+            header('Vary: Accept-Encoding');
+            header('Content-Encoding: deflate');
+            header('DEBUG: deflate found');
+
+            return gzdeflate($output, 9);
+        }
+        else
+        {
+            header('DEBUG: None found');
+
+            return $output;
+        }
     }
 }

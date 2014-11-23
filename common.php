@@ -79,8 +79,8 @@ $tkireg = new Tki\Reg($pdo_db);                    // TKI Registry object -  pas
 $tkireg->tkitimer = new Tki\Timer;                 // Create a benchmark timer to get benchmarking data for everything
 $tkireg->tkitimer->start();                        // Start benchmarking immediately
 $langvars = null;                                  // Language variables in every page, set them to a null value first
-$template = new \Tki\Template();                   // Template API.
-$template->setTheme($tkireg->default_template);    // Set the name of the theme, temporary until we have a theme picker
+$template = new \Tki\Smarty();
+$template->setTheme($tkireg->default_template);
 
 if (Tki\Db::isActive($pdo_db))
 {

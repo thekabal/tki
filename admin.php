@@ -96,10 +96,6 @@ $variables['filename'] = $filename;
 $variables['menu_location'] = $menu_location;
 $variables['button_main'] = $button_main;
 
-// Set a container for variables & langvars & send them to the template system
-//$variables['container'] = "variable";
-//$langvars['container'] = "langvar";
-
 // Pull in footer variables from footer_t.php
 require_once './footer_t.php';
 $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',

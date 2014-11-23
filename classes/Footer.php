@@ -24,13 +24,11 @@ namespace Tki;
 
 class Footer
 {
-    public static function display(\PDO $pdo_db, $lang, Reg $tkireg, Template $template)
+    public static function display(\PDO $pdo_db, $lang, Reg $tkireg, Smarty $template)
     {
         // Now set a container for the variables and langvars and send them off to the template system
         $variables = array();
         $langvars = array();
-        $variables['container'] = 'variable';
-        $langvars['container'] = 'langvars';
 
         // Pull in footer variables from footer_t.php
         require_once './footer_t.php';

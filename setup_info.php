@@ -42,9 +42,6 @@ $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'tki';
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
 
-// Now set a container for the variables and langvars and send them off to the template system
-$variables['container'] = "variable";
-$langvars['container'] = "langvars";
 $variables['selected_lang'] = null;
 $variables['system'] = php_uname();
 $variables['remote_addr'] = $_SERVER['REMOTE_ADDR'];
