@@ -937,6 +937,7 @@ l_login_change                          = "Change";
 l_login_banned                          = "You have been banned from this game by the administrator. You are no longer welcome to play on this server. Next time, behave.";
 
 [logout]
+l_logout_title                          = "Logout";
 l_logout_score                          = "You current score is";
 l_logout_text                           = "[name] is now logged out.  Click [here] to return to game.";
 l_login_forgotpw                        = "Forgot your password?&nbsp; &nbsp;Enter only your email address and press login.";
@@ -1490,6 +1491,9 @@ l_set_sched_ranking                     = "Rankings will be generated every ";
 l_set_sched_def_degrade                 = "Sector Defences will degrade every ";
 l_set_sched_apoc                        = "The planetary apocalypse will occur every ";
 l_set_minutes                           = " minutes";
+
+[setup_info]
+l_setup_info_title                      = "Setup info";
 
 [ship]
 l_ship_title                            = "Ship Commands";

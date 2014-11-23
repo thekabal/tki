@@ -43,11 +43,14 @@ if ($playerinfo['dev_emerwarp'] > 0)
 
 $variables['body_class'] = 'tki'; // No special css used for this page yet
 $variables['playerinfo_dev_emerwarp'] = $playerinfo['dev_emerwarp'];
+$variables['title'] = $langvars['l_ewd_title'];
+
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link" => "main.php");
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('emerwarp.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

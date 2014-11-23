@@ -39,8 +39,10 @@ $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 // Temporarily set the template to the default template until we have a user option
 $variables['template'] = $tkireg->default_template;
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('copyright.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

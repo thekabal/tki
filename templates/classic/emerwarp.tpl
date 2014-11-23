@@ -18,10 +18,11 @@
     File: emerwarp.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}{$langvars['l_ewd_title']}{/block}
-
-{block name=body}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
 
 <h1>{$langvars['l_ewd_title']}</h1>
 
@@ -31,4 +32,3 @@
 <p>{$langvars['l_ewd_none']}</p>
 {/if}
 {$variables['linkback']['fulltext']|replace:"[here]":"<a href='{$variables['linkback']['link']}'>{$langvars['l_here']}</a>"}
-{/block}

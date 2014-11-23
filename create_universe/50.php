@@ -27,10 +27,11 @@ $create_universe_info = Tki\BigBang::findStep(__FILE__);
 // Set variables
 $variables['templateset']            = $tkireg->default_template;
 $variables['body_class']             = 'create_universe';
+$variables['title']                  = $langvars['l_cu_title'];
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
 $variables['next_step']              = $create_universe_info['next_step'];
-$variables['max_sectors']             = filter_input(INPUT_POST, 'max_sectors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
+$variables['max_sectors']            = filter_input(INPUT_POST, 'max_sectors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
 $variables['spp']                    = filter_input(INPUT_POST, 'spp', FILTER_SANITIZE_NUMBER_INT);
 $variables['oep']                    = filter_input(INPUT_POST, 'oep', FILTER_SANITIZE_NUMBER_INT);
 $variables['ogp']                    = filter_input(INPUT_POST, 'ogp', FILTER_SANITIZE_NUMBER_INT);
@@ -108,10 +109,8 @@ $variables['update_config_results']['result'] = Tki\Db::logDbErrors($pdo_db, $pd
 $variables['update_config_results']['time'] = $local_table_timer->elapsed();
 
 $lang = $tkireg->default_lang;
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
-
-// Pull in footer variables from footer_t.php
-include './footer_t.php';
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/50.tpl');
-
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

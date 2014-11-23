@@ -29,10 +29,12 @@ $variables['lang'] = $lang;
 $variables['link'] = $link;
 $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'index';
+$variables['title'] = $langvars['l_new_title'];
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('new.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);

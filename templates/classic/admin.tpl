@@ -18,11 +18,13 @@
     File: admin.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}{$langvars['l_admin_title']}{/block}
-{block name=body_title}<h1>{$langvars['l_admin_title']}</h1>{/block}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
+<h1>{$langvars['l_admin_title']}</h1>
 
-{block name=body}
 {if $variables['is_admin'] != true}
     <form accept-charset="utf-8" action="admin.php" method="post">
     {$langvars['l_admin_password']}: <input type="password" name="swordfish" size="20" maxlength="20">&nbsp;&nbsp;
@@ -66,4 +68,3 @@
 {/if}
 <br>
 {$variables['linkback']['fulltext']|replace:"[here]":"<a href='{$variables['linkback']['link']}'>{$langvars['l_here']}</a>"}
-{/block}

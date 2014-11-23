@@ -18,10 +18,11 @@
     File: logout.tpl
 *}
 
-{extends file="layout.tpl"}
-{block name=title}{$langvars['l_logout']}{/block}
-
-{block name=body}
+{if !isset($variables['body_class'])}
+{$variables['body_class'] = "tki"}
+{/if}
+  <body class="{$variables['body_class']}">
+<div class="wrapper">
 
 <h1>{$langvars['l_logout']}</h1>
 
@@ -31,4 +32,3 @@
 {else}
     {$variables['linkback']['fulltext']|replace:"[here]":"<a href='{$variables['linkback']['link']}'>{$langvars['l_here']}</a>"}
 {/if}
-{/block}

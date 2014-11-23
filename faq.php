@@ -29,6 +29,7 @@ $variables = null;
 $variables['lang'] = $lang;
 $variables['link'] = $link;
 $variables['body_class'] = 'faq';
+$variables['title'] = $langvars['l_faq_title'];
 
 if (empty ($_SESSION['username']))
 {
@@ -39,8 +40,10 @@ else
     $variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link" => "index.php");
 }
 
-// Pull in footer variables from footer_t.php
-require_once './footer_t.php';
+Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('faq.tpl');
+
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
