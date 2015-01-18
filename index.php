@@ -30,7 +30,9 @@ if (!Tki\Db::isActive($pdo_db))
 }
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'footer','global_includes'));
+//$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'footer','global_includes'));
+
+$langvars = Tki\Translate::load($pdo_db, $lang, array('regional', 'admin', 'attack', 'beacon', 'bounty', 'check_fighters', 'check_mines', 'combat', 'common', 'team', 'create_universe', 'defence_report', 'device', 'dump', 'emerwarp', 'error', 'faq', 'feedback', 'footer', 'galaxy', 'genesis', 'ibank', 'index', 'log', 'login', 'logout', 'lrscan', 'mail', 'mailto', 'main', 'mines', 'modify_defences', 'move', 'navcomp', 'new', 'new_player_guide', 'news', 'option2', 'options', 'planet', 'planet_report', 'port', 'presets', 'pwreset', 'ranking', 'readmail', 'report', 'rsmove', 'scan', 'scheduler', 'sector_fighters', 'self_destruct', 'settings', 'setup_info', 'ship', 'team_planets', 'teams', 'traderoutes', 'warpedit', 'xenobe_control', 'zoneedit', 'zoneinfo', 'global_includes'));
 
 $variables = null;
 $variables['lang'] = $lang;
