@@ -139,12 +139,6 @@ if ($command == 'change')
 {
     // Sanitize zone name.
     $name = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $name);
-
-    if (!get_magic_quotes_gpc())
-    {
-        $name = addslashes($name);
-    }
-
     $resx = $db->Execute("UPDATE {$db->prefix}zones SET zone_name = ?, allow_beacon = ?, allow_attack = ?, allow_warpedit = ?, allow_planet = ?, allow_trade = ?, allow_defenses = ? WHERE zone_id = ?;", array($name, $beacons, $attacks, $warpedits, $planets, $trades, $defenses, $zone));
     Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
     echo $langvars['l_ze_saved'] . "<p>";
