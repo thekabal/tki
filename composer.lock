@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "21c026a1de04717bdde01bc7d81b6f9e",
+    "content-hash": "be8ed90626999a1a701126964c93f779",
     "packages": [
         {
             "name": "adodb/adodb-php",
@@ -252,6 +253,7 @@
     "minimum-stability": "alpha",
     "stability-flags": [],
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }
