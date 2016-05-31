@@ -38,7 +38,7 @@ class Reg
                 foreach ($big_array as $row)
                 {
                     settype($row['value'], $row['type']);
-                    $this->$row['name'] = $row['value'];
+                    $this->{$row['name']} = $row['value'];
                 }
 
                 return $this;
