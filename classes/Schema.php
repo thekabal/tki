@@ -84,82 +84,97 @@ class Schema
         $pdo_db->inactive = true;
 
         $i = 0;
-        $destroy_table_results = array();
+        $destroy_sequence_results = array();
 
-        $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
-        foreach ($seq_files as $seq_filename)
+        if ($dbtype == 'postgres9')
         {
-            $table_timer = new Timer;
-            $table_timer->start(); // Start benchmarking
-
-            if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
+       	    $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
+            foreach ($seq_files as $seq_filename)
             {
-                $seqname = mb_substr($seq_filename, 0, -4);
-                $drop_res = $pdo_db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
-//                Db::logDbErrors($pdo_db, $pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+                $table_timer = new Timer;
+                $table_timer->start(); // Start benchmarking
 
-                if ($drop_res !== false)
+                if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
                 {
-                    $destroy_table_results[$i]['result'] = true;
-                }
-                else
-                {
-                    $errorinfo = $pdo_db->errorInfo();
-                    $destroy_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
-                }
+                    $seqname = mb_substr($seq_filename, 0, -4);
+                    $drop_res = $pdo_db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
+//                  Db::logDbErrors($pdo_db, $pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
-                $destroy_table_results[$i]['name'] = $db_prefix . $seqname;
-                $table_timer->stop();
-                $destroy_table_results[$i]['time'] = $table_timer->elapsed();
-                $i++;
+                    if ($drop_res !== false)
+                    {
+                        $destroy_sequence_results[$i]['result'] = true;
+                    }
+                    else
+                    {
+                         $errorinfo = $pdo_db->errorInfo();
+                         $destroy_sequence_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                     }
+
+                    $destroy_sequence_results[$i]['name'] = $db_prefix . $seqname;
+                    $table_timer->stop();
+                    $destroy_sequence_results[$i]['time'] = $table_timer->elapsed();
+                    $i++;
+                }
             }
-        }
 
-        return $destroy_table_results;
+            return $destroy_sequence_results;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public static function createSequences(\PDO $pdo_db, $db_prefix, $dbtype)
     {
-        $create_table_results = array();
-        $i = 0;
-        define('PDO_SUCCESS', (string) '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
-
-        $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
-        foreach ($seq_files as $seq_filename)
+        if ($dbtype == 'postgres9')
         {
-            $table_timer = new Timer;
-            $table_timer->start(); // Start benchmarking
+            $create_table_results = array();
+            $i = 0;
+            define('PDO_SUCCESS', (string) '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
-            if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
+            $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
+            foreach ($seq_files as $seq_filename)
             {
-                $seqname = mb_substr($seq_filename, 0, -4);
-                $drop_res = $pdo_db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
-//                Db::logDbErrors($pdo_db, $pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+                $table_timer = new Timer;
+                $table_timer->start(); // Start benchmarking
 
-                if ($drop_res !== false)
+                if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
                 {
-                    $create_table_results[$i]['result'] = true;
-                }
-                else
-                {
-                    $errorinfo = $pdo_db->errorInfo();
-                    $create_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
-                }
+                    $seqname = mb_substr($seq_filename, 0, -4);
+                    $drop_res = $pdo_db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
+//                  Db::logDbErrors($pdo_db, $pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
-                $create_table_results[$i]['name'] = $db_prefix . $seqname;
-                $table_timer->stop();
-                $create_table_results[$i]['time'] = $table_timer->elapsed();
-                $i++;
+                    if ($drop_res !== false)
+                    {
+                        $create_table_results[$i]['result'] = true;
+                    }
+                    else
+                    {
+                        $errorinfo = $pdo_db->errorInfo();
+                        $create_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                    }
+
+                    $create_table_results[$i]['name'] = $db_prefix . $seqname;
+                    $table_timer->stop();
+                    $create_table_results[$i]['time'] = $table_timer->elapsed();
+                    $i++;
+                }
             }
-        }
 
         return $create_table_results;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public static function createTables(\PDO $pdo_db, $db_prefix, $dbtype)
     {
         $create_table_results = array();
         $i = 0;
+        define('PDO_SUCCESS', (string) '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)

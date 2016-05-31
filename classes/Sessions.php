@@ -136,7 +136,7 @@ class Sessions
     public function regen()
     {
         $old_id = session_id();
-        session_regenerate_id();
+//        session_regenerate_id(); PHP7 breaks this in some situations. TODO: Find correct fix
         $new_id = session_id();
         $table = $this->pdo_db->prefix . 'sessions';
         $qry = 'UPDATE ' . $table . ' SET sesskey=:newkey where sesskey=:sesskey';
