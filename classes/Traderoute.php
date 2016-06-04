@@ -1405,7 +1405,7 @@ class Traderoute
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
 
-        if (!empty ($traderoute_id))
+        if ($traderoute_id !== null)
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id=?", array($traderoute_id));
             \Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
@@ -1729,7 +1729,7 @@ class Traderoute
             <td colspan=2 valign=top><font size=2><input type=radio name=\"circuit_type\" value=\"1\"
             ";
 
-        if (is_null($editroute) || (!empty ($editroute) && $editroute['circuit'] == '1'))
+        if ($editroute === null) || ($editroute !== null) && $editroute['circuit'] == '1'))
         {
             echo " checked";
         }

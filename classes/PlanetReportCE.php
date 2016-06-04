@@ -88,7 +88,7 @@ class PlanetReportCE
 
             // Calc Ownership and Notify User Of Results
             $ownership = \Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
-            if (!empty ($ownership))
+            if ($ownership !== null)
             {
                 echo $ownership . "<p>";
             }

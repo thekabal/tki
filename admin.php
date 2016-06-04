@@ -75,7 +75,7 @@ if ($swordfish == \Tki\SecureConfig::ADMINPW)
                 $filename[$i]['option_title'] = $langvars['l_admin_new_module'] . $filename[$i]['file'];
             }
 
-            if (!empty ($menu))
+            if ($menu !== null)
             {
                 if ($menu == $filename[$i]['file'])
                 {

@@ -56,7 +56,7 @@ class Character
             Db::logDbErrors($pdo_db, $db, $up_pl_res, __LINE__, __FILE__);
         }
 
-        if (!empty($sectors))
+        if ($sectors !== null)
         {
             foreach ($sectors as $sector)
             {

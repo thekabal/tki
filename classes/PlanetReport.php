@@ -57,7 +57,7 @@ class PlanetReport
 
         $query = "SELECT * FROM {$db->prefix}planets WHERE owner=$playerinfo[ship_id]";
 
-        if (!empty($sort))
+        if ($sort !== null)
         {
             $query .= " ORDER BY";
             if ($sort == "name")
@@ -243,7 +243,7 @@ class PlanetReport
             echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> <br>";
         }
 
-        if (!empty ($sort))
+        if ($sort !== null)
         {
             $query .= " ORDER BY";
             if ($sort == "name")

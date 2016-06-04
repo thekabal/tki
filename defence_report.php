@@ -33,7 +33,7 @@ Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 $playerinfo = $res->fields;
 
 $query = "SELECT * FROM {$db->prefix}sector_defence WHERE ship_id = ?";
-if (!empty($sort))
+if ($sort !== null)
 {
     $query .= " ORDER BY";
     if ($sort == "quantity")

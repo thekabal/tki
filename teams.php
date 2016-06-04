@@ -182,7 +182,7 @@ switch ($teamwhat)
 
                 $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
-                if (!empty ($sectors))
+                if ($sectors !== null)
                 {
                     foreach ($sectors as $sector)
                     {
@@ -240,7 +240,7 @@ switch ($teamwhat)
 
                     $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
                     Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
-                    if (!empty ($sectors))
+                    if ($sectors !== null)
                     {
                         foreach ($sectors as $sector)
                         {
@@ -285,7 +285,7 @@ switch ($teamwhat)
 
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
-            if (!empty ($sectors))
+            if ($sectors !== null)
             {
                 foreach ($sectors as $sector)
                 {

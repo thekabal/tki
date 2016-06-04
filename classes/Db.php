@@ -63,7 +63,7 @@ class Db
             //ADODB_Session::filter (new ADODB_Compress_Gzip ());
 
             // If there is a $db_port variable set, use it in the connection method
-            if (!empty ($db_port))
+            if ($db_port !== null)
             {
                 $db_host.= ":$db_port";
             }
