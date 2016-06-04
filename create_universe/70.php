@@ -194,8 +194,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = intval(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
-        $link2 = intval(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
+        $link1 = int(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
+        $link2 = int(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
         $insert .= "($link1, $link2)";
         if ($j <= ($finish - 1))
         {
@@ -250,8 +250,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = intval(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
-        $link2 = intval(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
+        $link1 = int(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
+        $link2 = int(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
         $insert .= "($link1, $link2), ($link2, $link1)";
         if ($j <= ($finish - 1))
         {
