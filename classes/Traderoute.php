@@ -1430,7 +1430,7 @@ class Traderoute
 
         echo "<p><font size=3 color=blue><strong>";
 
-        if (is_null($editroute))
+        if ($editroute === null)
         {
             echo $langvars['l_tdr_createnew'];
         }
@@ -1751,7 +1751,7 @@ class Traderoute
             <td><td><td align='center'>
             ";
 
-        if (is_null($editroute))
+        if ($editroute === null)
         {
             echo "<input type=submit value=\"" . $langvars['l_tdr_create'] . "\">";
         }
