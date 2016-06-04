@@ -59,7 +59,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
 {
     for ($c = 0; $c < $div_xmax; $c++) // Loop the columns
     {
-        if (isset($row['sector_id']) && ($row['sector_id'] == $cur_sector) && $row !== false)
+        if ($row['sector_id'] !== null && ($row['sector_id'] == $cur_sector) && $row !== false)
         {
             $p = $row['port_type'];
             // Build the alt text for each image

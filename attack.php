@@ -83,7 +83,7 @@ elseif (Bad\Team::sameTeam($playerinfo['team'], $targetinfo['team']))
 {
     echo "<div style='color:#ff0;'>" . $langvars['l_team_noattack_members'] . "</div>\n";
 }
-elseif (isset($_SESSION['in_combat']) && $_SESSION['in_combat'] === true)
+elseif ($_SESSION['in_combat'] !== null && $_SESSION['in_combat'] === true)
 {
     echo "<div style='color:#ff0;'>" . $langvars['l_team_already_combat'] . "</div>\n";
     Tki\AdminLog::writeLog($pdo_db, $db, 13371337, "{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected multi attack.");

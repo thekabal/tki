@@ -278,7 +278,7 @@ switch ($response) {
         echo "<tr><td>" . $langvars['l_by_bountyon'] . "</td><td><select name=bounty_on>";
         while (!$res->EOF)
         {
-            if (isset ($bounty_on) && $bounty_on == $res->fields['ship_id'])
+            if ($bounty_on !== null && $bounty_on == $res->fields['ship_id'])
             {
                 $selected = "selected";
             }

@@ -41,7 +41,7 @@ class Footer
         }
 
         $elapsed = (int) 999; // Default value for elapsed, overridden with an actual value if its available
-        if (isset ($tkireg))
+        if ($tkireg !== null)
         {
             if (property_exists($tkireg, 'tkitimer'))
             {

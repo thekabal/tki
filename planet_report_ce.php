@@ -44,7 +44,7 @@ if ($tpcreds !== null && $tpcreds !== false)
 {
     Bad\PlanetReportCE::collectCredits($db, $langvars, $tpcreds, $tkireg->max_sectors);
 }
-elseif (isset($buildp) && isset($builds))
+elseif ($buildp !== null && $builds !== null)
 {
     Bad\PlanetReportCE::buildBase($db, $langvars, $buildp, $builds, $tkireg);
 }
