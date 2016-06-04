@@ -1729,7 +1729,7 @@ class Traderoute
             <td colspan=2 valign=top><font size=2><input type=radio name=\"circuit_type\" value=\"1\"
             ";
 
-        if ($editroute === null) || ($editroute !== null) && $editroute['circuit'] == '1'))
+        if (($editroute === null) || ($editroute !== null) && $editroute['circuit'] == '1')
         {
             echo " checked";
         }
