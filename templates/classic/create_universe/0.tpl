@@ -24,10 +24,10 @@
   <body class="{$variables['body_class']}">
 <div class="wrapper">
 
-{if $variables['goodpass'] === true}
-{$langvars['l_cu_step_title']|replace:'[current]':$variables['current_step']|replace:'[total]':$variables['steps']} - {$langvars['l_cu_welcome']}
-{else}
+{if $variables['goodpass'] === false}
 {$langvars['l_cu_welcome']} - {$langvars['l_cu_badpass_title']}
+{else}
+{$langvars['l_cu_step_title']|replace:'[current]':$variables['current_step']|replace:'[total]':$variables['steps']} - {$langvars['l_cu_welcome']}
 {/if}
 
 <form accept-charset='utf-8' name='create_universe' action='create_universe.php' method='post'><div style="text-align:center">

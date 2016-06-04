@@ -120,7 +120,7 @@ if (empty ($content))
     echo "        </select>\n";
     echo "      </td>\n";
     echo "    </tr>\n";
-    if (isset ($subject))
+    if ($subject !== null)
     {
         $subject = "RE: " . $subject;
     }

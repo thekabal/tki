@@ -320,7 +320,7 @@ elseif ($sectorinfo['port_type'] == "special")
             Tki\Db::logDbErrors($pdo_db, $db, $bank_res, __LINE__, __FILE__);
             $bank_row = $bank_res->fields;
 
-            if (isset ($pay) && $pay == 1)
+            if ($pay !== null && $pay == 1)
             {
                 if ($playerinfo['credits'] < $bty['total_bounty'])
                 {
@@ -342,7 +342,7 @@ elseif ($sectorinfo['port_type'] == "special")
                     die();
                 }
             }
-            elseif (isset($pay) && $pay == 2)
+            elseif ($pay !== null && $pay == 2)
             {
                 $bank_res = $db->Execute("SELECT * FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $db, $bank_res, __LINE__, __FILE__);

@@ -70,7 +70,7 @@ $variables['sched_apocalypse'] = $tkireg->sched_apocalypse;
 $variables['sched_thegovernor'] = $tkireg->sched_thegovernor;
 $variables['hash'] = mb_strtoupper(md5_file(__FILE__));
 $variables['updated_on'] = date("l, F d, Y", filemtime(basename(__FILE__)));
-$variables['cookie_test'] = isset($_COOKIE['TestCookie']);
+$variables['cookie_test'] = ($_COOKIE['TestCookie'] !== null);
 $variables['dev_mode'] = file_exists('dev');
 $variables['php_module_pdo'] = extension_loaded('pdo_mysql');
 $variables['php_module_mysqli'] = extension_loaded('mysqli');

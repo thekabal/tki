@@ -37,7 +37,7 @@ $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE owner = ?;"
 Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
 $num_traderoutes = $result->RecordCount();
 
-if (isset($traderoutes))
+if ($traderoutes !== null)
 {
     Tki\AdminLog::writeLog($pdo_db, $db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
     Bad\Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
@@ -141,7 +141,7 @@ elseif ($command == 'setsettings')
     // Enters settings in db
     Bad\Traderoute::traderouteSetsettings($db, $pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
 }
-elseif (isset ($engage))
+elseif ($engage !== null)
 {
     // Perform trade route
     $i = $tr_repeat;

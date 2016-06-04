@@ -191,7 +191,7 @@ class Ibank
              "<form accept-charset='utf-8' action='ibank.php?command=transfer2' method=post>" .
              $langvars['l_ibank_source'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class=term name=splanet_id>";
 
-        if (isset($planets))
+        if ($planets !== null)
         {
             foreach($planets as $planet)
             {
@@ -209,7 +209,7 @@ class Ibank
 
         echo "</select><br>" . $langvars['l_ibank_destination'] . "<select class=term name=dplanet_id>";
 
-        if (isset($planets))
+        if ($planets !== null)
         {
             foreach ($planets as $planet)
             {
@@ -235,7 +235,7 @@ class Ibank
              "<form accept-charset='utf-8' action='ibank.php?command=consolidate' method=post>" .
              $langvars['l_ibank_destination'] . " <select class=term name=dplanet_id>";
 
-        if (isset($planets))
+        if ($planets !== null)
         {
             foreach ($planets as $planet)
             {
@@ -429,7 +429,7 @@ class Ibank
 
     public static function ibankTransfer2($db, $pdo_db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id)
     {
-        if (isset($ship_id)) // Ship transfer
+        if ($ship_id !== null) // Ship transfer
         {
             $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=? AND ship_destroyed ='N' AND turns_used > ?;", array($ship_id, $tkireg->ibank_min_turns));
             \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
@@ -588,7 +588,7 @@ class Ibank
             $amount = 0;
         }
 
-        if (isset($ship_id)) // Ship transfer
+        if ($ship_id !== null) // Ship transfer
         {
             // Need to check again to prevent cheating by manual posts
 

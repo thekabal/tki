@@ -35,7 +35,7 @@ class Header
         // nulled by the template.
         $variables['body_class'] = $body_class;
 
-        if (isset($title))
+        if ($title !== null)
         {
             $variables['title'] = $title;
         }

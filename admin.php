@@ -64,7 +64,7 @@ if ($swordfish == \Tki\SecureConfig::ADMINPW)
             // Set option title to lang string of the form l_admin + file name
             $option_title = 'l_admin_' . mb_substr($filename[$i]['file'], 0, -4);
 
-            if (isset($langvars[$option_title]))
+            if ($langvars[$option_title] !== null)
             {
                 // The language translated title for option
                 $filename[$i]['option_title'] = $langvars[$option_title];
