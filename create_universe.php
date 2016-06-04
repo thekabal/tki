@@ -44,7 +44,7 @@ if ($swordfish === null || $swordfish === false) // If no swordfish password has
     $step = "1";
 }
 
-if (($swordfish !== null) && (\Tki\SecureConfig::ADMINPW != $swordfish)) // If a swordfish password is not null and it does not match (bad pass), redirect to step 1 (default or 0.php)
+if (($swordfish !== false) && (\Tki\SecureConfig::ADMINPW != $swordfish)) // If a swordfish password is not null and it does not match (bad pass), redirect to step 1 (default or 0.php)
 {
     $variables['goodpass'] = false;
     include_once 'create_universe/0.php';
@@ -52,7 +52,7 @@ if (($swordfish !== null) && (\Tki\SecureConfig::ADMINPW != $swordfish)) // If a
 else // If swordfish is set and matches (good pass)
 {
     $variables['goodpass'] = true;
-    if (isset($step) && $step !== null) // We've got a good pass, and its not step 1
+    if ($step !== null && $step !== 1) // We've got a good pass, and its not step 1
     {
         $create_universe_info = Tki\BigBang::findStep(false);
         natsort($create_universe_info['files']);
