@@ -25,7 +25,7 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 		</thead>
 <?php
 
-if (!empty($_POST))
+if ($_POST !== null)
 {
 	foreach ( $_POST as $key => $value )
 	{

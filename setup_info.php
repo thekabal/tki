@@ -97,7 +97,7 @@ else
     $variables['smarty_test'] = true;
 }
 
-if (!empty ($db_port))
+if ($db_port !== null)
 {
     $db_host.= ":$db_port";
 }

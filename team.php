@@ -50,7 +50,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
 
-        if (!empty($ownership))
+        if ($ownership !== null)
         {
             echo "<p>$ownership<p>";
         }
@@ -66,7 +66,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         // Kick other players off the planet
         $result = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = ? AND ship_id <> ?;", array($planet_id, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
-        if (!empty($ownership))
+        if ($ownership !== null)
         {
             echo "<p>" . $ownership . "<p>";
         }

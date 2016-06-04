@@ -444,7 +444,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
 
                     // Calc Ownership and Notify User Of Results
                     $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
-                    if (!empty ($ownership))
+                    if ($ownership !== null)
                     {
                         echo $ownership . '<p>';
                     }
@@ -864,7 +864,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
             $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
 
-            if (!empty ($ownership))
+            if ($ownership !== null)
             {
                 echo "$ownership<p>";
             }

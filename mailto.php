@@ -72,7 +72,7 @@ $purifier = new HTMLPurifier($html_purifier_config);
 $content = $purifier->purify($dirtycontent);
 
 // Filter the submitted subject to ensure that it doesn't have exploits either
-if (!empty ($subject))
+if ($subject !== null)
 {
     $subject = $purifier->purify($subject);
 }

@@ -282,7 +282,7 @@ elseif ($command == 'banip2')
 elseif ($command == 'unbanip')
 {
     $ip = $_POST['ip'];
-    if (!empty ($ban))
+    if ($ban !== null)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ban_mask=?;", array($ban));
         Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
@@ -301,7 +301,7 @@ elseif ($command == 'unbanip')
         $res->MoveNext();
     }
 
-    if (!empty ($ban))
+    if ($ban !== null)
     {
         $resx = $db->Execute("DELETE FROM {$db->prefix}ip_bans WHERE ban_mask=?;", array($ban));
         Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
