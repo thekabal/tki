@@ -23,7 +23,7 @@ use PDO;
 
 class Translate
 {
-    private static $langvars = array();
+    protected static $langvars = array();
 
     /**
      * @param string[] $categories

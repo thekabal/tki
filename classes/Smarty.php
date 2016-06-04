@@ -21,7 +21,7 @@ namespace Tki;
 
 class Smarty
 {
-    private $smarty = null;
+    protected $smarty = null;
 
     public function __construct()
     {
