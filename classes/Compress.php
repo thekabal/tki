@@ -32,7 +32,7 @@ class Compress
     public static function compress($output)
     {
         // Check to see if we have data, if not, then return null
-        if (is_null($output))
+        if ($output === null)
         {
             return null;
         }

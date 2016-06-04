@@ -37,7 +37,7 @@ echo "<h1>" . $title . "</h1>\n";
 
 // Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
 $destination  = filter_input(INPUT_GET, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
-if (is_null($destination))
+if ($destination === null)
 {
     $destination = filter_input(INPUT_POST, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
 }
@@ -56,7 +56,7 @@ if ($destination === false || $engage === false)
 else
 {
     // Check if we haven't been sent the destination.
-    if (is_null($destination) === true)
+    if ($destination === null)
     {
         // Nope, the destination was not sent, so show a web form asking for a destination.
         // Output:

@@ -64,7 +64,7 @@ if ($playerinfo['dev_warpedit'] < 1)
     die();
 }
 
-if (is_null($target_sector))
+if ($target_sector === null)
 {
     // This is the best that I can do without adding a new language variable.
     echo $langvars['l_warp_nosector'] ."<br><br>";
@@ -136,7 +136,7 @@ if ($result3 instanceof ADORecordSet)
 
         $update1 = $db->Execute("UPDATE {$db->prefix}ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $db, $update1, __LINE__, __FILE__);
-        if (is_null($bothway))
+        if ($bothway === null)
         {
             echo $langvars['l_warp_removed'] . " " . $target_sector . ".<br><br>";
         }

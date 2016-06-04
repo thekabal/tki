@@ -144,7 +144,7 @@ switch ($teamwhat)
             break;
         }
 
-        if (is_null($confirmleave))
+        if ($confirmleave === null)
         {
             echo $langvars['l_team_confirmleave'] . " <strong>" . $team['team_name'] . "</strong> ? <a href=\"teams.php?teamwhat=$teamwhat&confirmleave=1&whichteam=$whichteam\">" . $langvars['l_yes'] . "</a> - <a href=\"teams.php\">" . $langvars['l_no'] . "</a><br><br>";
         }
@@ -351,7 +351,7 @@ switch ($teamwhat)
             Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
             $whotoexpel = $result->fields;
 
-            if (is_null($confirmed))
+            if ($confirmed === null)
             {
                 echo $langvars['l_team_ejectsure'] . " " . $whotoexpel['character_name'] . "? <a href=\"teams.php?teamwhat=$teamwhat&confirmed=1&who=$who\">" . $langvars['l_yes'] . "</a> - <a href=\"teams.php\">" . $langvars['l_no'] . "</a><br>";
             }
@@ -384,7 +384,7 @@ switch ($teamwhat)
             continue;
         }
 
-        if (is_null($teamname))
+        if ($teamname === null)
         {
             echo "<form accept-charset='utf-8' action='teams.php' method='post'>\n";
             echo $langvars['l_team_entername'] . ": ";
@@ -428,7 +428,7 @@ switch ($teamwhat)
             break;
         }
 
-        if (is_null($invited))
+        if ($invited === null)
         {
             echo "<form accept-charset='utf-8' action='teams.php' method=post>";
             echo "<table><input type=hidden name=teamwhat value=$teamwhat><input type=hidden name=invited value=1><input type=hidden name=whichteam value=$whichteam>";
@@ -455,7 +455,7 @@ switch ($teamwhat)
         {
             if ($playerinfo['team'] == $whichteam)
             {
-                if (is_null($who))
+                if ($who === null)
                 {
                     echo "No player was selected.<br>\n";
                             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . "<br><br>";
@@ -506,7 +506,7 @@ switch ($teamwhat)
             break;
         }
 
-        if (is_null($update))
+        if ($update === null)
         {
             echo "<form accept-charset='utf-8' action='teams.php' method='post'>";
             echo $langvars['l_team_edname'] . " . : <br>";

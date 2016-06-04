@@ -64,7 +64,7 @@ if ($playerinfo['dev_warpedit'] < 1)
     die();
 }
 
-if (is_null($target_sector))
+if ($target_sector === null)
 {
     // This is the best that I can do without adding a new language variable.
     $langvars['l_warp_twoerror'] = str_replace('[target_sector]', $langvars['l_unknown'], $langvars['l_warp_twoerror']);
