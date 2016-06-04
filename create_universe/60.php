@@ -100,7 +100,7 @@ for ($i = 1; $i <= $loops; $i++)
     for ($j = $start; $j <= $finish; $j++)
     {
         $sector_id = $j;
-        $distance = int(Tki\Rand::betterRand(1, $tkireg->universe_size));
+        $distance = (int) round(Tki\Rand::betterRand(1, $tkireg->universe_size));
         $angle1 = Tki\Rand::betterRand(0, 180);
         $angle2 = Tki\Rand::betterRand(0, 90);
         $insert .= "($sector_id, '1', $angle1, $angle2, $distance)";
