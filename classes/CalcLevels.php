@@ -56,7 +56,7 @@ class CalcLevels
         return round(pow($level_factor, $level_power) * 500);
     }
 
-    public static function planetBeams($db, $ownerinfo, $base_defense, $planetinfo)
+    public static function planetBeams($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo)
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $base_defense : 0;
 
