@@ -618,14 +618,14 @@ else
                     );
                     Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
                     Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
-                    Tki\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                    Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                     Tki\AdminLog::writeLog($pdo_db, $db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Just lost the Escape Pod.");
                 }
                 else
                 {
                     Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
                     Tki\Character::kill($db, $targetinfo['ship_id'], $langvars, $tkireg, false);
-                    Tki\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                    Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                     Tki\AdminLog::writeLog($pdo_db, $db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Didn't have the Escape Pod.");
                 }
 
@@ -650,7 +650,7 @@ else
                         {
                             $rating_change = 0 - $rating_change;
                             Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
-                            Tki\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                            Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                             Tki\Character::kill($db, $targetinfo['ship_id'], $langvars, $tkireg, false);
 
                             Tki\AdminLog::writeLog($pdo_db, $db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Hope fully we only killed off the AI.");
@@ -784,13 +784,13 @@ else
                         array($tkireg->start_energy, $rating, $playerinfo['ship_id'])
                     );
                     Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
-                    Tki\Bounty::collect($db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
+                    Tki\Bounty::collect($pdo_db, $db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
                 }
                 else
                 {
                     echo "Didnt have pod?! $playerinfo[dev_escapepod]<br>";
                     Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, false);
-                    Tki\Bounty::collect($db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
+                    Tki\Bounty::collect($pdo_db, $db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
                 }
 
                 if ($targetarmor > 0)
