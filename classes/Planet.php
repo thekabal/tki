@@ -1059,7 +1059,7 @@ class Planet
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_goods]", $salv_goods, $langvars['l_cmb_yousalvaged']);
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salvage_rate]", $ship_salvage_rate, $langvars['l_cmb_yousalvaged']);
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salvage]", $ship_salvage, $langvars['l_cmb_yousalvaged']);
-                $langvars['l_cmb_yousalvaged2'] = str_replace("[cmb_number_rating_change]", number_format(abs($rating_change), 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_cmb_yousalvaged2']);
+                $langvars['l_cmb_yousalvaged2'] = str_replace("[cmb_number_rating_change]", number_format(abs($rating_change), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_cmb_yousalvaged2']);
                 echo $langvars['l_cmb_yousalvaged'] . "<br>" . $langvars['l_cmb_yousalvaged2'];
                 $update3 = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=ship_ore+?, ship_organics=ship_organics+?, ship_goods=ship_goods+?, credits=credits+? WHERE ship_id=?", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $db, $update3, __LINE__, __FILE__);
