@@ -189,7 +189,7 @@ switch ($teamwhat)
                         Tki\Ownership::calc($db, $sector, $min_bases_to_own, $langvars);
                     }
                 }
-                Tki\Defense::defenceVsDefence($db, $playerinfo['ship_id'], $langvars);
+                Tki\Defense::defenceVsDefence($pdo_db, $db, $playerinfo['ship_id'], $langvars);
                 Tki\Ship::leavePlanet($db, $playerinfo['ship_id']);
 
                 $langvars['l_team_onlymember'] = str_replace("[team_name]", "<strong>$team[team_name]</strong>", $langvars['l_team_onlymember']);
@@ -249,7 +249,7 @@ switch ($teamwhat)
                     }
 
                     echo $langvars['l_team_youveleft'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
-                    Tki\Defense::defenceVsDefence($db, $playerinfo['ship_id'], $langvars);
+                    Tki\Defense::defenceVsDefence($pdo_db, $db, $playerinfo['ship_id'], $langvars);
                     Tki\Ship::leavePlanet($db, $playerinfo['ship_id']);
                     Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
                     Tki\PlayerLog::writeLog($pdo_db, $db, $team['creator'], LOG_TEAM_NOT_LEAVE, $playerinfo['character_name']);
