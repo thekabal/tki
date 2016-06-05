@@ -598,4 +598,4 @@ switch ($teamwhat)
 
 echo "<br><br>";
 Tki\Text::gotoMain($pdo_db, $lang, $langvars);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

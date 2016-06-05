@@ -909,7 +909,7 @@ class Ibank
              "<img width=600 height=21 src=" . $active_template . "/images/div2.png>" .
              "</center>";
 
-        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
         die();
     }
 

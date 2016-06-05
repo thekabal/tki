@@ -101,4 +101,4 @@ else
 /// Log user in (like login does)
 
 /// Redirect to game (like login does)
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
