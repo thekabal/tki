@@ -33,7 +33,7 @@ class Reg
         {
             $big_array = $result->fetchAll();
             Db::logDbErrors($pdo_db, $pdo_db, 'fetchAll from gameconfig', __LINE__, __FILE__);
-            if ($big_array !== null)
+            if (!empty($big_array))
             {
                 foreach ($big_array as $row)
                 {
