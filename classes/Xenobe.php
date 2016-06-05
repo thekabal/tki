@@ -582,7 +582,7 @@ class Xenobe
                 $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id=?", array($planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $db, $resi, __LINE__, __FILE__);
 
-                \Tki\Ownership::cancel($db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);
+                \Tki\Ownership::cancel($pdo_db, $db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);
             }
             else
             {
@@ -1291,7 +1291,7 @@ class Xenobe
                     $langvars['l_sf_sendlog2'] = str_replace("[player]", "Xenobe " . $playerinfo['character_name'], $langvars['l_sf_sendlog2']);
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\SectorDefense::messageDefenseOwner($db, $targetlink, $langvars['l_sf_sendlog2']);
-                    \Tki\Bounty::cancel($db, $playerinfo['ship_id']);
+                    \Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
                     \Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     $xenobeisdead = 1;
 
@@ -1337,7 +1337,7 @@ class Xenobe
                             \Tki\SectorDefense::messageDefenseOwner($db, $targetlink, $langvars['l_chm_hewasdestroyedbyyourmines']);
 
                             // Actually kill the Xenobe now
-                            \Tki\Bounty::cancel($db, $playerinfo['ship_id']);
+                            \Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
                             \Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                             $xenobeisdead = 1;
                             // Lets get rid of the mines now and return out of this function
