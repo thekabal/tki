@@ -292,6 +292,7 @@ class PlanetReportCE
         $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ? ORDER BY sector_id;", array($ship_id));
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $i = 0;
+        $planet = array();
         if ($res)
         {
             while (!$res->EOF)
@@ -368,6 +369,8 @@ class PlanetReportCE
 
     public static function takeCredits($db, $langvars, $sector_id, $planet_id)
     {
+        $planet = array();
+
         // Get basic Database information (ship and planet)
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);

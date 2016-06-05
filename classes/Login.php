@@ -34,6 +34,7 @@ class Login
 
         // Establish timestamp for interval in checking bans
         $stamp = date('Y-m-d H:i:s');
+        $timestamp = array();
         $timestamp['now']  = (int) strtotime($stamp);
         $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
 

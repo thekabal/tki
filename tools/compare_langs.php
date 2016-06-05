@@ -21,6 +21,7 @@ require_once 'class_translate.php';
 
 function slurp($language)
 {
+    $langvars = array();
     // Slurp in language variables from the ini file directly
     $ini_file = '../languages/' . $language . '.ini.php';
     $ini_keys = parse_ini_file ($ini_file, true);

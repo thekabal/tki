@@ -86,6 +86,7 @@ class PlanetReport
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
         $i = 0;
+        $planet = array();
         if ($res)
         {
             while (!$res->EOF)
@@ -276,6 +277,7 @@ class PlanetReport
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
         $i = 0;
+        $planet = array();
         if ($res)
         {
             while (!$res->EOF)

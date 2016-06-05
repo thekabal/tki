@@ -51,6 +51,7 @@ class Player
                 if (password_verify($_SESSION['password'], $playerinfo['password']))
                 {
                     $stamp = date('Y-m-d H:i:s');
+                    $timestamp = array();
                     $timestamp['now']  = (int) strtotime($stamp);
                     $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
 

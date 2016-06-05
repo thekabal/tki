@@ -1448,6 +1448,7 @@ class Traderoute
 
         $num_planets = $result->RecordCount();
         $i = 0;
+        $planets = array();
         while (!$result->EOF)
         {
             $planets[$i] = $result->fields;
@@ -1466,6 +1467,7 @@ class Traderoute
 
         $num_team_planets = $result->RecordCount();
         $i = 0;
+        $planets_team = array();
         while (!$result->EOF)
         {
             $planets_team[$i] = $result->fields;
@@ -1868,6 +1870,7 @@ class Traderoute
      */
     public static function traderouteDistance($db, $langvars, $type1, $type2, $start, $dest, $circuit, $playerinfo, \Tki\Reg $tkireg, $sells = 'N')
     {
+        $retvalue = array();
         $retvalue['triptime'] = 0;
         $retvalue['scooped1'] = 0;
         $retvalue['scooped2'] = 0;

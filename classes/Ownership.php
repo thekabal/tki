@@ -28,6 +28,7 @@ class Ownership
         $num_bases = $bases_res->RecordCount();
 
         $i = 0;
+        $bases = array();
         if ($num_bases > 0)
         {
             while (!$bases_res->EOF)
@@ -105,6 +106,8 @@ class Ownership
         $loop = 0;
         $nbteams = 0;
         $nbships = 0;
+        $ships = array();
+        $steams = array();
         while ($loop < $owner_num)
         {
             if ($owners[$loop]['type'] == 'C')
