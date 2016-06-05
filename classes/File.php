@@ -99,6 +99,7 @@ class File
         $ini = file($file, FILE_SKIP_EMPTY_LINES|FILE_IGNORE_NEW_LINES);
 
         $container = null;
+        $out = array();
         foreach($ini as $line)
         {
             if (mb_substr(trim($line), 0, 1) === '[' && mb_substr(trim($line), -1, 1) === ']')
