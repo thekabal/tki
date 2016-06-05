@@ -1131,6 +1131,7 @@ class Xenobe
             \Tki\Db::logDbErrors($pdo_db, $db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
+            $defences = array();
             if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
@@ -1423,6 +1424,7 @@ class Xenobe
             \Tki\Db::logDbErrors($pdo_db, $db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
+            $defences = array();
             if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
@@ -1550,6 +1552,7 @@ class Xenobe
             \Tki\Db::logDbErrors($pdo_db, $db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
+            $defences = array();
             if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
