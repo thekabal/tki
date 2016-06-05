@@ -1,6 +1,41 @@
 Changelog
 =========
 
+5.4.2 (2016-05-01)
+------------------
+
+ * fixed support for IPv6 sockets
+ * added auto-retry when sending messages from the memory spool
+ * fixed consecutive read calls in Swift_ByteStream_FileByteStream
+ * added support for iso-8859-15 encoding
+ * fixed PHP mail extra params on missing reversePath
+ * added methods to set custom stream context options
+ * fixed charset changes in QpContentEncoderProxy
+ * added return-path header to the ignoredHeaders list of DKIMSigner
+ * fixed crlf for subject using mail
+ * fixed add soft line break only when necessary
+ * fixed escaping command-line args to Sendmail
+
+5.4.1 (2015-06-06)
+------------------
+
+ * made Swiftmailer exceptions confirm to PHP base exception constructor signature
+ * fixed MAIL FROM & RCPT TO headers to be RFC compliant
+
+5.4.0 (2015-03-14)
+------------------
+
+ * added the possibility to add extra certs to PKCS#7 signature
+ * fix base64 encoding with streams
+ * added a new RESULT_SPOOLED status for SpoolTransport
+ * fixed getBody() on attachments when called more than once
+ * removed dots from generated filenames in filespool
+
+5.3.1 (2014-12-05)
+------------------
+
+ * fixed cloning of messages with attachments
+
 5.3.0 (2014-10-04)
 ------------------
 
