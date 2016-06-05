@@ -564,13 +564,13 @@ else
                     $syllable_array = explode(",", $syllables);
                     for ($count = 1; $count <= 4; $count++)
                     {
-                        if (random_int(0, mt_getrandmax()) %10 ==1)
+                        if (random_int(0, mt_getrandmax()) %10 == 1)
                         {
-                            $makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() %50) + 1);
+                            $makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() %50) + 1));
                         }
                         else
                         {
-                            $makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() %62]);
+                            $makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() %62)]);
                         }
                     }
                     if ($xenlevel === null)
