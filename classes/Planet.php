@@ -502,7 +502,7 @@ class Planet
             }
             else
             {
-                \Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                 \Tki\Bounty::collect($pdo_db, $db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
         }
@@ -1078,7 +1078,7 @@ class Planet
             else
             {
                 \Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
-                \Tki\Character::kill($db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
                 \Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
         }

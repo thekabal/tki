@@ -181,7 +181,7 @@ if ($playerarmor < 1)
     else
     {
         Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
-        Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+        Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
         $ok = 0;
         Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
