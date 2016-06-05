@@ -105,7 +105,7 @@ if ($zoneinfo['zone_id'] == 4)
     echo "<h1>" . $title . "</h1>\n";
     echo $langvars['l_war_info'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 elseif ($zoneinfo['allow_trade'] == 'N')
@@ -115,7 +115,7 @@ elseif ($zoneinfo['allow_trade'] == 'N')
     echo "<h1>" . $title . "</h1>\n";
     echo $langvars['l_no_trade_info'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 elseif ($zoneinfo['allow_trade'] == 'L')
@@ -133,7 +133,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "<h1>" . $title . "</h1>\n";
             echo "Trading at this port is not allowed for outsiders<p>";
             Tki\Text::gotoMain($pdo_db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -145,7 +145,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
             Tki\Text::gotoMain($pdo_db, $lang, $langvars);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -296,7 +296,7 @@ elseif ($sectorinfo['port_type'] == "special")
         echo $langvars['l_port_loannotrade'] . "<p>";
         echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
         Tki\Text::gotoMain($pdo_db, $lang, $langvars);
-        Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+        Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
         die();
     }
 
@@ -1013,4 +1013,4 @@ echo "<br><br>\n";
 Tki\Text::gotoMain($pdo_db, $lang, $langvars);
 echo "\n";
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

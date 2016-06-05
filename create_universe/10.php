@@ -51,4 +51,4 @@ Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/10.tpl');
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

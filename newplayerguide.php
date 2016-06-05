@@ -42,4 +42,4 @@ $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('newplayerguide.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

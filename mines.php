@@ -109,7 +109,7 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_mines_noturn'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang, $langvars);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die ();
 }
 
@@ -260,4 +260,4 @@ else
 }
 
 Tki\Text::gotoMain($pdo_db, $lang, $langvars);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

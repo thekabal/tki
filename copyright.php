@@ -45,4 +45,4 @@ $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('copyright.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template, $langvars);
+Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
