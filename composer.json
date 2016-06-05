@@ -12,7 +12,6 @@
     "require": {
         "smarty/smarty": "v3.1.29",
         "ezyang/htmlpurifier": "v4.7.0",
-        "ircmaxell/password-compat": "1.0.4",
         "swiftmailer/swiftmailer": "v5.4.2",
         "adodb/adodb-php": "v5.20.4"
     },
