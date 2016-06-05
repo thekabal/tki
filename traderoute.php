@@ -114,7 +114,7 @@ if (mb_strlen(trim($command)) === 0)
 if ($command == 'new')
 {
     // Displays new trade route form
-    Bad\Traderoute::traderouteNew($pdo_db, $lang, $langvars, $tkireg, null, $template, $num_traderoutes, $playerinfo);
+    Bad\Traderoute::traderouteNew($db, $pdo_db, $lang, $langvars, $tkireg, null, $template, $num_traderoutes, $playerinfo);
 }
 elseif ($command == 'create')
 {
