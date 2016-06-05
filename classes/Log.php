@@ -31,6 +31,7 @@ class Log
 
         Log::getLogInfo($log_list, $entry['type'], $titletemp, $texttemp);
 
+        $retvalue = array();
         switch($entry['type'])
         {
             case LOG_LOGIN: //data args are : [ip]
