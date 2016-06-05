@@ -65,7 +65,7 @@ class Planet
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
         $planettorps = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $tkireg->level_factor);
-        $planetbeams = \Tki\CalcLevels::planetBeams($db, $ownerinfo, $base_defense, $planetinfo);
+        $planetbeams = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo);
 
         $planetfighters = $planetinfo['fighters'];
         $attackerfighters = $playerinfo['ship_fighters'];
@@ -142,7 +142,7 @@ class Planet
         }
 
         // Planetary defense system calculation
-        $planetbeams        = \Tki\CalcLevels::planetBeams($db, $ownerinfo, $base_defense, $planetinfo);
+        $planetbeams        = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo);
         $planetfighters     = $planetinfo['fighters'];
         $planetshields      = \Tki\CalcLevels::planetShields($db, $ownerinfo, $base_defense, $planetinfo);
         $planettorps        = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $tkireg->level_factor);
