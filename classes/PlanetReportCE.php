@@ -293,6 +293,7 @@ class PlanetReportCE
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $i = 0;
         $planet = array();
+        $planets = array();
         if ($res)
         {
             while (!$res->EOF)
