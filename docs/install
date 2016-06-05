@@ -9,7 +9,7 @@ Requirements:
 - Apache version 2.2.22+ is supported, we have not determined a required minimum. TKI will likely run on lighttpd and nginix, but has not been tested on either.
 - IIS is NOT supported, please do not ask!
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc)
-- PHP version 5.5+ is required.
+- PHP version 7+ is required (random_int used throughout).
 
 INSTALLATION
 

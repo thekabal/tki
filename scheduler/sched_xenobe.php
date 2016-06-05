@@ -53,7 +53,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
 
     // Run through orders
     $furcount++;
-    if (Tki\Rand::betterRand(1, 5) > 1)                                 // 20% Chance of not moving at all
+    if (random_int(1, 5) > 1)                                 // 20% Chance of not moving at all
     {
         // Orders = 0 Sentinel
         if ($playerinfo['orders'] == 0)
@@ -222,7 +222,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
         {
             $furcount3++;
             // LET SEE IF WE GO HUNTING THIS ROUND BEFORE WE DO ANYTHING ELSE
-            $hunt = Tki\Rand::betterRand(0, 3);                               // 25% CHANCE OF HUNTING
+            $hunt = random_int(0, 3);                               // 25% CHANCE OF HUNTING
             // Uncomment below for Debugging
             // $hunt = 0;
             if ($hunt == 0)

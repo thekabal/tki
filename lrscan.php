@@ -288,7 +288,7 @@ else
                     $success = 95;
                 }
 
-                $roll = Tki\Rand::betterRand(1, 100);
+                $roll = random_int(1, 100);
                 if ($roll < $success)
                 {
                     $num_detected++;

@@ -490,7 +490,7 @@ class Planet
             $free_organics = round($playerinfo['ship_organics'] / 2);
             $free_goods = round($playerinfo['ship_goods'] / 2);
             $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
-            $ship_salvage_rate = \Tki\Rand::betterRand(0, 10);
+            $ship_salvage_rate = random_int(0, 10);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
             echo "<br><center><font size='+2' COLOR='red'><strong>" . $langvars['l_cmb_yourshipdestroyed'] . "</font></strong></center><br>";
             if ($playerinfo['dev_escapepod'] == "Y")
@@ -553,7 +553,7 @@ class Planet
             $self_tech = \Tki\CalcLevels::avgTech($playerinfo);
             $target_tech = round(\Tki\CalcLevels::avgTech($ownerinfo));
 
-            $roll = \Tki\Rand::betterRand(0, (int) $target_tech);
+            $roll = random_int(0, (int) $target_tech);
             if ($roll > $self_tech)
             {
                 // Reset Planet Assets.
@@ -1052,7 +1052,7 @@ class Planet
                     $salv_organics = 0;
                 }
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull']))+round(pow($tkireg->upgrade_factor, $targetinfo['engines']))+round(pow($tkireg->upgrade_factor, $targetinfo['power']))+round(pow($tkireg->upgrade_factor, $targetinfo['computer']))+round(pow($tkireg->upgrade_factor, $targetinfo['sensors']))+round(pow($tkireg->upgrade_factor, $targetinfo['beams']))+round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $targetinfo['shields']))+round(pow($tkireg->upgrade_factor, $targetinfo['armor']))+round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
-                $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
+                $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_ore]", $salv_ore, $langvars['l_cmb_yousalvaged']);
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_organics]", $salv_organics, $langvars['l_cmb_yousalvaged']);

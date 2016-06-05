@@ -37,7 +37,7 @@ do
         {
             $row = $res->fields;
             echo "...towing $row[character_name] out of $row[sector] ...";
-            $newsector = Tki\Rand::betterRand(0, $max_sectors - 1);
+            $newsector = random_int(0, (int) $max_sectors - 1);
             echo " to sector $newsector.<br>";
             $query = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, cleared_defences=' ' WHERE ship_id=?", array($newsector, $row['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $db, $query, __LINE__, __FILE__);

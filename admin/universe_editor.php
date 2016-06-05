@@ -41,7 +41,7 @@ if ($action == "doexpand")
         while (!$result->EOF)
         {
             $row = $result->fields;
-            $distance = Tki\Rand::betterRand(1, $radius);
+            $distance = random_int(1, (int) $radius);
             $resx = $db->Execute("UPDATE {$db->prefix}universe SET distance = ? WHERE sector_id = ?", array($distance, $row['sector_id']));
             Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 

@@ -80,7 +80,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
         // I changed the behaivor so that rand will chose a % of mines to attack will
         // (it will always be at least 5% of the mines or at the very least 1 mine);
         // and if you are very unlucky they all will hit you
-        $pren = (Tki\Rand::betterRand(5, 100)/100);
+        $pren = (random_int(5, 100)/100);
         $roll = round($pren * $total_sector_mines - 1) + 1;
         $totalmines = $totalmines - $roll;
 
