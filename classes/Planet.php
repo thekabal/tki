@@ -498,12 +498,12 @@ class Planet
                 echo "<center><font color='white'>" . $langvars['l_cmb_escapepod'] . "</font></center><br><br>";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id=?", array($tkireg->start_energy, $playerinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
-                \Tki\Bounty::collect($db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
             else
             {
                 \Tki\Character::kill($db, $playerinfo['ship_id'], $langvars, $tkireg, false);
-                \Tki\Bounty::collect($db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
         }
         else
@@ -1073,13 +1073,13 @@ class Planet
                 $test = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating=?,dev_lssd='N' WHERE ship_id=?", array($tkireg->start_energy, $rating, $targetinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $db, $test, __LINE__, __FILE__);
                 \Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
-                \Tki\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
             else
             {
                 \Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
                 \Tki\Character::kill($db, $targetinfo['ship_id'], $langvars, $tkireg, false);
-                \Tki\Bounty::collect($db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
         }
         else
