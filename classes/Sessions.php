@@ -76,7 +76,7 @@ class Sessions
         $stmt->bindParam(':expiry', $this->currenttime);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return $result['sessdata'];
+        return (string) $result['sessdata']; // PHP7 change requires return to be string: https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
     }
 
     public function write($sesskey, $sessdata)
@@ -136,7 +136,7 @@ class Sessions
     public function regen()
     {
         $old_id = session_id();
-//        session_regenerate_id(); PHP7 breaks this in some situations. TODO: Find correct fix
+	session_regenerate_id();
         $new_id = session_id();
         $table = $this->pdo_db->prefix . 'sessions';
         $qry = 'UPDATE ' . $table . ' SET sesskey=:newkey where sesskey=:sesskey';
