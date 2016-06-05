@@ -197,7 +197,7 @@ class Xenobe
             \Tki\Db::logDbErrors($pdo_db, $db, $trade_result, __LINE__, __FILE__);
             $trade_result2 = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore + ?, port_organics = port_organics - ?, port_goods = port_goods + ? WHERE sector_id = ?;", array($amount_ore, $amount_organics, $amount_goods, $sectorinfo['sector_id']));
             \Tki\Db::logDbErrors($pdo_db, $db, $trade_result2, __LINE__, __FILE__);
-            \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo[ship_id], LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
         }
 
         if ($sectorinfo['port_type']=="goods") // Port goods
@@ -230,7 +230,7 @@ class Xenobe
             \Tki\Db::logDbErrors($pdo_db, $db, $trade_result, __LINE__, __FILE__);
             $trade_result2 = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore + ?, port_organics = port_organics + ?, port_goods = port_goods - ? WHERE sector_id = ?;", array($amount_ore, $amount_organics, $amount_goods, $sectorinfo['sector_id']));
             \Tki\Db::logDbErrors($pdo_db, $db, $trade_result2, __LINE__, __FILE__);
-            \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo[ship_id], LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
         }
     }
 
@@ -1039,7 +1039,7 @@ class Xenobe
             $target_energy = $targetinfo['ship_energy'];
             \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_RAW, "Attack failed, $targetinfo[character_name] survived.");
             \Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
-            $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ? , armor_pts = armor_pts - ?, rating=rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo[ship_id]));
+            $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ? , armor_pts = armor_pts - ?, rating=rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $db, $resf, __LINE__, __FILE__);
             $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts=armor_pts - ?, torps=torps - ?, rating = ? WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $target_rating_change, $targetinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $db, $resg, __LINE__, __FILE__);
