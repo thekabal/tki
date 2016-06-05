@@ -26,11 +26,6 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
                                 'planet'));
 $title = $langvars['l_admin_title'];
 
-function checked($yesno)
-{
-    return (($yesno == 'Y') ? 'checked' : '');
-}
-
 // We only want menu values that come from $_POST, and only want string values.
 $menu = filter_input(INPUT_POST, 'menu', FILTER_SANITIZE_STRING);
 $swordfish  = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);

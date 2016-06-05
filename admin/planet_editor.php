@@ -55,10 +55,10 @@ else
         echo "<table border='0' cellspacing='2' cellpadding='2'>";
         echo "<tr><td><tt>" . $langvars['l_admin_planet_id'] . "</tt></td><td><font color='#6f0'>" . $planet . "</font></td>";
         echo "<td align='right'><tt>" . $langvars['l_admin_sector_id'] . "</tt><input type='text' size='5' name='sector_id' value=\"" . $row['sector_id'] . "\"></td>";
-        echo "<td align='right'><tt>" . $langvars['l_admin_defeated'] . "</tt><input type='checkbox' name='defeated' value='ON' " . checked($row['defeated']) . "></td></tr>";
+        echo "<td align='right'><tt>" . $langvars['l_admin_defeated'] . "</tt><input type='checkbox' name='defeated' value='ON' " . \Tki\Checked::check($row['defeated']) . "></td></tr>";
         echo "<tr><td><tt>" . $langvars['l_admin_planet_name'] . "</tt></td><td><input type='text' size='15' name='name' value=\"" . $row['name'] . "\"></td>";
-        echo "<td align='right'><tt>" . $langvars['l_base'] . "</tt><input type='checkbox' name='base' value='ON' " . checked($row['base']) . "></td>";
-        echo "<td align='right'><tt>" . $langvars['l_admin_sells'] . "</tt><input type='checkbox' name='sells' value='ON' " . checked($row['sells']) . "></td></tr>";
+        echo "<td align='right'><tt>" . $langvars['l_base'] . "</tt><input type='checkbox' name='base' value='ON' " . \Tki\Checked::check($row['base']) . "></td>";
+        echo "<td align='right'><tt>" . $langvars['l_admin_sells'] . "</tt><input type='checkbox' name='sells' value='ON' " . \Tki\Checked::check($row['sells']) . "></td></tr>";
         echo "<tr><td colspan='4'><hr></td></tr>";
         echo "</table>";
 
