@@ -142,7 +142,7 @@ if ($num_defences > 0 && $total_sector_fighters > 0 && !$owner)
                 {
                     $success = 95;
                 }
-                $roll = Tki\Rand::betterRand(1, 100);
+                $roll = random_int(1, 100);
                 if ($roll < $success)
                 {
                     // Sector defences detect incoming ship

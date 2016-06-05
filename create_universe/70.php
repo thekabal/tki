@@ -81,7 +81,7 @@ do
 {
     if (($p_add > 1) && ($p_add < $variables['nump'])) // Skip the first one as we already did it during the prep of the insert call.
     {
-        $add_more = Tki\Rand::betterRand(1, $tkireg->max_planets_sector); // Add one to a random number of planets in each sector
+        $add_more = random_int(1, (int) $tkireg->max_planets_sector); // Add one to a random number of planets in each sector
         if (($add_more + $p_add) > $variables['nump']) // Ensure that we don't add more than the total amount needed
         {
             $add_more = $variables['nump'] - $p_add; // Lower the number to add to the amount that is left
@@ -194,8 +194,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = (int) round(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
-        $link2 = (int) round(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
+        $link1 = random_int(1, (int) $tkireg->max_sectors - 1);
+        $link2 = random_int(1, (int) $tkireg->max_sectors - 1);
         $insert .= "($link1, $link2)";
         if ($j <= ($finish - 1))
         {
@@ -250,8 +250,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = (int) round(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
-        $link2 = (int) round(Tki\Rand::betterRand(1, $tkireg->max_sectors - 1));
+        $link1 = random_int(1, (int) $tkireg->max_sectors - 1);
+        $link2 = random_int(1, (int) $tkireg->max_sectors - 1);
         $insert .= "($link1, $link2), ($link2, $link1)";
         if ($j <= ($finish - 1))
         {

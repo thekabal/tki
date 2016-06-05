@@ -105,8 +105,8 @@ else
         $success = 95;
     }
     $flee = (10 - $targetinfo['engines'] + $playerinfo['engines']) * 5;
-    $roll = Tki\Rand::betterRand(1, 100);
-    $roll2 = Tki\Rand::betterRand(1, 100);
+    $roll = random_int(1, 100);
+    $roll2 = random_int(1, 100);
 
     $res = $db->Execute(
         "SELECT allow_attack, {$db->prefix}universe.zone_id FROM {$db->prefix}zones, " .
@@ -157,13 +157,13 @@ else
         {
             $chance = 0;
         }
-        $random_value = Tki\Rand::betterRand(1, 100);
+        $random_value = random_int(1, 100);
 
         if ($targetinfo['dev_emerwarp'] > 0 && $random_value > $chance)
         {
             // Need to change warp destination to random sector in universe
             $rating_change = round($targetinfo['rating'] * .1);
-            $dest_sector = Tki\Rand::betterRand(1, $tkireg->max_sectors - 1);
+            $dest_sector = random_int(1, (int) $tkireg->max_sectors - 1);
             $resx = $db->Execute(
                 "UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, " .
                 "rating = rating - ? " .
@@ -706,7 +706,7 @@ else
                         $salv_organics = 0;
                     }
                     $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $targetinfo['hull'])) + round(pow($upgrade_factor, $targetinfo['engines'])) + round(pow($upgrade_factor, $targetinfo['power'])) + round(pow($upgrade_factor, $targetinfo['computer'])) + round(pow($upgrade_factor, $targetinfo['sensors'])) + round(pow($upgrade_factor, $targetinfo['beams'])) + round(pow($upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($upgrade_factor, $targetinfo['shields'])) + round(pow($upgrade_factor, $targetinfo['armor'])) + round(pow($upgrade_factor, $targetinfo['cloak'])));
-                    $ship_salvage_rate = Tki\Rand::betterRand(10, 20);
+                    $ship_salvage_rate = random_int(10, 20);
                     $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for xenobe - 0 if normal player
 
                     $langvars['l_att_ysalv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_ysalv']);
@@ -846,7 +846,7 @@ else
                         $salv_organics = 0;
                     }
                     $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $playerinfo['hull'])) + round(pow($upgrade_factor, $playerinfo['engines'])) + round(pow($upgrade_factor, $playerinfo['power'])) + round(pow($upgrade_factor, $playerinfo['computer'])) + round(pow($upgrade_factor, $playerinfo['sensors'])) + round(pow($upgrade_factor, $playerinfo['beams'])) + round(pow($upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($upgrade_factor, $playerinfo['shields'])) + round(pow($upgrade_factor, $playerinfo['armor'])) + round(pow($upgrade_factor, $playerinfo['cloak'])));
-                    $ship_salvage_rate = Tki\Rand::betterRand(10, 20);
+                    $ship_salvage_rate = random_int(10, 20);
                     $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for xenobe - 0 if normal player
 
                     $langvars['l_att_salv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_salv']);

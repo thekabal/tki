@@ -85,7 +85,7 @@ else
             $success = 95;
         }
 
-        $roll = Tki\Rand::betterRand(1, 100);
+        $roll = random_int(1, 100);
         if ($roll > $success)
         {
             // If scan fails - inform both player and target.
@@ -142,7 +142,7 @@ else
             echo "<strong>" . $langvars['l_ship_levels'] . ":</strong><br><br>";
             echo "<table  width=\"\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
             echo "<tr><td>" . $langvars['l_hull'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_hull = round($targetinfo['hull'] * $sc_error / 100);
@@ -154,7 +154,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_engines'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_engines = round($targetinfo['engines'] * $sc_error / 100);
@@ -166,7 +166,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_power'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_power = round($targetinfo['power'] * $sc_error / 100);
@@ -178,7 +178,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_computer'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_computer = round($targetinfo['computer'] * $sc_error / 100);
@@ -190,7 +190,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_sensors'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_sensors = round($targetinfo['sensors'] * $sc_error / 100);
@@ -202,7 +202,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_beams'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_beams = round($targetinfo['beams'] * $sc_error / 100);
@@ -214,7 +214,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_torp_launch'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_torp_launchers = round($targetinfo['torp_launchers'] * $sc_error / 100);
@@ -226,7 +226,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_armor'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_armor = round($targetinfo['armor'] * $sc_error / 100);
@@ -238,7 +238,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_shields'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_shields = round($targetinfo['shields'] * $sc_error / 100);
@@ -250,7 +250,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_cloak'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_cloak = round($targetinfo['cloak'] * $sc_error / 100);
@@ -265,7 +265,7 @@ else
             echo "<strong>" . $langvars['l_scan_arma'] . "</strong><br><br>";
             echo "<table  width=\"\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
             echo "<tr><td>" . $langvars['l_armorpts'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_armor_pts = round($targetinfo['armor_pts'] * $sc_error / 100);
@@ -277,7 +277,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_fighters'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_ship_fighters = round($targetinfo['ship_fighters'] * $sc_error / 100);
@@ -289,7 +289,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_torps'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_torps = round($targetinfo['torps'] * $sc_error / 100);
@@ -304,7 +304,7 @@ else
             echo "<strong>" . $langvars['l_scan_carry'] . "</strong><br><br>";
             echo "<table  width=\"\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
             echo "<tr><td>Credits:</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_credits = round($targetinfo['credits'] * $sc_error / 100);
@@ -316,7 +316,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_colonists'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_ship_colonists = round($targetinfo['ship_colonists'] * $sc_error / 100);
@@ -328,7 +328,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_energy'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_ship_energy = round($targetinfo['ship_energy'] * $sc_error / 100);
@@ -340,7 +340,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_ore'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_ship_ore = round($targetinfo['ship_ore'] * $sc_error / 100);
@@ -352,7 +352,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_organics'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_ship_organics = round($targetinfo['ship_organics'] * $sc_error / 100);
@@ -364,7 +364,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_goods'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_ship_goods = round($targetinfo['ship_goods'] * $sc_error / 100);
@@ -379,7 +379,7 @@ else
             echo "<strong>" . $langvars['l_devices'] . ":</strong><br><br>";
             echo "<table  width=\"\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
             echo "<tr><td>" . $langvars['l_warpedit'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_dev_warpedit = round($targetinfo['dev_warpedit'] * $sc_error / 100);
@@ -391,7 +391,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_genesis'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_dev_genesis = round($targetinfo['dev_genesis'] * $sc_error / 100);
@@ -403,7 +403,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_deflect'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_dev_minedeflector = round($targetinfo['dev_minedeflector'] * $sc_error / 100);
@@ -415,7 +415,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_ewd'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 $sc_dev_emerwarp = round($targetinfo['dev_emerwarp'] * $sc_error / 100);
@@ -427,7 +427,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_escape_pod'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 echo "<td>$targetinfo[dev_escapepod]</td></tr>";
@@ -438,7 +438,7 @@ else
             }
 
             echo "<tr><td>" . $langvars['l_fuel_scoop'] . ":</td>";
-            $roll = Tki\Rand::betterRand(1, 100);
+            $roll = random_int(1, 100);
             if ($roll < $success)
             {
                 echo "<td>" . $targetinfo['dev_fuelscoop'] . "</td></tr>";

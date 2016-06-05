@@ -522,7 +522,7 @@ class Xenobe
             $free_organics = round($playerinfo['ship_organics'] / 2);
             $free_goods = round($playerinfo['ship_goods'] / 2);
             $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines']))+round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors']))+round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
-            $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
+            $ship_salvage_rate = random_int(10, 20);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
             $fighters_lost = $planetinfo['fighters'] - $targetfighters;
 
@@ -644,7 +644,7 @@ class Xenobe
         if ($targetinfo['dev_emerwarp'] > 0)
         {
             \Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "Xenobe $playerinfo[character_name]");
-            $dest_sector = \Tki\Rand::betterRand(0, $tkireg->max_sectors);
+            $dest_sector = random_int(0, (int) $tkireg->max_sectors);
             $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $targetinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $db, $result_warp, __LINE__, __FILE__);
 
@@ -1013,7 +1013,7 @@ class Xenobe
                 }
 
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull']))+round(pow($tkireg->upgrade_factor, $targetinfo['engines']))+round(pow($tkireg->upgrade_factor, $targetinfo['power']))+round(pow($tkireg->upgrade_factor, $targetinfo['computer']))+round(pow($tkireg->upgrade_factor, $targetinfo['sensors']))+round(pow($tkireg->upgrade_factor, $targetinfo['beams']))+round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $targetinfo['shields']))+round(pow($tkireg->upgrade_factor, $targetinfo['armor']))+round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
-                $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
+                $ship_salvage_rate = random_int (10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
                 $resd = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id']));
@@ -1105,7 +1105,7 @@ class Xenobe
                 }
 
                 $ship_value = $tkireg->upgrade_cost*(round(pow($tkireg->upgrade_factor, $playerinfo['hull']))+round(pow($tkireg->upgrade_factor, $playerinfo['engines']))+round(pow($tkireg->upgrade_factor, $playerinfo['power']))+round(pow($tkireg->upgrade_factor, $playerinfo['computer']))+round(pow($tkireg->upgrade_factor, $playerinfo['sensors']))+round(pow($tkireg->upgrade_factor, $playerinfo['beams']))+round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $playerinfo['shields']))+round(pow($tkireg->upgrade_factor, $playerinfo['armor']))+round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
-                $ship_salvage_rate = \Tki\Rand::betterRand(10, 20);
+                $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$armor_lost|$fighters_lost");
                 \Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_RAW, "You destroyed the Xenobe ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
@@ -1186,7 +1186,7 @@ class Xenobe
                 $totalmines = $total_sector_mines;
                 if ($totalmines > 1)
                 {
-                    $roll = \Tki\Rand::betterRand(1, $totalmines);
+                    $roll = random_int(1, (int) $totalmines);
                 }
                 else
                 {
@@ -1382,7 +1382,7 @@ class Xenobe
                 $zonerow = $zoneres->fields;
                 if ($zonerow['allow_attack'] == "Y") // Dest link must allow attacking
                 {
-                    $setlink = \Tki\Rand::betterRand(0, 2);                        // 33% Chance of replacing destination link with this one
+                    $setlink = random_int(0, 2);                        // 33% Chance of replacing destination link with this one
                     if ($setlink == 0 || !$targetlink > 0)           // Unless there is no dest link, choose this one
                     {
                         $targetlink = $row['link_dest'];
@@ -1394,7 +1394,7 @@ class Xenobe
 
         if (!$targetlink > 0) // If there is no acceptable link, use a worm hole.
         {
-            $wormto = \Tki\Rand::betterRand(1, ($tkireg->max_sectors - 15));  // Generate a random sector number
+            $wormto = random_int(1, (int) ($tkireg->max_sectors - 15));  // Generate a random sector number
             $limitloop = 1;                             // Limit the number of loops
             while (!$targetlink > 0 && $limitloop < 15)
             {
@@ -1502,7 +1502,7 @@ class Xenobe
 
         // Choose a target from the top player list
         $i = 1;
-        $targetnum = \Tki\Rand::betterRand(1, $topnum);
+        $targetnum = random_int(1, $topnum);
         while (!$res->EOF)
         {
             if ($i == $targetnum)

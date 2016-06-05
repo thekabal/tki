@@ -19,9 +19,9 @@ Requirements:
 - PHP's pdo extension must be installed (used in create_universe, and soon the rest of the game)
 - Web browser - Firefox and Chrome (v30+ for both) are best, while Safari (v6+) is also good. Internet Explorer needs to be at least (v9+).
 - Apache version 2.2.22+ is supported, we have not determined a required minimum. TKI will likely run on lighttpd and nginix, but has not been tested on either.
-- IIS is NOT supported, please do not ask!
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc)
-- PHP version 5.5 is required. 
+- PHP version 7+ is required (random_int used throughout).
+- IIS is NOT supported, please do not ask!
 
 Download:
     You can get the newest version at https://github.com/thekabal/tki

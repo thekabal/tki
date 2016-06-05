@@ -454,9 +454,9 @@ else
                 $Sylable1 = array("Ak","Al","Ar","B","Br","D","F","Fr","G","Gr","K","Kr","N","Ol","Om","P","Qu","R","S","Z");
                 $Sylable2 = array("a","ar","aka","aza","e","el","i","in","int","ili","ish","ido","ir","o","oi","or","os","ov","u","un");
                 $Sylable3 = array("ag","al","ak","ba","dar","g","ga","k","ka","kar","kil","l","n","nt","ol","r","s","ta","til","x");
-                $sy1roll = Tki\Rand::betterRand(0, 19);
-                $sy2roll = Tki\Rand::betterRand(0, 19);
-                $sy3roll = Tki\Rand::betterRand(0, 19);
+                $sy1roll = random_int(0, 19);
+                $sy2roll = random_int(0, 19);
+                $sy3roll = random_int(0, 19);
                 $character = $Sylable1[$sy1roll] . $Sylable2[$sy2roll] . $Sylable3[$sy3roll];
                 $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
                 $resultnm = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE character_name = ?;", array($character));
@@ -467,9 +467,9 @@ else
                 // If Name Exists Try Again - Up To Nine Times
                 while (($namecheck[0]) && ($nametry <= 9))
                 {
-                    $sy1roll = Tki\Rand::betterRand(0, 19);
-                    $sy2roll = Tki\Rand::betterRand(0, 19);
-                    $sy3roll = Tki\Rand::betterRand(0, 19);
+                    $sy1roll = random_int(0, 19);
+                    $sy2roll = random_int(0, 19);
+                    $sy3roll = random_int(0, 19);
                     $character = $Sylable1[$sy1roll] . $Sylable2[$sy2roll] . $Sylable3[$sy3roll];
                     $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
                     $resultnm = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE character_name = ?;", array($character));
@@ -483,7 +483,7 @@ else
                 $shipname = "Xenobe-" . $character;
 
                 // Select Random Sector
-                $sector = Tki\Rand::betterRand(1, $tkireg->max_sectors);
+                $sector = random_int(1, (int) $tkireg->max_sectors);
 
                 // Display Confirmation form
                 echo "<td><table border=0 cellspacing=0 cellpadding=5>";
@@ -564,13 +564,13 @@ else
                     $syllable_array = explode(",", $syllables);
                     for ($count = 1; $count <= 4; $count++)
                     {
-                        if (Tki\Rand::betterRand() %10 == 1)
+                        if (random_int(0, mt_getrandmax()) %10 ==1)
                         {
-                            $makepass .= sprintf("%0.0f", (Tki\Rand::betterRand() %50) + 1);
+                            $makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() %50) + 1);
                         }
                         else
                         {
-                            $makepass .= sprintf("%s", $syllable_array[Tki\Rand::betterRand() %62]);
+                            $makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() %62]);
                         }
                     }
                     if ($xenlevel === null)
