@@ -21,7 +21,7 @@ namespace Tki;
 
 class Bounty
 {
-    public static function cancel($db, $bounty_on)
+    public static function cancel($pdo_db, $db, $bounty_on)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}bounty,{$db->prefix}ships WHERE bounty_on = ? AND bounty_on = ship_id", array($bounty_on));
         Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
