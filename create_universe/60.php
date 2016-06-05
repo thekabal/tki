@@ -517,13 +517,18 @@ for ($i = 1; $i <= $loops; $i++)
     }
 }
 
-//for ($t = 0; $t < $z; $t++)
-//{
-//    if ($catch_results[$t] !== true)
-//    {
+for ($t = 0; $t < $z; $t++)
+{
+    if (!isset($catch_results[$t])) // Several sectors are not being changed, and thus do not have a success set. FUTURE: Investigate why
+    {
+        $catch_results[$t] = true;
+    }
+
+    if ($catch_results[$t] !== true)
+    {
         $variables['autorun'] = false; // We disable autorun if any errors occur in processing
-//    }
-//}
+    }
+}
 
 Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
