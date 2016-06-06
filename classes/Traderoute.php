@@ -1867,6 +1867,7 @@ class Traderoute
     /**
      * @param string $langvars
      * @param string $type1
+     * @param string $type2
      */
     public static function traderouteDistance($pdo_db, $db, $langvars, $type1, $type2, $start, $dest, $circuit, $playerinfo, \Tki\Reg $tkireg, $sells = 'N')
     {
