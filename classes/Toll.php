@@ -21,7 +21,7 @@ namespace Tki;
 
 class Toll
 {
-    public static function distribute($db, $sector, $toll, $total_fighters)
+    public static function distribute($pdo_db, $db, $sector, $toll, $total_fighters)
     {
         $select_def_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id=? AND defence_type ='F'", array($sector));
         Db::logDbErrors($pdo_db, $db, $select_def_res, __LINE__, __FILE__);
