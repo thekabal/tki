@@ -48,7 +48,7 @@ elseif ($preptype == 2)                  // Display the production values of you
 {
     $title = $title .": Production";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::planetProductionChange($db, $langvars, $playerinfo, $sort, $tkireg);
+    Bad\PlanetReport::planetProductionChange($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
 }
 elseif ($preptype == 0)                  // For typing in manually to get a report menu
 {
