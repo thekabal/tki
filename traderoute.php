@@ -40,7 +40,7 @@ $num_traderoutes = $result->RecordCount();
 if ($traderoutes !== null)
 {
     Tki\AdminLog::writeLog($pdo_db, $db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
-    Bad\Traderoute::traderouteDie($db, $pdo_db, $lang, $langvars, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
+    Bad\Traderoute::traderouteDie($pdo_db, $lang, $langvars, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
 }
 
 $traderoutes = array();
