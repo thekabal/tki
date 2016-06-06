@@ -1341,13 +1341,13 @@ class Xenobe
                             \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                             $xenobeisdead = 1;
                             // Lets get rid of the mines now and return out of this function
-                            \Tki\Mines::explode($db, $targetlink, $roll);
+                            \Tki\Mines::explode($pdo_db, $db, $targetlink, $roll);
 
                             return;
                         }
                     }
                 }
-                \Tki\Mines::explode($db, $targetlink, $roll); // Dispose of the mines now
+                \Tki\Mines::explode($pdo_db, $db, $targetlink, $roll); // Dispose of the mines now
             }
             else
             {
