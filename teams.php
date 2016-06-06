@@ -401,7 +401,7 @@ switch ($teamwhat)
             $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
             $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
 
-            if (!Bad\Team::validateTeam($db, $teamname, $teamdesc, $playerinfo['ship_id']))
+            if (!Bad\Team::validateTeam($pdo_db, $db, $teamname, $teamdesc, $playerinfo['ship_id']))
             {
                 echo "<span style='color:#f00;'>Team Creation Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
                 echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
@@ -525,7 +525,7 @@ switch ($teamwhat)
             $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
             $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
 
-            if (Bad\Team::validateTeam($db, $teamname, $teamdesc, $playerinfo['ship_id']) === false)
+            if (Bad\Team::validateTeam($pdo_db, $db, $teamname, $teamdesc, $playerinfo['ship_id']) === false)
             {
                 echo "<span style='color:#f00;'>Team Edit Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
                 echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";

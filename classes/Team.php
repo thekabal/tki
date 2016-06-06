@@ -72,7 +72,7 @@ class Team
 
     }
 
-    public static function validateTeam($db, $name = null, $desc = null, $creator = null)
+    public static function validateTeam($pdo_db, $db, $name = null, $desc = null, $creator = null)
     {
         $name = trim($name);
         $desc = trim($desc);
