@@ -587,7 +587,7 @@ switch ($teamwhat)
 
         if ($num_res['total'] > 0)
         {
-            Bad\Team::displayAllTeams($db, $langvars, $tkireg, $order, $type);
+            Bad\Team::displayAllTeams($pdo_db, $db, $langvars, $tkireg, $order, $type);
         }
         else
         {
