@@ -168,7 +168,7 @@ class PlanetReportCE
         echo "<br><br>";
     }
 
-    public static function changePlanetProduction($pdo_db, $db, $langvars, $prodpercentarray)
+    public static function changePlanetProduction($pdo_db, $db, $langvars, $prodpercentarray, $tkireg)
     {
     //  Declare default production values from the config.php file
     //

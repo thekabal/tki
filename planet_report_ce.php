@@ -50,7 +50,7 @@ elseif ($buildp !== null && $builds !== null)
 }
 else
 {
-    Bad\PlanetReportCE::changePlanetProduction($pdo_db, $db, $langvars, $_POST);
+    Bad\PlanetReportCE::changePlanetProduction($pdo_db, $db, $langvars, $_POST, $tkireg);
 }
 
 echo '<br><br>';
