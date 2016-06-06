@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ownership
 {
-    public static function calc($db, $sector, $min_bases_to_own, $langvars)
+    public static function calc($pdo_db, $db, $sector, $min_bases_to_own, $langvars)
     {
         $bases_res = $db->Execute("SELECT owner, team FROM {$db->prefix}planets WHERE sector_id=? AND base='Y'", array($sector));
         Db::logDbErrors($pdo_db, $db, $bases_res, __LINE__, __FILE__);

@@ -160,7 +160,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                     Tki\Db::logDbErrors($pdo_db, $db, $update2, __LINE__, __FILE__);
                     $update3 = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE planet_id = ?;", array($planet_id));
                     Tki\Db::logDbErrors($pdo_db, $db, $update3, __LINE__, __FILE__);
-                    Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
+                    Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $min_bases_to_own, $langvars);
                     header("Location: main.php");
                 }
                 else
@@ -443,7 +443,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                     echo $langvars['l_planet_bbuild'] . "<br><br>";
 
                     // Calc Ownership and Notify User Of Results
-                    $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+                    $ownership = Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
                     if ($ownership !== null)
                     {
                         echo $ownership . '<p>';
@@ -862,7 +862,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             echo $langvars['l_planet_captured'] . "<br>";
             $update = $db->Execute("UPDATE {$db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
             Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
-            $ownership = Tki\Ownership::calc($db, $playerinfo['sector'], $min_bases_to_own, $langvars);
+            $ownership = Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $min_bases_to_own, $langvars);
 
             if ($ownership !== null)
             {

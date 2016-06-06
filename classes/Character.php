@@ -60,7 +60,7 @@ class Character
         {
             foreach ($sectors as $sector)
             {
-                Ownership::calc($db, $sector, $tkireg->min_bases_to_own, $langvars);
+                Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
             }
         }
 
