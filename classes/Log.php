@@ -27,11 +27,12 @@ class Log
 {
     public static function logParse($langvars, $entry)
     {
+        $log_list = array();
+        $retvalue = array();
         $langvars['l_log_nopod'] = "<font color=yellow><strong>" . $langvars['l_log_nopod'] . "</strong></font>"; // This should be done better, but I needed it moved out of the language file.
 
         Log::getLogInfo($log_list, $entry['type'], $titletemp, $texttemp);
 
-        $retvalue = array();
         switch($entry['type'])
         {
             case LOG_LOGIN: //data args are : [ip]
