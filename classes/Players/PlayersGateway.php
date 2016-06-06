@@ -28,6 +28,10 @@ class PlayersGateway // Gateway for SQL calls related to Players
         $this->pdo_db = $pdo_db;
     }
 
+    /**
+     * @param string $since_stamp
+     * @param string $stamp
+     */
     public function selectPlayersLoggedIn($since_stamp, $stamp)
     {
         // SQL call that selected the number (count) of logged in ships (should be players)
