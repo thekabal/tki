@@ -201,7 +201,7 @@ class Team
         }
     }
 
-    public static function showInfo($db, $langvars, $whichteam, $isowner, $playerinfo, $invite_info, $team, \Tki\Reg $tkireg)
+    public static function showInfo($pdo_db, $db, $langvars, $whichteam, $isowner, $playerinfo, $invite_info, $team, \Tki\Reg $tkireg)
     {
         // Heading
         echo "<div align=center>";
