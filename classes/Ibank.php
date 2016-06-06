@@ -936,7 +936,7 @@ class Ibank
         }
     }
 
-    public static function ibankDeposit(\PDO $pdo_db, $lang, $account, $playerinfo, $langvars)
+    public static function ibankDeposit(\PDO $pdo_db, $lang, $account, $playerinfo)
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('ibank'));
