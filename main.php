@@ -43,7 +43,7 @@ if (!array_key_exists('command', $_GET))
 
 if ($_GET['command'] == "score")
 {
-    $playerinfo['score'] = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg);
+    $playerinfo['score'] = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 }
 
 if ($playerinfo['cleared_defences'] > ' ')
