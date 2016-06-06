@@ -114,7 +114,6 @@ function php_true_delta($futurevalue, $shipvalue)
 
 function php_change_delta($desired_value, $current_value, $upgrade_cost)
 {
-    $delta = 0;
     $delta_cost = 0;
     $delta = $desired_value - $current_value;
 
