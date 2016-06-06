@@ -36,7 +36,7 @@ class Db
         }
         else
         {
-            if ($results->rowCount()>0)
+            if ($results->rowCount() > 0)
             {
                 return true;
             }
@@ -66,7 +66,7 @@ class Db
             // If there is a $db_port variable set, use it in the connection method
             if ($db_port !== null)
             {
-                $db_host.= ":$db_port";
+                $db_host .= ":$db_port";
             }
 
             // Attempt to connect to the database
@@ -103,8 +103,8 @@ class Db
             {
                 // We need to display the error message onto the screen.
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                           ' Database.<br> Database Error: '. $db->ErrorNo() .
-                           ': '. $db->ErrorMsg() .'<br>\n';
+                            ' Database.<br> Database Error: '. $db->ErrorNo() .
+                            ': '. $db->ErrorMsg() .'<br>\n';
                 die ($err_msg);
             }
 
@@ -144,8 +144,8 @@ class Db
             catch (\PDOException $e)
             {
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                           ' Database.<br> Database Error: '.
-                           $e->getMessage() ."<br>\n";
+                            ' Database.<br> Database Error: '.
+                            $e->getMessage() ."<br>\n";
                 die ($err_msg);
             }
 
@@ -209,9 +209,9 @@ class Db
             }
 
             $text_error = 'A Database error occurred in ' . $served_page .
-                          ' on line ' . $served_line .
-                          ' (called from: ' . $safe_script_name . ' the error message was: ' . $db_error .
-                          'and the query was ' . $query;
+                            ' on line ' . $served_line .
+                            ' (called from: ' . $safe_script_name . ' the error message was: ' . $db_error .
+                            'and the query was ' . $query;
 
             if (!Db::isActive($pdo_db))
             {
