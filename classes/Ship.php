@@ -48,7 +48,7 @@ class Ship
             {
                 // if the player doesn't have an escapepod - they're dead, delete them.
                 // But we can't delete them yet. (This prevents the self-distruct inherit bug)
-                $error_status .= str_replace('[here]', "<a href='log.php'>" .
+                $error_status = str_replace('[here]', "<a href='log.php'>" .
                                  ucfirst($langvars['l_here']) . '</a>', $langvars['l_global_died']) .
                                  '<br><br>' . $langvars['l_global_died2'];
                 $error_status .= str_replace('[logout]', "<a href='logout.php'>" .
