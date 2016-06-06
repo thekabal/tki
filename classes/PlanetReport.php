@@ -43,7 +43,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport($db, $langvars, $playerinfo, $sort, \Tki\Reg $tkireg)
+    public static function standardReport($pdo_db, $db, $langvars, $playerinfo, $sort, \Tki\Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
