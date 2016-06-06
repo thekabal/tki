@@ -42,7 +42,7 @@ class Ship
                 $stmt->execute();
                 Db::logDbErrors($pdo_db, $pdo_db, $sql, __LINE__, __FILE__);
 
-                $error_status = str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_login_died']);
+                // $error_status = str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_login_died']); Error status is not used anywhere
             }
             else
             {
