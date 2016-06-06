@@ -91,7 +91,7 @@ class Player
         }
     }
 
-    public static function handleBan($pdo_db, $lang, $timestamp, $template, $playerinfo)
+    public static function handleBan($pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars)
     {
         // Check to see if the player is banned every 60 seconds (may need to ajust this).
         if ($timestamp['now'] >= ($timestamp['last'] + 60))
