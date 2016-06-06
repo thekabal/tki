@@ -169,7 +169,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             }
 
             // NOW TRADE BEFORE WE DO ANY AGGRESSION CHECKS
-            Bad\Xenobe::xenobeTrade($db, $playerinfo, $tkireg, $xenobeisdead);
+            Bad\Xenobe::xenobeTrade($pdo_db, $db, $playerinfo, $tkireg);
             // FIND A TARGET
             // IN MY SECTOR, NOT MYSELF
             $reso2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
