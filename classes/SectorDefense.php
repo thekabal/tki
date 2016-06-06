@@ -21,7 +21,7 @@ namespace Tki;
 
 class SectorDefense
 {
-    public static function messageDefenseOwner($db, $sector, $message)
+    public static function messageDefenseOwner($pdo_db, $db, $sector, $message)
     {
         $res = $db->Execute("SELECT ship_id FROM {$db->prefix}sector_defence WHERE sector_id = ?;", array($sector));
         Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);

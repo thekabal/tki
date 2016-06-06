@@ -1276,7 +1276,7 @@ class Xenobe
                 $langvars['l_sf_sendlog'] = str_replace("[player]", "Xenobe $playerinfo[character_name]", $langvars['l_sf_sendlog']);
                 $langvars['l_sf_sendlog'] = str_replace("[lost]", $fighterslost, $langvars['l_sf_sendlog']);
                 $langvars['l_sf_sendlog'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog']);
-                \Tki\SectorDefense::messageDefenseOwner($db, $targetlink, $langvars['l_sf_sendlog']);
+                \Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $targetlink, $langvars['l_sf_sendlog']);
 
                 // Update Xenobe after comnbat
                 $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
@@ -1290,7 +1290,7 @@ class Xenobe
                 {
                     $langvars['l_sf_sendlog2'] = str_replace("[player]", "Xenobe " . $playerinfo['character_name'], $langvars['l_sf_sendlog2']);
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog2']);
-                    \Tki\SectorDefense::messageDefenseOwner($db, $targetlink, $langvars['l_sf_sendlog2']);
+                    \Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
                     \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     $xenobeisdead = 1;
@@ -1302,7 +1302,7 @@ class Xenobe
                 $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_playerinfo_character_name]", "Xenobe " . $playerinfo['character_name'], $langvars['l_chm_hehitminesinsector']);
                 $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_hehitminesinsector']);
                 $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_sector]", $targetlink, $langvars['l_chm_hehitminesinsector']);
-                \Tki\SectorDefense::messageDefenseOwner($db, $targetlink, $langvars['l_chm_hehitminesinsector']);
+                \Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $targetlink, $langvars['l_chm_hehitminesinsector']);
 
                 // Deflectors v. mines
                 if ($playerminedeflect >= $roll)
@@ -1334,7 +1334,7 @@ class Xenobe
                             // Xenobe dies, logs the fact that he died
                             $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_playerinfo_character_name]", "Xenobe " . $playerinfo['character_name'], $langvars['l_chm_hewasdestroyedbyyourmines']);
                             $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_sector]", $targetlink, $langvars['l_chm_hewasdestroyedbyyourmines']);
-                            \Tki\SectorDefense::messageDefenseOwner($db, $targetlink, $langvars['l_chm_hewasdestroyedbyyourmines']);
+                            \Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $targetlink, $langvars['l_chm_hewasdestroyedbyyourmines']);
 
                             // Actually kill the Xenobe now
                             \Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);

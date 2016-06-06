@@ -93,7 +93,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hehitminesinsector']);
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_roll]", "$roll", $langvars['l_chm_hehitminesinsector']);
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_sector]", $sector, $langvars['l_chm_hehitminesinsector']);
-        Tki\SectorDefense::messageDefenseOwner($db, $sector, $langvars['l_chm_hehitminesinsector']);
+        Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $sector, $langvars['l_chm_hehitminesinsector']);
 
         // If the player has enough mine deflectors then subtract the ammount and continue
         if ($playerinfo['dev_minedeflector'] >= $roll)
@@ -156,7 +156,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                     Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_SHIP_DESTROYED_MINES, "$sector|$pod");
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hewasdestroyedbyyourmines']);
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_sector]", $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
-                    Tki\SectorDefense::messageDefenseOwner($db, $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
+                    Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
                     echo $langvars['l_chm_yourshiphasbeendestroyed'] . "<br><br>";
 
                     // Survival
