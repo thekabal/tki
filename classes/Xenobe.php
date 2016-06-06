@@ -1486,7 +1486,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter($db, $playerinfo, $targetlink, $xenobeisdead)
+    public static function xenobeHunter($pdo_db, $db, $playerinfo, $xenobeisdead)
     {
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
         \Tki\Db::logDbErrors($pdo_db, $db, $rescount, __LINE__, __FILE__);
