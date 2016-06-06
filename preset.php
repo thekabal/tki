@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $langvars = Tki\Translate::load($pdo_db, $lang, array('presets'));
 $title = $langvars['l_pre_title'];
