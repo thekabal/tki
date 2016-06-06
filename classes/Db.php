@@ -25,6 +25,7 @@ use PDO;
 
 class Db
 {
+    private $prefix = null;
     public static function isActive(\PDO $pdo_db)
     {
         // Get the config_values from the DB
