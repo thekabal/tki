@@ -24,7 +24,7 @@ namespace Bad;
 
 class Xenobe
 {
-    public static function xenobeTrade($db, $playerinfo, \Tki\Reg $tkireg, $xenobeisdead)
+    public static function xenobeTrade($pdo_db, $db, $playerinfo, \Tki\Reg $tkireg)
     {
         // We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
         $tkireg->ore_price = 11;
@@ -1122,7 +1122,7 @@ class Xenobe
         \Tki\Db::logDbErrors($pdo_db, $db, $resj, __LINE__, __FILE__);
     }
 
-    public static function xenobeToSecDef($db, $langvars, $playerinfo, $targetlink, $xenobeisdead, \Tki\Reg $tkireg)
+    public static function xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, \Tki\Reg $tkireg)
     {
         // Check for sector defenses
         if ($targetlink > 0)
@@ -1455,7 +1455,7 @@ class Xenobe
             {
                 if ($playerinfo['aggression'] == 2 || $playerinfo['aggression'] == 1)
                 {
-                    Xenobe::xenobeToSecDef($db, $langvars, $playerinfo, $targetlink, $xenobeisdead, $tkireg); // Attack sector defences
+                    Xenobe::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defences
 
                     return;
                 }
@@ -1583,7 +1583,7 @@ class Xenobe
             {
                 // Attack sector defences
                 $targetlink = $targetinfo['sector'];
-                Xenobe::xenobeToSecDef($db, $langvars, $playerinfo, $targetlink, $xenobeisdead, $tkireg);
+                Xenobe::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
             }
 
             if ($xenobeisdead > 0)
