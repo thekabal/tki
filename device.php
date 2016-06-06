@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('device', 'common', 'global_includes', 'global_funcs', 'report', 'footer', 'regional'));

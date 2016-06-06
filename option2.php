@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Set a flag that we have not changed the language
 $changed_language = false;

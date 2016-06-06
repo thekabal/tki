@@ -21,7 +21,7 @@ require_once './common.php';
 
 // FUTURE: This should not be hard-coded, but for now, I need to be able to clear the errors
 $active_template = 'classic';
-Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('ibank', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));

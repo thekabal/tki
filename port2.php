@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-Tki\Login::checkLogin($pdo_db, $lang, $langvars, $tkireg, $template);
+Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_title_port'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
