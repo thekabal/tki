@@ -144,7 +144,7 @@ class Planet
         // Planetary defense system calculation
         $planetbeams        = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo);
         $planetfighters     = $planetinfo['fighters'];
-        $planetshields      = \Tki\CalcLevels::planetShields($db, $ownerinfo, $base_defense, $planetinfo);
+        $planetshields      = \Tki\CalcLevels::planetShields($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo);
         $planettorps        = \Tki\CalcLevels::planetTorps($db, $ownerinfo, $planetinfo, $base_defense, $tkireg->level_factor);
 
         // Attacking ship calculations

@@ -83,7 +83,7 @@ class CalcLevels
         return $planetbeams;
     }
 
-    public static function planetShields($db, $ownerinfo, $base_defense, $planetinfo)
+    public static function planetShields($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo)
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $base_defense : 0;
         $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $level_factor);
