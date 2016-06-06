@@ -234,7 +234,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeToPlanet($db, $planet_id, \Tki\Reg $tkireg, $playerinfo)
+    public static function xenobeToPlanet($pdo_db, $db, $planet_id, \Tki\Reg $tkireg, $playerinfo)
     {
         // Xenobe planet attack code
         global $planetinfo, $torp_dmg_rate, $xenobeisdead;
@@ -1595,7 +1595,7 @@ class Xenobe
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                Xenobe::xenobeToPlanet($db, $targetinfo['planet_id'], $tkireg, $playerinfo); // Yes, so move to that planet
+                Xenobe::xenobeToPlanet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo); // Yes, so move to that planet
             }
             else
             {
