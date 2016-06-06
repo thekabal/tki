@@ -66,7 +66,7 @@ class Ship
         }
     }
 
-    public static function leavePlanet($db, $ship_id)
+    public static function leavePlanet($pdo_db, $db, $ship_id)
     {
         $own_pl_result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ?", array($ship_id));
         Db::logDbErrors($pdo_db, $db, $own_pl_result, __LINE__, __FILE__);
