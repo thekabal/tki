@@ -42,7 +42,7 @@ if (mb_strlen(trim($tpcreds)) === 0)
 
 if ($tpcreds !== null && $tpcreds !== false)
 {
-    Bad\PlanetReportCE::collectCredits($db, $langvars, $tpcreds, $tkireg->max_sectors);
+    Bad\PlanetReportCE::collectCredits($pdo_db, $db, $langvars, $tpcreds, $tkireg->max_sectors);
 }
 elseif ($buildp !== null && $builds !== null)
 {
@@ -50,7 +50,7 @@ elseif ($buildp !== null && $builds !== null)
 }
 else
 {
-    Bad\PlanetReportCE::changePlanetProduction($db, $langvars, $_POST);
+    Bad\PlanetReportCE::changePlanetProduction($pdo_db, $db, $langvars, $_POST);
 }
 
 echo '<br><br>';

@@ -63,7 +63,7 @@ class PlanetReportCE
             return (boolean) false;
         }  // Build a base
 
-        PlanetReportCE::realSpaceMove($db, $langvars, $sector_id, $level_factor, $mine_hullsize);
+        PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $sector_id, $level_factor, $mine_hullsize);
         echo "<br>";
         echo str_replace("[here]", "<a href='planet.php?planet_id=$planet_id'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_planet']);
         echo "<br><br>";
@@ -95,7 +95,7 @@ class PlanetReportCE
         }
     }
 
-    public static function collectCredits($db, $langvars, $planetarray, $max_sectors)
+    public static function collectCredits($pdo_db, $db, $langvars, $planetarray, $max_sectors)
     {
         $CS = "GO"; // Current State
 
@@ -141,7 +141,7 @@ class PlanetReportCE
         for ($i = 0; $i < $temp_count2 && $CS == "GO"; $i++)
         {
             echo "<br>";
-            $CS = PlanetReportCE::realSpaceMove($db, $langvars, $s_p_pair[$i][0], $level_factor, $mine_hullsize);
+            $CS = PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $s_p_pair[$i][0], $level_factor, $mine_hullsize);
 
             if ($CS == "HOSTILE")
             {
@@ -149,7 +149,7 @@ class PlanetReportCE
             }
             elseif ($CS == "GO")
             {
-                $CS = PlanetReportCE::takeCredits($db, $langvars, $s_p_pair[$i][0], $s_p_pair[$i][1]);
+                $CS = PlanetReportCE::takeCredits($pdo_db, $db, $langvars, $s_p_pair[$i][1]);
             }
             else
             {
@@ -168,7 +168,7 @@ class PlanetReportCE
         echo "<br><br>";
     }
 
-    public static function changePlanetProduction($db, $langvars, $prodpercentarray)
+    public static function changePlanetProduction($pdo_db, $db, $langvars, $prodpercentarray)
     {
     //  Declare default production values from the config.php file
     //
@@ -368,7 +368,7 @@ class PlanetReportCE
         }
     }
 
-    public static function takeCredits($db, $langvars, $sector_id, $planet_id)
+    public static function takeCredits($pdo_db, $db, $langvars, $planet_id)
     {
         $planet = array();
 
@@ -444,7 +444,7 @@ class PlanetReportCE
         return ($retval);
     }
 
-    public static function realSpaceMove($db, $langvars, $destination, $level_factor, $mine_hullsize)
+    public static function realSpaceMove($pdo_db, $db, $langvars, $destination, $level_factor, $mine_hullsize)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
