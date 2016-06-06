@@ -602,7 +602,7 @@ class Planet
                 \Tki\Db::logDbErrors($pdo_db, $db, $update7a, __LINE__, __FILE__);
             }
 
-            \Tki\Ownership::calc($db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);
+            \Tki\Ownership::calc($pdo_db, $db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);
         }
         else
         {
