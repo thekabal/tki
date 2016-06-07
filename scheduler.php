@@ -126,7 +126,7 @@ else
             $multiplier = (int) $multiplier;
             $ticks_left = ($tkireg->sched_ticks + $event['ticks_left']) % $event['ticks_full'];
             $lastRun += $event['last_run'];
-            $schedCount += 1;
+            $schedCount++;
 
             // Store the last time the individual schedule was last run.
             $lastrunList[$event['sched_file']] = $event['last_run'];

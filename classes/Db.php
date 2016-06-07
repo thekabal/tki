@@ -205,7 +205,7 @@ class Db
         {
             if ($served_line > 0)
             {
-                $served_line = ($served_line-1); // Unless it is line 1 of the file, it is generally one lower than where it is reported.
+                $served_line--; // Unless it is line 1 of the file, it is generally one lower than where it is reported.
             }
 
             $text_error = 'A Database error occurred in ' . $served_page .

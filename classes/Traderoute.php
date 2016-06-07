@@ -1986,7 +1986,7 @@ class Traderoute
         }
         else
         {
-            $triptime+= 1;
+            $triptime++;
         }
 
         $retvalue['triptime'] = $triptime;

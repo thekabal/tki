@@ -76,7 +76,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
             // Move to next explored sector in database results
             $result3->Movenext();
             $row = $result3->fields;
-            $cur_sector = $cur_sector + 1;
+            $cur_sector++;
         }
         else
         {
@@ -94,7 +94,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
                 echo "<a href=\"rsmove.php?engage=1&amp;destination=". ($c + ($div_xmax * $r)) ."\">";
                 echo "<img class='map un' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
             }
-            $cur_sector = $cur_sector + 1;
+            $cur_sector++;
         }
     }
 }

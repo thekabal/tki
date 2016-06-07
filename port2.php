@@ -120,7 +120,7 @@ function php_change_delta($desired_value, $current_value, $upgrade_cost)
     while ($delta > 0)
     {
         $delta_cost = $delta_cost + pow(2, $desired_value - $delta);
-        $delta = $delta - 1;
+        $delta--;
     }
 
     $delta_cost = $delta_cost * $upgrade_cost;

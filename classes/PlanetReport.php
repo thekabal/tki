@@ -156,15 +156,15 @@ class PlanetReport
                 $total_torp += $planet[$i]['torps'];
                 if ($planet[$i]['base'] == "Y")
                 {
-                    $total_base += 1;
+                    $total_base++;
                 }
                 if ($planet[$i]['team'] > 0)
                 {
-                    $total_team += 1;
+                    $total_team++;
                 }
                 if ($planet[$i]['sells'] == "Y")
                 {
-                    $total_selling += 1;
+                    $total_selling++;
                 }
                 if (empty ($planet[$i]['name']))
                 {
