@@ -50,7 +50,7 @@ echo "  <tr>\n";
 echo "    <td height=\"73\" width=\"27%\"><img src=\"" . $template->getVariables('template_dir') . "/images/bnnhead.png\" width=\"312\" height=\"123\" alt=\"The TKI Network\"></td>\n";
 echo "    <td height=\"73\" width=\"73%\" bgcolor=\"#000\" valign=\"bottom\" align=\"right\">\n";
 echo "      <p><font size=\"-1\">" . $langvars['l_news_info_1'] . "<br>" . $langvars['l_news_info_2'] . "<br>" . $langvars['l_news_info_3'] . "<br>" . $langvars['l_news_info_4'] . "<br>" . $langvars['l_news_info_5'] . "<br></font></p>\n";
-echo "      <p>" . $langvars['l_news_for'] . " " . $startdate . "</p>\n";
+echo "      <p>" . $langvars['l_news_for'] . " " . htmlentities($startdate, ENT_QUOTES | ENT_HTML5, 'UTF-8') . "</p>\n";
 echo "    </td>\n";
 echo "  </tr>\n";
 echo "  <tr>\n";

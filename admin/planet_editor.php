@@ -136,5 +136,5 @@ else
 }
 
 echo "<input type='hidden' name='menu' value='planet_editor.php'>";
-echo "<input type='hidden' name='swordfish' value=" . $_POST['swordfish'] . ">";
+echo "<input type='hidden' name='swordfish' value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">";
 echo "</form>";
