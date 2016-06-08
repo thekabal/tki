@@ -52,7 +52,7 @@ if (!$result->EOF)
         $link_to_reset = "http://" . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
         $link_to_reset .= "pwreset.php?code=" . mb_substr(md5($playerinfo['password']), 5, 8);
 
-        $langvars['l_mail_message'] = str_replace("[link]", $link_to_reset, $langvars['l_mail_message']);
+        $langvars['l_mail_message'] = str_replace("[link]", htmlentities($link_to_reset, ENT_QUOTES | ENT_HTML5, 'UTF-8'), $langvars['l_mail_message']);
         $langvars['l_mail_message'] = str_replace("[name]", $playerinfo['character_name'], $langvars['l_mail_message']);
         $langvars['l_mail_message'] = str_replace("[ip]", $_SERVER['REMOTE_ADDR'], $langvars['l_mail_message']);
         $langvars['l_mail_message'] = str_replace("[game_name]", $tkireg->game_name, $langvars['l_mail_message']);
@@ -69,11 +69,12 @@ if (!$result->EOF)
         $recovery_update_result = $db->Execute("UPDATE {$db->prefix}ships SET recovery_time=? WHERE email = ?;", array(time(), $playerinfo['email']));
         Tki\Db::logDbErrors($pdo_db, $db, $recovery_update_result, __LINE__, __FILE__);
 
-        mail($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'] . "\r\n\r\n{$link_to_reset}\r\n", "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
+        mail($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'] . "\r\n\r\n" . htmlentities($link_to_reset, ENT_QUOTES | ENT_HTML5, 'UTF-8') . "\r\n", "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
         echo "<div style='color:#fff; text-align:left;'>" . $langvars['l_mail_sent'] . " <span style='color:#0f0;'>{$mail}</span></div>\n";
         echo "<br>\n";
         echo "<div style='font-size:14px; font-weight:bold; color:#f00;'>";
         echo $langvars['l_mail_note_1'] . "<br><br>";
+        $langvars['l_mail_note_2'] = htmlentities($l_mail_note_2, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         echo mb_strtoupper($langvars['l_mail_note_2']);
         echo "</div>\n";
     }
