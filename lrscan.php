@@ -29,7 +29,7 @@ echo "<h1>" . $title . "</h1>\n";
 
 if (array_key_exists('sector', $_GET))
 {
-    $sector = $_GET['sector'];
+    $sector = htmlentities($_GET['sector'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 else
 {
