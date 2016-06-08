@@ -26,7 +26,7 @@ echo "<strong>" . $langvars['l_admin_ban_editor'] . "</strong><p>";
 if (empty($command))
 {
     echo "<form accept-charset='utf-8' action=admin.php method=post>";
-    echo "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">";
+    echo "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">";
     echo "<input type='hidden' name=command value=showips>";
     echo "<input type='hidden' name=menu value='bans_editor.php'>";
     echo "<input type=submit value=\"" . $langvars['l_admin_show_ip'] . "\">";
@@ -113,7 +113,7 @@ if (empty($command))
 
             echo "<td align=center nowrap valign=center><font size=2 color=white>" .
                  "<form accept-charset='utf-8' action=admin.php method=post>" .
-                 "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">" .
+                 "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">" .
                  "<input type='hidden' name=command value=unbanip>" .
                  "<input type='hidden' name=menu value='bans_editor.php'>" .
                  "<input type='hidden' name=ban value=" . $ban . ">" .
@@ -186,14 +186,14 @@ elseif ($command == 'showips')
 
         echo "<td align=center nowrap valign=center><font size=2 color=white>" .
              "<form accept-charset='utf-8' action=admin.php method=post>" .
-             "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">" .
+             "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">" .
              "<input type='hidden' name=command value=banip>" .
              "<input type='hidden' name=menu value='bans_editor.php'>" .
              "<input type='hidden' name=ip value=" . $ip . ">" .
              "<input type=submit value=" . $langvars['l_admin_ban'] . ">" .
              "</form>" .
              "<form accept-charset='utf-8' action=admin.php method=post>" .
-             "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">" .
+             "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">" .
              "<input type='hidden' name=command value=unbanip>" .
              "<input type='hidden' name=menu value='bans_editor.php'>" .
              "<input type='hidden' name=ip value=" . $ip . ">" .
@@ -203,14 +203,14 @@ elseif ($command == 'showips')
 
     echo "</table><p>" .
          "<form accept-charset='utf-8' action=admin.php method=post>" .
-         "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">" .
+         "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">" .
          "<input type='hidden' name=menu value='bans_editor.php'>" .
          "<input type=submit value=\"" . $langvars['l_admin_return_bans_menu'] . "\">" .
          "</form>";
 }
 elseif ($command == 'banip')
 {
-    $ip = $_POST['ip'];
+    $ip = htmlentities($_POST['ip'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     echo "<strong>Banning ip : " . $ip . "<p>";
     echo "<font size=2 color=white>" . $langvars['l_admin_select_ban_type'] . "<p>";
 
@@ -219,7 +219,7 @@ elseif ($command == 'banip')
     echo "<table border=0>" .
          "<tr><td align=right>" .
          "<form accept-charset='utf-8' action=admin.php method=post>" .
-         "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">" .
+         "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">" .
          "<input type='hidden' name=menu value='bans_editor.php'>" .
          "<input type='hidden' name=command value=banip2>" .
          "<input type='hidden' name=ip value=" . $ip . ">" .
@@ -236,7 +236,7 @@ elseif ($command == 'banip')
          "</form>";
 
     echo "<form accept-charset='utf-8' action=admin.php method=post>" .
-         "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">" .
+         "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">" .
          "<input type='hidden' name=menu value='bans_editor.php'>" .
          "<input type=submit value=\"" . $langvars['l_admin_return_bans_menu'] . "\">" .
          "</form>";
@@ -260,6 +260,7 @@ elseif ($command == 'banip2')
     }
 
     $printban = str_replace("%", "*", $banmask);
+    $printban = htmlentities($printban, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     echo "<font size=2 color=white><strong>" . $langvars['l_admin_ban_success'] . " " . $printban . "</strong>.<p>";
 
     $resx = $db->Execute("INSERT INTO {$db->prefix}ip_bans values (NULL, ?);", array($banmask));
@@ -274,7 +275,7 @@ elseif ($command == 'banip2')
     }
 
     echo "<form accept-charset='utf-8' action=admin.php method=post>" .
-         "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">" .
+         "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">" .
          "<input type='hidden' name=menu value='bans_editor.php'>" .
          "<input type=submit value=\"" . $langvars['l_admin_return_bans_menu'] . "\">" .
          "</form>";
@@ -348,7 +349,7 @@ elseif ($command == 'unbanip')
     }
 
     echo "<form accept-charset='utf-8' action=admin.php method=post>" .
-         "<input type='hidden' name=swordfish value=" . $_POST['swordfish'] . ">" .
+         "<input type='hidden' name=swordfish value=" . htmlentities($_POST['swordfish'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . ">" .
          "<input type='hidden' name=menu value='bans_editor.php'>" .
          "<input type=submit value=\"" . $langvars['l_admin_return_bans_menu'] . "\">" .
          "</form>";
