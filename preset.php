@@ -65,6 +65,7 @@ foreach ($preset_list as $index => $preset)
         $change = 0;
         $result = str_replace("[preset]", $_POST['preset'][$index], $langvars['l_pre_exceed']);
         $result = str_replace("[max_sectors]", $tkireg->max_sectors, $result);
+        $result = htmlentities($result, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         echo $result . "<br>\n";
     }
 }
