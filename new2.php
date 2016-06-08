@@ -153,7 +153,8 @@ if ($flag == 0)
         // Some reason \r\n is broken, so replace them now.
         $langvars['l_new_message'] = str_replace('\r\n', "\r\n", $langvars['l_new_message']);
 
-        $link_to_game = 'http://' . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
+        $link_to_game_unsafe = 'http://' . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
+        $link_to_game = htmlentities($link_to_game_unsafe, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $langvars['l_new_message'] = str_replace('[website]', $link_to_game, $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[npg]', $link_to_game . 'newplayerguide.php', $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[faq]', $link_to_game . 'faq.php', $langvars['l_new_message']);
