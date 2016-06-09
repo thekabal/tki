@@ -817,7 +817,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate2($db, $langvars, $playerinfo, \Tki\Reg $tkireg, $dplanet_id, $minimum, $maximum)
+    public static function ibankConsolidate2($db, $pdo_db, $lang, $langvars, $playerinfo, \Tki\Reg $tkireg, $dplanet_id, $minimum, $maximum)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
@@ -981,7 +981,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         if (!$res || $res->EOF)
         {
-            Ibank::ibankError($pdo_db, $active_template, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer");
+            Ibank::ibankError($pdo_db, $active_template, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $tkireg);
         }
 
         $dest = $res->fields;
@@ -993,7 +993,7 @@ class Ibank
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            Ibank::ibankError($pdo_db, $active_template, $active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer");
+            Ibank::ibankError($pdo_db, $active_template, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $tkireg);
         }
 
         $minimum = preg_replace("/[^0-9]/", '', $minimum);
@@ -1024,7 +1024,7 @@ class Ibank
 
         if ($tcost > $playerinfo['turns'])
         {
-            Ibank::ibankError($pdo_db, $active_template, $active_template, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer");
+            Ibank::ibankError($pdo_db, $active_template, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $tkireg);
         }
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .
