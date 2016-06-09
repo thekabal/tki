@@ -762,7 +762,7 @@ class Ibank
         }
     }
 
-    public static function ibankDeposit2(\PDO $pdo_db, $langvars, $playerinfo, $amount, $account)
+    public static function ibankDeposit2(\PDO $pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg)
     {
         $max_credits_allowed = 18446744073709000000;
 

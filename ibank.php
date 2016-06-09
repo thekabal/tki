@@ -89,7 +89,7 @@ elseif ($command == 'deposit') // Deposit menu
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Bad\Ibank::ibankDeposit2($pdo_db, $langvars, $playerinfo, $amount, $account);
+    Bad\Ibank::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
