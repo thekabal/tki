@@ -1357,7 +1357,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead)
+    public static function xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars)
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
