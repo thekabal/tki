@@ -35,7 +35,7 @@ if (empty ($_POST['user']))
     Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
-        $players[]=$res->fields;
+        $players[] = $res->fields;
         $res->MoveNext();
     }
     $variables['user'] = null;
