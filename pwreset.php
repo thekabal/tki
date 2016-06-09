@@ -27,7 +27,7 @@ Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<h1>" . $title . "</h1>\n";
 
-$reset_code  = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
+$reset_code = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
 
 // It is important to note that SQL (both MySQL and PostgreSQL) index differently (one longer)
 // than php does, which is why the substr (6/8 instead of 5/8) has a start index one "larger" here than in the php calls

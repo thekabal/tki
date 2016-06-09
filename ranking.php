@@ -95,7 +95,7 @@ if ($rs instanceof ADORecordSet)
             {
                 $rating = -1 * $rating;
             }
-            $row['rating']  = $rating;
+            $row['rating'] = $rating;
 
             // Calculate the players online status.
             $curtime = time();
@@ -146,7 +146,7 @@ if ($rs instanceof ADORecordSet)
 
             $rs->MoveNext();
         }
-        $player_list['container']    = 'player';
+        $player_list['container'] = 'player';
         $template->addVariables('players', $player_list);
     }
 }
