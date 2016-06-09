@@ -97,11 +97,11 @@ elseif ($command == 'transfer') // Main transfer menu
 }
 elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 {
-    Bad\Ibank::ibankTransfer2($db, $pdo_db, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id);
+    Bad\Ibank::ibankTransfer2($db, $pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id);
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
-    Bad\Ibank::ibankTransfer3($db, $pdo_db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount);
+    Bad\Ibank::ibankTransfer3($db, $pdo_db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg);
 }
 elseif ($command == 'loans') // Loans menu
 {

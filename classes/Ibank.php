@@ -427,7 +427,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankTransfer2($db, $pdo_db, $langvars, \Tki\Reg $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id)
+    public static function ibankTransfer2($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id)
     {
         if ($ship_id !== null) // Ship transfer
         {
@@ -579,7 +579,7 @@ class Ibank
         }
     }
 
-    public static function ibankTransfer3($db, $pdo_db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount)
+    public static function ibankTransfer3($db, $pdo_db, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 
