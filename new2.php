@@ -73,7 +73,7 @@ if (mb_strlen(trim($newlang)) === 0)
 
 if ($newlang !== null && $newlang !== null)
 {
-    $lang   = $newlang;
+    $lang = $newlang;
 }
 else
 {

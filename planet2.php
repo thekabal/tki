@@ -140,14 +140,14 @@ $tpcredits          = $_POST['tpcredits'];
 $allcredits         = $_POST['allcredits'];
 
 // Validate and set the type of $_GET vars;
-$planet_id          = (int) $_GET['planet_id'];
+$planet_id = (int) $_GET['planet_id'];
 
 // Display Page Title.
 echo "<h1>" . $title . "</h1>\n";
 
 // Empty out Planet and Ship vars
-$planetinfo         = null;
-$playerinfo         = null;
+$planetinfo = null;
+$playerinfo = null;
 
 // Check if planet_id is valid.
 if ($planet_id <= 0)
