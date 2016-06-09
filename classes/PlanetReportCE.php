@@ -95,7 +95,7 @@ class PlanetReportCE
         }
     }
 
-    public static function collectCredits($pdo_db, $db, $langvars, $planetarray, $max_sectors)
+    public static function collectCredits($pdo_db, $db, $langvars, $planetarray, $tkireg)
     {
         $CS = "GO"; // Current State
 
