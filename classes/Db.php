@@ -36,14 +36,8 @@ class Db
         }
         else
         {
-            if ($results->rowCount() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            $returnvalue = ($results->rowCount() > 0);
+            return $returnvalue;
         }
     }
 
