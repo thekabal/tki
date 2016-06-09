@@ -378,8 +378,8 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
         elseif ($command == "transfer")
         {
             // Transfer menu
-            $free_holds = Tki\CalcLevels::holds($playerinfo['hull'], $level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
-            $free_power = Tki\CalcLevels::energy($playerinfo['power'], $level_factor) - $playerinfo['ship_energy'];
+            $free_holds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+            $free_power = Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor) - $playerinfo['ship_energy'];
             $langvars['l_planet_cinfo'] = str_replace("[cargo]", number_format($free_holds, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_planet_cinfo']);
             $langvars['l_planet_cinfo'] = str_replace("[energy]", number_format($free_power, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_planet_cinfo']);
             echo $langvars['l_planet_cinfo'] . "<br><br>";
