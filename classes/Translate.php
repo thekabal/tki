@@ -26,7 +26,7 @@ class Translate
     protected static $langvars = array();
 
     /**
-     * @param string[] $categories
+     * @param string[]|null $categories
      */
     public static function load(\PDO $pdo_db = null, $language = null, $categories = null)
     {
