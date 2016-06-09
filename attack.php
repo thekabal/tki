@@ -714,7 +714,7 @@ else
                     $langvars['l_att_ysalv'] = str_replace("[salv_goods]", $salv_goods, $langvars['l_att_ysalv']);
                     $langvars['l_att_ysalv'] = str_replace("[ship_salvage_rate]", $ship_salvage_rate, $langvars['l_att_ysalv']);
                     $langvars['l_att_ysalv'] = str_replace("[ship_salvage]", $ship_salvage, $langvars['l_att_ysalv']);
-                    $langvars['l_att_ysalv2'] = str_replace("[rating_change]", number_format(abs($rating_change), 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_att_ysalv2']);
+                    $langvars['l_att_ysalv2'] = str_replace("[rating_change]", number_format(abs($rating_change), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_att_ysalv2']);
 
                     echo $langvars['l_att_ysalv'] . "<br>" . $langvars['l_att_ysalv2'] . "<br>\n";
                     $update3 = $db->Execute(
