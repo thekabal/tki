@@ -562,7 +562,7 @@ class Xenobe
                 while (!$resultps->EOF && $xenobeisdead < 1)
                 {
                     $onplanet = $resultps->fields;
-                    Xenobe::xenobeToShip($pdo_db, $db, $onplanet['ship_id'], $tkireg, $playerinfo);
+                    Xenobe::xenobeToShip($pdo_db, $db, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
                     $resultps->MoveNext();
                 }
             }
@@ -598,7 +598,7 @@ class Xenobe
         \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
     }
 
-    public static function xenobeToShip($pdo_db, $db, $ship_id, \Tki\Reg $tkireg, $playerinfo)
+    public static function xenobeToShip($pdo_db, $db, $ship_id, \Tki\Reg $tkireg, $playerinfo, $langvars)
     {
         // Setup general variables
         global $attackerbeams;
@@ -1357,7 +1357,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove($db, $playerinfo, $targetlink, $xenobeisdead)
+    public static function xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead)
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1599,7 +1599,7 @@ class Xenobe
             }
             else
             {
-                Xenobe::xenobeToShip($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo); // Not on a planet, so move to the ship
+                Xenobe::xenobeToShip($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
             }
         }
         else
