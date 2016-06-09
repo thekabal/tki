@@ -272,8 +272,8 @@ else
             {
                 $targettorpnum = $targetinfo['torps'];
             }
-            $playertorpdmg = $torp_dmg_rate * $playertorpnum;
-            $targettorpdmg = $torp_dmg_rate * $targettorpnum;
+            $playertorpdmg = $tkireg->torp_dmg_rate * $playertorpnum;
+            $targettorpdmg = $tkireg->torp_dmg_rate * $targettorpnum;
             $playerarmor = $playerinfo['armor_pts'];
             $targetarmor = $targetinfo['armor_pts'];
             $playerfighters = $playerinfo['ship_fighters'];

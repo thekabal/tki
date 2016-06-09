@@ -52,7 +52,7 @@ if ($playertorpnum > $playerinfo['torps'])
     $playertorpnum = $playerinfo['torps'];
 }
 
-$playertorpdmg = $torp_dmg_rate * $playertorpnum;
+$playertorpdmg = $tkireg->torp_dmg_rate * $playertorpnum;
 $playerarmor = $playerinfo['armor_pts'];
 $playerfighters = $playerinfo['ship_fighters'];
 if ($targetfighters > 0 && $playerbeams > 0)

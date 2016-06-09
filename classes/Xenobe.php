@@ -237,7 +237,7 @@ class Xenobe
     public static function xenobeToPlanet($pdo_db, $db, $planet_id, \Tki\Reg $tkireg, $playerinfo, $langvars)
     {
         // Xenobe planet attack code
-        global $planetinfo, $torp_dmg_rate, $xenobeisdead;
+        global $planetinfo, $xenobeisdead;
 
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::logDbErrors($pdo_db, $db, $resh, __LINE__, __FILE__);
@@ -278,7 +278,7 @@ class Xenobe
             $targettorps = $torps;
         }
         $planetinfo['torps'] -= $targettorps;
-        $targettorpdmg = $torp_dmg_rate * $targettorps;
+        $targettorpdmg = $tkireg->torp_dmg_rate * $targettorps;
 
         // Planet fighters
         $targetfighters = $planetinfo['fighters'];
@@ -306,7 +306,7 @@ class Xenobe
             $attackertorps = $playerinfo['torps'];
         }
         $playerinfo['torps'] -= $attackertorps;
-        $attackertorpdamage = $torp_dmg_rate * $attackertorps;
+        $attackertorpdamage = $tkireg->torp_dmg_rate * $attackertorps;
 
         // Attacker fighters
         $attackerfighters = $playerinfo['ship_fighters'];
@@ -673,7 +673,7 @@ class Xenobe
         }
 
         $playerinfo['torps'] = $playerinfo['torps'] - $attackertorps;
-        $attackertorpdamage = $torp_dmg_rate * $attackertorps;
+        $attackertorpdamage = $tkireg->torp_dmg_rate * $attackertorps;
         $attackerarmor = $playerinfo['armor_pts'];
         $attackerfighters = $playerinfo['ship_fighters'];
 
@@ -699,7 +699,7 @@ class Xenobe
         }
 
         $targetinfo['torps'] = $targetinfo['torps'] - $targettorpnum;
-        $targettorpdmg = $torp_dmg_rate * $targettorpnum;
+        $targettorpdmg = $tkireg->torp_dmg_rate * $targettorpnum;
         $targetarmor = $targetinfo['armor_pts'];
         $targetfighters = $targetinfo['ship_fighters'];
 
@@ -1181,7 +1181,7 @@ class Xenobe
                     $playertorpnum = $playerinfo['torps'];
                 }
 
-                $playertorpdmg = $torp_dmg_rate * $playertorpnum;
+                $playertorpdmg = $tkireg->torp_dmg_rate * $playertorpnum;
                 $playerarmor = $playerinfo['armor_pts'];
                 $playerfighters = $playerinfo['ship_fighters'];
                 $totalmines = $total_sector_mines;
