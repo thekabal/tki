@@ -893,7 +893,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankError($pdo_db, $active_template, $langvars, $errmsg, $backlink, $lang, $tkireg, $template, $title = "Error!")
+    public static function ibankError($pdo_db, $active_template, $langvars, $errmsg, string $backlink, $lang, $tkireg, $template, $title = "Error!")
     {
         $title = $langvars['l_ibank_ibankerrreport'];
         echo "<tr><td colspan=2 align=center valign=top>" . $title . "<br>---------------------------------</td></tr>" .
