@@ -25,7 +25,7 @@ namespace Bad;
 
 class Ibank
 {
-    public static function ibankBorrow(\PDO $pdo_db, $langvars, \Tki\Reg $tkireg, $playerinfo, $active_template, $account, $amount)
+    public static function ibankBorrow(\PDO $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $playerinfo, $active_template, $account, $amount)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
