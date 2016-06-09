@@ -32,7 +32,7 @@ class Timer
 
     public function stop()
     {
-        $this->t_stop  = microtime(true);
+        $this->t_stop = microtime(true);
     }
 
     public function elapsed()
