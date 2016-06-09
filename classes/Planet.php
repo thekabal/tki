@@ -25,7 +25,7 @@ namespace Bad;
 
 class Planet
 {
-    public function getOwner($db = null, $planet_id = null, &$owner_info = null)
+    public function getOwner($pdo_db, $db = null, $planet_id = null, &$owner_info = null)
     {
         $owner_info = null;
         if (!is_null($planet_id) && is_numeric($planet_id) && $planet_id > 0)
@@ -64,8 +64,8 @@ class Planet
         $res = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE");
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
-        $planettorps = \Tki\CalcLevels::planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $base_defense, $tkireg->level_factor);
-        $planetbeams = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo);
+        $planettorps = \Tki\CalcLevels::planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $tkireg->base_defense, $tkireg->level_factor);
+        $planetbeams = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $tkireg->base_defense, $planetinfo);
 
         $planetfighters = $planetinfo['fighters'];
         $attackerfighters = $playerinfo['ship_fighters'];
@@ -142,10 +142,10 @@ class Planet
         }
 
         // Planetary defense system calculation
-        $planetbeams        = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo);
+        $planetbeams        = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $tkireg->base_defense, $planetinfo);
         $planetfighters     = $planetinfo['fighters'];
-        $planetshields      = \Tki\CalcLevels::planetShields($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo);
-        $planettorps        = \Tki\CalcLevels::planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $base_defense, $tkireg->level_factor);
+        $planetshields      = \Tki\CalcLevels::planetShields($pdo_db, $db, $ownerinfo, $tkireg->base_defense, $planetinfo);
+        $planettorps        = \Tki\CalcLevels::planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $tkireg->base_defense, $tkireg->level_factor);
 
         // Attacking ship calculations
 

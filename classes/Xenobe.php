@@ -250,7 +250,7 @@ class Xenobe
         \Tki\Db::logDbErrors($pdo_db, $db, $resulto, __LINE__, __FILE__);
         $ownerinfo = $resulto->fields;
 
-        $base_factor = ($planetinfo['base'] == 'Y') ? $base_defense : 0;
+        $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
 
         // Planet beams
         $targetbeams = \Tki\CalcLevels::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);

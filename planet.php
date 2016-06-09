@@ -302,7 +302,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
 
             $retOwnerInfo = null;
 
-            $owner_found = Bad\Planet::getOwner($db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Bad\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && !is_null($retOwnerInfo))
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
@@ -553,7 +553,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             }
 
             $retOwnerInfo = null;
-            $owner_found = Bad\Planet::getOwner($db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Bad\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && !is_null($retOwnerInfo))
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
@@ -589,7 +589,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             unset($_SESSION['planet_selected']);
 
             $retOwnerInfo = null;
-            $owner_found = Bad\Planet::getOwner($db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Bad\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && !is_null($retOwnerInfo))
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))

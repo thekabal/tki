@@ -56,9 +56,9 @@ class CalcLevels
         return round(pow($tkireg->level_factor, $level_power) * 500);
     }
 
-    public static function planetBeams($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo)
+    public static function planetBeams($pdo_db, $db, $ownerinfo, $tkireg->base_defense, $planetinfo)
     {
-        $base_factor = ($planetinfo['base'] == 'Y') ? $base_defense : 0;
+        $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
 
         $planetbeams = self::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
@@ -83,9 +83,9 @@ class CalcLevels
         return $planetbeams;
     }
 
-    public static function planetShields($pdo_db, $db, $ownerinfo, $base_defense, $planetinfo)
+    public static function planetShields($pdo_db, $db, $ownerinfo, $tkireg, $planetinfo)
     {
-        $base_factor = ($planetinfo['base'] == 'Y') ? $base_defense : 0;
+        $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
@@ -110,9 +110,9 @@ class CalcLevels
         return $planetshields;
     }
 
-    public static function planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $base_defense, $tkireg)
+    public static function planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $tkireg)
     {
-        $base_factor = ($planetinfo['base'] == 'Y') ? $base_defense : 0;
+        $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;
         $torps = $planetinfo['torps'];
 
