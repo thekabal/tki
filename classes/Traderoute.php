@@ -1400,7 +1400,7 @@ class Traderoute
         }
     }
 
-    public static function traderouteNew($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo)
+    public static function traderouteNew($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
