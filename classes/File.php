@@ -29,7 +29,7 @@ class File
         // This is a loop, that reads a ini file, of the type variable = value.
         // It will loop thru the list of the ini variables, and push them into the db.
 
-        $ini_keys = File::betterParseIni($ini_file);
+        $ini_keys = self::betterParseIni($ini_file);
         // We need a way to deal with errors in parse_ini_file here #fixit #future
 
         $status_array = array();
