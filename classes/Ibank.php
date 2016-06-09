@@ -631,8 +631,8 @@ class Ibank
                     $time = $res->fields;
                     $difftime = ($time['time'] - $curtime) / 60;
                     $langvars['l_ibank_mustwait2'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait2']);
-                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_ibank_mustwait2']);
-                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $local_number_dec_point, $local_number_thousands_sep), $langvars['l_ibank_mustwait2']);
+                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait2']);
+                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait2']);
                     Ibank::ibankError($pdo_db, $active_template, $langvars, $langvars['l_ibank_mustwait2'], "ibank.php?command=transfer", $lang, $tkireg, $template);
                 }
             }
@@ -668,15 +668,15 @@ class Ibank
             $transfer = $amount - $amount2;
 
             echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .
-                 "<tr valign=top><td colspan=2 align=center>" . number_format($transfer, 0, $local_number_dec_point, $local_number_thousands_sep) . " " . $langvars['l_ibank_creditsto'] . " " . $target['character_name'] . " .</tr>" .
+                 "<tr valign=top><td colspan=2 align=center>" . number_format($transfer, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " " . $langvars['l_ibank_creditsto'] . " " . $target['character_name'] . " .</tr>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_transferamount'] . " :</td><td align=right>" . number_format($amount, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_transferamount'] . " :</td><td align=right>" . number_format($amount, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_transferfee'] . " :</td><td align=right>" . number_format($amount2, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_transferfee'] . " :</td><td align=right>" . number_format($amount2, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_amounttransferred'] . " :</td><td align=right>" . number_format($transfer, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_amounttransferred'] . " :</td><td align=right>" . number_format($transfer, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_ibankaccount'] . " :</td><td align=right>" . number_format($account['balance'], 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_ibankaccount'] . " :</td><td align=right>" . number_format($account['balance'], 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=bottom>" .
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
@@ -740,17 +740,17 @@ class Ibank
             $dest['credits'] += $transfer;
 
             echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .
-                 "<tr valign=top><td colspan=2 align=center>" . number_format($transfer, 0, $local_number_dec_point, $local_number_thousands_sep) . " " . $langvars['l_ibank_ctransferredfrom'] . " " . $source['name'] . " " . $langvars['l_ibank_to'] . " " . $dest['name'] . ".</tr>" .
+                 "<tr valign=top><td colspan=2 align=center>" . number_format($transfer, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " " . $langvars['l_ibank_ctransferredfrom'] . " " . $source['name'] . " " . $langvars['l_ibank_to'] . " " . $dest['name'] . ".</tr>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_transferamount'] . " :</td><td align=right>" . number_format($amount, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_transferamount'] . " :</td><td align=right>" . number_format($amount, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_transferfee'] . " :</td><td align=right>" . number_format($amount2, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_transferfee'] . " :</td><td align=right>" . number_format($amount2, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_amounttransferred'] . " :</td><td align=right>" . number_format($transfer, 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_amounttransferred'] . " :</td><td align=right>" . number_format($transfer, 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_srcplanet'] . " " . $source['name'] . " " . $langvars['l_ibank_in'] . " " . $source['sector_id'] . " :</td><td align=right>" . number_format($source['credits'], 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_srcplanet'] . " " . $source['name'] . " " . $langvars['l_ibank_in'] . " " . $source['sector_id'] . " :</td><td align=right>" . number_format($source['credits'], 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_destplanet'] . " " . $dest['name'] . " " . $langvars['l_ibank_in'] . " " . $dest['sector_id'] . " :</td><td align=right>" . number_format($dest['credits'], 0, $local_number_dec_point, $local_number_thousands_sep) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_destplanet'] . " " . $dest['name'] . " " . $langvars['l_ibank_in'] . " " . $dest['sector_id'] . " :</td><td align=right>" . number_format($dest['credits'], 0, $local_number_dec_point, $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=bottom>" .
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
