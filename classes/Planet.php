@@ -64,7 +64,7 @@ class Planet
         $res = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE");
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
-        $planettorps = \Tki\CalcLevels::planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $tkireg->base_defense, $tkireg->level_factor);
+        $planettorps = \Tki\CalcLevels::planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $tkireg);
         $planetbeams = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $tkireg->base_defense, $planetinfo);
 
         $planetfighters = $planetinfo['fighters'];
@@ -145,7 +145,7 @@ class Planet
         $planetbeams        = \Tki\CalcLevels::planetBeams($pdo_db, $db, $ownerinfo, $tkireg->base_defense, $planetinfo);
         $planetfighters     = $planetinfo['fighters'];
         $planetshields      = \Tki\CalcLevels::planetShields($pdo_db, $db, $ownerinfo, $tkireg->base_defense, $planetinfo);
-        $planettorps        = \Tki\CalcLevels::planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $tkireg->base_defense, $tkireg->level_factor);
+        $planettorps        = \Tki\CalcLevels::planetTorps($pdo_db, $db, $ownerinfo, $planetinfo, $tkireg);
 
         // Attacking ship calculations
 
