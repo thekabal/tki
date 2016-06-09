@@ -48,13 +48,15 @@ class Compress
         {
             header('Vary: Accept-Encoding');
             header('Content-Encoding: gzip');
-            return gzencode($output, 9);
+            $encoded_output = gzencode($output, 9);
+            return $encoded_output;
         }
         elseif (in_array('deflate', $supported_enc) === true)
         {
             header('Vary: Accept-Encoding');
             header('Content-Encoding: deflate');
-            return gzdeflate($output, 9);
+            $deflated_output = gzdeflate($output, 9);
+            return $deflated_output;
         }
         else
         {

@@ -102,7 +102,6 @@ if ($num_defences > 0 && $total_sector_fighters > 0 && !$owner)
                 echo $langvars['l_chf_youretreatback'] . "<br>";
                 Tki\Text::gotoMain($pdo_db, $lang, $langvars);
                 die();
-                break;
 
             case "pay":
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defences = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
@@ -195,7 +194,6 @@ if ($num_defences > 0 && $total_sector_fighters > 0 && !$owner)
                 echo "<input type='hidden' name='destination' value='{$destination}'>";
                 echo "</form>";
                 die();
-                break;
 
         }
         // Clean up any sectors that have used up all mines or fighters

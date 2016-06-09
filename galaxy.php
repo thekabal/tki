@@ -80,10 +80,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
         }
         else
         {
-            if (($c + ($div_xmax * $r)) == 0) // We skip sector 0 because nothing is there.
-            {
-            }
-            else
+            if !(($c + ($div_xmax * $r)) == 0) // We skip sector 0 because nothing is there.
             {
                 $p = 'unknown';
                 // Build the alt text for each image

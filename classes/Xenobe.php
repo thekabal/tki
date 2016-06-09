@@ -1305,11 +1305,7 @@ class Xenobe
                 \Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $targetlink, $langvars['l_chm_hehitminesinsector']);
 
                 // Deflectors v. mines
-                if ($playerminedeflect >= $roll)
-                {
-                    // Took no mine damage due to virtual mine deflectors
-                }
-                else
+                if !($playerminedeflect >= $roll)
                 {
                     $mines_left = $roll - $playerminedeflect;
 
@@ -1357,7 +1353,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars, $tkireg)
+    public static function xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg)
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1608,7 +1604,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeRegen($pdo_db, $db, $playerinfo, $xen_unemployment, $xenobeisdead, $tkireg)
+    public static function xenobeRegen($pdo_db, $db, $playerinfo, $xen_unemployment, $tkireg)
     {
         // Xenobe Unempoyment Check
         $playerinfo['credits'] = $playerinfo['credits'] + $xen_unemployment;
@@ -1677,4 +1673,3 @@ class Xenobe
         }
     }
 }
-

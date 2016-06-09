@@ -23,37 +23,44 @@ class CalcLevels
 {
     public static function armor($level_armor, $tkireg)
     {
-        return round(pow($tkireg->level_factor, $level_armor) * 100);
+        $result = round(pow($tkireg->level_factor, $level_armor) * 100);
+        return $result;
     }
 
     public static function holds($level_hull, $tkireg)
     {
-        return round(pow($tkireg->level_factor, $level_hull) * 100);
+        $result = round(pow($tkireg->level_factor, $level_hull) * 100);
+        return $result;
     }
 
     public static function shields($level_shields, $tkireg)
     {
-        return round(pow($tkireg->level_factor, $level_shields) * 100);
+        $result = round(pow($tkireg->level_factor, $level_shields) * 100);
+        return $result;
     }
 
     public static function torpedoes($level_torp_launchers, $tkireg)
     {
-        return round(pow($tkireg->level_factor, $level_torp_launchers) * 100);
+        $result = round(pow($tkireg->level_factor, $level_torp_launchers) * 100);
+        return $result;
     }
 
     public static function beams($level_beams, $tkireg)
     {
-        return round(pow($tkireg->level_factor, $level_beams) * 100);
+        $result = round(pow($tkireg->level_factor, $level_beams) * 100);
+        return $result;
     }
 
     public static function fighters($level_computer, $tkireg)
     {
-        return round(pow($tkireg->level_factor, $level_computer) * 100);
+        $result = round(pow($tkireg->level_factor, $level_computer) * 100);
+        return $result;
     }
 
     public static function energy($level_power, $tkireg)
     {
-        return round(pow($tkireg->level_factor, $level_power) * 500);
+        $result = round(pow($tkireg->level_factor, $level_power) * 500);
+        return $result;
     }
 
     public static function planetBeams($pdo_db, $db, $ownerinfo, $tkireg, $planetinfo)

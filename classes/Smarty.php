@@ -108,7 +108,8 @@ class Smarty
 
     public function getVariables($nodeName)
     {
-        return $this->smarty->getTemplateVars($nodeName);
+        $temp_variable = $this->smarty->getTemplateVars($nodeName);
+        return $temp_variable;
     }
 
     public function test()

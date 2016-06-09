@@ -1106,4 +1106,3 @@ class Planet
         \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
     }
 }
-

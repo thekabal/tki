@@ -49,7 +49,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
     $xenobeisdead = 0;
     $playerinfo = $res->fields;
     // Regenerate / Buy stats
-    Bad\Xenobe::xenobeRegen($pdo_db, $db, $playerinfo, $xen_unemployment, $xenobeisdead, $tkireg);
+    Bad\Xenobe::xenobeRegen($pdo_db, $db, $playerinfo, $xen_unemployment, $tkireg);
 
     // Run through orders
     $furcount++;
@@ -103,7 +103,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars, $tkireg);
+            Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($xenobeisdead > 0)
             {
                 $res->MoveNext();
@@ -161,7 +161,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars, $tkireg);
+            Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($xenobeisdead > 0)
             {
                 $res->MoveNext();
@@ -238,7 +238,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars, $tkireg);
+                Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
                 if ($xenobeisdead > 0)
                 {
                     $res->MoveNext();

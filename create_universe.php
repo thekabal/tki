@@ -60,7 +60,7 @@ else // If swordfish is set and matches (good pass)
         $filename = 'create_universe/' . $loader_file;
         if (file_exists($filename))
         {
-            include_once($filename);
+            include_once $filename;
         }
     }
 }

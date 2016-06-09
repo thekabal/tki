@@ -99,4 +99,3 @@ class CheckBan
         return (boolean) false;
     }
 }
-
