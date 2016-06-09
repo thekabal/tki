@@ -598,7 +598,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 }
                 else
                 {
-                    BadPlanet::planetCombat($db, $langvars, $tkireg);
+                    BadPlanet::planetCombat($pdo_db, $db, $langvars, $tkireg);
                 }
             }
         }
