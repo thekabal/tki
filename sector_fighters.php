@@ -27,7 +27,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('sector_fighters', 'common
 
 echo $langvars['l_sf_attacking'] . "<br>";
 $targetfighters = $total_sector_fighters;
-$playerbeams = Tki\CalcLevels::beams($playerinfo['beams'], $level_factor);
+$playerbeams = Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
 if ($calledfrom == 'rsmove.php')
 {
     $playerinfo['ship_energy'] += $energyscooped;
@@ -39,13 +39,13 @@ if ($playerbeams > $playerinfo['ship_energy'])
 }
 
 $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
-$playershields = Tki\CalcLevels::shields($playerinfo['shields'], $level_factor);
+$playershields = Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
 
 if ($playershields > $playerinfo['ship_energy'])
 {
     $playershields = $playerinfo['ship_energy'];
 }
-$playertorpnum = round(pow($level_factor, $playerinfo['torp_launchers'])) * 2;
+$playertorpnum = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
 
 if ($playertorpnum > $playerinfo['torps'])
 {

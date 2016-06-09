@@ -63,7 +63,7 @@ class PlanetReportCE
             return (boolean) false;
         }  // Build a base
 
-        PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $sector_id, $level_factor, $mine_hullsize);
+        PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $sector_id, $tkireg->level_factor, $mine_hullsize);
         echo "<br>";
         echo str_replace("[here]", "<a href='planet.php?planet_id=$planet_id'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_planet']);
         echo "<br><br>";
@@ -141,7 +141,7 @@ class PlanetReportCE
         for ($i = 0; $i < $temp_count2 && $CS == "GO"; $i++)
         {
             echo "<br>";
-            $CS = PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $s_p_pair[$i][0], $level_factor, $mine_hullsize);
+            $CS = PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $s_p_pair[$i][0], $tkireg->level_factor, $mine_hullsize);
 
             if ($CS == "HOSTILE")
             {
@@ -444,7 +444,7 @@ class PlanetReportCE
         return ($retval);
     }
 
-    public static function realSpaceMove($pdo_db, $db, $langvars, $destination, $level_factor, $mine_hullsize)
+    public static function realSpaceMove($pdo_db, $db, $langvars, $destination, $tkireg, $mine_hullsize)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
@@ -467,7 +467,7 @@ class PlanetReportCE
         $y = ($start['distance'] * sin($sa1) * sin($sa2)) - ($finish['distance'] * sin($fa1) * sin($fa2));
         $z = ($start['distance'] * cos($sa1)) - ($finish['distance'] * cos($fa1));
         $distance = round(sqrt(pow($x, 2) + pow($y, 2) + pow($z, 2)));
-        $shipspeed = pow($level_factor, $playerinfo['engines']);
+        $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);
         $triptime = round($distance / $shipspeed);
 
         if ($triptime == 0 && $destination != $playerinfo['sector'])
@@ -489,7 +489,7 @@ class PlanetReportCE
             $energyscooped = 100;
         }
 
-        $free_power = \Tki\CalcLevels::energy($playerinfo['power'], $level_factor) - $playerinfo['ship_energy'];
+        $free_power = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor) - $playerinfo['ship_energy'];
 
         // Amount of energy that can be stored is less than the amount scooped. Amount scooped is set to what can be stored.
         if ($free_power < $energyscooped)

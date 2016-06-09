@@ -573,10 +573,10 @@ else
                         $xenlevel = 0;
                     }
 
-                    $maxenergy = Tki\CalcLevels::energy($xenlevel, $level_factor);
-                    $maxarmor = Tki\CalcLevels::armor($xenlevel, $level_factor);
-                    $maxfighters = Tki\CalcLevels::fighters($xenlevel, $level_factor);
-                    $maxtorps = Tki\CalcLevels::torpedoes($xenlevel, $level_factor);
+                    $maxenergy = Tki\CalcLevels::energy($xenlevel, $tkireg->level_factor);
+                    $maxarmor = Tki\CalcLevels::armor($xenlevel, $tkireg->level_factor);
+                    $maxfighters = Tki\CalcLevels::fighters($xenlevel, $tkireg->level_factor);
+                    $maxtorps = Tki\CalcLevels::torpedoes($xenlevel, $tkireg->level_factor);
                     $stamp = date("Y-m-d H:i:s");
 
                     // Add Xenobe record to ships table ... modify if the ships schema changes
