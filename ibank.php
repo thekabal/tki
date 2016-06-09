@@ -81,7 +81,7 @@ elseif ($command == 'withdraw') // Withdraw menu
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Bad\Ibank::ibankWithdraw2($pdo_db, $langvars, $playerinfo, $amount, $account);
+    Bad\Ibank::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
