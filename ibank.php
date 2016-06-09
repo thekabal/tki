@@ -121,7 +121,7 @@ elseif ($command == 'consolidate') // Consolidate menu
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Bad\Ibank::ibankConsolidate2($db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum);
+    Bad\Ibank::ibankConsolidate2($db, $pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
