@@ -186,7 +186,7 @@ switch ($teamwhat)
                     {
                         foreach ($sectors as $sector)
                         {
-                            Tki\Ownership::calc($pdo_db, $db, $sector, $min_bases_to_own, $langvars);
+                            Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
                         }
                     }
                     Tki\Defense::defenceVsDefence($pdo_db, $db, $playerinfo['ship_id'], $langvars);
@@ -244,7 +244,7 @@ switch ($teamwhat)
                         {
                             foreach ($sectors as $sector)
                             {
-                                Tki\Ownership::calc($pdo_db, $db, $sector, $min_bases_to_own, $langvars);
+                                Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
                             }
                         }
 
@@ -289,7 +289,7 @@ switch ($teamwhat)
                 {
                     foreach ($sectors as $sector)
                     {
-                        Tki\Ownership::calc($pdo_db, $db, $sector, $min_bases_to_own, $langvars);
+                        Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
                     }
                 }
 

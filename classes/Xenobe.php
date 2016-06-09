@@ -582,7 +582,7 @@ class Xenobe
                 $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id=?", array($planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $db, $resi, __LINE__, __FILE__);
 
-                \Tki\Ownership::cancel($pdo_db, $db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);
+                \Tki\Ownership::cancel($pdo_db, $db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
             }
             else
             {

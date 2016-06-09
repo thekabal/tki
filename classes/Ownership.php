@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ownership
 {
-    public static function calc($pdo_db, $db, $sector, $min_bases_to_own, $langvars)
+    public static function calc($pdo_db, $db, $sector, $tkireg, $langvars)
     {
         $bases_res = $db->Execute("SELECT owner, team FROM {$db->prefix}planets WHERE sector_id=? AND base='Y'", array($sector));
         Db::logDbErrors($pdo_db, $db, $bases_res, __LINE__, __FILE__);
@@ -216,7 +216,7 @@ class Ownership
             $i++;
         }
 
-        if ($owners[$winner]['num'] < $min_bases_to_own)
+        if ($owners[$winner]['num'] < $tkireg->min_bases_to_own)
         {
             $setzone_rese = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=1 WHERE sector_id=?", array($sector));
             Db::logDbErrors($pdo_db, $db, $setzone_rese, __LINE__, __FILE__);
