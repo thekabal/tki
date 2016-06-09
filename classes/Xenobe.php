@@ -1305,7 +1305,7 @@ class Xenobe
                 \Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $targetlink, $langvars['l_chm_hehitminesinsector']);
 
                 // Deflectors v. mines
-                if !($playerminedeflect >= $roll)
+                if (!($playerminedeflect >= $roll))
                 {
                     $mines_left = $roll - $playerminedeflect;
 
