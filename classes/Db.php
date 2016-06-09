@@ -207,7 +207,7 @@ class Db
                             ' (called from: ' . $safe_script_name . ' the error message was: ' . $db_error .
                             'and the query was ' . $query;
 
-            if (!Db::isActive($pdo_db))
+            if (!self::isActive($pdo_db))
             {
                 if ($db_log)
                 {
