@@ -562,7 +562,7 @@ class Xenobe
                 while (!$resultps->EOF && $xenobeisdead < 1)
                 {
                     $onplanet = $resultps->fields;
-                    Xenobe::xenobeToShip($pdo_db, $db, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
+                    self::xenobeToShip($pdo_db, $db, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
                     $resultps->MoveNext();
                 }
             }
@@ -846,7 +846,7 @@ class Xenobe
         {                                                                   // Attacker has fighters - target has fighters - fighters VS fighters
             if ($attackerfighters > $targetfighters)
             {                                                               // Attacker fighters GT target fighters
-                $temptargfighters=0;                                        // T will lose all fighters
+                $temptargfighters = 0;                                      // T will lose all fighters
             }
             else
             {                                                               // Attacker fighters LE target fighters
@@ -869,7 +869,7 @@ class Xenobe
         {                                                                   // Attacker has fighters - continue combat - fighters VS armor
             if ($attackerfighters > $targetarmor)
             {                                                               // Attacker fighters GT target armor
-                $targetarmor=0;                                             // T loses all armor (T DESTROYED)
+                $targetarmor = 0;                                           // T loses all armor (T DESTROYED)
             }
             else
             {                                                               // Attacker fighters LE target armor
@@ -1451,7 +1451,7 @@ class Xenobe
             {
                 if ($playerinfo['aggression'] == 2 || $playerinfo['aggression'] == 1)
                 {
-                    Xenobe::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defences
+                    self::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defences
 
                     return;
                 }
@@ -1579,7 +1579,7 @@ class Xenobe
             {
                 // Attack sector defences
                 $targetlink = $targetinfo['sector'];
-                Xenobe::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
+                self::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
             }
 
             if ($xenobeisdead > 0)
@@ -1591,11 +1591,11 @@ class Xenobe
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                Xenobe::xenobeToPlanet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
+                self::xenobeToPlanet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
             }
             else
             {
-                Xenobe::xenobeToShip($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
+                self::xenobeToShip($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
             }
         }
         else

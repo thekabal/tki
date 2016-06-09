@@ -103,7 +103,7 @@ if ($news_ticker_active === true)
         }
         array_push($news_ticker, array('url'=>null, 'text' => "End of News", 'type' => null, 'delay' => 5));
     }
-    $news_ticker['container']    = "article";
+    $news_ticker['container'] = "article";
     $template->addVariables("news", $news_ticker);
 }
 else
