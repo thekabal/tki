@@ -43,7 +43,7 @@ $tile['goods'] = "port-goods.png";
 $tile['none'] = "space.png";
 $tile['unknown'] = "uspace.png";
 
-$cur_sector= 0; // Clear this before iterating through the sectors
+$cur_sector = 0; // Clear this before iterating through the sectors
 
 // Display sectors as imgs, and each class in css in header.php; then match the width and height here
 $div_w = 20; // Only this width to match the included images
@@ -63,7 +63,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
         {
             $p = $row['port_type'];
             // Build the alt text for each image
-            $alt  = $langvars['l_sector'] . ": {$row['sector_id']} Port: {$row['port_type']} ";
+            $alt = $langvars['l_sector'] . ": {$row['sector_id']} Port: {$row['port_type']} ";
 
             if (!is_null($row['beacon']))
             {
@@ -84,7 +84,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
             {
                 $p = 'unknown';
                 // Build the alt text for each image
-                $alt  = ($c + ($div_xmax * $r)) . " - " . $langvars['l_unknown'] . " ";
+                $alt = ($c + ($div_xmax * $r)) . " - " . $langvars['l_unknown'] . " ";
 
                 // I have not figured out why this formula works, but $row[sector_id] doesn't, so I'm not switching it.
                 echo "<!-- current sector is " . ($c + ($div_xmax * $r)) . " -->";
