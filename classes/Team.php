@@ -42,14 +42,8 @@ class Team
         }
 
         // Check to see if the player is a member of $team['id'] if so return true, else return false.
-        if ($playerinfo['team'] == $team['id'])
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        $returnvalue = ($playerinfo['team'] == $team['id']);
+        return $returnvalue;
     }
 
     public static function isTeamOwner($team, $playerinfo)
@@ -61,15 +55,8 @@ class Team
         }
 
         // Check to see if the player is the Owner of $team['creator'] if so return true, else return false.
-        if ($playerinfo['ship_id'] == $team['creator'])
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
+        $returnvalue = ($playerinfo['ship_id'] == $team['creator'])
+        return $returnvalue;
     }
 
     public static function validateTeam($pdo_db, $db, $name = null, $desc = null, $creator = null)
@@ -98,12 +85,9 @@ class Team
         $res = $db->Execute("SELECT COUNT(*) as found FROM {$db->prefix}teams WHERE team_name = ? AND creator != ?;", array($name, $creator));
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
         $num_res = $res->fields;
-        if ($num_res['found'] > 0)
-        {
-            return false;
-        }
 
-        return true;
+        $returnvalue = (!($num_res['found'] > 0));
+        return $returnvalue;
     }
 
     // Rewritten display of teams list
@@ -225,7 +209,7 @@ class Team
             }
             echo "[<a href=teams.php?teamwhat=7&whichteam=$playerinfo[team]>" . $langvars['l_team_inv'] . "</a>] - [<a href=teams.php?teamwhat=2&whichteam=$playerinfo[team]>" . $langvars['l_team_leave'] . "</a>]</font></font>";
         }
-        Team::displayInviteInfo($langvars, $playerinfo, $invite_info);
+        self:displayInviteInfo($langvars, $playerinfo, $invite_info);
         echo "</div>";
 
         // Main table
@@ -233,7 +217,7 @@ class Team
         echo "<tr>";
         echo "<td><font color=white>" . $langvars['l_team_members'] . "</font></td>";
         echo "</tr><tr bgcolor=$tkireg->color_line2>";
-        $result  = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE team = ?;", array($whichteam));
+        $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE team = ?;", array($whichteam));
         \Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
         while (!$result->EOF)
         {
