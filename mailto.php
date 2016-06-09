@@ -33,31 +33,31 @@ Tki\Header::display($pdo_db, $lang, $template, $title, $body_class = 'tki', $inc
 $name = null;
 if (array_key_exists('name', $_POST))
 {
-    $name  = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 }
 elseif (array_key_exists('name', $_GET))
 {
-    $name  = filter_input(INPUT_GET, 'name', FILTER_SANITIZE_STRING);
+    $name = filter_input(INPUT_GET, 'name', FILTER_SANITIZE_STRING);
 }
 
 $to = null;
 if (array_key_exists('to', $_POST))
 {
-    $to  = filter_input(INPUT_POST, 'to', FILTER_SANITIZE_STRING);
+    $to = filter_input(INPUT_POST, 'to', FILTER_SANITIZE_STRING);
 }
 elseif (array_key_exists('to', $_GET))
 {
-    $to  = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_STRING);
+    $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_STRING);
 }
 
 $subject = null;
 if (array_key_exists('subject', $_POST))
 {
-    $subject  = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING);
+    $subject = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING);
 }
 if (array_key_exists('subject', $_GET))
 {
-    $subject  = filter_input(INPUT_GET, 'subject', FILTER_SANITIZE_STRING);
+    $subject = filter_input(INPUT_GET, 'subject', FILTER_SANITIZE_STRING);
 }
 
 // Allow rich-text codes (dirty) in, we will filter them using html purifier
