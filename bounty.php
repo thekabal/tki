@@ -181,7 +181,6 @@ switch ($response) {
         echo $langvars['l_by_canceled'] . "<br>";
         Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
-        break;
     case "place":
         echo "<h1>" . $title . "</h1>\n";
         $ex = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounty_on));
@@ -268,7 +267,6 @@ switch ($response) {
         echo $langvars['l_by_placed'] . "<br>";
         Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
-        break;
     default:
         echo "<h1>" . $title . "</h1>\n";
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_destroyed = 'N' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));

@@ -26,4 +26,3 @@ class Checked
         return (($yesno == "Y") ? "CHECKED" : "");
     }
 }
-

@@ -31,8 +31,9 @@ class News
         // Subtract one day in seconds from the timestamp
         $day = $day - 86400;
 
-        // Return the final amount formatted as YYYY/MM/DD
-        return date('Y/m/d', $day);
+        // Return the final version formatted as YYYY/MM/DD
+        $date = date('Y/m/d', $day);
+        return $date;
     }
 
     public static function nextDay($day)
@@ -43,8 +44,8 @@ class News
         // Add one day in seconds to the timestamp
         $day = $day + 86400;
 
-        // Return the final amount formatted as YYYY/MM/DD
-        return date('Y/m/d', $day);
+        // Return the final version formatted as YYYY/MM/DD
+        $date = date('Y/m/d', $day);
+        return $date;
     }
 }
-

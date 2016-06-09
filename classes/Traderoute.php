@@ -218,7 +218,7 @@ class Traderoute
         }
         else
         {
-            $dist = Traderoute::traderouteDistance($pdo_db, $db, $langvars, 'P', 'P', $sourceport, $destport, $traderoute['circuit'], $playerinfo, $tkireg);
+            $dist = Traderoute::traderouteDistance($pdo_db, $db, 'P', 'P', $sourceport, $destport, $traderoute['circuit'], $playerinfo, $tkireg);
         }
 
         // Check if player has enough turns
@@ -800,9 +800,6 @@ class Traderoute
                         $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=?, ship_goods=?, ship_organics=? WHERE ship_id=?", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $db, $resg, __LINE__, __FILE__);
                     }
-                }
-                else  // Buy from planet - not implemented yet
-                {
                 }
 
                 $resh = $db->Execute("UPDATE {$db->prefix}planets SET ore=ore-?, goods=goods-?, organics=organics-? WHERE planet_id=?", array($ore_buy, $goods_buy, $organics_buy, $source['planet_id']));
@@ -1869,7 +1866,7 @@ class Traderoute
      * @param string $type1
      * @param string $type2
      */
-    public static function traderouteDistance($pdo_db, $db, $langvars, $type1, $type2, $start, $dest, $circuit, $playerinfo, \Tki\Reg $tkireg, $sells = 'N')
+    public static function traderouteDistance($pdo_db, $db, $type1, $type2, $start, $dest, $circuit, $playerinfo, \Tki\Reg $tkireg, $sells = 'N')
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;
@@ -2266,7 +2263,7 @@ class Traderoute
         }
     }
 
-    public static function traderouteSettings($db, $pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $template, $playerinfo)
+    public static function traderouteSettings($pdo_db, $lang, $langvars, \Tki\Reg $tkireg, $template, $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 

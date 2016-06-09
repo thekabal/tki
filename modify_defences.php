@@ -209,7 +209,6 @@ switch ($response)
         echo $langvars['l_md_retr'] . " " . $quantity . " " . $defence_type . ".<br>";
         Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
-        break;
 
     case "change":
         echo "<h1>" . $title . "</h1>\n";
@@ -237,7 +236,6 @@ switch ($response)
         echo $langvars['l_md_mode'] . "<br>";
         Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
-        break;
 
     default:
         echo "<h1>" . $title . "</h1>\n";
@@ -285,7 +283,6 @@ switch ($response)
 
         Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         die();
-        break;
 }
 
 Tki\Text::gotoMain($pdo_db, $lang, $langvars);

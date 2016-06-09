@@ -134,7 +134,7 @@ elseif ($command == 'delete')
 elseif ($command == 'settings')
 {
     // Global traderoute settings form
-    Bad\Traderoute::traderouteSettings($db, $pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo);
+    Bad\Traderoute::traderouteSettings($pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo);
 }
 elseif ($command == 'setsettings')
 {

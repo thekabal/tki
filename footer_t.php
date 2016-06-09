@@ -139,4 +139,3 @@ $variables['elapsed'] = $elapsed;
 $variables['mem_peak_usage'] = $mem_peak_usage;
 $variables['footer_show_debug'] = $tkireg->footer_show_debug;
 $variables['cur_year'] = date('Y');
-
