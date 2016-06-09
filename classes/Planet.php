@@ -570,7 +570,7 @@ class Planet
                 $playerscore = \Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
                 $playerscore *= $playerscore;
 
-                $planetscore = $planetinfo['organics'] * $tkireg->organics_price + $planetinfo['ore'] * $tkireg->ore_price + $planetinfo['goods'] * $tkireg->goods_price + $planetinfo['energy'] * $tkireg->energy_price + $planetinfo['fighters'] * $fighter_price + $planetinfo['torps'] * $tkireg->torpedo_price + $planetinfo['colonists'] * $tkireg->colonist_price + $planetinfo['credits'];
+                $planetscore = $planetinfo['organics'] * $tkireg->organics_price + $planetinfo['ore'] * $tkireg->ore_price + $planetinfo['goods'] * $tkireg->goods_price + $planetinfo['energy'] * $tkireg->energy_price + $planetinfo['fighters'] * $tkireg->fighter_price + $planetinfo['torps'] * $tkireg->torpedo_price + $planetinfo['colonists'] * $tkireg->colonist_price + $planetinfo['credits'];
                 $planetscore = $planetscore * $tkireg->min_value_capture / 100;
 
                 if ($playerscore < $planetscore)
@@ -602,7 +602,7 @@ class Planet
                 \Tki\Db::logDbErrors($pdo_db, $db, $update7a, __LINE__, __FILE__);
             }
 
-            \Tki\Ownership::calc($pdo_db, $db, $planetinfo['sector_id'], $min_bases_to_own, $langvars);
+            \Tki\Ownership::calc($pdo_db, $db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
         }
         else
         {

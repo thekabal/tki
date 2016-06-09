@@ -87,7 +87,7 @@ class PlanetReportCE
             echo $langvars['l_planet_bbuild'] . "<br><br>";
 
             // Calc Ownership and Notify User Of Results
-            $ownership = \Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $min_bases_to_own, $langvars);
+            $ownership = \Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
             if ($ownership !== null)
             {
                 echo $ownership . "<p>";
