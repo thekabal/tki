@@ -228,7 +228,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             if ($hunt == 0)
             {
                 $furcount3h++;
-                Bad\Xenobe::xenobeHunter($pdo_db, $db, $playerinfo, $xenobeisdead);
+                Bad\Xenobe::xenobeHunter($pdo_db, $db, $playerinfo, $xenobeisdead, $langvars);
                 if ($xenobeisdead > 0)
                 {
                     $res->MoveNext();
