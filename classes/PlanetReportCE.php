@@ -115,7 +115,7 @@ class PlanetReportCE
             \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
 
             // Only add to array if the player owns the planet.
-            if ($res->fields['owner'] == $playerinfo['ship_id'] && $res->fields['sector_id'] < $max_sectors)
+            if ($res->fields['owner'] == $playerinfo['ship_id'] && $res->fields['sector_id'] < $tkireg->max_sectors)
             {
                 $s_p_pair[$i]= array($res->fields['sector_id'], $planetarray[$i]);
             }
