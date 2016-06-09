@@ -33,7 +33,7 @@ echo '<h1>' . $title . '</h1>';
 $ship_id = null;
 if (array_key_exists('ship_id', $_GET))
 {
-    $ship_id  = (int) filter_input(INPUT_GET, 'ship_id', FILTER_SANITIZE_NUMBER_INT);
+    $ship_id = (int) filter_input(INPUT_GET, 'ship_id', FILTER_SANITIZE_NUMBER_INT);
 }
 
 // Kami Multi Browser Window Attack Fix
