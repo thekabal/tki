@@ -321,7 +321,6 @@ class PlanetReport
 
             $total_colonists = 0;
             $total_credits = 0;
-            $total_team = 0;
             $color = $tkireg->color_line1;
 
             for ($i = 0; $i < $num_planets; $i++)
