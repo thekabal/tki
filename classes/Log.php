@@ -31,7 +31,7 @@ class Log
         $retvalue = array();
         $langvars['l_log_nopod'] = "<font color=yellow><strong>" . $langvars['l_log_nopod'] . "</strong></font>"; // This should be done better, but I needed it moved out of the language file.
 
-        Log::getLogInfo($log_list, $entry['type'], $titletemp, $texttemp);
+        self::getLogInfo($log_list, $entry['type'], $titletemp, $texttemp);
 
         switch($entry['type'])
         {
