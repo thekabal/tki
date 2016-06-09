@@ -44,7 +44,7 @@ class Planet
         return false;
     }
 
-    public static function planetBombing($db, $langvars, \Tki\Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $attackerfighters, $planettorps)
+    public static function planetBombing($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $attackerfighters, $planettorps)
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -621,7 +621,7 @@ class Planet
         \Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
     }
 
-    public static function shipToShip($db, $langvars, $ship_id, \Tki\Reg $tkireg, $playerinfo)
+    public static function shipToShip($pdo_db, $db, $langvars, $ship_id, \Tki\Reg $tkireg, $playerinfo)
     {
         global $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage, $armor_lost, $fighters_lost;
 
