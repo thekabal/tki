@@ -104,7 +104,7 @@ else
         echo "</table>";
 
         echo "<br>";
-        echo "<input type='hidden' name='planet' value='$planet'>";
+        echo "<input type='hidden' name='planet' value='" . $planet . "'>";
         echo "<input type='hidden' name='operation' value='save'>";
         echo "<input type='submit' size='1' value='" . $langvars['l_save'] . "'>";
     }
