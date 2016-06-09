@@ -166,7 +166,7 @@ class CalcLevels
 
         $count = count($calc_tech);
 
-        $shipavg  = 0;
+        $shipavg = 0;
         for ($i = 0; $i < $count; $i++)
         {
             $shipavg += $ship_info[$calc_tech[$i]];
