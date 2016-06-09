@@ -338,7 +338,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay(\PDO $pdo_db, $langvars, $playerinfo, $account, $amount, $active_template)
+    public static function ibankRepay(\PDO $pdo_db, $lang, $langvars, $playerinfo, $account, $amount, $active_template, $tkireg)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
