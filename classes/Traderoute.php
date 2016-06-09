@@ -1861,12 +1861,7 @@ class Traderoute
         }
     }
 
-    /**
-     * @param string $langvars
-     * @param string $type1
-     * @param string $type2
-     */
-    public static function traderouteDistance($pdo_db, $db, $type1, $type2, $start, $dest, $circuit, $playerinfo, \Tki\Reg $tkireg, $sells = 'N')
+    public static function traderouteDistance($pdo_db, $db, string $type1, string $type2, $start, $dest, $circuit, $playerinfo, \Tki\Reg $tkireg, $sells = 'N')
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;
