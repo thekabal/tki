@@ -63,7 +63,7 @@ class PlanetReportCE
             return (boolean) false;
         }  // Build a base
 
-        PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $sector_id, $tkireg->level_factor, $mine_hullsize);
+        PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $sector_id, $tkireg);
         echo "<br>";
         echo str_replace("[here]", "<a href='planet.php?planet_id=$planet_id'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_planet']);
         echo "<br><br>";
@@ -141,7 +141,7 @@ class PlanetReportCE
         for ($i = 0; $i < $temp_count2 && $CS == "GO"; $i++)
         {
             echo "<br>";
-            $CS = PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $s_p_pair[$i][0], $tkireg->level_factor, $mine_hullsize);
+            $CS = PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $s_p_pair[$i][0], $tkireg);
 
             if ($CS == "HOSTILE")
             {
@@ -444,7 +444,7 @@ class PlanetReportCE
         return ($retval);
     }
 
-    public static function realSpaceMove($pdo_db, $db, $langvars, $destination, $tkireg, $mine_hullsize)
+    public static function realSpaceMove($pdo_db, $db, $langvars, $destination, $tkireg)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
@@ -559,7 +559,7 @@ class PlanetReportCE
                 }
             }
 
-            if (($hostile > 0) && ($playerinfo['hull'] > $mine_hullsize))
+            if (($hostile > 0) && ($playerinfo['hull'] > $tkireg->mine_hullsize))
             {
                 $retval = "HOSTILE";
                 echo str_replace("[destination]", $destination, $langvars['l_pr_cannot_move_defenses']). "<br>";
