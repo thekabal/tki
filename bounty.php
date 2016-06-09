@@ -38,7 +38,7 @@ if (mb_strlen(trim($response)) === 0)
 
 if (array_key_exists('response', $_GET))
 {
-    $response  = filter_input(INPUT_GET, 'response', FILTER_SANITIZE_STRING);
+    $response = filter_input(INPUT_GET, 'response', FILTER_SANITIZE_STRING);
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -51,7 +51,7 @@ if (mb_strlen(trim($bounty_on)) === 0)
 
 if (array_key_exists('bounty_on', $_GET))
 {
-    $bounty_on  = filter_input(INPUT_GET, 'bounty_on', FILTER_SANITIZE_NUMBER_INT);
+    $bounty_on = filter_input(INPUT_GET, 'bounty_on', FILTER_SANITIZE_NUMBER_INT);
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
