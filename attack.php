@@ -496,7 +496,7 @@ else
                 $bcs_stats_info = true;
                 if ($playertorpdmg > $targetarmor)
                 {
-                    $targetarmor=0;
+                    $targetarmor = 0;
                     echo "$targetinfo[character_name]" . $langvars['l_att_sarm'] . "<br>";
                 }
                 else
