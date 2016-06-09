@@ -51,7 +51,7 @@ class Smarty
         $smarty_errors = null;
         if (!is_dir('templates'))
         {
-            $smarty_errors.='The Kabal Invasion smarty error: The templates/ subdirectory under the main TKI directory does not exist. Please create it.<br>';
+            $smarty_errors .= 'The Kabal Invasion smarty error: The templates/ subdirectory under the main TKI directory does not exist. Please create it.<br>';
         }
 
         $cache_perms = is_writable('templates/_cache');
@@ -59,12 +59,12 @@ class Smarty
 
         if (!$cache_perms)
         {
-            $smarty_errors.= 'The Kabal Invasion smarty error: The templates/_cache directory needs to have its permissions set to be writable by the web server user, OR 777, or ugo+rwx.<br>';
+            $smarty_errors .= 'The Kabal Invasion smarty error: The templates/_cache directory needs to have its permissions set to be writable by the web server user, OR 777, or ugo+rwx.<br>';
         }
 
         if (!$compile_perms)
         {
-            $smarty_errors.= 'The Kabal invasion smarty error: The templates/_compile directory needs to have its permissions set to be writable by the web server user, OR 777, or ugo+rwx.<br>';
+            $smarty_errors .= 'The Kabal invasion smarty error: The templates/_compile directory needs to have its permissions set to be writable by the web server user, OR 777, or ugo+rwx.<br>';
         }
 
         if ($smarty_errors !== null)
@@ -127,7 +127,7 @@ class Smarty
         }
         catch (\exception $e)
         {
-            $output  = 'The smarty template system is not working. We suggest checking the specific template you are using for an error in the page that you want to access.';
+            $output = 'The smarty template system is not working. We suggest checking the specific template you are using for an error in the page that you want to access.';
         }
 
         echo $output;
