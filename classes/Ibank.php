@@ -117,7 +117,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw2(\PDO $pdo_db, $langvars, $playerinfo, $amount, $account)
+    public static function ibankWithdraw2(\PDO $pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
