@@ -1357,7 +1357,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars)
+    public static function xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars, $tkireg)
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1486,7 +1486,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter($pdo_db, $db, $playerinfo, $xenobeisdead, $langvars)
+    public static function xenobeHunter($pdo_db, $db, $playerinfo, $xenobeisdead, $langvars, $tkireg)
     {
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
         \Tki\Db::logDbErrors($pdo_db, $db, $rescount, __LINE__, __FILE__);
@@ -1608,7 +1608,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeRegen($db, $playerinfo, $xen_unemployment, $xenobeisdead, $tkireg)
+    public static function xenobeRegen($pdo_db, $db, $playerinfo, $xen_unemployment, $xenobeisdead, $tkireg)
     {
         // Xenobe Unempoyment Check
         $playerinfo['credits'] = $playerinfo['credits'] + $xen_unemployment;

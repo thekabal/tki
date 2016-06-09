@@ -49,7 +49,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
     $xenobeisdead = 0;
     $playerinfo = $res->fields;
     // Regenerate / Buy stats
-    Bad\Xenobe::xenobeRegen($db, $playerinfo, $xen_unemployment, $xenobeisdead, $tkireg);
+    Bad\Xenobe::xenobeRegen($pdo_db, $db, $playerinfo, $xen_unemployment, $xenobeisdead, $tkireg);
 
     // Run through orders
     $furcount++;
@@ -103,7 +103,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars);
+            Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars, $tkireg);
             if ($xenobeisdead > 0)
             {
                 $res->MoveNext();
@@ -161,7 +161,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars);
+            Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars, $tkireg);
             if ($xenobeisdead > 0)
             {
                 $res->MoveNext();
@@ -228,7 +228,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             if ($hunt == 0)
             {
                 $furcount3h++;
-                Bad\Xenobe::xenobeHunter($pdo_db, $db, $playerinfo, $xenobeisdead, $langvars);
+                Bad\Xenobe::xenobeHunter($pdo_db, $db, $playerinfo, $xenobeisdead, $langvars, $tkireg);
                 if ($xenobeisdead > 0)
                 {
                     $res->MoveNext();
@@ -238,7 +238,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars);
+                Bad\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $xenobeisdead, $langvars, $tkireg);
                 if ($xenobeisdead > 0)
                 {
                     $res->MoveNext();
