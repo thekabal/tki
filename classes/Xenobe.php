@@ -562,7 +562,7 @@ class Xenobe
                 while (!$resultps->EOF && $xenobeisdead < 1)
                 {
                     $onplanet = $resultps->fields;
-                    Xenobe::xenobeToShip($db, $onplanet['ship_id'], $tkireg, $playerinfo);
+                    Xenobe::xenobeToShip($pdo_db, $db, $onplanet['ship_id'], $tkireg, $playerinfo);
                     $resultps->MoveNext();
                 }
             }
@@ -580,9 +580,9 @@ class Xenobe
 
                 // Update planet
                 $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id=?", array($planetinfo['planet_id']));
-                \Tki\Db::logDbErrors($pdo_db, $db, $resi, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $db, $resl, __LINE__, __FILE__);
 
-                \Tki\Ownership::cancel($pdo_db, $db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
+                \Tki\Ownership::calc($pdo_db, $db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
             }
             else
             {
@@ -598,7 +598,7 @@ class Xenobe
         \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
     }
 
-    public static function xenobeToShip($db, $ship_id, \Tki\Reg $tkireg, $playerinfo)
+    public static function xenobeToShip($pdo_db, $db, $ship_id, \Tki\Reg $tkireg, $playerinfo)
     {
         // Setup general variables
         global $attackerbeams;
@@ -1599,7 +1599,7 @@ class Xenobe
             }
             else
             {
-                Xenobe::xenobeToShip($db, $targetinfo['ship_id'], $tkireg, $playerinfo); // Not on a planet, so move to the ship
+                Xenobe::xenobeToShip($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo); // Not on a planet, so move to the ship
             }
         }
         else

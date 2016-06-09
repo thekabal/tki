@@ -144,7 +144,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     }
                     else
                     {
-                        Bad\Xenobe::xenobeToShip($db, $rowo1['ship_id'], $tkireg, $playerinfo);
+                        Bad\Xenobe::xenobeToShip($pdo_db, $db, $rowo1['ship_id'], $tkireg, $playerinfo);
                     }
 
                     if ($xenobeisdead > 0)
@@ -188,7 +188,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     {
                         $furcount2a++;
                         Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
-                        Bad\Xenobe::xenobeToShip($db, $rowo2['ship_id'], $tkireg, $playerinfo);
+                        Bad\Xenobe::xenobeToShip($pdo_db, $db, $rowo2['ship_id'], $tkireg, $playerinfo);
                         if ($xenobeisdead > 0)
                         {
                             $res->MoveNext();
@@ -206,7 +206,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     }
                     else
                     {
-                        Bad\Xenobe::xenobeToShip($db, $rowo2['ship_id'], $tkireg, $playerinfo);
+                        Bad\Xenobe::xenobeToShip($pdo_db, $db, $rowo2['ship_id'], $tkireg, $playerinfo);
                     }
 
                     if ($xenobeisdead > 0)
@@ -263,7 +263,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         {
                             $furcount3a++;
                             Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
-                            Bad\Xenobe::xenobeToShip($db, $rowo3['ship_id'], $tkireg, $playerinfo);
+                            Bad\Xenobe::xenobeToShip($pdo_db, $db, $rowo3['ship_id'], $tkireg, $playerinfo);
                             if ($xenobeisdead > 0)
                             {
                                 $res->MoveNext();
@@ -281,7 +281,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         }
                         else
                         {
-                            Bad\Xenobe::xenobeToShip($db, $rowo3['ship_id'], $tkireg, $playerinfo);
+                            Bad\Xenobe::xenobeToShip($pdo_db, $db, $rowo3['ship_id'], $tkireg, $playerinfo);
                         }
 
                         if ($xenobeisdead > 0)
