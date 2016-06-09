@@ -35,10 +35,6 @@ class PlanetReportCE
         \Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
 
-        $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-        \Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
-        $sectorinfo = $result2->fields;
-
         $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
         \Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
         $planetinfo = $result3->fields;
@@ -63,7 +59,7 @@ class PlanetReportCE
             return (boolean) false;
         }  // Build a base
 
-        PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $sector_id, $tkireg);
+        self::realSpaceMove($pdo_db, $db, $langvars, $sector_id, $tkireg);
         echo "<br>";
         echo str_replace("[here]", "<a href='planet.php?planet_id=$planet_id'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_planet']);
         echo "<br><br>";
@@ -78,7 +74,7 @@ class PlanetReportCE
             $update1b = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $db, $update1b, __LINE__, __FILE__);
 
-            // Refresh Plant Info
+            // Refresh Planet Info
             $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
             \Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
             $planetinfo = $result3->fields;
@@ -117,7 +113,7 @@ class PlanetReportCE
             // Only add to array if the player owns the planet.
             if ($res->fields['owner'] == $playerinfo['ship_id'] && $res->fields['sector_id'] < $tkireg->max_sectors)
             {
-                $s_p_pair[$i]= array($res->fields['sector_id'], $planetarray[$i]);
+                $s_p_pair[$i] = array($res->fields['sector_id'], $planetarray[$i]);
             }
             else
             {
@@ -141,7 +137,7 @@ class PlanetReportCE
         for ($i = 0; $i < $temp_count2 && $CS == "GO"; $i++)
         {
             echo "<br>";
-            $CS = PlanetReportCE::realSpaceMove($pdo_db, $db, $langvars, $s_p_pair[$i][0], $tkireg);
+            $CS = self::realSpaceMove($pdo_db, $db, $langvars, $s_p_pair[$i][0], $tkireg);
 
             if ($CS == "HOSTILE")
             {
@@ -149,7 +145,7 @@ class PlanetReportCE
             }
             elseif ($CS == "GO")
             {
-                $CS = PlanetReportCE::takeCredits($pdo_db, $db, $langvars, $s_p_pair[$i][1]);
+                $CS = self::takeCredits($pdo_db, $db, $langvars, $s_p_pair[$i][1]);
             }
             else
             {
@@ -198,7 +194,6 @@ class PlanetReportCE
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
         $ship_id = $result->fields['ship_id'];
-        $team_id = $result->fields['team'];
 
         $planet_hack = false;
         $hack_id = 0x0000;
