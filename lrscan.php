@@ -197,7 +197,7 @@ else
     // Get sectors which can be reached through scanned sector
     $result3 = $db->Execute("SELECT link_dest FROM {$db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($sector));
     Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
-    $i=0;
+    $i = 0;
 
     while (!$result3->EOF)
     {
