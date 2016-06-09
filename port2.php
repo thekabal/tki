@@ -264,7 +264,7 @@ else
             $fighter_number = $fighter_max;
         }
 
-        $fighter_cost    = $fighter_number * $tkireg->fighter_price;
+        $fighter_cost = $fighter_number * $tkireg->fighter_price;
         if ($torpedo_number < 0)
         {
             $torpedo_number = 0;
@@ -300,7 +300,7 @@ else
             $armor_number = $armor_max;
         }
 
-        $armor_cost     = $armor_number * $tkireg->armor_price;
+        $armor_cost = $armor_number * $tkireg->armor_price;
         if ($colonist_number < 0)
         {
             $colonist_number = 0;
@@ -722,7 +722,7 @@ else
                     </table>";
 
             // Update ship cargo, credits and turns
-            $trade_result     = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, rating = rating + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
+            $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, rating = rating + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $db, $trade_result, __LINE__, __FILE__);
 
             // Make all trades positive to change port values
@@ -732,7 +732,7 @@ else
             $trade_energy     = round(abs($trade_energy));
 
             // Decrease supply and demand on port
-            $trade_result2    = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_organics = port_organics - ?, port_goods = port_goods - ?, port_energy = port_energy - ? WHERE sector_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $sectorinfo['sector_id']));
+            $trade_result2 = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_organics = port_organics - ?, port_goods = port_goods - ?, port_energy = port_energy - ? WHERE sector_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $sectorinfo['sector_id']));
             Tki\Db::logDbErrors($pdo_db, $db, $trade_result2, __LINE__, __FILE__);
 
             echo $langvars['l_trade_complete'] . ".<br><br>";

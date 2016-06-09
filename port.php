@@ -403,7 +403,7 @@ elseif ($sectorinfo['port_type'] == "special")
                     die();
                 }
 
-                $bounty_left    = $bty['total_bounty'] - $bounty_payment;
+                $bounty_left = $bty['total_bounty'] - $bounty_payment;
                 Tki\Text::gotoMain($pdo_db, $lang, $langvars);
                 die();
             }
