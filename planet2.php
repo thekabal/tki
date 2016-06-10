@@ -204,7 +204,7 @@ else
 
     if ($tporganics != -1)
     {
-        $tporganics  = 1;
+        $tporganics = 1;
     }
 
     if ($tpgoods != -1)

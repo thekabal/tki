@@ -114,17 +114,17 @@ if (mb_strlen(trim($command)) === 0)
 if ($command == 'new')
 {
     // Displays new trade route form
-    Bad\Traderoute::traderouteNew($pdo_db, $db, $lang, $langvars, $tkireg, null, $template, $num_traderoutes, $playerinfo);
+    Bad\Traderoute::traderouteNew($pdo_db, $db, $lang, $tkireg, null, $template, $num_traderoutes, $playerinfo);
 }
 elseif ($command == 'create')
 {
     // Enters new route in db
-    Bad\Traderoute::traderouteCreate($db, $pdo_db, $lang, $langvars, $tkireg, $template);
+    Bad\Traderoute::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template);
 }
 elseif ($command == 'edit')
 {
     // Displays new trade route form, edit
-    Bad\Traderoute::traderouteNew($pdo_db, $db, $lang, $langvars, $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo);
+    Bad\Traderoute::traderouteNew($pdo_db, $db, $lang, $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo);
 }
 elseif ($command == 'delete')
 {
@@ -139,7 +139,7 @@ elseif ($command == 'settings')
 elseif ($command == 'setsettings')
 {
     // Enters settings in db
-    Bad\Traderoute::traderouteSetsettings($db, $pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
+    Bad\Traderoute::traderouteSetsettings($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
 }
 elseif ($engage !== null)
 {
