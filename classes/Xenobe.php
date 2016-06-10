@@ -345,18 +345,6 @@ class Xenobe
             }
         }
 
-        if ($attackerbeams > 0)                                     // Attacker has beams left - continue combat - Beams v. shields
-        {
-            if ($attackerbeams > $targetshields)                    // Attacker beams greater than target shields
-            {
-                $attackerbeams = $attackerbeams - $targetshields;   // Attacker loses beams equal to target shields
-            }
-            else                                                    // Attacker beams less than or equal to target shields
-            {
-                $attackerbeams = 0;                                 // Attacker loses all beams
-            }
-        }
-
         if ($targetbeams > 0)                                                // Target has beams left - continue combat - Beams v. shields
         {
             if ($targetbeams > $attackershields)                             // Target beams greater than attacker shields
