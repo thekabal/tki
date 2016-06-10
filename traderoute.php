@@ -335,7 +335,7 @@ else
 
             if ($traderoutes[$i]['dest_type'] == 'P')
             {
-                $dst= $port2;
+                $dst = $port2;
             }
             else
             {
