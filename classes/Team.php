@@ -55,7 +55,7 @@ class Team
         }
 
         // Check to see if the player is the Owner of $team['creator'] if so return true, else return false.
-        $returnvalue = ($playerinfo['ship_id'] == $team['creator'])
+        $returnvalue = ($playerinfo['ship_id'] == $team['creator']);
         return $returnvalue;
     }
 
