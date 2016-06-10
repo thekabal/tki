@@ -81,7 +81,7 @@ elseif ($command == 'withdraw') // Withdraw menu
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Bad\Ibank::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg);
+    Bad\Ibank::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
@@ -89,7 +89,7 @@ elseif ($command == 'deposit') // Deposit menu
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Bad\Ibank::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg);
+    Bad\Ibank::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
@@ -97,11 +97,11 @@ elseif ($command == 'transfer') // Main transfer menu
 }
 elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 {
-    Bad\Ibank::ibankTransfer2($db, $pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id);
+    Bad\Ibank::ibankTransfer2($db, $pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $template);
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
-    Bad\Ibank::ibankTransfer3($db, $pdo_db, $lang, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg);
+    Bad\Ibank::ibankTransfer3($db, $pdo_db, $lang, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $template);
 }
 elseif ($command == 'loans') // Loans menu
 {
@@ -109,11 +109,11 @@ elseif ($command == 'loans') // Loans menu
 }
 elseif ($command == 'borrow') // Borrow operation
 {
-    Bad\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount);
+    Bad\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount, $template);
 }
 elseif ($command == 'repay') // Repay operation
 {
-    Bad\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $account, $amount, $active_template, $tkireg);
+    Bad\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $account, $amount, $active_template, $tkireg, $template);
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {
@@ -121,11 +121,11 @@ elseif ($command == 'consolidate') // Consolidate menu
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Bad\Ibank::ibankConsolidate2($db, $pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum);
+    Bad\Ibank::ibankConsolidate2($db, $pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Bad\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum);
+    Bad\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
 }
 else
 {
