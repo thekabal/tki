@@ -209,7 +209,7 @@ class Team
             }
             echo "[<a href=teams.php?teamwhat=7&whichteam=$playerinfo[team]>" . $langvars['l_team_inv'] . "</a>] - [<a href=teams.php?teamwhat=2&whichteam=$playerinfo[team]>" . $langvars['l_team_leave'] . "</a>]</font></font>";
         }
-        self:displayInviteInfo($langvars, $playerinfo, $invite_info);
+        self::displayInviteInfo($langvars, $playerinfo, $invite_info);
         echo "</div>";
 
         // Main table
