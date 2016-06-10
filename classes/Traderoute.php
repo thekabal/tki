@@ -1371,7 +1371,7 @@ class Traderoute
         $playerinfo['turns'] -= $dist['triptime'];
 
         $tdr_display_creds = number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-        self::traderouteResultsDisplaySummary($pdo_db, $lang, $langvars, $tdr_display_creds, $dist, $playerinfo);
+        self::traderouteResultsDisplaySummary($pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo);
         // echo $j." -- ";
         if ($traderoute['circuit'] == 2)
         {
