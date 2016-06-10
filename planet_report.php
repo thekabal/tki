@@ -60,7 +60,7 @@ else                                  // Display the menu if no valid options ar
 {
     $title = $title . ": Status";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::planetReport();
+    Bad\PlanetReport::planetReportMenu();
 }
 
 echo "<br><br>";
