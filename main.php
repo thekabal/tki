@@ -16,7 +16,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: main.php
-
+/ testing
 require_once './common.php';
 
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
