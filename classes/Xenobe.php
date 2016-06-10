@@ -350,11 +350,9 @@ class Xenobe
             if ($attackerbeams > $targetshields)                    // Attacker beams greater than target shields
             {
                 $attackerbeams = $attackerbeams - $targetshields;   // Attacker loses beams equal to target shields
-                $targetshields = 0;                                 // Target loses all shields
             }
             else                                                    // Attacker beams less than or equal to target shields
             {
-                $targetshields = $targetshields - $attackerbeams;   // Target loses shields equal to attacker beams
                 $attackerbeams = 0;                                 // Attacker loses all beams
             }
         }
@@ -364,11 +362,9 @@ class Xenobe
             if ($targetbeams > $attackershields)                             // Target beams greater than attacker shields
             {
                 $targetbeams = $targetbeams - $attackershields;              // Target loses beams equal to attacker shields
-                $attackershields = 0;                                        // Attacker loses all shields
             }
             else                                                             // Target beams less than or equal to attacker shields
             {
-                $attackershields = $attackershields - $targetbeams;          // Attacker loses sheilds equal to target beams
                 $targetbeams = 0;                                            // Target loses all beams
             }
         }
@@ -377,13 +373,11 @@ class Xenobe
         {
             if ($targetbeams > $attackerarmor)                  // Target beams greater than attacker armor
             {
-                $targetbeams = $targetbeams - $attackerarmor;   // Target loses beams equal to attacker armor
                 $attackerarmor = 0;                             // Attacker loses all armor (attacker destroyed)
             }
             else                                                // Target beams less than or equal to attacker armor
             {
                 $attackerarmor = $attackerarmor - $targetbeams; // Attacker loses armor equal to target beams
-                $targetbeams = 0;                               // Target loses all beams
             }
         }
 
@@ -391,7 +385,6 @@ class Xenobe
         {
             if ($attackertorpdamage > $targetfighters)                      // Attacker fired torpedoes greater than target fighters
             {
-                $lost = $targetfighters;
                 $targetfighters = 0;                                        // Target loses all fighters
             }
             else                                                            // Attacker fired torpedoes less than or equal to half of the target fighters
@@ -720,12 +713,10 @@ class Xenobe
             if ($attackerbeams > $targetshields)                            // Attacker beams GT target shields
             {
                 $attackerbeams = $attackerbeams - $targetshields;           // A loses beams EQ to T shields
-                $targetshields=0;                                           // T loses all shields
             }
             else
             {                                                               // Attacker beams LE target shields
-                $targetshields = $targetshields - $attackerbeams;           // T loses shields EQ to A beams
-                $attackerbeams=0;                                           // A loses all beams
+                $attackerbeams = 0;                                           // A loses all beams
             }
         }
         if ($targetbeams > 0)
@@ -760,13 +751,11 @@ class Xenobe
         {                                                                   // Target has beams left - continue combat - beams VS armor
             if ($targetbeams > $attackerarmor)
             {                                                               // Target beams GT Attacker armor
-                $targetbeams = $targetbeams - $attackerarmor;               // T loses beams EQ to A armor
                 $attackerarmor = 0;                                         // A loses all armor (A DESTROYED)
             }
             else
             {                                                               // Target beams LE Attacker armor
                 $attackerarmor = $attackerarmor - $targetbeams;             // A loses armor EQ to T beams
-                $targetbeams = 0;                                           // T loses all beams
             }
         }
         if ($targetfighters > 0 && $attackertorpdamage > 0)
