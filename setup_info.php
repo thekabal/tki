@@ -99,7 +99,7 @@ else
 
 if ($db_port !== null)
 {
-    $db_host.= ":$db_port";
+    $db_host .= ":$db_port";
 }
 
 // Attempt to connect to the database via adodb
@@ -127,7 +127,7 @@ catch (\PDOException $e)
 }
 
 // Get environment variables
-$id=0;
+$id = 0;
 ksort($_SERVER);
 reset($_SERVER);
 foreach ($_SERVER as $name => $value)

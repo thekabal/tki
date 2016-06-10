@@ -43,7 +43,7 @@ if (array_key_exists('whichteam', $_REQUEST) === true)
 $teamwhat = null;
 if (array_key_exists('teamwhat', $_REQUEST) === true)
 {
-    $teamwhat  = (int) $_REQUEST['teamwhat'];
+    $teamwhat = (int) $_REQUEST['teamwhat'];
 }
 
 $confirmleave = null;
@@ -85,7 +85,7 @@ if (array_key_exists('update', $_POST) === true)
 $who = null;
 if (array_key_exists('who', $_REQUEST) === true)
 {
-    $who  = (int) $_REQUEST['who'];
+    $who = (int) $_REQUEST['who'];
 }
 
 // Setting up some recordsets.
@@ -97,7 +97,7 @@ $result = $db->Execute("SELECT {$db->prefix}ships.*, {$db->prefix}teams.team_nam
             LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team = {$db->prefix}teams.id
             WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username']));
 Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
-$playerinfo=$result->fields;
+$playerinfo = $result->fields;
 
 // We do not want to query the database, if it is not necessary.
 if ($playerinfo['team_invite'] != 0)
@@ -108,7 +108,7 @@ if ($playerinfo['team_invite'] != 0)
             LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team_invite = {$db->prefix}teams.id
             WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username']));
     Tki\Db::logDbErrors($pdo_db, $db, $invite, __LINE__, __FILE__);
-    $invite_info=$invite->fields;
+    $invite_info = $invite->fields;
 }
 else
 {
@@ -171,7 +171,7 @@ switch ($teamwhat)
 
                     $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y';", array($playerinfo['ship_id']));
                     Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
-                    $i=0;
+                    $i = 0;
                     while (!$res->EOF)
                     {
                         $row = $res->fields;
@@ -230,7 +230,7 @@ switch ($teamwhat)
 
                         $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
                         Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
-                        $i=0;
+                        $i = 0;
                         while (!$res->EOF)
                         {
                             $sectors[$i] = $res->fields['sector_id'];
@@ -275,7 +275,7 @@ switch ($teamwhat)
 
                 $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
-                $i=0;
+                $i = 0;
                 while (!$res->EOF)
                 {
                     $sectors[$i] = $res->fields['sector_id'];
@@ -581,7 +581,7 @@ switch ($teamwhat)
                 Bad\Team::showInfo($pdo_db, $db, $langvars, $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
             }
 
-            $res= $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
+            $res = $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
             Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
             $num_res = $res->fields;
 
