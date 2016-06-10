@@ -626,7 +626,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
         }
         elseif ($command == "bomb" && $tkireg->allow_sofa)
         {
-            BadPlanet::planetBombing($pdo_db, $db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo);
+            BadPlanet::planetBombing($pdo_db, $db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
         }
         elseif ($command == "scan")
         {

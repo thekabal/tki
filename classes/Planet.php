@@ -44,7 +44,7 @@ class Planet
         return false;
     }
 
-    public static function planetBombing($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo)
+    public static function planetBombing($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template)
     {
         if ($playerinfo['turns'] < 1)
         {

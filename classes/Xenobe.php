@@ -412,7 +412,6 @@ class Xenobe
         {
             if ($targettorpdmg > $attackerarmor)                    // Target fired torpedoes greater than half of attacker armor
             {
-                $targettorpdmg = $targettorpdmg - $attackerarmor;   // Target loses fired torpedoes equal to attacker armor
                 $attackerarmor = 0;                                 // Attacker loses all armor (Attacker destroyed)
             }
             else
@@ -465,11 +464,6 @@ class Xenobe
         if ($attackertorps    < 0)
         {
             $attackertorps = 0;
-        }
-
-        if ($attackerbeams    < 0)
-        {
-            $attackerbeams = 0;
         }
 
         if ($attackerarmor    < 0)
@@ -803,12 +797,10 @@ class Xenobe
         {                                                                   // Target fires torps - continue combat - torps VS armor
             if ($targettorpdmg > $attackerarmor)
             {                                                               // Target fired torps GT half Attacker armor
-                $targettorpdmg = $targettorpdmg - $attackerarmor;           // T loses fired torps EQ to A armor
                 $attackerarmor = 0;                                         // A loses all armor (A DESTROYED)
             }
             else
             {                                                               // Target fired torps LE half Attacker armor
-                $attackerarmor = $attackerarmor - $targettorpdmg;           // A loses armor EQ to T torps fired
                 $targettorpdmg = 0;                                         // T loses all torps fired
             }
         }
@@ -1143,7 +1135,6 @@ class Xenobe
                     $roll = 1;
                 }
 
-                $totalmines = $totalmines - $roll;
                 $playerminedeflect = $playerinfo['ship_fighters']; // Xenobe keep as many deflectors as fighters
 
                 // Combat - Beams v fighters
@@ -1153,7 +1144,6 @@ class Xenobe
                     {
                         $temp = round($targetfighters / 2);
                         $targetfighters = $temp;
-                        $playerbeams = $playerbeams - $temp;
                     }
                     else
                     {
@@ -1171,7 +1161,6 @@ class Xenobe
                     }
                     else
                     {
-                        $targetfighters = $targetfighters - $playertorpdmg;
                         $playertorpdmg = 0;
                     }
                 }
