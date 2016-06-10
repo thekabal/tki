@@ -393,12 +393,10 @@ class Xenobe
             {
                 $lost = $targetfighters;
                 $targetfighters = 0;                                        // Target loses all fighters
-                $attackertorpdamage = $attackertorpdamage - $lost;          // Attacker loses fired torpedoes equal to target fighters
             }
             else                                                            // Attacker fired torpedoes less than or equal to half of the target fighters
             {
                 $targetfighters = $targetfighters - $attackertorpdamage;    // Target loses fighters equal to attacker torpedoes fired
-                $attackertorpdamage=0;                                      // Attacker loses all torpedoes fired
             }
         }
 
@@ -427,7 +425,6 @@ class Xenobe
             else
             {                                                       // Target fired torpedoes less than or equal to half attacker armor
                 $attackerarmor = $attackerarmor - $targettorpdmg;   // Attacker loses armor equal to the target torpedoes fired
-                $targettorpdmg = 0;                                 // Target loses all torpedoes fired
             }
         }
 
@@ -477,11 +474,6 @@ class Xenobe
             $attackertorps = 0;
         }
 
-        if ($attackershields  < 0)
-        {
-            $attackershields = 0;
-        }
-
         if ($attackerbeams    < 0)
         {
             $attackerbeams = 0;
@@ -500,16 +492,6 @@ class Xenobe
         if ($targettorps      < 0)
         {
             $targettorps = 0;
-        }
-
-        if ($targetshields    < 0)
-        {
-            $targetshields = 0;
-        }
-
-        if ($targetbeams      < 0)
-        {
-            $targetbeams = 0;
         }
 
         if (!$attackerarmor > 0) // Check if attackers ship destroyed
@@ -537,7 +519,6 @@ class Xenobe
         {
             $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
             $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
-            $target_fighters_lost = $planetinfo['ship_fighters'] - $targetfighters;
             \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_RAW, "Made it past defenses on planet $planetinfo[name]");
 
             // Update attackers
@@ -899,11 +880,6 @@ class Xenobe
             $attackertorps = 0;
         }
 
-        if ($attackershields  < 0)
-        {
-            $attackershields = 0;
-        }
-
         if ($attackerbeams    < 0)
         {
             $attackerbeams = 0;
@@ -922,16 +898,6 @@ class Xenobe
         if ($targettorpnum    < 0)
         {
             $targettorpnum = 0;
-        }
-
-        if ($targetshields    < 0)
-        {
-            $targetshields = 0;
-        }
-
-        if ($targetbeams      < 0)
-        {
-            $targetbeams = 0;
         }
 
         if ($targetarmor      < 0)
@@ -985,12 +951,10 @@ class Xenobe
                 if ($free_holds > $free_ore)
                 {
                     $salv_ore = $free_ore;
-                    $free_holds = $free_holds - $free_ore;
                 }
                 elseif ($free_holds > 0)
                 {
                     $salv_ore = $free_holds;
-                    $free_holds = 0;
                 }
                 else
                 {
@@ -1000,12 +964,10 @@ class Xenobe
                 if ($free_holds > $free_organics)
                 {
                     $salv_organics = $free_organics;
-                    $free_holds = $free_holds - $free_organics;
                 }
                 elseif ($free_holds > 0)
                 {
                     $salv_organics = $free_holds;
-                    $free_holds = 0;
                 }
                 else
                 {
@@ -1092,12 +1054,10 @@ class Xenobe
                 if ($free_holds > $free_organics)
                 {
                     $salv_organics = $free_organics;
-                    $free_holds = $free_holds - $free_organics;
                 }
                 elseif ($free_holds > 0)
                 {
                     $salv_organics = $free_holds;
-                    $free_holds = 0;
                 }
                 else
                 {
@@ -1209,7 +1169,6 @@ class Xenobe
                     else
                     {
                         $targetfighters = $targetfighters - $playerbeams;
-                        $playerbeams = 0;
                     }
                 }
 
@@ -1220,7 +1179,6 @@ class Xenobe
                     {
                         $temp = round($targetfighters / 2);
                         $targetfighters = $temp;
-                        $playertorpdmg = $playertorpdmg - $temp;
                     }
                     else
                     {
@@ -1293,8 +1251,6 @@ class Xenobe
                     \Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
                     \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
-                    $xenobeisdead = 1;
-
                     return;
                 }
 
@@ -1335,7 +1291,7 @@ class Xenobe
                             // Actually kill the Xenobe now
                             \Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
                             \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
-                            $xenobeisdead = 1;
+
                             // Lets get rid of the mines now and return out of this function
                             \Tki\Mines::explode($pdo_db, $db, $targetlink, $roll);
 
@@ -1478,7 +1434,6 @@ class Xenobe
         else
         {
             \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_RAW, "Move failed due to lack of target link."); // We have no target link for some reason
-            $targetlink = $playerinfo['sector'];         // Reset target link so it is not zero
         }
     }
 
