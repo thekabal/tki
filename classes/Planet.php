@@ -59,7 +59,6 @@ class Planet
         $planetfighterslost = 0;
         $attackerfightercapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor);
         $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $tkireg->level_factor);
-        $beamsused = 0;
 
         $res = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE");
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
@@ -161,7 +160,7 @@ class Planet
         // Beams
         if ($attackerbeams > $playerinfo['ship_energy'])
         {
-            $attackerbeams   = $playerinfo['ship_energy'];
+            $attackerbeams = $playerinfo['ship_energy'];
         }
         $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $attackerbeams;
 
@@ -520,7 +519,7 @@ class Planet
             }
             else
             {
-                $rating_change=-100;
+                $rating_change = -100;
             }
             echo "<center><br><strong><font size='+2'>" . $langvars['l_cmb_finalcombatstats'] . "</font></strong><br><br>";
             $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
@@ -728,7 +727,6 @@ class Planet
             if ($attackerbeams > $targetshields)
             {
                 $attackerbeams = $attackerbeams - $targetshields;
-                $targetshields = 0;
                 $langvars['l_cmb_breachedsomeshields'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_breachedsomeshields']);
                 echo "<-- " . $langvars['l_cmb_breachedsomeshields'] . "<br>";
             }
@@ -1045,7 +1043,6 @@ class Planet
                 elseif ($free_holds > 0)
                 {
                     $salv_organics = $free_holds;
-                    $free_holds = 0;
                 }
                 else
                 {
