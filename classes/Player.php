@@ -77,7 +77,6 @@ class Player
 
         if ($flag)
         {
-            $title = $langvars['l_error'];
             $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_needlogin']);
             $title = $langvars['l_error'];
             Header::display($pdo_db, $lang, $template, $title);
