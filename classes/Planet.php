@@ -125,7 +125,7 @@ class Planet
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
     }
 
-    public static function planetCombat($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg)
+    public static function planetCombat($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $template)
     {
         global $playerinfo, $ownerinfo, $planetinfo;
         global $planetbeams, $planetfighters, $planetshields, $planettorps, $attackerbeams, $attackerfighters, $attackershields;
@@ -621,7 +621,7 @@ class Planet
 
     public static function shipToShip($pdo_db, $db, $langvars, $ship_id, \Tki\Reg $tkireg, $playerinfo)
     {
-        global $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage, $armor_lost, $fighters_lost;
+        global $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage;
 
         $resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}sector_defence WRITE, {$db->prefix}universe WRITE, {$db->prefix}adodb_logsql WRITE, {$db->prefix}logs WRITE, {$db->prefix}bounty WRITE, {$db->prefix}news WRITE, {$db->prefix}zones READ");
         \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
