@@ -319,7 +319,6 @@ class Xenobe
         {
             if ($attackerbeams > $targetfighters)                   // Attacker beams beat target fighters
             {
-                $lost = $targetfighters;
                 $targetfighters = 0;                                // Target loses all fighters
             }
             else                                                    // Attacker beams less than or equal to target fighters
@@ -665,7 +664,6 @@ class Xenobe
             {
                 $lost = $targetfighters-(round($targetfighters/2));
                 $targetfighters = $targetfighters - $lost;              // T loses half all fighters
-                $attackerbeams = $attackerbeams - $lost;                // A loded beams EQ to half T fighters
             }
             else                                                        // Attacker beams LE half target fighters
             {
