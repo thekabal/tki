@@ -44,7 +44,7 @@ class Planet
         return false;
     }
 
-    public static function planetBombing($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $attackerfighters, $planettorps)
+    public static function planetBombing($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo)
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -55,7 +55,6 @@ class Planet
         }
 
         echo $langvars['l_bombsaway'] . "<br><br>\n";
-        $attackerfighterslost = 0;
         $planetfighterslost = 0;
         $attackerfightercapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor);
         $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $tkireg->level_factor);
@@ -735,7 +734,6 @@ class Planet
                 $langvars['l_cmb_shieldsarehitbybeams'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_shieldsarehitbybeams']);
                 $langvars['l_cmb_shieldsarehitbybeams'] = str_replace("[cmb_attackerbeams]", $attackerbeams, $langvars['l_cmb_shieldsarehitbybeams']);
                 echo $langvars['l_cmb_shieldsarehitbybeams'] . "<br>";
-                $targetshields = $targetshields - $attackerbeams;
                 $attackerbeams = 0;
             }
         }
@@ -859,7 +857,7 @@ class Planet
                 $langvars['l_cmb_someonedestroyedfighters'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_someonedestroyedfighters']);
                 $langvars['l_cmb_someonedestroyedfighters'] = str_replace("[cmb_targettorpdmg]", $targettorpdmg, $langvars['l_cmb_someonedestroyedfighters']);
                 echo "<-- " . $langvars['l_cmb_someonedestroyedfighters'] . "<br>";
-                $targettorpdmg=0;
+                $targettorpdmg = 0;
             }
         }
         elseif ($attackerfighters > 0 && $targettorpdmg < 1)
@@ -1038,7 +1036,6 @@ class Planet
                 if ($free_holds > $free_organics)
                 {
                     $salv_organics = $free_organics;
-                    $free_holds = $free_holds - $free_organics;
                 }
                 elseif ($free_holds > 0)
                 {
