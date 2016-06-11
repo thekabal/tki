@@ -119,7 +119,7 @@ if ($command == 'new')
 elseif ($command == 'create')
 {
     // Enters new route in db
-    Bad\Traderoute::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template);
+    Bad\Traderoute::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing);
 }
 elseif ($command == 'edit')
 {

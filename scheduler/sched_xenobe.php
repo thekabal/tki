@@ -30,9 +30,6 @@ echo "<br><strong>Xenobe TURNS</strong><br><br>";
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('sched_xenobe', 'common', 'global_includes', 'combat', 'footer', 'news'));
 
-global $targetlink;
-global $xenobeisdead;
-
 // Make Xenobe selection
 $furcount = $furcount0 = $furcount0a = $furcount1 = $furcount1a = $furcount2 = $furcount2a = $furcount3 = $furcount3a = $furcount3h = 0;
 

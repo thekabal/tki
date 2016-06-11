@@ -125,12 +125,8 @@ class Planet
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
     }
 
-    public static function planetCombat($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $template)
+    public static function planetCombat($pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $planetshields, $planettorps, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
     {
-        global $playerinfo, $ownerinfo, $planetinfo;
-        global $planetbeams, $planetfighters, $planetshields, $planettorps, $attackerbeams, $attackerfighters, $attackershields;
-        global $attackertorps, $attackerarmor, $attackertorpdamage;
-
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";

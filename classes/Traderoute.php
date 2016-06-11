@@ -1982,21 +1982,8 @@ class Traderoute
         return $retvalue;
     }
 
-    public static function traderouteCreate($db, $pdo_db, $lang, \Tki\Reg $tkireg, $template)
+    public static function traderouteCreate($db, $pdo_db, $lang, \Tki\Reg $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
     {
-        global $playerinfo;
-        global $num_traderoutes;
-        global $ptype1;
-        global $ptype2;
-        global $port_id1;
-        global $port_id2;
-        global $planet_id1;
-        global $planet_id2;
-        global $team_planet_id1;
-        global $team_planet_id2;
-        global $move_type;
-        global $circuit_type;
-        global $editing;
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
         if ($num_traderoutes >= $tkireg->max_traderoutes_player && empty ($editing))
