@@ -100,7 +100,7 @@ if ($num_defences > 0 && $total_sector_fighters > 0 && !$owner)
                 Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
                 echo "<h1>" . $title . "</h1>\n";
                 echo $langvars['l_chf_youretreatback'] . "<br>";
-                Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+                Tki\Text::gotomain($pdo_db, $lang);
                 die();
 
             case "pay":

@@ -123,7 +123,7 @@ if ($playerfound)
                 $_SESSION['logged_in'] = true;
                 $_SESSION['password'] = $filtered_post_password;
                 $_SESSION['username'] = $playerinfo['email'];
-                Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+                Tki\Text::gotomain($pdo_db, $lang);
 
                 // They have logged in successfully, so update their session ID as well
                 $tki_session->regen();
