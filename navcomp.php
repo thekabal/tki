@@ -125,7 +125,7 @@ elseif ($state == 1)
 
             for ($j=2; $j<$i; $j++)
             {
-                $search_query = $search_query . ",a".$j.".link_dest ";
+                $search_query = $search_query . ",a" . $j . ".link_dest ";
             }
             $search_query = $search_query . ")";
         }

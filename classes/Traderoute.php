@@ -343,22 +343,22 @@ class Traderoute
         // Determine if Source is Planet or Port
         if ($traderoute['source_type'] == 'P')
         {
-            echo $langvars['l_tdr_portin']." ".$source['sector_id'];
+            echo $langvars['l_tdr_portin'] . " " . $source['sector_id'];
         }
         elseif (($traderoute['source_type'] == 'L') || ($traderoute['source_type'] == 'C'))
         {
-            echo $langvars['l_tdr_planet']." ".$source['name']." in ".$sourceport['sector_id'];
+            echo $langvars['l_tdr_planet'] . " " . $source['name'] . " in " . $sourceport['sector_id'];
         }
         self::traderouteResultsSource();
 
         // Determine if Destination is Planet or Port
         if ($traderoute['dest_type'] == 'P')
         {
-            echo $langvars['l_tdr_portin']." ".$dest['sector_id'];
+            echo $langvars['l_tdr_portin'] . " " . $dest['sector_id'];
         }
         elseif (($traderoute['dest_type'] == 'L') || ($traderoute['dest_type'] == 'C'))
         {
-            echo $langvars['l_tdr_planet']." ".$dest['name']." in ".$destport['sector_id'];
+            echo $langvars['l_tdr_planet'] . " " . $dest['name'] . " in " . $destport['sector_id'];
         }
         self::traderouteResultsDestination($tkireg);
 
@@ -384,7 +384,7 @@ class Traderoute
 
                     if ($colonists_buy != 0)
                     {
-                        echo $langvars['l_tdr_bought']." ".number_format($colonists_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_colonists']."<br>";
+                        echo $langvars['l_tdr_bought'] . " " . number_format($colonists_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_colonists'] . "<br>";
                     }
 
                     $sourcecost -= $colonists_buy * $tkireg->colonist_price;
@@ -407,7 +407,7 @@ class Traderoute
 
                     if ($fighters_buy != 0)
                     {
-                        echo $langvars['l_tdr_bought']." ".number_format($fighters_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_fighters']."<br>";
+                        echo $langvars['l_tdr_bought'] . " " . number_format($fighters_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_fighters'] . "<br>";
                     }
 
                     $sourcecost -= $fighters_buy * $tkireg->fighter_price;
@@ -430,7 +430,7 @@ class Traderoute
 
                     if ($torps_buy != 0)
                     {
-                        echo $langvars['l_tdr_bought']." ".number_format($torps_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_torps']."<br>";
+                        echo $langvars['l_tdr_bought'] . " " . number_format($torps_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_torps'] . "<br>";
                     }
 
                     $sourcecost -= $torps_buy * $tkireg->torpedo_price;
@@ -442,7 +442,7 @@ class Traderoute
 
                 if ($torps_buy == 0 && $colonists_buy == 0 && $fighters_buy == 0)
                 {
-                    echo $langvars['l_tdr_nothingtotrade']."<br>";
+                    echo $langvars['l_tdr_nothingtotrade'] . "<br>";
                 }
 
                 if ($traderoute['circuit'] == '1')
@@ -479,11 +479,11 @@ class Traderoute
                     {
                         if ($portfull == 1)
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']." (".$langvars['l_tdr_portisfull'].")<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . " (" . $langvars['l_tdr_portisfull'] . ")<br>";
                         }
                         else
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']."<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "<br>";
                         }
                     }
                     $playerinfo['ship_ore'] -= $ore_buy;
@@ -508,11 +508,11 @@ class Traderoute
                     {
                         if ($portfull == 1)
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']." (".$langvars['l_tdr_portisfull'].")<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . " (" . $langvars['l_tdr_portisfull'] . ")<br>";
                         }
                         else
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']."<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . "<br>";
                         }
                     }
                     $playerinfo['ship_goods'] -= $goods_buy;
@@ -537,11 +537,11 @@ class Traderoute
                     {
                         if ($portfull == 1)
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']." (".$langvars['l_tdr_portisfull'].")<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . " (" . $langvars['l_tdr_portisfull'] . ")<br>";
                         }
                         else
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']."<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . "<br>";
                         }
                     }
                     $playerinfo['ship_organics'] -= $organics_buy;
@@ -565,11 +565,11 @@ class Traderoute
                     {
                         if ($portfull == 1)
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']." (".$langvars['l_tdr_portisfull'].")<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . " (" . $langvars['l_tdr_portisfull'] . ")<br>";
                         }
                         else
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']."<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
                         }
                     }
                     $playerinfo['ship_energy'] -= $energy_buy;
@@ -592,13 +592,13 @@ class Traderoute
                         $ore_buy = $source['port_ore'];
                         if ($source['port_ore'] == 0)
                         {
-                            echo $langvars['l_tdr_bought']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']."(".$langvars['l_tdr_portisempty'].")<br>";
+                            echo $langvars['l_tdr_bought'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "(" . $langvars['l_tdr_portisempty'] . ")<br>";
                         }
                     }
 
                     if ($ore_buy != 0)
                     {
-                        echo $langvars['l_tdr_bought']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']."<br>";
+                        echo $langvars['l_tdr_bought'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "<br>";
                     }
                     $playerinfo['ship_ore'] += $ore_buy;
                     $sourcecost -= $ore_buy * $tkireg->ore_price1;
@@ -620,13 +620,13 @@ class Traderoute
                         $goods_buy = $source['port_goods'];
                         if ($source['port_goods'] == 0)
                         {
-                            echo $langvars['l_tdr_bought']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']." (".$langvars['l_tdr_portisempty'].")<br>";
+                            echo $langvars['l_tdr_bought'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
                         }
                     }
 
                     if ($goods_buy != 0)
                     {
-                        echo $langvars['l_tdr_bought']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']."<br>";
+                        echo $langvars['l_tdr_bought'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . "<br>";
                     }
 
                     $playerinfo['ship_goods'] += $goods_buy;
@@ -651,13 +651,13 @@ class Traderoute
                         $organics_buy = $source['port_organics'];
                         if ($source['port_organics'] == 0)
                         {
-                            echo $langvars['l_tdr_bought']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']." (".$langvars['l_tdr_portisempty'].")<br>";
+                            echo $langvars['l_tdr_bought'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
                         }
                     }
 
                     if ($organics_buy != 0)
                     {
-                        echo $langvars['l_tdr_bought']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']."<br>";
+                        echo $langvars['l_tdr_bought'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . "<br>";
                     }
 
                     $playerinfo['ship_organics'] += $organics_buy;
@@ -681,13 +681,13 @@ class Traderoute
                         $energy_buy = $source['port_energy'];
                         if ($source['port_energy'] == 0)
                         {
-                            echo $langvars['l_tdr_bought']." ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']." (".$langvars['l_tdr_portisempty'].")<br>";
+                            echo $langvars['l_tdr_bought'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
                         }
                     }
 
                     if ($energy_buy != 0)
                     {
-                        echo $langvars['l_tdr_bought']." ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']."<br>";
+                        echo $langvars['l_tdr_bought'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
                     }
                     $playerinfo['ship_energy'] += $energy_buy;
                     $sourcecost -= $energy_buy * $tkireg->energy_price1;
@@ -706,7 +706,7 @@ class Traderoute
 
                 if ($ore_buy == 0 && $goods_buy == 0 && $energy_buy == 0 && $organics_buy == 0)
                 {
-                    echo $langvars['l_tdr_nothingtotrade']."<br>";
+                    echo $langvars['l_tdr_nothingtotrade'] . "<br>";
                 }
 
                 if ($traderoute['circuit'] == '1')
@@ -738,7 +738,7 @@ class Traderoute
 
                         $free_holds -= $goods_buy;
                         $playerinfo['ship_goods'] += $goods_buy;
-                        echo $langvars['l_tdr_loaded']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']."<br>";
+                        echo $langvars['l_tdr_loaded'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . "<br>";
                     }
                     else
                     {
@@ -758,7 +758,7 @@ class Traderoute
 
                         $free_holds -= $ore_buy;
                         $playerinfo['ship_ore'] += $ore_buy;
-                        echo $langvars['l_tdr_loaded']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']."<br>";
+                        echo $langvars['l_tdr_loaded'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "<br>";
                     }
                     else
                     {
@@ -778,7 +778,7 @@ class Traderoute
 
                         $free_holds -= $organics_buy;
                         $playerinfo['ship_organics'] += $organics_buy;
-                        echo $langvars['l_tdr_loaded']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']."<br>";
+                        echo $langvars['l_tdr_loaded'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . "<br>";
                     }
                     else
                     {
@@ -787,7 +787,7 @@ class Traderoute
 
                     if ($ore_buy == 0 && $goods_buy == 0 && $organics_buy == 0)
                     {
-                        echo $langvars['l_tdr_nothingtoload']."<br>";
+                        echo $langvars['l_tdr_nothingtoload'] . "<br>";
                     }
 
                     if ($traderoute['circuit'] == '1')
@@ -816,7 +816,7 @@ class Traderoute
 
                     $free_holds -= $colonists_buy;
                     $playerinfo['ship_colonists'] += $colonists_buy;
-                    echo $langvars['l_tdr_loaded']." ".number_format($colonists_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_colonists']."<br>";
+                    echo $langvars['l_tdr_loaded'] . " " . number_format($colonists_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_colonists'] . "<br>";
                 }
                 else
                 {
@@ -837,7 +837,7 @@ class Traderoute
 
                     $free_torps -= $torps_buy;
                     $playerinfo['torps'] += $torps_buy;
-                    echo $langvars['l_tdr_loaded']." ".number_format($torps_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_torps']."<br>";
+                    echo $langvars['l_tdr_loaded'] . " " . number_format($torps_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_torps'] . "<br>";
                 }
                 else
                 {
@@ -858,7 +858,7 @@ class Traderoute
 
                     $free_fighters -= $fighters_buy;
                     $playerinfo['ship_fighters'] += $fighters_buy;
-                    echo $langvars['l_tdr_loaded']." ".number_format($fighters_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_fighters']."<br>";
+                    echo $langvars['l_tdr_loaded'] . " " . number_format($fighters_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_fighters'] . "<br>";
                 }
                 else
                 {
@@ -867,7 +867,7 @@ class Traderoute
 
                 if ($fighters_buy == 0 && $torps_buy == 0 && $colonists_buy == 0)
                 {
-                    echo $langvars['l_tdr_nothingtoload']."<br>";
+                    echo $langvars['l_tdr_nothingtoload'] . "<br>";
                 }
 
                 if ($traderoute['circuit'] == '1')
@@ -883,7 +883,7 @@ class Traderoute
 
         if ($dist['scooped1'] != 0)
         {
-            echo $langvars['l_tdr_scooped']." ".number_format($dist['scooped1'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']."<br>";
+            echo $langvars['l_tdr_scooped'] . " " . number_format($dist['scooped1'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
         }
 
         self::traderouteResultsCloseCell();
@@ -921,11 +921,11 @@ class Traderoute
                     {
                         if ($portfull == 1)
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']." (".$langvars['l_tdr_portisfull'].")<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . " (" . $langvars['l_tdr_portisfull'] . ")<br>";
                         }
                         else
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']."<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "<br>";
                         }
                     }
                     $playerinfo['ship_ore'] -= $ore_buy;
@@ -950,11 +950,11 @@ class Traderoute
                     {
                         if ($portfull == 1)
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']." (".$langvars['l_tdr_portisfull'].")<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . " (" . $langvars['l_tdr_portisfull'] . ")<br>";
                         }
                         else
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']."<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . "<br>";
                         }
                     }
                     $playerinfo['ship_goods'] -= $goods_buy;
@@ -979,11 +979,11 @@ class Traderoute
                     {
                         if ($portfull == 1)
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']." (".$langvars['l_tdr_portisfull'].")<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . " (" . $langvars['l_tdr_portisfull'] . ")<br>";
                         }
                         else
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']."<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . "<br>";
                         }
                     }
                     $playerinfo['ship_organics'] -= $organics_buy;
@@ -1008,11 +1008,11 @@ class Traderoute
                     {
                         if ($portfull == 1)
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']." (".$langvars['l_tdr_portisfull'].")<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . " (" . $langvars['l_tdr_portisfull'] . ")<br>";
                         }
                         else
                         {
-                            echo $langvars['l_tdr_sold']." ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']."<br>";
+                            echo $langvars['l_tdr_sold'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
                         }
                     }
                     $playerinfo['ship_energy'] -= $energy_buy;
@@ -1045,13 +1045,13 @@ class Traderoute
                             $ore_buy = $dest['port_ore'];
                             if ($dest['port_ore'] == 0)
                             {
-                                echo $langvars['l_tdr_bought']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']." (".$langvars['l_tdr_portisempty'].")<br>";
+                                echo $langvars['l_tdr_bought'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
                             }
                         }
 
                         if ($ore_buy != 0)
                         {
-                            echo $langvars['l_tdr_bought']." ".number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_ore']."<br>";
+                            echo $langvars['l_tdr_bought'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "<br>";
                         }
 
                         $playerinfo['ship_ore'] += $ore_buy;
@@ -1081,13 +1081,13 @@ class Traderoute
                             $goods_buy = $dest['port_goods'];
                             if ($dest['port_goods'] == 0)
                             {
-                                echo $langvars['l_tdr_bought']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']." (".$langvars['l_tdr_portisempty'].")<br>";
+                                echo $langvars['l_tdr_bought'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
                             }
                         }
 
                         if ($goods_buy != 0)
                         {
-                            echo $langvars['l_tdr_bought']." ".number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_goods']."<br>";
+                            echo $langvars['l_tdr_bought'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . "<br>";
                         }
 
                         $playerinfo['ship_goods'] += $goods_buy;
@@ -1117,13 +1117,13 @@ class Traderoute
 
                             if ($dest['port_organics'] == 0)
                             {
-                                echo $langvars['l_tdr_bought']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']." (".$langvars['l_tdr_portisempty'].")<br>";
+                                echo $langvars['l_tdr_bought'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
                             }
                         }
 
                         if ($organics_buy != 0)
                         {
-                            echo $langvars['l_tdr_bought']." ".number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_organics']."<br>";
+                            echo $langvars['l_tdr_bought'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . "<br>";
                         }
 
                         $playerinfo['ship_organics'] += $organics_buy;
@@ -1153,13 +1153,13 @@ class Traderoute
                             $energy_buy = $dest['port_energy'];
                             if ($dest['port_energy'] == 0)
                             {
-                                echo $langvars['l_tdr_bought']." ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']." (".$langvars['l_tdr_portisempty'].")<br>";
+                                echo $langvars['l_tdr_bought'] . " ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " ".$langvars['l_tdr_energy'] . " (".$langvars['l_tdr_portisempty'] . ")<br>";
                             }
                         }
 
                         if ($energy_buy != 0)
                         {
-                            echo $langvars['l_tdr_bought']." ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']."<br>";
+                            echo $langvars['l_tdr_bought'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
                         }
 
                         $playerinfo['ship_energy'] += $energy_buy;
@@ -1168,7 +1168,7 @@ class Traderoute
 
                     if ($ore_buy == 0 && $goods_buy == 0 && $energy_buy == 0 && $organics_buy == 0)
                     {
-                        echo $langvars['l_tdr_nothingtotrade']."<br>";
+                        echo $langvars['l_tdr_nothingtotrade'] . "<br>";
                     }
 
                     $resn = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore-?, port_energy=port_energy-?, port_goods=port_goods-?, port_organics=port_organics-? WHERE sector_id=?", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
@@ -1223,11 +1223,11 @@ class Traderoute
                 {
                     if ($setcol == 1)
                     {
-                        echo $langvars['l_tdr_dumped']." ".number_format($colonists_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_colonists']." (".$langvars['l_tdr_planetisovercrowded'].")<br>";
+                        echo $langvars['l_tdr_dumped'] . " " . number_format($colonists_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_colonists'] . " (" . $langvars['l_tdr_planetisovercrowded'] . ")<br>";
                     }
                     else
                     {
-                        echo $langvars['l_tdr_dumped']." ".number_format($colonists_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_colonists']."<br>";
+                        echo $langvars['l_tdr_dumped'] . " " . number_format($colonists_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_colonists'] . "<br>";
                     }
                 }
 
@@ -1243,7 +1243,7 @@ class Traderoute
 
                 if ($fighters_buy != 0)
                 {
-                    echo $langvars['l_tdr_dumped']." ".number_format($fighters_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_fighters']."<br>";
+                    echo $langvars['l_tdr_dumped'] . " " . number_format($fighters_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_fighters'] . "<br>";
                 }
 
                 if ($playerinfo['trade_torps'] == 'Y')
@@ -1258,12 +1258,12 @@ class Traderoute
 
                 if ($torps_buy != 0)
                 {
-                    echo $langvars['l_tdr_dumped']." ".number_format($torps_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_torps']."<br>";
+                    echo $langvars['l_tdr_dumped'] . " " . number_format($torps_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_torps'] . "<br>";
                 }
 
                 if ($torps_buy == 0 && $fighters_buy == 0 && $colonists_buy == 0)
                 {
-                    echo $langvars['l_tdr_nothingtodump']."<br>";
+                    echo $langvars['l_tdr_nothingtodump'] . "<br>";
                 }
 
                 if ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')
@@ -1323,7 +1323,7 @@ class Traderoute
             }
             if ($dist['scooped2'] != 0)
             {
-                echo $langvars['l_tdr_scooped']." ".number_format($dist['scooped1'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." ".$langvars['l_tdr_energy']."<br>";
+                echo $langvars['l_tdr_scooped'] . " " . number_format($dist['scooped1'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
             }
         }
         else
@@ -1335,21 +1335,21 @@ class Traderoute
 
         if ($sourcecost > 0)
         {
-            echo $langvars['l_tdr_profit']." : ".number_format(abs($sourcecost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+            echo $langvars['l_tdr_profit'] . " : " . number_format(abs($sourcecost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
         else
         {
-            echo $langvars['l_tdr_cost']." : ".number_format(abs($sourcecost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+            echo $langvars['l_tdr_cost'] . " : " . number_format(abs($sourcecost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
         self::traderouteResultsCloseCost();
 
         if ($destcost > 0)
         {
-            echo $langvars['l_tdr_profit']." : ".number_format(abs($destcost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+            echo $langvars['l_tdr_profit'] . " : " . number_format(abs($destcost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
         else
         {
-            echo $langvars['l_tdr_cost']." : ".number_format(abs($destcost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+            echo $langvars['l_tdr_cost'] . " : " . number_format(abs($destcost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
 
         self::traderouteResultsCloseTable();
@@ -1372,17 +1372,17 @@ class Traderoute
 
         $tdr_display_creds = number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         self::traderouteResultsDisplaySummary($pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo);
-        // echo $j." -- ";
+        // echo $j . " -- ";
         if ($traderoute['circuit'] == 2)
         {
-            $langvars['l_tdr_engageagain'] = str_replace("[here]", "<a href=\"traderoute.php?engage=[tdr_engage]\">".$langvars['l_here']."</a>", $langvars['l_tdr_engageagain']);
-            $langvars['l_tdr_engageagain'] = str_replace("[five]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=5\">".$langvars['l_tdr_five']."</a>", $langvars['l_tdr_engageagain']);
-            $langvars['l_tdr_engageagain'] = str_replace("[ten]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=10\">".$langvars['l_tdr_ten']."</a>", $langvars['l_tdr_engageagain']);
-            $langvars['l_tdr_engageagain'] = str_replace("[fifty]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=50\">".$langvars['l_tdr_fifty']."</a>", $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[here]", "<a href=\"traderoute.php?engage=[tdr_engage]\">".$langvars['l_here'] . "</a>", $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[five]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=5\">".$langvars['l_tdr_five'] . "</a>", $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[ten]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=10\">".$langvars['l_tdr_ten'] . "</a>", $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[fifty]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=50\">".$langvars['l_tdr_fifty'] . "</a>", $langvars['l_tdr_engageagain']);
             $langvars['l_tdr_engageagain'] = str_replace("[tdr_engage]", $engage, $langvars['l_tdr_engageagain']);
             if ($j == 1)
             {
-                echo $langvars['l_tdr_engageagain']."\n";
+                echo $langvars['l_tdr_engageagain'] . "\n";
                 self::traderouteResultsShowRepeat($engage);
             }
         }
@@ -1428,10 +1428,10 @@ class Traderoute
         }
         else
         {
-            echo $langvars['l_tdr_editinga']." ";
+            echo $langvars['l_tdr_editinga'] . " ";
         }
 
-        echo $langvars['l_tdr_traderoute']."</strong></font><p>";
+        echo $langvars['l_tdr_traderoute'] . "</strong></font><p>";
 
         // Get Planet info Team and Personal
 
@@ -1474,15 +1474,15 @@ class Traderoute
         }
 
         // Display Current Sector
-        echo $langvars['l_tdr_cursector']." ".$playerinfo['sector']."<br>";
+        echo $langvars['l_tdr_cursector'] . " " . $playerinfo['sector'] . "<br>";
 
         // Start of form for starting location
         echo "
             <form accept-charset='utf-8' action=traderoute.php?command=create method=post>
             <table border=0><tr>
-            <td align=right><font size=2><strong>" . $langvars['l_tdr_selspoint']." <br>&nbsp;</strong></font></td>
+            <td align=right><font size=2><strong>" . $langvars['l_tdr_selspoint'] . " <br>&nbsp;</strong></font></td>
             <tr>
-            <td align=right><font size=2>" . $langvars['l_tdr_port']." : </font></td>
+            <td align=right><font size=2>" . $langvars['l_tdr_port'] . " : </font></td>
             <td><input type=radio name=\"ptype1\" value=\"port\"
             ";
 
@@ -1508,7 +1508,7 @@ class Traderoute
 
         // Personal Planet
         echo "
-            <td align=right><font size=2>Personal " . $langvars['l_tdr_planet']." : </font></td>
+            <td align=right><font size=2>Personal " . $langvars['l_tdr_planet'] . " : </font></td>
             <td><input type=radio name=\"ptype1\" value=\"planet\"
             ";
 
@@ -1524,7 +1524,7 @@ class Traderoute
 
         if ($num_planets == 0)
         {
-            echo "<option value=none>".$langvars['l_tdr_none']."</option>";
+            echo "<option value=none>".$langvars['l_tdr_none'] . "</option>";
         }
         else
         {
@@ -1538,7 +1538,7 @@ class Traderoute
                     echo "selected ";
                 }
 
-                echo "value=".$planets[$i]['planet_id'].">".$planets[$i]['name']." ".$langvars['l_tdr_insector']." ".$planets[$i]['sector_id']."</option>";
+                echo "value=".$planets[$i]['planet_id'] . ">" . $planets[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1546,7 +1546,7 @@ class Traderoute
         // Team Planet
         echo "
             </tr><tr>
-            <td align=right><font size=2>Team " . $langvars['l_tdr_planet']." : </font></td>
+            <td align=right><font size=2>Team " . $langvars['l_tdr_planet'] . " : </font></td>
             <td><input type=radio name=\"ptype1\" value=\"team_planet\"
             ";
 
@@ -1562,7 +1562,7 @@ class Traderoute
 
         if ($num_team_planets == 0)
         {
-            echo "<option value=none>".$langvars['l_tdr_none']."</option>";
+            echo "<option value=none>".$langvars['l_tdr_none'] . "</option>";
         }
         else
         {
@@ -1576,7 +1576,7 @@ class Traderoute
                     echo "selected ";
                 }
 
-                echo "value=".$planets_team[$i]['planet_id'].">".$planets_team[$i]['name']." ".$langvars['l_tdr_insector']." ".$planets_team[$i]['sector_id']."</option>";
+                echo "value=".$planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1589,9 +1589,9 @@ class Traderoute
         echo "
             <tr><td>&nbsp;
             </tr><tr>
-            <td align=right><font size=2><strong>" . $langvars['l_tdr_selendpoint']." : <br>&nbsp;</strong></font></td>
+            <td align=right><font size=2><strong>" . $langvars['l_tdr_selendpoint'] . " : <br>&nbsp;</strong></font></td>
             <tr>
-            <td align=right><font size=2>" . $langvars['l_tdr_port']." : </font></td>
+            <td align=right><font size=2>" . $langvars['l_tdr_port'] . " : </font></td>
             <td><input type=radio name=\"ptype2\" value=\"port\"
             ";
 
@@ -1617,7 +1617,7 @@ class Traderoute
         // Personal Planet
         echo "
             <tr>
-            <td align=right><font size=2>Personal " . $langvars['l_tdr_planet']." : </font></td>
+            <td align=right><font size=2>Personal " . $langvars['l_tdr_planet'] . " : </font></td>
             <td><input type=radio name=\"ptype2\" value=\"planet\"
             ";
 
@@ -1633,7 +1633,7 @@ class Traderoute
 
         if ($num_planets == 0)
         {
-            echo "<option value=none>".$langvars['l_tdr_none']."</option>";
+            echo "<option value=none>".$langvars['l_tdr_none'] . "</option>";
         }
         else
         {
@@ -1647,7 +1647,7 @@ class Traderoute
                     echo "selected ";
                 }
 
-                echo "value=".$planets[$i]['planet_id'].">".$planets[$i]['name']." ".$langvars['l_tdr_insector']." ".$planets[$i]['sector_id']."</option>";
+                echo "value=".$planets[$i]['planet_id'] . ">" . $planets[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1655,7 +1655,7 @@ class Traderoute
         // Team Planet
         echo "
             </tr><tr>
-            <td align=right><font size=2>Team " . $langvars['l_tdr_planet']." : </font></td>
+            <td align=right><font size=2>Team " . $langvars['l_tdr_planet'] . " : </font></td>
             <td><input type=radio name=\"ptype2\" value=\"team_planet\"
             ";
 
@@ -1671,7 +1671,7 @@ class Traderoute
 
         if ($num_team_planets == 0)
         {
-            echo "<option value=none>".$langvars['l_tdr_none']."</option>";
+            echo "<option value=none>".$langvars['l_tdr_none'] . "</option>";
         }
         else
         {
@@ -1685,7 +1685,7 @@ class Traderoute
                     echo "selected ";
                 }
 
-                echo "value=".$planets_team[$i]['planet_id'].">".$planets_team[$i]['name']." ".$langvars['l_tdr_insector']." ".$planets_team[$i]['sector_id']."</option>";
+                echo "value=".$planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1698,7 +1698,7 @@ class Traderoute
             </tr><tr>
             <td>&nbsp;
             </tr><tr>
-            <td align=right><font size=2><strong>" . $langvars['l_tdr_selmovetype']." : </strong></font></td>
+            <td align=right><font size=2><strong>" . $langvars['l_tdr_selmovetype'] . " : </strong></font></td>
             <td colspan=2 valign=top><font size=2><input type=radio name=\"move_type\" value=\"realspace\"
             ";
 
@@ -1708,7 +1708,7 @@ class Traderoute
         }
 
         echo "
-            >&nbsp;" . $langvars['l_tdr_realspace']."&nbsp;&nbsp<font size=2><input type=radio name=\"move_type\" value=\"warp\"
+            >&nbsp;" . $langvars['l_tdr_realspace'] . "&nbsp;&nbsp<font size=2><input type=radio name=\"move_type\" value=\"warp\"
             ";
 
         if (!is_null($editroute) && $editroute['move_type'] == 'W')
@@ -1717,9 +1717,9 @@ class Traderoute
         }
 
         echo "
-            >&nbsp;" . $langvars['l_tdr_warp']."</font></td>
+            >&nbsp;" . $langvars['l_tdr_warp'] . "</font></td>
             </tr><tr>
-            <td align=right><font size=2><strong>" . $langvars['l_tdr_selcircuit']." : </strong></font></td>
+            <td align=right><font size=2><strong>" . $langvars['l_tdr_selcircuit'] . " : </strong></font></td>
             <td colspan=2 valign=top><font size=2><input type=radio name=\"circuit_type\" value=\"1\"
             ";
 
@@ -1729,7 +1729,7 @@ class Traderoute
         }
 
         echo "
-            >&nbsp;" . $langvars['l_tdr_oneway']."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=radio name=\"circuit_type\" value=\"2\"
+            >&nbsp;" . $langvars['l_tdr_oneway'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=radio name=\"circuit_type\" value=\"2\"
             ";
 
         if (!is_null($editroute) && $editroute['circuit'] == '2')
@@ -1738,7 +1738,7 @@ class Traderoute
         }
 
         echo "
-            >&nbsp;" . $langvars['l_tdr_bothways']."</font></td>
+            >&nbsp;" . $langvars['l_tdr_bothways'] . "</font></td>
             </tr><tr>
             <td>&nbsp;
             </tr><tr>
@@ -1747,19 +1747,19 @@ class Traderoute
 
         if ($editroute === null)
         {
-            echo "<input type=submit value=\"".$langvars['l_tdr_create']."\">";
+            echo "<input type=submit value=\"".$langvars['l_tdr_create'] . "\">";
         }
         else
         {
             echo "<input type=hidden name=editing value=$editroute[traderoute_id]>";
-            echo "<input type=submit value=\"".$langvars['l_tdr_modify']."\">";
+            echo "<input type=submit value=\"".$langvars['l_tdr_modify'] . "\">";
         }
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here']."</a>", $langvars['l_tdr_returnmenu']);
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
 
         echo "
             </table>
-            " . $langvars['l_tdr_returnmenu']."<br>
+            " . $langvars['l_tdr_returnmenu'] . "<br>
             </form>
             ";
 
@@ -1775,7 +1775,7 @@ class Traderoute
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
-        echo "<p>".$error_msg."<p>";
+        echo "<p>".$error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
         \Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         echo "</div>\n";
@@ -2215,7 +2215,7 @@ class Traderoute
             echo "<p>".$langvars['l_tdr_modified'];
         }
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here']."</a>", $langvars['l_tdr_returnmenu']);
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo " ".$langvars['l_tdr_returnmenu'];
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
@@ -2246,8 +2246,8 @@ class Traderoute
         {
             $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes WHERE traderoute_id=?;", array($traderoute_id));
             \Tki\Db::logDbErrors($pdo_db, $db, $query, __LINE__, __FILE__);
-            $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here']."</a>", $langvars['l_tdr_returnmenu']);
-            echo $langvars['l_tdr_deleted']." ".$langvars['l_tdr_returnmenu'];
+            $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
+            echo $langvars['l_tdr_deleted'] . " " . $langvars['l_tdr_returnmenu'];
             self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
         }
     }
@@ -2256,11 +2256,11 @@ class Traderoute
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
-        echo "<p><font size=3 color=blue><strong>".$langvars['l_tdr_globalset']."</strong></font><p>";
-        echo "<font color=white size=2><strong>".$langvars['l_tdr_sportsrc']." :</strong></font><p>".
+        echo "<p><font size=3 color=blue><strong>".$langvars['l_tdr_globalset'] . "</strong></font><p>";
+        echo "<font color=white size=2><strong>".$langvars['l_tdr_sportsrc'] . " :</strong></font><p>".
              "<form accept-charset='utf-8' action=traderoute.php?command=setsettings method=post>".
              "<table border=0><tr>".
-             "<td><font size=2 color=white> - ".$langvars['l_tdr_colonists']." :</font></td>".
+             "<td><font size=2 color=white> - ".$langvars['l_tdr_colonists'] . " :</font></td>".
              "<td><input type=checkbox name=colonists";
 
         if ($playerinfo['trade_colonists'] == 'Y')
@@ -2269,7 +2269,7 @@ class Traderoute
         }
 
         echo "></tr><tr>".
-            "<td><font size=2 color=white> - ".$langvars['l_tdr_fighters']." :</font></td>".
+            "<td><font size=2 color=white> - ".$langvars['l_tdr_fighters'] . " :</font></td>".
             "<td><input type=checkbox name=fighters";
 
         if ($playerinfo['trade_fighters'] == 'Y')
@@ -2278,7 +2278,7 @@ class Traderoute
         }
 
         echo "></tr><tr>".
-            "<td><font size=2 color=white> - ".$langvars['l_tdr_torps']." :</font></td>".
+            "<td><font size=2 color=white> - ".$langvars['l_tdr_torps'] . " :</font></td>".
             "<td><input type=checkbox name=torps";
 
         if ($playerinfo['trade_torps'] == 'Y')
@@ -2289,9 +2289,9 @@ class Traderoute
         echo "></tr>".
             "</table>".
             "<p>".
-            "<font color=white size=2><strong>".$langvars['l_tdr_tdrescooped']." :</strong></font><p>".
+            "<font color=white size=2><strong>".$langvars['l_tdr_tdrescooped'] . " :</strong></font><p>".
             "<table border=0><tr>".
-            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;".$langvars['l_tdr_trade']."</font></td>".
+            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;".$langvars['l_tdr_trade'] . "</font></td>".
             "<td><input type=radio name=energy value=\"Y\"";
 
         if ($playerinfo['trade_energy'] == 'Y')
@@ -2300,7 +2300,7 @@ class Traderoute
         }
 
         echo "></td></tr><tr>".
-            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;".$langvars['l_tdr_keep']."</font></td>".
+            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;".$langvars['l_tdr_keep'] . "</font></td>".
             "<td><input type=radio name=energy value=\"N\"";
 
         if ($playerinfo['trade_energy'] == 'N')
@@ -2309,11 +2309,11 @@ class Traderoute
         }
 
         echo "></td></tr><tr><td>&nbsp;</td></tr><tr><td>".
-            "<td><input type=submit value=\"".$langvars['l_tdr_save']."\"></td>".
+            "<td><input type=submit value=\"" . $langvars['l_tdr_save'] . "\"></td>".
             "</tr></table>".
             "</form>";
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here']."</a>", $langvars['l_tdr_returnmenu']);
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_returnmenu'];
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
@@ -2329,8 +2329,8 @@ class Traderoute
         $resa = $db->Execute("UPDATE {$db->prefix}ships SET trade_colonists=?, trade_fighters=?, trade_torps=?, trade_energy=? WHERE ship_id=?;", array($colonists, $fighters, $torps, $energy, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $db, $resa, __LINE__, __FILE__);
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here']."</a>", $langvars['l_tdr_returnmenu']);
-        echo $langvars['l_tdr_globalsetsaved']." ".$langvars['l_tdr_returnmenu'];
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
+        echo $langvars['l_tdr_globalsetsaved'] . " " . $langvars['l_tdr_returnmenu'];
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
@@ -2339,10 +2339,10 @@ class Traderoute
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
         echo "<table border='1' cellspacing='1' cellpadding='2' width='65%' align='center'>\n";
-        echo "  <tr bgcolor='".$tkireg->color_line2."'>\n";
-        echo "    <td align='center' colspan='7'><strong><font color='white'>".$langvars['l_tdr_res']."</font></strong></td>\n";
+        echo "  <tr bgcolor='" . $tkireg->color_line2 . "'>\n";
+        echo "    <td align='center' colspan='7'><strong><font color='white'>".$langvars['l_tdr_res'] . "</font></strong></td>\n";
         echo "  </tr>\n";
-        echo "  <tr align='center' bgcolor='".$tkireg->color_line2."'>\n";
+        echo "  <tr align='center' bgcolor='".$tkireg->color_line2 . "'>\n";
         echo "    <td width='50%'><font size='2' color='white'><strong>";
     }
 
@@ -2356,7 +2356,7 @@ class Traderoute
     {
         echo "</strong></font></td>\n";
         echo "  </tr>\n";
-        echo "  <tr bgcolor='".$tkireg->color_line1."'>\n";
+        echo "  <tr bgcolor='".$tkireg->color_line1 . "'>\n";
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
@@ -2370,7 +2370,7 @@ class Traderoute
     {
         echo "</font></td>\n";
         echo "  </tr>\n";
-        echo "  <tr bgcolor='".$tkireg->color_line2."'>\n";
+        echo "  <tr bgcolor='".$tkireg->color_line2 . "'>\n";
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
@@ -2397,11 +2397,11 @@ class Traderoute
 
         if ($total_profit > 0)
         {
-            echo "<p><center><font size=3 color=white><strong>".$langvars['l_tdr_totalprofit']." : <font style='color:#0f0;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])."</strong></font><br>\n";
+            echo "<p><center><font size=3 color=white><strong>".$langvars['l_tdr_totalprofit'] . " : <font style='color:#0f0;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
         }
         else
         {
-            echo "<p><center><font size=3 color=white><strong>".$langvars['l_tdr_totalcost']." : <font style='color:#f00;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])."</strong></font><br>\n";
+            echo "<p><center><font size=3 color=white><strong>".$langvars['l_tdr_totalcost'] . " : <font style='color:#f00;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
         }
     }
 
@@ -2412,16 +2412,16 @@ class Traderoute
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
-        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_turnsused']." : <font style='color:#f00;'>$dist[triptime]</font></strong></font><br>";
-        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_turnsleft']." : <font style='color:#0f0;'>$playerinfo[turns]</font></strong></font><br>";
+        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_turnsused'] . " : <font style='color:#f00;'>$dist[triptime]</font></strong></font><br>";
+        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_turnsleft'] . " : <font style='color:#0f0;'>$playerinfo[turns]</font></strong></font><br>";
 
-        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_credits']." : <font style='color:#0f0;'> $tdr_display_creds\n</font></strong></font><br> </strong></font></center>\n";
+        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_credits'] . " : <font style='color:#0f0;'> $tdr_display_creds\n</font></strong></font><br> </strong></font></center>\n";
         //echo "<font size='2'>\n";
     }
 
     public static function traderouteResultsShowRepeat($engage)
     {
-        echo "<form accept-charset='utf-8' action='traderoute.php?engage=".$engage."' method='post'>\n";
+        echo "<form accept-charset='utf-8' action='traderoute.php?engage=".$engage . "' method='post'>\n";
         echo "<br>Enter times to repeat <input type='text' name='tr_repeat' value='1' size='5'> <input type='submit' value='submit'>\n";
         echo "</form>\n";
         // echo "<p>";

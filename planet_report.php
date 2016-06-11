@@ -40,13 +40,13 @@ $playerinfo = $res->fields;
 // Determine what type of report is displayed and display it's title
 if ($preptype == 1 || !isset($preptype)) // Display the commodities on the planets
 {
-    $title = $title .": Status";
+    $title = $title . ": Status";
     echo "<h1>" . $title . "</h1>\n";
     Bad\PlanetReport::standardReport($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
 }
 elseif ($preptype == 2)                  // Display the production values of your planets and allow changing
 {
-    $title = $title .": Production";
+    $title = $title . ": Production";
     echo "<h1>" . $title . "</h1>\n";
     Bad\PlanetReport::planetProductionChange($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
 }

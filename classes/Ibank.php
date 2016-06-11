@@ -69,7 +69,7 @@ class Ibank
              "<tr valign=top>" .
              "<td>" . $langvars['l_ibank_amountowned'] . " :</td><td nowrap align=right>" . number_format($amount3, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
              "<tr valign=top>" .
-             "<td colspan=2 align=center>---------------------------------<br><br>" . $langvars['l_ibank_loanreminder'] . "<br><br>\"" . $langvars['l_ibank_loanreminder2'] ."\"</td>" .
+             "<td colspan=2 align=center>---------------------------------<br><br>" . $langvars['l_ibank_loanreminder'] . "<br><br>\"" . $langvars['l_ibank_loanreminder2'] . "\"</td>" .
              "<tr valign=top>" .
              "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
@@ -105,7 +105,7 @@ class Ibank
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_withdrawfunds'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
              "<td>" . $langvars['l_ibank_fundsavailable'] . ":</td>" .
-             "<td align=right>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) ." C<br></td>" .
+             "<td align=right>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br></td>" .
              "</tr><tr valign=top>" .
              "<td>" . $langvars['l_ibank_selwithdrawamount'] . ":</td><td align=right>" .
              "<form accept-charset='utf-8' action='ibank.php?command=withdraw2' method=post>" .
@@ -140,7 +140,7 @@ class Ibank
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_operationsuccessful'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
-             "<td colspan=2 align=center>" . number_format($amount, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) ." " . $langvars['l_ibank_creditstoyourship'] . "</td>" .
+             "<td colspan=2 align=center>" . number_format($amount, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_ibank_creditstoyourship'] . "</td>" .
              "<tr><td colspan=2 align=center>" . $langvars['l_ibank_accounts'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
              "<td>Ship Account :<br>" . $langvars['l_ibank_ibankaccount'] . " :</td>" .
@@ -799,7 +799,7 @@ class Ibank
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_operationsuccessful'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
-             "<td colspan=2 align=center>" . number_format($amount, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) ." " . $langvars['l_ibank_creditstoyou'] . "</td>" .
+             "<td colspan=2 align=center>" . number_format($amount, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_ibank_creditstoyou'] . "</td>" .
              "<tr><td colspan=2 align=center>" . $langvars['l_ibank_accounts'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
              "<td>" . $langvars['l_ibank_shipaccount'] . " :<br>" . $langvars['l_ibank_ibankaccount'] . " :</td>" .
@@ -957,7 +957,7 @@ class Ibank
         echo "<tr><td height=53 colspan=2 align=center valign=top>" . $langvars['l_ibank_depositfunds'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
              "<td height=30>" . $langvars['l_ibank_fundsavailable'] . " :</td>" .
-             "<td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) ." C<br></td>" .
+             "<td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br></td>" .
              "</tr><tr valign=top>" .
              "<td height=90>" . $langvars['l_ibank_seldepositamount'] . " :</td><td align=right>" .
              "<form accept-charset='utf-8' action='ibank.php?command=deposit2' method=post>" .
@@ -967,7 +967,7 @@ class Ibank
              "</td></tr>" .
              "<tr>" .
              "  <td height=30  colspan=2 align=left>" .
-             "    <span style='color:\"#00ff00\";'>You can deposit only ". number_format($credit_space, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." credits.</span><br>" .
+             "    <span style='color:\"#00ff00\";'>You can deposit only ". number_format($credit_space, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits.</span><br>" .
              "  </td>" .
              "</tr>" .
              "<tr valign=bottom>" .

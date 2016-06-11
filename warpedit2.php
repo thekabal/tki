@@ -68,7 +68,7 @@ if ($target_sector === null)
 {
     // This is the best that I can do without adding a new language variable.
     $langvars['l_warp_twoerror'] = str_replace('[target_sector]', $langvars['l_unknown'], $langvars['l_warp_twoerror']);
-    echo $langvars['l_warp_twoerror'] ."<br><br>";
+    echo $langvars['l_warp_twoerror'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang, $langvars);
     die();
 }

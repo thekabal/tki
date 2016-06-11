@@ -138,7 +138,7 @@ class Db
             {
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
                             ' Database.<br> Database Error: '.
-                            $e->getMessage() ."<br>\n";
+                            $e->getMessage() . "<br>\n";
                 die ($err_msg);
             }
 
