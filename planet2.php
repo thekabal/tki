@@ -418,7 +418,7 @@ else
     if (($tpgoods == -1) && ($transfer_goods > $playerinfo['ship_goods']))
     {
         $transfer_goods = $playerinfo['ship_goods'];
-        echo $langvars['l_planet2_noten'] . " " .  $langvars['l_goods'] . ". " . $langvars['l_planet2_settr'] . " " . $transfer_goods . " " .$langvars['l_units'] . ".<br>\n";
+        echo $langvars['l_planet2_noten'] . " " .  $langvars['l_goods'] . ". " . $langvars['l_planet2_settr'] . " " . $transfer_goods . " " . $langvars['l_units'] . ".<br>\n";
     }
     elseif (($tpgoods == 1) && ($transfer_goods > $planetinfo['goods']))
     {

@@ -158,7 +158,7 @@ if ($num_defences > 0 && $total_sector_fighters > 0 && !$owner)
                 break;
 
             default:
-                $interface_string = $calledfrom . '?sector='.$sector.'&destination='.$destination.'&engage='.$engage;
+                $interface_string = $calledfrom . '?sector=' . $sector . '&destination=' . $destination . '&engage=' . $engage;
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defences = ? WHERE ship_id = ?;", array($interface_string, $playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
                 $fighterstoll = $total_sector_fighters * $fighter_price * 0.6;

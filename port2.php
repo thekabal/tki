@@ -91,7 +91,7 @@ function build_one_col($text = "&nbsp;", $align = "left")
 {
     echo "
     <tr>
-      <td colspan=99 align=" . $align . ">".$text . ".</td>
+      <td colspan=99 align=" . $align . ">" . $text . ".</td>
     </tr>
     ";
 }
@@ -490,7 +490,7 @@ else
             if ($dev_beacon_number)
             {
                 $query = $query . ", dev_beacon = dev_beacon + $dev_beacon_number";
-                build_two_col($langvars['l_beacons']. " " .$langvars['l_trade_added'] . ":", $dev_beacon_number, "left", "right");
+                build_two_col($langvars['l_beacons']. " " . $langvars['l_trade_added'] . ":", $dev_beacon_number, "left", "right");
             }
 
             if ($dev_emerwarp_number)
