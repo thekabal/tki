@@ -91,7 +91,7 @@ function build_one_col($text = "&nbsp;", $align = "left")
 {
     echo "
     <tr>
-      <td colspan=99 align=".$align.">".$text.".</td>
+      <td colspan=99 align=" . $align . ">".$text . ".</td>
     </tr>
     ";
 }
@@ -100,8 +100,8 @@ function build_two_col($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1
 {
     echo "
     <tr>
-      <td align=".$align_col1.">".$text_col1."</td>
-      <td align=".$align_col2.">".$text_col2."</td>
+      <td align=" . $align_col1 . ">" . $text_col1 . "</td>
+      <td align=" . $align_col2 . ">" . $text_col2 . "</td>
     </tr>";
 }
 
@@ -490,7 +490,7 @@ else
             if ($dev_beacon_number)
             {
                 $query = $query . ", dev_beacon = dev_beacon + $dev_beacon_number";
-                build_two_col($langvars['l_beacons']. " " .$langvars['l_trade_added'].":", $dev_beacon_number, "left", "right");
+                build_two_col($langvars['l_beacons']. " " .$langvars['l_trade_added'] . ":", $dev_beacon_number, "left", "right");
             }
 
             if ($dev_emerwarp_number)
@@ -606,7 +606,7 @@ else
 
             // Debug info
             // echo "$origin * $price_array[$port_type]=";
-            // echo $origin * $price_array[$port_type]."<br>";
+            // echo $origin * $price_array[$port_type] . "<br>";
             return $origin;
         }
 
@@ -705,7 +705,7 @@ else
                         <td colspan=99 align=center><font size=3 color=white><strong>" . $langvars['l_trade_result'] . "</strong></font></td>
                     </tr>
                     <tr>
-                        <td colspan=99 align=center><strong><font style='color:{$trade_color};'>". $trade_result ." " . number_format(abs($total_cost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_credits'] . "</font></strong></td>
+                        <td colspan=99 align=center><strong><font style='color:{$trade_color};'>". $trade_result . " " . number_format(abs($total_cost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_credits'] . "</font></strong></td>
                     </tr>
                     <tr bgcolor=$tkireg->color_line1>
                         <td><strong><font size=2 color=white>" . $langvars['l_traded_ore'] . ": </font><strong></td><td align=right><strong><font size=2 color=white>" . number_format($trade_ore, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</font></strong></td>

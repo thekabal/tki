@@ -115,7 +115,7 @@ class PlanetReport
             echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=sector_id\">" . $langvars['l_sector'] . "</a></strong></td>";
             echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=name\">" . $langvars['l_name'] . "</a></strong></td>";
             echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=ore\">" . $langvars['l_ore'] . "</a></strong></td>";
-            echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=organics\">" . $langvars['l_organics'] ."</a></strong></td>";
+            echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=organics\">" . $langvars['l_organics'] . "</a></strong></td>";
             echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=goods\">" . $langvars['l_goods'] . "</a></strong></td>";
             echo "<td><strong><a href=\"planet_report.php?preptype=1&amp;sort=energy\">" . $langvars['l_energy'] . "</a></strong></td>";
             echo "<td align=center><strong><a href=\"planet_report.php?preptype=1&amp;sort=colonists\">" . $langvars['l_colonists'] . "</a></strong></td>";
@@ -172,7 +172,7 @@ class PlanetReport
                 }
 
                 echo "<tr bgcolor=\"$color\">";
-                echo "<td><a href=rsmove.php?engage=1&destination=". $planet[$i]['sector_id'] . ">". $planet[$i]['sector_id'] ."</a></td>";
+                echo "<td><a href=rsmove.php?engage=1&destination=". $planet[$i]['sector_id'] . ">". $planet[$i]['sector_id'] . "</a></td>";
                 echo "<td>" . $planet[$i]['name'] . "</td>";
                 echo "<td>" . number_format($planet[$i]['ore'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td>" . number_format($planet[$i]['organics'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
@@ -333,7 +333,7 @@ class PlanetReport
                 }
 
                 echo "<tr bgcolor=\"$color\">\n";
-                echo "<td><a href=rsmove.php?engage=1&amp;destination=". $planet[$i]['sector_id'] . ">". $planet[$i]['sector_id'] ."</a></td>\n";
+                echo "<td><a href=rsmove.php?engage=1&amp;destination=". $planet[$i]['sector_id'] . ">". $planet[$i]['sector_id'] . "</a></td>\n";
                 echo "<td>" . $planet[$i]['name'] . "</td>\n";
                 echo "<td align=center>" . "<input size=6 type=text name=\"prod_ore["      . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_ore']      . "\">" . "</td>\n";
                 echo "<td align=center>" . "<input size=6 type=text name=\"prod_organics[" . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_organics'] . "\">" . "</td>\n";

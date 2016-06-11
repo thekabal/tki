@@ -313,7 +313,7 @@ elseif ($command == 'unbanip')
         Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
     }
 
-    $query_string = "ip_address LIKE '" . $bans[0]['ban_mask'] ."'";
+    $query_string = "ip_address LIKE '" . $bans[0]['ban_mask'] . "'";
     for ($i = 1; $i < $nbbans; $i++)
     {
         $query_string = $query_string . " OR ip_address LIKE '" . $bans[$i]['ban_mask'] . "'";

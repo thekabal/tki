@@ -293,7 +293,7 @@ switch ($teamwhat)
                     }
                 }
 
-                Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_TEAM_NEWLEAD, $team['team_name'] ."|". $newcreatorname['character_name']);
+                Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_TEAM_NEWLEAD, $team['team_name'] . "|" . $newcreatorname['character_name']);
                 Tki\PlayerLog::writeLog($pdo_db, $db, $newcreator, LOG_TEAM_LEAD, $team['team_name']);
             }
 
@@ -317,7 +317,7 @@ switch ($teamwhat)
 
                     echo $langvars['l_team_welcome'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
                     Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_TEAM_JOIN, $team['team_name']);
-                    Tki\PlayerLog::writeLog($pdo_db, $db, $team['creator'], LOG_TEAM_NEWMEMBER, $team['team_name'] ."|". $playerinfo['character_name']);
+                    Tki\PlayerLog::writeLog($pdo_db, $db, $team['creator'], LOG_TEAM_NEWMEMBER, $team['team_name'] . "|" . $playerinfo['character_name']);
                 }
                 else
                 {
@@ -489,7 +489,7 @@ switch ($teamwhat)
             echo $langvars['l_team_refuse'] . " <strong>" . $invite_info['team_name'] . "</strong>.<br><br>";
             $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE ship_id = ?;", array($playerinfo['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
-            Tki\PlayerLog::writeLog($pdo_db, $db, $team['creator'], LOG_TEAM_REJECT, $playerinfo['character_name'] ."|". $invite_info['team_name']);
+            Tki\PlayerLog::writeLog($pdo_db, $db, $team['creator'], LOG_TEAM_REJECT, $playerinfo['character_name'] . "|" . $invite_info['team_name']);
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
 

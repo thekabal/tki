@@ -215,7 +215,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 echo $langvars['l_planet_not_selling'];
             }
 
-            $langvars['l_planet_tsell_link'] = "<a href=planet.php?planet_id=$planet_id&command=sell>" . $langvars['l_planet_tsell_link'] ."</a>";
+            $langvars['l_planet_tsell_link'] = "<a href=planet.php?planet_id=$planet_id&command=sell>" . $langvars['l_planet_tsell_link'] . "</a>";
             $langvars['l_planet_tsell'] = str_replace("[selling]", $langvars['l_planet_tsell_link'], $langvars['l_planet_tsell']);
             echo $langvars['l_planet_tsell'] . "<br>";
             if ($planetinfo['base'] == "N")
@@ -229,7 +229,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 echo $langvars['l_planet_hasbase'] . "<br>";
             }
 
-            $langvars['l_planet_readlog_link'] = "<a href=log.php>" . $langvars['l_planet_readlog_link'] ."</a>";
+            $langvars['l_planet_readlog_link'] = "<a href=log.php>" . $langvars['l_planet_readlog_link'] . "</a>";
             $langvars['l_planet_readlog'] = str_replace("[View]", $langvars['l_planet_readlog_link'], $langvars['l_planet_readlog']);
             echo "<br>" . $langvars['l_planet_readlog'] . "<br>";
 
@@ -270,7 +270,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             echo "<tr bgcolor=\"$tkireg->color_line2\"><td>" . $langvars['l_planet_perc'] . "</td>";
             echo "<td><input type=text name=pore value=\"$planetinfo[prod_ore]\" size=6 maxlength=6></td>";
             echo "<td><input type=text name=porganics value=\"$planetinfo[prod_organics]\" size=6 maxlength=6></td>";
-            echo "<td><input type=text name=pgoods value=\"" .round($planetinfo['prod_goods'])."\" size=6 maxlength=6></td>";
+            echo "<td><input type=text name=pgoods value=\"" .round($planetinfo['prod_goods']) . "\" size=6 maxlength=6></td>";
             echo "<td><input type=text name=penergy value=\"$planetinfo[prod_energy]\" size=6 maxlength=6></td>";
             echo "<td>n/a</td><td>*</td>";
             echo "<td><input type=text name=pfighters value=\"$planetinfo[prod_fighters]\" size=6 maxlength=6></td>";
@@ -284,7 +284,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             // Visitor menu
             if ($planetinfo['sells'] == "Y")
             {
-                $langvars['l_planet_buy_link'] = "<a href=planet.php?planet_id=$planet_id&command=buy>" . $langvars['l_planet_buy_link'] ."</a>";
+                $langvars['l_planet_buy_link'] = "<a href=planet.php?planet_id=$planet_id&command=buy>" . $langvars['l_planet_buy_link'] . "</a>";
                 $langvars['l_planet_buy'] = str_replace("[buy]", $langvars['l_planet_buy_link'], $langvars['l_planet_buy']);
                 echo $langvars['l_planet_buy'] . "<br>";
             }
@@ -311,9 +311,9 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 }
                 else
                 {
-                    $langvars['l_planet_att_link'] = "<a href=planet.php?planet_id=$planet_id&command=attac>" . $langvars['l_planet_att_link'] ."</a>";
+                    $langvars['l_planet_att_link'] = "<a href=planet.php?planet_id=$planet_id&command=attac>" . $langvars['l_planet_att_link'] . "</a>";
                     $langvars['l_planet_att'] = str_replace("[attack]", $langvars['l_planet_att_link'], $langvars['l_planet_att']);
-                    $langvars['l_planet_scn_link'] = "<a href=planet.php?planet_id=$planet_id&command=scan>" . $langvars['l_planet_scn_link'] ."</a>";
+                    $langvars['l_planet_scn_link'] = "<a href=planet.php?planet_id=$planet_id&command=scan>" . $langvars['l_planet_scn_link'] . "</a>";
                     $langvars['l_planet_scn'] = str_replace("[scan]", $langvars['l_planet_scn_link'], $langvars['l_planet_scn']);
                     echo $langvars['l_planet_att'] . "<br>";
                     echo $langvars['l_planet_scn'] . "<br>";
@@ -543,7 +543,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             // Check to see if sure
             if ($planetinfo['sells'] == "Y")
             {
-                $langvars['l_planet_buy_link'] = "<a href=planet.php?planet_id=$planet_id&command=buy>" . $langvars['l_planet_buy_link'] ."</a>";
+                $langvars['l_planet_buy_link'] = "<a href=planet.php?planet_id=$planet_id&command=buy>" . $langvars['l_planet_buy_link'] . "</a>";
                 $langvars['l_planet_buy'] = str_replace("[buy]", $langvars['l_planet_buy_link'], $langvars['l_planet_buy']);
                 echo $langvars['l_planet_buy'] . "<br>";
             }
@@ -564,7 +564,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 {
                     $langvars['l_planet_att_link'] = "<a href=planet.php?planet_id=$planet_id&command=attack>" . $langvars['l_planet_att_link'] . " .</a>";
                     $langvars['l_planet_att'] = str_replace("[attack]", $langvars['l_planet_att_link'], $langvars['l_planet_att']);
-                    $langvars['l_planet_scn_link'] = "<a href=planet.php?planet_id=$planet_id&command=scan>" . $langvars['l_planet_scn_link'] ."</a>";
+                    $langvars['l_planet_scn_link'] = "<a href=planet.php?planet_id=$planet_id&command=scan>" . $langvars['l_planet_scn_link'] . "</a>";
                     $langvars['l_planet_scn'] = str_replace("[scan]", $langvars['l_planet_scn_link'], $langvars['l_planet_scn']);
                     echo $langvars['l_planet_att'] . " <strong>" . $langvars['l_planet_att_sure'] . "</strong><br>";
                     echo $langvars['l_planet_scn'] . "<br>";
@@ -607,7 +607,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             // Check to see if sure...
             if ($planetinfo['sells'] == "Y" && $tkireg->allow_sofa)
             {
-                $langvars['l_planet_buy_link'] = "<a href=planet.php?planet_id=$planet_id&command=buy>" . $langvars['l_planet_buy_link'] ."</a>";
+                $langvars['l_planet_buy_link'] = "<a href=planet.php?planet_id=$planet_id&command=buy>" . $langvars['l_planet_buy_link'] . "</a>";
                 $langvars['l_planet_buy'] = str_replace("[buy]", $langvars['l_planet_buy_link'], $langvars['l_planet_buy']);
                 echo $langvars['l_planet_buy'] . "<br>";
             }
@@ -616,9 +616,9 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 echo $langvars['l_planet_not_selling'] . "<br>";
             }
 
-            $langvars['l_planet_att_link'] = "<a href=planet.php?planet_id=$planet_id&command=attac>" . $langvars['l_planet_att_link'] ."</a>";
+            $langvars['l_planet_att_link'] = "<a href=planet.php?planet_id=$planet_id&command=attac>" . $langvars['l_planet_att_link'] . "</a>";
             $langvars['l_planet_att'] = str_replace("[attack]", $langvars['l_planet_att_link'], $langvars['l_planet_att']);
-            $langvars['l_planet_scn_link'] ="<a href=planet.php?planet_id=$planet_id&command=scan>" . $langvars['l_planet_scn_link'] ."</a>";
+            $langvars['l_planet_scn_link'] ="<a href=planet.php?planet_id=$planet_id&command=scan>" . $langvars['l_planet_scn_link'] . "</a>";
             $langvars['l_planet_scn'] = str_replace("[scan]", $langvars['l_planet_scn_link'], $langvars['l_planet_scn']);
             echo $langvars['l_planet_att'] . "<br>";
             echo $langvars['l_planet_scn'] . "<br>";

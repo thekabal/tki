@@ -54,7 +54,7 @@ $div_ymax = $tkireg->max_sectors / $div_xmax;
 $map_width = ($div_w + $div_border) * $div_xmax;  // Define the containing div to be the right width to wrap at $div_xmax
 
 // Setup containing div to hold the width of the images
-echo "\n<div id='map' style='position:relative;background-color:#0000ff;width:".$map_width."px'>\n";
+echo "\n<div id='map' style='position:relative;background-color:#0000ff;width:" . $map_width . "px'>\n";
 for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
 {
     for ($c = 0; $c < $div_xmax; $c++) // Loop the columns
@@ -71,7 +71,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
             }
 
             echo "\n<a href=\"rsmove.php?engage=1&amp;destination=" . $row['sector_id'] . "\">";
-            echo "<img class='map ".$row['port_type']."' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
+            echo "<img class='map ".$row['port_type'] . "' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
 
             // Move to next explored sector in database results
             $result3->Movenext();
@@ -88,7 +88,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
 
                 // I have not figured out why this formula works, but $row[sector_id] doesn't, so I'm not switching it.
                 echo "<!-- current sector is " . ($c + ($div_xmax * $r)) . " -->";
-                echo "<a href=\"rsmove.php?engage=1&amp;destination=". ($c + ($div_xmax * $r)) ."\">";
+                echo "<a href=\"rsmove.php?engage=1&amp;destination=" . ($c + ($div_xmax * $r)) . "\">";
                 echo "<img class='map un' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
             }
             $cur_sector++;
@@ -99,7 +99,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
 // This is the row numbers on the side of the map
 for ($a = 1; $a < ($tkireg->max_sectors/50 +1); $a++)
 {
-    echo "\n<div style='position:absolute;left:" . ($map_width + 10)."px;top:".(($a - 1) * ($div_h + $div_border))."px;'>".(($a * 50) - 1)."</div>";
+    echo "\n<div style='position:absolute;left:" . ($map_width + 10) . "px;top:".(($a - 1) * ($div_h + $div_border)) . "px;'>" . (($a * 50) - 1) . "</div>";
 }
 
 echo "</div><div style='clear:both'></div><br>";

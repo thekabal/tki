@@ -378,7 +378,7 @@ elseif ($sectorinfo['port_type'] == "special")
                         echo "Partial Payment Mode<br>\n";
                         echo "You don't have enough Credits within your Intergalactic Bank Account to pay your entire bounty.<br>\n";
                         echo "However you can pay your bounty off in instalments.<br>\n";
-                        echo "And your first instalment will be " . number_format($bounty_payment, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])." credits.<br>\n";
+                        echo "And your first instalment will be " . number_format($bounty_payment, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits.<br>\n";
                         echo "<br>\n";
 
                         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?;", array($bounty_payment, $playerinfo['ship_id']));
@@ -613,7 +613,7 @@ elseif ($sectorinfo['port_type'] == "special")
 
     if ($playerinfo['ship_colonists'] != $colonist_max)
     {
-        echo "+ form.colonist_number.value * " . $tkireg->colonist_price ." ";
+        echo "+ form.colonist_number.value * " . $tkireg->colonist_price . " ";
     }
 
     echo ";\n";

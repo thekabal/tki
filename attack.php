@@ -421,7 +421,7 @@ else
                 else
                 {
                     $targetarmor = $targetarmor - $playerbeams;
-                    echo $targetinfo['character_name'] . $langvars['l_att_ashit'] ." " . $playerbeams . " " . $langvars['l_att_dmg'] . ".<br>";
+                    echo $targetinfo['character_name'] . $langvars['l_att_ashit'] . " " . $playerbeams . " " . $langvars['l_att_dmg'] . ".<br>";
                 }
             }
 
@@ -549,7 +549,7 @@ else
 
                 if ($targetfighters > $playerfighters)
                 {
-                    echo $langvars['l_att_ylostf'] ."<br>";
+                    echo $langvars['l_att_ylostf'] . "<br>";
                     $tempplayfighters = 0;
                 }
                 else
@@ -572,7 +572,7 @@ else
                 else
                 {
                     $targetarmor = $targetarmor - $playerfighters;
-                    echo $targetinfo['character_name'] . " " . $langvars['l_att_ashit'] ." " . $playerfighters . " " . $langvars['l_att_dmg'] . ".<br>";
+                    echo $targetinfo['character_name'] . " " . $langvars['l_att_ashit'] . " " . $playerfighters . " " . $langvars['l_att_dmg'] . ".<br>";
                 }
             }
 

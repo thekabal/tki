@@ -138,7 +138,7 @@ else
             }
 
             $sc_error = Tki\Scan::error($playerinfo['sensors'], $targetinfo['cloak'], $scan_error_factor);
-            echo $langvars['l_scan_ron'] ." " . $targetinfo['ship_name'] . ", " . $langvars['l_scan_capt'] . " " . $targetinfo['character_name'] . "<br><br>";
+            echo $langvars['l_scan_ron'] . " " . $targetinfo['ship_name'] . ", " . $langvars['l_scan_capt'] . " " . $targetinfo['character_name'] . "<br><br>";
             echo "<strong>" . $langvars['l_ship_levels'] . ":</strong><br><br>";
             echo "<table  width=\"\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
             echo "<tr><td>" . $langvars['l_hull'] . ":</td>";

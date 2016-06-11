@@ -93,7 +93,7 @@ if (!$result2 instanceof ADORecordSet)
 }
 else
 {
-    echo $langvars['l_warp_linkto'] ." ";
+    echo $langvars['l_warp_linkto'] . " ";
     while (!$result2->EOF)
     {
         echo $result2->fields['link_dest'] . " ";
