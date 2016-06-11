@@ -234,7 +234,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeToPlanet($pdo_db, $db, $planet_id, \Tki\Reg $tkireg, $playerinfo, $langvars, $planetinfo, $xenobeisdead)
+    public static function xenobeToPlanet($pdo_db, $db, $planet_id, \Tki\Reg $tkireg, $playerinfo, $langvars)
     {
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::logDbErrors($pdo_db, $db, $resh, __LINE__, __FILE__);
@@ -1497,7 +1497,7 @@ class Xenobe
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                self::xenobeToPlanet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars, $planetinfo, $xenobeisdead); // Yes, so move to that planet
+                self::xenobeToPlanet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
             }
             else
             {
