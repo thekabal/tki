@@ -513,7 +513,7 @@ class Xenobe
                 while (!$resultps->EOF && $xenobeisdead < 1)
                 {
                     $onplanet = $resultps->fields;
-                    self::xenobeToShip($pdo_db, $db, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
+                    self::xenobeToShip($pdo_db, $db, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage, $xenobeisdead);
                     $resultps->MoveNext();
                 }
             }
@@ -549,17 +549,8 @@ class Xenobe
         \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
     }
 
-    public static function xenobeToShip($pdo_db, $db, $ship_id, \Tki\Reg $tkireg, $playerinfo, $langvars)
+    public static function xenobeToShip($pdo_db, $db, $ship_id, \Tki\Reg $tkireg, $playerinfo, $langvars, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage, $xenobeisdead)
     {
-        // Setup general variables
-        global $attackerbeams;
-        global $attackerfighters;
-        global $attackershields;
-        global $attackertorps;
-        global $attackerarmor;
-        global $attackertorpdamage;
-        global $xenobeisdead;
-
         // Lookup target details
         $resa = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}zones READ, {$db->prefix}planets READ, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::logDbErrors($pdo_db, $db, $resa, __LINE__, __FILE__);
@@ -1510,7 +1501,7 @@ class Xenobe
             }
             else
             {
-                self::xenobeToShip($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
+                self::xenobeToShip($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage, $xenobeisdead); // Not on a planet, so move to the ship
             }
         }
         else
