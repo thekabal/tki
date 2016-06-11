@@ -321,7 +321,6 @@ class Xenobe
             else                                                    // Attacker beams less than or equal to target fighters
             {
                 $targetfighters = $targetfighters - $attackerbeams; // Target loses fighters equal to attacker beams
-                $attackerbeams = 0;                                 // Attacker loses all beams
             }
         }
 
