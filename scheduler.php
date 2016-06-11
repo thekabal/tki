@@ -185,5 +185,5 @@ else
 }
 
 echo "<br>";
-Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+Tki\Text::gotomain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

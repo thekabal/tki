@@ -44,7 +44,7 @@ if ($zoneinfo['allow_trade'] == 'N')
     $title = $langvars['l_no_trade'];
     echo "<h1>" . $title . "</h1>\n";
     echo $langvars['l_no_trade_info'] . "<p>";
-    Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+    Tki\Text::gotomain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -61,7 +61,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             $title = $langvars['l_no_trade'];
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
-            Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+            Tki\Text::gotomain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -73,7 +73,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             $title = $langvars['l_no_trade'];
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
-            Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+            Tki\Text::gotomain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -146,7 +146,7 @@ else
             echo "<div style='color:#fff; font-size:12px;'>Auto redirecting in 2 seconds.</div>\n";
             echo "<br>\n";
 
-            Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+            Tki\Text::gotomain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -156,7 +156,7 @@ else
         {
             echo $langvars['l_port_loannotrade'] . "<p>";
             echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
-            Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+            Tki\Text::gotomain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -741,7 +741,7 @@ else
 }
 
 echo "<br><br>";
-Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+Tki\Text::gotomain($pdo_db, $lang);
 
 if ($sectorinfo['port_type'] == "special")
 {

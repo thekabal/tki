@@ -1764,7 +1764,7 @@ class Traderoute
             ";
 
         echo "<div style='text-align:left;'>\n";
-        \Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+        \Tki\Text::gotomain($pdo_db, $lang);
         echo "</div>\n";
 
         \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -1777,7 +1777,7 @@ class Traderoute
 
         echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
-        \Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+        \Tki\Text::gotomain($pdo_db, $lang);
         echo "</div>\n";
         \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
         die ();

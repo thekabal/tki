@@ -142,5 +142,5 @@ $resx = $db->Execute("UNLOCK TABLES");
 Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 echo "<br><br>";
 
-Tki\Text::gotoMain($pdo_db, $lang, $langvars);
+Tki\Text::gotomain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
