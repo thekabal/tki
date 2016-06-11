@@ -598,7 +598,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                 }
                 else
                 {
-                    BadPlanet::planetCombat($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo, $planetbeams, $planetfighters, $planetshields, $planettorps, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage);
+                    BadPlanet::planetCombat($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo);
                 }
             }
         }
