@@ -1153,7 +1153,7 @@ class Traderoute
                             $energy_buy = $dest['port_energy'];
                             if ($dest['port_energy'] == 0)
                             {
-                                echo $langvars['l_tdr_bought'] . " ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " ".$langvars['l_tdr_energy'] . " (".$langvars['l_tdr_portisempty'] . ")<br>";
+                                echo $langvars['l_tdr_bought'] . " ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
                             }
                         }
 
@@ -1375,10 +1375,10 @@ class Traderoute
         // echo $j . " -- ";
         if ($traderoute['circuit'] == 2)
         {
-            $langvars['l_tdr_engageagain'] = str_replace("[here]", "<a href=\"traderoute.php?engage=[tdr_engage]\">".$langvars['l_here'] . "</a>", $langvars['l_tdr_engageagain']);
-            $langvars['l_tdr_engageagain'] = str_replace("[five]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=5\">".$langvars['l_tdr_five'] . "</a>", $langvars['l_tdr_engageagain']);
-            $langvars['l_tdr_engageagain'] = str_replace("[ten]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=10\">".$langvars['l_tdr_ten'] . "</a>", $langvars['l_tdr_engageagain']);
-            $langvars['l_tdr_engageagain'] = str_replace("[fifty]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=50\">".$langvars['l_tdr_fifty'] . "</a>", $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[here]", "<a href=\"traderoute.php?engage=[tdr_engage]\">" . $langvars['l_here'] . "</a>", $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[five]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=5\">" . $langvars['l_tdr_five'] . "</a>", $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[ten]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=10\">" . $langvars['l_tdr_ten'] . "</a>", $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[fifty]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=50\">" . $langvars['l_tdr_fifty'] . "</a>", $langvars['l_tdr_engageagain']);
             $langvars['l_tdr_engageagain'] = str_replace("[tdr_engage]", $engage, $langvars['l_tdr_engageagain']);
             if ($j == 1)
             {
@@ -1417,7 +1417,7 @@ class Traderoute
 
         if ($num_traderoutes >= $tkireg->max_traderoutes_player && is_null($editroute))
         {
-            self::traderouteDie($pdo_db, $lang, $tkireg, '<p>'.$langvars['l_tdr_maxtdr'].'<p>', $template);
+            self::traderouteDie($pdo_db, $lang, $tkireg, '<p>' . $langvars['l_tdr_maxtdr'].'<p>', $template);
         }
 
         echo "<p><font size=3 color=blue><strong>";
@@ -1524,7 +1524,7 @@ class Traderoute
 
         if ($num_planets == 0)
         {
-            echo "<option value=none>".$langvars['l_tdr_none'] . "</option>";
+            echo "<option value=none>" . $langvars['l_tdr_none'] . "</option>";
         }
         else
         {
@@ -1538,7 +1538,7 @@ class Traderoute
                     echo "selected ";
                 }
 
-                echo "value=".$planets[$i]['planet_id'] . ">" . $planets[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$i]['sector_id'] . "</option>";
+                echo "value=" . $planets[$i]['planet_id'] . ">" . $planets[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1562,7 +1562,7 @@ class Traderoute
 
         if ($num_team_planets == 0)
         {
-            echo "<option value=none>".$langvars['l_tdr_none'] . "</option>";
+            echo "<option value=none>" . $langvars['l_tdr_none'] . "</option>";
         }
         else
         {
@@ -1576,7 +1576,7 @@ class Traderoute
                     echo "selected ";
                 }
 
-                echo "value=".$planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
+                echo "value=" . $planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1633,7 +1633,7 @@ class Traderoute
 
         if ($num_planets == 0)
         {
-            echo "<option value=none>".$langvars['l_tdr_none'] . "</option>";
+            echo "<option value=none>" . $langvars['l_tdr_none'] . "</option>";
         }
         else
         {
@@ -1647,7 +1647,7 @@ class Traderoute
                     echo "selected ";
                 }
 
-                echo "value=".$planets[$i]['planet_id'] . ">" . $planets[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$i]['sector_id'] . "</option>";
+                echo "value=" . $planets[$i]['planet_id'] . ">" . $planets[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1671,7 +1671,7 @@ class Traderoute
 
         if ($num_team_planets == 0)
         {
-            echo "<option value=none>".$langvars['l_tdr_none'] . "</option>";
+            echo "<option value=none>" . $langvars['l_tdr_none'] . "</option>";
         }
         else
         {
@@ -1685,7 +1685,7 @@ class Traderoute
                     echo "selected ";
                 }
 
-                echo "value=".$planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
+                echo "value=" . $planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
                 $i++;
             }
         }
@@ -1747,15 +1747,15 @@ class Traderoute
 
         if ($editroute === null)
         {
-            echo "<input type=submit value=\"".$langvars['l_tdr_create'] . "\">";
+            echo "<input type=submit value=\"" . $langvars['l_tdr_create'] . "\">";
         }
         else
         {
             echo "<input type=hidden name=editing value=$editroute[traderoute_id]>";
-            echo "<input type=submit value=\"".$langvars['l_tdr_modify'] . "\">";
+            echo "<input type=submit value=\"" . $langvars['l_tdr_modify'] . "\">";
         }
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
 
         echo "
             </table>
@@ -1775,7 +1775,7 @@ class Traderoute
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
-        echo "<p>".$error_msg . "<p>";
+        echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
         \Tki\Text::gotoMain($pdo_db, $lang, $langvars);
         echo "</div>\n";
@@ -2206,17 +2206,17 @@ class Traderoute
         {
             $query = $db->Execute("INSERT INTO {$db->prefix}traderoutes VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
             \Tki\Db::logDbErrors($pdo_db, $db, $query, __LINE__, __FILE__);
-            echo "<p>".$langvars['l_tdr_newtdrcreated'];
+            echo "<p>" . $langvars['l_tdr_newtdrcreated'];
         }
         else
         {
             $query = $db->Execute("UPDATE {$db->prefix}traderoutes SET source_id=?, dest_id=?, source_type=?, dest_type=?, move_type=?, owner=?, circuit=? WHERE traderoute_id=?;", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type, $editing));
             \Tki\Db::logDbErrors($pdo_db, $db, $query, __LINE__, __FILE__);
-            echo "<p>".$langvars['l_tdr_modified'];
+            echo "<p>" . $langvars['l_tdr_modified'];
         }
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
-        echo " ".$langvars['l_tdr_returnmenu'];
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
+        echo " " . $langvars['l_tdr_returnmenu'];
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
@@ -2246,7 +2246,7 @@ class Traderoute
         {
             $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes WHERE traderoute_id=?;", array($traderoute_id));
             \Tki\Db::logDbErrors($pdo_db, $db, $query, __LINE__, __FILE__);
-            $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
+            $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
             echo $langvars['l_tdr_deleted'] . " " . $langvars['l_tdr_returnmenu'];
             self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
         }
@@ -2256,11 +2256,11 @@ class Traderoute
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
-        echo "<p><font size=3 color=blue><strong>".$langvars['l_tdr_globalset'] . "</strong></font><p>";
-        echo "<font color=white size=2><strong>".$langvars['l_tdr_sportsrc'] . " :</strong></font><p>".
+        echo "<p><font size=3 color=blue><strong>" . $langvars['l_tdr_globalset'] . "</strong></font><p>";
+        echo "<font color=white size=2><strong>" . $langvars['l_tdr_sportsrc'] . " :</strong></font><p>".
              "<form accept-charset='utf-8' action=traderoute.php?command=setsettings method=post>".
              "<table border=0><tr>".
-             "<td><font size=2 color=white> - ".$langvars['l_tdr_colonists'] . " :</font></td>".
+             "<td><font size=2 color=white> - " . $langvars['l_tdr_colonists'] . " :</font></td>".
              "<td><input type=checkbox name=colonists";
 
         if ($playerinfo['trade_colonists'] == 'Y')
@@ -2269,7 +2269,7 @@ class Traderoute
         }
 
         echo "></tr><tr>".
-            "<td><font size=2 color=white> - ".$langvars['l_tdr_fighters'] . " :</font></td>".
+            "<td><font size=2 color=white> - " . $langvars['l_tdr_fighters'] . " :</font></td>".
             "<td><input type=checkbox name=fighters";
 
         if ($playerinfo['trade_fighters'] == 'Y')
@@ -2278,7 +2278,7 @@ class Traderoute
         }
 
         echo "></tr><tr>".
-            "<td><font size=2 color=white> - ".$langvars['l_tdr_torps'] . " :</font></td>".
+            "<td><font size=2 color=white> - " . $langvars['l_tdr_torps'] . " :</font></td>".
             "<td><input type=checkbox name=torps";
 
         if ($playerinfo['trade_torps'] == 'Y')
@@ -2289,9 +2289,9 @@ class Traderoute
         echo "></tr>".
             "</table>".
             "<p>".
-            "<font color=white size=2><strong>".$langvars['l_tdr_tdrescooped'] . " :</strong></font><p>".
+            "<font color=white size=2><strong>" . $langvars['l_tdr_tdrescooped'] . " :</strong></font><p>".
             "<table border=0><tr>".
-            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;".$langvars['l_tdr_trade'] . "</font></td>".
+            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;" . $langvars['l_tdr_trade'] . "</font></td>".
             "<td><input type=radio name=energy value=\"Y\"";
 
         if ($playerinfo['trade_energy'] == 'Y')
@@ -2300,7 +2300,7 @@ class Traderoute
         }
 
         echo "></td></tr><tr>".
-            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;".$langvars['l_tdr_keep'] . "</font></td>".
+            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;" . $langvars['l_tdr_keep'] . "</font></td>".
             "<td><input type=radio name=energy value=\"N\"";
 
         if ($playerinfo['trade_energy'] == 'N')
@@ -2313,7 +2313,7 @@ class Traderoute
             "</tr></table>".
             "</form>";
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_returnmenu'];
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
@@ -2329,7 +2329,7 @@ class Traderoute
         $resa = $db->Execute("UPDATE {$db->prefix}ships SET trade_colonists=?, trade_fighters=?, trade_torps=?, trade_energy=? WHERE ship_id=?;", array($colonists, $fighters, $torps, $energy, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $db, $resa, __LINE__, __FILE__);
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>".$langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_globalsetsaved'] . " " . $langvars['l_tdr_returnmenu'];
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
@@ -2340,9 +2340,9 @@ class Traderoute
 
         echo "<table border='1' cellspacing='1' cellpadding='2' width='65%' align='center'>\n";
         echo "  <tr bgcolor='" . $tkireg->color_line2 . "'>\n";
-        echo "    <td align='center' colspan='7'><strong><font color='white'>".$langvars['l_tdr_res'] . "</font></strong></td>\n";
+        echo "    <td align='center' colspan='7'><strong><font color='white'>" . $langvars['l_tdr_res'] . "</font></strong></td>\n";
         echo "  </tr>\n";
-        echo "  <tr align='center' bgcolor='".$tkireg->color_line2 . "'>\n";
+        echo "  <tr align='center' bgcolor='" . $tkireg->color_line2 . "'>\n";
         echo "    <td width='50%'><font size='2' color='white'><strong>";
     }
 
@@ -2356,7 +2356,7 @@ class Traderoute
     {
         echo "</strong></font></td>\n";
         echo "  </tr>\n";
-        echo "  <tr bgcolor='".$tkireg->color_line1 . "'>\n";
+        echo "  <tr bgcolor='" . $tkireg->color_line1 . "'>\n";
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
@@ -2370,7 +2370,7 @@ class Traderoute
     {
         echo "</font></td>\n";
         echo "  </tr>\n";
-        echo "  <tr bgcolor='".$tkireg->color_line2 . "'>\n";
+        echo "  <tr bgcolor='" . $tkireg->color_line2 . "'>\n";
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
@@ -2397,11 +2397,11 @@ class Traderoute
 
         if ($total_profit > 0)
         {
-            echo "<p><center><font size=3 color=white><strong>".$langvars['l_tdr_totalprofit'] . " : <font style='color:#0f0;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
+            echo "<p><center><font size=3 color=white><strong>" . $langvars['l_tdr_totalprofit'] . " : <font style='color:#0f0;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
         }
         else
         {
-            echo "<p><center><font size=3 color=white><strong>".$langvars['l_tdr_totalcost'] . " : <font style='color:#f00;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
+            echo "<p><center><font size=3 color=white><strong>" . $langvars['l_tdr_totalcost'] . " : <font style='color:#f00;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
         }
     }
 
@@ -2412,16 +2412,16 @@ class Traderoute
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
-        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_turnsused'] . " : <font style='color:#f00;'>$dist[triptime]</font></strong></font><br>";
-        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_turnsleft'] . " : <font style='color:#0f0;'>$playerinfo[turns]</font></strong></font><br>";
+        echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_turnsused'] . " : <font style='color:#f00;'>$dist[triptime]</font></strong></font><br>";
+        echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_turnsleft'] . " : <font style='color:#0f0;'>$playerinfo[turns]</font></strong></font><br>";
 
-        echo "\n<font size='3' color='white'><strong>".$langvars['l_tdr_credits'] . " : <font style='color:#0f0;'> $tdr_display_creds\n</font></strong></font><br> </strong></font></center>\n";
+        echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_credits'] . " : <font style='color:#0f0;'> $tdr_display_creds\n</font></strong></font><br> </strong></font></center>\n";
         //echo "<font size='2'>\n";
     }
 
     public static function traderouteResultsShowRepeat($engage)
     {
-        echo "<form accept-charset='utf-8' action='traderoute.php?engage=".$engage . "' method='post'>\n";
+        echo "<form accept-charset='utf-8' action='traderoute.php?engage=" . $engage . "' method='post'>\n";
         echo "<br>Enter times to repeat <input type='text' name='tr_repeat' value='1' size='5'> <input type='submit' value='submit'>\n";
         echo "</form>\n";
         // echo "<p>";
