@@ -137,7 +137,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
                     if (!$rowo1['planet_id'] == 0)
                     {              // Is on planet
-                        Bad\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo1['planet_id'], $tkireg, $playerinfo, $langvars, $planetinfo, $xenobeisdead);
+                        Bad\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo1['planet_id'], $tkireg, $playerinfo, $langvars);
                     }
                     else
                     {
@@ -199,7 +199,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
                     if (!$rowo2['planet_id'] == 0)
                     {              // IS ON PLANET
-                        Bad\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars, $planetinfo, $xenobeisdead);
+                        Bad\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
                     }
                     else
                     {
@@ -274,7 +274,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
                         if (!$rowo3['planet_id'] == 0)
                         {              // IS ON PLANET
-                            Bad\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars, $planetinfo, $xenobeisdead);
+                            Bad\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
                         }
                         else
                         {
