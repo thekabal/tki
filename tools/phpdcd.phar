@@ -679,7 +679,7 @@ class GnuFindAdapter extends AbstractFindAdapter
         foreach ($contains as $contain) {
             $expr = Expression::create($contain);
 
-            // FUTURE: avoid forking process for each $pattern by using multiple -e options
+            // todo: avoid forking process for each $pattern by using multiple -e options
             $command
                 ->add('| xargs -I{} -r grep -I')
                 ->add($expr->isCaseSensitive() ? null : '-i')
@@ -781,7 +781,7 @@ class BsdFindAdapter extends AbstractFindAdapter
         foreach ($contains as $contain) {
             $expr = Expression::create($contain);
 
-            // FUTURE: avoid forking process for each $pattern by using multiple -e options
+            // todo: avoid forking process for each $pattern by using multiple -e options
             $command
                 ->add('| grep -v \'^$\'')
                 ->add('| xargs -I{} grep -I')
@@ -3051,7 +3051,7 @@ class Shell
     public function testCommand($command)
     {
         if (self::TYPE_WINDOWS === $this->type) {
-            // FUTURE: find a way to test if Windows command exists
+            // todo: find a way to test if Windows command exists
             return false;
         }
 
@@ -3059,7 +3059,7 @@ class Shell
             return false;
         }
 
-        // FUTURE: find a better way (command could not be available)
+        // todo: find a better way (command could not be available)
         exec('command -v '.$command, $output, $code);
 
         return 0 === $code && count($output) > 0;
@@ -15606,14 +15606,14 @@ class Analyser
 {
     /**
      * Function declaration mapping: maps declared function name to file and line number
-     * FUTURE: make mapping to file and line number optional for memory usage reduction?
+     * TODO: make mapping to file and line number optional for memory usage reduction?
      * @var array
      */
     private $functionDeclarations = array();
 
     /**
      * Function call mapping: maps "callees" to array of "callers"
-     * FUTURE: make callers array optional for memory usage reduction?
+     * TODO: make callers array optional for memory usage reduction?
      * @var array
      */
     private $functionCalls = array();
@@ -15646,7 +15646,7 @@ class Analyser
                     $resolvedCall = $ancestor . '::' . $method;
                     if (isset($this->functionDeclarations[$resolvedCall])) {
                         $this->functionCalls[$resolvedCall] = $callers;
-                        // FUTURE: also remove unresolved parent(class) entries?
+                        // TODO: also remove unresolved parent(class) entries?
                         break;
                     }
                 }
