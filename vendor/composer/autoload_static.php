@@ -19,7 +19,7 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
         ),
         'B' => 
         array (
-            'Bad\\' => 4,
+            'Tki\\' => 4,
         ),
     );
 
@@ -29,7 +29,7 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
             0 => __DIR__ . '/../..' . '/classes',
             1 => __DIR__ . '/../..' . '/config',
         ),
-        'Bad\\' => 
+        'Tki\\' => 
         array (
             0 => __DIR__ . '/../..' . '/classes',
         ),

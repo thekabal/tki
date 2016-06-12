@@ -52,7 +52,7 @@ echo '<table style="width:550px; height:300px;" border="0px">';
 
 if (!$tkireg->allow_ibank)
 {
-    Bad\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_malfunction'], "main.php", $lang, $tkireg, $template);
+    Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_malfunction'], "main.php", $lang, $tkireg, $template);
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -73,59 +73,59 @@ if (mb_strlen(trim($amount)) === 0)
 
 if ($command == 'login') // Main menu
 {
-    Bad\Ibank::ibankLogin($langvars, $playerinfo, $account);
+    Tki\Ibank::ibankLogin($langvars, $playerinfo, $account);
 }
 elseif ($command == 'withdraw') // Withdraw menu
 {
-    Bad\Ibank::ibankWithdraw($langvars, $account);
+    Tki\Ibank::ibankWithdraw($langvars, $account);
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Bad\Ibank::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\Ibank::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
-    Bad\Ibank::ibankDeposit($pdo_db, $lang, $account, $playerinfo);
+    Tki\Ibank::ibankDeposit($pdo_db, $lang, $account, $playerinfo);
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Bad\Ibank::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\Ibank::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
-    Bad\Ibank::ibankTransfer($pdo_db, $langvars, $playerinfo, $tkireg);
+    Tki\Ibank::ibankTransfer($pdo_db, $langvars, $playerinfo, $tkireg);
 }
 elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 {
-    Bad\Ibank::ibankTransfer2($db, $pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $template);
+    Tki\Ibank::ibankTransfer2($db, $pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $template);
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
-    Bad\Ibank::ibankTransfer3($db, $pdo_db, $lang, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $template);
+    Tki\Ibank::ibankTransfer3($db, $pdo_db, $lang, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $template);
 }
 elseif ($command == 'loans') // Loans menu
 {
-    Bad\Ibank::ibankLoans($pdo_db, $langvars, $tkireg, $playerinfo, $account);
+    Tki\Ibank::ibankLoans($pdo_db, $langvars, $tkireg, $playerinfo, $account);
 }
 elseif ($command == 'borrow') // Borrow operation
 {
-    Bad\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount, $template);
+    Tki\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount, $template);
 }
 elseif ($command == 'repay') // Repay operation
 {
-    Bad\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $account, $amount, $active_template, $tkireg, $template);
+    Tki\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $account, $amount, $active_template, $tkireg, $template);
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {
-    Bad\Ibank::ibankConsolidate($langvars, $tkireg, $dplanet_id);
+    Tki\Ibank::ibankConsolidate($langvars, $tkireg, $dplanet_id);
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Bad\Ibank::ibankConsolidate2($db, $pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
+    Tki\Ibank::ibankConsolidate2($db, $pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Bad\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
+    Tki\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
 }
 else
 {
