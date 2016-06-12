@@ -42,25 +42,25 @@ if ($preptype == 1 || !isset($preptype)) // Display the commodities on the plane
 {
     $title = $title . ": Status";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::standardReport($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
+    Tki\PlanetReport::standardReport($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
 }
 elseif ($preptype == 2)                  // Display the production values of your planets and allow changing
 {
     $title = $title . ": Production";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::planetProductionChange($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
+    Tki\PlanetReport::planetProductionChange($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
 }
 elseif ($preptype == 0)                  // For typing in manually to get a report menu
 {
     $title = $title . ": Menu";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::planetReportMenu($playerinfo, $langvars);
+    Tki\PlanetReport::planetReportMenu($playerinfo, $langvars);
 }
 else                                  // Display the menu if no valid options are passed in
 {
     $title = $title . ": Status";
     echo "<h1>" . $title . "</h1>\n";
-    Bad\PlanetReport::planetReportMenu($playerinfo, $langvars);
+    Tki\PlanetReport::planetReportMenu($playerinfo, $langvars);
 }
 
 echo "<br><br>";

@@ -132,12 +132,12 @@ else
 switch ($teamwhat)
 {
         case 1: // INFO on single team
-            Bad\Team::showInfo($pdo_db, $db, $langvars, $whichteam, 0, $playerinfo, $invite_info, $team, $tkireg);
+            Tki\Team::showInfo($pdo_db, $db, $langvars, $whichteam, 0, $playerinfo, $invite_info, $team, $tkireg);
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
 
         case 2: // LEAVE
-            if (!Bad\Team::isTeamMember($team, $playerinfo))
+            if (!Tki\Team::isTeamMember($team, $playerinfo))
             {
                 echo "<strong><font color=red>An error occured</font></strong><br>You are not a member of this Team.";
                 echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
@@ -152,7 +152,7 @@ switch ($teamwhat)
             {
                 if ($team['number_of_members'] == 1)
                 {
-                    if (!Bad\Team::isTeamOwner($team, $playerinfo))
+                    if (!Tki\Team::isTeamOwner($team, $playerinfo))
                     {
                         $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
                         echo $langvars['l_team_error'];
@@ -198,7 +198,7 @@ switch ($teamwhat)
                 }
                 else
                 {
-                    if (Bad\Team::isTeamOwner($team, $playerinfo))
+                    if (Tki\Team::isTeamOwner($team, $playerinfo))
                     {
                         echo $langvars['l_team_youarecoord'] . " <strong>$team[team_name]</strong>. " . $langvars['l_team_relinq'] . "<br><br>";
                         echo "<form accept-charset='utf-8' action='teams.php' method=post>";
@@ -210,7 +210,7 @@ switch ($teamwhat)
                         while (!$res->EOF)
                         {
                             $row = $res->fields;
-                            if (!Bad\Team::isTeamOwner($team, $row))
+                            if (!Tki\Team::isTeamOwner($team, $row))
                             {
                                 echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
                             }
@@ -337,7 +337,7 @@ switch ($teamwhat)
             // If not display "An error occured, You are not the leader of this Team." message.
             // Then show link back and break;
 
-            if (Bad\Team::isTeamOwner($team, $playerinfo) === false)
+            if (Tki\Team::isTeamOwner($team, $playerinfo) === false)
             {
                 $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
                 echo $langvars['l_team_error'];
@@ -401,7 +401,7 @@ switch ($teamwhat)
                 $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
                 $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
 
-                if (!Bad\Team::validateTeam($pdo_db, $db, $teamname, $teamdesc, $playerinfo['ship_id']))
+                if (!Tki\Team::validateTeam($pdo_db, $db, $teamname, $teamdesc, $playerinfo['ship_id']))
                 {
                     echo "<span style='color:#f00;'>Team Creation Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
                     echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
@@ -421,7 +421,7 @@ switch ($teamwhat)
             break;
 
         case 7: // INVITE player
-            if (Bad\Team::isTeamMember($team, $playerinfo) === false)
+            if (Tki\Team::isTeamMember($team, $playerinfo) === false)
             {
                 echo "<br>You are not in this team!<br>";
                 echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
@@ -439,7 +439,7 @@ switch ($teamwhat)
                 while (!$res->EOF)
                 {
                     $row = $res->fields;
-                    if (Bad\Team::isTeamOwner($team, $row) === false)
+                    if (Tki\Team::isTeamOwner($team, $row) === false)
                     {
                         echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
                     }
@@ -498,7 +498,7 @@ switch ($teamwhat)
             // If not display "An error occured, You are not the leader of this Team." message.
             // Then show link back and break;
 
-            if (Bad\Team::isTeamOwner($team, $playerinfo) === false)
+            if (Tki\Team::isTeamOwner($team, $playerinfo) === false)
             {
                 $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
                 echo $langvars['l_team_error'];
@@ -525,7 +525,7 @@ switch ($teamwhat)
                 $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
                 $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
 
-                if (Bad\Team::validateTeam($pdo_db, $db, $teamname, $teamdesc, $playerinfo['ship_id']) === false)
+                if (Tki\Team::validateTeam($pdo_db, $db, $teamname, $teamdesc, $playerinfo['ship_id']) === false)
                 {
                     echo "<span style='color:#f00;'>Team Edit Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
                     echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
@@ -554,7 +554,7 @@ switch ($teamwhat)
             if ($playerinfo['team'] == 0)
             {
                 echo $langvars['l_team_notmember'];
-                Bad\Team::displayInviteInfo($langvars, $playerinfo, $invite_info);
+                Tki\Team::displayInviteInfo($langvars, $playerinfo, $invite_info);
             }
             else
             {
@@ -577,8 +577,8 @@ switch ($teamwhat)
                     Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
                     $whichinvitingteam = $result->fields;
                 }
-                $isowner = Bad\Team::isTeamOwner($whichteam, $playerinfo);
-                Bad\Team::showInfo($pdo_db, $db, $langvars, $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
+                $isowner = Tki\Team::isTeamOwner($whichteam, $playerinfo);
+                Tki\Team::showInfo($pdo_db, $db, $langvars, $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
             }
 
             $res = $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
@@ -587,7 +587,7 @@ switch ($teamwhat)
 
             if ($num_res['total'] > 0)
             {
-                Bad\Team::displayAllTeams($pdo_db, $db, $langvars, $tkireg, $order, $type);
+                Tki\Team::displayAllTeams($pdo_db, $db, $langvars, $tkireg, $order, $type);
             }
             else
             {

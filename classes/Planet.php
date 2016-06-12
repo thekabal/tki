@@ -21,7 +21,7 @@
 // behaviors. But in the interest of saying goodbye to the includes directory, and raw functions, this
 // will at least allow us to auto-load and use classes instead. Plenty to do in the future, though!
 
-namespace Bad;
+namespace Tki;
 
 class Planet
 {

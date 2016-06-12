@@ -42,15 +42,15 @@ if (mb_strlen(trim($tpcreds)) === 0)
 
 if ($tpcreds !== null && $tpcreds !== false)
 {
-    Bad\PlanetReportCE::collectCredits($pdo_db, $db, $langvars, $tpcreds, $tkireg);
+    Tki\PlanetReportCE::collectCredits($pdo_db, $db, $langvars, $tpcreds, $tkireg);
 }
 elseif ($buildp !== null && $builds !== null)
 {
-    Bad\PlanetReportCE::buildBase($pdo_db, $db, $langvars, $buildp, $builds, $tkireg);
+    Tki\PlanetReportCE::buildBase($pdo_db, $db, $langvars, $buildp, $builds, $tkireg);
 }
 else
 {
-    Bad\PlanetReportCE::changePlanetProduction($pdo_db, $db, $langvars, $_POST, $tkireg);
+    Tki\PlanetReportCE::changePlanetProduction($pdo_db, $db, $langvars, $_POST, $tkireg);
 }
 
 echo '<br><br>';

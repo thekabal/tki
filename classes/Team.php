@@ -17,7 +17,7 @@
 //
 // File: classes/Team.php
 
-namespace Bad;
+namespace Tki;
 
 class Team
 {
