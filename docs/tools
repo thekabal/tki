@@ -6,5 +6,5 @@ We have a way to go on these standards, but are slowly making progress towards s
 php-cs-fixer strives to automatically correct code for specific items in the PSR standard. We do not currently use it, but may in the future use it as a pre-commit hook.
 
 phpmd is PHP Mess Detector. It examines code for a variety of issues, almost all of which are guidelines that have to be interpreted. However, we have made 
-excellent progress towards the usage: php tools/phpmd.phar classes/ text unusedcode
+excellent progress towards the usage: php tools/phpmd.phar . text unusedcode,tools/phpmd.xml --exclude vendor/,templates/,tools/
 There are other command-line options (try them!), with varying levels of usefulness to our project.
