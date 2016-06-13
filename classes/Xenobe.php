@@ -700,13 +700,11 @@ class Xenobe
         {                                                                   // Attacker has beams left - continue combat - beams VS armor
             if ($attackerbeams > $targetarmor)
             {                                                               // Attacker beams GT target armor
-                $attackerbeams = $attackerbeams - $targetarmor;             // A loses beams EQ to T armor
                 $targetarmor = 0;                                           // T loses all armor (T DESTROYED)
             }
             else
             {                                                               // Attacker beams LE target armor
                 $targetarmor = $targetarmor - $attackerbeams;               // T loses armor EQ to A beams
-                $attackerbeams = 0;                                         // A loses all beams
             }
         }
 
@@ -753,7 +751,7 @@ class Xenobe
         {                                                                   // Attacker fires torps - continue combat - torps VS armor
             if ($attackertorpdamage > $targetarmor)
             {                                                               // Attacker fired torps GT half target armor
-                $targetarmor=0;                                             // T loses all armor (T DESTROYED)
+                $targetarmor = 0;                                           // T loses all armor (T DESTROYED)
             }
             else
             {                                                                // Attacker fired torps LE half target armor
