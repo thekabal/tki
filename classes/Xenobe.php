@@ -689,11 +689,9 @@ class Xenobe
             if ($targetbeams > $attackershields)
             {                                                               // Target beams GT Attacker shields
                 $targetbeams = $targetbeams - $attackershields;             // T loses beams EQ to A shields
-                $attackershields = 0;                                       // A loses all shields
             }
             else
             {                                                               // Target beams LE Attacker shields
-                $attackershields = $attackershields - $targetbeams;         // A loses shields EQ to T beams
                 $targetbeams = 0;                                           // T loses all beams
             }
         }
@@ -755,13 +753,11 @@ class Xenobe
         {                                                                   // Attacker fires torps - continue combat - torps VS armor
             if ($attackertorpdamage > $targetarmor)
             {                                                               // Attacker fired torps GT half target armor
-                $attackertorpdamage = $attackertorpdamage - $targetarmor;   // A loses fired torps EQ to T armor
                 $targetarmor=0;                                             // T loses all armor (T DESTROYED)
             }
             else
             {                                                                // Attacker fired torps LE half target armor
                 $targetarmor = $targetarmor - $attackertorpdamage;           // T loses armor EQ to A torps fired
-                $attackertorpdamage = 0;                                     // A loses all torps fired
             }
         }
         if ($targettorpdmg > 0)
@@ -769,10 +765,6 @@ class Xenobe
             if ($targettorpdmg > $attackerarmor)
             {                                                               // Target fired torps GT half Attacker armor
                 $attackerarmor = 0;                                         // A loses all armor (A DESTROYED)
-            }
-            else
-            {                                                               // Target fired torps LE half Attacker armor
-                $targettorpdmg = 0;                                         // T loses all torps fired
             }
         }
         if ($attackerfighters > 0 && $targetfighters > 0)
@@ -830,11 +822,6 @@ class Xenobe
         if ($attackertorps    < 0)
         {
             $attackertorps = 0;
-        }
-
-        if ($attackerbeams    < 0)
-        {
-            $attackerbeams = 0;
         }
 
         if ($attackerarmor    < 0)
@@ -964,7 +951,6 @@ class Xenobe
         {
             \Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_RAW, "$targetinfo[character_name] destroyed your ship!");
             \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
-            $xenobeisdead = 1;
             if ($targetarmor > 0)
             {
                 // Target still alive to salvage attacker
@@ -1129,10 +1115,6 @@ class Xenobe
                     {
                         $temp = round($targetfighters / 2);
                         $targetfighters = $temp;
-                    }
-                    else
-                    {
-                        $playertorpdmg = 0;
                     }
                 }
 
