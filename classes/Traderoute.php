@@ -1773,7 +1773,7 @@ class Traderoute
 
     public static function traderouteDie($pdo_db, $lang, \Tki\Reg $tkireg, $error_msg, $template)
     {
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
+        \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
         echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
