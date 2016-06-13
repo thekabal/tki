@@ -1,4 +1,4 @@
-ohno<?php
+<?php
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -16,6 +16,7 @@ ohno<?php
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: main.php
+/
 require_once './common.php';
 
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
