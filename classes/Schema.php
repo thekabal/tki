@@ -88,7 +88,7 @@ class Schema
 
         if ($dbtype == 'postgres9')
         {
-       	    $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
+            $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
             foreach ($seq_files as $seq_filename)
             {
                 $table_timer = new Timer;
