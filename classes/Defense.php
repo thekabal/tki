@@ -48,8 +48,8 @@ class Defense
                             $qty -= $cur['quantity'];
                             $up_secdef_res = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity = ? WHERE defence_id = ?", array($qty, $row['defence_id']));
                             Db::logDbErrors($pdo_db, $db, $up_secdef_res, __LINE__, __FILE__);
-                            PlayerLog::writeLog($pdo_db, $db, $cur['ship_id'], LOG_DEFS_DESTROYED, $cur['quantity'] .'|'. $targetdeftype .'|'. $row['sector_id']);
-                            PlayerLog::writeLog($pdo_db, $db, $row['ship_id'], LOG_DEFS_DESTROYED, $cur['quantity'] .'|'. $deftype .'|'. $row['sector_id']);
+                            PlayerLog::WriteLog($pdo_db, $cur['ship_id'], LOG_DEFS_DESTROYED, $cur['quantity'] .'|'. $targetdeftype .'|'. $row['sector_id']);
+                            PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFS_DESTROYED, $cur['quantity'] .'|'. $deftype .'|'. $row['sector_id']);
                         }
                         else
                         {
@@ -58,8 +58,8 @@ class Defense
 
                             $up_secdef_res2 = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity=quantity - ? WHERE defence_id = ?", array($qty, $cur['defence_id']));
                             Db::logDbErrors($pdo_db, $db, $up_secdef_res2, __LINE__, __FILE__);
-                            PlayerLog::writeLog($pdo_db, $db, $cur['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $targetdeftype .'|'. $row['sector_id']);
-                            PlayerLog::writeLog($pdo_db, $db, $row['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $deftype .'|'. $row['sector_id']);
+                            PlayerLog::WriteLog($pdo_db, $cur['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $targetdeftype .'|'. $row['sector_id']);
+                            PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $deftype .'|'. $row['sector_id']);
                             $qty = 0;
                         }
                         $other_secdef_res->MoveNext();

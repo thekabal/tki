@@ -73,7 +73,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     if ($playerinfo['ship_fighters'] > $rowo0['ship_fighters'])
                     {
                         $furcount0a++;
-                        Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo0[character_name]");
+                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo0[character_name]");
                         Tki\Xenobe::xenobeToShip($pdo_db, $db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($xenobeisdead > 0)
                         {
@@ -85,7 +85,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        // O = 0 & Aggression = 2 attack always
                 {
                     $furcount0a++;
-                    Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo0[character_name]");
+                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo0[character_name]");
                     Tki\Xenobe::xenobeToShip($pdo_db, $db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
                     if ($xenobeisdead > 0)
                     {
@@ -122,7 +122,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     if ($playerinfo['ship_fighters'] > $rowo1['ship_fighters'] && $rowo1['planet_id'] == 0)
                     {
                         $furcount1a++;
-                        Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
+                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
                         Tki\Xenobe::xenobeToShip($pdo_db, $db, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($xenobeisdead > 0)
                         {
@@ -134,7 +134,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        //  O = 1 & AGRESSION = 2 ATTACK ALLWAYS
                 {
                     $furcount1a++;
-                    Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
+                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
                     if (!$rowo1['planet_id'] == 0)
                     {              // Is on planet
                         Tki\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo1['planet_id'], $tkireg, $playerinfo, $langvars);
@@ -184,7 +184,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     if ($playerinfo['ship_fighters'] > $rowo2['ship_fighters'] && $rowo2['planet_id'] == 0)
                     {
                         $furcount2a++;
-                        Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
+                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
                         Tki\Xenobe::xenobeToShip($pdo_db, $db, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($xenobeisdead > 0)
                         {
@@ -196,7 +196,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        // O = 2 & AGRESSION = 2 ATTACK ALLWAYS
                 {
                     $furcount2a++;
-                    Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
+                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
                     if (!$rowo2['planet_id'] == 0)
                     {              // IS ON PLANET
                         Tki\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
@@ -259,7 +259,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         if ($playerinfo['ship_fighters'] > $rowo3['ship_fighters'] && $rowo3['planet_id'] == 0)
                         {
                             $furcount3a++;
-                            Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
+                            Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
                             Tki\Xenobe::xenobeToShip($pdo_db, $db, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
                             if ($xenobeisdead > 0)
                             {
@@ -271,7 +271,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     elseif ($playerinfo['aggression'] == 2)        // O = 3 & AGRESSION = 2 ATTACK ALLWAYS
                     {
                         $furcount3a++;
-                        Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
+                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
                         if (!$rowo3['planet_id'] == 0)
                         {              // IS ON PLANET
                             Tki\Xenobe::xenobeToPlanet($pdo_db, $db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);

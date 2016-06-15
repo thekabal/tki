@@ -63,7 +63,7 @@ elseif ($sure == 2)
     Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, true);
     Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
     Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_HARAKIRI, "$playerinfo[character_name]|" . $_SERVER['REMOTE_ADDR'] . "");
-    Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_HARAKIRI, $_SERVER['REMOTE_ADDR']);
+    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_HARAKIRI, $_SERVER['REMOTE_ADDR']);
     echo "Due to nobody looking after your Planets, all your Planets have reduced into dust and ruble. Your Planets are no more.<br>\n";
 }
 else

@@ -115,7 +115,7 @@ if ($playerfound)
             if ($playerinfo['ship_destroyed'] == "N")
             {
                 // Player's ship has not been destroyed
-                Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_LOGIN, $_SERVER['REMOTE_ADDR']);
+                Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_LOGIN, $_SERVER['REMOTE_ADDR']);
                 $stamp = date("Y-m-d H:i:s");
                 $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, ip_address = ? WHERE ship_id = ?;", array($stamp, $_SERVER['REMOTE_ADDR'], $playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
@@ -201,7 +201,7 @@ if ($playerfound)
     {
         // password is incorrect
         echo $langvars['l_login_4gotpw1a'] . "<br><br>" . $langvars['l_login_4gotpw1b'] . " <a href='mail.php?mail=" . $email . "'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw2a'] . "<br><br>" . $langvars['l_login_4gotpw2b'] . " <a href='index.php'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw3'] . " " . $_SERVER['REMOTE_ADDR'] . "...";
-        Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_BADLOGIN, $_SERVER['REMOTE_ADDR']);
+        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_BADLOGIN, $_SERVER['REMOTE_ADDR']);
         Tki\AdminLog::writeLog($pdo_db, $db, (1000 + LOG_BADLOGIN), "{$_SERVER['REMOTE_ADDR']}|{$email}|{$filtered_post_password}");
     }
 }

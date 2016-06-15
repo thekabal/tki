@@ -35,7 +35,7 @@ class Toll
                 $toll_amount = round(($row['quantity'] / $total_fighters) * $toll);
                 $res = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits + ? WHERE ship_id = ?", array($toll_amount, $row['ship_id']));
                 Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
-                PlayerLog::writeLog($pdo_db, $db, $row['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
+                PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
                 $select_def_res->MoveNext();
             }
         }

@@ -87,7 +87,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
         // You are hit. Tell the player and put it in the log
         $langvars['l_chm_youhitsomemines'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_youhitsomemines']);
         echo $langvars['l_chm_youhitsomemines'] . "<br>";
-        Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_HIT_MINES, "$roll|$sector");
+        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_HIT_MINES, "$roll|$sector");
 
         // Tell the owner that his mines where hit
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hehitminesinsector']);
@@ -153,7 +153,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                 {
                     // BOOM
                     $pod = $playerinfo['dev_escapepod'];
-                    Tki\PlayerLog::writeLog($pdo_db, $db, $playerinfo['ship_id'], LOG_SHIP_DESTROYED_MINES, "$sector|$pod");
+                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_SHIP_DESTROYED_MINES, "$sector|$pod");
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hewasdestroyedbyyourmines']);
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_sector]", $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
                     Tki\SectorDefense::messageDefenseOwner($pdo_db, $db, $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);

@@ -54,14 +54,14 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
         $resx = $db->Execute("UPDATE {$db->prefix}planets SET colonists = ROUND (colonists - colonists * ?) WHERE planet_id = ?;", array($space_plague_kills, $targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
         $logpercent = round($space_plague_kills * 100);
-        Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['owner'], LOG_SPACE_PLAGUE, "$targetinfo[name]|$targetinfo[sector_id]|$logpercent");
+        Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['owner'], LOG_SPACE_PLAGUE, "$targetinfo[name]|$targetinfo[sector_id]|$logpercent");
     }
     else
     {
         echo "The horsemen release a Plasma Storm!<br>.";
         $resy = $db->Execute("UPDATE {$db->prefix}planets SET energy = 0 WHERE planet_id = ?;", array($targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $db, $resy, __LINE__, __FILE__);
-        Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['owner'], LOG_PLASMA_STORM, "$targetinfo[name]|$targetinfo[sector_id]");
+        Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['owner'], LOG_PLASMA_STORM, "$targetinfo[name]|$targetinfo[sector_id]");
     }
 }
 echo "<br>";
