@@ -61,11 +61,12 @@ else
 }
 
 $holds_used = $playerinfo['ship_ore'] + $playerinfo['ship_organics'] + $playerinfo['ship_goods'] + $playerinfo['ship_colonists'];
-$holds_max = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
-$armor_pts_max = Tki\CalcLevels::armor($playerinfo['armor'], $tkireg->level_factor);
-$ship_fighters_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor);
-$torps_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg->level_factor);
-$energy_max = Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor);
+var_dump($tkireg->level_factor);
+$holds_max = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
+$armor_pts_max = Tki\CalcLevels::armor($playerinfo['armor'], $tkireg);
+$ship_fighters_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg);
+$torps_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg);
+$energy_max = Tki\CalcLevels::energy($playerinfo['power'], $tkireg);
 $escape_pod = ($playerinfo['dev_escapepod'] == 'Y') ? $langvars['l_yes'] : $langvars['l_no'];
 $fuel_scoop = ($playerinfo['dev_fuelscoop'] == 'Y') ? $langvars['l_yes'] : $langvars['l_no'];
 $lssd = ($playerinfo['dev_lssd'] == 'Y') ? $langvars['l_yes'] : $langvars['l_no'];
