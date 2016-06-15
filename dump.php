@@ -27,8 +27,12 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('dump', 'main', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
 
-$result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-$playerinfo = $result->fields;
+// Get playerinfo from database
+$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->execute();
+$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
 $sectorinfo = $result2->fields;
