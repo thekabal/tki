@@ -573,7 +573,7 @@ class Planet
                     $resx = $db->Execute("DELETE FROM {$db->prefix}planets WHERE planet_id=?", array($planetinfo['planet_id']));
                     \Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
                     \Tki\PlayerLog::WriteLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
-                    \Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
+                    \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
                     \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
                 }
                 else
