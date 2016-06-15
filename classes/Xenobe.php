@@ -24,7 +24,7 @@ namespace Tki;
 
 class Xenobe
 {
-    public static function xenobeTrade(\PDO $pdo_db, $db, $playerinfo, \Tki\Reg $tkireg)
+    public static function xenobeTrade(\PDO $pdo_db, $db, $playerinfo, Reg $tkireg)
     {
         // We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
         $tkireg->ore_price = 11;
@@ -234,7 +234,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeToPlanet(\PDO $pdo_db, $db, $planet_id, \Tki\Reg $tkireg, $playerinfo, $langvars)
+    public static function xenobeToPlanet(\PDO $pdo_db, $db, $planet_id, Reg $tkireg, $playerinfo, $langvars)
     {
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
@@ -547,7 +547,7 @@ class Xenobe
         \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
 
-    public static function xenobeToShip(\PDO $pdo_db, $db, $ship_id, \Tki\Reg $tkireg, $playerinfo, $langvars)
+    public static function xenobeToShip(\PDO $pdo_db, $db, $ship_id, Reg $tkireg, $playerinfo, $langvars)
     {
         // Lookup target details
         $resa = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}zones READ, {$db->prefix}planets READ, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
@@ -1018,7 +1018,7 @@ class Xenobe
         \Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
     }
 
-    public static function xenobeToSecDef(\PDO $pdo_db, $db, $langvars, $playerinfo, $targetlink, \Tki\Reg $tkireg)
+    public static function xenobeToSecDef(\PDO $pdo_db, $db, $langvars, $playerinfo, $targetlink, Reg $tkireg)
     {
         // Check for sector defenses
         if ($targetlink > 0)
@@ -1238,7 +1238,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove(\PDO $pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg)
+    public static function xenobeMove(\PDO $pdo_db, $db, $playerinfo, $targetlink, $langvars, Reg $tkireg)
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1366,7 +1366,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter(\PDO $pdo_db, $db, $playerinfo, $xenobeisdead, $langvars, $tkireg)
+    public static function xenobeHunter(\PDO $pdo_db, $db, $playerinfo, $xenobeisdead, $langvars, Reg $tkireg)
     {
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
         \Tki\Db::LogDbErrors($pdo_db, $rescount, __LINE__, __FILE__);
@@ -1488,7 +1488,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeRegen(\PDO $pdo_db, $db, $playerinfo, $xen_unemployment, $tkireg)
+    public static function xenobeRegen(\PDO $pdo_db, $db, $playerinfo, $xen_unemployment, Reg $tkireg)
     {
         // Xenobe Unempoyment Check
         $playerinfo['credits'] = $playerinfo['credits'] + $xen_unemployment;
