@@ -17,10 +17,6 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
         array (
             'Tki\\' => 4,
         ),
-        'B' => 
-        array (
-            'Tki\\' => 4,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -28,10 +24,6 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
         array (
             0 => __DIR__ . '/../..' . '/classes',
             1 => __DIR__ . '/../..' . '/config',
-        ),
-        'Tki\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/classes',
         ),
     );
 
