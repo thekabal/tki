@@ -172,8 +172,8 @@ class Db
         $error = null;
         if ($pdo_db instanceof PDO)
         {
-            $error = $db->errorInfo()[1];
-            $db_error = $db->errorInfo()[2];
+            $error = $pdo_db->errorInfo()[1];
+            $db_error = $pdo_db->errorInfo()[2];
             $db_log = true; // We need to create a method for disabling db logging on PDO
         }
 

@@ -61,7 +61,6 @@ else
 }
 
 $holds_used = $playerinfo['ship_ore'] + $playerinfo['ship_organics'] + $playerinfo['ship_goods'] + $playerinfo['ship_colonists'];
-var_dump($tkireg->level_factor);
 $holds_max = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
 $armor_pts_max = Tki\CalcLevels::armor($playerinfo['armor'], $tkireg);
 $ship_fighters_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg);
