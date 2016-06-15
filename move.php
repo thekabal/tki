@@ -29,12 +29,12 @@ $sector = (int) filter_input(INPUT_GET, 'sector', FILTER_SANITIZE_NUMBER_INT);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('move', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
 
-// Retrieve the user and ship information
-$result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
-
-// Put the player information into the array: "playerinfo"
-$playerinfo = $result->fields;
+// Get playerinfo from database
+$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->execute();
+$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Check to see if the player has less than one turn available
 // and if so return to the main menu

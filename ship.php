@@ -33,9 +33,13 @@ if (!isset($ship_id))
     $ship_id = null;
 }
 
-$res = $db->Execute("SELECT team, ship_name, character_name, sector FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
-$playerinfo = $res->fields;
+// Get playerinfo from database
+$sql = "SELECT team, ship_name, character_name, sector FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->execute();
+$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
 $res2 = $db->Execute("SELECT team, ship_name, character_name, sector FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
 Tki\Db::logDbErrors($pdo_db, $db, $res2, __LINE__, __FILE__);
 $othership = $res2->fields;

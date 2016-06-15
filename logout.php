@@ -27,9 +27,14 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'globa
 if (array_key_exists('username', $_SESSION))
 {
     $current_score = 0;
-    $result = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
-    $playerinfo = $result->fields;
+
+    // Get playerinfo from database
+    $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':email', $_SESSION['username']);
+    $stmt->execute();
+    $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
     $current_score = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 
     $langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));

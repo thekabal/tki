@@ -28,9 +28,12 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
-$result = $db->Execute("SELECT ship_id,character_name FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
-$playerinfo = $result->fields;
+// Get playerinfo from database
+$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->execute();
+$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (array_key_exists('sure', $_GET))
 {
