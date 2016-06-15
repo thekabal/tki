@@ -58,7 +58,7 @@ if ($sort !== null)
 }
 
 $res = $db->Execute($query, array($playerinfo['ship_id']));
-Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
 $i = 0;
 if ($res)

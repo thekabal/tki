@@ -24,7 +24,7 @@ class Mines
     public static function explode($pdo_db, $db, $sector, $num_mines)
     {
         $secdef_result = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type ='M' ORDER BY QUANTITY ASC", array($sector));
-        Db::logDbErrors($pdo_db, $db, $secdef_result, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $secdef_result, __LINE__, __FILE__);
 
         // Put the defence information into the array "defenceinfo"
         if ($secdef_result instanceof \adodb\ADORecordSet)
@@ -35,13 +35,13 @@ class Mines
                 if ($row['quantity'] > $num_mines)
                 {
                     $update_res = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity = quantity - ? WHERE defence_id = ?", array($num_mines, $row['defence_id']));
-                    Db::logDbErrors($pdo_db, $db, $update_res, __LINE__, __FILE__);
+                    Db::LogDbErrors($pdo_db, $update_res, __LINE__, __FILE__);
                     $num_mines = 0;
                 }
                 else
                 {
                     $update_res = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE defence_id = ?", array($row['defence_id']));
-                    Db::logDbErrors($pdo_db, $db, $update_res, __LINE__, __FILE__);
+                    Db::LogDbErrors($pdo_db, $update_res, __LINE__, __FILE__);
                     $num_mines -= $row['quantity'];
                 }
                 $secdef_result->MoveNext();

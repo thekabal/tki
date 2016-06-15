@@ -43,19 +43,19 @@ if (!array_key_exists('action', $_GET))
 if ($_GET['action'] == "delete")
 {
     $resx = $db->Execute("DELETE FROM {$db->prefix}messages WHERE ID=? AND recp_id = ?;", array($ID, $playerinfo['ship_id']));
-    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 }
 elseif ($_GET['action'] == "delete_all")
 {
     $resx = $db->Execute("DELETE FROM {$db->prefix}messages WHERE recp_id = ?;", array($playerinfo['ship_id']));
-    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 }
 
 $cur_D = date("Y-m-d");
 $cur_T = date("H:i:s");
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}messages WHERE recp_id = ? ORDER BY sent DESC;", array($playerinfo['ship_id']));
-Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 ?>
 <div align="center">
   <table border="0" cellspacing="0" width="70%" bgcolor="silver" cellpadding="0">
@@ -103,7 +103,7 @@ else
     {
         $msg = $res->fields;
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($msg['sender_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $sender = $result->fields;
 //      $isAdmin = isAdmin($sender);
         ?>

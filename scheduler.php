@@ -74,7 +74,7 @@ echo "<h1>" . $title . "</h1>\n";
 // This isn't the right thing to do, but its better than creating an entire class for a 12 line function.
 function is_query_ok($pdo_db, $db, $res)
 {
-    $test_result = Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+    $test_result = Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     if ($test_result)
     {
         echo " ok.<br>";
@@ -116,7 +116,7 @@ else
     $schedCount = 0;
     $lastrunList = null;
     $sched_res = $db->Execute("SELECT * FROM {$db->prefix}scheduler");
-    Tki\Db::logDbErrors($pdo_db, $db, $sched_res, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $sched_res, __LINE__, __FILE__);
     if ($sched_res)
     {
         while (!$sched_res->EOF)
@@ -141,18 +141,18 @@ else
                 if ($event['spawn'] - $multiplier == 0)
                 {
                     $resx = $db->Execute("DELETE FROM {$db->prefix}scheduler WHERE sched_id = ?", array($event['sched_id']));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 }
                 else
                 {
                     $resy = $db->Execute("UPDATE {$db->prefix}scheduler SET ticks_left = ?, spawn = spawn - ? WHERE sched_id = ?", array($ticks_left, $multiplier, $event['sched_id']));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resy, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
                 }
             }
             else
             {
                 $resz = $db->Execute("UPDATE {$db->prefix}scheduler SET ticks_left = ? WHERE sched_id = ?", array($ticks_left, $event['sched_id']));
-                Tki\Db::logDbErrors($pdo_db, $db, $resz, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
             }
 
             $sched_var_id = $event['sched_id'];
@@ -181,7 +181,7 @@ else
     echo "<p>The scheduler took $runtime seconds to execute.<p>";
 
     $res = $db->Execute("UPDATE {$db->prefix}scheduler SET last_run = ". time());
-    Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 }
 
 echo "<br>";

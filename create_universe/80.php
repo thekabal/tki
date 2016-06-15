@@ -67,7 +67,7 @@ $variables['update_turns_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
 $resxx = $db->execute("INSERT INTO {$db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', $tkireg->sched_turns, 'sched_xenobe.php', ?)", array(time()));
-$variables['update_xenobe_results']['result'] = Tki\Db::logDbErrors($pdo_db, $db, $resxx, __LINE__, __FILE__);
+$variables['update_xenobe_results']['result'] = Tki\Db::LogDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
 $variables['update_xenobe_results']['sched'] = $tkireg->sched_turns;
 $local_table_timer->stop();
 $variables['update_xenobe_results']['elapsed'] = $local_table_timer->elapsed();

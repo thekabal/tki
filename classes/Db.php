@@ -164,30 +164,17 @@ class Db
      * @param integer $served_line
      * @param string $served_page
      */
-    public static function logDbErrors(\PDO $pdo_db, $db, $query, $served_line, $served_page)
+    public static function logDbErrors(\PDO $pdo_db, $query, $served_line, $served_page)
     {
         // Convert the content of PHP_SELF (in case it has been tainted) to the correct html entities
         $safe_script_name = htmlentities($_SERVER['PHP_SELF'], ENT_HTML5, 'UTF-8');
         $db_log = false;
-        if ($db instanceof PDO)
+        $error = null;
+        if ($pdo_db instanceof PDO)
         {
-//            echo "PDO<br>";
             $error = $db->errorInfo()[1];
             $db_error = $db->errorInfo()[2];
             $db_log = true; // We need to create a method for disabling db logging on PDO
-        }
-        else
-        {
-//            echo "ADODB<br>";
-            $error = $db->ErrorMsg();
-            $db_error = $db->ErrorMsg();
-            if (property_exists($db, 'LogSQL'))
-            {
-                if ($db->LogSQL)
-                {
-                    $db_log = true;
-                }
-            }
         }
 
         if ($error === 'null' || $error == '')

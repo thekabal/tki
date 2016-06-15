@@ -76,7 +76,7 @@ if ($target_sector === null)
 }
 
 $res = $db->Execute("SELECT allow_warpedit,{$db->prefix}universe.zone_id FROM {$db->prefix}zones,{$db->prefix}universe WHERE sector_id=? AND {$db->prefix}universe.zone_id={$db->prefix}zones.zone_id;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 if ($zoneinfo['allow_warpedit'] == 'N')
 {
@@ -88,11 +88,11 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 
 $target_sector = round($target_sector);
 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 $res = $db->Execute("SELECT allow_warpedit,{$db->prefix}universe.zone_id FROM {$db->prefix}zones,{$db->prefix}universe WHERE sector_id=? AND {$db->prefix}universe.zone_id={$db->prefix}zones.zone_id;", array($target_sector));
-Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 {
@@ -104,7 +104,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 }
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($target_sector));
-Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 $row = $result2->fields;
 if (!$row)
 {
@@ -114,7 +114,7 @@ if (!$row)
 }
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 if ($result3 instanceof ADORecordSet)
 {
     $flag = 0;
@@ -135,10 +135,10 @@ if ($result3 instanceof ADORecordSet)
     else
     {
         $delete1 = $db->Execute("DELETE FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($playerinfo['sector'], $target_sector));
-        Tki\Db::logDbErrors($pdo_db, $db, $delete1, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $delete1, __LINE__, __FILE__);
 
         $update1 = $db->Execute("UPDATE {$db->prefix}ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $update1, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
         if ($bothway === null)
         {
             echo $langvars['l_warp_removed'] . " " . $target_sector . ".<br><br>";
@@ -146,7 +146,7 @@ if ($result3 instanceof ADORecordSet)
         else
         {
             $delete2 = $db->Execute("DELETE FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($target_sector, $playerinfo['sector']));
-            Tki\Db::logDbErrors($pdo_db, $db, $delete2, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $delete2, __LINE__, __FILE__);
             echo $langvars['l_warp_removedtwo'] . " " . $target_sector . ".<br><br>";
         }
     }

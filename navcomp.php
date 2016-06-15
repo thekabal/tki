@@ -63,7 +63,7 @@ $current_sector = $playerinfo['sector'];
 $computer_tech  = $playerinfo['computer'];
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($current_sector));
-Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 $sectorinfo = $result2->fields;
 
 if ($state == 0)
@@ -151,7 +151,7 @@ elseif ($state == 1)
         }
         else
         {
-            Tki\Db::logDbErrors($pdo_db, $db, $search_result, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $search_result, __LINE__, __FILE__);
             $found = $search_result->RecordCount();
             if ($found > 0)
             {

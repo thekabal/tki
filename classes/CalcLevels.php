@@ -71,7 +71,7 @@ class CalcLevels
         $energy_available = $planetinfo['energy'];
 
         $res = $db->Execute("SELECT beams FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
-        Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if ($res instanceof \adodb\ADORecordSet)
         {
             while (!$res->EOF)
@@ -97,7 +97,7 @@ class CalcLevels
         $energy_available = $planetinfo['energy'];
 
         $res = $db->Execute("SELECT shields FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
-        Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
         if ($res instanceof \adodb\ADORecordSet)
         {
@@ -124,7 +124,7 @@ class CalcLevels
         $torps = $planetinfo['torps'];
 
         $res = $db->Execute("SELECT torp_launchers FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
-        Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if ($res instanceof \adodb\ADORecordSet)
         {
             while (!$res->EOF)

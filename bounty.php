@@ -81,7 +81,7 @@ switch ($response) {
     case "display":
         echo "<h1>" . $title . "</h1>\n";
         $res5 = $db->Execute("SELECT * FROM {$db->prefix}ships, {$db->prefix}bounty WHERE bounty_on = ship_id AND bounty_on = ?;", array($bounty_on));
-        Tki\Db::logDbErrors($pdo_db, $db, $res5, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $res5, __LINE__, __FILE__);
         $j = 0;
         if ($res5)
         {
@@ -111,7 +111,7 @@ switch ($response) {
             for ($j = 0; $j < $num_details; $j++)
             {
                 $someres = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounty_details[$j]['placed_by']));
-                Tki\Db::logDbErrors($pdo_db, $db, $someres, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $someres, __LINE__, __FILE__);
                 $details = $someres->fields;
                 echo "<tr bgcolor=\"$color\">";
                 echo "<td>" . $bounty_details[$j]['amount'] . "</td>";
@@ -157,7 +157,7 @@ switch ($response) {
         }
 
         $res = $db->Execute("SELECT * FROM {$db->prefix}bounty WHERE bounty_id = ?;", array($bid));
-        Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if (!$res || $res->RowCount() ==0)
         {
             echo $langvars['l_by_nobounty'] . "<br><br>";
@@ -176,18 +176,18 @@ switch ($response) {
         }
 
         $del = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_id = ?;", array($bid));
-        Tki\Db::logDbErrors($pdo_db, $db, $del, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $del, __LINE__, __FILE__);
         $stamp = date("Y-m-d H:i:s");
         $refund = $bty['amount'];
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns-1, turns_used = turns_used + 1, credits = credits + ? WHERE ship_id = ?;", array($stamp, $refund, $playerinfo['ship_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         echo $langvars['l_by_canceled'] . "<br>";
         Tki\Text::gotomain($pdo_db, $lang);
         die();
     case "place":
         echo "<h1>" . $title . "</h1>\n";
         $ex = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounty_on));
-        Tki\Db::logDbErrors($pdo_db, $db, $ex, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $ex, __LINE__, __FILE__);
         if (!$ex)
         {
             echo $langvars['l_by_notexists'] . "<br><br>";
@@ -245,7 +245,7 @@ switch ($response) {
             $maxtrans = $score * $score * $tkireg->max_bountyvalue;
             $previous_bounty = 0;
             $pb = $db->Execute("SELECT SUM(amount) AS totalbounty FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = ?;", array($bounty_on, $playerinfo['ship_id']));
-            Tki\Db::logDbErrors($pdo_db, $db, $pb, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $pb, __LINE__, __FILE__);
             if ($pb)
             {
                 $prev = $pb->fields;
@@ -263,17 +263,17 @@ switch ($response) {
         }
 
         $insert = $db->Execute("INSERT INTO {$db->prefix}bounty (bounty_on,placed_by,amount) values (?,?,?);", array($bounty_on, $playerinfo['ship_id'] ,$amount));
-        Tki\Db::logDbErrors($pdo_db, $db, $insert, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $insert, __LINE__, __FILE__);
         $stamp = date("Y-m-d H:i:s");
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, credits = credits - ? WHERE ship_id = ?;", array($stamp, $amount, $playerinfo['ship_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         echo $langvars['l_by_placed'] . "<br>";
         Tki\Text::gotomain($pdo_db, $lang);
         die();
     default:
         echo "<h1>" . $title . "</h1>\n";
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_destroyed = 'N' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         echo "<form accept-charset='utf-8' action=bounty.php method=post>";
         echo "<table>";
         echo "<tr><td>" . $langvars['l_by_bountyon'] . "</td><td><select name=bounty_on>";
@@ -302,7 +302,7 @@ switch ($response) {
         echo "</form>";
 
         $result3 = $db->Execute("SELECT bounty_on, SUM(amount) as total_bounty FROM {$db->prefix}bounty GROUP BY bounty_on;");
-        Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
         $i = 0;
         if ($result3)
@@ -332,7 +332,7 @@ switch ($response) {
             for ($i = 0; $i < $num_bounties; $i++)
             {
                 $someres = $db->execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounties[$i]['bounty_on']));
-                Tki\Db::logDbErrors($pdo_db, $db, $someres, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $someres, __LINE__, __FILE__);
                 $details = $someres->fields;
                 echo "<tr bgcolor=\"$color\">";
                 echo "<td><a href=bounty.php?bounty_on=" . $bounties[$i]['bounty_on'] . "&response=display>". $details['character_name'] . "</a></td>";

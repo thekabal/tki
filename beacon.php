@@ -38,7 +38,7 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 $sectorinfo = $result2->fields;
 
 $allowed_rsw = "N";
@@ -54,7 +54,7 @@ if (mb_strlen(trim($beacon_text)) === 0)
 if ($playerinfo['dev_beacon'] > 0)
 {
     $res = $db->Execute("SELECT allow_beacon FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-    Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     $zoneinfo = $res->fields;
     if ($zoneinfo['allow_beacon'] == 'N')
     {
@@ -63,10 +63,10 @@ if ($playerinfo['dev_beacon'] > 0)
     elseif ($zoneinfo['allow_beacon'] == 'L')
     {
         $result3 = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
         $zoneowner_info = $result3->fields;
         $result5 = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneowner_info['owner']));
-        Tki\Db::logDbErrors($pdo_db, $db, $result5, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $result5, __LINE__, __FILE__);
         $zoneteam = $result5->fields;
 
         if ($zoneowner_info['owner'] != $playerinfo['ship_id'])
@@ -114,9 +114,9 @@ if ($playerinfo['dev_beacon'] > 0)
             $beacon_text = trim(htmlentities($beacon_text, ENT_HTML5, 'UTF-8'));
             echo $langvars['l_beacon_nowreads'] . ": " . $beacon_text . ".<br><br>";
             $update = $db->Execute("UPDATE {$db->prefix}universe SET beacon = ? WHERE sector_id = ?;", array($beacon_text, $sectorinfo['sector_id']));
-            Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
             $update = $db->Execute("UPDATE {$db->prefix}ships SET dev_beacon=dev_beacon-1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::logDbErrors($pdo_db, $db, $update, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
         }
     }
 }
