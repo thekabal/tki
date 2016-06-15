@@ -31,9 +31,12 @@ class PlanetReportCE
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_status']);
         echo "<br><br>";
 
-        $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-        \Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
-        $playerinfo = $result->fields;
+        // Get playerinfo from database
+        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':email', $_SESSION['username']);
+        $stmt->execute();
+        $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
         \Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
