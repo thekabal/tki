@@ -36,7 +36,7 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result3 = $db->Execute("SELECT distinct {$db->prefix}movement_log.sector_id, port_type, beacon FROM {$db->prefix}movement_log,{$db->prefix}universe WHERE ship_id = ? AND {$db->prefix}movement_log.sector_id={$db->prefix}universe.sector_id order by sector_id ASC", array($playerinfo['ship_id']));
-Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 $row = $result3->fields;
 
 $tile['special'] = "port-special.png";

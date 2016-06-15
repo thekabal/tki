@@ -38,7 +38,7 @@ if ($playerinfo['dev_emerwarp'] > 0)
 {
     $dest_sector = random_int(0, (int) $max_sectors - 1);
     $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $playerinfo['ship_id']));
-    Tki\Db::logDbErrors($pdo_db, $db, $result_warp, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $result_warp, __LINE__, __FILE__);
     Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $dest_sector);
     $langvars['l_ewd_used'] = str_replace("[sector]", $dest_sector, $langvars['l_ewd_used']);
     $variables['dest_sector'] = $dest_sector;

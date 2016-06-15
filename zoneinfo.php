@@ -39,7 +39,7 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($zone));
-Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 
 if ($res->EOF)
@@ -80,14 +80,14 @@ else
         if ($row['team_zone'] == 'N')
         {
             $result = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['owner']));
-            Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $ownerinfo = $result->fields;
             $ownername = $ownerinfo['character_name'];
         }
         else
         {
             $result = $db->Execute("SELECT team_name, creator, id FROM {$db->prefix}teams WHERE id = ?;", array($row['owner']));
-            Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $ownerinfo = $result->fields;
             $ownername = $ownerinfo['team_name'];
         }

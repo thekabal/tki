@@ -81,7 +81,7 @@ else
 }
 
 $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email=? || character_name=? || ship_name=?;", array($username, $character, $shipname));
-Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $flag = 0;
 
 if ($username === null || $character === null || $shipname === null)
@@ -118,7 +118,7 @@ if ($flag == 0)
     // Insert code to add player to database
     $stamp = date('Y-m-d H:i:s');
     $query = $db->Execute("SELECT MAX(turns_used + turns) AS mturns FROM {$db->prefix}ships;");
-    Tki\Db::logDbErrors($pdo_db, $db, $query, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
     $res = $query->fields;
 
     $mturns = $res['mturns'];
@@ -133,7 +133,7 @@ if ($flag == 0)
 
     $result2 = $db->Execute("INSERT INTO {$db->prefix}ships (ship_name, ship_destroyed, character_name, password, email, armor_pts, credits, ship_energy, ship_fighters, turns, on_planet, dev_warpedit, dev_genesis, dev_beacon, dev_emerwarp, dev_escapepod, dev_fuelscoop, dev_minedeflector, last_login, ip_address, trade_colonists, trade_fighters, trade_torps, trade_energy, cleared_defences, lang, dev_lssd)
                              VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, $tkireg->start_armor, $tkireg->start_credits, $tkireg->start_energy, $tkireg->start_fighters, $mturns, 'N', $tkireg->start_editors, $tkireg->start_genesis, $tkireg->start_beacon, $tkireg->start_emerwarp, $tkireg->start_escape_pod, $tkireg->start_scoop, $tkireg->start_minedeflectors, $stamp, $_SERVER['REMOTE_ADDR'], 'Y', 'N', 'N', 'Y', NULL, $lang, $tkireg->start_lssd));
-    Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
     if (!$result2)
     {
@@ -142,7 +142,7 @@ if ($flag == 0)
     else
     {
         $result2 = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($username));
-        Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
         $shipid = $result2->fields;
 
@@ -164,10 +164,10 @@ if ($flag == 0)
 
         Tki\LogMove::writeLog($pdo_db, $shipid['ship_id'], 0); // A new player is placed into sector 0. Make sure his movement log shows it, so they see it on the galaxy map.
         $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES (NULL, ?, ?, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array($character . "\'s Territory", $shipid['ship_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
         $resx = $db->Execute("INSERT INTO {$db->prefix}ibank_accounts (ship_id,balance,loan) VALUES (?,0,0);", array($shipid['ship_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
         // Add presets for new player
         for ($zz=0; $zz<$tkireg->max_presets; $zz++)

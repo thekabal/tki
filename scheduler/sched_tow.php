@@ -28,7 +28,7 @@ $num_to_tow = 0;
 do
 {
     $res = $db->Execute("SELECT ship_id,character_name,hull,sector,{$db->prefix}universe.zone_id,max_hull FROM {$db->prefix}ships,{$db->prefix}universe,{$db->prefix}zones WHERE sector=sector_id AND {$db->prefix}universe.zone_id={$db->prefix}zones.zone_id AND max_hull<>0 AND (({$db->prefix}ships.hull + {$db->prefix}ships.engines + {$db->prefix}ships.computer + {$db->prefix}ships.beams + {$db->prefix}ships.torp_launchers + {$db->prefix}ships.shields + {$db->prefix}ships.armor)/7) >max_hull AND ship_destroyed='N'");
-    Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     if ($res)
     {
         $num_to_tow = $res->RecordCount();
@@ -40,7 +40,7 @@ do
             $newsector = random_int(0, (int) $max_sectors - 1);
             echo " to sector $newsector.<br>";
             $query = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, cleared_defences=' ' WHERE ship_id=?", array($newsector, $row['ship_id']));
-            Tki\Db::logDbErrors($pdo_db, $db, $query, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
             Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_TOW, "$row[sector]|$newsector|$row[max_hull]");
             Tki\LogMove::writeLog($pdo_db, $row['ship_id'], $newsector);
             $res->MoveNext();

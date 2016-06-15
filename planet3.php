@@ -70,7 +70,7 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
-Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 $planetinfo = $result2->fields;
 
 // Check to see if it returned valid planet info.
@@ -160,10 +160,10 @@ if ($planetinfo['sells'] == 'Y')
 
         // Update ship cargo, credits and turns
         $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
-        Tki\Db::logDbErrors($pdo_db, $db, $trade_result, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
 
         $trade_result2 = $db->Execute("UPDATE {$db->prefix}planets SET ore = ore - ?, organics = organics - ?, goods = goods - ?, energy = energy - ?, credits = credits + ? WHERE planet_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $total_cost, $planet_id));
-        Tki\Db::logDbErrors($pdo_db, $db, $trade_result2, __LINE__, __FILE__);
+        Tki\Db::LogDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
         echo $langvars['l_trade_complete'] . "<br><br>";
     }
 }

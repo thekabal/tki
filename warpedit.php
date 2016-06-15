@@ -36,7 +36,7 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result4 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($pdo_db, $db, $result4, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result4, __LINE__, __FILE__);
 $sectorinfo = $result4->fields;
 
 if ($playerinfo['turns'] < 1)
@@ -56,7 +56,7 @@ if ($playerinfo['dev_warpedit'] < 1)
 }
 
 $res = $db->Execute("SELECT allow_warpedit FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 if ($zoneinfo['allow_warpedit'] == 'N')
 {
@@ -69,11 +69,11 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 if ($zoneinfo['allow_warpedit'] == 'L')
 {
     $result3 = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-    Tki\Db::logDbErrors($pdo_db, $db, $result3, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
     $zoneowner_info = $result3->fields;
 
     $result5 = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneowner_info['owner']));
-    Tki\Db::logDbErrors($pdo_db, $db, $result5, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $result5, __LINE__, __FILE__);
     $zoneteam = $result5->fields;
 
     if ($zoneowner_info['owner'] != $playerinfo['ship_id'])
@@ -89,7 +89,7 @@ if ($zoneinfo['allow_warpedit'] == 'L')
 }
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($pdo_db, $db, $result2, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 if (!$result2 instanceof ADORecordSet)
 {
     echo $langvars['l_warp_nolink'] . "<br><br>";

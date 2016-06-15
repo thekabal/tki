@@ -24,7 +24,7 @@ class Ownership
     public static function calc($pdo_db, $db, $sector, $tkireg, $langvars)
     {
         $bases_res = $db->Execute("SELECT owner, team FROM {$db->prefix}planets WHERE sector_id=? AND base='Y'", array($sector));
-        Db::logDbErrors($pdo_db, $db, $bases_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $bases_res, __LINE__, __FILE__);
         $num_bases = $bases_res->RecordCount();
 
         $i = 0;
@@ -117,7 +117,7 @@ class Ownership
             else
             {
                 $team_res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id=?", array($owners[$loop]['id']));
-                Db::logDbErrors($pdo_db, $db, $team_res, __LINE__, __FILE__);
+                Db::LogDbErrors($pdo_db, $team_res, __LINE__, __FILE__);
                 if ($team_res && $team_res->RecordCount() != 0)
                 {
                     $curship = $team_res->fields;
@@ -133,7 +133,7 @@ class Ownership
         if ($nbteams > 1)
         {
             $setzone_res = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
-            Db::logDbErrors($pdo_db, $db, $setzone_res, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $setzone_res, __LINE__, __FILE__);
 
             return $langvars['l_global_warzone'];
         }
@@ -151,7 +151,7 @@ class Ownership
         if ($numunallied > 1)
         {
             $setzone_resb = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
-            Db::logDbErrors($pdo_db, $db, $setzone_resb, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $setzone_resb, __LINE__, __FILE__);
 
             return $langvars['l_global_warzone'];
         }
@@ -160,7 +160,7 @@ class Ownership
         if ($numunallied > 0 && $nbteams > 0)
         {
             $setzone_resc = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
-            Db::logDbErrors($pdo_db, $db, $setzone_resc, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $setzone_resc, __LINE__, __FILE__);
 
             return $langvars['l_global_warzone'];
         }
@@ -186,12 +186,12 @@ class Ownership
 
             $query = $query . ' AND team!=0';
             $select_team_res = $db->Execute($query);
-            Db::logDbErrors($pdo_db, $db, $select_team_res, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $select_team_res, __LINE__, __FILE__);
 
             if ($select_team_res !== false && ($select_team_res->RecordCount() != 0))
             {
                 $setzone_resd = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
-                Db::logDbErrors($pdo_db, $db, $setzone_resd, __LINE__, __FILE__);
+                Db::LogDbErrors($pdo_db, $setzone_resd, __LINE__, __FILE__);
 
                 return $langvars['l_global_warzone'];
             }
@@ -219,7 +219,7 @@ class Ownership
         if ($owners[$winner]['num'] < $tkireg->min_bases_to_own)
         {
             $setzone_rese = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=1 WHERE sector_id=?", array($sector));
-            Db::logDbErrors($pdo_db, $db, $setzone_rese, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $setzone_rese, __LINE__, __FILE__);
 
             return $langvars['l_global_nzone'];
         }
@@ -227,15 +227,15 @@ class Ownership
         if ($owners[$winner]['type'] == 'C')
         {
             $setzone_resf = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE team_zone='Y' AND owner=?", array($owners[$winner]['id']));
-            Db::logDbErrors($pdo_db, $db, $setzone_resf, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $setzone_resf, __LINE__, __FILE__);
             $zone = $setzone_resf->fields;
 
             $setzone_resg = $db->Execute("SELECT team_name FROM {$db->prefix}teams WHERE id=?", array($owners[$winner]['id']));
-            Db::logDbErrors($pdo_db, $db, $setzone_resg, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $setzone_resg, __LINE__, __FILE__);
             $team = $setzone_resg->fields;
 
             $update_res = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=? WHERE sector_id=?", array($zone['zone_id'], $sector));
-            Db::logDbErrors($pdo_db, $db, $update_res, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $update_res, __LINE__, __FILE__);
 
             return $langvars['l_global_team'] . ' ' . $team['team_name'] . '!';
         }
@@ -255,7 +255,7 @@ class Ownership
             if ($onpar == 1)
             {
                 $setzone_resh = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=1 WHERE sector_id=?", array($sector));
-                Db::logDbErrors($pdo_db, $db, $setzone_resh, __LINE__, __FILE__);
+                Db::LogDbErrors($pdo_db, $setzone_resh, __LINE__, __FILE__);
 
                 return $langvars['l_global_nzone'];
             }
@@ -263,15 +263,15 @@ class Ownership
             {
 
                 $setzone_resi = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE team_zone='N' AND owner=?", array($owners[$winner]['id']));
-                Db::logDbErrors($pdo_db, $db, $setzone_resi, __LINE__, __FILE__);
+                Db::LogDbErrors($pdo_db, $setzone_resi, __LINE__, __FILE__);
                 $zone = $setzone_resi->fields;
 
                 $setzone_resj = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id=?", array($owners[$winner]['id']));
-                Db::logDbErrors($pdo_db, $db, $setzone_resj, __LINE__, __FILE__);
+                Db::LogDbErrors($pdo_db, $setzone_resj, __LINE__, __FILE__);
                 $ship = $setzone_resj->fields;
 
                 $update_res2 = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=? WHERE sector_id=?", array($zone['zone_id'], $sector));
-                Db::logDbErrors($pdo_db, $db, $update_res2, __LINE__, __FILE__);
+                Db::LogDbErrors($pdo_db, $update_res2, __LINE__, __FILE__);
 
                 return $langvars['l_global_player'] . ' ' . $ship['character_name'] . '!';
             }

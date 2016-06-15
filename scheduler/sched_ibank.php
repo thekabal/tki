@@ -28,7 +28,7 @@ $expoloan = pow($tkireg->ibank_loaninterest + 1, $multiplier);
 echo "<strong>IBANK</strong><p>";
 
 $ibank_result = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance * ?, loan = loan * ?", array($exponinter, $expoloan));
-Tki\Db::logDbErrors($pdo_db, $db, $ibank_result, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $ibank_result, __LINE__, __FILE__);
 echo "All IBANK accounts updated ($multiplier times).<p>";
 
 $multiplier = 0;

@@ -24,7 +24,7 @@ class Toll
     public static function distribute($pdo_db, $db, $sector, $toll, $total_fighters)
     {
         $select_def_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id=? AND defence_type ='F'", array($sector));
-        Db::logDbErrors($pdo_db, $db, $select_def_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $select_def_res, __LINE__, __FILE__);
 
         // Put the defence information into the array "defenceinfo"
         if ($select_def_res instanceof \adodb\ADORecordSet)
@@ -34,7 +34,7 @@ class Toll
                 $row = $select_def_res->fields;
                 $toll_amount = round(($row['quantity'] / $total_fighters) * $toll);
                 $res = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits + ? WHERE ship_id = ?", array($toll_amount, $row['ship_id']));
-                Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
                 $select_def_res->MoveNext();
             }

@@ -96,7 +96,7 @@ $result = $db->Execute("SELECT {$db->prefix}ships.*, {$db->prefix}teams.team_nam
             FROM {$db->prefix}ships
             LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team = {$db->prefix}teams.id
             WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username']));
-Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
 
 // We do not want to query the database, if it is not necessary.
@@ -107,7 +107,7 @@ if ($playerinfo['team_invite'] != 0)
             FROM {$db->prefix}ships
             LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team_invite = {$db->prefix}teams.id
             WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($pdo_db, $db, $invite, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $invite, __LINE__, __FILE__);
     $invite_info = $invite->fields;
 }
 else
@@ -119,13 +119,13 @@ else
 if (!is_null($whichteam))
 {
     $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
-    Tki\Db::logDbErrors($pdo_db, $db, $result_team, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $result_team, __LINE__, __FILE__);
     $team = $result_team->fields;
 }
 else
 {
     $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
-    Tki\Db::logDbErrors($pdo_db, $db, $result_team, __LINE__, __FILE__);
+    Tki\Db::LogDbErrors($pdo_db, $result_team, __LINE__, __FILE__);
     $team = $result_team->fields;
 }
 
@@ -161,16 +161,16 @@ switch ($teamwhat)
                     }
 
                     $resx = $db->Execute("DELETE FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                     $resy = $db->Execute("UPDATE {$db->prefix}ships SET team='0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resy, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
                     $resz = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE team_invite = ?;", array($whichteam));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resz, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
 
                     $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y';", array($playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                     $i = 0;
                     while (!$res->EOF)
                     {
@@ -181,7 +181,7 @@ switch ($teamwhat)
                     }
 
                     $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                     if ($sectors !== null)
                     {
                         foreach ($sectors as $sector)
@@ -206,7 +206,7 @@ switch ($teamwhat)
                         echo "<tr><td>" . $langvars['l_team_newc'] . "</td><td><select name=newcreator>";
 
                         $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team = ? ORDER BY character_name ASC;", array($whichteam));
-                        Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                         while (!$res->EOF)
                         {
                             $row = $res->fields;
@@ -224,12 +224,12 @@ switch ($teamwhat)
                     else
                     {
                         $resx = $db->Execute("UPDATE {$db->prefix}ships SET team='0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whichteam));
-                        Tki\Db::logDbErrors($pdo_db, $db, $resy, __LINE__, __FILE__);
+                        Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
                         $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                         $i = 0;
                         while (!$res->EOF)
                         {
@@ -239,7 +239,7 @@ switch ($teamwhat)
                         }
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         if ($sectors !== null)
                         {
                             foreach ($sectors as $sector)
@@ -260,21 +260,21 @@ switch ($teamwhat)
             {
                 // owner of a team is leaving and set a new owner
                 $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($newcreator));
-                Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 $newcreatorname = $res->fields;
                 echo $langvars['l_team_youveleft'] . " <strong>" . $team['team_name'] . "</strong> " . $langvars['l_team_relto'] . " " . $newcreatorname['character_name'] . ".<br><br>";
 
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                 $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = ? WHERE team = ?;", array($newcreator, $whichteam));
-                Tki\Db::logDbErrors($pdo_db, $db, $resy, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
                 $resz = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1, creator = ? WHERE id = ?;", array($newcreator, $whichteam));
-                Tki\Db::logDbErrors($pdo_db, $db, $resz, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
 
                 $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
-                Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 $i = 0;
                 while (!$res->EOF)
                 {
@@ -284,7 +284,7 @@ switch ($teamwhat)
                 }
 
                 $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
-                Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 if ($sectors !== null)
                 {
                     foreach ($sectors as $sector)
@@ -310,10 +310,10 @@ switch ($teamwhat)
                 if ($playerinfo['team_invite'] == $whichteam)
                 {
                     $resx = $db->Execute("UPDATE {$db->prefix}ships SET team = ?, team_invite = 0 WHERE ship_id = ?;", array($whichteam, $playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                     $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members + 1 WHERE id = ?;", array($whichteam));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resy, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
                     echo $langvars['l_team_welcome'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
                     Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_JOIN, $team['team_name']);
@@ -348,7 +348,7 @@ switch ($teamwhat)
             {
                 $who = preg_replace('/[^0-9]/', '', $who);
                 $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
-                Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                 $whotoexpel = $result->fields;
 
                 if ($confirmed === null)
@@ -361,10 +361,10 @@ switch ($teamwhat)
                     // should go here if ($whotoexpel[team] ==
 
                     $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = '0' WHERE owner = ?;", array($who));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                     $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($who));
-                    Tki\Db::logDbErrors($pdo_db, $db, $resy, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
                     // No more necessary due to COUNT(*) in previous SQL statement
                     $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whotoexpel['team']));
@@ -409,11 +409,11 @@ switch ($teamwhat)
                 }
 
                 $res = $db->Execute("INSERT INTO {$db->prefix}teams (id, creator, team_name, number_of_members, description) VALUES (?, ?, ?, '1', ?);", array($playerinfo['ship_id'], $playerinfo['ship_id'], $teamname, $teamdesc));
-                Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES(NULL, ?, ?, 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array("{$teamname}\'s Empire", $playerinfo['ship_id']));
-                Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 $resy = $db->Execute("UPDATE {$db->prefix}ships SET team=? WHERE ship_id = ?;", array($playerinfo['ship_id'], $playerinfo['ship_id']));
-                Tki\Db::logDbErrors($pdo_db, $db, $resy, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
                 echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hcreated'] . ".<br><br>";
                 Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_CREATE, $teamname);
             }
@@ -435,7 +435,7 @@ switch ($teamwhat)
                 echo "<tr><td>" . $langvars['l_team_selectp'] . ":</td><td><select name=who style='width:200px;'>";
 
                 $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team <> ? AND ship_destroyed ='N' AND turns_used > 0 ORDER BY character_name ASC;", array($whichteam));
-                Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 while (!$res->EOF)
                 {
                     $row = $res->fields;
@@ -462,7 +462,7 @@ switch ($teamwhat)
                                 break;
                     }
                     $res = $db->Execute("SELECT character_name,team_invite FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
-                    Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                     $newpl = $res->fields;
                     if ($newpl['team_invite'])
                     {
@@ -472,7 +472,7 @@ switch ($teamwhat)
                     else
                     {
                         $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = ? WHERE ship_id = ?;", array($whichteam, $who));
-                        Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         echo $langvars['l_team_plinvted'] . "<br>" . $langvars['l_team_plinvted2'] . "<br>";
                         Tki\PlayerLog::WriteLog($pdo_db, $who, LOG_TEAM_INVITE, $team['team_name']);
                     }
@@ -488,7 +488,7 @@ switch ($teamwhat)
         case 8: // REFUSE invitation
             echo $langvars['l_team_refuse'] . " <strong>" . $invite_info['team_name'] . "</strong>.<br><br>";
             $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
             Tki\PlayerLog::WriteLog($pdo_db, $team['creator'], LOG_TEAM_REJECT, $playerinfo['character_name'] . "|" . $invite_info['team_name']);
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
@@ -533,12 +533,12 @@ switch ($teamwhat)
                 }
 
                 $res = $db->Execute("UPDATE {$db->prefix}teams SET team_name = ?, description = ? WHERE id = ?;", array($teamname, $teamdesc, $whichteam));
-                Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hasbeenr'] . "<br><br>";
 
                 // Adding a log entry to all members of the renamed team
                 $result_team_name = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE team = ? AND ship_id <> ?;", array($whichteam, $playerinfo['ship_id']));
-                Tki\Db::logDbErrors($pdo_db, $db, $result_team_name, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $result_team_name, __LINE__, __FILE__);
                 Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_RENAME, $teamname);
                 while (!$result_team_name->EOF)
                 {
@@ -562,19 +562,19 @@ switch ($teamwhat)
                 {
                     $playerinfo['team'] = -$playerinfo['team'];
                     $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
-                    Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                     $whichteam = $result->fields;
                     echo $langvars['l_team_urejected'] . " <strong>" . $whichteam['team_name'] . "</strong><br><br>";
                     echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
                     break;
                 }
                 $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
-                Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+                Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                 $whichteam = $result->fields;
                 if ($playerinfo['team_invite'])
                 {
                     $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team_invite']));
-                    Tki\Db::logDbErrors($pdo_db, $db, $result, __LINE__, __FILE__);
+                    Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                     $whichinvitingteam = $result->fields;
                 }
                 $isowner = Tki\Team::isTeamOwner($whichteam, $playerinfo);
@@ -582,7 +582,7 @@ switch ($teamwhat)
             }
 
             $res = $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
-            Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
+            Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
             $num_res = $res->fields;
 
             if ($num_res['total'] > 0)

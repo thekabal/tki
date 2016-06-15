@@ -24,13 +24,13 @@ class Character
     public static function kill($pdo_db, $db, $ship_id, $langvars, Reg $tkireg, $remove_planets = false)
     {
         $update_ships_res = $db->Execute("UPDATE {$db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defences=' ' WHERE ship_id=?", array($ship_id));
-        Db::logDbErrors($pdo_db, $db, $update_ships_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $update_ships_res, __LINE__, __FILE__);
 
         $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE placed_by = ?", array($ship_id));
-        Db::logDbErrors($pdo_db, $db, $delete_bounty_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $delete_bounty_res, __LINE__, __FILE__);
 
         $sec_pl_res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner=? AND base='Y'", array($ship_id));
-        Db::logDbErrors($pdo_db, $db, $sec_pl_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $sec_pl_res, __LINE__, __FILE__);
         $i = 0;
 
         $sectors = null;
@@ -48,12 +48,12 @@ class Character
         if ($remove_planets === true && $ship_id > 0)
         {
             $rm_pl_res = $db->Execute("DELETE FROM {$db->prefix}planets WHERE owner = ?", array($ship_id));
-            Db::logDbErrors($pdo_db, $db, $rm_pl_res, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $rm_pl_res, __LINE__, __FILE__);
         }
         else
         {
             $up_pl_res = $db->Execute("UPDATE {$db->prefix}planets SET owner=0, team=0, fighters=0, base='N' WHERE owner=?", array($ship_id));
-            Db::logDbErrors($pdo_db, $db, $up_pl_res, __LINE__, __FILE__);
+            Db::LogDbErrors($pdo_db, $up_pl_res, __LINE__, __FILE__);
         }
 
         if ($sectors !== null)
@@ -65,17 +65,17 @@ class Character
         }
 
         $rm_def_res = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE ship_id=?", array($ship_id));
-        Db::logDbErrors($pdo_db, $db, $rm_def_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $rm_def_res, __LINE__, __FILE__);
 
         $zone_res = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE team_zone='N' AND owner=?", array($ship_id));
-        Db::logDbErrors($pdo_db, $db, $zone_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $zone_res, __LINE__, __FILE__);
         $zone = $zone_res->fields;
 
         $up_zone_res = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=1 WHERE zone_id=?", array($zone['zone_id']));
-        Db::logDbErrors($pdo_db, $db, $up_zone_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $up_zone_res, __LINE__, __FILE__);
 
         $char_res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id=?", array($ship_id));
-        Db::logDbErrors($pdo_db, $db, $char_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $char_res, __LINE__, __FILE__);
         $name = $char_res->fields;
 
         $headline = $name['character_name'] .' '. $langvars['l_killheadline'];
@@ -83,7 +83,7 @@ class Character
         $newstext = str_replace('[name]', $name['character_name'], $langvars['l_news_killed']);
 
         $news_ins_res = $db->Execute("INSERT INTO {$db->prefix}news (headline, newstext, user_id, date, news_type) VALUES (?,?,?,NOW(), 'killed')", array($headline, $newstext, $ship_id));
-        Db::logDbErrors($pdo_db, $db, $news_ins_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $news_ins_res, __LINE__, __FILE__);
     }
 
     // Choosing to use a method instead of a property.

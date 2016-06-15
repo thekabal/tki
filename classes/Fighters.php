@@ -24,7 +24,7 @@ class Fighters
     public static function destroy($pdo_db, $db, $sector, $num_fighters)
     {
         $secdef_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id=? AND defence_type ='F' ORDER BY quantity ASC", array($sector));
-        Db::logDbErrors($pdo_db, $db, $secdef_res, __LINE__, __FILE__);
+        Db::LogDbErrors($pdo_db, $secdef_res, __LINE__, __FILE__);
 
         // Put the defence information into the array "defenceinfo"
         if ($secdef_res instanceof \adodb\ADORecordSet)
@@ -35,13 +35,13 @@ class Fighters
                 if ($row['quantity'] > $num_fighters)
                 {
                     $update_res = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity=quantity - ? WHERE defence_id = ?", array($num_fighters, $row['defence_id']));
-                    Db::logDbErrors($pdo_db, $db, $update_res, __LINE__, __FILE__);
+                    Db::LogDbErrors($pdo_db, $update_res, __LINE__, __FILE__);
                     $num_fighters = 0;
                 }
                 else
                 {
                     $update_res = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE defence_id = ?", array($row['defence_id']));
-                    Db::logDbErrors($pdo_db, $db, $update_res, __LINE__, __FILE__);
+                    Db::LogDbErrors($pdo_db, $update_res, __LINE__, __FILE__);
                     $num_fighters -= $row['quantity'];
                 }
                 $secdef_res->MoveNext();
