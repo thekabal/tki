@@ -212,7 +212,7 @@ if ($mode != 'compat')
     {
         foreach ($logs as $log)
         {
-            $event = \Tki\Log::logParse($log);
+            $event = \Tki\Log::logParse($langvars, $log);
             $log_months_temp = "l_log_months_" . (int) (mb_substr($log['time'], 5, 2));
             $time = $$log_months_temp . " " . mb_substr($log['time'], 8, 2) . " " . mb_substr($log['time'], 0, 4) . " " . mb_substr($log['time'], 11);
 
@@ -257,7 +257,7 @@ if ($mode != 'compat')
     {
         foreach ($logs as $log)
         {
-            $event = \Tki\Log::logParse($log);
+            $event = \Tki\Log::logParse($langvars, $log);
             $log_months_temp = "l_log_months_" . (int) (mb_substr($log['time'], 5, 2));
             $time = $$log_months_temp . " " . mb_substr($log['time'], 8, 2) . " " . mb_substr($log['time'], 0, 4) . " " . mb_substr($log['time'], 11);
 
