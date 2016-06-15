@@ -44,7 +44,7 @@ class Planet
         return false;
     }
 
-    public static function planetBombing(\PDO $pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template)
+    public static function planetBombing(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template)
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -125,7 +125,7 @@ class Planet
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     }
 
-    public static function planetCombat(\PDO $pdo_db, $db, $lang, $langvars, \Tki\Reg $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo)
+    public static function planetCombat(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo)
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -615,7 +615,7 @@ class Planet
         \Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
     }
 
-    public static function shipToShip(\PDO $pdo_db, $db, $langvars, $ship_id, \Tki\Reg $tkireg, $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
+    public static function shipToShip(\PDO $pdo_db, $db, $langvars, $ship_id, Reg $tkireg, $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
     {
         $resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}sector_defence WRITE, {$db->prefix}universe WRITE, {$db->prefix}adodb_logsql WRITE, {$db->prefix}logs WRITE, {$db->prefix}bounty WRITE, {$db->prefix}news WRITE, {$db->prefix}zones READ");
         \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
