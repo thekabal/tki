@@ -96,7 +96,7 @@ else
 
 /// Reset recovery_time to zero
 //$recovery_update_result = $db->Execute ("UPDATE {$db->prefix}ships SET recovery_time = null WHERE email = ?;", array($playerinfo['email']));
-//var_dump (Tki\Db::logDbErrors ($pdo_db, $pdo_db, $recovery_update_result, __LINE__, __FILE__));
+//echo (Tki\Db::logDbErrors ($pdo_db, $pdo_db, $recovery_update_result, __LINE__, __FILE__));
 
 /// Log user in (like login does)
 

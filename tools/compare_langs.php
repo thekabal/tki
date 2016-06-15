@@ -49,8 +49,8 @@ $second = slurp ($second_language);
 $diff = array_diff_key ($first, $second);
 
 // Print out missing array items with clear specify of which has it
-//var_dump ($diff);
-//var_dump ($first);
+//echo  ($diff);
+//echo ($first);
 
 $trans = new translate ($first['local_lang'], $second['local_lang']);
 
