@@ -1790,7 +1790,7 @@ class Traderoute
         // Check circuit compatibility (we only use types 1 and 2 so block anything else)
         if ($circuit != "1" && $circuit != "2")
         {
-            \Tki\AdminLog::writeLog($pdo_db, $db, LOG_RAW, "{$playerinfo['ship_id']}|Tried to use an invalid circuit_type of '{$circuit}', This is normally a result from using an external page and should be banned.");
+            \Tki\AdminLog::writeLog($pdo_db, LOG_RAW, "{$playerinfo['ship_id']}|Tried to use an invalid circuit_type of '{$circuit}', This is normally a result from using an external page and should be banned.");
             self::traderouteDie($pdo_db, $lang, $tkireg, "Invalid Circuit type!<br>*** Possible Exploit has been reported to the admin. ***", $template);
         }
 
@@ -2041,7 +2041,7 @@ class Traderoute
                     // self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnotownnotsell'], $template);
 
                     // Check for valid Owned Source Planet
-                    \Tki\AdminLog::writeLog($pdo_db, $db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id1} as source.");
+                    \Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id1} as source.");
                     self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
                 }
             }
@@ -2106,7 +2106,7 @@ class Traderoute
                 // self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnotownnotsell2'], $template);
 
                 // Check for valid Owned Source Planet
-                \Tki\AdminLog::writeLog($pdo_db, $db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id2} as dest.");
+                \Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id2} as dest.");
                 self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invaliddplanet'], $template);
             }
         }

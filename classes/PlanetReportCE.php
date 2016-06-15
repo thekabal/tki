@@ -56,7 +56,7 @@ class PlanetReportCE
         {
             $ip = $_SERVER['REMOTE_ADDR'];
             $hack_id = 0x1337;
-            \Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
+            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
 
             return (boolean) false;
@@ -124,7 +124,7 @@ class PlanetReportCE
                 $ip = $_SERVER['REMOTE_ADDR'];
                 $planet_id = $res->fields['planet_id'];
                 $sector_id = $res->fields['sector_id'];
-                \Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
+                \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
                 break;
             }
         }
@@ -221,7 +221,7 @@ class PlanetReportCE
                             $planet_hack = true;
                             $hack_id = 0x18582;
                             $hack_count[0]++;
-                            \Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
+                            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
                         }
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET {$commod_type} = ? WHERE planet_id = ? AND owner = ?;", array($prodpercent, $planet_id, $ship_id));
@@ -261,7 +261,7 @@ class PlanetReportCE
                             $planet_hack = true;
                             $hack_id = 0x18531;
                             $hack_count[1]++;
-                            \Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$prodpercent}|{$ship_id}|{$prodpercentarray['team_id']} not {$team_id}");
+                            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$prodpercent}|{$ship_id}|{$prodpercentarray['team_id']} not {$team_id}");
                         }
                     }
                     else
@@ -270,7 +270,7 @@ class PlanetReportCE
                         $planet_hack = true;
                         $hack_id = 0x18598;
                         $hack_count[2]++;
-                        \Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
+                        \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
                     }
                 }
             }
@@ -279,7 +279,7 @@ class PlanetReportCE
         if ($planet_hack)
         {
             $serial_data = serialize($prodpercentarray);
-            \Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_PLANETCHEAT + 1000, "{$ship_id}|{$serial_data}");
+            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT + 1000, "{$ship_id}|{$serial_data}");
             printf("<font color=\"red\"><strong>Your Cheat has been logged to the admin (%08x) [%02X:%02X:%02X].</strong></font><br>\n", (int) $hack_id, (int) $hack_count[0], (int) $hack_count[1], (int) $hack_count[2]);
         }
 

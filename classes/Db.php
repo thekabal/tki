@@ -210,7 +210,7 @@ class Db
             {
                 if ($db_log)
                 {
-                    AdminLog::writeLog($pdo_db, $db, LOG_RAW, $text_error);
+                    AdminLog::writeLog($pdo_db, LOG_RAW, $text_error);
                 }
             }
 
