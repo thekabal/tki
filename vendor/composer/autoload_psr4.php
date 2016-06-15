@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Tki\\' => array($baseDir . '/classes', $baseDir . '/config'),
-    'Tki\\' => array($baseDir . '/classes'),
 );
