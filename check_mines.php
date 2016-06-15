@@ -116,7 +116,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
 
             // Shields up
             $mines_left = $roll - $playerinfo['dev_minedeflector'];
-            $playershields = Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
+            $playershields = Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
             if ($playershields > $playerinfo['ship_energy'])
             {
                 $playershields = $playerinfo['ship_energy'];

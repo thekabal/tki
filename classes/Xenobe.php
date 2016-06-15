@@ -146,7 +146,7 @@ class Xenobe
             $amount_goods = $playerinfo['ship_goods'];
 
             // Since we sell all other holds we set amount to be our total hold limit
-            $amount_ore = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
+            $amount_ore = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
 
             // We adjust this to make sure it does not exceed what the port has to sell
             $amount_ore = min($amount_ore, $sectorinfo['port_ore']);
@@ -179,7 +179,7 @@ class Xenobe
             $amount_goods = $playerinfo['ship_goods'];
 
             // SINCE WE SELL ALL OTHER HOLDS WE SET AMOUNT TO BE OUR TOTAL HOLD LIMIT
-            $amount_organics = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
+            $amount_organics = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
 
             // WE ADJUST THIS TO MAKE SURE IT DOES NOT EXCEED WHAT THE PORT HAS TO SELL
             $amount_organics = min($amount_organics, $sectorinfo['port_organics']);
@@ -212,7 +212,7 @@ class Xenobe
             $amount_organics = $playerinfo['ship_organics'];
 
             // Since we sell all other holds we set amount to be our total hold limit
-            $amount_goods = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor);
+            $amount_goods = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
 
             // We adjust this to make sure it does not exceed what the port has to sell
             $amount_goods = min($amount_goods, $sectorinfo['port_goods']);
@@ -250,7 +250,7 @@ class Xenobe
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
 
         // Planet beams
-        $targetbeams = \Tki\CalcLevels::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
+        $targetbeams = \Tki\CalcLevels::beams($ownerinfo['beams'] + $base_factor, $tkireg);
         if ($targetbeams > $planetinfo['energy'])
         {
             $targetbeams = $planetinfo['energy'];
@@ -258,7 +258,7 @@ class Xenobe
         $planetinfo['energy'] -= $targetbeams;
 
         // Planet shields
-        $targetshields = \Tki\CalcLevels::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
+        $targetshields = \Tki\CalcLevels::shields($ownerinfo['shields'] + $base_factor, $tkireg);
         if ($targetshields > $planetinfo['energy'])
         {
             $targetshields = $planetinfo['energy'];
@@ -281,7 +281,7 @@ class Xenobe
         $targetfighters = $planetinfo['fighters'];
 
         // Attacker beams
-        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
+        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
         if ($attackerbeams > $playerinfo['ship_energy'])
         {
             $attackerbeams = $playerinfo['ship_energy'];
@@ -289,7 +289,7 @@ class Xenobe
         $playerinfo['ship_energy'] -= $attackerbeams;
 
         // Attacker shields
-        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
+        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
         if ($attackershields > $playerinfo['ship_energy'])
         {
             $attackershields = $playerinfo['ship_energy'];
@@ -592,14 +592,14 @@ class Xenobe
         }
 
         // Setup attacker variables
-        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
+        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
         if ($attackerbeams > $playerinfo['ship_energy'])
         {
             $attackerbeams = $playerinfo['ship_energy'];
         }
 
         $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $attackerbeams;
-        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
+        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
         if ($attackershields > $playerinfo['ship_energy'])
         {
             $attackershields = $playerinfo['ship_energy'];
@@ -618,14 +618,14 @@ class Xenobe
         $attackerfighters = $playerinfo['ship_fighters'];
 
         // Setup target variables
-        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $tkireg->level_factor);
+        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $tkireg);
         if ($targetbeams > $targetinfo['ship_energy'])
         {
             $targetbeams = $targetinfo['ship_energy'];
         }
 
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
-        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg->level_factor);
+        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg);
         if ($targetshields>$targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
@@ -869,7 +869,7 @@ class Xenobe
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what we can carry
                     $salv_goods = $free_goods;
@@ -956,7 +956,7 @@ class Xenobe
                 $free_ore = round($playerinfo['ship_ore'] / 2);
                 $free_organics = round($playerinfo['ship_organics'] / 2);
                 $free_goods = round($playerinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $tkireg->level_factor) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $tkireg ) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what target can carry
                     $salv_goods = $free_goods;
@@ -1058,14 +1058,14 @@ class Xenobe
             {
                 \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENCES $total_sector_fighters fighters and $total_sector_mines mines.");
                 $targetfighters = $total_sector_fighters;
-                $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
+                $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
                 if ($playerbeams > $playerinfo['ship_energy'])
                 {
                     $playerbeams = $playerinfo['ship_energy'];
                 }
 
                 $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
-                $playershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
+                $playershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
                 if ($playershields > $playerinfo['ship_energy'])
                 {
                     $playershields = $playerinfo['ship_energy'];
@@ -1492,14 +1492,14 @@ class Xenobe
     {
         // Xenobe Unempoyment Check
         $playerinfo['credits'] = $playerinfo['credits'] + $xen_unemployment;
-        $maxenergy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg->level_factor); // Regenerate energy
+        $maxenergy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg); // Regenerate energy
         if ($playerinfo['ship_energy'] <= ($maxenergy - 50))  // Stop regen when within 50 of max
         {
             $playerinfo['ship_energy'] = $playerinfo['ship_energy'] + round(($maxenergy - $playerinfo['ship_energy']) / 2); // Regen half of remaining energy
             $gene = "regenerated Energy to $playerinfo[ship_energy] units,";
         }
 
-        $maxarmor = \Tki\CalcLevels::armor($playerinfo['armor'], $tkireg->level_factor); // Regenerate armor
+        $maxarmor = \Tki\CalcLevels::armor($playerinfo['armor'], $tkireg); // Regenerate armor
         if ($playerinfo['armor_pts'] <= ($maxarmor - 50))  // Stop regen when within 50 of max
         {
             $playerinfo['armor_pts'] = $playerinfo['armor_pts'] + round(($maxarmor - $playerinfo['armor_pts']) / 2); // Regen half of remaining armor
@@ -1507,7 +1507,7 @@ class Xenobe
         }
 
         // Buy fighters & torpedos at 6 credits per fighter
-        $available_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor) - $playerinfo['ship_fighters'];
+        $available_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg) - $playerinfo['ship_fighters'];
         if (($playerinfo['credits'] > 5) && ($available_fighters > 0))
         {
             if (round($playerinfo['credits'] / 6) > $available_fighters)
@@ -1528,7 +1528,7 @@ class Xenobe
         }
 
         // Xenobe pay 3 credits per torpedo
-        $available_torpedoes = \Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg->level_factor) - $playerinfo['torps'];
+        $available_torpedoes = \Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
         if (($playerinfo['credits'] > 2) && ($available_torpedoes > 0))
         {
             if (round($playerinfo['credits'] / 3) > $available_torpedoes)

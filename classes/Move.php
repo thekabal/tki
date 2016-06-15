@@ -42,7 +42,7 @@ class Move
         }
 
         // Calculate the free power for the ship.
-        $free_power = CalcLevels::energy($playerinfo['power'], $tkireg->level_factor) - $playerinfo['ship_energy'];
+        $free_power = CalcLevels::energy($playerinfo['power'], $tkireg) - $playerinfo['ship_energy'];
         if ($free_power < $energyscooped)
         {
             // Limit the energy scooped to the maximum free power available.
