@@ -72,7 +72,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common', 'global
 echo "<h1>" . $title . "</h1>\n";
 
 // This isn't the right thing to do, but its better than creating an entire class for a 12 line function.
-function is_query_ok($pdo_db, $res)
+function is_query_ok(\PDO $pdo_db, $res)
 {
     $test_result = Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     if ($test_result)

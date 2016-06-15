@@ -59,7 +59,7 @@ class Team
         return $returnvalue;
     }
 
-    public static function validateTeam($pdo_db, $db, $name = null, $desc = null, $creator = null)
+    public static function validateTeam(\PDO $pdo_db, $db, $name = null, $desc = null, $creator = null)
     {
         $name = trim($name);
         $desc = trim($desc);
@@ -91,7 +91,7 @@ class Team
     }
 
     // Rewritten display of teams list
-    public static function displayAllTeams($pdo_db, $db, $langvars, \Tki\Reg $tkireg, $order, $type)
+    public static function displayAllTeams(\PDO $pdo_db, $db, $langvars, \Tki\Reg $tkireg, $order, $type)
     {
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
         echo "<table style='width:100%; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
@@ -185,7 +185,7 @@ class Team
         }
     }
 
-    public static function showInfo($pdo_db, $db, $langvars, $whichteam, $isowner, $playerinfo, $invite_info, $team, \Tki\Reg $tkireg)
+    public static function showInfo(\PDO $pdo_db, $db, $langvars, $whichteam, $isowner, $playerinfo, $invite_info, $team, \Tki\Reg $tkireg)
     {
         // Heading
         echo "<div align=center>";

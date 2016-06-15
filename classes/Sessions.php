@@ -26,7 +26,7 @@ class Sessions
     private $currenttime = null;
     private $expiry = null;
 
-    public function __construct($pdo_db)
+    public function __construct(\PDO $pdo_db)
     {
         session_set_save_handler(
         array($this, 'open'),

@@ -21,7 +21,7 @@ namespace Tki;
 
 class Defense
 {
-    public static function defenceVsDefence($pdo_db, $db, $ship_id, $langvars)
+    public static function defenceVsDefence(\PDO $pdo_db, $db, $ship_id, $langvars)
     {
         $secdef_result = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE ship_id = ?;", array($ship_id));
         Db::LogDbErrors($pdo_db, $secdef_result, __LINE__, __FILE__);

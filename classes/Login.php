@@ -21,7 +21,7 @@ namespace Tki;
 
 class Login
 {
-    public static function checkLogin($pdo_db, $lang, Reg $tkireg, $template)
+    public static function checkLogin(\PDO $pdo_db, $lang, Reg $tkireg, $template)
     {
         // Database driven language entries
         $langvars = Translate::load($pdo_db, $lang, array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
