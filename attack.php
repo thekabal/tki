@@ -89,7 +89,7 @@ elseif (Tki\Team::sameTeam($playerinfo['team'], $targetinfo['team']))
 elseif ($_SESSION['in_combat'] !== null && $_SESSION['in_combat'] === true)
 {
     echo "<div style='color:#ff0;'>" . $langvars['l_team_already_combat'] . "</div>\n";
-    Tki\AdminLog::writeLog($pdo_db, $db, 13371337, "{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected multi attack.");
+    Tki\AdminLog::writeLog($pdo_db, 13371337, "{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected multi attack.");
 }
 else
 {
@@ -622,14 +622,14 @@ else
                     Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
                     Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
                     Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
-                    Tki\AdminLog::writeLog($pdo_db, $db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Just lost the Escape Pod.");
+                    Tki\AdminLog::writeLog($pdo_db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Just lost the Escape Pod.");
                 }
                 else
                 {
                     Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
                     Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
                     Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
-                    Tki\AdminLog::writeLog($pdo_db, $db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Didn't have the Escape Pod.");
+                    Tki\AdminLog::writeLog($pdo_db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Didn't have the Escape Pod.");
                 }
 
                 if ($playerarmor > 0)
@@ -647,7 +647,7 @@ else
                         $resx = $db->Execute("UPDATE {$db->prefix}xenobe SET active= N WHERE xenobe_id = ?;", array($targetinfo['email']));
                         Tki\Db::logDbErrors($pdo_db, $db, $resx, __LINE__, __FILE__);
 
-                        Tki\AdminLog::writeLog($pdo_db, $db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected as AI.");
+                        Tki\AdminLog::writeLog($pdo_db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected as AI.");
 
                         if ($rating_change > 0)
                         {
@@ -656,7 +656,7 @@ else
                             Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                             Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
 
-                            Tki\AdminLog::writeLog($pdo_db, $db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Hope fully we only killed off the AI.");
+                            Tki\AdminLog::writeLog($pdo_db, 950, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Hope fully we only killed off the AI.");
 
                         }
                         $salv_credits = $targetinfo['credits'];

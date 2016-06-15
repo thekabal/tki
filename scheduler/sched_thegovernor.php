@@ -49,7 +49,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "1|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|{$ship_fighters_max}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "1|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|{$ship_fighters_max}");
     }
     elseif ($playerinfo['ship_fighters'] < 0)
     {
@@ -62,7 +62,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "2|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
+        Tki\AdminLog::writeLog($pdo_db, 960, "2|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
     }
 
     // Checking Torpedoes
@@ -77,7 +77,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "3|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|{$ship_fighters_max}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "3|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|{$ship_fighters_max}");
     }
     elseif ($playerinfo['torps'] < 0)
     {
@@ -89,7 +89,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "4|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
+        Tki\AdminLog::writeLog($pdo_db, 960, "4|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
     }
 
     // Checking Armor Points
@@ -104,7 +104,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "5|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|{$ship_fighters_max}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "5|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|{$ship_fighters_max}");
     }
     elseif ($playerinfo['armor_pts'] < 0)
     {
@@ -117,7 +117,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "6|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
+        Tki\AdminLog::writeLog($pdo_db, 960, "6|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
     }
 
     // Checking Credits
@@ -132,7 +132,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "7|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
+        Tki\AdminLog::writeLog($pdo_db, 960, "7|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
     }
 
     if ($playerinfo['credits'] > 100000000000000000000)
@@ -146,7 +146,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "7|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
+        Tki\AdminLog::writeLog($pdo_db, 960, "7|{$playerinfo['ship_id']}|{$playerinfo['ship_fighters']}|0");
     }
 
     $tdres->MoveNext();
@@ -172,7 +172,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "10|{$planetinfo['planet_id']}|{$planetinfo['credits']}|{$planetinfo['owner']}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "10|{$planetinfo['planet_id']}|{$planetinfo['credits']}|{$planetinfo['owner']}");
     }
 
     if ($planetinfo['credits'] > 100000000000000000000)
@@ -186,7 +186,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "10|{$planetinfo['planet_id']}|{$planetinfo['credits']}|{$planetinfo['owner']}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "10|{$planetinfo['planet_id']}|{$planetinfo['credits']}|{$planetinfo['owner']}");
     }
 
     // Checking Fighters
@@ -201,7 +201,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "11|{$planetinfo['planet_id']}|{$planetinfo['fighters']}|{$planetinfo['owner']}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "11|{$planetinfo['planet_id']}|{$planetinfo['fighters']}|{$planetinfo['owner']}");
     }
 
     // Checking Torpedoes
@@ -216,7 +216,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "12|{$planetinfo['planet_id']}|{$planetinfo['torps']}|{$planetinfo['owner']}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "12|{$planetinfo['planet_id']}|{$planetinfo['torps']}|{$planetinfo['owner']}");
     }
     $tdres->MoveNext();
 }
@@ -241,7 +241,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "20|{$bankinfo['ship_id']}|{$bankinfo['balance']}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "20|{$bankinfo['ship_id']}|{$bankinfo['balance']}");
     }
 
     if ($bankinfo['balance'] > 100000000000000000000)
@@ -255,7 +255,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        // Tki\AdminLog::writeLog ($pdo_db, $db, 960, "20|{$bankinfo['ship_id']}|{$bankinfo['balance']}");
+        // Tki\AdminLog::writeLog ($pdo_db, 960, "20|{$bankinfo['ship_id']}|{$bankinfo['balance']}");
     }
 
     // Checking IBANK Loan Credits
@@ -270,7 +270,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog($pdo_db, $db, 960, "21|{$bankinfo['ship_id']}|{$bankinfo['balance']}");
+        Tki\AdminLog::writeLog($pdo_db, 960, "21|{$bankinfo['ship_id']}|{$bankinfo['balance']}");
     }
 
     $tdres->MoveNext();
@@ -295,7 +295,7 @@ while (!$tdres->EOF)
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
         $detected = (boolean) true;
-        Tki\AdminLog::writeLog ($pdo_db, $db, 960, "22|{$transferinfo['transfer_id']}|{$transferinfo['amount']}|{$transferinfo['source_id']}|{$transferinfo['dest_id']}");
+        Tki\AdminLog::writeLog ($pdo_db, 960, "22|{$transferinfo['transfer_id']}|{$transferinfo['amount']}|{$transferinfo['source_id']}|{$transferinfo['dest_id']}");
     }
     $tdres->MoveNext();
 }

@@ -410,7 +410,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             // Kami Multi Browser Window Attack Fix
             if ($_SESSION['planet_selected'] != $planet_id && $_SESSION['planet_selected'] !== null)
             {
-                Tki\AdminLog::writeLog($pdo_db, $db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to create a base without clicking on the Planet.");
+                Tki\AdminLog::writeLog($pdo_db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to create a base without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -535,7 +535,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                Tki\AdminLog::writeLog($pdo_db, $db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to start an attack without clicking on the Planet.");
+                Tki\AdminLog::writeLog($pdo_db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to start an attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -582,7 +582,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                Tki\AdminLog::writeLog($pdo_db, $db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Attack without clicking on the Planet.");
+                Tki\AdminLog::writeLog($pdo_db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -635,7 +635,7 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                Tki\AdminLog::writeLog($pdo_db, $db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Scan without clicking on the Planet.");
+                Tki\AdminLog::writeLog($pdo_db, 57, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Scan without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

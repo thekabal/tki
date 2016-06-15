@@ -42,7 +42,7 @@ $num_traderoutes = $result->RecordCount();
 
 if ($traderoutes !== null)
 {
-    Tki\AdminLog::writeLog($pdo_db, $db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
+    Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
     Tki\Traderoute::traderouteDie($pdo_db, $lang, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
 }
 
@@ -63,27 +63,27 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
 {
     if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_colonists'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
+        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
         $playerinfo['ship_colonists'] = 0;
     }
     if ($playerinfo['ship_ore'] < 0 || $playerinfo['ship_ore'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
+        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
         $playerinfo['ship_ore'] = 0;
     }
     if ($playerinfo['ship_organics'] < 0 || $playerinfo['ship_organics'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
+        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
         $playerinfo['ship_organics'] = 0;
     }
     if ($playerinfo['ship_goods'] < 0 || $playerinfo['ship_goods'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
+        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
         $playerinfo['ship_goods'] = 0;
     }
     if ($playerinfo['ship_energy'] < 0 || $playerinfo['ship_energy'] > $maxenergy)
     {
-        Tki\AdminLog::writeLog($pdo_db, $db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
+        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
         $playerinfo['ship_energy'] = 0;
     }
     if ($freeholds < 0)
