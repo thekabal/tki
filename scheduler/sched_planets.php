@@ -43,7 +43,7 @@ while (!$res->EOF)
         $starvation = floor($row['colonists'] * $starvation_death_rate);
         if ($row['owner'] && $starvation >= 1)
         {
-            Tki\PlayerLog::writeLog($pdo_db, $db, $row['owner'], LOG_STARVATION, "$row[sector_id]|$starvation");
+            Tki\PlayerLog::WriteLog($pdo_db, $row['owner'], LOG_STARVATION, "$row[sector_id]|$starvation");
         }
     }
     else

@@ -34,7 +34,7 @@ class Bounty
                 {
                     $update_creds_res = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits + ? WHERE ship_id = ?", array($bountydetails['amount'], $bountydetails['placed_by']));
                     Db::logDbErrors($pdo_db, $db, $update_creds_res, __LINE__, __FILE__);
-                    PlayerLog::writeLog($pdo_db, $db, $bountydetails['placed_by'], LOG_BOUNTY_CANCELLED, "$bountydetails[amount]|$bountydetails[character_name]");
+                    PlayerLog::WriteLog($pdo_db, $bountydetails['placed_by'], LOG_BOUNTY_CANCELLED, "$bountydetails[amount]|$bountydetails[character_name]");
                 }
 
                  $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_id = ?", array($bountydetails['bounty_id']));
@@ -70,8 +70,8 @@ class Bounty
                 $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_id = ?", array($bountydetails['bounty_id']));
                 Db::logDbErrors($pdo_db, $db, $delete_bounty_res, __LINE__, __FILE__);
 
-                PlayerLog::writeLog($pdo_db, $db, $attacker, LOG_BOUNTY_CLAIMED, "$bountydetails[amount]|$bountydetails[character_name]|$placed");
-                PlayerLog::writeLog($pdo_db, $db, $bountydetails['placed_by'], LOG_BOUNTY_PAID, "$bountydetails[amount]|$bountydetails[character_name]");
+                PlayerLog::WriteLog($pdo_db, $attacker, LOG_BOUNTY_CLAIMED, "$bountydetails[amount]|$bountydetails[character_name]|$placed");
+                PlayerLog::WriteLog($pdo_db, $bountydetails['placed_by'], LOG_BOUNTY_PAID, "$bountydetails[amount]|$bountydetails[character_name]");
                 $res->MoveNext();
             }
         }

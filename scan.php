@@ -93,7 +93,7 @@ else
         {
             // If scan fails - inform both player and target.
             echo $langvars['l_planet_noscan'];
-            Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_SHIP_SCAN_FAIL, $playerinfo['character_name']);
+            Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_SHIP_SCAN_FAIL, $playerinfo['character_name']);
         }
         else
         {
@@ -452,7 +452,7 @@ else
             }
 
             echo "</table><br>";
-            Tki\PlayerLog::writeLog($pdo_db, $db, $targetinfo['ship_id'], LOG_SHIP_SCAN, "$playerinfo[character_name]");
+            Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_SHIP_SCAN, "$playerinfo[character_name]");
         }
 
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id=?", array($playerinfo['ship_id']));
