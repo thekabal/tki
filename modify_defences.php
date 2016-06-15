@@ -134,7 +134,7 @@ switch ($response)
             $countres = $db->Execute("SELECT SUM(quantity) AS totalmines FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type = 'M';", array($sector));
             $ttl = $countres->fields;
             $total_sector_mines = $ttl['totalmines'];
-            $playerbeams = Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
+            $playerbeams = Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
             if ($playerbeams > $playerinfo['ship_energy'])
             {
                 $playerbeams = $playerinfo['ship_energy'];
@@ -175,8 +175,8 @@ switch ($response)
             $quantity = $defenceinfo['quantity'];
         }
 
-        $torpedo_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg->level_factor) - $playerinfo['torps'];
-        $fighter_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor) - $playerinfo['ship_fighters'];
+        $torpedo_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
+        $fighter_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg) - $playerinfo['ship_fighters'];
         if ($defenceinfo['defence_type'] == 'F')
         {
             if ($quantity > $fighter_max)

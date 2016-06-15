@@ -25,48 +25,23 @@ use PDO;
 
 class AdminLog
 {
-    /**
-     * @param integer $log_type
-     */
-    public static function writeLog(\PDO $pdo_db, $db, $log_type, $data = null)
+    public static function writeLog(\PDO $pdo_db, $db, int $log_type, $data = null)
     {
-        if ($db instanceof \adodb\ADODB_mysqli)
-        {
-            // Write log_entry to the admin log
-            $res = false;
-            $data = addslashes($data);
-            if (is_int($log_type))
-            {
-                $res = $db->Execute(
-                    "INSERT INTO {$db->prefix}logs VALUES " .
-                    "(NULL, " .
-                    "0, " .
-                    "?, " .
-                    "NOW(), " .
-                    "?)",
-                    array($log_type, $data)
-                );
-                Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
-            }
-
-            return $res;
+        $res = false;
+        $query = "INSERT INTO {$pdo_db->prefix}logs VALUES (NULL, 0, :logtype, NOW(), :data)";
+        $prep = $pdo_db->prepare($query);
+        if ($prep !== false) // If the database is not live, this will return false
+        {                      // so we should not attempt to write (or it will fail silently)
+            $prep->bindParam(':logtype', $log_type, PDO::PARAM_STR);
+            $prep->bindParam(':data', $data, PDO::PARAM_STR);
+            $res = $prep->execute();
+            Db::logDbErrors($pdo_db, $pdo_db, $res, __LINE__, __FILE__);
         }
         else
         {
-            $query = "INSERT INTO {$db->prefix}logs VALUES (NULL, 0, :logtype, NOW(), :data)";
-            $prep = $db->prepare($query);
-            if ($prep !== false) // If the database is not live, this will return false
-            {                      // so we should not attempt to write (or it will fail silently)
-                $prep->bindParam(':logtype', $log_type, PDO::PARAM_STR);
-                $prep->bindParam(':data', $data, PDO::PARAM_STR);
-                $result = $prep->execute();
-            }
-            else
-            {
-                $result = false;
-            }
-
-            return $result;
+            $result = false;
         }
+
+        return $result;
     }
 }

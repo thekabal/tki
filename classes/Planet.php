@@ -56,8 +56,8 @@ class Planet
 
         echo $langvars['l_bombsaway'] . "<br><br>\n";
         $planetfighterslost = 0;
-        $attackerfightercapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg->level_factor);
-        $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $tkireg->level_factor);
+        $attackerfightercapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg);
+        $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $tkireg);
 
         $res = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE");
         \Tki\Db::logDbErrors($pdo_db, $db, $res, __LINE__, __FILE__);
@@ -143,9 +143,9 @@ class Planet
 
         // Attacking ship calculations
 
-        $attackerbeams      = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg->level_factor);
+        $attackerbeams      = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
         $attackerfighters   = $playerinfo['ship_fighters'];
-        $attackershields    = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg->level_factor);
+        $attackershields    = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
         $attackertorps      = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
         $attackerarmor      = $playerinfo['armor_pts'];
 
@@ -634,13 +634,13 @@ class Planet
         " . $langvars['l_cmb_statattackerarmor'] . ": $attackerarmor<br>
         " . $langvars['l_cmb_statattackertorpdamage'] . ": $attackertorpdamage<br>";
 
-        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $tkireg->level_factor);
+        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $tkireg);
         if ($targetbeams > $targetinfo['ship_energy'])
         {
             $targetbeams = $targetinfo['ship_energy'];
         }
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
-        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg->level_factor);
+        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg);
         if ($targetshields > $targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
@@ -998,7 +998,7 @@ class Planet
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg->level_factor) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {
                     $salv_goods = $free_goods;
