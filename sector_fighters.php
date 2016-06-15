@@ -39,7 +39,7 @@ if ($playerbeams > $playerinfo['ship_energy'])
 }
 
 $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
-$playershields = Tki\CalcLevels::shields($playerinfo['shields']);
+$playershields = Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
 
 if ($playershields > $playerinfo['ship_energy'])
 {
