@@ -21,7 +21,7 @@ namespace Tki;
 
 class Mines
 {
-    public static function explode($pdo_db, $db, $sector, $num_mines)
+    public static function explode(\PDO $pdo_db, $db, $sector, $num_mines)
     {
         $secdef_result = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type ='M' ORDER BY QUANTITY ASC", array($sector));
         Db::LogDbErrors($pdo_db, $secdef_result, __LINE__, __FILE__);

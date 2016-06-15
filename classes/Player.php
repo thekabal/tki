@@ -93,7 +93,7 @@ class Player
     /**
      * @param Reg $tkireg
      */
-    public static function handleBan($pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars, $tkireg)
+    public static function handleBan(\PDO $pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars, $tkireg)
     {
         // Check to see if the player is banned every 60 seconds (may need to ajust this).
         if ($timestamp['now'] >= ($timestamp['last'] + 60))

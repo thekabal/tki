@@ -21,7 +21,7 @@ namespace Tki;
 
 class Character
 {
-    public static function kill($pdo_db, $db, $ship_id, $langvars, Reg $tkireg, $remove_planets = false)
+    public static function kill(\PDO $pdo_db, $db, $ship_id, $langvars, Reg $tkireg, $remove_planets = false)
     {
         $update_ships_res = $db->Execute("UPDATE {$db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defences=' ' WHERE ship_id=?", array($ship_id));
         Db::LogDbErrors($pdo_db, $update_ships_res, __LINE__, __FILE__);
