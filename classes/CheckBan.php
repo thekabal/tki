@@ -44,7 +44,7 @@ class CheckBan
         $stmt->execute();
         $ipban_count = $stmt->rowCount();
         $ipbans_res = $stmt->fetch();
-        Db::logDbErrors($pdo_db, $pdo_db, $sql, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         if ($ipban_count > 0)
         {
@@ -59,7 +59,7 @@ class CheckBan
         $stmt->execute();
         $idban_count = $stmt->rowCount();
         $idbans_res = $stmt->fetch();
-        Db::logDbErrors($pdo_db, $pdo_db, $sql, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         if ($idban_count > 0)
         {
@@ -87,7 +87,7 @@ class CheckBan
         $stmt->execute();
         $multiban_count = $stmt->rowCount();
         $multiban_res = $stmt->fetch();
-        Db::logDbErrors($pdo_db, $pdo_db, $sql, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         if ($multiban_count > 0)
         {

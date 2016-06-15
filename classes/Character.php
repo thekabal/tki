@@ -97,7 +97,7 @@ class Character
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':email', $a_username);
         $res = $stmt->execute();
-        Db::logDbErrors($pdo_db, $pdo_db, $res, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $res = $stmt->fetch();
         $playerinfo = array();
         $playerinfo['score'] = $res['score'];

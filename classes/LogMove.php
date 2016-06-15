@@ -27,6 +27,6 @@ class LogMove
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->bindParam(':sector_id', $sector_id);
         $result = $stmt->execute();
-        Db::logDbErrors($pdo_db, $pdo_db, $result, __LINE__, __FILE__);
+        Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 }

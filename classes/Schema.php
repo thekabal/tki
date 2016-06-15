@@ -51,7 +51,7 @@ class Schema
                 if (!$persist_file)
                 {
                     $drop_res = $pdo_db->exec('DROP TABLE ' . $db_prefix . $tablename);
-//                    Db::logDbErrors($pdo_db, $pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+//                    Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                     if ($drop_res !== false)
                     {
@@ -98,7 +98,7 @@ class Schema
                 {
                     $seqname = mb_substr($seq_filename, 0, -4);
                     $drop_res = $pdo_db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
-//                  Db::logDbErrors($pdo_db, $pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+//                  Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                     if ($drop_res !== false)
                     {
@@ -143,7 +143,7 @@ class Schema
                 {
                     $seqname = mb_substr($seq_filename, 0, -4);
                     $drop_res = $pdo_db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
-//                  Db::logDbErrors($pdo_db, $pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+//                  Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
                     if ($drop_res !== false)
                     {
@@ -219,7 +219,7 @@ class Schema
                     $create_table_results[$i]['result'] = true;
                 }
 
-//                Db::logDbErrors($pdo_db, $pdo_db, $execute_res, __LINE__, __FILE__); // Triggers errors because there is no DB
+//                Db::logDbErrors($pdo_db, $execute_res, __LINE__, __FILE__); // Triggers errors because there is no DB
                 $create_table_results[$i]['name'] = $db_prefix . $tablename;
                 $table_timer->stop();
                 $create_table_results[$i]['time'] = $table_timer->elapsed();
