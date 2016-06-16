@@ -146,7 +146,7 @@ class CalcLevels
 
         $planetinfo['torps'] -= $planettorps;
 
-        return $planettorps;
+        return (int) $planettorps;
     }
 
     public static function avgTech($ship_info = null, $type = 'ship')
