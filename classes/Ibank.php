@@ -981,7 +981,7 @@ class Ibank
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if (!$res || $res->EOF)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $tkireg, "Error");
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, "Error");
         }
 
         $dest = $res->fields;
@@ -993,7 +993,7 @@ class Ibank
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $tkireg, "Error");
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, "Error");
         }
 
         $minimum = preg_replace("/[^0-9]/", '', $minimum);
@@ -1024,7 +1024,7 @@ class Ibank
 
         if ($tcost > $playerinfo['turns'])
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $tkireg, "Error");
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $lang, $tkireg, "Error");
         }
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .
