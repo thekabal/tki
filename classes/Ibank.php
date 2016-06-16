@@ -975,7 +975,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankConsolidate3($db, \PDO $pdo_db, $langvars, $playerinfo, Reg $tkireg, $dplanet_id, $minimum, $maximum, $template)
+    public static function ibankConsolidate3($db, \PDO $pdo_db, $langvars, $playerinfo, Reg $tkireg, $dplanet_id, $minimum, $maximum, $template, $lang)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
