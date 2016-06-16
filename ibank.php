@@ -125,7 +125,7 @@ elseif ($command == 'consolidate2') // Consolidate compute
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Tki\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
+    Tki\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template, $lang);
 }
 else
 {
