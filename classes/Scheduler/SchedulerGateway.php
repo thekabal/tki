@@ -37,7 +37,7 @@ class SchedulerGateway // Gateway for SQL calls related to Players
             $sql = "SELECT last_run FROM {$this->pdo_db->prefix}scheduler LIMIT 1";
             $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
             $row = $stmt->fetchObject();
-            \Tki\Db::logDbErrors($this->pdo_db, $this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
+            \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 
             if (is_object($row))
             {
