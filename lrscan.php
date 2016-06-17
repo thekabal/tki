@@ -110,9 +110,14 @@ if ($sector == "*")
         $row2 = $result2->fields;
         $num_ships = $row2['count'];
 
+        // Get sectorinfo from database
+        $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', array($row['link_dest']));
+        $stmt->execute();
+        $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
         // Get port type and discover the presence of a planet in scanned sector
-        $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($row['link_dest']));
-        Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $result3 = $db->Execute("SELECT planet_id FROM {$db->prefix}planets WHERE sector_id = ?;", array($row['link_dest']));
         Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
         $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'M';", array($row['link_dest']));
@@ -120,7 +125,6 @@ if ($sector == "*")
         $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'F';", array($row['link_dest']));
         Tki\Db::LogDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
 
-        $sectorinfo = $result2->fields;
         $defM = $resultSDa->fields;
         $defF = $resultSDb->fields;
         $port_type = $sectorinfo['port_type'];
@@ -191,10 +195,13 @@ if ($sector == "*")
 else
 {
     // User requested a single sector (standard) long range scan
-    // Get scanned sector information
-    $result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($sector));
-    Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-    $sectorinfo = $result2->fields;
+
+    // Get playerinfo from database
+    $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':sector_id', $sector);
+    $stmt->execute();
+    $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Get sectors which can be reached through scanned sector
     $result3 = $db->Execute("SELECT link_dest FROM {$db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($sector));

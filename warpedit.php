@@ -35,9 +35,12 @@ $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result4 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result4, __LINE__, __FILE__);
-$sectorinfo = $result4->fields;
+// Get sectorinfo from database
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($playerinfo['turns'] < 1)
 {
@@ -55,9 +58,13 @@ if ($playerinfo['dev_warpedit'] < 1)
     die();
 }
 
-$res = $db->Execute("SELECT allow_warpedit FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$zoneinfo = $res->fields;
+// Get playerinfo from database
+$sql = "SELECT allow_warpedit FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+$stmt->execute();
+$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
 if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
@@ -68,13 +75,19 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 
 if ($zoneinfo['allow_warpedit'] == 'L')
 {
-    $result3 = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-    Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-    $zoneowner_info = $result3->fields;
+    // Get playerinfo from database
+    $sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+    $stmt->execute();
+    $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $result5 = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneowner_info['owner']));
-    Tki\Db::LogDbErrors($pdo_db, $result5, __LINE__, __FILE__);
-    $zoneteam = $result5->fields;
+    // Get playerinfo from database
+    $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':sector_id', $zoneowner_info['owner']);
+    $stmt->execute();
+    $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($zoneowner_info['owner'] != $playerinfo['ship_id'])
     {

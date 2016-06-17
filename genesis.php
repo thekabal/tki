@@ -42,9 +42,12 @@ $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-$sectorinfo = $result2->fields;
+// Get sectorinfo from database
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE sector_id=?;", array($playerinfo['sector']));
 Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
