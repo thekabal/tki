@@ -66,9 +66,12 @@ if ($playerinfo['ship_goods'] < 0)
     $playerinfo['ship_goods'] = 0;
 }
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$sectorinfo = $res->fields;
+// Get playerinfo from database
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($sectorinfo['port_ore'] < 0)
 {
@@ -98,9 +101,11 @@ if ($sectorinfo['port_energy'] < 0)
     $sectorinfo['port_energy'] = 0;
 }
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$zoneinfo = $res->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+$stmt->execute();
+$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($zoneinfo['zone_id'] == 4)
 {
@@ -125,9 +130,12 @@ elseif ($zoneinfo['allow_trade'] == 'L')
 {
     if ($zoneinfo['team_zone'] == 'N')
     {
-        $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $ownerinfo = $res->fields;
+        // Get playerinfo from database
+        $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $zoneinfo['owner']);
+        $stmt->execute();
+        $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
         {
