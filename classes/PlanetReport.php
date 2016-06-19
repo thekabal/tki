@@ -233,7 +233,7 @@ class PlanetReport
 
     public static function planetProductionChange(\PDO $pdo_db, $db, $langvars, $playerinfo, $sort, Reg $tkireg)
     {
-        $query = "SELECT * FROM {$db->prefix}planets WHERE owner=? AND base='Y'";
+        $query = "SELECT * FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y'";
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
         echo "Planetary report <strong><a href=\"planet_report.php?preptype=0\">menu</a></strong><br><br>" .

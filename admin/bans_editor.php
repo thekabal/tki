@@ -163,7 +163,7 @@ elseif ($command == 'showips')
         echo "<td align=center><font size=2 color=white>" . $ip . "</td>" .
              "<td align=center><font size=2 color=white>";
 
-        $res = $db->Execute("SELECT character_name, ship_id, email FROM {$db->prefix}ships WHERE ip_address=?;", array($ip));
+        $res = $db->Execute("SELECT character_name, ship_id, email FROM {$db->prefix}ships WHERE ip_address = ?;", array($ip));
         Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         unset($players);
         while (!$res->EOF)
@@ -285,7 +285,7 @@ elseif ($command == 'unbanip')
     $ip = $_POST['ip'];
     if ($ban !== null)
     {
-        $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ban_mask=?;", array($ban));
+        $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ban_mask = ?;", array($ban));
         Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     }
     else
@@ -304,7 +304,7 @@ elseif ($command == 'unbanip')
 
     if ($ban !== null)
     {
-        $resx = $db->Execute("DELETE FROM {$db->prefix}ip_bans WHERE ban_mask=?;", array($ban));
+        $resx = $db->Execute("DELETE FROM {$db->prefix}ip_bans WHERE ban_mask = ?;", array($ban));
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
     else

@@ -42,7 +42,7 @@ if (mb_strlen(trim($filtered_ship_id)) === 0)
     $filtered_ship_id = false;
 }
 
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=?", array($filtered_ship_id));
+$result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($filtered_ship_id));
 Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 $targetinfo = $result2->fields;
 

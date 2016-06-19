@@ -23,7 +23,7 @@ class Fighters
 {
     public static function destroy(\PDO $pdo_db, $db, int $sector, $num_fighters)
     {
-        $secdef_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id=? AND defence_type ='F' ORDER BY quantity ASC", array($sector));
+        $secdef_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type ='F' ORDER BY quantity ASC", array($sector));
         Db::LogDbErrors($pdo_db, $secdef_res, __LINE__, __FILE__);
 
         // Put the defence information into the array "defenceinfo"

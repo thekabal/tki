@@ -33,7 +33,7 @@ $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Put the defence information into the array "defenceinfo"
-$result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id=? and defence_type ='M'", array($sector));
+$result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? and defence_type ='M'", array($sector));
 Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
 // Correct the targetship bug to reflect the player info

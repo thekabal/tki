@@ -150,7 +150,7 @@ elseif ($engage !== null)
     $i = $tr_repeat;
     while ($i > 0)
     {
-        $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email=?", array($_SESSION['username']));
+        $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
         Tki\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull);
@@ -239,7 +239,7 @@ else
         echo "<td align='center'><font size=2 color=white>";
         if ($traderoutes[$i]['source_type'] == 'P')
         {
-            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($traderoutes[$i]['source_id']));
+            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['source_id']));
             Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $port1 = $result->fields;
             echo "&nbsp;" . Tki\Ports::getType($port1['port_type'], $langvars) . "</font></td>";
@@ -279,7 +279,7 @@ else
 
         if ($traderoutes[$i]['dest_type'] == 'P')
         {
-            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($traderoutes[$i]['dest_id']));
+            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['dest_id']));
             Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $port2 = $result->fields;
             echo "&nbsp;" . Tki\Ports::getType($port2['port_type'], $langvars) . "</font></td>";

@@ -293,7 +293,7 @@ else
                     echo "<hr>";
                     echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #0f0;\">Log Data For This Xenobe</span><br>";
 
-                    $logres = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? ORDER BY time DESC, type DESC", array($row['ship_id']));
+                    $logres = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? ORDER BY time DESC, type DESC;", array($row['ship_id']));
                     Tki\Db::LogDbErrors($pdo_db, $logres, __LINE__, __FILE__);
                     while (!$logres->EOF)
                     {

@@ -100,7 +100,7 @@ if (mb_strlen(trim($trades)) === 0)
     $trades = false;
 }
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id=?", array($zone));
+$res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($zone));
 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 if ($res->EOF)
 {

@@ -32,7 +32,7 @@ $stmt->bindParam(':sector_id', $sector);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id=? and defence_type ='F' ORDER BY quantity DESC;", array($sector));
+$result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? and defence_type ='F' ORDER BY quantity DESC;", array($sector));
 Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
 // Put the defence information into the array "defences"
@@ -79,7 +79,7 @@ if ($num_defences > 0 && $total_sector_fighters > 0 && !$owner)
     // Find out if the fighter owner and player are on the same team
     // All sector defences must be owned by members of the same team
     $fm_owner = $defences[0]['ship_id'];
-    $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=?;", array($fm_owner));
+    $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
     Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
     $fighters_owner = $result2->fields;
     if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
