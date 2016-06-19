@@ -32,14 +32,18 @@ class Xenobe
         $tkireg->goods_price = 15;
 
         // Obtain sector information
-        $sectres = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-        \Tki\Db::LogDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
-        $sectorinfo = $sectres->fields;
+        $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $playerinfo['sector']);
+        $stmt->execute();
+        $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Obtain zone information
-        $zoneres = $db->Execute("SELECT zone_id, allow_attack, allow_trade FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
-        $zonerow = $zoneres->fields;
+        $sql = "SELECT zone_id, allow_attack, allow_trade FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
+        $stmt->execute();
+        $zonerow = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Make sure we can trade here
         if ($zonerow['allow_trade'] == "N")
@@ -239,13 +243,17 @@ class Xenobe
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
 
-        $resultp = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id=?", array($planet_id)); // Get target planet information
-        \Tki\Db::LogDbErrors($pdo_db, $resultp, __LINE__, __FILE__);
-        $planetinfo = $resultp->fields;
+        $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id"; // Get target planet information
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $planet_id);
+        $stmt->execute();
+        $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $resulto = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=?", array($planetinfo['owner'])); // Get target player information
-        \Tki\Db::LogDbErrors($pdo_db, $resulto, __LINE__, __FILE__);
-        $ownerinfo = $resulto->fields;
+        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id"; // Get target player information
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $planetinfo['owner']);
+        $stmt->execute();
+        $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
 
