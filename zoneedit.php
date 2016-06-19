@@ -116,15 +116,19 @@ $curzone['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $curzone['
 
 if ($curzone['team_zone'] == 'N')
 {
-    $result = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-    $ownerinfo = $result->fields;
+    $sql = "SELECT ship_id FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':email', $_SESSION['username']);
+    $stmt->execute();
+    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 else
 {
-    $result = $db->Execute("SELECT creator, id FROM {$db->prefix}teams WHERE creator = ?;", array($curzone['owner']));
-    Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-    $ownerinfo = $result->fields;
+    $sql = "SELECT creator, id FROM {$pdo_db->prefix}teams WHERE creator=:creator LIMIT 1";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':creator', $curzone['owner']);
+    $stmt->execute();
+    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 if (($curzone['team_zone'] == 'N' && $curzone['owner'] != $ownerinfo['ship_id']) || ($curzone['team_zone'] == 'Y' && $curzone['owner'] != $ownerinfo['id'] && $row['owner'] == $ownerinfo['creator']))
