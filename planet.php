@@ -72,9 +72,11 @@ if ($planet_id <= 0)
     die ();
 }
 
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-$sectorinfo = $result2->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
 Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
@@ -122,9 +124,11 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
 
     if ($planetinfo['owner'] != 0)
     {
-        $result3 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($planetinfo['owner']));
-        Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-        $ownerinfo = $result3->fields;
+        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $planetinfo['owner']);
+        $stmt->execute();
+        $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     if (empty($command))
@@ -437,9 +441,11 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
                     Tki\Db::LogDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
 
                     // Refresh Planet Info
-                    $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?", array($planet_id));
-                    Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-                    $planetinfo = $result3->fields;
+                    $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':planet_id', $planet_id);
+                    $stmt->execute();
+                    $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     // Notify User Of Base Results
                     echo $langvars['l_planet_bbuild'] . "<br><br>";
@@ -878,10 +884,11 @@ if (!is_bool($planetinfo) && $planetinfo !== false)
 
             if ($planetinfo['owner'] != 0)
             {
-                $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($planetinfo['owner']));
-                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                $query = $res->fields;
-                $planetowner = $query['character_name'];
+                $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $planetinfo['owner']);
+                $stmt->execute();
+                $planetowner = $stmt->fetch(PDO::FETCH_ASSOC);
             }
             else
             {

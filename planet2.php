@@ -166,9 +166,11 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get the Planet Info
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ? AND planet_id > 0;", array($planet_id));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-$planetinfo = $result2->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id AND planet_id > 0 LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':planet_id', $planet_id);
+$stmt->execute();
+$planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Check to see if it returned valid planet info.
 if ($planetinfo === false)

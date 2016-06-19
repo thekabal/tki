@@ -44,9 +44,11 @@ $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$sectorinfo = $res->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ?;", array($playerinfo['sector']));
 Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
@@ -131,9 +133,12 @@ else
         if (!$owns_all)
         {
             $defence_owner = $defences[0]['ship_id'];
-            $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($defence_owner));
-            Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-            $fighters_owner = $result2->fields;
+
+            $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $defence_owner);
+            $stmt->execute();
+            $fighters_owner = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -147,9 +152,12 @@ else
     if ($zoneinfo['allow_defenses'] == 'L')
     {
         $zone_owner = $zoneinfo['owner'];
-        $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($zone_owner));
-        Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-        $zoneowner_info = $result2->fields;
+
+        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $zone_owner);
+        $stmt->execute();
+        $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($zone_owner != $playerinfo['ship_id'])
         {

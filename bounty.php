@@ -110,9 +110,12 @@ switch ($response) {
             $color = $tkireg->color_line1;
             for ($j = 0; $j < $num_details; $j++)
             {
-                $someres = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounty_details[$j]['placed_by']));
-                Tki\Db::LogDbErrors($pdo_db, $someres, __LINE__, __FILE__);
-                $details = $someres->fields;
+                $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $bounty_details[$j]['placed_by']);
+                $stmt->execute();
+                $details = $stmt->fetch(PDO::FETCH_ASSOC);
+
                 echo "<tr bgcolor=\"$color\">";
                 echo "<td>" . $bounty_details[$j]['amount'] . "</td>";
                 if ($bounty_details[$j]['placed_by'] == 0)
@@ -331,9 +334,12 @@ switch ($response) {
             $color = $tkireg->color_line1;
             for ($i = 0; $i < $num_bounties; $i++)
             {
-                $someres = $db->execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounties[$i]['bounty_on']));
-                Tki\Db::LogDbErrors($pdo_db, $someres, __LINE__, __FILE__);
-                $details = $someres->fields;
+                $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $bounties[$i]['bounty_on']);
+                $stmt->execute();
+                $details = $stmt->fetch(PDO::FETCH_ASSOC);
+
                 echo "<tr bgcolor=\"$color\">";
                 echo "<td><a href=bounty.php?bounty_on=" . $bounties[$i]['bounty_on'] . "&response=display>". $details['character_name'] . "</a></td>";
                 echo "<td>" . $bounties[$i]['total_bounty'] . "</td>";

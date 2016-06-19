@@ -327,9 +327,11 @@ elseif ($sectorinfo['port_type'] == "special")
         $bty = $res2->fields;
         if ($bty['total_bounty'] > 0)
         {
-            $bank_res = $db->Execute("SELECT * FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $bank_res, __LINE__, __FILE__);
-            $bank_row = $bank_res->fields;
+            $sql = "SELECT * FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->execute();
+            $bank_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($pay !== null && $pay == 1)
             {
@@ -355,9 +357,11 @@ elseif ($sectorinfo['port_type'] == "special")
             }
             elseif ($pay !== null && $pay == 2)
             {
-                $bank_res = $db->Execute("SELECT * FROM {$db->prefix}ibank_accounts WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $bank_res, __LINE__, __FILE__);
-                $bank_row = $bank_res->fields;
+                $sql = "SELECT * FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->execute();
+                $bank_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 $bounty_payment = $bank_row['balance'];
                 if ($bounty_payment >1000)

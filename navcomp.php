@@ -62,9 +62,11 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 $current_sector = $playerinfo['sector'];
 $computer_tech  = $playerinfo['computer'];
 
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($current_sector));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-$sectorinfo = $result2->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $current_sector);
+$stmt->execute();
+$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($state == 0)
 {
