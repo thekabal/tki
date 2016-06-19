@@ -237,9 +237,11 @@ class Traderoute
         if (!$result99->EOF)
         {
             $fighters_owner = $result99->fields;
-            $nsresult = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=?", array($fighters_owner['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $nsresult, __LINE__, __FILE__);
-            $nsfighters = $nsresult->fields;
+            $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
+            $stmt->execute();
+            $nsfighters = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -252,9 +254,12 @@ class Traderoute
         if (!$result98->EOF)
         {
             $fighters_owner = $result98->fields;
-            $nsresult = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=?", array($fighters_owner['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $nsresult, __LINE__, __FILE__);
-            $nsfighters = $nsresult->fields;
+
+            $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
+            $stmt->execute();
+            $nsfighters = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -276,9 +281,12 @@ class Traderoute
         // Check if zone allows trading  SRC
         if ($traderoute['source_type'] == 'P')
         {
-            $res = $db->Execute("SELECT * FROM {$db->prefix}zones,{$db->prefix}universe WHERE {$db->prefix}universe.sector_id=? AND {$db->prefix}zones.zone_id={$db->prefix}universe.zone_id;", array($traderoute['source_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-            $zoneinfo = $res->fields;
+            $sql = "SELECT * FROM {$pdo_db->prefix}zones,{$pdo_db->prefix}universe WHERE {$pdo_db->prefix}universe.sector_id=:sector_id AND {$pdo_db->prefix}zones.zone_id={$pdo_db->prefix}universe.zone_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $traderoute['source_id']);
+            $stmt->execute();
+            $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
             if ($zoneinfo['allow_trade'] == 'N')
             {
                 self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_nosrcporttrade'], $template);
@@ -287,9 +295,11 @@ class Traderoute
             {
                 if ($zoneinfo['team_zone'] == 'N')
                 {
-                    $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id=?", array($zoneinfo['owner']));
-                    \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                    $ownerinfo = $res->fields;
+                    $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ship_id', $zoneinfo['owner']);
+                    $stmt->execute();
+                    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
@@ -309,9 +319,12 @@ class Traderoute
         // Check if zone allows trading  DEST
         if ($traderoute['dest_type'] == 'P')
         {
-            $res = $db->Execute("SELECT * FROM {$db->prefix}zones,{$db->prefix}universe WHERE {$db->prefix}universe.sector_id=? AND {$db->prefix}zones.zone_id={$db->prefix}universe.zone_id;", array($traderoute['dest_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-            $zoneinfo = $res->fields;
+            $sql = "SELECT * FROM {$pdo_db->prefix}zones,{$pdo_db->prefix}universe WHERE {$pdo_db->prefix}universe.sector_id=:sector_id AND {$pdo_db->prefix}zones.zone_id={$pdo_db->prefix}universe.zone_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':zone_id', $traderoute['dest_id']);
+            $stmt->execute();
+            $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
             if ($zoneinfo['allow_trade'] == 'N')
             {
                 self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_nodestporttrade'], $template);
@@ -320,9 +333,11 @@ class Traderoute
             {
                 if ($zoneinfo['team_zone'] == 'N')
                 {
-                    $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id=?", array($zoneinfo['owner']));
-                    \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                    $ownerinfo = $res->fields;
+                    $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ship_id', $zoneinfo['owner']);
+                    $stmt->execute();
+                    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
@@ -1866,16 +1881,20 @@ class Traderoute
 
         if ($type1 == 'L')
         {
-            $query = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($start));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            $start = $query->fields;
+            $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $start);
+            $stmt->execute();
+            $start = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         if ($type2 == 'L')
         {
-            $query = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($dest));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            $dest = $query->fields;
+            $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':dest', $dest);
+            $stmt->execute();
+            $dest = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         if ($start['sector_id'] == $dest['sector_id'])
