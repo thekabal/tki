@@ -64,9 +64,11 @@ $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-$targetinfo = $result2->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':ship_id', $ship_id);
+$stmt->execute();
+$targetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $playerscore = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 $targetscore = Tki\Score::updateScore($pdo_db, $targetinfo['ship_id'], $tkireg, $playerinfo);

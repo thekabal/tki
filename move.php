@@ -46,12 +46,11 @@ if ($playerinfo['turns'] < 1)
     die();
 }
 
-// Retrieve all the sector information about the current sector
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-
-// Put the sector information into the array "sectorinfo"
-$sectorinfo = $result2->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Retrive all the warp links out of the current sector
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));

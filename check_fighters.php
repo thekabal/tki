@@ -25,11 +25,12 @@ if (strpos($_SERVER['PHP_SELF'], 'check_fighters.php')) // Prevent direct access
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('check_fighters', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id=?;", array($sector));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-
-// Put the sector information into the array "sectorinfo"
-$sectorinfo = $result2->fields;
+// Get sectorinfo from database
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $sector);
+$stmt->execute();
+$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id=? and defence_type ='F' ORDER BY quantity DESC;", array($sector));
 Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);

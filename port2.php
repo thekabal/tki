@@ -41,9 +41,11 @@ $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$zoneinfo = $res->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+$stmt->execute();
+$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($zoneinfo['allow_trade'] == 'N')
 {
@@ -58,9 +60,12 @@ elseif ($zoneinfo['allow_trade'] == 'L')
 {
     if ($zoneinfo['team_zone'] == 'N')
     {
-        $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $ownerinfo = $res->fields;
+
+        $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $zoneinfo['owner']);
+        $stmt->execute();
+        $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
         {

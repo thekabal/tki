@@ -483,9 +483,13 @@ if ($num_planets > 0)
     {
         if ($planets[$i]['owner'] != 0)
         {
-            $result5 = $db->Execute("SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id = ?;", array($planets[$i]['owner']));
-            Tki\Db::LogDbErrors($pdo_db, $result5, __LINE__, __FILE__);
-            $planet_owner = $result5->fields;
+            // Get planet info from database
+            $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $planets[$i]['owner']);
+            $stmt->execute();
+            $planet_owner = $stmt->fetch(PDO::FETCH_ASSOC);
+
             $planetavg = Tki\CalcLevels::avgTech($planet_owner, "planet");
 
             if ($planetavg < 8)
@@ -533,7 +537,7 @@ if ($num_planets > 0)
         }
         else
         {
-            echo "<br>($planet_owner[character_name])";
+            echo "<br>(" . $planet_owner['character_name'] . ")";
         }
         echo "</span></td>";
 
