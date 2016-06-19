@@ -38,9 +38,11 @@ class PlanetReportCE
         $stmt->execute();
         $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
-        \Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-        $planetinfo = $result3->fields;
+        $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $planet_id);
+        $stmt->execute();
+        $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Error out and return if the Player isn't the owner of the Planet
         // Verify player owns the planet which is to have the base created on.
@@ -78,9 +80,11 @@ class PlanetReportCE
             \Tki\Db::LogDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
 
             // Refresh Planet Info
-            $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
-            \Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-            $planetinfo = $result3->fields;
+            $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_id', $planet_id);
+            $stmt->execute();
+            $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Notify User Of Base Results
             echo $langvars['l_planet_bbuild'] . "<br><br>";
