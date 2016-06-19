@@ -218,7 +218,7 @@ class Traderoute
         }
         else
         {
-            $dist = self::traderouteDistance($pdo_db, $db, 'P', 'P', $sourceport, $destport, $traderoute['circuit'], $playerinfo, $tkireg);
+            $dist = self::traderouteDistance($pdo_db, 'P', 'P', $sourceport, $destport, $traderoute['circuit'], $playerinfo, $tkireg);
         }
 
         // Check if player has enough turns
@@ -1871,7 +1871,7 @@ class Traderoute
         }
     }
 
-    public static function traderouteDistance(\PDO $pdo_db, $db, string $type1, string $type2, $start, $dest, $circuit, $playerinfo, Reg $tkireg, $sells = 'N')
+    public static function traderouteDistance(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, $playerinfo, Reg $tkireg, $sells = 'N')
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;
