@@ -48,9 +48,12 @@ else
 {
     if (empty($operation))
     {
-        $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?", array($planet));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $row = $res->fields;
+        // Get planet info from database
+        $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $planet);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         echo "<table border='0' cellspacing='2' cellpadding='2'>";
         echo "<tr><td><tt>" . $langvars['l_admin_planet_id'] . "</tt></td><td><font color='#6f0'>" . $planet . "</font></td>";
