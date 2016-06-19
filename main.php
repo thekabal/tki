@@ -78,7 +78,7 @@ if ($playerinfo['on_planet'] == "Y")
     }
 }
 
-$res = $db->Execute("SELECT * FROM {$pdo_db->prefix}links WHERE link_start=? ORDER BY link_dest ASC;", array($playerinfo['sector']));
+$res = $db->Execute("SELECT * FROM {$pdo_db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($playerinfo['sector']));
 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
 $i = 0;
@@ -800,7 +800,7 @@ echo '<table style="width:100%;">';
 
 // Pull the presets for the player from the db.
 $i = 0;
-$debug_query = $db->Execute("SELECT * FROM {$pdo_db->prefix}presets WHERE ship_id=?", array($playerinfo['ship_id']));
+$debug_query = $db->Execute("SELECT * FROM {$pdo_db->prefix}presets WHERE ship_id = ?;", array($playerinfo['ship_id']));
 Tki\Db::LogDbErrors($pdo_db, $debug_query, __LINE__, __FILE__);
 while (!$debug_query->EOF)
 {

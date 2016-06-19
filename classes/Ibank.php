@@ -431,7 +431,7 @@ class Ibank
     {
         if ($ship_id !== null) // Ship transfer
         {
-            $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=? AND ship_destroyed ='N' AND turns_used > ?;", array($ship_id, $tkireg->ibank_min_turns));
+            $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ? AND ship_destroyed ='N' AND turns_used > ?;", array($ship_id, $tkireg->ibank_min_turns));
             \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
             if ($playerinfo['ship_id'] == $ship_id)
@@ -841,7 +841,7 @@ class Ibank
         $minimum = preg_replace("/[^0-9]/", '', $minimum);
         $maximum = preg_replace("/[^0-9]/", '', $maximum);
 
-        $query = "SELECT SUM(credits) AS total, COUNT(*) AS count FROM {$db->prefix}planets WHERE owner=? AND credits != 0 AND planet_id != ?";
+        $query = "SELECT SUM(credits) AS total, COUNT(*) AS count FROM {$db->prefix}planets WHERE owner = ? AND credits != 0 AND planet_id != ?";
 
         if ($minimum != 0)
         {
@@ -999,7 +999,7 @@ class Ibank
         $minimum = preg_replace("/[^0-9]/", '', $minimum);
         $maximum = preg_replace("/[^0-9]/", '', $maximum);
 
-        $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM {$db->prefix}planets WHERE owner=? AND credits != 0 AND planet_id != ?";
+        $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM {$db->prefix}planets WHERE owner = ? AND credits != 0 AND planet_id != ?";
 
         if ($minimum != 0)
         {
@@ -1037,7 +1037,7 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout ']. "</a></td>" .
              "</tr>";
 
-        $query = "UPDATE {$db->prefix}planets SET credits=0 WHERE owner=? AND credits != 0 AND planet_id != ?";
+        $query = "UPDATE {$db->prefix}planets SET credits=0 WHERE owner = ? AND credits != 0 AND planet_id != ?";
 
         if ($minimum != 0)
         {
@@ -1051,9 +1051,9 @@ class Ibank
 
         $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $res = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id=?", array($transfer, $dplanet_id));
+        $res = $db->Execute("UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id = ?;", array($transfer, $dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $res = $db->Execute("UPDATE {$db->prefix}ships SET turns=turns - ? WHERE ship_id=?", array($tcost, $playerinfo['ship_id']));
+        $res = $db->Execute("UPDATE {$db->prefix}ships SET turns=turns - ? WHERE ship_id = ?;", array($tcost, $playerinfo['ship_id']));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     }
 }
