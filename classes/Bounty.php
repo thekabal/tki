@@ -60,9 +60,11 @@ class Bounty
                 }
                 else
                 {
-                    $pl_bounty_res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?", array($bountydetails['placed_by']));
-                    Db::LogDbErrors($pdo_db, $pl_bounty_res, __LINE__, __FILE__);
-                    $placed = $pl_bounty_res->fields['character_name'];
+                    $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ship_id', $bountydetails['placed_by']);
+                    $stmt->execute();
+                    $placed = $stmt->fetch(PDO::FETCH_ASSOC);
                 }
 
                 $update_creds_res = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits + ? WHERE ship_id = ?", array($bountydetails['amount'], $attacker));
