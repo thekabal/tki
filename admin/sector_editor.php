@@ -50,9 +50,12 @@ else
 {
     if ($_POST['operation'] === null)
     {
-        $res = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($_POST['sector']));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $row = $res->fields;
+        // Get playerinfo from database
+        $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $_POST['sector']);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $variables['sector_name'] = $row['sector_name'];
 

@@ -483,7 +483,7 @@ if ($num_planets > 0)
     {
         if ($planets[$i]['owner'] != 0)
         {
-            // Get planet info from database
+            // Get planet owner from database
             $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $planets[$i]['owner']);

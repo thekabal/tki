@@ -45,57 +45,60 @@ else
 {
     if ($_POST['operation'] === null)
     {
-        $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id=?;", array($_POST['user']));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $row = $res->fields;
+        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $_POST['user']);
+        $stmt->execute();
+        $userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $variables['operation'] = $_POST['operation'];
         $variables['user'] = $_POST['user'];
-        $variables['character_name'] = $row['character_name'];
-        $variables['password'] = $row['password'];
-        $variables['email'] = $row['email'];
-        $variables['ship_name'] = $row['ship_name'];
-        $variables['hull'] = $row['hull'];
-        $variables['engines'] = $row['engines'];
-        $variables['power'] = $row['power'];
-        $variables['computer'] = $row['computer'];
-        $variables['sensors'] = $row['sensors'];
-        $variables['beams'] = $row['beams'];
-        $variables['armor'] = $row['armor'];
-        $variables['shields'] = $row['shields'];
-        $variables['torp_launchers'] = $row['torp_launchers'];
-        $variables['cloak'] = $row['cloak'];
-        $variables['ship_ore'] = $row['ship_ore'];
-        $variables['ship_organics'] = $row['ship_organics'];
-        $variables['ship_goods'] = $row['ship_goods'];
-        $variables['ship_energy'] = $row['ship_energy'];
-        $variables['ship_colonists'] = $row['ship_colonists'];
-        $variables['ship_fighters'] = $row['ship_fighters'];
-        $variables['torps'] = $row['torps'];
-        $variables['armor_pts'] = $row['armor_pts'];
-        $variables['dev_beacon'] = $row['dev_beacon'];
-        $variables['dev_emerwarp'] = $row['dev_emerwarp'];
-        $variables['dev_warpedit'] = $row['dev_warpedit'];
-        $variables['dev_genesis'] = $row['dev_genesis'];
-        $variables['dev_minedeflector'] = $row['dev_minedeflector'];
-        $variables['credits'] = $row['credits'];
-        $variables['turns'] = $row['turns'];
-        $variables['sector'] = $row['sector'];
+        $variables['character_name'] = $userinfo['character_name'];
+        $variables['password'] = $userinfo['password'];
+        $variables['email'] = $userinfo['email'];
+        $variables['ship_name'] = $userinfo['ship_name'];
+        $variables['hull'] = $userinfo['hull'];
+        $variables['engines'] = $userinfo['engines'];
+        $variables['power'] = $userinfo['power'];
+        $variables['computer'] = $userinfo['computer'];
+        $variables['sensors'] = $userinfo['sensors'];
+        $variables['beams'] = $userinfo['beams'];
+        $variables['armor'] = $userinfo['armor'];
+        $variables['shields'] = $userinfo['shields'];
+        $variables['torp_launchers'] = $userinfo['torp_launchers'];
+        $variables['cloak'] = $userinfo['cloak'];
+        $variables['ship_ore'] = $userinfo['ship_ore'];
+        $variables['ship_organics'] = $userinfo['ship_organics'];
+        $variables['ship_goods'] = $userinfo['ship_goods'];
+        $variables['ship_energy'] = $userinfo['ship_energy'];
+        $variables['ship_colonists'] = $userinfo['ship_colonists'];
+        $variables['ship_fighters'] = $userinfo['ship_fighters'];
+        $variables['torps'] = $userinfo['torps'];
+        $variables['armor_pts'] = $userinfo['armor_pts'];
+        $variables['dev_beacon'] = $userinfo['dev_beacon'];
+        $variables['dev_emerwarp'] = $userinfo['dev_emerwarp'];
+        $variables['dev_warpedit'] = $userinfo['dev_warpedit'];
+        $variables['dev_genesis'] = $userinfo['dev_genesis'];
+        $variables['dev_minedeflector'] = $userinfo['dev_minedeflector'];
+        $variables['credits'] = $userinfo['credits'];
+        $variables['turns'] = $userinfo['turns'];
+        $variables['sector'] = $userinfo['sector'];
 
         // For checkboxes, switch out the database stored value of Y/N for the html checked="checked", so the checkbox actually is checked.
         $variables['dev_escapepod'] = null;
-        if ($row['dev_escapepod'] == 'Y')
+        if ($userinfo['dev_escapepod'] == 'Y')
         {
             $variables['dev_escapepod'] = 'checked="checked"';
         }
 
         $variables['dev_fuelscoop'] = null;
-        if ($row['dev_fuelscoop'] == 'Y')
+        if ($userinfo['dev_fuelscoop'] == 'Y')
         {
             $variables['dev_fuelscoop'] = 'checked="checked"';
         }
 
         $variables['ship_destroyed'] = null;
-        if ($row['ship_destroyed'] == 'Y')
+        if ($userinfo['ship_destroyed'] == 'Y')
         {
             $variables['ship_destroyed'] = 'checked="checked"';
         }

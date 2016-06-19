@@ -47,9 +47,12 @@ else
     $variables['zone'] = null;
     if ($_POST['operation'] == "edit")
     {
-        $res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?", array($_POST['zone']));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $row = $res->fields;
+        $sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':email', $_POST['zone']);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
         $variables['operation'] = "edit";
         $variables['zone_id'] = $row['zone_id'];
         $variables['zone_name'] = $row['zone_name'];
