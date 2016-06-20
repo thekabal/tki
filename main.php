@@ -78,51 +78,53 @@ if ($playerinfo['on_planet'] == "Y")
     }
 }
 
-$res = $db->Execute("SELECT * FROM {$pdo_db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
 $i = 0;
-if ($res !== false)
+$sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start=:link_start ORDER BY link_dest ASC";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':link_start', $playerinfo['sector']);
+$stmt->execute();
+$link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if ($link_present)
 {
-    while (!$res->EOF)
+    foreach ($link_present as $tmp_link)
     {
-        $links[$i] = $res->fields['link_dest'];
+        $links[$i] = $tmp_link['link_dest'];
         $i++;
-        $res->MoveNext();
     }
 }
 $num_links = $i;
 
-$res = $db->Execute("SELECT * FROM {$pdo_db->prefix}planets WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
 $i = 0;
-if ($res !== false)
+$sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE sector_id=:sector_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$planet_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if ($planet_present)
 {
-    while (!$res->EOF)
+    foreach ($planet_present as $tmp_planet)
     {
-        $planets[$i] = $res->fields;
+        $planets[$i] = $tmp_planet;
         $i++;
-        $res->MoveNext();
     }
 }
 $num_planets = $i;
 
-$res = $db->Execute("SELECT * FROM {$pdo_db->prefix}sector_defence, {$pdo_db->prefix}ships WHERE {$pdo_db->prefix}sector_defence.sector_id = ? AND {$pdo_db->prefix}ships.ship_id = {$pdo_db->prefix}sector_defence.ship_id;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
 $i = 0;
-if ($res !== false)
+$sql = "SELECT * FROM {$pdo_db->prefix}sector_defence, {$pdo_db->prefix}ships WHERE {$pdo_db->prefix}sector_defence.sector_id=:sector_id AND {$pdo_db->prefix}ships.ship_id = {$pdo_db->prefix}sector_defence.ship_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if ($defence_present)
 {
-    while (!$res->EOF)
+    foreach ($defence_present as $tmp_defence)
     {
-        $defences[$i] = $res->fields;
+        $defences[$i] = $tmp_defence;
         $i++;
-        $res->MoveNext();
     }
 }
 $num_defences = $i;
-
 
 // Grab zoneinfo from database
 $sql = "SELECT zone_id,zone_name FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
@@ -305,7 +307,7 @@ echo "</table>\n";
 $i = 0;
 $num_traderoutes = 0;
 
-// Traderoute querry
+// Traderoute query
 $tr_result = $db->Execute("SELECT * FROM {$pdo_db->prefix}traderoutes WHERE source_type = ? AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array("P", $playerinfo['sector'], $playerinfo['ship_id']));
 Tki\Db::LogDbErrors($pdo_db, $tr_result, __LINE__, __FILE__);
 while (!$tr_result->EOF)

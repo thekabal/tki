@@ -63,21 +63,22 @@ class CalcLevels
         return $result;
     }
 
-    public static function planetBeams(\PDO $pdo_db, $db, $ownerinfo, Reg $tkireg, $planetinfo)
+    public static function planetBeams(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo)
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
-
         $planetbeams = self::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
-        $res = $db->Execute("SELECT beams FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
-        Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        if ($res instanceof \adodb\ADORecordSet)
+        $sql = "SELECT beams FROM {$pdo_db->prefix}ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->execute();
+        $beam_defender_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($beam_defender_present)
         {
-            while (!$res->EOF)
+            foreach ($beam_defender_present as $tmp_beams)
             {
-                $planetbeams = $planetbeams + self::beams($res->fields['beams'], $tkireg->level_factor);
-                $res->MoveNext();
+                $planetbeams = $planetbeams + self::beams($tmp_beams['beams'], $tkireg->level_factor);
             }
         }
 
