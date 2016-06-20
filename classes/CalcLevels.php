@@ -91,7 +91,7 @@ class CalcLevels
         return (int) $planetbeams;
     }
 
-    public static function planetShields(\PDO $pdo_db, $db, $ownerinfo, Reg $tkireg, $planetinfo)
+    public static function planetShields(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo)
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
