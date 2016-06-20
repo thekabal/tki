@@ -28,6 +28,7 @@ class Ownership
         $num_bases = $bases_res->RecordCount();
 
         $i = 0;
+        $owners = array();
         $bases = array();
         if ($num_bases > 0)
         {
