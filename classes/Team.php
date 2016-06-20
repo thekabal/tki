@@ -93,6 +93,7 @@ class Team
     // Rewritten display of teams list
     public static function displayAllTeams(\PDO $pdo_db, $db, $langvars, Reg $tkireg, $order, $type)
     {
+        $row2 = array();
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
         echo "<table style='width:100%; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
         echo "<tr bgcolor=\"$tkireg->color_header\">";

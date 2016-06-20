@@ -26,6 +26,16 @@ class Traderoute
 {
     public static function traderouteEngage($db, \PDO $pdo_db, $lang, $j, $langvars, Reg $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull)
     {
+        $traderoute = array();
+        $source = array();
+        $dest = array();
+
+        // Added below initializations, for traderoute bug
+        $ore_buy = 0;
+        $goods_buy = 0;
+        $organics_buy = 0;
+        $energy_buy = 0;
+
         foreach ($traderoutes as $testroute)
         {
             if ($testroute['traderoute_id'] == $engage)
@@ -470,11 +480,6 @@ class Traderoute
             else
             {
                 // Sells commodities
-                // Added below initializations, for traderoute bug
-                $ore_buy = 0;
-                $goods_buy = 0;
-                $organics_buy = 0;
-                $energy_buy = 0;
 
                 if ($source['port_type'] != 'ore')
                 {
