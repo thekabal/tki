@@ -34,6 +34,7 @@ class File
 
         $status_array = array();
         $j = 0;
+        $final_result = null;
         $start_tran_res = $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
         Db::logDbErrors($pdo_db, $start_tran_res, __LINE__, __FILE__);
 

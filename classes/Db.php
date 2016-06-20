@@ -170,6 +170,7 @@ class Db
         $safe_script_name = htmlentities($_SERVER['PHP_SELF'], ENT_HTML5, 'UTF-8');
         $db_log = false;
         $error = null;
+        $db_error = null;
         if ($pdo_db instanceof PDO)
         {
             $error = $pdo_db->errorInfo()[1];
