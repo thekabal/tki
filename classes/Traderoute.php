@@ -2018,6 +2018,11 @@ class Traderoute
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
+        $src_id = null;
+        $dest_id = null;
+        $src_type = null;
+        $dest_type = null;
+
         if ($num_traderoutes >= $tkireg->max_traderoutes_player && empty ($editing))
         { // Dont let them exceed max traderoutes
             self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_maxtdr'], $template);
