@@ -84,7 +84,7 @@ $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':link_start', $playerinfo['sector']);
 $stmt->execute();
 $link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if ($link_present)
+if ($link_present !== null)
 {
     foreach ($link_present as $tmp_link)
     {
@@ -100,7 +100,7 @@ $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $planet_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if ($planet_present)
+if ($planet_present !== null)
 {
     foreach ($planet_present as $tmp_planet)
     {
@@ -116,7 +116,7 @@ $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if ($defence_present)
+if ($defence_present !== null)
 {
     foreach ($defence_present as $tmp_defence)
     {
