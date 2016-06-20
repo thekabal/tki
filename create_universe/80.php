@@ -69,7 +69,7 @@ $local_table_timer->start(); // Start benchmarking for Xenobe
 $sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_turns);
-$stmt->bindParam(':sched_file', 'sched_xenobe.php');
+$stmt->bindValue(':sched_file', 'sched_xenobe.php');
 $stmt->bindParam(':last_run', $now);
 $resxx = $stmt->execute();
 $variables['update_xenobe_results']['result'] = Tki\Db::LogDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
