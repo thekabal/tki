@@ -101,19 +101,21 @@ if ($zoneinfo['allow_warpedit'] == 'L')
     }
 }
 
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-if (!$result2 instanceof ADORecordSet)
+$sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start=:link_start ORDER BY link_dest ASC";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':link_start', $playerinfo['sector']);
+$stmt->execute();
+$link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if (!$link_present)
 {
     echo $langvars['l_warp_nolink'] . "<br><br>";
 }
 else
 {
     echo $langvars['l_warp_linkto'] . " ";
-    while (!$result2->EOF)
+    foreach ($link_present as $tmp_link)
     {
-        echo $result2->fields['link_dest'] . " ";
-        $result2->MoveNext();
+        echo $tmp_link['link_dest'] . " ";
     }
     echo "<br><br>";
 }
