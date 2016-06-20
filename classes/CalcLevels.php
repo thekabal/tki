@@ -88,7 +88,7 @@ class CalcLevels
         }
         $planetinfo['energy'] -= $planetbeams;
 
-        return $planetbeams;
+        return (int) $planetbeams;
     }
 
     public static function planetShields(\PDO $pdo_db, $db, $ownerinfo, Reg $tkireg, $planetinfo)
@@ -97,15 +97,16 @@ class CalcLevels
         $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
-        $res = $db->Execute("SELECT shields FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
-        Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
-        if ($res instanceof \adodb\ADORecordSet)
+        $sql = "SELECT shields FROM {$pdo_db->prefix}ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->execute();
+        $shield_defender_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($shield_defender_present !== null)
         {
-            while (!$res->EOF)
+            foreach ($shield_defender_present as $tmp_shields)
             {
-                $planetshields += self::shields($res->fields['shields'], $tkireg->level_factor);
-                $res->MoveNext();
+                $planetshields = $planetshields + self::shields($tmp_shields['shields'], $tkireg->level_factor);
             }
         }
 
@@ -115,7 +116,7 @@ class CalcLevels
         }
         $planetinfo['energy'] -= $planetshields;
 
-        return $planetshields;
+        return (int) $planetshields;
     }
 
     public static function planetTorps(\PDO $pdo_db, $db, $ownerinfo, $planetinfo, Reg $tkireg)
