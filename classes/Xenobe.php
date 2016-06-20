@@ -30,6 +30,9 @@ class Xenobe
         $tkireg->ore_price = 11;
         $tkireg->organics_price = 5;
         $tkireg->goods_price = 15;
+        $shipore = null;
+        $shiporganics = null;
+        $shipgoods = null;
 
         // Obtain sector information
         $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id";
@@ -557,6 +560,9 @@ class Xenobe
 
     public static function xenobeToShip(\PDO $pdo_db, $db, $ship_id, Reg $tkireg, $playerinfo, $langvars)
     {
+        $armor_lost = null;
+        $fighters_lost = null;
+
         // Lookup target details
         $resa = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}zones READ, {$db->prefix}planets READ, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
@@ -1376,6 +1382,7 @@ class Xenobe
 
     public static function xenobeHunter(\PDO $pdo_db, $db, $playerinfo, $xenobeisdead, $langvars, Reg $tkireg)
     {
+        $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
         \Tki\Db::LogDbErrors($pdo_db, $rescount, __LINE__, __FILE__);
         $rowcount = $rescount->fields;
@@ -1498,6 +1505,11 @@ class Xenobe
 
     public static function xenobeRegen(\PDO $pdo_db, $db, $playerinfo, $xen_unemployment, Reg $tkireg)
     {
+        $gena = null;
+        $gene = null;
+        $genf = null;
+        $gent = null;
+
         // Xenobe Unempoyment Check
         $playerinfo['credits'] = $playerinfo['credits'] + $xen_unemployment;
         $maxenergy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg); // Regenerate energy
