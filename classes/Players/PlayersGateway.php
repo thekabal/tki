@@ -43,8 +43,8 @@ class PlayersGateway // Gateway for SQL calls related to Players
         $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
         $row = $stmt->fetchObject(); // Fetch the associated object from the select
-        $online = (int) $row->loggedin; // Set online variable to the int value of the loggedin count from SQL
-        return $online;
+        $online = $row->loggedin; // Set online variable to the loggedin count from SQL
+        return (int) $online;
     }
 
     public function selectPlayerInfo($email)
