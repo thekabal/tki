@@ -38,66 +38,66 @@ $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($zone));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$zoneinfo = $res->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':zone_id', $zone);
+$stmt->execute();
+$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($res->EOF)
+if (!$zoneinfo)
 {
     echo $langvars['l_zi_nexist'];
 }
 else
 {
-    $row = $res->fields;
-
     if ($zoneinfo['zone_id'] < 5)
     {
         $zonevar = "l_zname_" . $zoneinfo['zone_id'];
         $zoneinfo['zone_name'] = $langvars[$zonevar];
     }
 
-    if ($row['zone_id'] == '2')
+    if ($zoneinfo['zone_id'] == '2')
     {
         $ownername = $langvars['l_zi_feds'];
     }
-    elseif ($row['zone_id'] == '3')
+    elseif ($zoneinfo['zone_id'] == '3')
     {
         $ownername = $langvars['l_zi_traders'];
     }
-    elseif ($row['zone_id'] == '1')
+    elseif ($zoneinfo['zone_id'] == '1')
     {
         $ownername = $langvars['l_zi_nobody'];
     }
-    elseif ($row['zone_id'] == '4')
+    elseif ($zoneinfo['zone_id'] == '4')
     {
         $ownername = $langvars['l_zi_war'];
     }
     else
     {
         // Sanitize ZoneName.
-        $row['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $row['zone_name']);
+        $zoneinfo['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $zoneinfo['zone_name']);
 
-        if ($row['team_zone'] == 'N')
+        if ($zoneinfo['team_zone'] == 'N')
         {
-            $result = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['owner']));
+            $result = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
             Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $ownerinfo = $result->fields;
             $ownername = $ownerinfo['character_name'];
         }
         else
         {
-            $result = $db->Execute("SELECT team_name, creator, id FROM {$db->prefix}teams WHERE id = ?;", array($row['owner']));
+            $result = $db->Execute("SELECT team_name, creator, id FROM {$db->prefix}teams WHERE id = ?;", array($zoneinfo['owner']));
             Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $ownerinfo = $result->fields;
             $ownername = $ownerinfo['team_name'];
         }
     }
 
-    if ($row['allow_beacon'] == 'Y')
+    if ($zoneinfo['allow_beacon'] == 'Y')
     {
         $beacon = $langvars['l_zi_allow'];
     }
-    elseif ($row['allow_beacon'] == 'N')
+    elseif ($zoneinfo['allow_beacon'] == 'N')
     {
         $beacon = $langvars['l_zi_notallow'];
     }
@@ -106,7 +106,7 @@ else
         $beacon = $langvars['l_zi_limit'];
     }
 
-    if ($row['allow_attack'] == 'Y')
+    if ($zoneinfo['allow_attack'] == 'Y')
     {
         $attack = $langvars['l_zi_allow'];
     }
@@ -115,11 +115,11 @@ else
         $attack = $langvars['l_zi_notallow'];
     }
 
-    if ($row['allow_defenses'] == 'Y')
+    if ($zoneinfo['allow_defenses'] == 'Y')
     {
         $defense = $langvars['l_zi_allow'];
     }
-    elseif ($row['allow_defenses'] == 'N')
+    elseif ($zoneinfo['allow_defenses'] == 'N')
     {
         $defense = $langvars['l_zi_notallow'];
     }
@@ -128,11 +128,11 @@ else
         $defense = $langvars['l_zi_limit'];
     }
 
-    if ($row['allow_warpedit'] == 'Y')
+    if ($zoneinfo['allow_warpedit'] == 'Y')
     {
         $warpedit = $langvars['l_zi_allow'];
     }
-    elseif ($row['allow_warpedit'] == 'N')
+    elseif ($zoneinfo['allow_warpedit'] == 'N')
     {
         $warpedit = $langvars['l_zi_notallow'];
     }
@@ -141,11 +141,11 @@ else
         $warpedit = $langvars['l_zi_limit'];
     }
 
-    if ($row['allow_planet'] == 'Y')
+    if ($zoneinfo['allow_planet'] == 'Y')
     {
         $planet = $langvars['l_zi_allow'];
     }
-    elseif ($row['allow_planet'] == 'N')
+    elseif ($zoneinfo['allow_planet'] == 'N')
     {
         $planet = $langvars['l_zi_notallow'];
     }
@@ -154,11 +154,11 @@ else
         $planet = $langvars['l_zi_limit'];
     }
 
-    if ($row['allow_trade'] == 'Y')
+    if ($zoneinfo['allow_trade'] == 'Y')
     {
         $trade = $langvars['l_zi_allow'];
     }
-    elseif ($row['allow_trade'] == 'N')
+    elseif ($zoneinfo['allow_trade'] == 'N')
     {
         $trade = $langvars['l_zi_notallow'];
     }
@@ -167,22 +167,22 @@ else
         $trade = $langvars['l_zi_limit'];
     }
 
-    if ($row['max_hull'] == 0)
+    if ($zoneinfo['max_hull'] == 0)
     {
         $hull = $langvars['l_zi_ul'];
     }
     else
     {
-        $hull = $row['max_hull'];
+        $hull = $zoneinfo['max_hull'];
     }
 
-    if (($row['team_zone'] == 'N' && $row['owner'] == $playerinfo['ship_id']) || ($row['team_zone'] == 'Y' && $row['owner'] == $playerinfo['team'] && $playerinfo['ship_id'] == $ownerinfo['creator']))
+    if (($zoneinfo['team_zone'] == 'N' && $zoneinfo['owner'] == $playerinfo['ship_id']) || ($zoneinfo['team_zone'] == 'Y' && $zoneinfo['owner'] == $playerinfo['team'] && $playerinfo['ship_id'] == $ownerinfo['creator']))
     {
         echo "<center>" . $langvars['l_zi_control'] . ". <a href=zoneedit.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_zi_tochange'] . "</center><p>";
     }
 
     echo "<table class=\"top\">\n" .
-         "<tr><td class=\"zonename\"><strong>$row[zone_name]</strong></td></tr></table>\n" .
+         "<tr><td class=\"zonename\"><strong>$zoneinfo[zone_name]</strong></td></tr></table>\n" .
          "<table class=\"bottom\">\n" .
          "<tr><td class=\"name\">&nbsp;" . $langvars['l_zi_owner'] . "</td><td class=\"value\">$ownername&nbsp;</td></tr>\n" .
          "<tr><td>&nbsp;" . $langvars['l_beacons'] . "</td><td>$beacon&nbsp;</td></tr>\n" .
