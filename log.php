@@ -62,10 +62,13 @@ if ($swordfish == \Tki\SecureConfig::ADMINPW) // Check if called by admin script
     }
     else
     {
-        $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($player));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $targetname = $res->fields;
-        $playerinfo['character_name'] = $targetname['character_name'];
+        // Get playerinfo from database
+        $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $player);
+        $stmt->execute();
+        $tmp_playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $playerinfo['character_name'] = $tmp_playerinfo['character_name'];
     }
 }
 
@@ -110,17 +113,12 @@ if (empty ($startdate))
     $startdate = date("Y-m-d");
 }
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$startdate%' ORDER BY time DESC, type DESC;", array($playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
-if ($res instanceof ADORecordSet)
-{
-    while (!$res->EOF)
-    {
-        $logs[] = $res->fields;
-        $res->MoveNext();
-    }
-}
+$sql = "SELECT * FROM {$pdo_db->prefix}logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+$stmt->bindParam(':start_date', $startdate);
+$stmt->execute();
+$logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $langvars['l_log_months_temp'] = "l_log_months_" . (int) (mb_substr($startdate, 5, 2));
 $entry = $langvars[$langvars['l_log_months_temp']] . " " . mb_substr($startdate, 8, 2) . " " . mb_substr($startdate, 0, 4);
@@ -192,13 +190,12 @@ if ($mode != 'compat')
     $entry = $$log_months_temp . " " . mb_substr($yesterday, 8, 2) . " " . mb_substr($yesterday, 0, 4);
 
     unset($logs);
-    $res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$yesterday%' ORDER BY time DESC, type DESC;", array($playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-    while (!$res->EOF)
-    {
-        $logs[] = $res->fields;
-        $res->MoveNext();
-    }
+    $sql = "SELECT * FROM {$pdo_db->prefix}logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+    $stmt->bindParam(':start_date', $yesterday);
+    $stmt->execute();
+    $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo "<div id=\"dynPage1\" class=\"dynPage\">" .
          "<center>" .
@@ -237,13 +234,12 @@ if ($mode != 'compat')
     $entry = $$log_months_temp . " " . mb_substr($tomorrow, 8, 2) . " " . mb_substr($tomorrow, 0, 4);
 
     unset($logs);
-    $res = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? AND time LIKE '$tomorrow%' ORDER BY time DESC, type DESC", array($playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-    while (!$res->EOF)
-    {
-        $logs[] = $res->fields;
-        $res->MoveNext();
-    }
+    $sql = "SELECT * FROM {$pdo_db->prefix}logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+    $stmt->bindParam(':start_date', $tomorrow);
+    $stmt->execute();
+    $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo "<div id=\"dynPage2\" class=\"dynPage\">" .
          "<center>" .
