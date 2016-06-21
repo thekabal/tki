@@ -119,7 +119,7 @@ class CalcLevels
         return (int) $planetshields;
     }
 
-    public static function planetTorps(\PDO $pdo_db, $db, $ownerinfo, $planetinfo, Reg $tkireg)
+    public static function planetTorps(\PDO $pdo_db, $ownerinfo, $planetinfo, Reg $tkireg)
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;
