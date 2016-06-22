@@ -23,9 +23,6 @@ class Schema
 {
     public static function dropTables(\PDO $pdo_db, $db_prefix, $dbtype)
     {
-        // Need to set this or all hell breaks loose.
-        $pdo_db->inactive = true;
-
         $i = 0;
         $destroy_table_results = array();
 
@@ -80,9 +77,6 @@ class Schema
 
     public static function dropSequences(\PDO $pdo_db, $db_prefix, $dbtype)
     {
-        // Need to set this or all hell breaks loose.
-        $pdo_db->inactive = true;
-
         $i = 0;
         $destroy_sequence_results = array();
 
