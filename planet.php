@@ -78,20 +78,20 @@ $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
-Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-$planetinfo = $result3->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':planet_id', $planet_id);
+$stmt->execute();
+$planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Check to see if it returned valid planet info.
-if (!$result3 instanceof ADORecordSet || (is_bool($planetinfo) && $planetinfo === false))
+if (!$planetinfo)
 {
     echo "Invalid Planet<br><br>";
     Tki\Text::gotomain($pdo_db, $lang);
     die();
 }
 
-if (!is_bool($planetinfo) && $planetinfo !== false)
-// If there is a planet in the sector show appropriate menu
+if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 {
     if ($playerinfo['sector'] != $planetinfo['sector_id'])
     {
