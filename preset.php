@@ -39,16 +39,11 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Pull the presets for the player from the db.
-$i=0;
-$debug_query = $db->Execute("SELECT * FROM {$db->prefix}presets WHERE ship_id = ?;", array($playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $debug_query, __LINE__, __FILE__);
-while (!$debug_query->EOF)
-{
-    $presetinfo[$i] = $debug_query->fields;
-    $debug_query->MoveNext();
-    $i++;
-}
-
+$sql = "SELECT * FROM {$pdo_db->prefix}presets WHERE ship_id=:ship_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+$stmt->execute();
+$presetinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $preset_list = array();
 
 // Filter the array of presets from the form submission
