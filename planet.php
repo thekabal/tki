@@ -870,7 +870,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             echo $langvars['l_planet_captured'] . "<br>";
             $update = $db->Execute("UPDATE {$db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
             Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
-            $ownership = Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+            $ownership = Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg, $langvars);
 
             if ($ownership !== null)
             {
