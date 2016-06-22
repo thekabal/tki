@@ -29,7 +29,14 @@ echo "<h1>" . $title . "</h1>\n";
 
 if (array_key_exists('sector', $_GET))
 {
-    $sector = htmlentities($_GET['sector'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    if ($_GET['sector'] == "*")
+    {
+        $sector = "*";
+    }
+    else
+    {
+        $sector = htmlentities($_GET['sector'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
 }
 else
 {
@@ -113,7 +120,7 @@ if ($sector == "*")
         // Get sectorinfo from database
         $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', array($row['link_dest']));
+        $stmt->bindParam(':sector_id', $row['link_dest']);
         $stmt->execute();
         $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
