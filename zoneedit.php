@@ -100,16 +100,19 @@ if (mb_strlen(trim($trades)) === 0)
     $trades = false;
 }
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}zones WHERE zone_id = ?;", array($zone));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-if ($res->EOF)
+$sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':zone_id', $zone);
+$stmt->execute();
+$curzone = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$curzone)
 {
     echo "<p>" . $langvars['l_zi_nexist'] . "<p>";
     Tki\Text::gotomain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
-$curzone = $res->fields;
 
 // Sanitize ZoneName.
 $curzone['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $curzone['zone_name']);
