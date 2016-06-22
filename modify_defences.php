@@ -64,18 +64,19 @@ if ($playerinfo['turns'] < 1)
     die ();
 }
 
-$result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE defence_id = ?;", array($defence_id));
-Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-// Put the defence information into the array "defenceinfo"
+$sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE defence_id=:defence_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':defence_id', $defence_id);
+$stmt->execute();
+$defenceinfo = $stmt->fetchAll(PDO::FETCH_ASSOC); // Put the defence information into the array "defenceinfo"
 
-if (!$result3 instanceof ADORecordSet) // Not too sure, may need more checks on this.
+if (!$defenceinfo)  // Not too sure, may need more checks on this.
 {
     echo $langvars['l_md_nolonger'] . "<br>";
     Tki\Text::gotomain($pdo_db, $lang);
     die();
 }
 
-$defenceinfo = $result3->fields;
 if ($defenceinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_md_nothere'] . "<br><br>";
