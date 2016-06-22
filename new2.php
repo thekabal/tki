@@ -175,7 +175,7 @@ if ($flag == 0)
             $sql = "INSERT INTO {$pdo_db->prefix}presets (ship_id, preset, type) " .
                    "VALUES (:ship_id, :preset, :type)";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindValue(':ship_id', $shipid['ship_id']);
+            $stmt->bindParam(':ship_id', $shipid['ship_id']);
             $stmt->bindValue(':preset', 1);
             $stmt->bindValue(':type', 'R');
             $resxx = $stmt->execute();
