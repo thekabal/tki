@@ -18,17 +18,16 @@ The ideal state that we are moving towards is that all unique units of code are 
 auto loaded. For some files this is not done yet, but is planned. For those, we directly include a file instead,
 which has a single function defined.
 
-We try to stay close to psr 1, 2 and 4, with the notable exceptions of our braces being on their own line always,
-and not using namespaces.
+We try to stay close to psr 1, 2 and 4, with the notable exceptions of our braces being on their own line always.
 
 In a templated file, header-t loads the needed HTML headers. Similarly, footer-t loads the needed HTML closing
-statements, copyright notices, and so on.
+statements, copyright notices, and so on. This is a temporary measure until all of the game is templated.
 
 Translation support is improving in game. Language outputs should be done via the $langvars array, with
 corresponding entries and categories (which match file names usually) in languages/language.ini.php
 
 Methods and older functions should have needed variables defined in their calling in the 
-order ($db, $langvars, $config, others).
+order ($pdo_db, $db, $langvars, $config, others).
 
 Anywhere you are unconditionally including a class file, use require_once(). Anywhere you are conditionally 
 including a class file, use include_once().
