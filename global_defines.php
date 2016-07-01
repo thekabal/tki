@@ -73,6 +73,8 @@ define('LOG_BOUNTY_FEDBOUNTY', 52);         // Sent when the federation places a
 define('LOG_PLANET_BOMBED', 53);            // Sent after bombing a planet
 define('LOG_ADMIN_ILLEGVALUE', 54);         // Sent to admin on planet destruction instead of capture
 define('LOG_ADMIN_PLANETCHEAT', 55);        // Sent to admin due to planet hack (hack_id, ip, planet_id, ship_id)
+define('LOG_ATTACK_DEBUG', 56);             // Log attack debug information
+define('LOG_MULTI_BROWSER', 57);            // Sent when we have detected a multi-browser hack attempt
 
 // Ban system defines
 define('ID_WATCH', 0x00, true);             // Player flagged as being watched.
