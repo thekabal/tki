@@ -28,7 +28,7 @@ class Translate
     /**
      * @param string[]|null $categories
      */
-    public static function load(\PDO $pdo_db = null, $language = null, $categories = null)
+    public static function load(\PDO $pdo_db, $language = null, $categories = null)
     {
         // Check if all supplied args are valid, if not return false.
         if (is_null($pdo_db) || is_null($language) || !is_array($categories))
