@@ -98,24 +98,24 @@ elseif ($state == 1)
         $max_search_depth = 6;
     }
 
-    for ($search_depth=1; $search_depth<=$max_search_depth; $search_depth++)
+    for ($search_depth = 1; $search_depth <= $max_search_depth; $search_depth++)
     {
         $search_query = "SELECT distinct a1.link_start, a1.link_dest ";
-        for ($i=2; $i<=$search_depth; $i++)
+        for ($i = 2; $i <= $search_depth; $i++)
         {
             $search_query = $search_query . " ,a". $i . ".link_dest ";
         }
 
         $search_query = $search_query . "FROM     {$db->prefix}links AS a1 ";
 
-        for ($i=2; $i<=$search_depth; $i++)
+        for ($i = 2; $i <= $search_depth; $i++)
         {
             $search_query = $search_query . "    ,{$db->prefix}links AS a". $i . " ";
         }
 
         $search_query = $search_query . "WHERE         a1.link_start = $current_sector ";
 
-        for ($i=2; $i<=$search_depth; $i++)
+        for ($i = 2; $i <= $search_depth; $i++)
         {
             $k = $i-1;
             $search_query = $search_query . "    AND a" . $k . ".link_dest = a" . $i . ".link_start ";
@@ -124,11 +124,11 @@ elseif ($state == 1)
         $search_query = $search_query . "    AND a" . $search_depth . ".link_dest = $stop_sector ";
         $search_query = $search_query . "    AND a1.link_dest != a1.link_start ";
 
-        for ($i=2; $i<=$search_depth; $i++)
+        for ($i = 2; $i <= $search_depth; $i++)
         {
             $search_query = $search_query . "    AND a" . $i . ".link_dest not in (a1.link_dest, a1.link_start ";
 
-            for ($j=2; $j<$i; $j++)
+            for ($j = 2; $j < $i; $j++)
             {
                 $search_query = $search_query . ",a" . $j . ".link_dest ";
             }
@@ -136,7 +136,7 @@ elseif ($state == 1)
         }
 
         $search_query = $search_query . "ORDER BY a1.link_start, a1.link_dest ";
-        for ($i=2; $i<=$search_depth; $i++)
+        for ($i = 2; $i <= $search_depth; $i++)
         {
             $search_query = $search_query . ", a" . $i . ".link_dest";
         }
@@ -167,7 +167,7 @@ elseif ($state == 1)
         echo "<h3>" . $langvars['l_nav_pathfnd'] . "</h3>\n";
         $links = $search_result->fields;
         echo $links[0];
-        for ($i=1; $i<$search_depth + 1; $i++)
+        for ($i = 1; $i < $search_depth + 1; $i++)
         {
             echo " >> " . $links[$i];
         }
