@@ -78,7 +78,7 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 switch ($response) {
-    case "display":
+    case 'display':
         echo "<h1>" . $title . "</h1>\n";
         $res5 = $db->Execute("SELECT * FROM {$db->prefix}ships, {$db->prefix}bounty WHERE bounty_on = ship_id AND bounty_on = ?;", array($bounty_on));
         Tki\Db::LogDbErrors($pdo_db, $res5, __LINE__, __FILE__);
@@ -149,7 +149,7 @@ switch ($response) {
             echo "</table>";
         }
         break;
-    case "cancel":
+    case 'cancel':
         echo "<h1>" . $title . "</h1>\n";
         if ($playerinfo['turns'] < 1)
         {
@@ -187,7 +187,7 @@ switch ($response) {
         echo $langvars['l_by_canceled'] . "<br>";
         Tki\Text::gotomain($pdo_db, $lang);
         die();
-    case "place":
+    case 'place':
         echo "<h1>" . $title . "</h1>\n";
         $ex = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounty_on));
         Tki\Db::LogDbErrors($pdo_db, $ex, __LINE__, __FILE__);

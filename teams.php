@@ -131,12 +131,12 @@ else
 
 switch ($teamwhat)
 {
-        case 1: // INFO on single team
+        case 1: // Info on single team
             Tki\Team::showInfo($pdo_db, $db, $langvars, $whichteam, 0, $playerinfo, $invite_info, $team, $tkireg);
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
 
-        case 2: // LEAVE
+        case 2: // Leave the team
             if (!Tki\Team::isTeamMember($team, $playerinfo))
             {
                 echo "<strong><font color=red>An error occured</font></strong><br>You are not a member of this Team.";
@@ -300,7 +300,7 @@ switch ($teamwhat)
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
 
-        case 3: // JOIN
+        case 3: // Join a team
             if ($playerinfo['team'] != 0)
             {
                 echo $langvars['l_team_leavefirst'] . "<br>";
@@ -327,7 +327,7 @@ switch ($teamwhat)
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
 
-        case 4:
+        case 4: // Not implemented yet
             echo "Not implemented yet. Sorry! :)<br><br>";
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
@@ -376,7 +376,7 @@ switch ($teamwhat)
             }
             break;
 
-        case 6: // Create Team
+        case 6: // Create team
             if ($playerinfo['team'] != 0)
             {
                 echo $langvars['l_team_leavefirst'] . "<br>";
@@ -420,7 +420,7 @@ switch ($teamwhat)
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
 
-        case 7: // INVITE player
+        case 7: // Invite a player to a team
             if (Tki\Team::isTeamMember($team, $playerinfo) === false)
             {
                 echo "<br>You are not in this team!<br>";
@@ -485,7 +485,7 @@ switch ($teamwhat)
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . "<br><br>";
             break;
 
-        case 8: // REFUSE invitation
+        case 8: // Decline invitation to a team
             echo $langvars['l_team_refuse'] . " <strong>" . $invite_info['team_name'] . "</strong>.<br><br>";
             $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE ship_id = ?;", array($playerinfo['ship_id']));
             Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);

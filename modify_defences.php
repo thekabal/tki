@@ -112,7 +112,7 @@ else
 
 switch ($response)
 {
-    case "fight":
+    case 'fight':
         echo "<h1>" . $title . "</h1>\n";
         if ($defenceinfo['ship_id'] == $playerinfo['ship_id'])
         {
@@ -159,7 +159,7 @@ switch ($response)
         }
         break;
 
-    case "retrieve":
+    case 'retrieve':
         if ($defenceinfo['ship_id'] != $playerinfo['ship_id'])
         {
              echo $langvars['l_md_notyours'] . "<br><br>";
@@ -216,7 +216,7 @@ switch ($response)
         Tki\Text::gotomain($pdo_db, $lang);
         die();
 
-    case "change":
+    case 'change':
         echo "<h1>" . $title . "</h1>\n";
         if ($defenceinfo['ship_id'] != $playerinfo['ship_id'])
         {

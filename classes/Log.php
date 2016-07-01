@@ -331,15 +331,15 @@ class Log
                 $retvalue['title'] = "<font color=red>" . $retvalue['title'] . "</font>";
                 break;
 
-            case 57:
+            case LOG_MULTI_BROWSER:
                 // Multi Browser Logs.
                 list ($ship_ip, $ship_id, $info)= explode("|", $entry['data']);
                 $retvalue['text'] = "Account: <span style='color:#ff0;'>{$ship_id}</span> with IP: '<span style='color:#ff0;'>{$ship_ip}</span>' <span style='color:#fff;'>{$info}</span>";
                 $retvalue['title'] = "Possible Multi Browser Attempt.";
                 break;
 
-            case 950:
-                // Attack logs debug info
+            case LOG_ATTACK_DEBUG:
+                // Attack debug logs
                 if (count(explode("|", $entry['data'])) == 7)
                 {
                     list ($step, $attacker_armor, $target_armor, $attacker_fighters, $target_fighters, $attacker_id, $target_id)= explode("|", $entry['data']);
@@ -352,21 +352,6 @@ class Log
                     $retvalue['text']  = "Attacker Ship: {$attacker_id}, Target Ship: {$target_id}, Target Ship: {$info}\n";
                 }
                 $retvalue['title'] = "Attack Logs Stage: {$step} [Debug].";
-                break;
-
-            case 1019:
-                // Invalid login try (wrong password etc)
-                if (count(explode("|", $entry['data'])) == 3)
-                {
-                    list ($ship_ip, $ship_email)= explode("|", $entry['data']);
-                    $retvalue['text'] = "Someone using IP: <span style='color:#ff0;'>{$ship_ip}</span> tried to login into Account: '<span style='color:#ff0;'>{$ship_email}</span>' with a non-blank password.";
-                }
-                else
-                {
-                    list ($ship_ip, $ship_email)= explode("|", $entry['data']);
-                    $retvalue['text'] = "Someone using IP: <span style='color:#ff0;'>{$ship_ip}</span> tried to login into Account: '<span style='color:#ff0;'>{$ship_email}</span>' with a blank Password.'";
-                }
-                $retvalue['title'] = "Invalid Login Attempt.";
                 break;
 
             default:
