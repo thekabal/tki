@@ -107,7 +107,7 @@ class PlanetReportCE
         \Tki\Db::LogDbErrors($pdo_db, $result1, __LINE__, __FILE__);
         $playerinfo = $result1->fields;
 
-        // Set var as an array.
+        // Set s_p_pair as an array.
         $s_p_pair = array();
 
         // Create an array of sector -> planet pairs
