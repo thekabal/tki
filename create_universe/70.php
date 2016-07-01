@@ -87,7 +87,7 @@ do
             $add_more = $variables['nump'] - $p_add; // Lower the number to add to the amount that is left
         }
 
-        for ($q=1; $q<=$add_more; $q++)
+        for ($q = 1; $q <= $add_more; $q++)
         {
             // Add a line of values for every iteration
             $planet_insert_sql .= ", (2, 0, 0, $tkireg->default_prod_ore, $tkireg->default_prod_organics, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, $open_sectors_array[$p_add])";
