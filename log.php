@@ -315,7 +315,7 @@ $nonext = 0;
 
 if ($swordfish == \Tki\SecureConfig::ADMINPW) // Fix for admin log view
 {
-    $postlink = "&swordfish=" . urlencode($swordfish) . "&player=$player";
+    $postlink = "&swordfish=" . urlencode($swordfish) . "&player=" . urlencode($player);
 }
 else
 {
