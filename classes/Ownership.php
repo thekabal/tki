@@ -173,7 +173,7 @@ class Ownership
             $i = 0;
             foreach ($ships as $ship)
             {
-                $query = $query . 'ship_id=$ship';
+                $query = $query . 'ship_id=' . $ship;
                 $i++;
                 if ($i != $nbships)
                 {

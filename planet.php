@@ -470,12 +470,12 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         elseif ($command == "productions")
         {
             // Change production percentages
-            $pore       = (int) array_key_exists('pore', $_POST)?$_POST['pore']:0;
-            $porganics  = (int) array_key_exists('porganics', $_POST)?$_POST['porganics']:0;
-            $pgoods     = (int) array_key_exists('pgoods', $_POST)?$_POST['pgoods']:0;
-            $penergy    = (int) array_key_exists('penergy', $_POST)?$_POST['penergy']:0;
-            $pfighters  = (int) array_key_exists('pfighters', $_POST)?$_POST['pfighters']:0;
-            $ptorp      = (int) array_key_exists('ptorp', $_POST)?$_POST['ptorp']:0;
+            $pore       = (int) array_key_exists('pore', $_POST) ? $_POST['pore'] : 0;
+            $porganics  = (int) array_key_exists('porganics', $_POST) ? $_POST['porganics'] : 0;
+            $pgoods     = (int) array_key_exists('pgoods', $_POST) ? $_POST['pgoods'] : 0;
+            $penergy    = (int) array_key_exists('penergy', $_POST) ? $_POST['penergy'] : 0;
+            $pfighters  = (int) array_key_exists('pfighters', $_POST) ? $_POST['pfighters'] : 0;
+            $ptorp      = (int) array_key_exists('ptorp', $_POST) ? $_POST['ptorp'] : 0;
 
             if ($porganics < 0.0 || $pore < 0.0 || $pgoods < 0.0 || $penergy < 0.0 || $pfighters < 0.0 || $ptorp < 0.0)
             {
