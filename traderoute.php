@@ -192,7 +192,7 @@ else
 
     echo "</font></strong>" .
          "</td></tr>" .
-         "<tr align='center' bgcolor=$tkireg->color_line2>" .
+         "<tr align='center' bgcolor='" . $tkireg->color_line2 . "'>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_tdr_src'] . "</strong></font></td>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_tdr_srctype'] . "</strong></font></td>" .
          "<td><font size=2 color=white><strong>" . $langvars['l_tdr_dest'] . "</strong></font></td>" .
@@ -206,7 +206,7 @@ else
     $curcolor = $tkireg->color_line1;
     while ($i < $num_traderoutes)
     {
-        echo "<tr bgcolor=$curcolor>";
+        echo "<tr bgcolor='" . $curcolor . "'>";
         if ($curcolor == $tkireg->color_line1)
         {
             $curcolor = $tkireg->color_line2;
@@ -228,7 +228,7 @@ else
             if ($result)
             {
                 $planet1 = $result->fields;
-                echo "&nbsp;" . $langvars['l_tdr_planet'] . " <strong>$planet1[name]</strong>" . $langvars['l_tdr_within'] . "<a href=\"rsmove.php?engage=1&destination=$planet1[sector_id]\">$planet1[sector_id]</a></font></td>";
+                echo "&nbsp;" . $langvars['l_tdr_planet'] . " <strong>$planet1[name]</strong>" . $langvars['l_tdr_within'] . "<a href=\"rsmove.php?engage=1&destination=" . $planet1['sector_id'] . "\">" . $planet1['sector_id'] . "</a></font></td>";
             }
             else
             {
@@ -268,7 +268,7 @@ else
             if ($result)
             {
                 $planet2 = $result->fields;
-                echo "&nbsp;" . $langvars['l_tdr_planet'] . " <strong>$planet2[name]</strong>" . $langvars['l_tdr_within'] . "<a href=\"rsmove.php?engage=1&destination=$planet2[sector_id]\">$planet2[sector_id]</a></font></td>";
+                echo "&nbsp;" . $langvars['l_tdr_planet'] . " <strong>$planet2[name]</strong>" . $langvars['l_tdr_within'] . "<a href=\"rsmove.php?engage=1&destination=" . $planet2['sector_id'] . "\">" . $planet2['sector_id'] . "</a></font></td>";
             }
             else
             {

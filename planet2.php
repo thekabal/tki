@@ -94,16 +94,16 @@ $valid_vars[] = array("pref" => "_POST", "var" => "allcredits", "type" => "integ
 
 $valid_vars[] = array("pref" => "_GET", "var" => "planet_id", "type" => "integer");
 
-foreach ($valid_vars as $k => $v)
+foreach ($valid_vars as $key => $value)
 {
     // is found ?
-    if (!isset(${$v['pref']}[$v['var']]))
+    if (!isset(${$value['pref']}[$value['var']]))
     {
         // if not found set var to 0.
-        ${$v['pref']}[$v['var']] = 0;
+        ${$value['pref']}[$value['var']] = 0;
     }
     // set var type to set type.
-    settype(${$v['pref']}[$v['var']], $v['type']);
+    settype(${$value['pref']}[$value['var']], $value['type']);
 }
 
 // Validate and set the type of $_POST vars

@@ -540,7 +540,7 @@ else
                 build_one_col($langvars['l_lssd'] . " " .  $langvars['l_trade_installed']);
             }
 
-            $query = $query . ", turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id=$playerinfo[ship_id]";
+            $query = $query . ", turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = " . $playerinfo['ship_id'];
             $purchase = $db->Execute("$query");
             Tki\Db::LogDbErrors($pdo_db, $purchase, __LINE__, __FILE__);
 

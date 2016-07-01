@@ -586,7 +586,7 @@ if ($playerinfo['sector'] != 0)
         $ship_detected = null;
         while (!$result4->EOF)
         {
-            $row=$result4->fields;
+            $row = $result4->fields;
             $success = Tki\Scan::success($playerinfo['sensors'], $row['cloak']);
             if ($success < 5)
             {
@@ -813,7 +813,7 @@ while (!$debug_query->EOF)
 
 if ($i==0)
 {
-    for ($x=0; $x<$tkireg->max_presets; $x++)
+    for ($x = 0; $x < $tkireg->max_presets; $x++)
     {
         $i++;
         echo "<tr>\n";
@@ -825,7 +825,7 @@ if ($i==0)
 }
 else
 {
-    for ($z=0; $z<$i; $z++)
+    for ($z = 0; $z < $i; $z++)
     {
         echo "<tr>\n";
         echo '<td style="text-align:left;"><a class=mnu href="rsmove.php?engage=1&amp;destination=' . $presetinfo[$z]['preset'] . '">=&gt;&nbsp;' . $presetinfo[$z]['preset'] . '</a></td>';
