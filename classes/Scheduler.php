@@ -21,7 +21,7 @@ namespace Tki;
 
 class Scheduler
 {
-    function is_query_ok(\PDO $pdo_db, $res)
+    public static function is_query_ok(\PDO $pdo_db, $res)
     {
         $test_result = Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if ($test_result)
