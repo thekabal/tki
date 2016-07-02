@@ -156,6 +156,7 @@ else
         $escapepod_purchase         = filter_input(INPUT_POST, 'escapepod_purchase', FILTER_VALIDATE_BOOLEAN);
         $fuelscoop_purchase         = filter_input(INPUT_POST, 'fuelscoop_purchase', FILTER_VALIDATE_BOOLEAN);
         $lssd_purchase              = filter_input(INPUT_POST, 'lssd_purchase', FILTER_VALIDATE_BOOLEAN);
+        $upgrade_cost = null;
 
         $hull_upgrade_cost = 0;
         if ($hull_upgrade > $playerinfo['hull'])
