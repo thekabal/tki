@@ -74,7 +74,7 @@ class Db
                     $db = ADONewConnection('mysqli');
                 }
 
-                $db_init_result = @$db->Connect($db_host, $db_user, $db_pwd, $db_name);
+                $db_init_result = @@$db->Connect($db_host, $db_user, $db_pwd, $db_name);
 
                 // Returns Boolean true or false.
                 // However ADOdb's postgres driver returns null if postgres insn't installed.
