@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,7 +22,7 @@ namespace Tki;
 
 class Languages
 {
-    public static function listAvailable(\PDO $pdo_db, $lang)
+    public static function listAvailable(\PDO $pdo_db, $lang) : array
     {
         // Get a list of supported languages
         $sql = "SELECT section, name, value FROM {$pdo_db->prefix}languages WHERE category = :category AND (name = :name1 OR name = :name2) ORDER BY section, name;";

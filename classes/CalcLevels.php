@@ -63,7 +63,7 @@ class CalcLevels
         return $result;
     }
 
-    public static function planetBeams(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo)
+    public static function planetBeams(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetbeams = self::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
@@ -91,7 +91,7 @@ class CalcLevels
         return (int) $planetbeams;
     }
 
-    public static function planetShields(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo)
+    public static function planetShields(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
@@ -119,7 +119,7 @@ class CalcLevels
         return (int) $planetshields;
     }
 
-    public static function planetTorps(\PDO $pdo_db, $ownerinfo, $planetinfo, Reg $tkireg)
+    public static function planetTorps(\PDO $pdo_db, $ownerinfo, $planetinfo, Reg $tkireg) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;

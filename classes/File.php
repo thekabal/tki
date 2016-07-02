@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,7 +25,7 @@ namespace Tki;
 
 class File
 {
-    public static function iniToDb(\PDO $pdo_db, $ini_file, $ini_table, $section, Reg $tkireg)
+    public static function iniToDb(\PDO $pdo_db, $ini_file, $ini_table, $section, Reg $tkireg) : bool
     {
         // This is a loop, that reads a ini file, of the type variable = value.
         // It will loop thru the list of the ini variables, and push them into the db.
@@ -95,7 +96,7 @@ class File
 
     // Very close to a drop-in replacement for parse_ini_file, although without the second parameter
     // This defaults to the equivalent of "true" for the second param of parse_ini, ie, process sections
-    public static function betterParseIni($file)
+    public static function betterParseIni($file) : array
     {
         $ini = file($file, FILE_SKIP_EMPTY_LINES|FILE_IGNORE_NEW_LINES);
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -60,17 +61,17 @@ class Sessions
         session_write_close();
     }
 
-    public function open()
+    public function open() : bool
     {
         return true;
     }
 
-    public function close()
+    public function close() : bool
     {
         return true;
     }
 
-    public function read($sesskey)
+    public function read($sesskey) : string
     {
         $table = $this->pdo_db->prefix . 'sessions';
         $qry = 'SELECT sessdata FROM ' . $table . ' where sesskey=:sesskey and expiry>=:expiry';

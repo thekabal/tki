@@ -21,7 +21,7 @@ namespace Tki;
 
 class Schema
 {
-    public static function dropTables(\PDO $pdo_db, $db_prefix, $dbtype)
+    public static function dropTables(\PDO $pdo_db, $db_prefix, $dbtype) : array
     {
         $i = 0;
         $destroy_table_results = array();
@@ -156,7 +156,7 @@ class Schema
                 }
             }
 
-        return $create_table_results;
+            return $create_table_results;
         }
         else
         {

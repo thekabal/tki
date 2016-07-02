@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +26,7 @@ namespace Tki;
 
 class SetPaths
 {
-    public static function setGamepath()
+    public static function setGamepath() : string
     {
         $gamepath = dirname($_SERVER['PHP_SELF']);
         if ($gamepath !== null && mb_strlen($gamepath) > 0)
@@ -58,7 +59,7 @@ class SetPaths
         return $gamepath;
     }
 
-    public static function setGamedomain()
+    public static function setGamedomain() : string
     {
         $remove_port = true;
         $gamedomain = $_SERVER['HTTP_HOST'];

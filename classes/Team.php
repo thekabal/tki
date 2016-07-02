@@ -21,45 +21,45 @@ namespace Tki;
 
 class Team
 {
-    public static function sameTeam($attacker_team = null, $attackie_team = null)
+    public static function sameTeam($attacker_team = null, $attackie_team = null) : bool
     {
         if (($attacker_team != $attackie_team) || ($attacker_team == 0 || $attackie_team == 0))
         {
-            return (boolean) false;
+            return (bool) false;
         }
         else
         {
-            return (boolean) true;
+            return (bool) true;
         }
     }
 
-    public static function isTeamMember($team, $playerinfo)
+    public static function isTeamMember($team, $playerinfo) : bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
         {
-            return false;
+            return (bool) false;
         }
 
         // Check to see if the player is a member of $team['id'] if so return true, else return false.
         $returnvalue = ($playerinfo['team'] == $team['id']);
-        return $returnvalue;
+        return (bool) $returnvalue;
     }
 
-    public static function isTeamOwner($team, $playerinfo)
+    public static function isTeamOwner($team, $playerinfo) : bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
         {
-            return false;
+            return (bool) false;
         }
 
         // Check to see if the player is the Owner of $team['creator'] if so return true, else return false.
         $returnvalue = ($playerinfo['ship_id'] == $team['creator']);
-        return $returnvalue;
+        return (bool) $returnvalue;
     }
 
-    public static function validateTeam(\PDO $pdo_db, $db, $name = null, $desc = null, $creator = null)
+    public static function validateTeam(\PDO $pdo_db, $db, $name = null, $desc = null, $creator = null) : bool
     {
         $name = trim($name);
         $desc = trim($desc);
@@ -67,17 +67,17 @@ class Team
 
         if ((is_null($name) || empty ($name)) || (is_null($desc) || empty ($desc)) || (is_null($creator) || empty ($creator)))
         {
-            return false;
+            return (bool) false;
         }
 
         if (($res = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $name, $matches)) != 0)
         {
-            return false;
+            return (bool) false;
         }
 
         if (($res = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $desc, $matches)) != 0)
         {
-            return false;
+            return (bool) false;
         }
 
         // Just a test to see if an team with a name of $name exists.
@@ -87,7 +87,7 @@ class Team
         $num_res = $res->fields;
 
         $returnvalue = (!($num_res['found'] > 0));
-        return $returnvalue;
+        return (bool) $returnvalue;
     }
 
     // Rewritten display of teams list

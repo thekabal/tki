@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -23,7 +24,7 @@ namespace Tki;
 
 class News
 {
-    public static function previousDay($day)
+    public static function previousDay($day) : string
     {
         // Convert the formatted date into a timestamp
         $day = strtotime($day);
@@ -36,7 +37,7 @@ class News
         return $date;
     }
 
-    public static function nextDay($day)
+    public static function nextDay($day) : string
     {
         // Convert the formatted date into a timestamp
         $day = strtotime($day);
