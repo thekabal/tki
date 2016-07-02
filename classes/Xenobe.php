@@ -530,7 +530,7 @@ class Xenobe
             $resultps = $db->Execute("SELECT ship_id,ship_name FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
             \Tki\Db::LogDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
             $shipsonplanet = $resultps->RecordCount();
-            if ($shipsonplanet == 0 && $xenobeisdead < 1)
+            if ($shipsonplanet == 0)
             {
                 // Must have killed all ships on the planet
                 \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Defeated all ships on planet $planetinfo[name]");
