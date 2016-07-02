@@ -24,7 +24,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function traderouteEngage($db, \PDO $pdo_db, $lang, $j, $langvars, Reg $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull)
+    public static function traderouteEngage($db, \PDO $pdo_db, $lang, $j, $langvars, Reg $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template)
     {
         $traderoute = array();
         $source = array();
@@ -1806,7 +1806,7 @@ class Traderoute
         die ();
     }
 
-    public static function traderouteCheckCompatible($db, \PDO $pdo_db, $lang, $type1, $type2, $move, $circuit, $src, $dest, $playerinfo, Reg $tkireg)
+    public static function traderouteCheckCompatible($db, \PDO $pdo_db, $lang, $type1, $type2, $move, $circuit, $src, $dest, $playerinfo, Reg $tkireg, $template)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2009,7 +2009,7 @@ class Traderoute
         return $retvalue;
     }
 
-    public static function traderouteCreate($db, \PDO $pdo_db, $lang, Reg $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
+    public static function traderouteCreate($db, \PDO $pdo_db, $lang, Reg $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $template)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2158,7 +2158,7 @@ class Traderoute
             self::traderouteDie($pdo_db, $lang, $tkireg, "You cannot create a traderoute into a special port!", $template);
         }
         // Check traderoute for src => dest
-        self::traderouteCheckCompatible($db, $pdo_db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg);
+        self::traderouteCheckCompatible($db, $pdo_db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
 
         if ($ptype1 == 'port')
         {
