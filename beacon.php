@@ -116,9 +116,11 @@ if ($playerinfo['dev_beacon'] > 0)
             }
             echo "<form accept-charset='utf-8' action=beacon.php method=post>";
             echo "<table>";
-            echo "<tr><td>" . $langvars['l_beacon_enter'] . ":</td><td><input type=text name=beacon_text size=40 maxlength=80></td></tr>";
+            echo "<tr><td>" . $langvars['l_beacon_enter'];
+            echo ":</td><td><input type=text name=beacon_text size=40 maxlength=80></td></tr>";
             echo "</table>";
-            echo "<input type=submit value=" . $langvars['l_submit'] . "><input type=reset value=" . $langvars['l_reset'] . ">";
+            echo "<input type=submit value=" . $langvars['l_submit'] . ">";
+            echo "<input type=reset value=" . $langvars['l_reset'] . ">";
             echo "</form>";
         }
         else
