@@ -35,7 +35,7 @@ class BigBang
         $filelist = array();
 
         $bigbang_dir = new \DirectoryIterator('create_universe/');
-        foreach($bigbang_dir as $file_info) // Get a list of the files in the bigbang directory
+        foreach ($bigbang_dir as $file_info) // Get a list of the files in the bigbang directory
         {
             // If it is a PHP file, add it to the list of accepted make galaxy files
             if ($file_info->isFile() && $file_info->getExtension() == 'php')
@@ -49,7 +49,7 @@ class BigBang
         natsort($filelist);
 
         // Now move files over to the $bigbang_files array creating the correct index key order.
-        foreach($filelist as $ofile)
+        foreach ($filelist as $ofile)
         {
             array_push($bigbang_files, $ofile);
         }

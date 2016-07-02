@@ -73,7 +73,7 @@ if (count($row) == 0)
 }
 else
 {
-    foreach($row as $item)
+    foreach ($row as $item)
     {
         echo "  <tr>\n";
         echo "    <td bgcolor=\"#003\" align=\"center\" style=\"vertical-align:text-top;\">" . $item['headline'] . "</td>\n";
