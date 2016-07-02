@@ -762,7 +762,7 @@ class Ibank
         }
     }
 
-    public static function ibankDeposit2(\PDO $pdo_db, $lang, $langvars, $playerinfo, $amount, $account, Reg $tkireg)
+    public static function ibankDeposit2(\PDO $pdo_db, $lang, $langvars, $playerinfo, $amount, $account, Reg $tkireg, $template)
     {
         $max_credits_allowed = 18446744073709000000;
 
@@ -770,17 +770,17 @@ class Ibank
 
         if (($amount * 1) != $amount)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invaliddepositinput'], "ibank.php?command=deposit", $lang, $tkireg);
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invaliddepositinput'], "ibank.php?command=deposit", $lang, $tkireg, $template);
         }
 
         if ($amount == 0)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_nozeroamount2'], "ibank.php?command=deposit", $lang, $tkireg);
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_nozeroamount2'], "ibank.php?command=deposit", $lang, $tkireg, $template);
         }
 
         if ($amount > $playerinfo['credits'])
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=deposit", $lang, $tkireg);
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=deposit", $lang, $tkireg, $template);
         }
 
         $tmpcredits = $max_credits_allowed - $account['balance'];
@@ -791,7 +791,7 @@ class Ibank
 
         if ($amount > $tmpcredits)
         {
-            self::ibankError($pdo_db, $langvars, "<center>Error You cannot deposit that much into your bank,<br> (Max Credits Reached)</center>", "ibank.php?command=deposit", $lang, $tkireg);
+            self::ibankError($pdo_db, $langvars, "<center>Error You cannot deposit that much into your bank,<br> (Max Credits Reached)</center>", "ibank.php?command=deposit", $lang, $tkireg, $template);
         }
 
         $account['balance'] += $amount;
@@ -817,14 +817,14 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate2($db, \PDO $pdo_db, $lang, $langvars, $playerinfo, Reg $tkireg, $dplanet_id, $minimum, $maximum)
+    public static function ibankConsolidate2($db, \PDO $pdo_db, $lang, $langvars, $playerinfo, Reg $tkireg, $dplanet_id, $minimum, $maximum, $template)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
         if (!$res || $res->EOF)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg);
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
         $dest = $res->fields;
 
@@ -835,7 +835,7 @@ class Ibank
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg);
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
 
         $minimum = preg_replace("/[^0-9]/", '', $minimum);
@@ -975,13 +975,13 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankConsolidate3($db, \PDO $pdo_db, $langvars, $playerinfo, Reg $tkireg, $dplanet_id, $minimum, $maximum, $lang)
+    public static function ibankConsolidate3($db, \PDO $pdo_db, $langvars, $playerinfo, Reg $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if (!$res || $res->EOF)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, "Error");
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
 
         $dest = $res->fields;
@@ -993,7 +993,7 @@ class Ibank
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, "Error");
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
 
         $minimum = preg_replace("/[^0-9]/", '', $minimum);
@@ -1024,7 +1024,7 @@ class Ibank
 
         if ($tcost > $playerinfo['turns'])
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $lang, $tkireg, "Error");
+            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .
