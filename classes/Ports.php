@@ -71,7 +71,7 @@ class Ports
         return $dropdownvar;
     }
 
-    function build_one_col($text = "&nbsp;", $align = "left")
+    public static function build_one_col($text = "&nbsp;", $align = "left")
     {
         echo "
         <tr>
@@ -80,7 +80,7 @@ class Ports
         ";
     }
 
-    function build_two_col($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left")
+    public static function build_two_col($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left")
     {
         echo "
         <tr>
@@ -89,14 +89,14 @@ class Ports
         </tr>";
     }
 
-    function php_true_delta($futurevalue, $shipvalue)
+    public static function php_true_delta($futurevalue, $shipvalue)
     {
         $tempval = $futurevalue - $shipvalue;
 
         return $tempval;
     }
 
-    function php_change_delta($desired_value, $current_value, $upgrade_cost)
+    public static function php_change_delta($desired_value, $current_value, $upgrade_cost)
     {
         $delta_cost = 0;
         $delta = $desired_value - $current_value;
@@ -114,7 +114,7 @@ class Ports
 
     // Here is the trade fonction to strip out some "spaghetti code". The function saves about 60 lines of code, I hope it will be
     // easier to modify/add something in this part.
-    function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, $price_array, $sectorinfo)
+    public static function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, $price_array, $sectorinfo)
     {
         if ($sectorinfo['port_type'] ==  $port_type)
         {
