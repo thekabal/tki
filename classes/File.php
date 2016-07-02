@@ -141,7 +141,10 @@ class File
                 }
 
                 $value = trim($value);
-                $comment = trim($comment);
+                if ($comment !== null)
+                {
+                    $comment = trim($comment);
+                }
 
                 // Check for Numeric types (int/long, double/float)
                 if (is_numeric($value))
