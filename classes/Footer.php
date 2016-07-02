@@ -127,7 +127,7 @@ class Footer
         $sf_logo_link = null;
 
         $mem_peak_usage = floor(memory_get_peak_usage() / 1024);
-        $public_pages = array( 'ranking.php', 'new.php', 'faq.php', 'settings.php', 'news.php', 'index.php');
+        $public_pages = array('ranking.php', 'new.php', 'faq.php', 'settings.php', 'news.php', 'index.php');
         $slash_position = mb_strrpos($_SERVER['PHP_SELF'], '/') + 1;
         $current_page = mb_substr($_SERVER['PHP_SELF'], $slash_position);
         if (in_array($current_page, $public_pages))
