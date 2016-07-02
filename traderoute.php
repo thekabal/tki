@@ -122,7 +122,7 @@ if ($command == 'new')
 elseif ($command == 'create')
 {
     // Enters new route in db
-    Tki\Traderoute::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing);
+    Tki\Traderoute::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $template);
 }
 elseif ($command == 'edit')
 {
@@ -153,7 +153,7 @@ elseif ($engage !== null)
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
-        Tki\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull);
+        Tki\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
         $i--;
     }
 }
