@@ -21,17 +21,18 @@ namespace Tki;
 
 class SectorDefense
 {
-    public static function messageDefenseOwner(\PDO $pdo_db, $db, int $sector, $message)
+    public static function messageDefenseOwner(\PDO $pdo_db, int $sector, $message)
     {
-        $res = $db->Execute("SELECT ship_id FROM {$db->prefix}sector_defence WHERE sector_id = ?;", array($sector));
-        Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
-        if ($res instanceof \adodb\ADORecordSet)
+        $sql = "SELECT ship_id FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $sector);
+        $stmt->execute();
+        $defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($defence_present !== null)
         {
-            while (!$res->EOF)
+            foreach ($defence_present as $tmp_defence)
             {
-                player_log($db, $res->fields['ship_id'], LOG_RAW, $message);
-                $res->MoveNext();
+                PlayerLog::WriteLog($pdo_db, $tmp_defence['ship_id'], LOG_RAW, $message);
             }
         }
     }
