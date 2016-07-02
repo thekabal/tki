@@ -496,6 +496,7 @@ class Xenobe
         }
         else  // Must have made it past planet defences
         {
+            $xenobeisdead = null;
             $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
             $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Made it past defenses on planet $planetinfo[name]");
