@@ -95,6 +95,8 @@ class PlanetReportCE
             {
                 echo $ownership . "<p>";
             }
+
+            return $planetinfo;
         }
     }
 

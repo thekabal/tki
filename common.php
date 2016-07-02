@@ -77,8 +77,12 @@ $db = new Tki\Db;
 $db = $db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
 
 $tkireg = new Tki\Reg($pdo_db);                    // TKI Registry object -  passing config variables via classes
-$tkireg->tkitimer = new Tki\Timer;                 // Create a benchmark timer to get benchmarking data for everything
-$tkireg->tkitimer->start();                        // Start benchmarking immediately
+if ($tkireg !== null)
+{
+    $tkireg->tkitimer = new Tki\Timer;             // Create a benchmark timer to get benchmarking data for everything
+    $tkireg->tkitimer->start();                    // Start benchmarking immediately
+}
+
 $langvars = null;                                  // Language variables in every page, set them to a null value first
 $template = new \Tki\Smarty();
 $template->setTheme($tkireg->default_template);
