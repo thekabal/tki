@@ -1,10 +1,23 @@
 We have committed a number of additional tools that are useful to development in the tools/ directory.
 
-phpcs is PHP Code Sniffer. It examines code against a set of standards. The usage we are closest to so far is php tools/phpcs.phar --standard=tools/phpcs.xml *.php 
-We have a way to go on these standards, but are slowly making progress towards some of them.
+phpcpd (https://github.com/sebastianbergmann/phpcpd) is a Copy/Paste Detector (CPD) for PHP code. We use it like this:
+We have not resolved all errors it identifies yet, but are making progress towards doing so. We use it like this:
+php tools/phpcpd.phar . --exclude=templates --exclude=vendor
 
-php-cs-fixer strives to automatically correct code for specific items in the PSR standard. We do not currently use it, but may in the future use it as a pre-commit hook.
+phpdcd (https://github.com/sebastianbergmann/phpdcd) is a Dead Code Detector (DCD) for PHP code. It scans a PHP project
+for all declared functions and methods and reports those as being "dead code" that are not called at least once.
+We have not resolved all errors it identifies yet, but are making progress towards doing so. We use it like this:
+php tools/phpdcd.phar --exclude=templates --exclude=vendor .
 
-phpmd is PHP Mess Detector. It examines code for a variety of issues, almost all of which are guidelines that have to be interpreted. However, we have made 
-excellent progress towards the usage: php tools/phpmd.phar . text unusedcode,tools/phpmd.xml --exclude vendor/,templates/,tools/
-There are other command-line options (try them!), with varying levels of usefulness to our project.
+phpcs (https://github.com/squizlabs/PHP_CodeSniffer) is PHP Code Sniffer. PHP_CodeSniffer tokenizes 
+PHP, JavaScript and CSS files and detects violations of a defined set of coding standards. We use it like this: 
+php tools/phpcs.phar --standard=tools/phpcs.xml  . --ignore=templates,vendor,config,languages
+
+phpmd (https://phpmd.org/) is PHP Mess Detector. It takes a given PHP source code base and looks for several potential
+problems within that source. We use it like this:
+php tools/phpmd.phar . text unusedcode,tools/phpmd.xml --exclude vendor/,templates/,tools/
+
+php-cs-fixer strives to automatically correct code for specific items in the PSR standard. We do not currently use it,
+but may in the future use it as a pre-commit hook.
+
+There are other command-line options for these tools (try them!), with varying levels of usefulness to our project.
