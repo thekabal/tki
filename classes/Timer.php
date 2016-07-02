@@ -38,7 +38,6 @@ class Timer
 
     public function elapsed(): float
     {
-
         $this->t_elapsed = $this->t_stop - $this->t_start;
         $rounded = round($this->t_elapsed, 3); // Round it down to three significant digits
         return $rounded;

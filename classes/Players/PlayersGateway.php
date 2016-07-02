@@ -32,7 +32,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
      * @param string $since_stamp
      * @param string $stamp
      */
-    public function selectPlayersLoggedIn($since_stamp, $stamp)
+    public function selectPlayersLoggedIn(string $since_stamp, string $stamp) : int
     {
         // SQL call that selected the number (count) of logged in ships (should be players)
         // where last login time is between the since_stamp, and the current timestamp ($stamp)

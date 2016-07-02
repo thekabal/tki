@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,7 +22,7 @@ namespace Tki;
 
 class Score
 {
-    public static function updateScore(\PDO $pdo_db, $ship_id, Reg $tkireg, $playerinfo)
+    public static function updateScore(\PDO $pdo_db, $ship_id, Reg $tkireg, $playerinfo) : int
     {
 //      Not currently used in calculation!
 //        $base_ore = $tkireg->base_ore;
@@ -99,6 +100,6 @@ class Score
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
-        return $score;
+        return (int) $score;
     }
 }

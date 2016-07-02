@@ -23,6 +23,6 @@ class Checked
 {
     public static function check($yesno)
     {
-        return (($yesno == "Y") ? "CHECKED" : "");
+        return (($yesno == 'Y') ? 'CHECKED' : null);
     }
 }
