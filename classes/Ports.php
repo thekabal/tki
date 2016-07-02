@@ -48,7 +48,6 @@ class Ports
         return $ret;
     }
 
-    // Create dropdowns when called
     public static function dropdown($element_name, $current_value, $onchange, $temp_devices)
     {
         $i = $current_value;
@@ -70,5 +69,66 @@ class Ports
         $dropdownvar = "$dropdownvar       </select>\n";
 
         return $dropdownvar;
+    }
+
+    function build_one_col($text = "&nbsp;", $align = "left")
+    {
+        echo "
+        <tr>
+          <td colspan=99 align=" . $align . ">" . $text . ".</td>
+        </tr>
+        ";
+    }
+
+    function build_two_col($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left")
+    {
+        echo "
+        <tr>
+          <td align=" . $align_col1 . ">" . $text_col1 . "</td>
+          <td align=" . $align_col2 . ">" . $text_col2 . "</td>
+        </tr>";
+    }
+
+    function php_true_delta($futurevalue, $shipvalue)
+    {
+        $tempval = $futurevalue - $shipvalue;
+
+        return $tempval;
+    }
+
+    function php_change_delta($desired_value, $current_value, $upgrade_cost)
+    {
+        $delta_cost = 0;
+        $delta = $desired_value - $current_value;
+
+        while ($delta > 0)
+        {
+            $delta_cost = $delta_cost + pow(2, $desired_value - $delta);
+            $delta--;
+        }
+
+        $delta_cost = $delta_cost * $upgrade_cost;
+
+        return $delta_cost;
+    }
+
+    // Here is the trade fonction to strip out some "spaghetti code". The function saves about 60 lines of code, I hope it will be
+    // easier to modify/add something in this part.
+    function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, $price_array, $sectorinfo)
+    {
+        if ($sectorinfo['port_type'] ==  $port_type)
+        {
+            $price_array[$port_type] = $price - $delta * $max / $limit * $factor;
+        }
+        else
+        {
+            $price_array[$port_type] = $price + $delta * $max / $limit * $factor;
+            $origin = -$origin;
+        }
+
+        // Debug info
+        // echo "$origin * $price_array[$port_type]=";
+        // echo $origin * $price_array[$port_type] . "<br>";
+        return $origin;
     }
 }
