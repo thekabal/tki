@@ -42,9 +42,9 @@ class File
         $insert_sql = 'INSERT into ' . $pdo_db->prefix. $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
         $stmt = $pdo_db->prepare($insert_sql);
 
-        foreach($ini_keys as $config_category => $config_line)
+        foreach ($ini_keys as $config_category => $config_line)
         {
-            foreach($config_line as $config_key => $type_n_value)
+            foreach ($config_line as $config_key => $type_n_value)
             {
                 $j++;
                 if (mb_strpos($ini_file, '_config') !== false)
@@ -64,7 +64,7 @@ class File
             }
         }
 
-        for($k = 1; $k < $j; $k++)
+        for ($k = 1; $k < $j; $k++)
         {
             // Status Array will continue the results of individual executes. It should be === true unless something went horribly wrong.
             if ($status_array[$k] !== true)
@@ -98,11 +98,11 @@ class File
     // This defaults to the equivalent of "true" for the second param of parse_ini, ie, process sections
     public static function betterParseIni($file) : array
     {
-        $ini = file($file, FILE_SKIP_EMPTY_LINES|FILE_IGNORE_NEW_LINES);
+        $ini = file($file, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
 
         $container = null;
         $out = array();
-        foreach($ini as $line)
+        foreach ($ini as $line)
         {
             if (mb_substr(trim($line), 0, 1) === '[' && mb_substr(trim($line), -1, 1) === ']')
             {
@@ -146,11 +146,11 @@ class File
                 // Check for Numeric types (int/long, double/float)
                 if (is_numeric($value))
                 {
-                    $value +=0;
+                    $value += 0;
                 }
                 elseif (mb_strtolower($value) === 'true' || mb_strtolower($value) === 'false')
                 {
-                    $value =(mb_strtolower($value) == 'true' ? true : false);
+                    $value = (mb_strtolower($value) == 'true' ? true : false);
                     settype($value, 'bool');
                 }
                 elseif (is_string($value))

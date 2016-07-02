@@ -178,7 +178,7 @@ class Ibank
              "<td>" . $langvars['l_ibank_toanothership'] . " :<br><br>" .
              "<select class=term name=ship_id style='width:200px;'>";
 
-        foreach($ships as $ship)
+        foreach ($ships as $ship)
         {
             echo "<option value='" . $ship['ship_id'] . "'>" . $ship['character_name'] . "</option>";
         }
@@ -193,7 +193,7 @@ class Ibank
 
         if ($planets !== null)
         {
-            foreach($planets as $planet)
+            foreach ($planets as $planet)
             {
                 if (empty($planet['name']))
                 {

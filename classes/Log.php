@@ -33,7 +33,7 @@ class Log
 
         self::getLogInfo($log_list, $entry['type'], $titletemp, $texttemp);
 
-        switch($entry['type'])
+        switch ($entry['type'])
         {
             case LOG_LOGIN: //data args are : [ip]
             case LOG_LOGOUT:

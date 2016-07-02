@@ -43,14 +43,14 @@ class SetPaths
                     $gamepath = "/$gamepath";
                 }
 
-                if ($gamepath[mb_strlen($gamepath)-1] != '/')
+                if ($gamepath[mb_strlen($gamepath) - 1] != '/')
                 {
                     $gamepath = "$gamepath/";
                 }
             }
             else
             {
-                $gamepath ='/';
+                $gamepath = '/';
             }
 
             $gamepath = str_replace("\\", '/', stripcslashes($gamepath));

@@ -43,7 +43,7 @@ class Languages
                     $list_of_langs[$langinfo['section']] = array();
                 }
 
-                switch($langinfo['name'])
+                switch ($langinfo['name'])
                 {
                     case 'local_lang_flag':
                         $list_of_langs[$langinfo['section']] = array_merge($list_of_langs[$langinfo['section']], array('flag' => $langinfo['value']));
