@@ -21,22 +21,24 @@ namespace Tki;
 
 class Toll
 {
-    public static function distribute(\PDO $pdo_db, $db, int $sector, $toll, $total_fighters)
+    public static function distribute(\PDO $pdo_db, int $sector, $toll, $total_fighters)
     {
-        $select_def_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type ='F';", array($sector));
-        Db::LogDbErrors($pdo_db, $select_def_res, __LINE__, __FILE__);
-
-        // Put the defence information into the array "defenceinfo"
-        if ($select_def_res instanceof \adodb\ADORecordSet)
+        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id AND defence_type='F'";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $sector);
+        $stmt->execute();
+        $defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($defence_present !== null)
         {
-            while (!$select_def_res->EOF)
+            foreach ($defence_present as $tmp_defence)
             {
-                $row = $select_def_res->fields;
-                $toll_amount = round(($row['quantity'] / $total_fighters) * $toll);
-                $res = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits + ? WHERE ship_id = ?", array($toll_amount, $row['ship_id']));
-                Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
-                $select_def_res->MoveNext();
+                $toll_amount = round(($tmp_defence['quantity'] / $total_fighters) * $toll);
+                $sql = "UPDATE {$pdo_db->prefix}ships SET credits=credits + :toll_amount WHERE ship_id = :ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':toll_amount', $toll_amount);
+                $stmt->bindParam(':ship_id', $tmp_defence['ship_id']);
+                $stmt->execute();
+                PlayerLog::WriteLog($pdo_db, $tmp_defence['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
             }
         }
     }
