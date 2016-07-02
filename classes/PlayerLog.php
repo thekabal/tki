@@ -21,18 +21,18 @@ namespace Tki;
 
 class PlayerLog
 {
-    public static function writeLog(\PDO $pdo_db, $sid, $log_type, $data = null)
+    public static function writeLog(\PDO $pdo_db, $ship_id, $log_type, $data = null)
     {
         $data = addslashes($data);
         $stamp = date('Y-m-d H:i:s'); // Now (as seen by PHP)
 
-        // Write log_entry to the player's log - identified by player's ship_id - sid.
-        if ($sid !== null && $log_type !== null)
+        // Write log_entry to the player's log - identified by player's ship_id.
+        if ($ship_id !== null && $log_type !== null)
         {
             $sql = "INSERT INTO {$pdo_db->prefix}logs (ship_id, type, time, data) " .
                    "VALUES (:ship_id, :type, :time, :data)";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $sid);
+            $stmt->bindParam(':ship_id', $ship_id);
             $stmt->bindParam(':type', $log_type);
             $stmt->bindParam(':time', $stamp);
             $stmt->bindParam(':data', $data);
