@@ -116,7 +116,7 @@ class Ports
     // easier to modify/add something in this part.
     public static function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, $price_array, $sectorinfo)
     {
-        if ($sectorinfo['port_type'] ==  $port_type)
+        if ($sectorinfo['port_type'] == $port_type)
         {
             $price_array[$port_type] = $price - $delta * $max / $limit * $factor;
         }
