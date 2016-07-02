@@ -9,8 +9,8 @@ for all declared functions and methods and reports those as being "dead code" th
 We have not resolved all errors it identifies yet, but are making progress towards doing so. We use it like this:
 php tools/phpdcd.phar --exclude=templates --exclude=vendor .
 
-phpcs (https://github.com/squizlabs/PHP_CodeSniffer) is PHP Code Sniffer. PHP_CodeSniffer tokenizes 
-PHP, JavaScript and CSS files and detects violations of a defined set of coding standards. We use it like this: 
+phpcs (https://github.com/squizlabs/PHP_CodeSniffer) is PHP Code Sniffer. PHP_CodeSniffer tokenizes
+PHP, JavaScript and CSS files and detects violations of a defined set of coding standards. We use it like this:
 php tools/phpcs.phar --standard=tools/phpcs.xml  . --ignore=templates,vendor,config,languages
 
 phpmd (https://phpmd.org/) is PHP Mess Detector. It takes a given PHP source code base and looks for several potential
