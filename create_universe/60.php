@@ -351,7 +351,7 @@ for ($i = 1; $i <= $loops; $i++)
     $update = "UPDATE {$pdo_db->prefix}universe SET port_type='organics',port_ore=$initbore,port_organics=$initsorganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
     for ($j = $start; $j < $finish; $j++)
     {
-        $update .= "(port_type='none' and sector_id=" . $sql_query[$j] . "])";
+        $update .= "(port_type='none' and sector_id=" . $sql_query[$j] . ")";
         if ($j < ($finish - 1))
         {
             $update .= " or ";
