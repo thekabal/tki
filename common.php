@@ -76,9 +76,9 @@ $pdo_db = $pdo_db->initDb('pdo');                  // Connect to db using pdo
 $db = new Tki\Db;
 $db = $db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
 
-$tkireg = new Tki\Reg($pdo_db);                    // TKI Registry object -  passing config variables via classes
-if ($tkireg !== null)
+if ($pdo_db !== null)
 {
+    $tkireg = new Tki\Reg($pdo_db);                // TKI Registry object -  passing config variables via classes
     $tkireg->tkitimer = new Tki\Timer;             // Create a benchmark timer to get benchmarking data for everything
     $tkireg->tkitimer->start();                    // Start benchmarking immediately
 }
@@ -87,7 +87,7 @@ $langvars = null;                                  // Language variables in ever
 $template = new \Tki\Smarty();
 $template->setTheme($tkireg->default_template);
 
-if (Tki\Db::isActive($pdo_db))
+if ($pdo_db !== null && Tki\Db::isActive($pdo_db))
 {
     $tki_session = new Tki\Sessions($pdo_db);
     session_start();
