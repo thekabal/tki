@@ -79,16 +79,20 @@ else
 
         if ($zoneinfo['team_zone'] == 'N')
         {
-            $result = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-            $ownerinfo = $result->fields;
+            $sql = "SELECT ship_id, character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $zoneinfo['owner']);
+            $stmt->execute();
+            $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
             $ownername = $ownerinfo['character_name'];
         }
         else
         {
-            $result = $db->Execute("SELECT team_name, creator, id FROM {$db->prefix}teams WHERE id = ?;", array($zoneinfo['owner']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-            $ownerinfo = $result->fields;
+            $sql = "SELECT team_name, creator, id FROM {$pdo_db->prefix}teams WHERE id=:id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':id', $zoneinfo['owner']);
+            $stmt->execute();
+            $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
             $ownername = $ownerinfo['team_name'];
         }
     }
