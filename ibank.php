@@ -18,9 +18,6 @@
 // File: ibank.php
 
 require_once './common.php';
-
-// FUTURE: This should not be hard-coded, but for now, I need to be able to clear the errors
-$active_template = 'classic';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
@@ -89,7 +86,7 @@ elseif ($command == 'deposit') // Deposit menu
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Tki\Ibank::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\Ibank::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
@@ -109,11 +106,11 @@ elseif ($command == 'loans') // Loans menu
 }
 elseif ($command == 'borrow') // Borrow operation
 {
-    Tki\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $active_template, $account, $amount, $template);
+    Tki\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $amount, $template);
 }
 elseif ($command == 'repay') // Repay operation
 {
-    Tki\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $account, $amount, $active_template, $tkireg, $template);
+    Tki\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $account, $amount, $tkireg, $template);
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {
@@ -121,11 +118,11 @@ elseif ($command == 'consolidate') // Consolidate menu
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Tki\Ibank::ibankConsolidate2($db, $pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
+    Tki\Ibank::ibankConsolidate2($db, $pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Tki\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template, $lang);
+    Tki\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang);
 }
 else
 {
