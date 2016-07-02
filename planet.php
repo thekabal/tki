@@ -412,7 +412,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             }
 
             // Kami Multi Browser Window Attack Fix
-            if ($_SESSION['planet_selected'] != $planet_id && $_SESSION['planet_selected'] !== null)
+            if ($_SESSION['planet_selected'] !== $planet_id && $_SESSION['planet_selected'] !== null)
             {
                 Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to create a base without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
