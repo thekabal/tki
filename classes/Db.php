@@ -159,11 +159,7 @@ class Db
         }
     }
 
-    /**
-     * @param integer $served_line
-     * @param string $served_page
-     */
-    public static function logDbErrors(\PDO $pdo_db, $query, $served_line, $served_page)
+    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
     {
         // Convert the content of PHP_SELF (in case it has been tainted) to the correct html entities
         $safe_script_name = htmlentities($_SERVER['PHP_SELF'], ENT_HTML5, 'UTF-8');
