@@ -35,14 +35,9 @@ class Traderoute
         $goods_buy = 0;
         $organics_buy = 0;
         $energy_buy = 0;
-
         $colonists_buy = null;
         $fighters_buy = null;
         $torps_buy = null;
-        $src_id = null;
-        $dest_id = null;
-        $src_type = null;
-        $dest_type = null;
 
         foreach ($traderoutes as $testroute)
         {
