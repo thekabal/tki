@@ -50,8 +50,21 @@ $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
+$i = 0;
+$sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if ($defense_present !== null)
+{
+    foreach ($link_present as $tmp_link)
+    {
+        $links[$i] = $tmp_link['link_dest'];
+        $i++;
+    }
+}
+$num_links = $i;
 
 // Put the defence information into the array "defenceinfo"
 $i = 0;
@@ -64,11 +77,11 @@ $set_attack = 'CHECKED';
 $set_toll = null;
 
 // Do we have a valid recordset?
-if ($result3 instanceof ADORecordSet)
+if ($defence_present)
 {
-    while (!$result3->EOF)
+    foreach ($defence_present as $tmp_defence)
     {
-        $defences[$i] = $result3->fields;
+        $defences[$i] = $tmp_defence;
         if ($defences[$i]['defence_type'] == 'F')
         {
             $total_sector_fighters += $defences[$i]['quantity'];
@@ -104,7 +117,6 @@ if ($result3 instanceof ADORecordSet)
             }
         }
         $i++;
-        $result3->MoveNext();
     }
 }
 
