@@ -521,33 +521,38 @@ else
 
                 // Create emailname from character
                 $emailname = str_replace(" ", "_", $character) . "@xenobe";
-                $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-                $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
-                Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-                if ($result instanceof ADORecordSet)
+//                $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+//                $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
+//                Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+                $sql = "SELECT email, character_name, ship_name FROM {$pdo_db->prefix}ships WHERE email=:email OR character_name=:character_name OR ship_name=:ship_name";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':email', $emailname);
+                $stmt->bindParam(':character_name', $character);
+                $stmt->bindParam(':ship_name', $shipname);
+                $stmt->execute();
+                $playerinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if ($playerinfo !== null)
                 {
-                    while (!$result->EOF)
+                    foreach ($playerinfo as $tmp_info)
                     {
-                        $row = $result->fields;
-                        if ($row[0] == $emailname)
+                        if ($tmp_info['email'] == $emailname)
                         {
                             echo "ERROR: E-mail address $emailname, is already in use.  ";
                             $errflag = 1;
                         }
 
-                        if ($row[1] == $character)
+                        if ($tmp_info['character_name'] == $character)
                         {
                             echo "ERROR: Character name $character, is already in use.<br>";
                             $errflag = 1;
                         }
 
-                        if ($row[2] == $shipname)
+                        if ($tmp_info['ship_name'] == $shipname)
                         {
                             echo "ERROR: Ship name $shipname, is already in use.<br>";
                             $errflag = 1;
                         }
-
-                        $result->MoveNext();
                     }
                 }
 
