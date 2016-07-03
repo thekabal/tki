@@ -75,9 +75,12 @@ if ($target_sector === null)
     die();
 }
 
-$res = $db->Execute("SELECT allow_warpedit,{$db->prefix}universe.zone_id FROM {$db->prefix}zones,{$db->prefix}universe WHERE sector_id=? AND {$db->prefix}universe.zone_id={$db->prefix}zones.zone_id;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$zoneinfo = $res->fields;
+$sql = "SELECT allow_warpedit,{$pdo_db->prefix}universe.zone_id FROM {$pdo_db->prefix}zones,{$pdo_db->prefix}universe WHERE sector_id=:sector_id AND {$pdo_db->prefix}universe.zone_id={$pdo_db->prefix}zones.zone_id;";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->execute();
+$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
 if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
@@ -87,13 +90,18 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 }
 
 $target_sector = round($target_sector);
-$result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-$playerinfo = $result->fields;
+$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->execute();
+$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$res = $db->Execute("SELECT allow_warpedit,{$db->prefix}universe.zone_id FROM {$db->prefix}zones,{$db->prefix}universe WHERE sector_id=? AND {$db->prefix}universe.zone_id={$db->prefix}zones.zone_id;", array($target_sector));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$zoneinfo = $res->fields;
+$sql = "SELECT allow_warpedit,{$pdo_db->prefix}universe.zone_id FROM {$pdo_db->prefix}zones,{$pdo_db->prefix}universe WHERE sector_id=:sector_id AND {$pdo_db->prefix}universe.zone_id={$pdo_db->prefix}zones.zone_id;";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $target_sector);
+$stmt->execute();
+$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
 if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 {
     $langvars['l_warp_forbidtwo'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_forbidtwo']);
@@ -103,30 +111,36 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
     die();
 }
 
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($target_sector));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-$row = $result2->fields;
-if (!$row)
+$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id = :sector_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sector_id', $target_sector);
+$stmt->execute();
+$tmpinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$tmpinfo)
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
     Tki\Text::gotomain($pdo_db, $lang);
     die();
 }
 
-$result3 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-if ($result3 instanceof ADORecordSet)
+$sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start = :link_start";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':link_start', $playerinfo['sector']);
+$stmt->execute();
+$linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($linkinfo !== false)
 {
     $flag = 0;
-    while (!$result3->EOF)
+    foreach ($linkinfo as $tmp_link)
     {
-        $row = $result3->fields;
-        if ($target_sector == $row['link_dest'])
+        if ($target_sector == $tmp_link['link_dest'])
         {
             $flag = 1;
         }
-        $result3->MoveNext();
     }
+
     if ($flag != 1)
     {
         $langvars['l_warp_unlinked'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_unlinked']);
@@ -134,19 +148,31 @@ if ($result3 instanceof ADORecordSet)
     }
     else
     {
-        $delete1 = $db->Execute("DELETE FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($playerinfo['sector'], $target_sector));
-        Tki\Db::LogDbErrors($pdo_db, $delete1, __LINE__, __FILE__);
+        $sql = "DELETE FROM {$pdo_db->prefix}links WHERE link_start=:link_start AND link_dest=:link_dest";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':link_start', $playerinfo['sector']);
+        $stmt->bindParam(':link_dest', $target_sector);
+        $stmt->execute();
+        $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $update1 = $db->Execute("UPDATE {$db->prefix}ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+        $sql = "UPDATE {$pdo_db->prefix}ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':link_start', $playerinfo['ship_id']);
+        $stmt->execute();
+        $update_ships = $stmt->fetch(PDO::FETCH_ASSOC);
+
         if ($bothway === null)
         {
             echo $langvars['l_warp_removed'] . " " . $target_sector . ".<br><br>";
         }
         else
         {
-            $delete2 = $db->Execute("DELETE FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($target_sector, $playerinfo['sector']));
-            Tki\Db::LogDbErrors($pdo_db, $delete2, __LINE__, __FILE__);
+            $sql = "DELETE {$pdo_db->prefix}links link_start = :link_start AND link_dest = :link_dest";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':link_start', $target_sector);
+            $stmt->bindParam(':link_start', $playerinfo['sector']);
+            $stmt->execute();
+            $update_ships = $stmt->fetch(PDO::FETCH_ASSOC);
             echo $langvars['l_warp_removedtwo'] . " " . $target_sector . ".<br><br>";
         }
     }
