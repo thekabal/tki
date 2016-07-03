@@ -25,16 +25,8 @@ namespace Tki;
 
 class CheckBan
 {
-    public static function isBanned(\PDO $pdo_db, $playerinfo = false)
+    public static function isBanned(\PDO $pdo_db, array $playerinfo)
     {
-        // Check to see if we have valid player info.
-        if (is_bool($playerinfo) && $playerinfo === false)
-        {
-            // Nope we do not have valid player info so we return a Boolean false.
-            // This needs to be a Boolean false not just a false.
-            return (boolean) false;
-        }
-
         // Check for IP Ban
         $sql = "SELECT * FROM {$pdo_db->prefix}bans WHERE (ban_type = :ban_type AND ban_mask = :ban_mask1) OR (ban_mask = :ban_mask2)";
         $stmt = $pdo_db->prepare($sql);
