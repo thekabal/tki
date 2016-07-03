@@ -309,52 +309,23 @@ if ($detected === false)
 }
 
 echo "<br>\n";
-echo "Checking for Old Session Data...<br>\n";
+echo "Clearing stale session data...<br>\n";
 
-$old_sessions = 0;
+$sql = "DELETE FROM {$pdo_db->prefix}sessions WHERE expiry < NOW()";
+$stmt = $pdo_db->prepare($sql);
+$stmt->execute();
 
-$resl = $db->Execute("SELECT COUNT(*) as old FROM {$db->prefix}sessions WHERE expiry < NOW();");
-Tki\Db::LogDbErrors($pdo_db, $resl, __LINE__, __FILE__);
-if ($resl instanceof ADORecordSet)
+echo "Optimizing Session Table.<br>\n";
+
+if ($db_type == 'postgres9')
 {
-    $old_sessions = (int) $resl->fields['old'];
-    if ($old_sessions >0)
-    {
-        echo "Found {$old_sessions} Old Sessions that needs to be removed.<br>\n";
-
-        $resm = $db->Execute("DELETE FROM {$db->prefix}sessions WHERE expiry < NOW();");
-        Tki\Db::LogDbErrors($pdo_db, $resm, __LINE__, __FILE__);
-        if ($db->ErrorNo() >0)
-        {
-            echo "error: ". $db->ErrorMsg() . "<br>\n";
-        }
-        echo "<br>\n";
-
-        echo "Optimizing Session Table.<br>\n";
-
-        if ($db_type == 'postgres9')
-        {
-            // Postgresql and SQLite (but SQLite its more like rebuild the whole database!)
-            $resn = $db->Execute("VACUUM {$db->prefix}sessions;");
-        }
-        else
-        {
-            // Oracle, and mysql
-            $resn = $db->Execute("OPTIMIZE TABLE {$db->prefix}sessions;");
-        }
-
-        Tki\Db::LogDbErrors($pdo_db, $resn, __LINE__, __FILE__);
-        if ($db->ErrorNo() >0)
-        {
-            echo "error: ". $db->ErrorMsg() . "<br>\n";
-        }
-        echo "<br>\n";
-    }
-    else
-    {
-        echo "Not found any old Session data - Skipping...<br>\n";
-        echo "<br>\n";
-    }
+    // Postgresql and SQLite (but SQLite its more like rebuild the whole database!)
+    $resn = $db->Execute("VACUUM {$db->prefix}sessions;");
+}
+else
+{
+    // Oracle, and mysql
+    $resn = $db->Execute("OPTIMIZE TABLE {$db->prefix}sessions;");
 }
 
 echo "The Governor has completed.<br>\n";
