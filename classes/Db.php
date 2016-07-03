@@ -100,15 +100,6 @@ class Db
                 die ($err_msg);
             }
 
-            if ($db_type === 'postgres9')
-            {
-                $db->type = 'pgsql';
-            }
-            else
-            {
-                $db->type = 'mysql';
-            }
-
             $db->prefix = $db_prefix;
             // End of database work
             return $db;
@@ -144,15 +135,6 @@ class Db
             // Disable emulated prepares so that we get true prepared statements
             // These are slightly slower, but also far safer in a number of cases that matter
             $pdo_db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-            if ($db_type === 'postgres9')
-            {
-                $pdo_db->type = 'pgsql';
-            }
-            else
-            {
-                $pdo_db->type = 'mysql';
-            }
 
             $pdo_db->prefix = $db_prefix;
             return $pdo_db;

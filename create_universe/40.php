@@ -44,9 +44,9 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-$variables['create_seq_results']     = Tki\Schema::createSequences($pdo_db, $pdo_db->prefix, $pdo_db->type); // Create all tables in the database
+$variables['create_seq_results']     = Tki\Schema::createSequences($pdo_db, $pdo_db->prefix, \Tki\SecureConfig::TYPE); // Create all tables in the database
 $variables['create_seq_count']       = count($variables['create_seq_results']) - 1;
-$variables['create_tables_results']  = Tki\Schema::createTables($pdo_db, $pdo_db->prefix, $pdo_db->type); // Create all tables in the database
+$variables['create_tables_results']  = Tki\Schema::createTables($pdo_db, $pdo_db->prefix, \Tki\SecureConfig::TYPE); // Create all tables in the database
 $variables['create_tables_count']    = count($variables['create_tables_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
