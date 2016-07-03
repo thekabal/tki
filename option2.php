@@ -42,8 +42,12 @@ if (array_key_exists('newlang', $_POST) === true)
                 $lang = $lang_file;
 
                 // Update the ship record to the requested language
-                $res = $db->Execute("UPDATE {$db->prefix}ships SET lang = ? WHERE email = ?", array($lang, $_SESSION['username']));
-                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                $sql = "UPDATE {$pdo_db->prefix}ships SET lang=:lang WHERE email=:email LIMIT 1";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':lang', $lang);
+                $stmt->bindParam(':email', $_SESSION['username']);
+                $stmt->execute();
+                $lang_changed = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 // Set a flag that we changed the language
                 $changed_language = true;
@@ -83,15 +87,16 @@ else
 {
     // Load Player information from their username (i.e. email)
     $playerinfo = false;
-    $rs = $db->SelectLimit("SELECT ship_id, password FROM {$db->prefix}ships WHERE email=?", 1, -1, array('email' => $_SESSION['username']));
-    Tki\Db::LogDbErrors($pdo_db, $rs, __LINE__, __FILE__);
+
+    $sql = "SELECT ship_id, password FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':email', $_SESSION['username']);
+    $stmt->execute();
+    $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Do we have a valid RecordSet?
-    if ($rs instanceof ADORecordSet)
+    if ($playerinfo !== null)
     {
-        // We have a valid RecorSet, so now set $playerinfo.
-        $playerinfo = $rs->fields;
-
         // Does the oldpass and the players password match?
         if (password_verify($oldpass, $playerinfo['password']))
         {
@@ -99,11 +104,16 @@ else
             $new_hashed_pass = password_hash($newpass1, PASSWORD_DEFAULT);
 
             // Now update the players password.
-            $rs = $db->Execute("UPDATE {$db->prefix}ships SET password = ? WHERE ship_id = ?;", array($new_hashed_pass, $playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $rs, __LINE__, __FILE__);
+            $sql = "UPDATE {$pdo_db->prefix}ships SET password=:pass WHERE ship_id=:ship_id LIMIT 1";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':pass', $new_hashed_pass);
+            $stmt->bindParam(':email', $playerinfo['ship_id']);
+            $stmt->execute();
+            $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Now check to see if we have a valid update and have ONLY 1 changed record.
-            if ((is_bool($rs) && $rs === false) || $db->Affected_Rows() != 1)
+            // if ((is_bool($rs) && $rs === false) || $db->Affected_Rows() != 1)
+            if ($playerinfo === null)
             {
                 // Either we got an error in the SQL Query or <> 1 records was changed.
                 echo $langvars['l_opt2_passchangeerr'] . "<br><br>";
