@@ -33,7 +33,7 @@ class Character
         Db::LogDbErrors($pdo_db, $sec_pl_res, __LINE__, __FILE__);
         $i = 0;
 
-        $sectors = null;
+        $sectors = array();
 
         if ($sec_pl_res instanceof \adodb\ADORecordSet)
         {
