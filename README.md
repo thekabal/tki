@@ -26,7 +26,7 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 - IIS is NOT supported, please do not ask. (But we welcome code to make it work on IIS!)
 
 ##Credits:
-The Kabal Invasion forked from Blacknova Traders, please visit their sourceforge page for more information about their project.
+The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/projects/blacknova/), please visit their sourceforge page for more information about their project.
 
 ##Installation:
 Please see the docs/install file.
