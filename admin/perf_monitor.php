@@ -22,7 +22,6 @@ if (strpos($_SERVER['PHP_SELF'], 'perf_monitor.php')) // Prevent direct access t
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }
 
-define('ADODB_PERF_NO_RUN_SQL', 1);
 //adodb_perf::table("{$db->prefix}adodb_logsql");
 $perf = NewPerfMonitor($db);
 $perf->UI($pollsecs=5);
