@@ -80,9 +80,14 @@ else
     $lang = $tkireg->default_lang;
 }
 
-$result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email=? || character_name=? || ship_name=?;", array($username, $character, $shipname));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $flag = 0;
+$sql = "SELECT email, character_name, ship_name FROM {$pdo_db->prefix}ships WHERE email=:email || character_name=:character_name || ship_name=:shipname";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':email', $username);
+$stmt->bindParam(':character_name', $character);
+$stmt->bindParam(':ship_name', $shipname);
+$stmt->execute();
+$character_exists = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($username === null || $character === null || $shipname === null)
 {
@@ -90,38 +95,40 @@ if ($username === null || $character === null || $shipname === null)
     $flag = 1;
 }
 
-while (($result instanceof ADORecordSet) && !$result->EOF)
+if ($character_exists !== null)
 {
-    $row = $result->fields;
-    if (mb_strtolower($row['email']) == mb_strtolower($username))
+    foreach ($character_exists as $tmp_char)
     {
-        echo $langvars['l_new_inuse'] . ' ' .  $langvars['l_new_4gotpw1'] . ' <a href=mail.php?mail=' . $username . '>' . $langvars['l_clickme'] . '</a> ' . $langvars['l_new_4gotpw2'] . '<br>';
-        $flag = 1;
+        if (mb_strtolower($tmp_char['email']) == mb_strtolower($username))
+        {
+            echo $langvars['l_new_inuse'] . ' ' .  $langvars['l_new_4gotpw1'] . ' <a href=mail.php?mail=' . $username . '>' . $langvars['l_clickme'] . '</a> ' . $langvars['l_new_4gotpw2'] . '<br>';
+            $flag = 1;
+        }
+        if (mb_strtolower($tmp_char['character_name']) == mb_strtolower($character))
+        {
+            $langvars['l_new_inusechar'] = str_replace('[character]', $character, $langvars['l_new_inusechar']);
+            echo $langvars['l_new_inusechar'] . '<br>';
+            $flag = 1;
+        }
+        if (mb_strtolower($tmp_char['ship_name']) == mb_strtolower($shipname))
+        {
+            $langvars['l_new_inuseship'] = str_replace('[shipname]', $shipname, $langvars['l_new_inuseship']);
+            echo $langvars['l_new_inuseship'] . '<br>';
+            $flag = 1;
+        }
     }
-    if (mb_strtolower($row['character_name']) == mb_strtolower($character))
-    {
-        $langvars['l_new_inusechar'] = str_replace('[character]', $character, $langvars['l_new_inusechar']);
-        echo $langvars['l_new_inusechar'] . '<br>';
-        $flag = 1;
-    }
-    if (mb_strtolower($row['ship_name']) == mb_strtolower($shipname))
-    {
-        $langvars['l_new_inuseship'] = str_replace('[shipname]', $shipname, $langvars['l_new_inuseship']);
-        echo $langvars['l_new_inuseship'] . '<br>';
-        $flag = 1;
-    }
-    $result->MoveNext();
 }
 
 if ($flag == 0)
 {
     // Insert code to add player to database
     $stamp = date('Y-m-d H:i:s');
-    $query = $db->Execute("SELECT MAX(turns_used + turns) AS mturns FROM {$db->prefix}ships;");
-    Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-    $res = $query->fields;
 
-    $mturns = $res['mturns'];
+    $sql = "SELECT MAX(turns_used + turns) AS mturns  FROM {$pdo_db->prefix}ships";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->execute();
+    $turns_info = $stmt->fetch(PDO::FETCH_ASSOC);
+    $mturns = $turns_info['mturns'];
 
     if ($mturns > $tkireg->max_turns)
     {
@@ -143,7 +150,6 @@ if ($flag == 0)
     {
         $result2 = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($username));
         Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-
         $shipid = $result2->fields;
 
         // To do: build a bit better "new player" message
