@@ -44,7 +44,7 @@ while (!$tdres->EOF)
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_fighters = ? WHERE ship_id = ? LIMIT 1;", array($ship_fighters_max, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -57,7 +57,7 @@ while (!$tdres->EOF)
         $resy = $db->Execute("UPDATE {$db->prefix}ships SET ship_fighters = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -72,7 +72,7 @@ while (!$tdres->EOF)
         $resz = $db->Execute("UPDATE {$db->prefix}ships SET torps = ? WHERE ship_id = ? LIMIT 1;", array($torps_max, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -84,7 +84,7 @@ while (!$tdres->EOF)
         echo "'-> <span style='color:#f00;'>Detected Torpedoes Flip on Ship: {$playerinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
         $resa = $db->Execute("UPDATE {$db->prefix}ships SET torps = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -99,7 +99,7 @@ while (!$tdres->EOF)
         $resb = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts = ? WHERE ship_id = ? LIMIT 1;", array($armor_pts_max, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resb, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -112,7 +112,7 @@ while (!$tdres->EOF)
         $resc = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resc, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -127,7 +127,7 @@ while (!$tdres->EOF)
         $resd = $db->Execute("UPDATE {$db->prefix}ships SET credits = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resd, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -141,7 +141,7 @@ while (!$tdres->EOF)
         $rese = $db->Execute("UPDATE {$db->prefix}ships SET credits = ? WHERE ship_id = ? LIMIT 1;", array(100000000000000000000, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $rese, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -167,7 +167,7 @@ while (!$tdres->EOF)
         $rese = $db->Execute("UPDATE {$db->prefix}planets SET credits = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
         Tki\Db::LogDbErrors($pdo_db, $rese, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -181,7 +181,7 @@ while (!$tdres->EOF)
         $resf = $db->Execute("UPDATE {$db->prefix}planets SET credits = ? WHERE planet_id = ? LIMIT 1;", array(100000000000000000000, $planetinfo['planet_id']));
         Tki\Db::LogDbErrors($pdo_db, $resf, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -196,7 +196,7 @@ while (!$tdres->EOF)
         $resg = $db->Execute("UPDATE {$db->prefix}planets SET fighters = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
         Tki\Db::LogDbErrors($pdo_db, $resg, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -211,7 +211,7 @@ while (!$tdres->EOF)
         $resh = $db->Execute("UPDATE {$db->prefix}planets SET torps = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
         Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -236,7 +236,7 @@ while (!$tdres->EOF)
         $resi = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = ? WHERE ship_id = ? LIMIT 1;", array(0, $bankinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -250,7 +250,7 @@ while (!$tdres->EOF)
         $resj = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = ? WHERE ship_id = ? LIMIT 1;", array(100000000000000000000, $bankinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -265,7 +265,7 @@ while (!$tdres->EOF)
         $resk = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan = ? WHERE ship_id = ? LIMIT 1;", array(0, $bankinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resk, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
@@ -290,7 +290,7 @@ while (!$tdres->EOF)
     {
         echo "'-> <span style='color:#f00;'>Detected Transfer Amount Credits Flip on IBANK Transfer: {$transferinfo['ship_id']}.</span> <span style='color:#0f0;'>*** FIXED ***</span><br>\n";
         $db->Execute ("UPDATE {$db->prefix}ibank_transfers SET amount = ? WHERE transfer_id = ? LIMIT 1;", array(0, $transferinfo['transfer_id']));
-        if ($db->ErrorNo() >0)
+        if ($db->ErrorNo() > 0)
         {
             echo "error: ". $db->ErrorMsg() . "<br>\n";
         }
