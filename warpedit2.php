@@ -195,7 +195,7 @@ if ($linkinfo)
             if ($linkinfo2 !== false)
             {
                 $flag2 = 0;
-                foreach($linkinfo2 as $tmp_link)
+                foreach ($linkinfo2 as $tmp_link)
                 {
                     if ($playerinfo['sector'] == $tmp_link['link_dest'])
                     {
