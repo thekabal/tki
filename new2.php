@@ -124,7 +124,7 @@ if ($flag == 0)
     // Insert code to add player to database
     $stamp = date('Y-m-d H:i:s');
 
-    $sql = "SELECT MAX(turns_used + turns) AS mturns  FROM {$pdo_db->prefix}ships";
+    $sql = "SELECT MAX(turns_used + turns) AS mturns FROM {$pdo_db->prefix}ships";
     $stmt = $pdo_db->prepare($sql);
     $stmt->execute();
     $turns_info = $stmt->fetch(PDO::FETCH_ASSOC);
