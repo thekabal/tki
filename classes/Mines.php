@@ -35,7 +35,7 @@ class Mines
                 if ($num_mines > 0)
                 {
                     // Put the defence information into the array "defenceinfo"
-                    if ($row['quantity'] > $num_mines)
+                    if ($tmp_defence['quantity'] > $num_mines)
                     {
                         $sql = "UPDATE {$pdo_db->prefix}sector_defence SET quantity = quantity - :num_mines WHERE defence_id=:defence_id";
                         $stmt = $pdo_db->prepare($sql);
@@ -52,7 +52,6 @@ class Mines
                         $stmt->execute();
                         $num_mines -= $tmp_defence['quantity'];
                     }
-                    $secdef_result->MoveNext();
                 }
             }
         }
