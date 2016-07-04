@@ -29,22 +29,6 @@ class Character
         $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE placed_by = ?", array($ship_id));
         Db::LogDbErrors($pdo_db, $delete_bounty_res, __LINE__, __FILE__);
 
-        $sec_pl_res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner=? AND base='Y'", array($ship_id));
-        Db::LogDbErrors($pdo_db, $sec_pl_res, __LINE__, __FILE__);
-        $i = 0;
-
-        $sectors = array();
-
-        if ($sec_pl_res instanceof \adodb\ADORecordSet)
-        {
-            while (!$sec_pl_res->EOF && $sec_pl_res)
-            {
-                $sectors[$i] = $sec_pl_res->fields['sector_id'];
-                $i++;
-                $sec_pl_res->MoveNext();
-            }
-        }
-
         if ($remove_planets === true && $ship_id > 0)
         {
             $rm_pl_res = $db->Execute("DELETE FROM {$db->prefix}planets WHERE owner = ?", array($ship_id));
@@ -56,9 +40,15 @@ class Character
             Db::LogDbErrors($pdo_db, $up_pl_res, __LINE__, __FILE__);
         }
 
-        if ($sectors !== null)
+        $sql = "SELECT DISTINCT sector_id FROM {$pdo_db->prefix}planets WHERE owner=:owner AND base='Y'";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $ship_id);
+        $stmt->execute();
+        $sectors_owned = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($sectors_owned !== null)
         {
-            foreach ($sectors as $sector)
+            foreach ($sectors_owned as $tmp_sector)
             {
                 Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
             }
