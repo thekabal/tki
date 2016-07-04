@@ -1171,7 +1171,7 @@ class Xenobe
 
                 // Get rid of the sector fighters that died
                 $fighterslost = $total_sector_fighters - $targetfighters;
-                \Tki\Fighters::destroy($pdo_db, $db, $targetlink, $fighterslost);
+                \Tki\Fighters::destroy($pdo_db, $targetlink, $fighterslost);
 
                 // Message the defence owner with what happened
                 $langvars['l_sf_sendlog'] = str_replace("[player]", "Xenobe $playerinfo[character_name]", $langvars['l_sf_sendlog']);
