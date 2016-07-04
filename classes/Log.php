@@ -262,7 +262,7 @@ class Log
                 $retvalue['title'] = $titletemp;
                 break;
 
-            case LOG_DEFENCE_DEGRADE: //data args are : [sector] [degrade]
+            case LOG_DEFENSE_DEGRADE: //data args are : [sector] [degrade]
                 list ($sector, $degrade) = explode("|", $entry['data']);
                 $retvalue['text'] = str_replace("[sector]", "<font color=white><strong>$sector</strong></font>", $texttemp);
                 $retvalue['text'] = str_replace("[degrade]", "<font color=white><strong>$degrade</strong></font>", $retvalue['text']);

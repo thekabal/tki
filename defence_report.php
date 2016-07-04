@@ -15,14 +15,14 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: defence_report.php
+// File: defense_report.php
 
 require_once './common.php';
 
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('defence_report', 'planet_report', 'main', 'device', 'port', 'modify_defences', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('defense_report', 'planet_report', 'main', 'device', 'port', 'modify_defenses', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 $title = $langvars['l_sdf_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
@@ -35,7 +35,7 @@ $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$query = "SELECT * FROM {$db->prefix}sector_defence WHERE ship_id = ?";
+$query = "SELECT * FROM {$db->prefix}sector_defense WHERE ship_id = ?";
 if ($sort !== null)
 {
     $query .= " ORDER BY";
@@ -49,7 +49,7 @@ if ($sort !== null)
     }
     elseif ($sort == "type")
     {
-        $query .= " defence_type ASC";
+        $query .= " defense_type ASC";
     }
     else
     {
@@ -81,10 +81,10 @@ else
     echo $langvars['l_pr_clicktosort'] . "<br><br>";
     echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=2>";
     echo "<tr bgcolor=\"$tkireg->color_header\">";
-    echo "<td><strong><a href=defence_report.php?sort=sector>" . $langvars['l_sector'] . "</a></strong></td>";
-    echo "<td><strong><a href=defence_report.php?sort=quantity>" . $langvars['l_qty'] . "</a></strong></td>";
-    echo "<td><strong><a href=defence_report.php?sort=type>" . $langvars['l_sdf_type'] . "</a></strong></td>";
-    echo "<td><strong><a href=defence_report.php?sort=mode>" . $langvars['l_sdf_mode'] . "</a></strong></td>";
+    echo "<td><strong><a href=defense_report.php?sort=sector>" . $langvars['l_sector'] . "</a></strong></td>";
+    echo "<td><strong><a href=defense_report.php?sort=quantity>" . $langvars['l_qty'] . "</a></strong></td>";
+    echo "<td><strong><a href=defense_report.php?sort=type>" . $langvars['l_sdf_type'] . "</a></strong></td>";
+    echo "<td><strong><a href=defense_report.php?sort=mode>" . $langvars['l_sdf_mode'] . "</a></strong></td>";
     echo "</tr>";
     $color = $tkireg->color_line1;
     for ($i = 0; $i < $num_sectors; $i++)
@@ -92,9 +92,9 @@ else
         echo "<tr bgcolor=\"$color\">";
         echo "<td><a href=rsmove.php?engage=1&destination=". $sector[$i]['sector_id'] . ">". $sector[$i]['sector_id'] . "</a></td>";
         echo "<td>" . number_format($sector[$i]['quantity'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-        $defence_type = $sector[$i]['defence_type'] == 'F' ? $langvars['l_fighters'] : $langvars['l_mines'];
-        echo "<td> $defence_type </td>";
-        $mode = $sector[$i]['defence_type'] == 'F' ? $sector[$i]['fm_setting'] : $langvars['l_n_a'];
+        $defense_type = $sector[$i]['defense_type'] == 'F' ? $langvars['l_fighters'] : $langvars['l_mines'];
+        echo "<td> $defense_type </td>";
+        $mode = $sector[$i]['defense_type'] == 'F' ? $sector[$i]['fm_setting'] : $langvars['l_n_a'];
         if ($mode == 'attack')
         {
             $mode = $langvars['l_md_attack'];

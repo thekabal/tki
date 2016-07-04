@@ -62,7 +62,7 @@ define('LOG_TEAM_INVITE', 41);              // Sent to invited player
 define('LOG_TEAM_NOT_LEAVE', 42);           // Sent to leader on leave
 define('LOG_ADMIN_HARAKIRI', 43);           // Sent to admin on self-destruct
 define('LOG_ADMIN_PLANETDEL', 44);          // Sent to admin on planet destruction instead of capture
-define('LOG_DEFENCE_DEGRADE', 45);          // Sent sector fighters have no supporting planet
+define('LOG_DEFENSE_DEGRADE', 45);          // Sent sector fighters have no supporting planet
 define('LOG_PLANET_CAPTURED', 46);          // Sent to player when he captures a planet
 define('LOG_BOUNTY_CLAIMED', 47);           // Sent to player when they claim a bounty
 define('LOG_BOUNTY_PAID', 48);              // Sent to player when their bounty on someone is paid

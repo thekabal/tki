@@ -23,32 +23,32 @@ class Fighters
 {
     public static function destroy(\PDO $pdo_db, int $sector, $num_fighters)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id AND defence_type ='F' ORDER BY quantity ASC";
+        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id AND defense_type ='F' ORDER BY quantity ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();
-        $defence_present = $stmt->fetch(PDO::FETCH_ASSOC);
+        $defense_present = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($defence_present !== null && $num_fighters > 0)
+        if ($defense_present !== null && $num_fighters > 0)
         {
-            foreach ($defence_present as $tmp_defence)
+            foreach ($defense_present as $tmp_defense)
             {
-                if ($tmp_defence['quantity'] > $num_fighters)
+                if ($tmp_defense['quantity'] > $num_fighters)
                 {
-                    $sql = "UPDATE {$pdo_db->prefix}sector_defence SET quantity = :quantity - ? WHERE defence_id = :defence_id";
+                    $sql = "UPDATE {$pdo_db->prefix}sector_defense SET quantity = :quantity - ? WHERE defense_id = :defense_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':quantity', $quantity);
-                    $stmt->bindParam(':defence_id', $tmp_defence['defence_id']);
+                    $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
                     $stmt->execute();
                     $num_fighters = 0;
                 }
                 else
                 {
-                    $sql = "DELETE FROM {$pdo_db->prefix}sector_defence WHERE defence_id = :defence_id";
+                    $sql = "DELETE FROM {$pdo_db->prefix}sector_defense WHERE defense_id = :defense_id";
                     $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':defence_id', $tmp_defence['defence_id']);
+                    $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
                     $stmt->execute();
-                    $num_fighters -= $tmp_defence['quantity'];
+                    $num_fighters -= $tmp_defense['quantity'];
                 }
             }
         }

@@ -96,10 +96,10 @@
         takes the same number of turns, but requires less work from you. Traderoutes can work on either real space or warp links. When you
         first start out, you will want to use warp links, so find sectors that are linked by warp links to trade between. Traderoutes can be one way
         or two ways. A two way traderoute means your ship will buy commodities from port A, sell them at port B, buy from port B then go back to port A and sell.
-        <li> Sector defences consist of mines and fighters. Mines are deployed torpedoes. Mines can only detect an incoming ship with a hull size greater than a certain level. Usually 8.
+        <li> Sector defenses consist of mines and fighters. Mines are deployed torpedoes. Mines can only detect an incoming ship with a hull size greater than a certain level. Usually 8.
         Fighters can be set to one of two modes. Attack or Toll. In attack mode, they will attack any ship that does not belong to their owner or a member of their owners team. In toll mode,
         they will only let you enter the sector safely if you agree to pay a toll. Sector fighters require energy from a friendly planet to remain in the sector. If there is insufficient or no energy, they will slow
-        break down. A defence against mines are mine deflectors. It is a good idea to carry a lot of these. They are cheap anyway. With fighters, you are given the options of fighting, retreating or using your ships cloaking
+        break down. A defense against mines are mine deflectors. It is a good idea to carry a lot of these. They are cheap anyway. With fighters, you are given the options of fighting, retreating or using your ships cloaking
         device to try and sneak in to the sector. Sector fighters require energy from a friendly planet in the same sector, otherwise they begin to degrade. The default amount of energy required is 1 unit of energy per 10 ships. Energy can be taken from any of your planets or from a team planet from your team in that sector.
         <li> Planets can created using a genesis torpedoe. Planets can produce commodoties and credits to fund your ship. The more colonists you have, the more they produce. You can use traderoutes to populate your planets from special ports.
         <li>Now go to the regular <a

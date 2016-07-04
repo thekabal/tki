@@ -1,1 +1,1 @@
-ALTER SEQUENCE tki_sector_defence_defence_id_seq OWNED BY tki_sector_defence.defence_id;
+ALTER SEQUENCE tki_sector_defense_defense_id_seq OWNED BY tki_sector_defense.defense_id;

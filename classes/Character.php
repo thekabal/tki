@@ -23,7 +23,7 @@ class Character
 {
     public static function kill(\PDO $pdo_db, $db, $ship_id, $langvars, Reg $tkireg, $remove_planets = false)
     {
-        $update_ships_res = $db->Execute("UPDATE {$db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defences=' ' WHERE ship_id=?", array($ship_id));
+        $update_ships_res = $db->Execute("UPDATE {$db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defenses=' ' WHERE ship_id=?", array($ship_id));
         Db::LogDbErrors($pdo_db, $update_ships_res, __LINE__, __FILE__);
 
         $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE placed_by = ?", array($ship_id));
@@ -54,7 +54,7 @@ class Character
             }
         }
 
-        $rm_def_res = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE ship_id=?", array($ship_id));
+        $rm_def_res = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE ship_id=?", array($ship_id));
         Db::LogDbErrors($pdo_db, $rm_def_res, __LINE__, __FILE__);
 
         $zone_res = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE team_zone='N' AND owner=?", array($ship_id));

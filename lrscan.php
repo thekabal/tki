@@ -127,9 +127,9 @@ if ($sector == "*")
         // Get port type and discover the presence of a planet in scanned sector
         $result3 = $db->Execute("SELECT planet_id FROM {$db->prefix}planets WHERE sector_id = ?;", array($row['link_dest']));
         Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-        $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'M';", array($row['link_dest']));
+        $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M';", array($row['link_dest']));
         Tki\Db::LogDbErrors($pdo_db, $resultSDa, __LINE__, __FILE__);
-        $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'F';", array($row['link_dest']));
+        $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F';", array($row['link_dest']));
         Tki\Db::LogDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
 
         $defM = $resultSDa->fields;
@@ -379,9 +379,9 @@ else
         $query->MoveNext();
     }
 
-    $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'M';", array($sector));
+    $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M';", array($sector));
     Tki\Db::LogDbErrors($pdo_db, $resultSDa, __LINE__, __FILE__);
-    $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'F';", array($sector));
+    $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F';", array($sector));
     Tki\Db::LogDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
     $defM = $resultSDa->fields;
     $defF = $resultSDb->fields;

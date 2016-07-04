@@ -494,7 +494,7 @@ class Xenobe
             $resi = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($planetinfo['energy'], $fighters_lost, $targettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
             \Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
         }
-        else  // Must have made it past planet defences
+        else  // Must have made it past planet defenses
         {
             $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
             $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
@@ -1037,23 +1037,23 @@ class Xenobe
         // Check for sector defenses
         if ($targetlink > 0)
         {
-            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'F' ORDER BY quantity DESC", array($targetlink));
+            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F' ORDER BY quantity DESC", array($targetlink));
             \Tki\Db::LogDbErrors($pdo_db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
-            $defences = array();
+            $defenses = array();
             if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
                 {
-                    $defences[$i] = $resultf->fields;
-                    $total_sector_fighters += $defences[$i]['quantity'];
+                    $defenses[$i] = $resultf->fields;
+                    $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
                     $resultf->MoveNext();
                 }
             }
 
-            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'M'", array($targetlink));
+            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M'", array($targetlink));
             \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
@@ -1061,8 +1061,8 @@ class Xenobe
             {
                 while (!$resultm->EOF)
                 {
-                    $defences[$i] = $resultm->fields;
-                    $total_sector_mines += $defences[$i]['quantity'];
+                    $defenses[$i] = $resultm->fields;
+                    $total_sector_mines += $defenses[$i]['quantity'];
                     $i++;
                     $resultm->MoveNext();
                 }
@@ -1070,7 +1070,7 @@ class Xenobe
 
             if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) // Dest link has defenses so lets attack them
             {
-                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENCES $total_sector_fighters fighters and $total_sector_mines mines.");
+                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENSES $total_sector_fighters fighters and $total_sector_mines mines.");
                 $targetfighters = $total_sector_fighters;
                 $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
                 if ($playerbeams > $playerinfo['ship_energy'])
@@ -1173,7 +1173,7 @@ class Xenobe
                 $fighterslost = $total_sector_fighters - $targetfighters;
                 \Tki\Fighters::destroy($pdo_db, $targetlink, $fighterslost);
 
-                // Message the defence owner with what happened
+                // Message the defense owner with what happened
                 $langvars['l_sf_sendlog'] = str_replace("[player]", "Xenobe $playerinfo[character_name]", $langvars['l_sf_sendlog']);
                 $langvars['l_sf_sendlog'] = str_replace("[lost]", $fighterslost, $langvars['l_sf_sendlog']);
                 $langvars['l_sf_sendlog'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog']);
@@ -1246,7 +1246,7 @@ class Xenobe
             }
             else
             {
-                // This was called without any sector defences to attack
+                // This was called without any sector defenses to attack
                 return;
             }
         }
@@ -1315,23 +1315,23 @@ class Xenobe
 
         if ($targetlink > 0) // Check for sector defenses
         {
-            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'F' ORDER BY quantity DESC", array($targetlink));
+            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F' ORDER BY quantity DESC", array($targetlink));
             \Tki\Db::LogDbErrors($pdo_db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
-            $defences = array();
+            $defenses = array();
             if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
                 {
-                    $defences[$i] = $resultf->fields;
-                    $total_sector_fighters += $defences[$i]['quantity'];
+                    $defenses[$i] = $resultf->fields;
+                    $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
                     $resultf->MoveNext();
                 }
             }
 
-            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? and defence_type = 'M'", array($targetlink));
+            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M'", array($targetlink));
             \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
@@ -1339,18 +1339,18 @@ class Xenobe
             {
                 while (!$resultm->EOF)
                 {
-                    $defences[$i] = $resultm->fields;
-                    $total_sector_mines += $defences[$i]['quantity'];
+                    $defenses[$i] = $resultm->fields;
+                    $total_sector_mines += $defenses[$i]['quantity'];
                     $i++;
                     $resultm->MoveNext();
                 }
             }
 
-            if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) // If destination link has defences
+            if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) // If destination link has defenses
             {
                 if ($playerinfo['aggression'] == 2 || $playerinfo['aggression'] == 1)
                 {
-                    self::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defences
+                    self::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defenses
 
                     return;
                 }
@@ -1442,24 +1442,24 @@ class Xenobe
                 return;
             }
 
-            // Check for sector defences
-            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type = 'F' ORDER BY quantity DESC", array($targetinfo['sector']));
+            // Check for sector defenses
+            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'F' ORDER BY quantity DESC", array($targetinfo['sector']));
             \Tki\Db::LogDbErrors($pdo_db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
-            $defences = array();
+            $defenses = array();
             if ($resultf instanceof \adodb\ADORecordSet)
             {
                 while (!$resultf->EOF)
                 {
-                    $defences[$i] = $resultf->fields;
-                    $total_sector_fighters += $defences[$i]['quantity'];
+                    $defenses[$i] = $resultf->fields;
+                    $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
                     $resultf->MoveNext();
                 }
             }
 
-            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type = 'M'", array($targetinfo['sector']));
+            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'M'", array($targetinfo['sector']));
             \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
@@ -1467,16 +1467,16 @@ class Xenobe
             {
                 while (!$resultm->EOF)
                 {
-                    $defences[$i] = $resultm->fields;
-                    $total_sector_mines += $defences[$i]['quantity'];
+                    $defenses[$i] = $resultm->fields;
+                    $total_sector_mines += $defenses[$i]['quantity'];
                     $i++;
                     $resultm->MoveNext();
                 }
             }
 
-            if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) // Destination link has defences
+            if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) // Destination link has defenses
             {
-                // Attack sector defences
+                // Attack sector defenses
                 $targetlink = $targetinfo['sector'];
                 self::xenobeToSecDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
             }

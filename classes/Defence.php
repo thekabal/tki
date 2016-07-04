@@ -21,9 +21,9 @@ namespace Tki;
 
 class Defense
 {
-    public static function defenceVsDefence(\PDO $pdo_db, $db, $ship_id, $langvars)
+    public static function defenseVsDefense(\PDO $pdo_db, $db, $ship_id, $langvars)
     {
-        $secdef_result = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE ship_id = ?;", array($ship_id));
+        $secdef_result = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE ship_id = ?;", array($ship_id));
         Db::LogDbErrors($pdo_db, $secdef_result, __LINE__, __FILE__);
 
         if ($secdef_result instanceof \adodb\ADORecordSet)
@@ -31,32 +31,32 @@ class Defense
             while (!$secdef_result->EOF)
             {
                 $row = $secdef_result->fields;
-                $deftype = $row['defence_type'] == 'F' ? 'Fighters' : 'Mines';
+                $deftype = $row['defense_type'] == 'F' ? 'Fighters' : 'Mines';
                 $qty = $row['quantity'];
-                $other_secdef_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND ship_id <> ? ORDER BY quantity DESC", array($row['sector_id'], $ship_id));
+                $other_secdef_res = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ? ORDER BY quantity DESC", array($row['sector_id'], $ship_id));
                 Db::LogDbErrors($pdo_db, $other_secdef_res, __LINE__, __FILE__);
                 if ($other_secdef_res instanceof \adodb\ADORecordSet)
                 {
                     while (!$other_secdef_res->EOF && $qty > 0)
                     {
                         $cur = $other_secdef_res->fields;
-                        $targetdeftype = $cur['defence_type'] == 'F' ? $langvars['l_fighters'] : $langvars['l_mines'];
+                        $targetdeftype = $cur['defense_type'] == 'F' ? $langvars['l_fighters'] : $langvars['l_mines'];
                         if ($qty > $cur['quantity'])
                         {
-                            $del_secdef_res = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE defence_id = ?", array($cur['defence_id']));
+                            $del_secdef_res = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE defense_id = ?", array($cur['defense_id']));
                             Db::LogDbErrors($pdo_db, $del_secdef_res, __LINE__, __FILE__);
                             $qty -= $cur['quantity'];
-                            $up_secdef_res = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity = ? WHERE defence_id = ?", array($qty, $row['defence_id']));
+                            $up_secdef_res = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = ? WHERE defense_id = ?", array($qty, $row['defense_id']));
                             Db::LogDbErrors($pdo_db, $up_secdef_res, __LINE__, __FILE__);
                             PlayerLog::WriteLog($pdo_db, $cur['ship_id'], LOG_DEFS_DESTROYED, $cur['quantity'] .'|'. $targetdeftype .'|'. $row['sector_id']);
                             PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFS_DESTROYED, $cur['quantity'] .'|'. $deftype .'|'. $row['sector_id']);
                         }
                         else
                         {
-                            $del_secdef_res2 = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE defence_id = ?", array($row['defence_id']));
+                            $del_secdef_res2 = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE defense_id = ?", array($row['defense_id']));
                             Db::LogDbErrors($pdo_db, $del_secdef_res2, __LINE__, __FILE__);
 
-                            $up_secdef_res2 = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity=quantity - ? WHERE defence_id = ?", array($qty, $cur['defence_id']));
+                            $up_secdef_res2 = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity=quantity - ? WHERE defense_id = ?", array($qty, $cur['defense_id']));
                             Db::LogDbErrors($pdo_db, $up_secdef_res2, __LINE__, __FILE__);
                             PlayerLog::WriteLog($pdo_db, $cur['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $targetdeftype .'|'. $row['sector_id']);
                             PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $deftype .'|'. $row['sector_id']);
@@ -67,7 +67,7 @@ class Defense
                 }
                 $secdef_result->MoveNext();
             }
-            $del_secdef_res3 = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE quantity <= 0");
+            $del_secdef_res3 = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0");
             Db::LogDbErrors($pdo_db, $del_secdef_res3, __LINE__, __FILE__);
         }
     }

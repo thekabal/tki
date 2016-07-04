@@ -23,16 +23,16 @@ class SectorDefense
 {
     public static function messageDefenseOwner(\PDO $pdo_db, int $sector, $message)
     {
-        $sql = "SELECT ship_id FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id";
+        $sql = "SELECT ship_id FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();
-        $defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if ($defence_present !== null)
+        $defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($defense_present !== null)
         {
-            foreach ($defence_present as $tmp_defence)
+            foreach ($defense_present as $tmp_defense)
             {
-                PlayerLog::WriteLog($pdo_db, $tmp_defence['ship_id'], LOG_RAW, $message);
+                PlayerLog::WriteLog($pdo_db, $tmp_defense['ship_id'], LOG_RAW, $message);
             }
         }
     }

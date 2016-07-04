@@ -23,34 +23,34 @@ class Mines
 {
     public static function explode(\PDO $pdo_db, $sector, $num_mines)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id AND defence_type ='M' ORDER BY QUANTITY ASC";
+        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id AND defense_type ='M' ORDER BY QUANTITY ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();
-        $defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if ($defence_present !== null)
+        $defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($defense_present !== null)
         {
-            foreach ($defence_present as $tmp_defence)
+            foreach ($defense_present as $tmp_defense)
             {
                 if ($num_mines > 0)
                 {
-                    // Put the defence information into the array "defenceinfo"
-                    if ($tmp_defence['quantity'] > $num_mines)
+                    // Put the defense information into the array "defenseinfo"
+                    if ($tmp_defense['quantity'] > $num_mines)
                     {
-                        $sql = "UPDATE {$pdo_db->prefix}sector_defence SET quantity = quantity - :num_mines WHERE defence_id=:defence_id";
+                        $sql = "UPDATE {$pdo_db->prefix}sector_defense SET quantity = quantity - :num_mines WHERE defense_id=:defense_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':num_mines', $num_mines);
-                        $stmt->bindParam(':defence_id', $tmp_defence['defence_id']);
+                        $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
                         $stmt->execute();
                         $num_mines = 0;
                     }
                     else
                     {
-                        $sql = "DELETE FROM {$pdo_db->prefix}sector_defence WHERE defence_id=:defence_id";
+                        $sql = "DELETE FROM {$pdo_db->prefix}sector_defense WHERE defense_id=:defense_id";
                         $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':defence_id', $tmp_defence['defence_id']);
+                        $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
                         $stmt->execute();
-                        $num_mines -= $tmp_defence['quantity'];
+                        $num_mines -= $tmp_defense['quantity'];
                     }
                 }
             }

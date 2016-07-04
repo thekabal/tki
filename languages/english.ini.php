@@ -236,7 +236,7 @@ l_cmb_defender                          = "Defender";
 l_cmb_attackingplanet                   = "Attacking planet in sector";
 l_cmb_youfireyourbeams                  = "You fire your beams";
 l_cmb_defenselost                       = "Planetary defense lost [cmb_planetfighters] fighters to your beams";
-l_cmb_defenselost2                      = "Planetary Defense lost [cmb_attackerbeams] fighters, but there are more coming!";
+l_cmb_defenselost2                      = "Planetary defense lost [cmb_attackerbeams] fighters, but there are more coming!";
 l_cmb_planetarybeams                    = "Planetary beams destroy [cmb_temp] of your fighters";
 l_cmb_planetarybeams2                   = "Planetary beams destroy [cmb_planetbeams] of your fighters";
 l_cmb_youdestroyedplanetshields         = "Your beams have destroyed the planetary shields";
@@ -491,7 +491,7 @@ l_cu_planets_minutes                    = "Planets will generate production ever
 l_cu_port_regen                         = "Ports will regenerate every [sched] minutes";
 l_cu_tow_sched                          = "Ships will be towed from fed sectors every [sched] minutes";
 l_cu_ranking_sched                      = "Rankings will be generated every [sched] minutes";
-l_cu_sector_degrade                     = "Sector defences will degrade every [sched] minutes";
+l_cu_sector_degrade                     = "Sector defenses will degrade every [sched] minutes";
 l_cu_apoc_sched                         = "The planetary apocalypse will occur every [sched] minutes";
 l_cu_governor_sched                     = "The Governor will run every [sched] minutes";
 l_cu_insert_news                        = "Inserting first news item";
@@ -523,9 +523,9 @@ l_cu_autorun                            = "NEW!! Check this box to have create u
 l_cu_update_maxsector                   = "Saving max sector setting to the database";
 l_cu_choose_lang                        = "Choose the language to use during create universe:";
 
-[defence_report]
-l_sdf_title                             = "Sector Defence Report";
-l_sdf_none                              = "You have no sector defences deployed.";
+[defense_report]
+l_sdf_title                             = "Sector Defense Report";
+l_sdf_none                              = "You have no sector defenses deployed.";
 l_sdf_type                              = "Type";
 l_sdf_mode                              = "Mode";
 
@@ -867,8 +867,8 @@ l_log_text_LOG_ADMIN_ILLEGVALUE         = "[player] had [quantity] [type], with 
 l_log_title_LOG_ADMIN_ILLEGVALUE        = "Illegal ship value";
 l_log_text_LOG_ADMIN_PLANETDEL          = "[attacker] has attempted to capture [defender]'s planet in sector [sector]. Planet was destroyed instead.";
 l_log_title_LOG_ADMIN_PLANETDEL         = "Planet destroyed";
-l_log_text_LOG_DEFENCE_DEGRADE          = "Sector Defences Fighters in sector [sector] degraded by [degrade] percent due to insufficient energy.";
-l_log_title_LOG_DEFENCE_DEGRADE         = "Sector Defences degraded.";
+l_log_text_LOG_DEFENSE_DEGRADE          = "Sector Defenses Fighters in sector [sector] degraded by [degrade] percent due to insufficient energy.";
+l_log_title_LOG_DEFENSE_DEGRADE         = "Sector Defenses degraded.";
 l_log_text_LOG_PLANET_CAPTURED          = "You captured a planet belonging to [owner]. It had [cols] colonists and [credits] credits on it.";
 l_log_title_LOG_PLANET_CAPTURED         = "Planet captured!";
 l_log_text_LOG_PLANET_BOMBED            = "Your planet [planet_name] in sector [sector] was bombed by [name]. You used [beams] energy and [torps] torpedoes in your defense.  You lost [figs] fighters.";
@@ -1000,7 +1000,7 @@ l_devices                               = "Devices";
 l_planets                               = "Planets";
 l_ibank                                 = "IBANK";
 l_log                                   = "Log";
-l_sector_def                            = "Sector Defences";
+l_sector_def                            = "Sector Defenses";
 l_defense                               = "Defenses";
 l_read_msg                              = "Read Messages";
 l_send_msg                              = "Send Messages";
@@ -1028,7 +1028,7 @@ l_main_ships_detected                   = "Ship(s) Detected";
 
 [mines]
 l_mines_title                           = "Deploy Sector Mines &amp; Fighters";
-l_mines_noturn                          = "You need at least one turn to deploy sector defences.";
+l_mines_noturn                          = "You need at least one turn to deploy sector defenses.";
 l_mines_nopermit                        = "Deploying Mines and Fighters in this sector is not permitted.";
 l_mines_nodeploy                        = "Can not deploy here. Another Ship or Team has mines or fighters in this sector.";
 l_mines_info1                           = "You are presently in sector [sector]. There are [mines] mines and [fighters] fighters here.";
@@ -1041,27 +1041,27 @@ l_mines_nofighters                      = "You do not have enough fighters";
 l_mines_dmines                          = "Deployed [mines] mines.";
 l_mines_dfighter                        = "Deployed [fighters] fighters in [mode] mode.";
 
-[modify_defences]
-l_md_title                              = "Sector Defences";
-l_md_invalid                            = "Invalid Sector Defence";
-l_md_nolonger                           = "The sector defence selected is no longer there.";
+[modify_defenses]
+l_md_title                              = "Sector Defenses";
+l_md_invalid                            = "Invalid Sector Defense";
+l_md_nolonger                           = "The sector defense selected is no longer there.";
 l_md_you                                = "you";
 l_md_bmines                             = "Your beams destroyed";
 l_md_msgdownerb                         = "[name] destroyed [mines] mines in sector [sector].";
 l_md_retr                               = "You retrieved";
 l_md_mode                               = "The fighters selected have been set to [mode] mode.";
-l_md_consist                            = "This sector defence consists of [qty] [type] owned by [owner].";
+l_md_consist                            = "This sector defense consists of [qty] [type] owned by [owner].";
 l_md_youcan                             = "You can";
 l_md_retrieve                           = "Retrieve";
 l_md_change                             = "Change Fighter settings";
 l_md_cmode                              = "Fighter mode";
 l_md_attack                             = "Attack";
 l_md_toll                               = "Toll";
-l_md_attdef                             = "Attack the Sector Defences. All sector fighters will retaliate.";
+l_md_attdef                             = "Attack the Sector Defenses. All sector fighters will retaliate.";
 l_md_noturn                             = "You need at least one turn.";
-l_md_nothere                            = "You need to be in the same sector as the sector defences.";
-l_md_notyours                           = "Action not permitted. Those sector defences do not belong to you.";
-l_md_yours                              = "You can not attack your own sector defences.";
+l_md_nothere                            = "You need to be in the same sector as the sector defenses.";
+l_md_notyours                           = "Action not permitted. Those sector defenses do not belong to you.";
+l_md_yours                              = "You can not attack your own sector defenses.";
 
 [move]
 l_move_title                            = "Move";
@@ -1122,7 +1122,7 @@ l_news_killed                           = "[name] was killed in a tragic acciden
 l_news_p_text5                          = "The rising empire of [name] now has five planets, the BNN will watch the actions of [name] more closely in the future!";
 l_news_p_text10                         = "The aspiring empire of [name] now controls ten planets, Reports of BNN say that further expansion of [name] might lead to war!";
 l_news_p_text25                         = "The large empire of [name] colonized 25 planets already, in an interview, [name] announced that he might consider slowing down his expansion in the future!";
-l_news_p_text50                         = "The enormous vast empire of [name], represented by 50 planets in the whole galaxy is getting a threatening strength. One of the BNN reporters found out that [name] is upgrading his ship planning a major war. In an interview [name] announced that is done on defence purpose only!";
+l_news_p_text50                         = "The enormous vast empire of [name], represented by 50 planets in the whole galaxy is getting a threatening strength. One of the BNN reporters found out that [name] is upgrading his ship planning a major war. In an interview [name] announced that is done on defense purpose only!";
 l_news_p_text100                        = "The astounding empire of [name], now spanning 100 planets across the galaxy is truly a dominating force. Other empires are looking to emulate this success.";
 l_news_p_text250                        = "The overwhelming might of the [name] empire now encroaches on the borders of several other empires. With 250 planets, can they be stopped?";
 l_news_p_text500                        = "The staggering empire of [name], now governing 500 planets, seems to be beyond normal laws of civilization. Scientists have been dispatched to discover the secret to their efficiency.";
@@ -1396,7 +1396,7 @@ l_scan_carry                            = "Carrying:";
 l_sys_update                            = "System update";
 
 [sector_fighters]
-l_sf_attacking                          = "Sector defence fighters are attacking you!";
+l_sf_attacking                          = "Sector defense fighters are attacking you!";
 l_sf_destfight                          = "Your beams destroyed [lost] fighters";
 l_sf_destfightb                         = "Your beams destroyed [lost] fighters";
 l_sf_torphit                            = "Torpedoes hit:";
@@ -1408,10 +1408,10 @@ l_sf_lostfight                          = "You lost all fighters.";
 l_sf_lostfight2                         = "You lost [lost] fighters.";
 l_sf_armorbreach                        = "Your armor is breached!";
 l_sf_armorbreach2                       = "Your armor is hit for [lost] damage.";
-l_sf_sendlog                            = "[player] destroyed [lost] sector defence fighters in sector [sector].";
+l_sf_sendlog                            = "[player] destroyed [lost] sector defense fighters in sector [sector].";
 l_sf_lreport                            = "You lost [armor] armor points, [fighters] fighters, and used [torps] torpedoes.";
 l_sf_shipdestroyed                      = "Your ship has been destroyed!";
-l_sf_sendlog2                           = "Sector defence fighters destroyed [player] in sector [sector].";
+l_sf_sendlog2                           = "Sector defense fighters destroyed [player] in sector [sector].";
 l_sf_escape                             = "Luckily you have an escape pod!";
 
 [self_destruct]
@@ -1488,7 +1488,7 @@ l_set_sched_limit_cap                   = "Limit captured planets Max Credits to
 l_set_sched_port_regen                  = "Ports will regenerate x [port_regenrate] every ";
 l_set_sched_fed_tow                     = "Ships will be towed from fed sectors every ";
 l_set_sched_ranking                     = "Rankings will be generated every ";
-l_set_sched_def_degrade                 = "Sector Defences will degrade every ";
+l_set_sched_def_degrade                 = "Sector Defenses will degrade every ";
 l_set_sched_apoc                        = "The planetary apocalypse will occur every ";
 l_set_minutes                           = " minutes";
 
@@ -1649,7 +1649,7 @@ l_tdr_invaliddport                      = "Destination port does not seem to be 
 l_tdr_invaliddplanet                    = "Destination planet doesn't seem to be a valid planet!";
 l_tdr_invaliddsector                    = "Destination sector does not seem to be valid!";
 l_tdr_moreturnsneeded                   = "This trade route requires [tdr_dist_triptime] turns to complete. You only have [tdr_playerinfo_turns] left.";
-l_tdr_hostdef                           = "You can not use trade routes between sectors with hostile defences. You must defeat the defences first.";
+l_tdr_hostdef                           = "You can not use trade routes between sectors with hostile defenses. You must defeat the defenses first.";
 l_tdr_globalsetbuynothing               = "Your global settings are set to buy nothing! You would only waste turns doing this route!";
 l_tdr_nosrcporttrade                    = "Trading from source port is not allowed.";
 l_tdr_tradesrcportoutsider              = "Trading at source port is not allowed for outsiders";
