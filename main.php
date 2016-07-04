@@ -22,7 +22,7 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common', 'main', 'modify_defences', 'admin','footer','global_includes', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common', 'main', 'modify_defenses', 'admin','footer','global_includes', 'regional'));
 $title = $langvars['l_main_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
@@ -46,10 +46,10 @@ if ($_GET['command'] == "score")
     $playerinfo['score'] = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 }
 
-if ($playerinfo['cleared_defences'] > ' ')
+if ($playerinfo['cleared_defenses'] > ' ')
 {
     echo $langvars['l_incompletemove'] . " <br>";
-    echo "<a href=$playerinfo[cleared_defences]>" . $langvars['l_clicktocontinue'] . "</a>";
+    echo "<a href=$playerinfo[cleared_defenses]>" . $langvars['l_clicktocontinue'] . "</a>";
     die();
 }
 
@@ -111,20 +111,20 @@ if ($planet_present !== null)
 $num_planets = $i;
 
 $i = 0;
-$sql = "SELECT * FROM {$pdo_db->prefix}sector_defence, {$pdo_db->prefix}ships WHERE {$pdo_db->prefix}sector_defence.sector_id=:sector_id AND {$pdo_db->prefix}ships.ship_id = {$pdo_db->prefix}sector_defence.ship_id";
+$sql = "SELECT * FROM {$pdo_db->prefix}sector_defense, {$pdo_db->prefix}ships WHERE {$pdo_db->prefix}sector_defense.sector_id=:sector_id AND {$pdo_db->prefix}ships.ship_id = {$pdo_db->prefix}sector_defense.ship_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
-$defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if ($defence_present !== null)
+$defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if ($defense_present !== null)
 {
-    foreach ($defence_present as $tmp_defence)
+    foreach ($defense_present as $tmp_defense)
     {
-        $defences[$i] = $tmp_defence;
+        $defenses[$i] = $tmp_defense;
         $i++;
     }
 }
-$num_defences = $i;
+$num_defenses = $i;
 
 // Grab zoneinfo from database
 $sql = "SELECT zone_id,zone_name FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
@@ -253,7 +253,7 @@ echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href=
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='planet_report.php'>{$langvars['l_planets']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='ibank.php'>{$langvars['l_ibank']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='log.php'>{$langvars['l_log']}</a></div>\n";
-echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='defence_report.php'>{$langvars['l_sector_def']}</a></div>\n";
+echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='defense_report.php'>{$langvars['l_sector_def']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='readmail.php'>{$langvars['l_read_msg']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='mailto.php'>{$langvars['l_send_msg']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='ranking.php'>{$langvars['l_rankings']}</a></div>\n";
@@ -318,7 +318,7 @@ while (!$tr_result->EOF)
     $tr_result->MoveNext();
 }
 
-// Sector Defense Trade route query - this is still under developement
+// Sector defense trade route query - this is still under developement
 $sd_tr_result = $db->Execute("SELECT * FROM {$pdo_db->prefix}traderoutes WHERE source_type='D' AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array($playerinfo['sector'], $playerinfo['ship_id']));
 Tki\Db::LogDbErrors($pdo_db, $sd_tr_result, __LINE__, __FILE__);
 while (!$sd_tr_result->EOF)
@@ -675,27 +675,27 @@ else
 }
 echo "</div>";
 
-if ($num_defences>0)
+if ($num_defenses>0)
 {
             echo "<div style='padding-top:4px; padding-bottom:4px; width:500px; margin:auto; background-color:#303030; text-align:center;'>" . $langvars['l_sector_def'] . "</div>\n";
             echo "<div style='width:498px; margin:auto; overflow:auto; height:125px; scrollbar-base-color: #303030; scrollbar-arrow-color: #fff; padding:0px; text-align:center;'>\n";
 }
 echo "<table><tr>";
 
-if ($num_defences > 0)
+if ($num_defenses > 0)
 {
     $totalcount = 0;
     $curcount = 0;
     $i = 0;
-    while ($i < $num_defences)
+    while ($i < $num_defenses)
     {
-        $defence_id = $defences[$i]['defence_id'];
+        $defense_id = $defenses[$i]['defense_id'];
         echo "<td style='vertical-align:top; background: URL(" . $template->getVariables('template_dir') . "/images/bg_alpha.png) repeat;'><div style=' width:160px; font-size:12px; '>";
-        if ($defences[$i]['defence_type'] == 'F')
+        if ($defenses[$i]['defense_type'] == 'F')
         {
-            echo "<a class='new_link' href='modify_defences.php?defence_id=$defence_id'><img class='mnu' src=\"" . $template->getVariables('template_dir') . "/images/fighters.png\" style='border:0px; width:80px; height:60px' alt='Fighters'></a>\n";
+            echo "<a class='new_link' href='modify_defenses.php?defense_id=$defense_id'><img class='mnu' src=\"" . $template->getVariables('template_dir') . "/images/fighters.png\" style='border:0px; width:80px; height:60px' alt='Fighters'></a>\n";
             $def_type = $langvars['l_fighters'];
-            $mode = $defences[$i]['fm_setting'];
+            $mode = $defenses[$i]['fm_setting'];
             if ($mode == 'attack')
             {
                 $mode = $langvars['l_md_attack'];
@@ -706,14 +706,14 @@ if ($num_defences > 0)
             }
             $def_type .= $mode;
         }
-        elseif ($defences[$i]['defence_type'] == 'M')
+        elseif ($defenses[$i]['defense_type'] == 'M')
         {
-            echo "<div><a href='modify_defences.php?defence_id=$defence_id'><img src=\"" . $template->getVariables('template_dir') . "/images/mines.png\" style='border:0px; width:80px; height:60px' alt='Mines'></a></div>\n";
+            echo "<div><a href='modify_defenses.php?defense_id=$defense_id'><img src=\"" . $template->getVariables('template_dir') . "/images/mines.png\" style='border:0px; width:80px; height:60px' alt='Mines'></a></div>\n";
             $def_type = $langvars['l_mines'];
         }
 
-        $char_name = $defences[$i]['character_name'];
-        $qty = $defences[$i]['quantity'];
+        $char_name = $defenses[$i]['character_name'];
+        $qty = $defenses[$i]['quantity'];
         echo "<div style='font-size:1em; color:#fff;'>$char_name<br>( $qty $def_type )</div>\n";
         echo "</div></td>";
 

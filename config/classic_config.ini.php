@@ -207,7 +207,7 @@ min_bases_to_own           = 3;                                // The minimum nu
 default_lang               = 'english';                        // The default language the game displays in until a player chooses a language
 team_planet_transfers      = false;                            // If transferring credits to/from team planets is allowed.
 min_value_capture          = 0;                                // Percantage of planet's value a ship must be worth to be able to capture it. 0=disable
-defence_degrade_rate       = '0.05';                           // The percentage rate at which defenses fits, mines degrade during scheduler runs
+defense_degrade_rate       = '0.05';                           // The percentage rate at which defenses fits, mines degrade during scheduler runs
 energy_per_fighter         = '0.10';                           // The amount of energy needed from planets in sector to maintain a fighter during scheduler runs
 space_plague_kills         = '0.20';                           // Percentage of colonists killed by space plague
 max_credits_without_base   = 10000000;                         // Max amount of credits allowed on a planet without a base

@@ -245,7 +245,7 @@ class Traderoute
         // Sector Defense Check
         $hostile = 0;
 
-        $result99 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND ship_id <> ?", array($source['sector_id'], $playerinfo['ship_id']));
+        $result99 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($source['sector_id'], $playerinfo['ship_id']));
         \Tki\Db::LogDbErrors($pdo_db, $result99, __LINE__, __FILE__);
         if (!$result99->EOF)
         {
@@ -262,7 +262,7 @@ class Traderoute
             }
         }
 
-        $result98 = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND ship_id <> ?", array($dest['sector_id'], $playerinfo['ship_id']));
+        $result98 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($dest['sector_id'], $playerinfo['ship_id']));
         \Tki\Db::LogDbErrors($pdo_db, $result98, __LINE__, __FILE__);
         if (!$result98->EOF)
         {

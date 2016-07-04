@@ -149,7 +149,7 @@ $langvars['l_sf_sendlog'] = str_replace("[player]", $playerinfo['character_name'
 $langvars['l_sf_sendlog'] = str_replace("[lost]", $fighterslost, $langvars['l_sf_sendlog']);
 $langvars['l_sf_sendlog'] = str_replace("[sector]", $sector, $langvars['l_sf_sendlog']);
 
-Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog']);
+Tki\Sectordefense::messagedefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog']);
 Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_DEFS_DESTROYED_F, "$fighterslost|$sector");
 $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
@@ -166,12 +166,12 @@ if ($playerarmor < 1)
     Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_DEFS_KABOOM, "$sector|$playerinfo[dev_escapepod]");
     $langvars['l_sf_sendlog2'] = str_replace("[player]", $playerinfo['character_name'], $langvars['l_sf_sendlog2']);
     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $sector, $langvars['l_sf_sendlog2']);
-    Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog2']);
+    Tki\Sectordefense::messagedefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog2']);
     if ($playerinfo['dev_escapepod'] == 'Y')
     {
         $rating = round($playerinfo['rating'] / 2);
         echo $langvars['l_sf_escape'] . "<br><br>";
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 0, ship_organics = 0, ship_ore = 0, ship_goods = 0, ship_energy = ?, ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', rating = ?, cleared_defences=' ', dev_lssd = 'N' WHERE ship_id = ?;", array($tkireg->start_energy, $rating, $playerinfo['ship_id']));
+        $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 0, ship_organics = 0, ship_ore = 0, ship_goods = 0, ship_energy = ?, ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', rating = ?, cleared_defenses=' ', dev_lssd = 'N' WHERE ship_id = ?;", array($tkireg->start_energy, $rating, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
         $ok = 0;

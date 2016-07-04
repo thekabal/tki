@@ -15,7 +15,7 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: modify_defences.php
+// File: modify_defenses.php
 
 require_once './common.php';
 
@@ -25,9 +25,9 @@ $title = $langvars['l_md_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('modify_defences', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('modify_defenses', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 
-if (!isset($defence_id))
+if (!isset($defense_id))
 {
     echo $langvars['l_md_invalid'] . "<br><br>";
     Tki\Text::gotomain($pdo_db, $lang);
@@ -64,20 +64,20 @@ if ($playerinfo['turns'] < 1)
     die ();
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE defence_id=:defence_id";
+$sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE defense_id=:defense_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':defence_id', $defence_id);
+$stmt->bindParam(':defense_id', $defense_id);
 $stmt->execute();
-$defenceinfo = $stmt->fetchAll(PDO::FETCH_ASSOC); // Put the defence information into the array "defenceinfo"
+$defenseinfo = $stmt->fetchAll(PDO::FETCH_ASSOC); // Put the defense information into the array "defenseinfo"
 
-if (!$defenceinfo)  // Not too sure, may need more checks on this.
+if (!$defenseinfo)  // Not too sure, may need more checks on this.
 {
     echo $langvars['l_md_nolonger'] . "<br>";
     Tki\Text::gotomain($pdo_db, $lang);
     die();
 }
 
-if ($defenceinfo['sector_id'] != $playerinfo['sector'])
+if ($defenseinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_md_nothere'] . "<br><br>";
     Tki\Text::gotomain($pdo_db, $lang);
@@ -85,21 +85,21 @@ if ($defenceinfo['sector_id'] != $playerinfo['sector'])
     die();
 }
 
-if ($defenceinfo['ship_id'] == $playerinfo['ship_id'])
+if ($defenseinfo['ship_id'] == $playerinfo['ship_id'])
 {
-    $defence_owner = $langvars['l_md_you'];
+    $defense_owner = $langvars['l_md_you'];
 }
 else
 {
-    $defence_ship_id = $defenceinfo['ship_id'];
-    $resulta = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($defence_ship_id));
+    $defense_ship_id = $defenseinfo['ship_id'];
+    $resulta = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($defense_ship_id));
     $ownerinfo = $resulta->fields;
-    $defence_owner = $ownerinfo['character_name'];
+    $defense_owner = $ownerinfo['character_name'];
 }
 
-$defence_type = $defenceinfo['defence_type'] == 'F' ? $langvars['l_fighters'] : $langvars['l_mines'];
-$qty = $defenceinfo['quantity'];
-if ($defenceinfo['fm_setting'] == 'attack')
+$defense_type = $defenseinfo['defense_type'] == 'F' ? $langvars['l_fighters'] : $langvars['l_mines'];
+$qty = $defenseinfo['quantity'];
+if ($defenseinfo['fm_setting'] == 'attack')
 {
     $set_attack = 'CHECKED';
     $set_toll = null;
@@ -114,7 +114,7 @@ switch ($response)
 {
     case 'fight':
         echo "<h1>" . $title . "</h1>\n";
-        if ($defenceinfo['ship_id'] == $playerinfo['ship_id'])
+        if ($defenseinfo['ship_id'] == $playerinfo['ship_id'])
         {
             echo $langvars['l_md_yours'] . "<br><br>";
             Tki\Text::gotomain($pdo_db, $lang);
@@ -123,18 +123,18 @@ switch ($response)
         }
 
         $sector = $playerinfo['sector'] ;
-        if ($defenceinfo['defence_type'] == 'F')
+        if ($defenseinfo['defense_type'] == 'F')
         {
-            $countres = $db->Execute("SELECT SUM(quantity) AS totalfighters FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type = 'F';", array($sector));
+            $countres = $db->Execute("SELECT SUM(quantity) AS totalfighters FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'F';", array($sector));
             $ttl = $countres->fields;
             $total_sector_fighters = $ttl['totalfighters'];
-            $calledfrom = "modify_defences.php";
+            $calledfrom = "modify_defenses.php";
             include_once './sector_fighters.php';
         }
         else
         {
             // Attack mines goes here
-            $countres = $db->Execute("SELECT SUM(quantity) AS totalmines FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type = 'M';", array($sector));
+            $countres = $db->Execute("SELECT SUM(quantity) AS totalmines FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'M';", array($sector));
             $ttl = $countres->fields;
             $total_sector_mines = $ttl['totalmines'];
             $playerbeams = Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
@@ -153,14 +153,14 @@ switch ($response)
             $langvars['l_md_msgdownerb'] = str_replace("[sector]", $sector, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[mines]", $playerbeams, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[name]", $char_name, $langvars['l_md_msgdownerb']);
-            Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_md_msgdownerb']);
+            Tki\Sectordefense::messagedefenseOwner($pdo_db, $sector, $langvars['l_md_msgdownerb']);
             Tki\Text::gotomain($pdo_db, $lang);
             die();
         }
         break;
 
     case 'retrieve':
-        if ($defenceinfo['ship_id'] != $playerinfo['ship_id'])
+        if ($defenseinfo['ship_id'] != $playerinfo['ship_id'])
         {
              echo $langvars['l_md_notyours'] . "<br><br>";
              Tki\Text::gotomain($pdo_db, $lang);
@@ -173,14 +173,14 @@ switch ($response)
             $quantity = 0;
         }
 
-        if ($quantity > $defenceinfo['quantity'])
+        if ($quantity > $defenseinfo['quantity'])
         {
-            $quantity = $defenceinfo['quantity'];
+            $quantity = $defenseinfo['quantity'];
         }
 
         $torpedo_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
         $fighter_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg) - $playerinfo['ship_fighters'];
-        if ($defenceinfo['defence_type'] == 'F')
+        if ($defenseinfo['defense_type'] == 'F')
         {
             if ($quantity > $fighter_max)
             {
@@ -188,7 +188,7 @@ switch ($response)
             }
         }
 
-        if ($defenceinfo['defence_type'] == 'M')
+        if ($defenseinfo['defense_type'] == 'M')
         {
             if ($quantity > $torpedo_max)
             {
@@ -197,8 +197,8 @@ switch ($response)
         }
         if ($quantity > 0)
         {
-            $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity=quantity - ? WHERE defence_id = ?", array($quantity, $defence_id));
-            if ($defenceinfo['defence_type'] == 'M')
+            $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity=quantity - ? WHERE defense_id = ?", array($quantity, $defense_id));
+            if ($defenseinfo['defense_type'] == 'M')
             {
                 $db->Execute("UPDATE {$db->prefix}ships SET torps=torps + ? WHERE ship_id = ?", array($quantity, $playerinfo['ship_id']));
             }
@@ -206,19 +206,19 @@ switch ($response)
             {
                 $db->Execute("UPDATE {$db->prefix}ships SET ship_fighters = ship_fighters + ? WHERE ship_id = ?", array($quantity, $playerinfo['ship_id']));
             }
-            $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE quantity <= 0");
+            $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0");
         }
         $stamp = date("Y-m-d H:i:s");
 
         $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($stamp, $playerinfo['sector'], $playerinfo['ship_id']));
         echo "<h1>" . $title . "</h1>\n";
-        echo $langvars['l_md_retr'] . " " . $quantity . " " . $defence_type . ".<br>";
+        echo $langvars['l_md_retr'] . " " . $quantity . " " . $defense_type . ".<br>";
         Tki\Text::gotomain($pdo_db, $lang);
         die();
 
     case 'change':
         echo "<h1>" . $title . "</h1>\n";
-        if ($defenceinfo['ship_id'] != $playerinfo['ship_id'])
+        if ($defenseinfo['ship_id'] != $playerinfo['ship_id'])
         {
             echo $langvars['l_md_notyours'] . "<br><br>";
             Tki\Text::gotomain($pdo_db, $lang);
@@ -226,7 +226,7 @@ switch ($response)
             die();
         }
 
-        $db->Execute("UPDATE {$db->prefix}sector_defence SET fm_setting = ? WHERE defence_id = ?", array($mode, $defence_id));
+        $db->Execute("UPDATE {$db->prefix}sector_defense SET fm_setting = ? WHERE defense_id = ?", array($mode, $defense_id));
         $stamp = date("Y-m-d H:i:s");
         $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($stamp, $playerinfo['sector'], $playerinfo['ship_id']));
         if ($mode == 'attack')
@@ -246,43 +246,43 @@ switch ($response)
     default:
         echo "<h1>" . $title . "</h1>\n";
         $langvars['l_md_consist'] = str_replace("[qty]", $qty, $langvars['l_md_consist']);
-        $langvars['l_md_consist'] = str_replace("[type]", $defence_type, $langvars['l_md_consist']);
-        $langvars['l_md_consist'] = str_replace("[owner]", $defence_owner, $langvars['l_md_consist']);
+        $langvars['l_md_consist'] = str_replace("[type]", $defense_type, $langvars['l_md_consist']);
+        $langvars['l_md_consist'] = str_replace("[owner]", $defense_owner, $langvars['l_md_consist']);
         echo $langvars['l_md_consist'] . "<br>";
 
-        if ($defenceinfo['ship_id'] == $playerinfo['ship_id'])
+        if ($defenseinfo['ship_id'] == $playerinfo['ship_id'])
         {
             echo $langvars['l_md_youcan'] . ":<br>";
-            echo "<form accept-charset='utf-8' action=modify_defences.php method=post>";
-            echo $langvars['l_md_retrieve'] . " <input type=test name=quantity size=10 maxlength=10 value=0></input> $defence_type<br>";
+            echo "<form accept-charset='utf-8' action=modify_defenses.php method=post>";
+            echo $langvars['l_md_retrieve'] . " <input type=test name=quantity size=10 maxlength=10 value=0></input> $defense_type<br>";
             echo "<input type=hidden name=response value=retrieve>";
-            echo "<input type=hidden name=defence_id value=$defence_id>";
+            echo "<input type=hidden name=defense_id value=$defense_id>";
             echo "<input type=submit value=" . $langvars['l_submit'] . "><br><br>";
             echo "</form>";
-            if ($defenceinfo['defence_type'] == 'F')
+            if ($defenseinfo['defense_type'] == 'F')
             {
                 echo $langvars['l_md_change'] . ":<br>";
-                echo "<form accept-charset='utf-8' action=modify_defences.php method=post>";
+                echo "<form accept-charset='utf-8' action=modify_defenses.php method=post>";
                 echo $langvars['l_md_cmode'] . " <input type=radio name=mode $set_attack value=attack>" . $langvars['l_md_attack'] . "</input>";
                 echo "<input type=radio name=mode $set_toll value=toll>" . $langvars['l_md_toll'] . "</input><br>";
                 echo "<input type=submit value=" . $langvars['l_submit'] . "><br><br>";
                 echo "<input type=hidden name=response value=change>";
-                echo "<input type=hidden name=defence_id value=$defence_id>";
+                echo "<input type=hidden name=defense_id value=$defense_id>";
                 echo "</form>";
             }
         }
         else
         {
-            $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($defenceinfo['ship_id']));
+            $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($defenseinfo['ship_id']));
             $fighters_owner = $result2->fields;
 
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
                 echo $langvars['l_md_youcan'] . ":<br>";
-                echo "<form accept-charset='utf-8' action=modify_defences.php method=post>";
+                echo "<form accept-charset='utf-8' action=modify_defenses.php method=post>";
                 echo $langvars['l_md_attdef'] . "<br><input type=submit value=" . $langvars['l_md_attack'] . "></input><br>";
                 echo "<input type=hidden name=response value=fight>";
-                echo "<input type=hidden name=defence_id value=$defence_id>";
+                echo "<input type=hidden name=defense_id value=$defense_id>";
                 echo "</form>";
             }
         }

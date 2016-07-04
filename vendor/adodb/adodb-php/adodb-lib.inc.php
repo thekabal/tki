@@ -1073,7 +1073,7 @@ function _adodb_column_sql(&$zthis, $action, $type, $fname, $fnameq, $arrFields,
 		    break;
 
 		default:
-			$val = str_replace(array("'"," ","("),"",$arrFields[$fname]); // basic sql injection defence
+			$val = str_replace(array("'"," ","("),"",$arrFields[$fname]); // basic sql injection defense
 			if (empty($val)) $val = '0';
 			break;
 	}

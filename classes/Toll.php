@@ -23,22 +23,22 @@ class Toll
 {
     public static function distribute(\PDO $pdo_db, int $sector, $toll, $total_fighters)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id AND defence_type='F'";
+        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id AND defense_type='F'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();
-        $defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if ($defence_present !== null)
+        $defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($defense_present !== null)
         {
-            foreach ($defence_present as $tmp_defence)
+            foreach ($defense_present as $tmp_defense)
             {
-                $toll_amount = round(($tmp_defence['quantity'] / $total_fighters) * $toll);
+                $toll_amount = round(($tmp_defense['quantity'] / $total_fighters) * $toll);
                 $sql = "UPDATE {$pdo_db->prefix}ships SET credits=credits + :toll_amount WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':toll_amount', $toll_amount);
-                $stmt->bindParam(':ship_id', $tmp_defence['ship_id']);
+                $stmt->bindParam(':ship_id', $tmp_defense['ship_id']);
                 $stmt->execute();
-                PlayerLog::WriteLog($pdo_db, $tmp_defence['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
+                PlayerLog::WriteLog($pdo_db, $tmp_defense['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
             }
         }
     }

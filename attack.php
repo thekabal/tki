@@ -50,7 +50,7 @@ unset ($_SESSION['ship_selected']);
 // or it will fail to log the sql.
 $result = $db->Execute(
     "LOCK TABLES {$db->prefix}adodb_logsql WRITE, {$db->prefix}languages READ, " .
-    "{$db->prefix}ibank_accounts READ, {$db->prefix}sector_defence WRITE, " .
+    "{$db->prefix}ibank_accounts READ, {$db->prefix}sector_defense WRITE, " .
     "{$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}bounty WRITE, " .
     "{$db->prefix}zones READ, {$db->prefix}planets WRITE, " .
     "{$db->prefix}news WRITE, {$db->prefix}movement_log WRITE, {$db->prefix}logs WRITE;"
@@ -179,7 +179,7 @@ else
             Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "$playerinfo[character_name]");
             $result_warp = $db->Execute(
                 "UPDATE {$db->prefix}ships SET sector = $dest_sector, " .
-                "dev_emerwarp = dev_emerwarp - 1, cleared_defences = ' ' " .
+                "dev_emerwarp = dev_emerwarp - 1, cleared_defenses = ' ' " .
                 "WHERE ship_id = ?;",
                 array($targetinfo['ship_id'])
             );
@@ -617,7 +617,7 @@ else
                         "UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0, torp_launchers = 0, " .
                         "torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 0, ship_organics = 0, ship_ore = 0, ship_goods = 0, " .
                         "ship_energy = ?, ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, " .
-                        "dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', rating = ?, cleared_defences = ' ', " .
+                        "dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', rating = ?, cleared_defenses = ' ', " .
                         "dev_lssd = 'N' WHERE ship_id = ?;",
                         array($tkireg->start_energy, $rating, $targetinfo['ship_id'])
                     );

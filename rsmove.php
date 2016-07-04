@@ -52,7 +52,7 @@ if ($destination === false || $engage === false)
     // Invalid destination
 
     echo $langvars['l_rs_invalid'] . ".<br><br>";
-    $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defences=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+    $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
     Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 }
 else
@@ -165,7 +165,7 @@ else
                 $langvars['l_rs_movetime'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_movetime']);
                 echo $langvars['l_rs_movetime'] . "<br><br>";
                 echo $langvars['l_rs_noturns'] . "<br><br>";
-                $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defences=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+                $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
             }
             else

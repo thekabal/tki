@@ -325,7 +325,7 @@ This information will help us to help you much faster and will help improve our 
     </tr>
     <tr>
       <td width="25%" bgcolor="#ccccff" align="left" valign="top"><font color="#000">Scheduler Rate</font></td>
-      <td width="65%" bgcolor="#C0C0C0" align="left" valign="top"><font color="#000">Sector Defences will degrade every</font></td>
+      <td width="65%" bgcolor="#C0C0C0" align="left" valign="top"><font color="#000">Sector Defenses will degrade every</font></td>
       <td width="10%" bgcolor="#ccccff" align="center" valign="top"><font color="#000"><strong>{$variables['sched_degrade']} Minutes</strong></font></td>
     </tr>
     <tr>

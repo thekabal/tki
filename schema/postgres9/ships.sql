@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS tki_ships (
   trade_fighters character varying(1) NOT NULL DEFAULT 'N',
   trade_torps character varying(1) NOT NULL DEFAULT 'N',
   trade_energy character varying(1) NOT NULL DEFAULT 'Y',
-  cleared_defences character varying(99) DEFAULT NULL,
+  cleared_defenses character varying(99) DEFAULT NULL,
   lang character varying(30) NOT NULL DEFAULT 'english.inc',
   dev_lssd character varying(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (ship_id)

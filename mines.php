@@ -51,7 +51,7 @@ $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $i = 0;
-$sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id";
+$sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
@@ -66,7 +66,7 @@ if ($defense_present !== null)
 }
 $num_links = $i;
 
-// Put the defence information into the array "defenceinfo"
+// Put the defense information into the array "defenseinfo"
 $i = 0;
 $total_sector_fighters = 0;
 $total_sector_mines = 0;
@@ -77,30 +77,30 @@ $set_attack = 'CHECKED';
 $set_toll = null;
 
 // Do we have a valid recordset?
-if ($defence_present)
+if ($defense_present)
 {
-    foreach ($defence_present as $tmp_defence)
+    foreach ($defense_present as $tmp_defense)
     {
-        $defences[$i] = $tmp_defence;
-        if ($defences[$i]['defence_type'] == 'F')
+        $defenses[$i] = $tmp_defense;
+        if ($defenses[$i]['defense_type'] == 'F')
         {
-            $total_sector_fighters += $defences[$i]['quantity'];
+            $total_sector_fighters += $defenses[$i]['quantity'];
         }
         else
         {
-            $total_sector_mines += $defences[$i]['quantity'];
+            $total_sector_mines += $defenses[$i]['quantity'];
         }
 
-        if ($defences[$i]['ship_id'] != $playerinfo['ship_id'])
+        if ($defenses[$i]['ship_id'] != $playerinfo['ship_id'])
         {
             $owns_all = false;
         }
         else
         {
-            if ($defences[$i]['defence_type'] == 'F')
+            if ($defenses[$i]['defense_type'] == 'F')
             {
-                $fighter_id = $defences[$i]['defence_id'];
-                if ($defences[$i]['fm_setting'] == 'attack')
+                $fighter_id = $defenses[$i]['defense_id'];
+                if ($defenses[$i]['fm_setting'] == 'attack')
                 {
                     $set_attack = 'CHECKED';
                     $set_toll = null;
@@ -113,14 +113,14 @@ if ($defence_present)
             }
             else
             {
-                $mine_id = $defences[$i]['defence_id'];
+                $mine_id = $defenses[$i]['defense_id'];
             }
         }
         $i++;
     }
 }
 
-$num_defences = $i;
+$num_defenses = $i;
 echo "<h1>" . $title . "</h1>\n";
 if ($playerinfo['turns'] < 1)
 {
@@ -140,15 +140,15 @@ if ($zoneinfo['allow_defenses'] == 'N')
 }
 else
 {
-    if ($num_defences > 0)
+    if ($num_defenses > 0)
     {
         if (!$owns_all)
         {
-            $defence_owner = $defences[0]['ship_id'];
+            $defense_owner = $defenses[0]['ship_id'];
 
             $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $defence_owner);
+            $stmt->bindParam(':ship_id', $defense_owner);
             $stmt->execute();
             $fighters_owner = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -252,12 +252,12 @@ else
         {
             if ($fighter_id != 0)
             {
-                $update = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity = quantity + ? ,fm_setting = ? WHERE defence_id = ?;", array($numfighters, $mode, $fighter_id));
+                $update = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity + ? ,fm_setting = ? WHERE defense_id = ?;", array($numfighters, $mode, $fighter_id));
                 Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
             }
             else
             {
-                $update = $db->Execute("INSERT INTO {$db->prefix}sector_defence (ship_id, sector_id, defence_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'F', $numfighters, $mode));
+                $update = $db->Execute("INSERT INTO {$db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'F', $numfighters, $mode));
                 Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
                 echo $db->ErrorMsg();
             }
@@ -267,12 +267,12 @@ else
         {
             if ($mine_id != 0)
             {
-                $update = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity = quantity + ?, fm_setting = ? WHERE defence_id = ?;", array($nummines, $mode, $mine_id));
+                $update = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity + ?, fm_setting = ? WHERE defense_id = ?;", array($nummines, $mode, $mine_id));
                 Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
             }
             else
             {
-                $update = $db->Execute("INSERT INTO {$db->prefix}sector_defence (ship_id, sector_id, defence_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'M', $nummines, $mode));
+                $update = $db->Execute("INSERT INTO {$db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'M', $nummines, $mode));
                 Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
             }
         }

@@ -23,7 +23,7 @@ if (strpos($_SERVER['PHP_SELF'], 'sched_degrade.php')) // Prevent direct access 
 }
 
 echo "<strong>Degrading Sector Fighters with no friendly base</strong><br><br>";
-$res = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE defence_type = 'F'");
+$res = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE defense_type = 'F'");
 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
 while (!$res->EOF)
@@ -36,10 +36,10 @@ while (!$res->EOF)
     Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
     if ($res2->EOF)
     {
-        $resa = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defence_id = ? AND quantity > 0;", array($defence_degrade_rate, $row['defence_id']));
+        $resa = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defense_id = ? AND quantity > 0;", array($defense_degrade_rate, $row['defense_id']));
         Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
-        $degrade_rate = $defence_degrade_rate * 100;
-        Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFENCE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
+        $degrade_rate = $defense_degrade_rate * 100;
+        Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFENSE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
     }
     else
     {
@@ -61,13 +61,13 @@ while (!$res->EOF)
         }
         else
         {
-            $resc = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defence_id = ?;", array($defence_degrade_rate, $row['defence_id']));
+            $resc = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defense_id = ?;", array($defense_degrade_rate, $row['defense_id']));
             Tki\Db::LogDbErrors($pdo_db, $resc, __LINE__, __FILE__);
-            $degrade_rate = $defence_degrade_rate * 100;
-            Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFENCE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
+            $degrade_rate = $defense_degrade_rate * 100;
+            Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFENSE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
         }
     }
     $res->MoveNext();
 }
-$resx = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE quantity <= 0");
+$resx = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0");
 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);

@@ -54,7 +54,7 @@
     <tr><td>{$langvars['l_set_max_traderoutes']}</td><td style="text-align:right;">{$variables['max_traderoutes_player']}</td></tr>
     <tr><td>{$langvars['l_set_colonist_prod']}</td><td style="text-align:right;">{$variables['colonist_production_rate']}</td></tr>
     <tr><td>{$langvars['l_set_energy_fits']}</td><td style="text-align:right;">{$variables['energy_per_fighter']}</td></tr>
-    <tr><td>{$langvars['l_set_fit_degrade']}</td><td style="text-align:right;">{$variables['defence_degrade_rate']}</td></tr>
+    <tr><td>{$langvars['l_set_fit_degrade']}</td><td style="text-align:right;">{$variables['defense_degrade_rate']}</td></tr>
     <tr><td>{$langvars['l_set_sector_own']}</td><td style="text-align:right;">{$variables['min_bases_to_own']}</td></tr>
     <tr><td>{$langvars['l_set_planet_interest']}</td><td style="text-align:right;">{$variables['interest_rate']}</td></tr>
     <tr><td>{$langvars['l_set_prod_fit']}</td><td style="text-align:right;">{$variables['cols_needed_fit']}</td></tr>

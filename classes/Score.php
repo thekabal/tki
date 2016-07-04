@@ -64,10 +64,10 @@ class Score
 
         $calc_planet_goods      = "SUM({$pdo_db->prefix}planets.organics) * $tkireg->organics_price + SUM({$pdo_db->prefix}planets.ore) * $tkireg->ore_price + SUM({$pdo_db->prefix}planets.goods) * $tkireg->goods_price + SUM({$pdo_db->prefix}planets.energy) * $tkireg->energy_price";
         $calc_planet_colonists  = "SUM({$pdo_db->prefix}planets.colonists) * $tkireg->colonist_price";
-        $calc_planet_defence    = "SUM({$pdo_db->prefix}planets.fighters) * $tkireg->fighter_price + IF({$pdo_db->prefix}planets.base='Y', $tkireg->base_credits + SUM({$pdo_db->prefix}planets.torps) * $tkireg->torpedo_price, 0)";
+        $calc_planet_defense    = "SUM({$pdo_db->prefix}planets.fighters) * $tkireg->fighter_price + IF({$pdo_db->prefix}planets.base='Y', $tkireg->base_credits + SUM({$pdo_db->prefix}planets.torps) * $tkireg->torpedo_price, 0)";
         $calc_planet_credits    = "SUM({$pdo_db->prefix}planets.credits)";
 
-        $sql = "SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_colonists + $calc_planet_defence + $calc_planet_credits, 0) AS planet_score " .
+        $sql = "SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_colonists + $calc_planet_defense + $calc_planet_credits, 0) AS planet_score " .
                                      "FROM {$pdo_db->prefix}planets WHERE owner=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
