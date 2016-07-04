@@ -143,7 +143,7 @@ if ($targetfighters > 0)
 }
 
 $fighterslost = $total_sector_fighters - $targetfighters;
-Tki\Fighters::destroy($pdo_db, $db, $sector, $fighterslost);
+Tki\Fighters::destroy($pdo_db, $sector, $fighterslost);
 
 $langvars['l_sf_sendlog'] = str_replace("[player]", $playerinfo['character_name'], $langvars['l_sf_sendlog']);
 $langvars['l_sf_sendlog'] = str_replace("[lost]", $fighterslost, $langvars['l_sf_sendlog']);
