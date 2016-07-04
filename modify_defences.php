@@ -148,7 +148,7 @@ switch ($response)
             }
             echo $langvars['l_md_bmines'] . " " . $playerbeams . " " . $langvars['l_mines'] . "<br>";
             $update4b = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ship_energy - ? WHERE ship_id = ?;", array($playerbeams, $playerinfo['ship_id']));
-            Tki\Mines::explode($pdo_db, $db, $sector, $playerbeams);
+            Tki\Mines::explode($pdo_db, $sector, $playerbeams);
             $char_name = $playerinfo['character_name'];
             $langvars['l_md_msgdownerb'] = str_replace("[sector]", $sector, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[mines]", $playerbeams, $langvars['l_md_msgdownerb']);

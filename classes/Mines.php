@@ -21,30 +21,39 @@ namespace Tki;
 
 class Mines
 {
-    public static function explode(\PDO $pdo_db, $db, $sector, $num_mines)
+    public static function explode(\PDO $pdo_db, $sector, $num_mines)
     {
-        $secdef_result = $db->Execute("SELECT * FROM {$db->prefix}sector_defence WHERE sector_id = ? AND defence_type ='M' ORDER BY QUANTITY ASC", array($sector));
-        Db::LogDbErrors($pdo_db, $secdef_result, __LINE__, __FILE__);
-
-        // Put the defence information into the array "defenceinfo"
-        if ($secdef_result instanceof \adodb\ADORecordSet)
+        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defence WHERE sector_id=:sector_id AND defence_type ='M' ORDER BY QUANTITY ASC";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $sector);
+        $stmt->execute();
+        $defence_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($defence_present !== null)
         {
-            while (!$secdef_result->EOF && $num_mines > 0)
+            foreach ($defence_present as $tmp_defence)
             {
-                $row = $secdef_result->fields;
-                if ($row['quantity'] > $num_mines)
+                if ($num_mines > 0)
                 {
-                    $update_res = $db->Execute("UPDATE {$db->prefix}sector_defence SET quantity = quantity - ? WHERE defence_id = ?", array($num_mines, $row['defence_id']));
-                    Db::LogDbErrors($pdo_db, $update_res, __LINE__, __FILE__);
-                    $num_mines = 0;
+                    // Put the defence information into the array "defenceinfo"
+                    if ($row['quantity'] > $num_mines)
+                    {
+                        $sql = "UPDATE {$pdo_db->prefix}sector_defence SET quantity = quantity - :num_mines WHERE defence_id=:defence_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':num_mines', $num_mines);
+                        $stmt->bindParam(':defence_id', $tmp_defence['defence_id']);
+                        $stmt->execute();
+                        $num_mines = 0;
+                    }
+                    else
+                    {
+                        $sql = "DELETE FROM {$pdo_db->prefix}sector_defence WHERE defence_id=:defence_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':defence_id', $tmp_defence['defence_id']);
+                        $stmt->execute();
+                        $num_mines -= $tmp_defence['quantity'];
+                    }
+                    $secdef_result->MoveNext();
                 }
-                else
-                {
-                    $update_res = $db->Execute("DELETE FROM {$db->prefix}sector_defence WHERE defence_id = ?", array($row['defence_id']));
-                    Db::LogDbErrors($pdo_db, $update_res, __LINE__, __FILE__);
-                    $num_mines -= $row['quantity'];
-                }
-                $secdef_result->MoveNext();
             }
         }
     }
