@@ -66,30 +66,37 @@ class Ship
         }
     }
 
-    public static function leavePlanet(\PDO $pdo_db, $db, $ship_id)
+    // FUTURE: Reduce the number of SQL calls needed to accomplish this. Maybe do the update without two selects?
+    public static function leavePlanet(\PDO $pdo_db, $ship_id)
     {
-        $own_pl_result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ?", array($ship_id));
-        Db::LogDbErrors($pdo_db, $own_pl_result, __LINE__, __FILE__);
+        $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE owner=:owner";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $ship_id);
+        $stmt->execute();
+        $planets_owned = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($own_pl_result instanceof \adodb\ADORecordSet)
+        if ($planets_owned !== null)
         {
-            while (!$own_pl_result->EOF)
+            foreach ($planets_owned as $tmp_planet)
             {
-                $row = $own_pl_result->fields;
-                $on_pl_result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE on_planet = 'Y' AND planet_id = ? AND ship_id <> ?", array($row['planet_id'], $ship_id));
-                Db::LogDbErrors($pdo_db, $on_pl_result, __LINE__, __FILE__);
-                if ($on_pl_result instanceof \adodb\ADORecordSet)
+                $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':planet_id', $planet_id);
+                $stmt->bindParam(':ship_id', $ship_id);
+                $stmt->execute();
+                $ships_on_planet = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if ($ships_on_planet !== null)
                 {
-                    while (!$on_pl_result->EOF)
+                    foreach ($ships_on_planet as $tmp_ship)
                     {
-                        $cur = $on_pl_result->fields;
-                        $uppl_res = $db->Execute("UPDATE {$db->prefix}ships SET on_planet = 'N',planet_id = '0' WHERE ship_id = ?", array($cur['ship_id']));
-                        Db::LogDbErrors($pdo_db, $uppl_res, __LINE__, __FILE__);
+                        $sql = "UPDATE {$pdo_db->prefix}ships SET on_planet='N', planet_id = '0' WHERE ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':ship_id', $tmp_ship['ship_id']);
+                        $stmt->execute();
                         PlayerLog::WriteLog($pdo_db, $cur['ship_id'], LOG_PLANET_EJECT, $cur['sector'] .'|'. $row['character_name']);
-                        $on_pl_result->MoveNext();
                     }
                 }
-                $own_pl_result->MoveNext();
             }
         }
     }
