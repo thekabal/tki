@@ -179,6 +179,6 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                 }
             }
         }
-        Tki\Mines::explode($pdo_db, $db, $sector, $roll);
+        Tki\Mines::explode($pdo_db, $sector, $roll);
     }
 }
