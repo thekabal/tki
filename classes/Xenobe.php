@@ -1037,21 +1037,24 @@ class Xenobe
         // Check for sector defenses
         if ($targetlink > 0)
         {
-            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F' ORDER BY quantity DESC", array($targetlink));
-            \Tki\Db::LogDbErrors($pdo_db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
             $defenses = array();
-            if ($resultf instanceof \adodb\ADORecordSet)
+
+            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                while (!$resultf->EOF)
+                foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $resultf->fields;
+                    $links[$i] = $tmp_defense['link_dest'];
+
+                    $defenses[$i] = $tmp_defense;
                     $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
-                    $resultf->MoveNext();
-                }
-            }
 
             $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M'", array($targetlink));
             \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
