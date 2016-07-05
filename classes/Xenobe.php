@@ -1051,10 +1051,11 @@ class Xenobe
                 foreach ($defenses_present as $tmp_defense)
                 {
                     $links[$i] = $tmp_defense['link_dest'];
-
                     $defenses[$i] = $tmp_defense;
                     $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
+                }
+            }
 
             $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M'", array($targetlink));
             \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
