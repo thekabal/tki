@@ -18,7 +18,7 @@
 // File: setup_info.php
 
 require_once './common.php';
-require_once './config/db_config.php';
+require_once './config/SecureConfig.php';
 
 // Set headers
 header('Content-type: text/html; charset=utf-8');  // Set character set to utf-8, and using HTML as our content type
