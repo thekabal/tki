@@ -1,4 +1,5 @@
 templates/_compile
+release.zip
 
 ### Composer ###
 composer.phar
