@@ -1,7 +1,7 @@
 We have committed a number of additional tools that are useful to development in the /vendor/bin directory.
 
-phpcpd (https://github.com/sebastianbergmann/phpcpd) is a Copy/Paste Detector (CPD) for PHP code. We use it like this:
-We have not resolved all errors it identifies yet, but are making progress towards doing so. We use it like this:
+phpcpd (https://github.com/sebastianbergmann/phpcpd) is a Copy/Paste Detector (CPD) for PHP code. We have not resolved
+all errors it identifies yet, but are making progress towards doing so. We use it like this:
 php vendor/bin/phpcpd . --exclude=templates --exclude=vendor
 
 phpdcd (https://github.com/sebastianbergmann/phpdcd) is a Dead Code Detector (DCD) for PHP code. It scans a PHP project
