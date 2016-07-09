@@ -12,7 +12,7 @@
     "require": {
         "smarty/smarty": "v3.1.29",
         "ezyang/htmlpurifier": "v4.7.0",
-        "swiftmailer/swiftmailer": "v5.4.2",
+        "swiftmailer/swiftmailer": "v5.4.3",
         "adodb/adodb-php": "v5.20.4"
     },
     "autoload": {
