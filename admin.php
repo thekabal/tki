@@ -40,7 +40,7 @@ $variables['is_admin'] = false;
 $variables['module'] = null;
 $variables['title'] = $langvars['l_admin_title'];
 
-if ($swordfish == \Tki\SecureConfig::ADMINPW)
+if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
 {
     $i = 0;
     $variables['is_admin'] = true;

@@ -32,6 +32,18 @@ header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP co
 SetCookie('TestCookie', '', 0);
 SetCookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
 
+/*
+ * Database configuration.
+ * TODO: Move config to .env/array storage.
+ */
+$db_host = \Tki\SecureConfig::DB_HOST;
+$db_port = \Tki\SecureConfig::DB_PORT;
+$db_user = \Tki\SecureConfig::DB_USER;
+$db_pwd = \Tki\SecureConfig::DB_PASS;
+$db_type = \Tki\SecureConfig::DB_TYPE;
+$db_name = \Tki\SecureConfig::DB_NAME;
+$db_prefix = \Tki\SecureConfig::DB_TABLE_PREFIX;
+
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'index', 'options', 'setup_info'));
 
