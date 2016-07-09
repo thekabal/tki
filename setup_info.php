@@ -69,6 +69,7 @@ if($sapi === 'apache')
 }
 else
 {
+    // This logic presumes nginx is being used.
     $nameVersionPair = explode('/', $_SERVER['SERVER_SOFTWARE']);
     $serverType = $nameVersionPair[0];
     $serverVersion = array_pop($nameVersionPair);
