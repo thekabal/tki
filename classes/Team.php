@@ -33,7 +33,7 @@ class Team
         }
     }
 
-    public static function isTeamMember($team, $playerinfo) : bool
+    public static function isTeamMember($team, Array $playerinfo) : bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
@@ -46,7 +46,7 @@ class Team
         return (bool) $returnvalue;
     }
 
-    public static function isTeamOwner($team, $playerinfo) : bool
+    public static function isTeamOwner($team, Array $playerinfo) : bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
@@ -170,7 +170,7 @@ class Team
         echo "</table><br>";
     }
 
-    public static function displayInviteInfo($langvars, $playerinfo, $invite_info)
+    public static function displayInviteInfo($langvars, Array $playerinfo, $invite_info)
     {
         if (!$playerinfo['team_invite'])
         {
@@ -186,7 +186,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, $db, $langvars, $whichteam, $isowner, $playerinfo, $invite_info, $team, Reg $tkireg)
+    public static function showInfo(\PDO $pdo_db, $db, $langvars, $whichteam, $isowner, Array $playerinfo, $invite_info, $team, Reg $tkireg)
     {
         // Heading
         echo "<div align=center>";

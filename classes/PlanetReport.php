@@ -25,7 +25,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function planetReportMenu($playerinfo, $langvars)
+    public static function planetReportMenu(Array $playerinfo, $langvars)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -43,7 +43,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport(\PDO $pdo_db, $db, $langvars, $playerinfo, $sort, Reg $tkireg)
+    public static function standardReport(\PDO $pdo_db, $db, $langvars, Array $playerinfo, $sort, Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -231,7 +231,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function planetProductionChange(\PDO $pdo_db, $db, $langvars, $playerinfo, $sort, Reg $tkireg)
+    public static function planetProductionChange(\PDO $pdo_db, $db, $langvars, Array $playerinfo, $sort, Reg $tkireg)
     {
         $query = "SELECT * FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y'";
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
