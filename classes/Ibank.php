@@ -427,7 +427,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankTransfer2($db, \PDO $pdo_db, $lang, $langvars, Reg $tkireg, Array $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $template)
+    public static function ibankTransfer2($db, \PDO $pdo_db, $lang, $langvars, Reg $tkireg, Array $playerinfo, $account, int $ship_id, $splanet_id, $dplanet_id, $template)
     {
         if ($ship_id !== null) // Ship transfer
         {
@@ -579,7 +579,7 @@ class Ibank
         }
     }
 
-    public static function ibankTransfer3($db, \PDO $pdo_db, $lang, $langvars, Array $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, Reg $tkireg, $template)
+    public static function ibankTransfer3($db, \PDO $pdo_db, $lang, $langvars, Array $playerinfo, $account, int $ship_id, $splanet_id, $dplanet_id, $amount, Reg $tkireg, $template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 
@@ -913,7 +913,7 @@ class Ibank
         die();
     }
 
-    public static function isLoanPending(\PDO $pdo_db, $ship_id, Reg $tkireg)
+    public static function isLoanPending(\PDO $pdo_db, int $ship_id, Reg $tkireg)
     {
         $stmt = $pdo_db->prepare("SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id");
         $stmt->bindParam(':ship_id', $ship_id);

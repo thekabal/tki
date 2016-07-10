@@ -21,7 +21,7 @@ namespace Tki;
 
 class Defense
 {
-    public static function defenseVsDefense(\PDO $pdo_db, $ship_id, $langvars)
+    public static function defenseVsDefense(\PDO $pdo_db, int $ship_id, $langvars)
     {
         $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE ship_id=:ship_d";
         $stmt = $pdo_db->prepare($sql);

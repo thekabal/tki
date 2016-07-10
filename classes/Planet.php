@@ -615,7 +615,7 @@ class Planet
         \Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
     }
 
-    public static function shipToShip(\PDO $pdo_db, $db, $langvars, $ship_id, Reg $tkireg, Array $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
+    public static function shipToShip(\PDO $pdo_db, $db, $langvars, int $ship_id, Reg $tkireg, Array $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
     {
         $resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}sector_defense WRITE, {$db->prefix}universe WRITE, {$db->prefix}adodb_logsql WRITE, {$db->prefix}logs WRITE, {$db->prefix}bounty WRITE, {$db->prefix}news WRITE, {$db->prefix}zones READ");
         \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
