@@ -120,7 +120,7 @@ CKEDITOR.scriptLoader = ( function() {
 
 					if ( callback ) {
 						if ( CKEDITOR.env.ie && CKEDITOR.env.version < 11 ) {
-							// FIXME: For IE, we are not able to return false on error (like 404).
+							// FUTURE: For IE, we are not able to return false on error (like 404).
 							script.$.onreadystatechange = function() {
 								if ( script.$.readyState == 'loaded' || script.$.readyState == 'complete' ) {
 									script.$.onreadystatechange = null;
@@ -136,7 +136,7 @@ CKEDITOR.scriptLoader = ( function() {
 								}, 0 );
 							};
 
-							// FIXME: Opera and Safari will not fire onerror.
+							// FUTURE: Opera and Safari will not fire onerror.
 							script.$.onerror = function() {
 								onLoad( url, false );
 							};

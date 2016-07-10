@@ -1652,7 +1652,7 @@
       var old = sel.rangeCount && sel.getRangeAt(0);
       if (!start) {
         start = {node: view[0].measure.map[2], offset: 0};
-      } else if (!end) { // FIXME dangerously hacky
+      } else if (!end) { // FUTURE dangerously hacky
         var measure = view[view.length - 1].measure;
         var map = measure.maps ? measure.maps[measure.maps.length - 1] : measure.map;
         end = {node: map[map.length - 1], offset: map[map.length - 2] - map[map.length - 3]};
@@ -1900,7 +1900,7 @@
     var found = find(textNode, topNode, offset);
     if (found) return badPos(found, bad);
 
-    // FIXME this is all really shaky. might handle the few cases it needs to handle, but likely to cause problems
+    // FUTURE this is all really shaky. might handle the few cases it needs to handle, but likely to cause problems
     for (var after = topNode.nextSibling, dist = textNode ? textNode.nodeValue.length - offset : 0; after; after = after.nextSibling) {
       found = find(after, after.firstChild, 0);
       if (found)
@@ -5273,7 +5273,7 @@
   option("specialCharPlaceholder", defaultSpecialCharPlaceholder, function(cm) {cm.refresh();}, true);
   option("electricChars", true);
   option("inputStyle", mobile ? "contenteditable" : "textarea", function() {
-    throw new Error("inputStyle can not (yet) be changed in a running editor"); // FIXME
+    throw new Error("inputStyle can not (yet) be changed in a running editor"); // FUTURE
   }, true);
   option("rtlMoveVisually", !windows);
   option("wholeLineUpdateBefore", true);
