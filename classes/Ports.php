@@ -48,7 +48,7 @@ class Ports
         return (string) $ret;
     }
 
-    public static function dropdown($element_name, $current_value, $onchange, $temp_devices)
+    public static function dropdown($element_name, $current_value, $onchange, $temp_devices) : string
     {
         $i = $current_value;
         $dropdownvar = "<select size='1' name='$element_name'";
@@ -68,7 +68,7 @@ class Ports
 
         $dropdownvar = "$dropdownvar       </select>\n";
 
-        return $dropdownvar;
+        return (string) $dropdownvar;
     }
 
     public static function build_one_col($text = "&nbsp;", $align = "left")
@@ -127,8 +127,7 @@ class Ports
         }
 
         // Debug info
-        // echo "$origin * $price_array[$port_type]=";
-        // echo $origin * $price_array[$port_type] . "<br>";
+        // echo "$origin * $price_array[$port_type]=" . $origin * $price_array[$port_type] . "<br>";
         return $origin;
     }
 }
