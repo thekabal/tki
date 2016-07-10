@@ -1591,7 +1591,6 @@ class Xenobe
         $stmt->bindParam(':credits', $playerinfo['credits']);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $stmt->execute();
-        $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$gene === null || !$gena === null || !$genf === null || !$gent === null)
         {
