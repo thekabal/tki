@@ -1267,14 +1267,15 @@ class Xenobe
             $targetlink = 0;
         }
 
-        $linkres = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
-        \Tki\Db::LogDbErrors($pdo_db, $linkres, __LINE__, __FILE__);
-        if ($linkres instanceof \adodb\ADORecordSet)
+        $sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start = :link_start";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':link_start', $playerinfo['sector']);
+        $stmt->execute();
+        $links_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($links_present !== null)
         {
-            while (!$linkres->EOF)
+            foreach ($links_present as $row)
             {
-                $row = $linkres->fields;
-
                 // Obtain sector information
                 $sectres = $db->Execute("SELECT sector_id,zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($row['link_dest']));
                 \Tki\Db::LogDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
@@ -1291,7 +1292,6 @@ class Xenobe
                         $targetlink = $row['link_dest'];
                     }
                 }
-                $linkres->MoveNext();
             }
         }
 
