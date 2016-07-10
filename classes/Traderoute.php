@@ -1796,8 +1796,6 @@ class Traderoute
 
     public static function traderouteDie(\PDO $pdo_db, $lang, Reg $tkireg, $error_msg, $template)
     {
-        \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
-
         echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
         \Tki\Text::gotomain($pdo_db, $lang);
