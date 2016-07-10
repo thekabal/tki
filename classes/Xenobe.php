@@ -1322,34 +1322,40 @@ class Xenobe
 
         if ($targetlink > 0) // Check for sector defenses
         {
-            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F' ORDER BY quantity DESC", array($targetlink));
-            \Tki\Db::LogDbErrors($pdo_db, $resultf, __LINE__, __FILE__);
+            // Check for sector defenses
             $i = 0;
             $total_sector_fighters = 0;
+            $total_sector_mines = 0;
             $defenses = array();
-            if ($resultf instanceof \adodb\ADORecordSet)
+
+            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                while (!$resultf->EOF)
+                foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $resultf->fields;
+                    $defenses[$i] = $tmp_defense;
                     $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
-                    $resultf->MoveNext();
                 }
             }
 
-            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M'", array($targetlink));
-            \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
             $i = 0;
-            $total_sector_mines = 0;
-            if ($resultm instanceof \adodb\ADORecordSet)
+            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                while (!$resultm->EOF)
+                foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $resultm->fields;
+                    $defenses[$i] = $tmp_defense;
                     $total_sector_mines += $defenses[$i]['quantity'];
                     $i++;
-                    $resultm->MoveNext();
                 }
             }
 
@@ -1373,6 +1379,7 @@ class Xenobe
         if ($targetlink > 0) // Move to target link
         {
             $stamp = date("Y-m-d H:i:s");
+
             $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?", array($stamp, $targetlink, $playerinfo['ship_id']));
             \Tki\Db::LogDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
             if (!$move_result)
