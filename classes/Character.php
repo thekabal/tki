@@ -78,10 +78,8 @@ class Character
 
     // Choosing to use a method instead of a property.
     // If we went with a method, and it needed to be changed, we would have to change lots of property->method calls.
-    public static function getInsignia(\PDO $pdo_db, $a_username, $langvars)
+    public static function getInsignia(\PDO $pdo_db, $a_username, $langvars) : string
     {
-        unset($player_insignia);
-
         // Lookup players score.
         $sql = "SELECT score FROM {$pdo_db->prefix}ships WHERE email =:email";
         $stmt = $pdo_db->prepare($sql);
@@ -118,6 +116,6 @@ class Character
             $player_insignia = $langvars['l_insignia_19'];
         }
 
-        return $player_insignia;
+        return (string) $player_insignia;
     }
 }
