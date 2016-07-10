@@ -31,10 +31,10 @@ class Compress
 
     public static function compress($output)
     {
-        // Check to see if we have data, if not, then return null
+        // Check to see if we have data, if not, then return empty string
         if ($output === null)
         {
-            return null;
+            return (string) '';
         }
 
         // Handle the supported compressions.
@@ -49,18 +49,18 @@ class Compress
             header('Vary: Accept-Encoding');
             header('Content-Encoding: gzip');
             $encoded_output = gzencode($output, 9);
-            return $encoded_output;
+            return (string) $encoded_output;
         }
         elseif (in_array('deflate', $supported_enc) === true)
         {
             header('Vary: Accept-Encoding');
             header('Content-Encoding: deflate');
             $deflated_output = gzdeflate($output, 9);
-            return $deflated_output;
+            return (string) $deflated_output;
         }
         else
         {
-            return $output;
+            return (string) $output;
         }
     }
 }
