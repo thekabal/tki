@@ -157,7 +157,7 @@ class Db
 
         if ($error === 'null' || $error == '')
         {
-            return true;
+            return (bool) true;
         }
         else
         {
@@ -179,7 +179,7 @@ class Db
                 }
             }
 
-            return $db_error;
+            return (string) $db_error;
         }
     }
 }
