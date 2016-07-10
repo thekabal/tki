@@ -18,6 +18,10 @@ declare(strict_types=1);
 //
 // File: tests/Test.php
 
+namespace Tki\tests;
+
+use PHPUnit_Framework_TestCase;
+
 class Test extends PHPUnit_Framework_TestCase
 {
     public function testOnePlusOne()
