@@ -49,7 +49,7 @@ class Translate
                 }
             }
 
-            return self::$langvars;
+            return (Array) self::$langvars;
         }
         else
         {
@@ -72,7 +72,7 @@ class Translate
                     self::$langvars[$row['name']] = $row['value'];
                 }
             }
-            return self::$langvars;
+            return (Array) self::$langvars;
         }
     }
 }
