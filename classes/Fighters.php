@@ -37,7 +37,7 @@ class Fighters
                 {
                     $sql = "UPDATE {$pdo_db->prefix}sector_defense SET quantity = :quantity - ? WHERE defense_id = :defense_id";
                     $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':quantity', $quantity);
+                    $stmt->bindParam(':quantity', $tmp_defense['quantity']);
                     $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
                     $stmt->execute();
                     $num_fighters = 0;
