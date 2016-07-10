@@ -21,9 +21,9 @@ namespace Tki;
 
 class Ports
 {
-    public static function getType($ptype, $langvars)
+    public static function getType($ptype, $langvars) : string
     {
-        $ret = null;
+        $ret = '';
         switch ($ptype)
         {
             case 'ore':
@@ -45,7 +45,7 @@ class Ports
                 $ret = $langvars['l_special'];
                 break;
         }
-        return $ret;
+        return (string) $ret;
     }
 
     public static function dropdown($element_name, $current_value, $onchange, $temp_devices)
