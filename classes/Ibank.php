@@ -431,20 +431,20 @@ class Ibank
     {
         if ($ship_id !== null) // Ship transfer
         {
-            $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ? AND ship_destroyed ='N' AND turns_used > ?;", array($ship_id, $tkireg->ibank_min_turns));
-            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
             if ($playerinfo['ship_id'] == $ship_id)
             {
                 self::ibankError($pdo_db, $langvars, $langvars['l_ibank_sendyourself'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
 
-            if (!$res instanceof \adodb\ADORecordSet || $res->EOF)
+            $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
+            $stmt->bindParam(':ship_id', $ship_id);
+            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
+            $target = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$target)
             {
                 self::ibankError($pdo_db, $langvars, $langvars['l_ibank_unknowntargetship'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
-
-            $target = $res->fields;
 
             if ($target['turns_used'] < $tkireg->ibank_min_turns)
             {
