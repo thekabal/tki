@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ownership
 {
-    public static function calc(\PDO $pdo_db, $db, $sector, Reg $tkireg, $langvars)
+    public static function calc(\PDO $pdo_db, $db, $sector, Reg $tkireg, $langvars) : string
     {
         $bases_res = $db->Execute("SELECT owner, team FROM {$db->prefix}planets WHERE sector_id=? AND base='Y'", array($sector));
         Db::LogDbErrors($pdo_db, $bases_res, __LINE__, __FILE__);
@@ -41,7 +41,7 @@ class Ownership
         }
         else
         {
-            return "Sector ownership didn't change";
+            return (string) "Sector ownership didn't change";
         }
 
         $owner_num = 0;
@@ -136,7 +136,7 @@ class Ownership
             $setzone_res = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
             Db::LogDbErrors($pdo_db, $setzone_res, __LINE__, __FILE__);
 
-            return $langvars['l_global_warzone'];
+            return (string) $langvars['l_global_warzone'];
         }
 
         // More than one unallied ship, war
@@ -154,7 +154,7 @@ class Ownership
             $setzone_resb = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
             Db::LogDbErrors($pdo_db, $setzone_resb, __LINE__, __FILE__);
 
-            return $langvars['l_global_warzone'];
+            return (string) $langvars['l_global_warzone'];
         }
 
         // Unallied ship, another team present, war
@@ -163,7 +163,7 @@ class Ownership
             $setzone_resc = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
             Db::LogDbErrors($pdo_db, $setzone_resc, __LINE__, __FILE__);
 
-            return $langvars['l_global_warzone'];
+            return (string) $langvars['l_global_warzone'];
         }
 
         // Unallied ship, another ship in a team, war
@@ -194,7 +194,7 @@ class Ownership
                 $setzone_resd = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=4 WHERE sector_id=?", array($sector));
                 Db::LogDbErrors($pdo_db, $setzone_resd, __LINE__, __FILE__);
 
-                return $langvars['l_global_warzone'];
+                return (string) $langvars['l_global_warzone'];
             }
         }
 
@@ -222,7 +222,7 @@ class Ownership
             $setzone_rese = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=1 WHERE sector_id=?", array($sector));
             Db::LogDbErrors($pdo_db, $setzone_rese, __LINE__, __FILE__);
 
-            return $langvars['l_global_nzone'];
+            return (string) $langvars['l_global_nzone'];
         }
 
         if ($owners[$winner]['type'] == 'C')
@@ -238,7 +238,7 @@ class Ownership
             $update_res = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=? WHERE sector_id=?", array($zone['zone_id'], $sector));
             Db::LogDbErrors($pdo_db, $update_res, __LINE__, __FILE__);
 
-            return $langvars['l_global_team'] . ' ' . $team['team_name'] . '!';
+            return (string) $langvars['l_global_team'] . ' ' . $team['team_name'] . '!';
         }
         else
         {
@@ -258,7 +258,7 @@ class Ownership
                 $setzone_resh = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=1 WHERE sector_id=?", array($sector));
                 Db::LogDbErrors($pdo_db, $setzone_resh, __LINE__, __FILE__);
 
-                return $langvars['l_global_nzone'];
+                return (string) $langvars['l_global_nzone'];
             }
             else
             {
@@ -274,7 +274,7 @@ class Ownership
                 $update_res2 = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=? WHERE sector_id=?", array($zone['zone_id'], $sector));
                 Db::LogDbErrors($pdo_db, $update_res2, __LINE__, __FILE__);
 
-                return $langvars['l_global_player'] . ' ' . $ship['character_name'] . '!';
+                return (string) $langvars['l_global_player'] . ' ' . $ship['character_name'] . '!';
             }
         }
     }
