@@ -390,27 +390,27 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function teamPlanetCheckboxes($planet, $i)
+    public static function teamPlanetCheckboxes($planet, $i) : string
     {
         if ($planet[$i]['team'] <= 0)
         {
-            return ("<input type='checkbox' name='team[{$i}]' value='{$planet[$i]['planet_id']}' />");
+            return (string) "<input type='checkbox' name='team[" . $i . "]' value='" . $planet[$i]['planet_id'] ."' />";
         }
         elseif ($planet[$i]['team'] > 0)
         {
-            return ("<input type='checkbox' name='team[{$i}]' value='{$planet[$i]['planet_id']}' checked />");
+            return (string) "<input type='checkbox' name='team[" . $i . "]' value='{" . $planet[$i]['planet_id'] . "' checked />";
         }
     }
 
-    public static function sellingCheckboxes($planet, $i)
+    public static function sellingCheckboxes($planet, $i) : string
     {
         if ($planet[$i]['sells'] != 'Y')
         {
-            return ("<input type='checkbox' name='sells[{$i}]' value='{$planet[$i]['planet_id']}' />");
+            return (string) "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' />";
         }
         elseif ($planet[$i]['sells'] == 'Y')
         {
-            return ("<input type='checkbox' name='sells[{$i}]' value='{$planet[$i]['planet_id']}' checked />");
+            return (string) "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' checked />";
         }
     }
 }
