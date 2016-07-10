@@ -67,7 +67,7 @@ class Ship
     }
 
     // FUTURE: Reduce the number of SQL calls needed to accomplish this. Maybe do the update without two selects?
-    public static function leavePlanet(\PDO $pdo_db, $ship_id)
+    public static function leavePlanet(\PDO $pdo_db, int $ship_id)
     {
         $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE owner=:owner";
         $stmt = $pdo_db->prepare($sql);

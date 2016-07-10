@@ -21,7 +21,7 @@ namespace Tki;
 
 class PlayerLog
 {
-    public static function writeLog(\PDO $pdo_db, $ship_id, $log_type, $data = null)
+    public static function writeLog(\PDO $pdo_db, int $ship_id, $log_type, $data = null)
     {
         $data = addslashes($data);
         $stamp = date('Y-m-d H:i:s'); // Now (as seen by PHP)
