@@ -46,7 +46,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
     $xenobeisdead = 0;
     $playerinfo = $res->fields;
     // Regenerate / Buy stats
-    Tki\Xenobe::xenobeRegen($pdo_db, $db, $playerinfo, $xen_unemployment, $tkireg);
+    Tki\Xenobe::xenobeRegen($pdo_db, $playerinfo, $xen_unemployment, $tkireg);
 
     // Run through orders
     $furcount++;
