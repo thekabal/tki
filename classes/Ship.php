@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ship
 {
-    public static function isDestroyed(\PDO $pdo_db, $lang, Reg $tkireg, $langvars, $template, $playerinfo) : bool
+    public static function isDestroyed(\PDO $pdo_db, $lang, Reg $tkireg, $langvars, $template, Array $playerinfo) : bool
     {
         // Check for destroyed ship
         if ($playerinfo['ship_destroyed'] === 'Y')
@@ -81,7 +81,7 @@ class Ship
             {
                 $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':planet_id', $planet_id);
+                $stmt->bindParam(':planet_id', $tmp_planet['planet_id']);
                 $stmt->bindParam(':ship_id', $ship_id);
                 $stmt->execute();
                 $ships_on_planet = $stmt->fetchAll(PDO::FETCH_ASSOC);
