@@ -439,7 +439,7 @@ class Ibank
             $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
             $stmt->bindParam(':ship_id', $ship_id);
             $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
-            $target = $stmt->fetch(PDO::FETCH_ASSOC);
+            $target = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$target)
             {

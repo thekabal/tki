@@ -131,7 +131,7 @@ class Planet
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
             \Tki\Text::gotomain($pdo_db, $lang);
-            \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+            \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 

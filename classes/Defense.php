@@ -41,7 +41,7 @@ class Defense
                 $stmt->bindParam(':sector_id', $tmp_defense['sector_id']);
                 $stmt->bindParam(':ship_id', $ship_id);
                 $stmt->execute();
-                $other_secdef_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $other_secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
                 if ($other_secdef_present !== null && $qty > 0)
                 {

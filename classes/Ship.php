@@ -84,7 +84,7 @@ class Ship
                 $stmt->bindParam(':planet_id', $tmp_planet['planet_id']);
                 $stmt->bindParam(':ship_id', $ship_id);
                 $stmt->execute();
-                $ships_on_planet = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $ships_on_planet = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
                 if ($ships_on_planet !== null)
                 {

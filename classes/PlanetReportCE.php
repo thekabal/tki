@@ -84,7 +84,7 @@ class PlanetReportCE
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':planet_id', $planet_id);
             $stmt->execute();
-            $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             // Notify User Of Base Results
             echo $langvars['l_planet_bbuild'] . "<br><br>";

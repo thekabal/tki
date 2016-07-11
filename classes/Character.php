@@ -44,7 +44,7 @@ class Character
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $ship_id);
         $stmt->execute();
-        $sectors_owned = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sectors_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if ($sectors_owned !== null)
         {
