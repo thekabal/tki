@@ -28,90 +28,90 @@ echo "Adding ore to all commodities ports...";
 
 $resa = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore + ($tkireg->ore_rate * $multiplier * $tkireg->port_regenrate ) WHERE port_type='ore' AND port_ore < $tkireg->ore_limit");
 $debug = Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Adding ore to all ore ports...";
 $resb = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore + ($tkireg->ore_rate * $multiplier * $tkireg->port_regenrate) WHERE port_type!='special' AND port_type!='none' AND port_ore < $tkireg->ore_limit");
 $debug = Tki\Db::LogDbErrors($pdo_db, $resb, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Ensuring minimum ore levels are 0...";
 $resc = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = 0 WHERE port_ore < 0");
 $debug = Tki\Db::LogDbErrors($pdo_db, $resc, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 echo "<br>";
 
 // Update Organics in Ports
 echo "Adding organics to all commodities ports...";
 $resd = $db->Execute("UPDATE {$db->prefix}universe SET port_organics = port_organics + (? * ? * ?) WHERE port_type='organics' AND port_organics < ?", array($tkireg->organics_rate, $multiplier, $tkireg->port_regenrate, $tkireg->organics_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resd, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Adding organics to all organics ports...";
 $rese = $db->Execute("UPDATE {$db->prefix}universe SET port_organics = port_organics + (? * ? * ?) WHERE port_type!='special' AND port_type!='none' AND port_organics < ?", array($tkireg->organics_rate, $multiplier, $tkireg->port_regenrate, $tkireg->organics_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $rese, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Ensuring minimum organics levels are 0...";
 $resf = $db->Execute("UPDATE {$db->prefix}universe SET port_organics = 0 WHERE port_organics < 0");
 $debug = Tki\Db::LogDbErrors($pdo_db, $resf, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 echo "<br>";
 
 // Update Goods in Ports
 echo "Adding goods to all commodities ports...";
 $resg = $db->Execute("UPDATE {$db->prefix}universe SET port_goods = port_goods + (? * ? * ?) WHERE port_type='goods' AND port_goods < ?", array($tkireg->goods_rate, $multiplier, $tkireg->port_regenrate, $tkireg->goods_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resg, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Adding goods to all goods ports...";
 $resh = $db->Execute("UPDATE {$db->prefix}universe SET port_goods = port_goods + (? * ? * ?) WHERE port_type!='special' AND port_type!='none' AND port_goods < ?", array($tkireg->goods_rate, $multiplier, $tkireg->port_regenrate, $tkireg->goods_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Ensuring minimum goods levels are 0...";
 $resi = $db->Execute("UPDATE {$db->prefix}universe SET port_goods = 0 WHERE port_goods < 0");
 $debug = Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 echo "<br>";
 
 // Update Energy in Ports
 echo "Adding energy to all commodities ports...";
 $resj = $db->Execute("UPDATE {$db->prefix}universe SET port_energy = port_energy + (? * ? * ?) WHERE port_type='energy' AND port_energy < ?", array($tkireg->energy_rate, $multiplier, $tkireg->port_regenrate, $tkireg->energy_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Adding energy to all energy ports...";
 $resk = $db->Execute("UPDATE {$db->prefix}universe SET port_energy = port_energy + (? * ? * ?) WHERE port_type!='special' AND port_type!='none' AND port_energy < ?", array($tkireg->energy_rate, $multiplier, $tkireg->port_regenrate, $tkireg->energy_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resk, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Ensuring minimum energy levels are 0...";
 $resl = $db->Execute("UPDATE {$db->prefix}universe SET port_energy = 0 WHERE port_energy < 0");
 $debug = Tki\Db::LogDbErrors($pdo_db, $resl, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 echo "<br>";
 
 // Now check to see if any ports are over max, if so rectify.
 echo "Checking Energy Port Cap...";
 $resm = $db->Execute("UPDATE {$db->prefix}universe SET port_energy = ? WHERE port_energy > ?", array($tkireg->energy_limit, $tkireg->energy_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resm, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Checking Goods Port Cap...";
 $resn = $db->Execute("UPDATE {$db->prefix}universe SET port_goods = ? WHERE port_goods > ?", array($tkireg->goods_limit, $tkireg->goods_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resn, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Checking Organics Port Cap...";
 $reso = $db->Execute("UPDATE {$db->prefix}universe SET port_organics = ? WHERE port_organics > ?", array($tkireg->organics_limit, $tkireg->organics_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $reso, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 
 echo "Checking Ore Port Cap...";
 $resp = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = ? WHERE port_ore > ?", array($tkireg->ore_limit, $tkireg->ore_limit));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resp, __LINE__, __FILE__);
-Tki\Scheduler::is_query_ok($pdo_db, $debug);
+Tki\Scheduler::isQueryOk($pdo_db, $debug);
 $multiplier = 0;
 
 echo "<br>";
