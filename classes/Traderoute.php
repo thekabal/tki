@@ -336,7 +336,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':zone_id', $traderoute['dest_id']);
             $stmt->execute();
-            $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $zoneinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($zoneinfo['allow_trade'] == 'N')
             {
