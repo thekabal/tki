@@ -34,8 +34,7 @@ class PlanetReportCE
         // Get playerinfo from database
         $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $clean_email = filter_var($_SESSION['username'], FILTER_SANITIZE_EMAIL);
-        $stmt->bindParam(':email', $clean_email);
+        $stmt->bindParam(':email', $_SESSION['username']);
         $stmt->execute();
         $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
