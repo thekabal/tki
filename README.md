@@ -32,7 +32,7 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 
 ### Notes:
 - TKI will likely run on `lighttpd` and `nginix`, but has not been tested on either. 
-- **IIS is NOT supported, please do not ask!**
+- **IIS is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc).
 
 ## Credits:
