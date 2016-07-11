@@ -71,7 +71,7 @@ class Ports
         return (string) $dropdownvar;
     }
 
-    public static function build_one_col($text = "&nbsp;", $align = "left")
+    public static function buildOneCol($text = "&nbsp;", $align = "left")
     {
         echo "
         <tr>
@@ -80,7 +80,7 @@ class Ports
         ";
     }
 
-    public static function build_two_col($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left")
+    public static function buildTwoCol($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left")
     {
         echo "
         <tr>
@@ -89,7 +89,7 @@ class Ports
         </tr>";
     }
 
-    public static function php_true_delta($futurevalue, $shipvalue)
+    public static function phpTrueDelta($futurevalue, $shipvalue)
     {
         $tempval = $futurevalue - $shipvalue;
 
