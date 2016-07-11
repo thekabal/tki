@@ -38,14 +38,14 @@ class Xenobe
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $playerinfo['sector']);
         $stmt->execute();
-        $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sectorinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Obtain zone information
         $sql = "SELECT zone_id, allow_attack, allow_trade FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
         $stmt->execute();
-        $zonerow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $zonerow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Make sure we can trade here
         if ($zonerow['allow_trade'] == "N")
@@ -249,13 +249,13 @@ class Xenobe
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet_id);
         $stmt->execute();
-        $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $planetinfo['owner']);
         $stmt->execute();
-        $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
 
@@ -1046,7 +1046,7 @@ class Xenobe
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
-            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
             {
                 foreach ($defenses_present as $tmp_defense)
@@ -1064,7 +1064,7 @@ class Xenobe
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
-            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
             {
                 foreach ($defenses_present as $tmp_defenses)
@@ -1271,7 +1271,7 @@ class Xenobe
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $playerinfo['sector']);
         $stmt->execute();
-        $links_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $links_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($links_present !== null)
         {
             foreach ($links_present as $row)
@@ -1332,7 +1332,7 @@ class Xenobe
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
-            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
             {
                 foreach ($defenses_present as $tmp_defense)
