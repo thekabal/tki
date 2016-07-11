@@ -10,7 +10,7 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 [![GitHub issues](https://img.shields.io/github/issues/thekabal/tki.svg)](https://github.com/thekabal/tki/issues)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thekabal/tki/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/thekabal/tki/?branch=master)
 
-##What is it?
+## What is it?
     A web based space exploration (4x) game based on the old BBS door games that went
     by many names (Tradewars, Galactic Warzone, Ultimate Universe, and
     many other games like this) but shares no code with them.  It is
@@ -38,16 +38,16 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 ## Credits:
 The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/projects/blacknova/), please visit their sourceforge page for more information about their project.
 
-##Installation:
+## Installation:
 Please see the `/docs/install.md` file.
 
-##Upgrades:
+## Upgrades:
 As is typical with releases, we highly recommend a fresh install. Upgrades are not supported at this time.
 
-##Code quality:
+## Code quality:
 The project began in the early PHP4 era, and as a result, is less than ideal. Substantial progress has been made towards modernization, and we are continuing that process. **Feedback and PR's are welcome and appreciated**.
 
-##Contributing:
+## Contributing:
 Feel free to contribute to the project! We use GitHub for our issues tracking (provide feedback!), milestone planning, code storage, and releases.
 
 I hope you enjoy the game!,
