@@ -10,44 +10,25 @@
     "license": "AGPL-3.0",
     "minimum-stability": "alpha",
     "require": {
-        "smarty/smarty": "v3.1.29",
-        "ezyang/htmlpurifier": "v4.7.0",
-        "swiftmailer/swiftmailer": "v5.4.3",
-        "adodb/adodb-php": "v5.20.4"
+        "smarty/smarty": "~3.1.29",
+        "ezyang/htmlpurifier": "~4.7.0",
+        "swiftmailer/swiftmailer": "~5.4.3",
+        "adodb/adodb-php": "~5.20.4"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "^1.11",
+        "sebastian/phpdcd": "^1.0",
+        "phpunit/phpunit": "^5.4",
+        "sebastian/phpcpd": "^2.0",
+        "squizlabs/php_codesniffer": "^2.6",
+        "phpmd/phpmd": "^2.4"
     },
     "autoload": {
-        "psr-4": { "Tki\\": ["classes/", "config/"]}
-    },
-    "scripts": {
-        "post-update-cmd": [
-            "rm -rf vendor/ezyang/htmlpurifier/docs/",
-            "rm -rf vendor/ezyang/htmlpurifier/extras/",
-            "rm -rf vendor/ezyang/htmlpurifier/smoketests/",
-            "rm -rf vendor/ezyang/htmlpurifier/tests/",
-            "rm -rf vendor/ezyang/htmlpurifier/art/",
-            "rm -rf vendor/ezyang/htmlpurifier/benchmarks/",
-            "rm -rf vendor/ezyang/htmlpurifier/configdoc/",
-            "rm -rf vendor/ezyang/htmlpurifier/maintenance/",
-            "rm -rf vendor/ezyang/htmlpurifier/plugins/",
-            "rm -rf vendor/ezyang/htmlpurifier/.git/",
-            "rm -rf vendor/ezyang/htmlpurifier/INSTALL.fr.utf8",
-            "rm -rf vendor/ezyang/htmlpurifier/Doxyfile",
-            "rm -rf vendor/ezyang/htmlpurifier/*.php",
-            "rm -rf vendor/ezyang/htmlpurifier/phpdoc.ini",
-            "rm -rf vendor/adodb/adodb-php/contrib/",
-            "rm -rf vendor/adodb/adodb-php/cute_icons_for_site/",
-            "rm -rf vendor/adodb/adodb-php/lang/",
-            "rm -rf vendor/adodb/adodb-php/pear/",
-            "rm -rf vendor/adodb/adodb-php/replicate/",
-            "rm -rf vendor/adodb/adodb-php/scripts/",
-            "rm -rf vendor/adodb/adodb-php/tests/",
-            "rm -rf vendor/adodb/adodb-php/docs/",
-            "rm -rf vendor/adodb/adodb-php/.git/",
-            "rm -rf vendor/smarty/smarty/development",
-            "rm -rf vendor/smarty/smarty/documentation",
-            "rm -rf vendor/swiftmailer/swiftmailer/notes",
-            "rm -rf vendor/swiftmailer/swiftmailer/doc",
-            "rm -rf vendor/swiftmailer/swiftmailer/tests"
-        ]
+        "psr-4": {
+            "Tki\\": [
+                "classes/",
+                "config/"
+            ]
+        }
     }
 }
