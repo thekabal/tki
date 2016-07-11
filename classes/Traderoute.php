@@ -350,7 +350,7 @@ class Traderoute
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $zoneinfo['owner']);
                     $stmt->execute();
-                    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
