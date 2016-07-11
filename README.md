@@ -50,5 +50,5 @@ The project began in the early PHP4 era, and as a result, is less than ideal. Su
 ## Contributing:
 Feel free to contribute to the project! We use GitHub for our issues tracking (provide feedback!), milestone planning, code storage, and releases.
 
-I hope you enjoy the game!,
+I hope you enjoy the game!
 <br>The Kabal
