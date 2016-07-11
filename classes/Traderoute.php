@@ -2237,7 +2237,7 @@ class Traderoute
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteDelete(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, $template, Array $playerinfo, $confirm, $traderoute_id, $traderoutes)
+    public static function traderouteDelete(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, $template, Array $playerinfo, $confirm, $traderoute_id)
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
         \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
