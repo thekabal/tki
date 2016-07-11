@@ -388,7 +388,7 @@ class PlanetReportCE
         // Set the name for unamed planets to be "unnamed"
         if (empty ($planetinfo['name']))
         {
-            $planet['name'] = $langvars['l_unnamed'];
+            $planetinfo['name'] = $langvars['l_unnamed'];
         }
 
         // Verify player is still in same sector as the planet

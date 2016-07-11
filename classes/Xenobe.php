@@ -1051,7 +1051,6 @@ class Xenobe
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
-                    $links[$i] = $tmp_defense['link_dest'];
                     $defenses[$i] = $tmp_defense;
                     $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
