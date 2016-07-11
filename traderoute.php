@@ -132,7 +132,7 @@ elseif ($command == 'edit')
 elseif ($command == 'delete')
 {
     // Displays delete info
-    Tki\Traderoute::traderouteDelete($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id, $traderoutes);
+    Tki\Traderoute::traderouteDelete($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
 }
 elseif ($command == 'settings')
 {

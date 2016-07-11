@@ -374,8 +374,6 @@ class PlanetReportCE
 
     public static function takeCredits(\PDO $pdo_db, $db, $langvars, $planet_id)
     {
-        $planet = array();
-
         // Get basic Database information (ship and planet)
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);

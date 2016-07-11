@@ -1033,8 +1033,6 @@ class Xenobe
 
     public static function xenobeToSecDef(\PDO $pdo_db, $db, $langvars, Array $playerinfo, int $targetlink, Reg $tkireg)
     {
-        $links = array();
-
         // Check for sector defenses
         if ($targetlink > 0)
         {
