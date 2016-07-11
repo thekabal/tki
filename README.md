@@ -38,5 +38,8 @@ As is typical with releases, we highly recommend a fresh install. Upgrades are n
 ##Code quality:
 The project began in the early PHP4 era, and as a result, is less than ideal. Substantial progress has been made towards modernization, and we are continuing that process. **Feedback and PR's are welcome and appreciated**.
 
+##Contributing:
+Feel free to contribute to the project! We use GitHub for our issues tracking (provide feedback!), milestone planning, code storage, and releases.
+
 I hope you enjoy the game!,
 <br>The Kabal
