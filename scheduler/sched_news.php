@@ -19,7 +19,7 @@
 
 // FUTURE: Recode file so that news are generated in the server default language, and remove hard-coded (language) news text from the database
 
-if (strpos($_SERVER['PHP_SELF'], 'sched_news.php')) // Prevent direct access to this file
+if (strpos($_SERVER['SCRIPT_NAME'], 'sched_news.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }

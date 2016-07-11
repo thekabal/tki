@@ -17,7 +17,7 @@
 //
 // File: sched_planets.php
 
-if (strpos($_SERVER['PHP_SELF'], 'sched_planets.php')) // Prevent direct access to this file
+if (strpos($_SERVER['SCRIPT_NAME'], 'sched_planets.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }

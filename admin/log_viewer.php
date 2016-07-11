@@ -17,7 +17,7 @@
 //
 // File: admin/log_viewer.php
 
-if (strpos($_SERVER['PHP_SELF'], 'log_viewer.php')) // Prevent direct access to this file
+if (strpos($_SERVER['SCRIPT_NAME'], 'log_viewer.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }

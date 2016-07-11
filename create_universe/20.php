@@ -16,7 +16,7 @@
 //
 // File: create_universe/20.php
 
-if (strpos($_SERVER['PHP_SELF'], '/20.php')) // Prevent direct access to this file
+if (strpos($_SERVER['SCRIPT_NAME'], '/20.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }

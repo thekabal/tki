@@ -17,7 +17,7 @@
 //
 // File: admin/bans_editor.php
 
-if (strpos($_SERVER['PHP_SELF'], 'bans_editor.php')) // Prevent direct access to this file
+if (strpos($_SERVER['SCRIPT_NAME'], 'bans_editor.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }

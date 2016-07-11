@@ -17,7 +17,7 @@
 //
 // File: admin/perf_monitor.php
 
-if (strpos($_SERVER['PHP_SELF'], 'perf_monitor.php')) // Prevent direct access to this file
+if (strpos($_SERVER['SCRIPT_NAME'], 'perf_monitor.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }
