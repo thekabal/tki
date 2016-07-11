@@ -29,12 +29,12 @@ if (!empty($_POST))
 {
     foreach ( $_POST as $key => $value)
     {
-		if ( ( !is_string($value) && !is_numeric($value) ) || !is_string($key) )
+        if ( ( !is_string($value) && !is_numeric($value) ) || !is_string($key))
         {
 			continue;
         }
 
-		if ( get_magic_quotes_gpc() )
+		if ( get_magic_quotes_gpc())
         {
 			$value = htmlspecialchars( stripslashes((string)$value) );
         }
