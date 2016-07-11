@@ -67,6 +67,9 @@ header('Vary: Accept-Encoding, Accept-Language');  // Tell CDN's or proxies to k
                                                    // for example.
 header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP connections (15sec), which give better
                                                    // per-client performance, but can be worse (for a server) for many
+header('X-Frame-Options: DENY');                   // Prevent iFrames and clickjacking
+header('X-XSS-Protection: 1; mode=block');         // XSS protection - block if XSS detected
+header('X-Content-Type-Options: nosniff');         // Prevents MIME-sniffing away from the declared content-type.
 ob_start(array('Tki\Compress', 'compress'));       // Start a buffer, and when it closes (at the end of a request),
                                                    // call the callback function 'Tki\Compress' to properly handle
                                                    // detection of compression.
