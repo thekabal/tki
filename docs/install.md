@@ -67,6 +67,8 @@ See the `/README.md` file.
   `setsebool -P httpd_can_sendmail=1`.
 - To allow the web server to talk to the MySQL server. Issue this command:
   `setsebool -P httpd_can_network_connect_db 1`.
+- To ensure safety, you need to enable htaccess processing in your web server.
+  For apache, this is AllowOverrides Limit or AllowOverrides All in the server config file (httpd.conf / apache2.conf)
 
 **Join the TKI forums to stay informed of updates, patches and new releases.**
 
