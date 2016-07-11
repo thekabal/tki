@@ -161,61 +161,61 @@ else
         $hull_upgrade_cost = 0;
         if ($hull_upgrade > $playerinfo['hull'])
         {
-            $hull_upgrade_cost = Tki\Ports::php_change_delta($hull_upgrade, $playerinfo['hull'], $upgrade_cost);
+            $hull_upgrade_cost = Tki\Ports::phpChangeDelta($hull_upgrade, $playerinfo['hull'], $upgrade_cost);
         }
 
         $engine_upgrade_cost = 0;
         if ($engine_upgrade > $playerinfo['engines'])
         {
-            $engine_upgrade_cost = Tki\Ports::php_change_delta($engine_upgrade, $playerinfo['engines'], $upgrade_cost);
+            $engine_upgrade_cost = Tki\Ports::phpChangeDelta($engine_upgrade, $playerinfo['engines'], $upgrade_cost);
         }
 
         $power_upgrade_cost = 0;
         if ($power_upgrade > $playerinfo['power'])
         {
-            $power_upgrade_cost = Tki\Ports::php_change_delta($power_upgrade, $playerinfo['power'], $upgrade_cost);
+            $power_upgrade_cost = Tki\Ports::phpChangeDelta($power_upgrade, $playerinfo['power'], $upgrade_cost);
         }
 
         $computer_upgrade_cost = 0;
         if ($computer_upgrade > $playerinfo['computer'])
         {
-            $computer_upgrade_cost = Tki\Ports::php_change_delta($computer_upgrade, $playerinfo['computer'], $upgrade_cost);
+            $computer_upgrade_cost = Tki\Ports::phpChangeDelta($computer_upgrade, $playerinfo['computer'], $upgrade_cost);
         }
 
         $sensors_upgrade_cost = 0;
         if ($sensors_upgrade > $playerinfo['sensors'])
         {
-            $sensors_upgrade_cost = Tki\Ports::php_change_delta($sensors_upgrade, $playerinfo['sensors'], $upgrade_cost);
+            $sensors_upgrade_cost = Tki\Ports::phpChangeDelta($sensors_upgrade, $playerinfo['sensors'], $upgrade_cost);
         }
 
         $beams_upgrade_cost = 0;
         if ($beams_upgrade > $playerinfo['beams'])
         {
-            $beams_upgrade_cost = Tki\Ports::php_change_delta($beams_upgrade, $playerinfo['beams'], $upgrade_cost);
+            $beams_upgrade_cost = Tki\Ports::phpChangeDelta($beams_upgrade, $playerinfo['beams'], $upgrade_cost);
         }
 
         $armor_upgrade_cost = 0;
         if ($armor_upgrade > $playerinfo['armor'])
         {
-            $armor_upgrade_cost = Tki\Ports::php_change_delta($armor_upgrade, $playerinfo['armor'], $upgrade_cost);
+            $armor_upgrade_cost = Tki\Ports::phpChangeDelta($armor_upgrade, $playerinfo['armor'], $upgrade_cost);
         }
 
         $cloak_upgrade_cost = 0;
         if ($cloak_upgrade > $playerinfo['cloak'])
         {
-            $cloak_upgrade_cost = Tki\Ports::php_change_delta($cloak_upgrade, $playerinfo['cloak'], $upgrade_cost);
+            $cloak_upgrade_cost = Tki\Ports::phpChangeDelta($cloak_upgrade, $playerinfo['cloak'], $upgrade_cost);
         }
 
         $torp_launchers_upgrade_cost = 0;
         if ($torp_launchers_upgrade > $playerinfo['torp_launchers'])
         {
-            $torp_launchers_upgrade_cost = Tki\Ports::php_change_delta($torp_launchers_upgrade, $playerinfo['torp_launchers'], $upgrade_cost);
+            $torp_launchers_upgrade_cost = Tki\Ports::phpChangeDelta($torp_launchers_upgrade, $playerinfo['torp_launchers'], $upgrade_cost);
         }
 
         $shields_upgrade_cost = 0;
         if ($shields_upgrade > $playerinfo['shields'])
         {
-            $shields_upgrade_cost = Tki\Ports::php_change_delta($shields_upgrade, $playerinfo['shields'], $upgrade_cost);
+            $shields_upgrade_cost = Tki\Ports::phpChangeDelta($shields_upgrade, $playerinfo['shields'], $upgrade_cost);
         }
 
         if ($fighter_number < 0)
