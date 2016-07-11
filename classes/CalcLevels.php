@@ -101,7 +101,7 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $shield_defender_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $shield_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($shield_defender_present !== null)
         {
             foreach ($shield_defender_present as $tmp_shields)

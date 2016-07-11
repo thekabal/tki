@@ -1790,7 +1790,7 @@ class Traderoute
         \Tki\Text::gotomain($pdo_db, $lang);
         echo "</div>\n";
 
-        \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
         die ();
     }
 
@@ -1891,7 +1891,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $start);
             $stmt->execute();
-            $start = $stmt->fetch(PDO::FETCH_ASSOC);
+            $start = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         if ($type2 == 'L')

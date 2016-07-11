@@ -73,7 +73,7 @@ class Ship
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $ship_id);
         $stmt->execute();
-        $planets_owned = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $planets_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if ($planets_owned !== null)
         {

@@ -1483,7 +1483,7 @@ class Xenobe
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetinfo['sector']);
             $stmt->execute();
-            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
             {
                 foreach ($defenses_present as $tmp_defense)

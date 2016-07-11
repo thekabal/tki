@@ -42,7 +42,7 @@ class PlanetReportCE
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet_id);
         $stmt->execute();
-        $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Error out and return if the Player isn't the owner of the Planet
         // Verify player owns the planet which is to have the base created on.
