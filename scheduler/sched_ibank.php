@@ -17,7 +17,7 @@
 //
 // File: sched_ibank.php
 
-if (strpos($_SERVER['PHP_SELF'], 'sector_ibank.php')) // Prevent direct access to this file
+if (strpos($_SERVER['SCRIPT_NAME'], 'sector_ibank.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }

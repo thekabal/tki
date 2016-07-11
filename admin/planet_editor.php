@@ -17,7 +17,7 @@
 //
 // File: admin/planet_editor.php
 
-if (strpos($_SERVER['PHP_SELF'], 'planet_editor.php')) // Prevent direct access to this file
+if (strpos($_SERVER['SCRIPT_NAME'], 'planet_editor.php')) // Prevent direct access to this file
 {
     die('The Kabal Invasion - General error: You cannot access this file directly.');
 }

@@ -28,7 +28,7 @@ class SetPaths
 {
     public static function setGamepath() : string
     {
-        $gamepath = dirname($_SERVER['PHP_SELF']);
+        $gamepath = dirname($_SERVER['SCRIPT_NAME']);
         if ($gamepath !== null && mb_strlen($gamepath) > 0)
         {
             if ($gamepath === "\\")
