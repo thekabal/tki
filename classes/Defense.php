@@ -27,7 +27,7 @@ class Defense
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
-        $secdef_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if ($secdef_present !== null)
         {
