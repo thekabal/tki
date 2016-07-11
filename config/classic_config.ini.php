@@ -1,5 +1,3 @@
-; <?php die('The Kabal Invasion - General error: You cannot access this file directly.'); ?>
-; This is the set config page, do not modify the above line.
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
