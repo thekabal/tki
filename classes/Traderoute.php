@@ -254,7 +254,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
             $stmt->execute();
-            $nsfighters = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nsfighters = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -272,7 +272,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
             $stmt->execute();
-            $nsfighters = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nsfighters = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -298,7 +298,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $traderoute['source_id']);
             $stmt->execute();
-            $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $zoneinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($zoneinfo['allow_trade'] == 'N')
             {
@@ -312,7 +312,7 @@ class Traderoute
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $zoneinfo['owner']);
                     $stmt->execute();
-                    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
