@@ -2254,12 +2254,7 @@ class Traderoute
             self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_notowntdr'], $template);
         }
 
-        if (empty ($confirm))
-        {
-            $traderoutes[0] = $delroute;
-            // Here it continues to the main file area to print the route
-        }
-        else
+        if (!empty ($confirm))
         {
             $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
             \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
