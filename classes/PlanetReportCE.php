@@ -36,7 +36,7 @@ class PlanetReportCE
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':email', $_SESSION['username']);
         $stmt->execute();
-        $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $playerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);

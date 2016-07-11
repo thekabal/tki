@@ -73,7 +73,7 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $beam_defender_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $beam_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($beam_defender_present !== null)
         {
             foreach ($beam_defender_present as $tmp_beams)
