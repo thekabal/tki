@@ -64,7 +64,7 @@ class Bounty
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $bountydetails['placed_by']);
                     $stmt->execute();
-                    $placed = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $placed = $stmt->fetch(\PDO::FETCH_ASSOC);
                 }
 
                 $update_creds_res = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits + ? WHERE ship_id = ?", array($bountydetails['amount'], $attacker));

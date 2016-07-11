@@ -1800,7 +1800,7 @@ class Traderoute
         echo "<div style='text-align:left;'>\n";
         \Tki\Text::gotomain($pdo_db, $lang);
         echo "</div>\n";
-        \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
         die ();
     }
 
@@ -1900,7 +1900,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':dest', $dest);
             $stmt->execute();
-            $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+            $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         if ($start['sector_id'] == $dest['sector_id'])

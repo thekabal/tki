@@ -27,7 +27,7 @@ class Fighters
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();
-        $defense_present = $stmt->fetch(PDO::FETCH_ASSOC);
+        $defense_present = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if ($defense_present !== null && $num_fighters > 0)
         {
