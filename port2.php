@@ -351,153 +351,153 @@ else
             if ($hull_upgrade > $playerinfo['hull'])
             {
                 $tempvar = 0;
-                $tempvar = Tki\Ports::php_true_delta($hull_upgrade, $playerinfo['hull']);
+                $tempvar = Tki\Ports::phpTrueDelta($hull_upgrade, $playerinfo['hull']);
                 $query = $query . ", hull=hull + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_hull'] . " " . $langvars['l_trade_upgraded'] . " " . $hull_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_hull'] . " " . $langvars['l_trade_upgraded'] . " " . $hull_upgrade);
             }
 
             if ($engine_upgrade > $playerinfo['engines'])
             {
                 $tempvar = 0;
-                $tempvar = Tki\Ports::php_true_delta($engine_upgrade, $playerinfo['engines']);
+                $tempvar = Tki\Ports::phpTrueDelta($engine_upgrade, $playerinfo['engines']);
                 $query = $query . ", engines=engines + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_engines'] . " " . $langvars['l_trade_upgraded'] . " " . $engine_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_engines'] . " " . $langvars['l_trade_upgraded'] . " " . $engine_upgrade);
             }
 
             if ($power_upgrade > $playerinfo['power'])
             {
                 $tempvar = 0;
-                $tempvar=Tki\Ports::php_true_delta($power_upgrade, $playerinfo['power']);
+                $tempvar=Tki\Ports::phpTrueDelta($power_upgrade, $playerinfo['power']);
                 $query = $query . ", power=power + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_power'] . " " . $langvars['l_trade_upgraded'] . " " . $power_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_power'] . " " . $langvars['l_trade_upgraded'] . " " . $power_upgrade);
             }
 
             if ($computer_upgrade > $playerinfo['computer'])
             {
                 $tempvar = 0;
-                $tempvar=Tki\Ports::php_true_delta($computer_upgrade, $playerinfo['computer']);
+                $tempvar=Tki\Ports::phpTrueDelta($computer_upgrade, $playerinfo['computer']);
                 $query = $query . ", computer=computer + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_computer'] . " " . $langvars['l_trade_upgraded'] . " " . $computer_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_computer'] . " " . $langvars['l_trade_upgraded'] . " " . $computer_upgrade);
             }
 
             if ($sensors_upgrade > $playerinfo['sensors'])
             {
                 $tempvar = 0;
-                $tempvar=Tki\Ports::php_true_delta($sensors_upgrade, $playerinfo['sensors']);
+                $tempvar=Tki\Ports::phpTrueDelta($sensors_upgrade, $playerinfo['sensors']);
                 $query = $query . ", sensors=sensors + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_sensors'] . " " . $langvars['l_trade_upgraded'] . " " . $sensors_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_sensors'] . " " . $langvars['l_trade_upgraded'] . " " . $sensors_upgrade);
             }
 
             if ($beams_upgrade > $playerinfo['beams'])
             {
                 $tempvar = 0;
-                $tempvar=Tki\Ports::php_true_delta($beams_upgrade, $playerinfo['beams']);
+                $tempvar=Tki\Ports::phpTrueDelta($beams_upgrade, $playerinfo['beams']);
                 $query = $query . ", beams=beams + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_beams'] . " " . $langvars['l_trade_upgraded'] . " " . $beams_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_beams'] . " " . $langvars['l_trade_upgraded'] . " " . $beams_upgrade);
             }
 
             if ($armor_upgrade > $playerinfo['armor'])
             {
                 $tempvar = 0;
-                $tempvar=Tki\Ports::php_true_delta($armor_upgrade, $playerinfo['armor']);
+                $tempvar=Tki\Ports::phpTrueDelta($armor_upgrade, $playerinfo['armor']);
                 $query = $query . ", armor=armor + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_armor'] . " " .  $langvars['l_trade_upgraded'] . " " . $armor_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_armor'] . " " .  $langvars['l_trade_upgraded'] . " " . $armor_upgrade);
             }
 
             if ($cloak_upgrade > $playerinfo['cloak'])
             {
                 $tempvar = 0;
-                $tempvar=Tki\Ports::php_true_delta($cloak_upgrade, $playerinfo['cloak']);
+                $tempvar=Tki\Ports::phpTrueDelta($cloak_upgrade, $playerinfo['cloak']);
                 $query = $query . ", cloak=cloak + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_cloak'] . " " . $langvars['l_trade_upgraded'] . " " . $cloak_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_cloak'] . " " . $langvars['l_trade_upgraded'] . " " . $cloak_upgrade);
             }
 
             if ($torp_launchers_upgrade > $playerinfo['torp_launchers'])
             {
                 $tempvar = 0;
-                $tempvar=Tki\Ports::php_true_delta($torp_launchers_upgrade, $playerinfo['torp_launchers']);
+                $tempvar=Tki\Ports::phpTrueDelta($torp_launchers_upgrade, $playerinfo['torp_launchers']);
                 $query = $query . ", torp_launchers=torp_launchers + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_torp_launch'] . " " . $langvars['l_trade_upgraded'] . " " . $torp_launchers_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_torp_launch'] . " " . $langvars['l_trade_upgraded'] . " " . $torp_launchers_upgrade);
             }
 
             if ($shields_upgrade > $playerinfo['shields'])
             {
                 $tempvar = 0;
-                $tempvar=Tki\Ports::php_true_delta($shields_upgrade, $playerinfo['shields']);
+                $tempvar=Tki\Ports::phpTrueDelta($shields_upgrade, $playerinfo['shields']);
                 $query = $query . ", shields=shields + $tempvar";
-                Tki\Ports::build_one_col($langvars['l_shields'] . " " . $langvars['l_trade_upgraded'] . " " . $shields_upgrade);
+                Tki\Ports::buildOneCol($langvars['l_shields'] . " " . $langvars['l_trade_upgraded'] . " " . $shields_upgrade);
             }
 
             if ($fighter_number)
             {
                 $query = $query . ", ship_fighters = ship_fighters + $fighter_number";
-                Tki\Ports::build_two_col($langvars['l_fighters'] . " " .  $langvars['l_trade_added'] . ":", $fighter_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_fighters'] . " " .  $langvars['l_trade_added'] . ":", $fighter_number, "left", "right");
             }
 
             if ($torpedo_number)
             {
                 $query = $query . ", torps=torps + $torpedo_number";
-                Tki\Ports::build_two_col($langvars['l_torps'] . " " . $langvars['l_trade_added'] . ":", $torpedo_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_torps'] . " " . $langvars['l_trade_added'] . ":", $torpedo_number, "left", "right");
             }
 
             if ($armor_number)
             {
                 $query = $query . ", armor_pts=armor_pts + $armor_number";
-                Tki\Ports::build_two_col($langvars['l_armorpts'] . " " . $langvars['l_trade_added'] . ":", $armor_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_armorpts'] . " " . $langvars['l_trade_added'] . ":", $armor_number, "left", "right");
             }
 
             if ($colonist_number)
             {
                 $query = $query . ", ship_colonists = ship_colonists + $colonist_number";
-                Tki\Ports::build_two_col($langvars['l_colonists'] . " " .  $langvars['l_trade_added'] . ":", $colonist_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_colonists'] . " " .  $langvars['l_trade_added'] . ":", $colonist_number, "left", "right");
             }
 
             if ($dev_genesis_number)
             {
                 $query = $query . ", dev_genesis = dev_genesis + $dev_genesis_number";
-                Tki\Ports::build_two_col($langvars['l_genesis'] . " " . $langvars['l_trade_added'] . ":", $dev_genesis_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_genesis'] . " " . $langvars['l_trade_added'] . ":", $dev_genesis_number, "left", "right");
             }
 
             if ($dev_beacon_number)
             {
                 $query = $query . ", dev_beacon = dev_beacon + $dev_beacon_number";
-                Tki\Ports::build_two_col($langvars['l_beacons']. " " . $langvars['l_trade_added'] . ":", $dev_beacon_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_beacons']. " " . $langvars['l_trade_added'] . ":", $dev_beacon_number, "left", "right");
             }
 
             if ($dev_emerwarp_number)
             {
                 $query = $query . ", dev_emerwarp = dev_emerwarp + $dev_emerwarp_number";
-                Tki\Ports::build_two_col($langvars['l_ewd'] . " " .  $langvars['l_trade_added'] . ":", $dev_emerwarp_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_ewd'] . " " .  $langvars['l_trade_added'] . ":", $dev_emerwarp_number, "left", "right");
             }
 
             if ($dev_warpedit_number)
             {
                 $query = $query . ", dev_warpedit = dev_warpedit + $dev_warpedit_number";
-                Tki\Ports::build_two_col($langvars['l_warpedit'] . " " . $langvars['l_trade_added'] . ":", $dev_warpedit_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_warpedit'] . " " . $langvars['l_trade_added'] . ":", $dev_warpedit_number, "left", "right");
             }
 
             if ($dev_minedeflector_number)
             {
                 $query = $query . ", dev_minedeflector = dev_minedeflector + $dev_minedeflector_number";
-                Tki\Ports::build_two_col($langvars['l_deflect'] . " " . $langvars['l_trade_added'] . ":", $dev_minedeflector_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_deflect'] . " " . $langvars['l_trade_added'] . ":", $dev_minedeflector_number, "left", "right");
             }
 
             if (($escapepod_purchase) && ($playerinfo['dev_escapepod'] != 'Y'))
             {
                 $query = $query . ", dev_escapepod='Y'";
-                Tki\Ports::build_one_col($langvars['l_escape_pod'] . " " .  $langvars['l_trade_installed']);
+                Tki\Ports::buildOneCol($langvars['l_escape_pod'] . " " .  $langvars['l_trade_installed']);
             }
 
             if (($fuelscoop_purchase) && ($playerinfo['dev_fuelscoop'] != 'Y'))
             {
                 $query = $query . ", dev_fuelscoop='Y'";
-                Tki\Ports::build_one_col($langvars['l_fuel_scoop'] . " " . $langvars['l_trade_installed']);
+                Tki\Ports::buildOneCol($langvars['l_fuel_scoop'] . " " . $langvars['l_trade_installed']);
             }
 
             if (($lssd_purchase) && ($playerinfo['dev_lssd'] != 'Y'))
             {
                 $query = $query . ", dev_lssd='Y'";
-                Tki\Ports::build_one_col($langvars['l_lssd'] . " " .  $langvars['l_trade_installed']);
+                Tki\Ports::buildOneCol($langvars['l_lssd'] . " " .  $langvars['l_trade_installed']);
             }
 
             $query = $query . ", turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = " . $playerinfo['ship_id'];
@@ -512,7 +512,7 @@ else
 
             if ((Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists']) < 0)
             {
-                // Tki\Ports::build_two_col("<span style='color:#f00;'>Detected Illegal Cargo</span>", "<span style='color:#0f0;'>Fixed</span>", "left", "right");
+                // Tki\Ports::buildTwoCol("<span style='color:#f00;'>Detected Illegal Cargo</span>", "<span style='color:#0f0;'>Fixed</span>", "left", "right");
                 echo "<span style='color:#f00; font-weight:bold;'>Detected illegal cargo, as a penalty, we are confiscating all of your cargo, you may now continue.</span>\n";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=0, ship_organics=0, ship_goods=0, ship_energy=0, ship_colonists =0 WHERE ship_id = ? LIMIT 1;", array($playerinfo['ship_id']));
                 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
