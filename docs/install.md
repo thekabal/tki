@@ -14,7 +14,7 @@ See the `/README.md` file.
    `config/SecureConfig.php` file.
 5. Edit the `/config/SecureConfig.php` files to your own settings and manually update 
    your cron file. 
-6. PLEASE edit `game_name` in `/config/classic_set_config.ini.php` to be something 
+6. PLEASE edit `game_name` in `/config/classic_set_config.ini` to be something 
    unique!
 7. Contact your hosting provider, and determine which command-line web fetching
    program they make available to you, and where it is located. This is to help

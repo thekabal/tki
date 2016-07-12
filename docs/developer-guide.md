@@ -20,7 +20,7 @@ auto-loaded where possible, files are being converted to use templates for outpu
 - In a templated file, header-t loads the needed HTML headers. Similarly, footer-t loads the needed HTML closing
   statements, copyright notices, and so on. This is a temporary measure until all of the game is templated.
 - Translation support is improving in game. Language outputs should be done via the $langvars array, with
-  corresponding entries and categories (which match file names usually) in languages/language.ini.php
+  corresponding entries and categories (which match file names usually) in languages/language.ini
 - Methods and older functions should have needed variables defined in their calling in the 
   order ($pdo_db, $db, $langvars, $config, others).
 - Anywhere you are unconditionally including a class file, use require_once(). Anywhere you are conditionally 
