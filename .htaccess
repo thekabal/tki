@@ -1,19 +1,19 @@
-<Files "check_fighters.php">
+<Files check_fighters.php>
     Order deny,allow
     Deny from all
 </Files>
 
-<Files "check_mines.php">
+<Files check_mines.php>
     Order deny,allow
     Deny from all
 </Files>
 
-<Files "common.php">
+<Files common.php>
     Order deny,allow
     Deny from all
 </Files>
 
-<Files "sector_fighters.php">
+<Files sector_fighters.php>
     Order deny,allow
     Deny from all
 </Files>
