@@ -17,11 +17,6 @@
 //
 // File: common.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'common.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 if (!extension_loaded('mbstring')) // Test to ensure mbstring extension is loaded
 {
     die ('The Kabal Invasion - General error: The PHP mbstring extension is required. Please install it.');
