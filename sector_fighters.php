@@ -171,7 +171,7 @@ if ($playerarmor < 1)
         Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
         $ok = 0;
         Tki\Text::gotomain($pdo_db, $lang);
-        die ();
+        die();
     }
     else
     {

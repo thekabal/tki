@@ -69,7 +69,7 @@ class Smarty
 
         if ($smarty_errors !== null)
         {
-            die ($smarty_errors);
+            die($smarty_errors);
         }
     }
 
