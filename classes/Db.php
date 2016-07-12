@@ -44,13 +44,13 @@ class Db
 
     public function initDb($db_layer)
     {
-        $db_port = \Tki\SecureConfig::PORT;
-        $db_host = \Tki\SecureConfig::HOST;
-        $db_user = \Tki\SecureConfig::USER;
-        $db_pwd = \Tki\SecureConfig::PASS;
-        $db_name = \Tki\SecureConfig::NAME;
-        $db_type = \Tki\SecureConfig::TYPE;
-        $db_prefix = \Tki\SecureConfig::PREFIX;
+        $db_port = \Tki\SecureConfig::DB_PORT;
+        $db_host = \Tki\SecureConfig::DB_HOST;
+        $db_user = \Tki\SecureConfig::DB_USER;
+        $db_pwd = \Tki\SecureConfig::DB_PASS;
+        $db_name = \Tki\SecureConfig::DB_NAME;
+        $db_type = \Tki\SecureConfig::DB_TYPE;
+        $db_prefix = \Tki\SecureConfig::DB_TABLE_PREFIX;
 
         if ($db_layer == 'adodb')
         {
