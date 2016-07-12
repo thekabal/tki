@@ -1,4 +1,4 @@
-<Files *.ini.php>
+<Files *.ini>
     Order deny,allow
     Deny from all
 </Files>
