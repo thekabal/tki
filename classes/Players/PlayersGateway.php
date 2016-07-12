@@ -49,7 +49,6 @@ class PlayersGateway // Gateway for SQL calls related to Players
 
     public function selectPlayerInfo($email)
     {
-//        $sql = "SELECT lang, ip_address, password, ship_destroyed, ship_id, email, dev_escapepod FROM {$this->pdo_db->prefix}ships WHERE email = :email";
         $sql = "SELECT * FROM {$this->pdo_db->prefix}ships WHERE email = :email";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':email', $email);

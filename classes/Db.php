@@ -18,6 +18,8 @@
 // File: classes/Db.php
 //
 // Class for managing the database inside TKI
+//
+// FUTURE: Add Session filters for Mcrypt & gzip, like we once had in Adodb
 
 namespace Tki;
 
@@ -53,8 +55,6 @@ class Db
         if ($db_layer == 'adodb')
         {
             // Add MD5 encryption for sessions, and then compress it before storing it in the database
-            //ADODB_Session::filter (new ADODB_Encrypt_Mcrypt ());
-            //ADODB_Session::filter (new ADODB_Compress_Gzip ());
 
             // If there is a $db_port variable set, use it in the connection method
             if ($db_port !== null)
