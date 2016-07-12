@@ -17,11 +17,6 @@
 //
 // File: admin/link_editor.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'link_editor.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 $variables['lang'] = $lang;
 $variables['swordfish'] = $swordfish;
 
