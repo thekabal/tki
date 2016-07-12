@@ -10,9 +10,9 @@
     "license": "AGPL-3.0",
     "minimum-stability": "alpha",
     "require": {
-        "smarty/smarty": "v3.1.29",
-        "ezyang/htmlpurifier": "v4.7.0",
-        "swiftmailer/swiftmailer": "v5.4.3",
+        "smarty/smarty": "~3.1.29",
+        "ezyang/htmlpurifier": "~4.7.0",
+        "swiftmailer/swiftmailer": "~5.4.3",
         "adodb/adodb-php": "v5.20.4"
     },
     "autoload": {
