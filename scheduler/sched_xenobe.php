@@ -19,11 +19,6 @@
 //
 // FUTURE: SQL bind varibles
 
-if (strpos($_SERVER['PHP_SELF'], 'sched_xenobe.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Xenobe turn updates
 echo "<br><strong>Xenobe TURNS</strong><br><br>";
 
@@ -46,7 +41,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
     $xenobeisdead = 0;
     $playerinfo = $res->fields;
     // Regenerate / Buy stats
-    Tki\Xenobe::xenobeRegen($pdo_db, $db, $playerinfo, $xen_unemployment, $tkireg);
+    Tki\Xenobe::xenobeRegen($pdo_db, $playerinfo, $xen_unemployment, $tkireg);
 
     // Run through orders
     $furcount++;

@@ -1,6 +1,6 @@
 <?php
 // The Kabal Invasion - A web-based 4X space game
-// Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
+// Copyright © 2016 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Affero General Public License as

@@ -163,8 +163,12 @@ This information will help us to help you much faster and will help improve our 
       <td width="75%" colspan="2" bgcolor="#C0C0C0" align="left" valign="top"><font color="#000">{$variables['zend_version']}</font></td>
     </tr>
     <tr>
-      <td width="25%" bgcolor="#ccccff" align="left" valign="top"><font color="#000">apache_version</font></td>
-      <td width="75%" colspan="2" bgcolor="#C0C0C0" align="left" valign="top"><font color="#000">{$variables['apache_version']}</font></td>
+      <td width="25%" bgcolor="#ccccff" align="left" valign="top"><font color="#000">server_type</font></td>
+      <td width="75%" colspan="2" bgcolor="#C0C0C0" align="left" valign="top"><font color="#000">{$variables['server_type']}</font></td>
+    </tr>
+    <tr>
+      <td width="25%" bgcolor="#ccccff" align="left" valign="top"><font color="#000">server_version</font></td>
+      <td width="75%" colspan="2" bgcolor="#C0C0C0" align="left" valign="top"><font color="#000">{$variables['server_version']}</font></td>
     </tr>
     <tr>
       <td width="25%" bgcolor="#ccccff" align="left" valign="top"><font color="#000">php_version</font></td>

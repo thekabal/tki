@@ -16,11 +16,6 @@
 //
 // File: create_universe/80.php
 
-if (strpos($_SERVER['PHP_SELF'], '/80.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Determine current step, next step, and number of steps
 $create_universe_info = Tki\BigBang::findStep(__FILE__);
 
@@ -237,7 +232,7 @@ $admin_ip = '1.1.1.1';
 $admin_recovery_time = null;
 $admin_sector = 1;
 $admin_last_login = date("Y-m-d H:i:s");
-$admin_hashed_password = password_hash(\Tki\SecureConfig::ADMINPW, PASSWORD_DEFAULT);
+$admin_hashed_password = password_hash(\Tki\SecureConfig::ADMIN_PASS, PASSWORD_DEFAULT);
 
 $stmt->bindParam(':ship_name', $tkireg->admin_ship_name);
 $stmt->bindParam(':ship_destroyed', $admin_ship_destr);
@@ -258,7 +253,7 @@ $resxx = $stmt->execute();
 $variables['admin_account_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
 $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['admin_name'] = $tkireg->admin_name;
-$variables['admin_pass'] = \Tki\SecureConfig::ADMINPW;
+$variables['admin_pass'] = \Tki\SecureConfig::ADMIN_PASS;
 $local_table_timer->stop();
 $variables['admin_account_results']['elapsed'] = $local_table_timer->elapsed();
 

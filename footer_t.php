@@ -38,7 +38,7 @@ if ($tkireg !== null)
 }
 
 // Suppress the news ticker on the IBANK and index pages
-$news_ticker_active = (!(preg_match("/index.php/i", $_SERVER['PHP_SELF']) || preg_match("/ibank.php/i", $_SERVER['PHP_SELF']) || preg_match("/new.php/i", $_SERVER['PHP_SELF'])));
+$news_ticker_active = (!(preg_match("/index.php/i", $_SERVER['SCRIPT_NAME']) || preg_match("/ibank.php/i", $_SERVER['SCRIPT_NAME']) || preg_match("/new.php/i", $_SERVER['SCRIPT_NAME'])));
 
 // Suppress the news ticker if the database is not active
 if (!Tki\Db::isActive($pdo_db))
@@ -115,8 +115,8 @@ $sf_logo_link = null;
 
 $mem_peak_usage = floor(memory_get_peak_usage() / 1024);
 $public_pages = array('ranking.php', 'new.php', 'faq.php', 'settings.php', 'news.php', 'index.php');
-$slash_position = mb_strrpos($_SERVER['PHP_SELF'], '/') + 1;
-$current_page = mb_substr($_SERVER['PHP_SELF'], $slash_position);
+$slash_position = mb_strrpos($_SERVER['SCRIPT_NAME'], '/') + 1;
+$current_page = mb_substr($_SERVER['SCRIPT_NAME'], $slash_position);
 if (in_array($current_page, $public_pages))
 {
     // If it is a non-login required page, such as ranking, new, faq, settings, news, and index use the public SF logo, which increases project stats.

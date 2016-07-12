@@ -32,6 +32,18 @@ header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP co
 SetCookie('TestCookie', '', 0);
 SetCookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
 
+/*
+ * Database configuration.
+ * TODO: Move config to .env/array storage.
+ */
+$db_host = \Tki\SecureConfig::DB_HOST;
+$db_port = \Tki\SecureConfig::DB_PORT;
+$db_user = \Tki\SecureConfig::DB_USER;
+$db_pwd = \Tki\SecureConfig::DB_PASS;
+$db_type = \Tki\SecureConfig::DB_TYPE;
+$db_name = \Tki\SecureConfig::DB_NAME;
+$db_prefix = \Tki\SecureConfig::DB_TABLE_PREFIX;
+
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'index', 'options', 'setup_info'));
 
@@ -42,14 +54,36 @@ $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'tki';
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
 
+/*
+ * Get the webserver version.
+ * TODO: Clean this up by moving all setup_info logic to a class.
+ */
+$sapi = php_sapi_name();
+$serverType = '';
+$serverVersion = '';
+
+if($sapi === 'apache')
+{
+    $serverType = $sapi;
+    $serverVersion = apache_get_version();
+}
+else
+{
+    // This logic presumes nginx is being used.
+    $nameVersionPair = explode('/', $_SERVER['SERVER_SOFTWARE']);
+    $serverType = $nameVersionPair[0];
+    $serverVersion = array_pop($nameVersionPair);
+}
+
 $variables['selected_lang'] = null;
 $variables['system'] = php_uname();
 $variables['remote_addr'] = $_SERVER['REMOTE_ADDR'];
 $variables['server_addr'] = $_SERVER['HTTP_HOST'] . ':' . $_SERVER['SERVER_PORT'];
 $variables['zend_version'] = zend_version();
-$variables['apache_version'] = apache_get_version();
 $variables['php_version'] = PHP_VERSION;
 $variables['php_sapi_name'] = php_sapi_name();
+$variables['server_type'] = $serverType;
+$variables['server_version'] = $serverVersion;
 $variables['game_path'] = Tki\SetPaths::setGamepath();
 $variables['db_type'] = $db_type;
 $variables['db_name'] = $db_name;

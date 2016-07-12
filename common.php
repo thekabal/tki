@@ -17,16 +17,6 @@
 //
 // File: common.php
 
-if (strpos($_SERVER['PHP_SELF'], 'common.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
-if (!extension_loaded('mbstring')) // Test to ensure mbstring extension is loaded
-{
-    die ('The Kabal Invasion - General error: The PHP mbstring extension is required. Please install it.');
-}
-
 require_once './vendor/autoload.php';              // Load the auto-loader
 require_once './global_defines.php';               // Defines used in many places
 mb_http_output('UTF-8');                           // Our output should be served in UTF-8 no matter what.
@@ -67,6 +57,9 @@ header('Vary: Accept-Encoding, Accept-Language');  // Tell CDN's or proxies to k
                                                    // for example.
 header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP connections (15sec), which give better
                                                    // per-client performance, but can be worse (for a server) for many
+header('X-Frame-Options: DENY');                   // Prevent iFrames and clickjacking
+header('X-XSS-Protection: 1; mode=block');         // XSS protection - block if XSS detected
+header('X-Content-Type-Options: nosniff');         // Prevents MIME-sniffing away from the declared content-type.
 ob_start(array('Tki\Compress', 'compress'));       // Start a buffer, and when it closes (at the end of a request),
                                                    // call the callback function 'Tki\Compress' to properly handle
                                                    // detection of compression.

@@ -27,7 +27,6 @@ class Reg
         $stmt = "SELECT name,value,type FROM {$pdo_db->prefix}gameconfig";
         $result = $pdo_db->query($stmt);
         Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
-//        $no_langs_yet = true;
 
         if ($result !== false) // If the database is not live, this will give false, and db calls will fail silently
         {
@@ -46,7 +45,7 @@ class Reg
             else
             {
                 // Slurp in config variables from the ini file directly
-                $ini_file = 'config/classic_config.ini.php'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+                $ini_file = 'config/classic_config.ini'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
                 $ini_keys = parse_ini_file($ini_file, true);
                 foreach ($ini_keys as $config_category => $config_line)
                 {
@@ -62,7 +61,7 @@ class Reg
         else
         {
             // Slurp in config variables from the ini file directly
-            $ini_file = 'config/classic_config.ini.php'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+            $ini_file = 'config/classic_config.ini'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
             $ini_keys = parse_ini_file($ini_file, true);
             foreach ($ini_keys as $config_category => $config_line)
             {

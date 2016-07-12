@@ -17,11 +17,6 @@
 //
 // File: sched_degrade.php
 
-if (strpos($_SERVER['PHP_SELF'], 'sched_degrade.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 echo "<strong>Degrading Sector Fighters with no friendly base</strong><br><br>";
 $res = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE defense_type = 'F'");
 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);

@@ -21,9 +21,9 @@ namespace Tki;
 
 class Ports
 {
-    public static function getType($ptype, $langvars)
+    public static function getType($ptype, $langvars) : string
     {
-        $ret = null;
+        $ret = '';
         switch ($ptype)
         {
             case 'ore':
@@ -45,10 +45,10 @@ class Ports
                 $ret = $langvars['l_special'];
                 break;
         }
-        return $ret;
+        return (string) $ret;
     }
 
-    public static function dropdown($element_name, $current_value, $onchange, $temp_devices)
+    public static function dropdown($element_name, $current_value, $onchange, $temp_devices) : string
     {
         $i = $current_value;
         $dropdownvar = "<select size='1' name='$element_name'";
@@ -68,10 +68,10 @@ class Ports
 
         $dropdownvar = "$dropdownvar       </select>\n";
 
-        return $dropdownvar;
+        return (string) $dropdownvar;
     }
 
-    public static function build_one_col($text = "&nbsp;", $align = "left")
+    public static function buildOneCol($text = "&nbsp;", $align = "left")
     {
         echo "
         <tr>
@@ -80,7 +80,7 @@ class Ports
         ";
     }
 
-    public static function build_two_col($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left")
+    public static function buildTwoCol($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left")
     {
         echo "
         <tr>
@@ -89,14 +89,14 @@ class Ports
         </tr>";
     }
 
-    public static function php_true_delta($futurevalue, $shipvalue)
+    public static function phpTrueDelta($futurevalue, $shipvalue)
     {
         $tempval = $futurevalue - $shipvalue;
 
         return $tempval;
     }
 
-    public static function php_change_delta($desired_value, $current_value, $upgrade_cost)
+    public static function phpChangeDelta($desired_value, $current_value, $upgrade_cost)
     {
         $delta_cost = 0;
         $delta = $desired_value - $current_value;
@@ -127,8 +127,7 @@ class Ports
         }
 
         // Debug info
-        // echo "$origin * $price_array[$port_type]=";
-        // echo $origin * $price_array[$port_type] . "<br>";
+        // echo "$origin * $price_array[$port_type]=" . $origin * $price_array[$port_type] . "<br>";
         return $origin;
     }
 }

@@ -18,6 +18,8 @@
 // File: classes/Db.php
 //
 // Class for managing the database inside TKI
+//
+// FUTURE: Add Session filters for Mcrypt & gzip, like we once had in Adodb
 
 namespace Tki;
 
@@ -42,19 +44,17 @@ class Db
 
     public function initDb($db_layer)
     {
-        $db_port = \Tki\SecureConfig::PORT;
-        $db_host = \Tki\SecureConfig::HOST;
-        $db_user = \Tki\SecureConfig::USER;
-        $db_pwd = \Tki\SecureConfig::PASS;
-        $db_name = \Tki\SecureConfig::NAME;
-        $db_type = \Tki\SecureConfig::TYPE;
-        $db_prefix = \Tki\SecureConfig::PREFIX;
+        $db_port = \Tki\SecureConfig::DB_PORT;
+        $db_host = \Tki\SecureConfig::DB_HOST;
+        $db_user = \Tki\SecureConfig::DB_USER;
+        $db_pwd = \Tki\SecureConfig::DB_PASS;
+        $db_name = \Tki\SecureConfig::DB_NAME;
+        $db_type = \Tki\SecureConfig::DB_TYPE;
+        $db_prefix = \Tki\SecureConfig::DB_TABLE_PREFIX;
 
         if ($db_layer == 'adodb')
         {
             // Add MD5 encryption for sessions, and then compress it before storing it in the database
-            //ADODB_Session::filter (new ADODB_Encrypt_Mcrypt ());
-            //ADODB_Session::filter (new ADODB_Compress_Gzip ());
 
             // If there is a $db_port variable set, use it in the connection method
             if ($db_port !== null)
@@ -97,7 +97,7 @@ class Db
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
                             ' Database.<br> Database Error: '. $db->ErrorNo() .
                             ': '. $db->ErrorMsg() .'<br>\n';
-                die ($err_msg);
+                die($err_msg);
             }
 
             $db->prefix = $db_prefix;
@@ -129,7 +129,7 @@ class Db
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
                             ' Database.<br> Database Error: '.
                             $e->getMessage() . "<br>\n";
-                die ($err_msg);
+                die($err_msg);
             }
 
             // Disable emulated prepares so that we get true prepared statements
@@ -143,8 +143,8 @@ class Db
 
     public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
     {
-        // Convert the content of PHP_SELF (in case it has been tainted) to the correct html entities
-        $safe_script_name = htmlentities($_SERVER['PHP_SELF'], ENT_HTML5, 'UTF-8');
+        // Convert the content of SCRIPT_NAME (in case it has been tainted) to the correct html entities
+        $safe_script_name = htmlentities($_SERVER['SCRIPT_NAME'], ENT_HTML5, 'UTF-8');
         $db_log = false;
         $error = null;
         $db_error = null;
@@ -157,7 +157,7 @@ class Db
 
         if ($error === 'null' || $error == '')
         {
-            return true;
+            return (bool) true;
         }
         else
         {
@@ -179,7 +179,7 @@ class Db
                 }
             }
 
-            return $db_error;
+            return (string) $db_error;
         }
     }
 }

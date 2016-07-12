@@ -73,7 +73,7 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $beam_defender_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $beam_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($beam_defender_present !== null)
         {
             foreach ($beam_defender_present as $tmp_beams)
@@ -101,7 +101,7 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $shield_defender_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $shield_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($shield_defender_present !== null)
         {
             foreach ($shield_defender_present as $tmp_shields)
@@ -129,7 +129,7 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $torp_defender_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $torp_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($torp_defender_present !== null)
         {
             foreach ($torp_defender_present as $tmp_torp)

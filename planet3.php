@@ -59,7 +59,7 @@ if ($planet_id <= 0)
     echo "Invalid Planet<br><br>";
     Tki\Text::gotomain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-    die ();
+    die();
 }
 
 // Get playerinfo from database

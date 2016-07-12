@@ -24,7 +24,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function traderouteEngage($db, \PDO $pdo_db, $lang, $j, $langvars, Reg $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template)
+    public static function traderouteEngage($db, \PDO $pdo_db, $lang, $j, $langvars, Reg $tkireg, Array $playerinfo, $engage, $dist, $traderoutes, $portfull, $template)
     {
         $traderoute = array();
         $source = array();
@@ -254,7 +254,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
             $stmt->execute();
-            $nsfighters = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nsfighters = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -272,7 +272,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
             $stmt->execute();
-            $nsfighters = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nsfighters = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -298,7 +298,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $traderoute['source_id']);
             $stmt->execute();
-            $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $zoneinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($zoneinfo['allow_trade'] == 'N')
             {
@@ -312,7 +312,7 @@ class Traderoute
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $zoneinfo['owner']);
                     $stmt->execute();
-                    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
@@ -336,7 +336,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':zone_id', $traderoute['dest_id']);
             $stmt->execute();
-            $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $zoneinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($zoneinfo['allow_trade'] == 'N')
             {
@@ -350,7 +350,7 @@ class Traderoute
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $zoneinfo['owner']);
                     $stmt->execute();
-                    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
@@ -1415,7 +1415,7 @@ class Traderoute
         }
     }
 
-    public static function traderouteNew(\PDO $pdo_db, $db, $lang, Reg $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo)
+    public static function traderouteNew(\PDO $pdo_db, $db, $lang, Reg $tkireg, $traderoute_id, $template, $num_traderoutes, Array $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
@@ -1790,23 +1790,21 @@ class Traderoute
         \Tki\Text::gotomain($pdo_db, $lang);
         echo "</div>\n";
 
-        \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-        die ();
+        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        die();
     }
 
     public static function traderouteDie(\PDO $pdo_db, $lang, Reg $tkireg, $error_msg, $template)
     {
-        \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
-
         echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
         \Tki\Text::gotomain($pdo_db, $lang);
         echo "</div>\n";
-        \Tki\Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-        die ();
+        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        die();
     }
 
-    public static function traderouteCheckCompatible($db, \PDO $pdo_db, $lang, $type1, $type2, $move, $circuit, $src, $dest, $playerinfo, Reg $tkireg, $template)
+    public static function traderouteCheckCompatible($db, \PDO $pdo_db, $lang, $type1, $type2, $move, $circuit, $src, $dest, Array $playerinfo, Reg $tkireg, $template)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -1879,7 +1877,7 @@ class Traderoute
         }
     }
 
-    public static function traderouteDistance(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, $playerinfo, Reg $tkireg, $sells = 'N')
+    public static function traderouteDistance(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, Array $playerinfo, Reg $tkireg, $sells = 'N')
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;
@@ -1893,7 +1891,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $start);
             $stmt->execute();
-            $start = $stmt->fetch(PDO::FETCH_ASSOC);
+            $start = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         if ($type2 == 'L')
@@ -1902,7 +1900,7 @@ class Traderoute
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':dest', $dest);
             $stmt->execute();
-            $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+            $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         if ($start['sector_id'] == $dest['sector_id'])
@@ -2009,7 +2007,7 @@ class Traderoute
         return $retvalue;
     }
 
-    public static function traderouteCreate($db, \PDO $pdo_db, $lang, Reg $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
+    public static function traderouteCreate($db, \PDO $pdo_db, $lang, Reg $tkireg, $template, Array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2239,7 +2237,7 @@ class Traderoute
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteDelete(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, $template, $playerinfo, $confirm, $traderoute_id, $traderoutes)
+    public static function traderouteDelete(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, $template, Array $playerinfo, $confirm, $traderoute_id)
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
         \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
@@ -2256,12 +2254,7 @@ class Traderoute
             self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_notowntdr'], $template);
         }
 
-        if (empty ($confirm))
-        {
-            $traderoutes[0] = $delroute;
-            // Here it continues to the main file area to print the route
-        }
-        else
+        if (!empty ($confirm))
         {
             $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
             \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
@@ -2271,7 +2264,7 @@ class Traderoute
         }
     }
 
-    public static function traderouteSettings(\PDO $pdo_db, $lang, Reg $tkireg, $template, $playerinfo)
+    public static function traderouteSettings(\PDO $pdo_db, $lang, Reg $tkireg, $template, Array $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2337,7 +2330,7 @@ class Traderoute
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteSetsettings($db, \PDO $pdo_db, $lang, Reg $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy)
+    public static function traderouteSetsettings($db, \PDO $pdo_db, $lang, Reg $tkireg, $template, Array $playerinfo, $colonists, $fighters, $torps, $energy)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2427,7 +2420,7 @@ class Traderoute
     /**
      * @param string $tdr_display_creds
      */
-    public static function traderouteResultsDisplaySummary(\PDO $pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo)
+    public static function traderouteResultsDisplaySummary(\PDO $pdo_db, $lang, $tdr_display_creds, $dist, Array $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 

@@ -1,6 +1,3 @@
-; <?php die('The Kabal Invasion - General error: You cannot access this file directly.'); ?>
-; This is the languages page, do not modify the above line.
-
 [regional]
 local_date_full_format                  = "Y-m-d H:i:s";
 local_date_short_format                 = "Y-m-d";

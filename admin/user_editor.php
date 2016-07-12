@@ -17,11 +17,6 @@
 //
 // File: admin/user_editor.php
 
-if (strpos($_SERVER['PHP_SELF'], 'user_editor.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 $button_main = true;
 
 if (!array_key_exists('operation', $_POST))

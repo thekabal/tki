@@ -16,11 +16,6 @@
 //
 // File: create_universe/0.php
 
-if (strpos($_SERVER['PHP_SELF'], '/0.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Determine current step, next step, and number of steps
 $create_universe_info = Tki\BigBang::findStep(__FILE__);
 
@@ -61,7 +56,7 @@ foreach ($lang_dir as $file_info) // Get a list of the files in the languages di
             else
             {
                 // Load language ini file to get regional local_lang_name value
-                $ini_file = './languages/' . $lang_file . '.ini.php';
+                $ini_file = './languages/' . $lang_file . '.ini';
                 $parsed_lang_file = parse_ini_file($ini_file, true);
                 $variables['lang_list'][$i]['value'] = $parsed_lang_file['regional']['local_lang_name'];
             }
@@ -69,7 +64,7 @@ foreach ($lang_dir as $file_info) // Get a list of the files in the languages di
         else
         {
                 // Load language ini file to get regional local_lang_name value
-                $ini_file = './languages/' . $lang_file . '.ini.php';
+                $ini_file = './languages/' . $lang_file . '.ini';
                 $parsed_lang_file = parse_ini_file($ini_file, true);
                 $variables['lang_list'][$i]['value'] = $parsed_lang_file['regional']['local_lang_name'];
         }

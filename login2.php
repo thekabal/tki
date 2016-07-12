@@ -83,7 +83,7 @@ if ($tkireg->game_closed)
     echo "<div style='text-align:center; color:#ff0; font-size:20px;'><br>" . $langvars['l_login_closed_message'] . "</div><br>\n";
     echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-    die ();
+    die();
 }
 
 $title = $langvars['l_login_title2'];

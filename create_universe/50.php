@@ -16,11 +16,6 @@
 //
 // File: create_universe/50.php
 
-if (strpos($_SERVER['PHP_SELF'], '/50.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Determine current step, next step, and number of steps
 $create_universe_info = Tki\BigBang::findStep(__FILE__);
 
@@ -76,7 +71,7 @@ foreach ($language_files as $language_filename)
 $variables['language_count'] = ($i - 1);
 
 $local_table_timer->start(); // Start benchmarking
-$gameconfig_result = Tki\File::iniToDb($pdo_db, "config/classic_config.ini.php", "gameconfig", "game", $tkireg);
+$gameconfig_result = Tki\File::iniToDb($pdo_db, "config/classic_config.ini", "gameconfig", "game", $tkireg);
 $local_table_timer->stop();
 if ($gameconfig_result === true)
 {

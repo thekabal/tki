@@ -47,7 +47,7 @@ if ($playerinfo['turns'] < 1)
     echo $langvars['l_dump_turn']  . "<br><br>";
     Tki\Text::gotomain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-    die ();
+    die();
 }
 
 if ($playerinfo['ship_colonists'] == 0)
