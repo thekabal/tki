@@ -39,7 +39,7 @@ class Translate
         if (!Db::isActive($pdo_db))
         {
             // Slurp in language variables from the ini file directly
-            $ini_file = './languages/' . $language . '.ini.php';
+            $ini_file = './languages/' . $language . '.ini';
             $ini_keys = parse_ini_file($ini_file, true);
             foreach ($ini_keys as $config_line)
             {

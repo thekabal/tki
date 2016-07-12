@@ -71,7 +71,7 @@ foreach ($language_files as $language_filename)
 $variables['language_count'] = ($i - 1);
 
 $local_table_timer->start(); // Start benchmarking
-$gameconfig_result = Tki\File::iniToDb($pdo_db, "config/classic_config.ini.php", "gameconfig", "game", $tkireg);
+$gameconfig_result = Tki\File::iniToDb($pdo_db, "config/classic_config.ini", "gameconfig", "game", $tkireg);
 $local_table_timer->stop();
 if ($gameconfig_result === true)
 {
