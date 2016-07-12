@@ -16,11 +16,6 @@
 //
 // File: create_universe/80.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], '/80.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Determine current step, next step, and number of steps
 $create_universe_info = Tki\BigBang::findStep(__FILE__);
 
