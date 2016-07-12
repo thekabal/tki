@@ -54,14 +54,36 @@ $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'tki';
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
 
+/*
+ * Get the webserver version.
+ * TODO: Clean this up by moving all setup_info logic to a class.
+ */
+$sapi = php_sapi_name();
+$serverType = '';
+$serverVersion = '';
+
+if($sapi === 'apache')
+{
+    $serverType = $sapi;
+    $serverVersion = apache_get_version();
+}
+else
+{
+    // This logic presumes nginx is being used.
+    $nameVersionPair = explode('/', $_SERVER['SERVER_SOFTWARE']);
+    $serverType = $nameVersionPair[0];
+    $serverVersion = array_pop($nameVersionPair);
+}
+
 $variables['selected_lang'] = null;
 $variables['system'] = php_uname();
 $variables['remote_addr'] = $_SERVER['REMOTE_ADDR'];
 $variables['server_addr'] = $_SERVER['HTTP_HOST'] . ':' . $_SERVER['SERVER_PORT'];
 $variables['zend_version'] = zend_version();
-$variables['apache_version'] = apache_get_version();
 $variables['php_version'] = PHP_VERSION;
 $variables['php_sapi_name'] = php_sapi_name();
+$variables['server_type'] = $serverType;
+$variables['server_version'] = $serverVersion;
 $variables['game_path'] = Tki\SetPaths::setGamepath();
 $variables['db_type'] = $db_type;
 $variables['db_name'] = $db_name;
