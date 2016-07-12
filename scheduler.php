@@ -88,7 +88,7 @@ else
     }
 }
 
-if ($swordfish != \Tki\SecureConfig::ADMINPW)
+if ($swordfish != \Tki\SecureConfig::ADMIN_PASS)
 {
     echo "<form accept-charset='utf-8' action='scheduler.php' method='post'>";
     echo "Password: <input type='password' name='swordfish' size='20' maxlength='20'><br><br>";

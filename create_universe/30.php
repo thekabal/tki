@@ -39,9 +39,9 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-$variables['drop_tables_results']    = Tki\Schema::dropTables($pdo_db, $pdo_db->prefix, \Tki\SecureConfig::TYPE); // Delete all tables in the database
+$variables['drop_tables_results']    = Tki\Schema::dropTables($pdo_db, $pdo_db->prefix, \Tki\SecureConfig::DB_TYPE); // Delete all tables in the database
 $variables['drop_tables_count']      = count($variables['drop_tables_results']) - 1;
-$variables['drop_seq_results']       = Tki\Schema::dropSequences($pdo_db, $pdo_db->prefix, \Tki\SecureConfig::TYPE); // Delete all sequences in the database
+$variables['drop_seq_results']       = Tki\Schema::dropSequences($pdo_db, $pdo_db->prefix, \Tki\SecureConfig::DB_TYPE); // Delete all sequences in the database
 $variables['drop_seq_count']         = count($variables['drop_seq_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
