@@ -17,11 +17,6 @@
 //
 // File: sched_thegovernor.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'sched_thegovernor.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 echo "<strong>The Governor</strong><br><br>";
 
 echo "Validating Ship Fighters, Torpedoes, Armor points and Credits...<br>\n";

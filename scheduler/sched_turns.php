@@ -17,11 +17,6 @@
 //
 // File: sched_turns.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'sched_turns.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 echo "<strong>TURNS</strong><br><br>";
 echo "Adding turns...";
 $resa = $db->Execute("UPDATE {$db->prefix}ships SET turns = LEAST (turns + ($tkireg->turns_per_tick * $multiplier), $tkireg->max_turns) WHERE turns < $tkireg->max_turns");

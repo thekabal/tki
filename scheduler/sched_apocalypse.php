@@ -17,11 +17,6 @@
 //
 // File: sched_apocalypse.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'sched_apocalyse.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 echo "<strong>PLANETARY APOCALYPSE</strong><br><br>";
 echo "The four horsemen of the apocalypse set forth...<br>";
 $doomsday = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE colonists > ?;", array($tkireg->doomsday_value));

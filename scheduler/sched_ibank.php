@@ -17,11 +17,6 @@
 //
 // File: sched_ibank.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'sector_ibank.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 $exponinter = pow($tkireg->ibank_interest + 1, $multiplier);
 $expoloan = pow($tkireg->ibank_loaninterest + 1, $multiplier);
 
