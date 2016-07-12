@@ -30,7 +30,7 @@ class Scheduler
         }
         else
         {
-            die (" failed.");
+            die(" failed.");
         }
     }
 }

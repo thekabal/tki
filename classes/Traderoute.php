@@ -1791,7 +1791,7 @@ class Traderoute
         echo "</div>\n";
 
         \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-        die ();
+        die();
     }
 
     public static function traderouteDie(\PDO $pdo_db, $lang, Reg $tkireg, $error_msg, $template)
@@ -1801,7 +1801,7 @@ class Traderoute
         \Tki\Text::gotomain($pdo_db, $lang);
         echo "</div>\n";
         \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-        die ();
+        die();
     }
 
     public static function traderouteCheckCompatible($db, \PDO $pdo_db, $lang, $type1, $type2, $move, $circuit, $src, $dest, Array $playerinfo, Reg $tkireg, $template)

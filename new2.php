@@ -28,7 +28,7 @@ echo '<h1>' . $title . '</h1>';
 
 if ($tkireg->account_creation_closed)
 {
-    die ($langvars['l_new_closed_message']); // This should ideally use a class based error handler instead
+    die($langvars['l_new_closed_message']); // This should ideally use a class based error handler instead
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.

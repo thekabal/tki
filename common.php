@@ -17,11 +17,6 @@
 //
 // File: common.php
 
-if (!extension_loaded('mbstring')) // Test to ensure mbstring extension is loaded
-{
-    die ('The Kabal Invasion - General error: The PHP mbstring extension is required. Please install it.');
-}
-
 require_once './vendor/autoload.php';              // Load the auto-loader
 require_once './global_defines.php';               // Defines used in many places
 mb_http_output('UTF-8');                           // Our output should be served in UTF-8 no matter what.
