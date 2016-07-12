@@ -17,11 +17,6 @@
 //
 // File: admin/sector_editor.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'sector_editor.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 $variables['operation'] = null;
 
 if (!array_key_exists('sector', $_POST))

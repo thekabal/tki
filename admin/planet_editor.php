@@ -17,11 +17,6 @@
 //
 // File: admin/planet_editor.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'planet_editor.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 echo "<h2>" . $langvars['l_admin_planet_editor'] . "</h2>";
 echo "<form accept-charset='utf-8' action='admin.php' method='post'>";
 if (empty($planet))

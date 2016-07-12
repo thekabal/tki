@@ -17,11 +17,6 @@
 //
 // File: admin/perf_monitor.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'perf_monitor.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 //adodb_perf::table("{$db->prefix}adodb_logsql");
 $perf = NewPerfMonitor($db);
 $perf->UI($pollsecs=5);
