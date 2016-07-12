@@ -26,11 +26,11 @@ class Scheduler
         $test_result = Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if ($test_result)
         {
-            echo " ok.<br>";
+            echo ' ok.<br>';
         }
         else
         {
-            die(" failed.");
+            die(' failed.');
         }
     }
 }
