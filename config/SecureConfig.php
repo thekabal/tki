@@ -21,38 +21,67 @@
 
 namespace Tki;
 
+/**
+ * Stores configuration details that are accessed across the entire codebase.
+ *
+ * NOTES: The ADOdb db module is currently required to run TKI. You can find it at http://php.weblogs.com/ADODB.
+ * Adodb is automatically configured to be run from vendor/adodb. We are migrating away from adodb, switching
+ * to pure PDO instead.
+ */
 class SecureConfig
 {
-    // The ADOdb db module is currently required to run TKI. You can find it at http://php.weblogs.com/ADODB.
-    // Adodb is automatically configured to be run from vendor/adodb.
-    // We are migrating away from adodb, switching to pure PDO instead.
+    /**
+     * Port to connect to database on.
+     *
+     * If you do not know the port, set this to '' for default.
+     * - MySQL default is 3306
+     * - PgSQL default is 5432
+     */
+    const DB_PORT = null;
 
-    // Port to connect to database on. Note : if you do not know the port, set this to '' for default.
-    // Ex, MySQL default is 3306, PgSQL is 5432
-    const PORT = null;
+    /**
+     * Hostname of the database server.
+     */
+    const DB_HOST = '127.0.0.1';
 
-    // Hostname of the database server:
-    const HOST = '127.0.0.1';
+    /**
+     * Username connect to the database.
+     */
+    const DB_USER = 'tki';
 
-    // Username and password to connect to the database:
-    const USER = 'tki';
-    const PASS = 'tki';
+    /**
+     * Password to connect to the database.
+     */
+    const DB_PASS = 'tki';
 
-    // Name of the SQL database:
-    const NAME = 'tki';
+    /**
+     * Name of the SQL database.
+     */
+    const DB_NAME = 'tki';
 
-    // Type of the SQL database.
-    // "mysqli" for MySQLi - needed for transaction support or "postgres9" for PostgreSQL ver 9 and up
-    // NOTE: only mysqli works as of this release.
-    const TYPE = 'mysqli';
-    // const TYPE = 'postgres9';
+    /**
+     * Type of the SQL database.
+     *
+     * Possible values:
+     * - "mysqli" -  required for transaction support.
+     * - "postgres9" - Version 9+.
+     *
+     * NOTES:
+     * - MySQLi is required for transaction support.
+     * - Only mysqli works as of this release.
+     */
+    const DB_TYPE = 'mysqli';
 
-    // Table prefix for the database. If you want to run more than
-    // one game of TKI on the same database, or if the current table
-    // names conflict with tables you already have in your db, you will
-    // need to change this
-    const PREFIX = 'tki_';
+    /**
+     * Table prefix for the database.
+     *
+     * If you want to run more than one game of TKI on the same database, or if the current table names
+     * conflict with tables you already have in your db, you will need to change this.
+     */
+    const DB_TABLE_PREFIX = 'tki_';
 
-    // Define the admin password, used for accessing create_universe, scheduler, and the admin control panel
-    const ADMINPW = 'secret';
+    /**
+     * Define the admin password, used for accessing "create_universe", "scheduler", and the admin control panel.
+     */
+    const ADMIN_PASS = 'secret';
 }
