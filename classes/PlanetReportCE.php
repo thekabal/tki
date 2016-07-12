@@ -36,13 +36,13 @@ class PlanetReportCE
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':email', $_SESSION['username']);
         $stmt->execute();
-        $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $playerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet_id);
         $stmt->execute();
-        $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Error out and return if the Player isn't the owner of the Planet
         // Verify player owns the planet which is to have the base created on.
@@ -84,7 +84,7 @@ class PlanetReportCE
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':planet_id', $planet_id);
             $stmt->execute();
-            $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             // Notify User Of Base Results
             echo $langvars['l_planet_bbuild'] . "<br><br>";
@@ -374,8 +374,6 @@ class PlanetReportCE
 
     public static function takeCredits(\PDO $pdo_db, $db, $langvars, $planet_id)
     {
-        $planet = array();
-
         // Get basic Database information (ship and planet)
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
@@ -388,7 +386,7 @@ class PlanetReportCE
         // Set the name for unamed planets to be "unnamed"
         if (empty ($planetinfo['name']))
         {
-            $planet['name'] = $langvars['l_unnamed'];
+            $planetinfo['name'] = $langvars['l_unnamed'];
         }
 
         // Verify player is still in same sector as the planet

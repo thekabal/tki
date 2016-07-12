@@ -33,7 +33,7 @@ if (!$tkireg->allow_navcomp)
     echo $langvars['l_nav_nocomp'] . '<br><br>';
     Tki\Text::gotomain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-    die ();
+    die();
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -149,7 +149,7 @@ elseif ($state == 1)
         $search_result = $db->Execute($search_query);
         if ($search_result === false)
         {
-            die ('Invalid query');
+            die('Invalid query');
         }
         else
         {

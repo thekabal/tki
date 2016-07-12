@@ -48,7 +48,7 @@ if (mb_strlen(trim($swordfish)) === 0)
     $swordfish = false;
 }
 
-if ($swordfish != \Tki\SecureConfig::ADMINPW)
+if ($swordfish != \Tki\SecureConfig::ADMIN_PASS)
 {
     echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
     echo "password: <input type=password name=swordfish size=20><br><br>";

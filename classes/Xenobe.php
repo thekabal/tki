@@ -17,16 +17,15 @@
 //
 // File: classes/Xenobe.php
 //
-// FUTURE: These are horribly bad. But in the interest of saying goodbye to the includes directory, and raw functions, this
-// will at least allow us to auto-load and use classes instead. Plenty to do in the future, though!
+// FUTURE: This class is horribly bad, and needs to be refactored and tested.
 
 namespace Tki;
 
 class Xenobe
 {
-    public static function xenobeTrade(\PDO $pdo_db, $db, $playerinfo, Reg $tkireg)
+    public static function xenobeTrade(\PDO $pdo_db, $db, Array $playerinfo, Reg $tkireg)
     {
-        // We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
+        // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
         $tkireg->ore_price = 11;
         $tkireg->organics_price = 5;
         $tkireg->goods_price = 15;
@@ -39,14 +38,14 @@ class Xenobe
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $playerinfo['sector']);
         $stmt->execute();
-        $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sectorinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Obtain zone information
         $sql = "SELECT zone_id, allow_attack, allow_trade FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
         $stmt->execute();
-        $zonerow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $zonerow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Make sure we can trade here
         if ($zonerow['allow_trade'] == "N")
@@ -241,7 +240,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeToPlanet(\PDO $pdo_db, $db, $planet_id, Reg $tkireg, $playerinfo, $langvars)
+    public static function xenobeToPlanet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, Array $playerinfo, $langvars)
     {
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
@@ -250,13 +249,13 @@ class Xenobe
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet_id);
         $stmt->execute();
-        $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $planetinfo['owner']);
         $stmt->execute();
-        $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
 
@@ -558,7 +557,7 @@ class Xenobe
         \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
 
-    public static function xenobeToShip(\PDO $pdo_db, $db, $ship_id, Reg $tkireg, $playerinfo, $langvars)
+    public static function xenobeToShip(\PDO $pdo_db, $db, int $ship_id, Reg $tkireg, Array $playerinfo, $langvars)
     {
         $armor_lost = null;
         $fighters_lost = null;
@@ -1032,10 +1031,8 @@ class Xenobe
         \Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
     }
 
-    public static function xenobeToSecDef(\PDO $pdo_db, $db, $langvars, $playerinfo, $targetlink, Reg $tkireg)
+    public static function xenobeToSecDef(\PDO $pdo_db, $db, $langvars, Array $playerinfo, int $targetlink, Reg $tkireg)
     {
-        $links = array();
-
         // Check for sector defenses
         if ($targetlink > 0)
         {
@@ -1047,30 +1044,31 @@ class Xenobe
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
-            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
-                    $links[$i] = $tmp_defense['link_dest'];
                     $defenses[$i] = $tmp_defense;
                     $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
                 }
             }
 
-            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M'", array($targetlink));
-            \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
-            if ($resultm instanceof \adodb\ADORecordSet)
+            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                while (!$resultm->EOF)
+                foreach ($defenses_present as $tmp_defenses)
                 {
-                    $defenses[$i] = $resultm->fields;
+                    $defenses[$i] = $tmp_defenses;
                     $total_sector_mines += $defenses[$i]['quantity'];
                     $i++;
-                    $resultm->MoveNext();
                 }
             }
 
@@ -1258,7 +1256,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove(\PDO $pdo_db, $db, $playerinfo, $targetlink, $langvars, Reg $tkireg)
+    public static function xenobeMove(\PDO $pdo_db, $db, Array $playerinfo, int $targetlink, $langvars, Reg $tkireg)
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1266,14 +1264,15 @@ class Xenobe
             $targetlink = 0;
         }
 
-        $linkres = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
-        \Tki\Db::LogDbErrors($pdo_db, $linkres, __LINE__, __FILE__);
-        if ($linkres instanceof \adodb\ADORecordSet)
+        $sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start = :link_start";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':link_start', $playerinfo['sector']);
+        $stmt->execute();
+        $links_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($links_present !== null)
         {
-            while (!$linkres->EOF)
+            foreach ($links_present as $row)
             {
-                $row = $linkres->fields;
-
                 // Obtain sector information
                 $sectres = $db->Execute("SELECT sector_id,zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($row['link_dest']));
                 \Tki\Db::LogDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
@@ -1290,7 +1289,6 @@ class Xenobe
                         $targetlink = $row['link_dest'];
                     }
                 }
-                $linkres->MoveNext();
             }
         }
 
@@ -1321,34 +1319,40 @@ class Xenobe
 
         if ($targetlink > 0) // Check for sector defenses
         {
-            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F' ORDER BY quantity DESC", array($targetlink));
-            \Tki\Db::LogDbErrors($pdo_db, $resultf, __LINE__, __FILE__);
+            // Check for sector defenses
             $i = 0;
             $total_sector_fighters = 0;
+            $total_sector_mines = 0;
             $defenses = array();
-            if ($resultf instanceof \adodb\ADORecordSet)
+
+            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                while (!$resultf->EOF)
+                foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $resultf->fields;
+                    $defenses[$i] = $tmp_defense;
                     $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
-                    $resultf->MoveNext();
                 }
             }
 
-            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M'", array($targetlink));
-            \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
             $i = 0;
-            $total_sector_mines = 0;
-            if ($resultm instanceof \adodb\ADORecordSet)
+            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                while (!$resultm->EOF)
+                foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $resultm->fields;
+                    $defenses[$i] = $tmp_defense;
                     $total_sector_mines += $defenses[$i]['quantity'];
                     $i++;
-                    $resultm->MoveNext();
                 }
             }
 
@@ -1372,6 +1376,7 @@ class Xenobe
         if ($targetlink > 0) // Move to target link
         {
             $stamp = date("Y-m-d H:i:s");
+
             $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?", array($stamp, $targetlink, $playerinfo['ship_id']));
             \Tki\Db::LogDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
             if (!$move_result)
@@ -1386,7 +1391,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter(\PDO $pdo_db, $db, $playerinfo, $xenobeisdead, $langvars, Reg $tkireg)
+    public static function xenobeHunter(\PDO $pdo_db, $db, Array $playerinfo, $xenobeisdead, $langvars, Reg $tkireg)
     {
         $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
@@ -1449,34 +1454,40 @@ class Xenobe
             }
 
             // Check for sector defenses
-            $resultf = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'F' ORDER BY quantity DESC", array($targetinfo['sector']));
-            \Tki\Db::LogDbErrors($pdo_db, $resultf, __LINE__, __FILE__);
             $i = 0;
             $total_sector_fighters = 0;
             $defenses = array();
-            if ($resultf instanceof \adodb\ADORecordSet)
+
+            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $targetinfo['sector']);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                while (!$resultf->EOF)
+                foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $resultf->fields;
+                    $defenses[$i] = $tmp_defense;
                     $total_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
-                    $resultf->MoveNext();
                 }
             }
 
-            $resultm = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'M'", array($targetinfo['sector']));
-            \Tki\Db::LogDbErrors($pdo_db, $resultm, __LINE__, __FILE__);
             $i = 0;
             $total_sector_mines = 0;
-            if ($resultm instanceof \adodb\ADORecordSet)
+
+            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $targetinfo['sector']);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                while (!$resultm->EOF)
+                foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $resultm->fields;
+                    $defenses[$i] = $tmp_defense;
                     $total_sector_mines += $defenses[$i]['quantity'];
                     $i++;
-                    $resultm->MoveNext();
                 }
             }
 
@@ -1509,7 +1520,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeRegen(\PDO $pdo_db, $db, $playerinfo, $xen_unemployment, Reg $tkireg)
+    public static function xenobeRegen(\PDO $pdo_db, Array $playerinfo, $xen_unemployment, Reg $tkireg)
     {
         $gena = null;
         $gene = null;
@@ -1575,8 +1586,16 @@ class Xenobe
         }
 
         // Update Xenobe record
-        $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, armor_pts = ?, ship_fighters = ?, torps = ?, credits = ? WHERE ship_id = ?;", array($playerinfo['ship_energy'], $playerinfo['armor_pts'], $playerinfo['ship_fighters'], $playerinfo['torps'], $playerinfo['credits'], $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $resg, __LINE__, __FILE__);
+        $sql = "UPDATE {$pdo_db->prefix}ships SET ship_energy = :ship_energy, armor_pts = :armor_pts, ship_fighters = :ship_fighters, torps = :torps, credits = :credits WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_energy', $playerinfo['ship_energy']);
+        $stmt->bindParam(':armor_pts', $playerinfo['armor_pts']);
+        $stmt->bindParam(':ship_fighters', $playerinfo['ship_fighters']);
+        $stmt->bindParam(':torps', $playerinfo['torps']);
+        $stmt->bindParam(':credits', $playerinfo['credits']);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->execute();
+
         if (!$gene === null || !$gena === null || !$genf === null || !$gent === null)
         {
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe $gene $gena $genf $gent and has been updated.");

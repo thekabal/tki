@@ -17,11 +17,6 @@
 //
 // File: admin/zone_editor.php
 
-if (strpos($_SERVER['PHP_SELF'], 'zone_editor.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Set array with all used variables in page
 $variables['operation'] = null;
 

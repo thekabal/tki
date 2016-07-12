@@ -21,7 +21,7 @@ namespace Tki;
 
 class Character
 {
-    public static function kill(\PDO $pdo_db, $db, $ship_id, $langvars, Reg $tkireg, $remove_planets = false)
+    public static function kill(\PDO $pdo_db, $db, int $ship_id, $langvars, Reg $tkireg, $remove_planets = false)
     {
         $update_ships_res = $db->Execute("UPDATE {$db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defenses=' ' WHERE ship_id=?", array($ship_id));
         Db::LogDbErrors($pdo_db, $update_ships_res, __LINE__, __FILE__);
@@ -44,7 +44,7 @@ class Character
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $ship_id);
         $stmt->execute();
-        $sectors_owned = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sectors_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if ($sectors_owned !== null)
         {
@@ -78,10 +78,8 @@ class Character
 
     // Choosing to use a method instead of a property.
     // If we went with a method, and it needed to be changed, we would have to change lots of property->method calls.
-    public static function getInsignia(\PDO $pdo_db, $a_username, $langvars)
+    public static function getInsignia(\PDO $pdo_db, $a_username, $langvars) : string
     {
-        unset($player_insignia);
-
         // Lookup players score.
         $sql = "SELECT score FROM {$pdo_db->prefix}ships WHERE email =:email";
         $stmt = $pdo_db->prepare($sql);
@@ -118,6 +116,6 @@ class Character
             $player_insignia = $langvars['l_insignia_19'];
         }
 
-        return $player_insignia;
+        return (string) $player_insignia;
     }
 }

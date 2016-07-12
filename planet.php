@@ -69,7 +69,7 @@ if ($planet_id <= 0)
     echo 'Invalid Planet<br><br>';
     Tki\Text::gotomain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-    die ();
+    die();
 }
 
 $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
@@ -645,7 +645,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-                die ();
+                die();
             }
             unset($_SESSION['planet_selected']);
 

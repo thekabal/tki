@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ship
 {
-    public static function isDestroyed(\PDO $pdo_db, $lang, Reg $tkireg, $langvars, $template, $playerinfo) : bool
+    public static function isDestroyed(\PDO $pdo_db, $lang, Reg $tkireg, $langvars, $template, Array $playerinfo) : bool
     {
         // Check for destroyed ship
         if ($playerinfo['ship_destroyed'] === 'Y')
@@ -67,13 +67,13 @@ class Ship
     }
 
     // FUTURE: Reduce the number of SQL calls needed to accomplish this. Maybe do the update without two selects?
-    public static function leavePlanet(\PDO $pdo_db, $ship_id)
+    public static function leavePlanet(\PDO $pdo_db, int $ship_id)
     {
         $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE owner=:owner";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $ship_id);
         $stmt->execute();
-        $planets_owned = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $planets_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if ($planets_owned !== null)
         {
@@ -81,10 +81,10 @@ class Ship
             {
                 $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':planet_id', $planet_id);
+                $stmt->bindParam(':planet_id', $tmp_planet['planet_id']);
                 $stmt->bindParam(':ship_id', $ship_id);
                 $stmt->execute();
-                $ships_on_planet = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $ships_on_planet = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
                 if ($ships_on_planet !== null)
                 {

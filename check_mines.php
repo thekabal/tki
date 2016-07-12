@@ -17,11 +17,6 @@
 //
 // File: check_mines.php
 
-if (strpos($_SERVER['PHP_SELF'], 'check_mines.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('check_mines', 'common', 'global_includes', 'combat', 'footer', 'news'));
 
@@ -62,7 +57,7 @@ $shipavg = Tki\CalcLevels::avgTech($targetship, "ship");
 //    1) There is at least 1 group of mines in the sector
 //    2) There is at least 1 mine in the sector
 //    3) You are not the owner or on the team of the owner - team 0 dosent count
-//    4) You ship is at least $tkireg->mine_hullsize (setable in config/classic_config.ini.php) big
+//    4) You ship is at least $tkireg->mine_hullsize (setable in config/classic_config.ini) big
 
 if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkireg->mine_hullsize)
 {

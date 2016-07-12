@@ -19,11 +19,6 @@
 
 // FUTURE: Recode file so that news are generated in the server default language, and remove hard-coded (language) news text from the database
 
-if (strpos($_SERVER['PHP_SELF'], 'sched_news.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 

@@ -21,13 +21,13 @@ namespace Tki;
 
 class Defense
 {
-    public static function defenseVsDefense(\PDO $pdo_db, $ship_id, $langvars)
+    public static function defenseVsDefense(\PDO $pdo_db, int $ship_id, $langvars)
     {
         $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE ship_id=:ship_d";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
-        $secdef_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if ($secdef_present !== null)
         {
@@ -41,7 +41,7 @@ class Defense
                 $stmt->bindParam(':sector_id', $tmp_defense['sector_id']);
                 $stmt->bindParam(':ship_id', $ship_id);
                 $stmt->execute();
-                $other_secdef_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $other_secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
                 if ($other_secdef_present !== null && $qty > 0)
                 {

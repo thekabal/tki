@@ -17,11 +17,6 @@
 //
 // File: sched_ranking.php
 
-if (strpos($_SERVER['PHP_SELF'], 'sched_rankings.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 echo "<strong>Ranking</strong><br><br>";
 $res = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE ship_destroyed='N'");
 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);

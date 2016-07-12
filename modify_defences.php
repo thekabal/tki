@@ -32,7 +32,7 @@ if (!isset($defense_id))
     echo $langvars['l_md_invalid'] . "<br><br>";
     Tki\Text::gotomain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-    die ();
+    die();
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -61,7 +61,7 @@ if ($playerinfo['turns'] < 1)
     echo $langvars['l_md_noturn'] . "<br><br>";
     Tki\Text::gotomain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-    die ();
+    die();
 }
 
 $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE defense_id=:defense_id";

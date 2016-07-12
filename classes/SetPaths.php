@@ -19,7 +19,7 @@ declare(strict_types=1);
 // File: classes/SetPaths.php
 //
 // Auto detect and set the game path (uses the logic from setup_info)
-// If it does not work, please comment this out and set it in db_config.php instead.
+// If it does not work, please comment this out and set it in config/SecureConfig.php instead.
 // But PLEASE also report that it did not work for you at the github project page ()
 
 namespace Tki;
@@ -28,7 +28,7 @@ class SetPaths
 {
     public static function setGamepath() : string
     {
-        $gamepath = dirname($_SERVER['PHP_SELF']);
+        $gamepath = dirname($_SERVER['SCRIPT_NAME']);
         if ($gamepath !== null && mb_strlen($gamepath) > 0)
         {
             if ($gamepath === "\\")

@@ -17,11 +17,6 @@
 //
 // File: sched_tow.php
 
-if (strpos($_SERVER['PHP_SELF'], 'sched_tow.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 echo "<strong>ZONES</strong><br><br>";
 echo "Towing bigger players out of restricted zones...";
 $num_to_tow = 0;
