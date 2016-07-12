@@ -17,11 +17,6 @@
 //
 // File: sched_ports.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'sched_ports.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Update Ore in Ports
 echo "<strong>PORTS</strong><br><br>";
 echo "Adding ore to all commodities ports...";

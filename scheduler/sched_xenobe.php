@@ -19,11 +19,6 @@
 //
 // FUTURE: SQL bind varibles
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'sched_xenobe.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Xenobe turn updates
 echo "<br><strong>Xenobe TURNS</strong><br><br>";
 
