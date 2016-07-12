@@ -268,8 +268,7 @@ $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
-// FUTURE: This select should have an error check that is reflected in the template
-//$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
+// FUTURE: This select should have an error check that is reflected in the template, like catch_results[$z] = logdberrors
 $z++;
 $update = "UPDATE {$pdo_db->prefix}universe SET port_type='ore',port_ore=$initsore,port_organics=$initborganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
 
@@ -336,8 +335,7 @@ $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
-// FUTURE: This select should have an error check that is reflected in the template
-//$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
+// FUTURE: This select should have an error check that is reflected in the template like $catch_results[$z] = logDbErrors
 $z++;
 $update = "UPDATE {$pdo_db->prefix}universe SET port_type='organics',port_ore=$initsore,port_organics=$initborganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
 
@@ -404,8 +402,7 @@ $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
-// FUTURE: This select should have an error check that is reflected in the template
-//$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
+// FUTURE: This select should have an error check that is reflected in the template like $catch_results[$z] = logDbErrors
 $z++;
 $update = "UPDATE {$pdo_db->prefix}universe SET port_type='goods',port_ore=$initbore,port_organics=$initborganics,port_goods=$initsgoods,port_energy=$initbenergy WHERE ";
 

@@ -27,7 +27,6 @@ class Reg
         $stmt = "SELECT name,value,type FROM {$pdo_db->prefix}gameconfig";
         $result = $pdo_db->query($stmt);
         Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
-//        $no_langs_yet = true;
 
         if ($result !== false) // If the database is not live, this will give false, and db calls will fail silently
         {
