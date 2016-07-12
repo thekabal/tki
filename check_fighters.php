@@ -17,11 +17,6 @@
 //
 // File: check_fighters.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'check_fighters.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('check_fighters', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 

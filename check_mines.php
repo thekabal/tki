@@ -17,11 +17,6 @@
 //
 // File: check_mines.php
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'check_mines.php')) // Prevent direct access to this file
-{
-    die('The Kabal Invasion - General error: You cannot access this file directly.');
-}
-
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('check_mines', 'common', 'global_includes', 'combat', 'footer', 'news'));
 
