@@ -32,10 +32,7 @@ header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP co
 SetCookie('TestCookie', '', 0);
 SetCookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
 
-/*
- * Database configuration.
- * TODO: Move config to .env/array storage.
- */
+// Database configuration.
 $db_host = \Tki\SecureConfig::DB_HOST;
 $db_port = \Tki\SecureConfig::DB_PORT;
 $db_user = \Tki\SecureConfig::DB_USER;
@@ -54,10 +51,7 @@ $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'tki';
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
 
-/*
- * Get the webserver version.
- * TODO: Clean this up by moving all setup_info logic to a class.
- */
+// Get the webserver version.
 $sapi = php_sapi_name();
 $serverType = '';
 $serverVersion = '';
@@ -117,6 +111,7 @@ $test_smarty = new \Smarty;
 $test_smarty->setCompileDir('templates/_compile/');
 $test_smarty->setCacheDir('templates/_cache/');
 $test_smarty->setConfigDir('templates/_configs/');
+
 // Smarty outputs directly (yuck), so we output buffer it instead
 ob_start();
 $test_smarty->testInstall();
