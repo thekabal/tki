@@ -222,7 +222,7 @@ if ($tkireg->enable_gravatars)
     echo "<table style='width:150px; margin:auto; text-align:center; border:0px; padding:0px; border-spacing:0px'>\n";
     echo "  <tr>\n";
     echo "    <td style='white-space:nowrap; border:#fff 1px solid; background-color:#500050; width:150px'>\n";
-    echo "<img style='display:block; margin-left:auto; margin-right:auto' height='80' width='80' alt='Player Avatar' src='http://www.gravatar.com/avatar/" . $gravatar_id . "?r=g&amp;d=mm'>";
+    echo "<img style='display:block; margin-left:auto; margin-right:auto' height='80' width='80' alt='Player Avatar' src='https://www.gravatar.com/avatar/" . $gravatar_id . "?r=g&amp;d=mm'>";
     echo "    <div style='padding-left:4px; text-align:left'>\n";
     echo "</div>\n";
     echo "    </td>\n";
