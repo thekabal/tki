@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,49 +22,49 @@ namespace Tki;
 
 class CalcLevels
 {
-    public static function armor($level_armor, Reg $tkireg)
+    public static function armor(int $level_armor, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_armor) * 100);
         return $result;
     }
 
-    public static function holds($level_hull, Reg $tkireg)
+    public static function holds(int $level_hull, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_hull) * 100);
         return $result;
     }
 
-    public static function shields($level_shields, Reg $tkireg)
+    public static function shields(int $level_shields, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_shields) * 100);
         return $result;
     }
 
-    public static function torpedoes($level_torp_launchers, Reg $tkireg)
+    public static function torpedoes(int $level_torp_launchers, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_torp_launchers) * 100);
         return $result;
     }
 
-    public static function beams($level_beams, Reg $tkireg)
+    public static function beams(int $level_beams, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_beams) * 100);
         return $result;
     }
 
-    public static function fighters($level_computer, Reg $tkireg)
+    public static function fighters(int $level_computer, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_computer) * 100);
         return $result;
     }
 
-    public static function energy($level_power, Reg $tkireg)
+    public static function energy(int $level_power, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_power) * 500);
         return $result;
     }
 
-    public static function planetBeams(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo) : int
+    public static function planetBeams(\PDO $pdo_db, Array $ownerinfo, Reg $tkireg, Array $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetbeams = self::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
@@ -91,7 +92,7 @@ class CalcLevels
         return (int) $planetbeams;
     }
 
-    public static function planetShields(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo) : int
+    public static function planetShields(\PDO $pdo_db, Array $ownerinfo, Reg $tkireg, Array $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
@@ -119,7 +120,7 @@ class CalcLevels
         return (int) $planetshields;
     }
 
-    public static function planetTorps(\PDO $pdo_db, $ownerinfo, $planetinfo, Reg $tkireg) : int
+    public static function planetTorps(\PDO $pdo_db, Array $ownerinfo, Array $planetinfo, Reg $tkireg) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,7 +22,7 @@ namespace Tki;
 
 class Move
 {
-    public static function calcFuelScooped(Array $playerinfo, $distance, $triptime, Reg $tkireg)
+    public static function calcFuelScooped(Array $playerinfo, int $distance, int $triptime, Reg $tkireg) : int
     {
         // Check if we have a fuel scoop
         if ($playerinfo['dev_fuelscoop'] == 'Y')
@@ -56,6 +57,6 @@ class Move
             $energyscooped = 0;
         }
 
-        return $energyscooped;
+        return (int) $energyscooped;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +26,7 @@ namespace Tki;
 
 class PlanetReportCE
 {
-    public static function buildBase(\PDO $pdo_db, $db, $langvars, $planet_id, $sector_id, Reg $tkireg)
+    public static function buildBase(\PDO $pdo_db, $db, Array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
     {
         echo "<br>";
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_status']);
@@ -100,7 +101,7 @@ class PlanetReportCE
         }
     }
 
-    public static function collectCredits(\PDO $pdo_db, $db, $langvars, $planetarray, Reg $tkireg)
+    public static function collectCredits(\PDO $pdo_db, $db, Array $langvars, $planetarray, Reg $tkireg)
     {
         $CS = "GO"; // Current State
 
@@ -173,7 +174,7 @@ class PlanetReportCE
         echo "<br><br>";
     }
 
-    public static function changePlanetProduction(\PDO $pdo_db, $db, $langvars, $prodpercentarray, Reg $tkireg)
+    public static function changePlanetProduction(\PDO $pdo_db, $db, Array $langvars, $prodpercentarray, Reg $tkireg)
     {
     //  Declare default production values from the config.php file
     //
@@ -372,7 +373,7 @@ class PlanetReportCE
         }
     }
 
-    public static function takeCredits(\PDO $pdo_db, $db, $langvars, $planet_id)
+    public static function takeCredits(\PDO $pdo_db, $db, Array $langvars, int $planet_id)
     {
         // Get basic Database information (ship and planet)
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
@@ -446,7 +447,7 @@ class PlanetReportCE
         return ($retval);
     }
 
-    public static function realSpaceMove(\PDO $pdo_db, $db, $langvars, $destination, Reg $tkireg)
+    public static function realSpaceMove(\PDO $pdo_db, $db, Array $langvars, $destination, Reg $tkireg)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,23 +22,31 @@ namespace Tki;
 
 class Character
 {
-    public static function kill(\PDO $pdo_db, $db, int $ship_id, $langvars, Reg $tkireg, $remove_planets = false)
+    public static function kill(\PDO $pdo_db, $db, int $ship_id, Array $langvars, Reg $tkireg, $remove_planets = false)
     {
-        $update_ships_res = $db->Execute("UPDATE {$db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defenses=' ' WHERE ship_id=?", array($ship_id));
-        Db::LogDbErrors($pdo_db, $update_ships_res, __LINE__, __FILE__);
+        $sql = "UPDATE {$pdo_db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defenses=' ' WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->execute();
 
-        $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE placed_by = ?", array($ship_id));
-        Db::LogDbErrors($pdo_db, $delete_bounty_res, __LINE__, __FILE__);
+        $sql = "DELETE FROM {$pdo_db->prefix}bounty WHERE placed_by = :placed_by";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':placed_by', $ship_id);
+        $stmt->execute();
 
         if ($remove_planets === true && $ship_id > 0)
         {
-            $rm_pl_res = $db->Execute("DELETE FROM {$db->prefix}planets WHERE owner = ?", array($ship_id));
-            Db::LogDbErrors($pdo_db, $rm_pl_res, __LINE__, __FILE__);
+            $sql = "DELETE FROM {$pdo_db->prefix}planets WHERE owner=:owner";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':owner', $ship_id);
+            $stmt->execute();
         }
         else
         {
-            $up_pl_res = $db->Execute("UPDATE {$db->prefix}planets SET owner=0, team=0, fighters=0, base='N' WHERE owner=?", array($ship_id));
-            Db::LogDbErrors($pdo_db, $up_pl_res, __LINE__, __FILE__);
+            $sql = "UPDATE {$pdo_db->prefix}planets SET owner=0, team=0, fighters=0, base='N' WHERE owner=:owner";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':owner', $ship_id);
+            $stmt->execute();
         }
 
         $sql = "SELECT DISTINCT sector_id FROM {$pdo_db->prefix}planets WHERE owner=:owner AND base='Y'";
@@ -54,31 +63,42 @@ class Character
             }
         }
 
-        $rm_def_res = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE ship_id=?", array($ship_id));
-        Db::LogDbErrors($pdo_db, $rm_def_res, __LINE__, __FILE__);
+        $sql = "DELETE FROM {$pdo_db->prefix}sector_defense WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $ship_id);
+        $stmt->execute();
 
-        $zone_res = $db->Execute("SELECT zone_id FROM {$db->prefix}zones WHERE team_zone='N' AND owner=?", array($ship_id));
-        Db::LogDbErrors($pdo_db, $zone_res, __LINE__, __FILE__);
-        $zone = $zone_res->fields;
+        $sql = "SELECT zone_id FROM {$pdo_db->prefix}zones WHERE team_zone='N' AND owner=:owner";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $ship_id);
+        $stmt->execute();
+        $zone = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $up_zone_res = $db->Execute("UPDATE {$db->prefix}universe SET zone_id=1 WHERE zone_id=?", array($zone['zone_id']));
-        Db::LogDbErrors($pdo_db, $up_zone_res, __LINE__, __FILE__);
+        $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=1 WHERE zone_id=:zone_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':zone_id', $zone['zone_id']);
+        $stmt->execute();
 
-        $char_res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id=?", array($ship_id));
-        Db::LogDbErrors($pdo_db, $char_res, __LINE__, __FILE__);
-        $name = $char_res->fields;
+        $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $ship_id);
+        $stmt->execute();
+        $name = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $headline = $name['character_name'] .' '. $langvars['l_killheadline'];
-
         $newstext = str_replace('[name]', $name['character_name'], $langvars['l_news_killed']);
 
-        $news_ins_res = $db->Execute("INSERT INTO {$db->prefix}news (headline, newstext, user_id, date, news_type) VALUES (?,?,?,NOW(), 'killed')", array($headline, $newstext, $ship_id));
-        Db::LogDbErrors($pdo_db, $news_ins_res, __LINE__, __FILE__);
+        $sql = "INSERT INTO {$pdo_db->prefix}news (headline, newstext, user_id, date, news_type) VALUES (:headline,:newstext,:user_id,NOW(), 'killed')";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':headline', $headline);
+        $stmt->bindParam(':newstext', $newstext);
+        $stmt->bindParam(':user_id', $ship_id);
+        $stmt->execute();
     }
 
     // Choosing to use a method instead of a property.
     // If we went with a method, and it needed to be changed, we would have to change lots of property->method calls.
-    public static function getInsignia(\PDO $pdo_db, $a_username, $langvars) : string
+    public static function getInsignia(\PDO $pdo_db, $a_username, Array $langvars) : string
     {
         // Lookup players score.
         $sql = "SELECT score FROM {$pdo_db->prefix}ships WHERE email =:email";

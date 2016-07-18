@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +26,7 @@ namespace Tki;
 
 class Ibank
 {
-    public static function ibankBorrow(\PDO $pdo_db, $lang, $langvars, Reg $tkireg, Array $playerinfo, $account, $amount, $template)
+    public static function ibankBorrow(\PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, $account, $amount, $template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -87,7 +88,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankLogin($langvars, Array $playerinfo, $account)
+    public static function ibankLogin(Array $langvars, Array $playerinfo, $account)
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_welcometoibank'] . "<br>---------------------------------</td></tr>" .
             "<tr valign=top>" .
@@ -100,7 +101,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw($langvars, $account)
+    public static function ibankWithdraw(Array $langvars, $account)
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_withdrawfunds'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
@@ -117,7 +118,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw2(\PDO $pdo_db, $lang, $langvars, Array $playerinfo, $amount, $account, Reg $tkireg, $template)
+    public static function ibankWithdraw2(\PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $amount, $account, Reg $tkireg, $template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -158,7 +159,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankTransfer(\PDO $pdo_db, $langvars, Array $playerinfo, Reg $tkireg)
+    public static function ibankTransfer(\PDO $pdo_db, Array $langvars, Array $playerinfo, Reg $tkireg)
     {
         $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC");
         $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
@@ -261,7 +262,7 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
-    public static function ibankLoans(\PDO $pdo_db, $langvars, Reg $tkireg, Array $playerinfo, $account)
+    public static function ibankLoans(\PDO $pdo_db, Array $langvars, Reg $tkireg, Array $playerinfo, $account)
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
@@ -338,7 +339,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay(\PDO $pdo_db, $lang, $langvars, Array $playerinfo, $account, $amount, Reg $tkireg, $template)
+    public static function ibankRepay(\PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $account, $amount, Reg $tkireg, $template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -400,7 +401,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate($langvars, Reg $tkireg, $dplanet_id)
+    public static function ibankConsolidate(Array $langvars, Reg $tkireg, int $dplanet_id)
     {
         $percent = $tkireg->ibank_paymentfee * 100;
 
@@ -427,7 +428,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankTransfer2($db, \PDO $pdo_db, $lang, $langvars, Reg $tkireg, Array $playerinfo, $account, int $ship_id, $splanet_id, $dplanet_id, $template)
+    public static function ibankTransfer2($db, \PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $template)
     {
         if ($ship_id !== null) // Ship transfer
         {
@@ -579,7 +580,7 @@ class Ibank
         }
     }
 
-    public static function ibankTransfer3($db, \PDO $pdo_db, $lang, $langvars, Array $playerinfo, $account, int $ship_id, $splanet_id, $dplanet_id, $amount, Reg $tkireg, $template)
+    public static function ibankTransfer3($db, \PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, $template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 
@@ -762,7 +763,7 @@ class Ibank
         }
     }
 
-    public static function ibankDeposit2(\PDO $pdo_db, $lang, $langvars, Array $playerinfo, $amount, $account, Reg $tkireg, $template)
+    public static function ibankDeposit2(\PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $amount, $account, Reg $tkireg, $template)
     {
         $max_credits_allowed = 18446744073709000000;
 
@@ -817,7 +818,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate2($db, \PDO $pdo_db, $lang, $langvars, Array $playerinfo, Reg $tkireg, $dplanet_id, $minimum, $maximum, $template)
+    public static function ibankConsolidate2($db, \PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, Reg $tkireg, int $dplanet_id, $minimum, $maximum, $template)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
@@ -893,7 +894,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankError(\PDO $pdo_db, $langvars, string $errmsg, string $backlink, $lang, Reg $tkireg, $template)
+    public static function ibankError(\PDO $pdo_db, Array $langvars, string $errmsg, string $backlink, $lang, Reg $tkireg, $template)
     {
         $title = $langvars['l_ibank_ibankerrreport'];
         echo "<tr><td colspan=2 align=center valign=top>" . $title . "<br>---------------------------------</td></tr>" .
@@ -975,7 +976,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankConsolidate3($db, \PDO $pdo_db, $langvars, Array $playerinfo, Reg $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template)
+    public static function ibankConsolidate3($db, \PDO $pdo_db, Array $langvars, Array $playerinfo, Reg $tkireg, int $dplanet_id, $minimum, $maximum, $lang, $template)
     {
         $res = $db->Execute("SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?", array($dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);

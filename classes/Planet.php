@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +26,7 @@ namespace Tki;
 
 class Planet
 {
-    public function getOwner(\PDO $pdo_db, $db = null, $planet_id = null, &$owner_info = null)
+    public function getOwner(\PDO $pdo_db, $db = null, int $planet_id = null, &$owner_info = null)
     {
         $owner_info = null;
         if (!is_null($planet_id) && is_numeric($planet_id) && $planet_id > 0)
@@ -44,7 +45,7 @@ class Planet
         return false;
     }
 
-    public static function planetBombing(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, Array $playerinfo, $ownerinfo, $planetinfo, $template)
+    public static function planetBombing(\PDO $pdo_db, $db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, Array $ownerinfo, Array $planetinfo, $template)
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -125,7 +126,7 @@ class Planet
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     }
 
-    public static function planetCombat(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, $template, Array $playerinfo, $ownerinfo, $planetinfo)
+    public static function planetCombat(\PDO $pdo_db, $db, $lang, Array $langvars, Reg $tkireg, $template, Array $playerinfo, $ownerinfo, $planetinfo)
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -492,12 +493,12 @@ class Planet
                 echo "<center><font color='white'>" . $langvars['l_cmb_escapepod'] . "</font></center><br><br>";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy = ?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id = ?;", array($tkireg->start_energy, $playerinfo['ship_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                \Tki\Bounty::collect($pdo_db, $db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
             else
             {
                 \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
-                \Tki\Bounty::collect($pdo_db, $db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
         }
         else
@@ -615,7 +616,7 @@ class Planet
         \Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
     }
 
-    public static function shipToShip(\PDO $pdo_db, $db, $langvars, int $ship_id, Reg $tkireg, Array $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
+    public static function shipToShip(\PDO $pdo_db, $db, Array $langvars, int $ship_id, Reg $tkireg, Array $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
     {
         $resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}sector_defense WRITE, {$db->prefix}universe WRITE, {$db->prefix}adodb_logsql WRITE, {$db->prefix}logs WRITE, {$db->prefix}bounty WRITE, {$db->prefix}news WRITE, {$db->prefix}zones READ");
         \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
@@ -1061,13 +1062,13 @@ class Planet
                 $test = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy = ?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($tkireg->start_energy, $rating, $targetinfo['ship_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $test, __LINE__, __FILE__);
                 \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
-                \Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
             else
             {
                 \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
                 \Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
-                \Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
         }
         else

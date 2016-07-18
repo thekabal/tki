@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,7 +22,7 @@ namespace Tki;
 
 class Player
 {
-    public static function handleAuth(\PDO $pdo_db, $lang, $langvars, Reg $tkireg, $template)
+    public static function handleAuth(\PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, $template)
     {
         $flag = true;
         $error_status = null;
@@ -94,7 +95,7 @@ class Player
     /**
      * @param Reg $tkireg
      */
-    public static function handleBan(\PDO $pdo_db, $lang, $timestamp, $template, Array $playerinfo, $langvars, Reg $tkireg)
+    public static function handleBan(\PDO $pdo_db, $lang, $timestamp, $template, Array $playerinfo, Array $langvars, Reg $tkireg)
     {
         // Check to see if the player is banned every 60 seconds (may need to ajust this).
         if ($timestamp['now'] >= ($timestamp['last'] + 60))

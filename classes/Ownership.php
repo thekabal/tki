@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,7 +22,7 @@ namespace Tki;
 
 class Ownership
 {
-    public static function calc(\PDO $pdo_db, $db, $sector, Reg $tkireg, $langvars) : string
+    public static function calc(\PDO $pdo_db, $db, int $sector, Reg $tkireg, Array $langvars) : string
     {
         $bases_res = $db->Execute("SELECT owner, team FROM {$db->prefix}planets WHERE sector_id=? AND base='Y'", array($sector));
         Db::LogDbErrors($pdo_db, $bases_res, __LINE__, __FILE__);
