@@ -66,7 +66,7 @@ class SetPaths
 
         if ($gamedomain !== null && mb_strlen($gamedomain) > 0)
         {
-            $pos = mb_strpos($gamedomain, 'http://');
+            $pos = mb_strpos($gamedomain, 'https://');
             if (is_int($pos))
             {
                 $gamedomain = mb_substr($gamedomain, $pos + 7);

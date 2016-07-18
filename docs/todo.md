@@ -22,4 +22,4 @@ This file is used to keep track of things that we intend on doing, and all accep
 - TODO: Postgresql compatibility
 - TODO: Split ships table from players table
 - TODO: Review schema for improvements (BIGINT, more indexes, reduce unstructured data, etc)
-- TODO: Add new variable for admin to set that provides http/https independent source for images/css/js/etc. Basically supporting a CDN. Variable can be handled much like template is.
+- TODO: Add new variable for admin to set that provides https independent source for images/css/js/etc. Basically supporting a CDN. Variable can be handled much like template is.
