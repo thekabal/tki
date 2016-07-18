@@ -1196,7 +1196,7 @@ class Xenobe
                     $langvars['l_sf_sendlog2'] = str_replace("[player]", "Xenobe " . $playerinfo['character_name'], $langvars['l_sf_sendlog2']);
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_sf_sendlog2']);
-                    \Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
+                    \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
                     \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     return;
                 }
@@ -1236,7 +1236,7 @@ class Xenobe
                             \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_chm_hewasdestroyedbyyourmines']);
 
                             // Actually kill the Xenobe now
-                            \Tki\Bounty::cancel($pdo_db, $db, $playerinfo['ship_id']);
+                            \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
                             \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
                             // Lets get rid of the mines now and return out of this function

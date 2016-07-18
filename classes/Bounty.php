@@ -21,25 +21,31 @@ namespace Tki;
 
 class Bounty
 {
-    public static function cancel(\PDO $pdo_db, $db, $bounty_on)
+    public static function cancel(\PDO $pdo_db, $bounty_on)
     {
-        $res = $db->Execute("SELECT * FROM {$db->prefix}bounty,{$db->prefix}ships WHERE bounty_on = ? AND bounty_on = ship_id", array($bounty_on));
-        Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        if ($res)
+        $sql = "SELECT * FROM {$pdo_db->prefix}bounty WHERE bounty_on=:bounty_on AND bounty_on=ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':bounty_on', $bounty_on);
+        $stmt->execute();
+        $bounty_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($bounty_present !== null)
         {
-            while (!$res->EOF)
+            foreach ($bounty_present as $tmp_bounty)
             {
-                $bountydetails = $res->fields;
-                if ($bountydetails['placed_by'] != 0)
+                if ($tmp_bounty['placed_by'] != 0)
                 {
-                    $update_creds_res = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits + ? WHERE ship_id = ?", array($bountydetails['amount'], $bountydetails['placed_by']));
-                    Db::LogDbErrors($pdo_db, $update_creds_res, __LINE__, __FILE__);
-                    PlayerLog::WriteLog($pdo_db, $bountydetails['placed_by'], LOG_BOUNTY_CANCELLED, "$bountydetails[amount]|$bountydetails[character_name]");
+                    $sql = "UPDATE {$pdo_db->prefix}ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':bounty_amount', $tmp_bounty['amount']);
+                    $stmt->bindParam(':ship_id', $tmp_bounty['placed_by']);
+                    $stmt->execute();
+                    PlayerLog::WriteLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_CANCELLED, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
                 }
 
-                 $delete_bounty_res = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_id = ?", array($bountydetails['bounty_id']));
-                 Db::LogDbErrors($pdo_db, $delete_bounty_res, __LINE__, __FILE__);
-                 $res->MoveNext();
+                $sql = "DELETE FROM {$pdo_db->prefix}bounty WHERE bounty_id = :bounty_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':bounty_id', $tmp_bounty['bounty_id']);
+                $stmt->execute();
             }
         }
     }
