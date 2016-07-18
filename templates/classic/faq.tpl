@@ -182,7 +182,7 @@
       than this FAQ. First, you can always send a message to one of the top 10
       players in the game. They should know the answer, but they may not bother
       to reply. The second source is the <a
-      href="http://kabal.tk/forums/">official forum</a>. 
+      href="https://kabal-invasion.com/forums/">official forum</a>.
       <br><br></p></td>
     <td style="width:5%">&nbsp;</td></tr></tbody></table><br><a id="strategies"></a>
 <table>
