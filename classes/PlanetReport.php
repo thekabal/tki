@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +26,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function planetReportMenu(Array $playerinfo, $langvars)
+    public static function planetReportMenu(Array $playerinfo, Array $langvars)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -43,7 +44,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport(\PDO $pdo_db, $db, $langvars, Array $playerinfo, $sort, Reg $tkireg)
+    public static function standardReport(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -231,7 +232,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function planetProductionChange(\PDO $pdo_db, $db, $langvars, Array $playerinfo, $sort, Reg $tkireg)
+    public static function planetProductionChange(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
     {
         $query = "SELECT * FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y'";
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";

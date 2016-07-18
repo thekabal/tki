@@ -53,6 +53,7 @@ class BigBang
         {
             array_push($bigbang_files, $ofile);
         }
+
         // Now remove the unwanted array.
         unset($filelist);
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -59,7 +60,7 @@ class Team
         return (bool) $returnvalue;
     }
 
-    public static function validateTeam(\PDO $pdo_db, $db, $name = null, $desc = null, $creator = null) : bool
+    public static function validateTeam(\PDO $pdo_db, $name = null, $desc = null, $creator = null) : bool
     {
         $name = trim($name);
         $desc = trim($desc);
@@ -82,16 +83,19 @@ class Team
 
         // Just a test to see if an team with a name of $name exists.
         // This is just a temp fix until we find a better one.
-        $res = $db->Execute("SELECT COUNT(*) as found FROM {$db->prefix}teams WHERE team_name = ? AND creator != ?;", array($name, $creator));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $num_res = $res->fields;
+        $sql = "SELECT COUNT(*) as found FROM {$pdo_db->prefix}teams WHERE team_name=:team_name AND creator !=:creator";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':team_name', $name);
+        $stmt->bindParam(':creator', $creator);
+        $stmt->execute();
+        $num_res = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $returnvalue = (!($num_res['found'] > 0));
         return (bool) $returnvalue;
     }
 
     // Rewritten display of teams list
-    public static function displayAllTeams(\PDO $pdo_db, $db, $langvars, Reg $tkireg, $order, $type)
+    public static function displayAllTeams(\PDO $pdo_db, $db, Array $langvars, Reg $tkireg, $order, $type)
     {
         $row2 = array();
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
@@ -170,7 +174,7 @@ class Team
         echo "</table><br>";
     }
 
-    public static function displayInviteInfo($langvars, Array $playerinfo, $invite_info)
+    public static function displayInviteInfo(Array $langvars, Array $playerinfo, $invite_info)
     {
         if (!$playerinfo['team_invite'])
         {
@@ -186,7 +190,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, $db, $langvars, $whichteam, $isowner, Array $playerinfo, $invite_info, $team, Reg $tkireg)
+    public static function showInfo(\PDO $pdo_db, $db, Array $langvars, $whichteam, $isowner, Array $playerinfo, $invite_info, $team, Reg $tkireg)
     {
         // Heading
         echo "<div align=center>";

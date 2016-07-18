@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +26,7 @@ namespace Tki;
 
 class Log
 {
-    public static function logParse($langvars, $entry) : array
+    public static function logParse(Array $langvars, $entry) : array
     {
         $log_list = array();
         $retvalue = array();

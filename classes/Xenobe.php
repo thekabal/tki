@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -240,7 +241,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeToPlanet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, Array $playerinfo, $langvars)
+    public static function xenobeToPlanet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, Array $playerinfo, Array $langvars)
     {
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
@@ -557,7 +558,7 @@ class Xenobe
         \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
 
-    public static function xenobeToShip(\PDO $pdo_db, $db, int $ship_id, Reg $tkireg, Array $playerinfo, $langvars)
+    public static function xenobeToShip(\PDO $pdo_db, $db, int $ship_id, Reg $tkireg, Array $playerinfo, Array $langvars)
     {
         $armor_lost = null;
         $fighters_lost = null;
@@ -1031,7 +1032,7 @@ class Xenobe
         \Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
     }
 
-    public static function xenobeToSecDef(\PDO $pdo_db, $db, $langvars, Array $playerinfo, int $targetlink, Reg $tkireg)
+    public static function xenobeToSecDef(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, int $targetlink, Reg $tkireg)
     {
         // Check for sector defenses
         if ($targetlink > 0)
@@ -1256,7 +1257,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove(\PDO $pdo_db, $db, Array $playerinfo, int $targetlink, $langvars, Reg $tkireg)
+    public static function xenobeMove(\PDO $pdo_db, $db, Array $playerinfo, int $targetlink, Array $langvars, Reg $tkireg)
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1391,7 +1392,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter(\PDO $pdo_db, $db, Array $playerinfo, $xenobeisdead, $langvars, Reg $tkireg)
+    public static function xenobeHunter(\PDO $pdo_db, $db, Array $playerinfo, $xenobeisdead, Array $langvars, Reg $tkireg)
     {
         $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");

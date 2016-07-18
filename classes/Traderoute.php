@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,7 +25,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function traderouteEngage($db, \PDO $pdo_db, $lang, $j, $langvars, Reg $tkireg, Array $playerinfo, $engage, $dist, $traderoutes, $portfull, $template)
+    public static function traderouteEngage($db, \PDO $pdo_db, $lang, $j, Array $langvars, Reg $tkireg, Array $playerinfo, $engage, $dist, $traderoutes, $portfull, $template)
     {
         $traderoute = array();
         $source = array();
@@ -2007,7 +2008,7 @@ class Traderoute
         return $retvalue;
     }
 
-    public static function traderouteCreate($db, \PDO $pdo_db, $lang, Reg $tkireg, $template, Array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
+    public static function traderouteCreate($db, \PDO $pdo_db, $lang, Reg $tkireg, $template, Array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, int $planet_id1, int $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -2237,7 +2238,7 @@ class Traderoute
         self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteDelete(\PDO $pdo_db, $db, $lang, $langvars, Reg $tkireg, $template, Array $playerinfo, $confirm, $traderoute_id)
+    public static function traderouteDelete(\PDO $pdo_db, $db, $lang, Array $langvars, Reg $tkireg, $template, Array $playerinfo, $confirm, $traderoute_id)
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
         \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
