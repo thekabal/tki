@@ -164,7 +164,7 @@ if ($flag == 0)
         $langvars['l_new_message'] = str_replace('[website]', $link_to_game, $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[npg]', $link_to_game . 'newplayerguide.php', $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[faq]', $link_to_game . 'faq.php', $langvars['l_new_message']);
-        $langvars['l_new_message'] = str_replace('[forums]', 'http://kabal.tk/forums/', $langvars['l_new_message']);
+        $langvars['l_new_message'] = str_replace('[forums]', 'https://kabal-invasion.com/forums/', $langvars['l_new_message']);
 
         mail("$username", $langvars['l_new_topic'], $langvars['l_new_message'] . "\r\n\r\n" . $link_to_game, 'From: ' . $tkireg->admin_mail . "\r\nReply-To: " . $tkireg->admin_mail . "\r\nX-Mailer: PHP/" . phpversion());
 
