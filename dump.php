@@ -56,7 +56,10 @@ if ($playerinfo['ship_colonists'] == 0)
 }
 elseif ($sectorinfo['port_type'] == "special")
 {
-    $update = $db->Execute("UPDATE {$db->prefix}ships SET ship_colonists = 0, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
+    $sql = "UPDATE {$pdo_db->prefix}ships SET ship_colonists=0, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+    $stmt->execute();
     echo $langvars['l_dump_dumped'] . "<br><br>";
 }
 else
