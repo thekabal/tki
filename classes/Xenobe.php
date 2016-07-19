@@ -171,7 +171,7 @@ class Xenobe
             $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits);
-            $stmt->bindParam(':ship_ore', $ship_ore);
+            $stmt->bindParam(':ship_ore', $newore);
             $stmt->bindParam(':ship_organics', $neworganics);
             $stmt->bindParam(':ship_goods', $newgoods);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);

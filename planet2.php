@@ -622,10 +622,32 @@ else
                     $transfer_credits = 0;
                 }
 
-                $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ?, ship_colonists = ship_colonists + ?, torps = torps + ?, ship_fighters = ship_fighters + ?, credits = credits + ?, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($transfer_ore, $transfer_organics, $transfer_goods, $transfer_energy, $transfer_colonists, $transfer_torps, $transfer_fighters, $transfer_credits, $playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
-                $update2 = $db->Execute("UPDATE {$db->prefix}planets SET ore = ore - ?, organics = organics - ?, goods = goods - ?, energy = energy - ?, colonists = colonists - ?, torps = torps - ?, fighters = fighters - ?, credits = credits - ? WHERE planet_id = ?;", array($transfer_ore, $transfer_organics, $transfer_goods, $transfer_energy, $transfer_colonists, $transfer_torps, $transfer_fighters, $transfer_credits, $planet_id));
-                Tki\Db::LogDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+                $sql = "UPDATE {$pdo_db->prefix}ships SET ship_ore=ship_ore+:ship_ore, ship_organics=ship_organics+:ship_organics, ship_goods=ship_goods+:ship_goods, ship_energy=ship_energy+:ship_energy, ship_colonists=ship_colonists+:ship_colonists, torps=torps+:torps, ship_fighters=ship_fighters+:ship_fighters, credits=credits+:credits, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_ore', $transfer_ore);
+                $stmt->bindParam(':ship_organics', $transfer_organics);
+                $stmt->bindParam(':ship_goods', $transfer_goods);
+                $stmt->bindParam(':ship_energy', $transfer_energy);
+                $stmt->bindParam(':ship_colonists', $transfer_colonists);
+                $stmt->bindParam(':torps', $transfer_torps);
+                $stmt->bindParam(':ship_fighters', $transfer_fighters);
+                $stmt->bindParam(':credits', $transfer_credits);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->execute();
+
+                $sql = "UPDATE {$pdo_db->prefix}planets SET ore=ore-:ore, organics=organics-:organics, goods=goods-:goods, energy=energy-:energy, colonists=colonists-:colonists, torps=torps-:torps, fighters=fighters-:fighters, credits=credits-:credits WHERE planet_id=:planet_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ore', $transfer_ore);
+                $stmt->bindParam(':organics', $transfer_organics);
+                $stmt->bindParam(':goods', $transfer_goods);
+                $stmt->bindParam(':energy', $transfer_energy);
+                $stmt->bindParam(':colonists', $transfer_colonists);
+                $stmt->bindParam(':torps', $transfer_torps);
+                $stmt->bindParam(':fighters', $transfer_fighters);
+                $stmt->bindParam(':credits', $transfer_credits);
+                $stmt->bindParam(':planet_id', $planet_id);
+                $stmt->execute();
+
                 echo $langvars['l_planet2_compl'] . "<br><a href=planet.php?planet_id=$planet_id>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "<br><br>";
             }
             else

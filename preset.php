@@ -89,8 +89,12 @@ else
     {
         if ($key < $tkireg->max_presets)
         {
-            $update = $db->Execute("UPDATE {$db->prefix}presets SET preset = ? WHERE preset_id = ?;", array($preset_list[$key], $presetinfo[$key]['preset_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+            $sql = "UPDATE {$pdo_db->prefix}presets SET preset=:preset WHERE preset_id=:preset_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':preset', $preset_list[key]);
+            $stmt->bindParam(':preset_id', $presetinfo[key]['preset_id']);
+            $stmt->execute();
+
             $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);
             $preset_result_echo = str_replace("[num]", $key + 1, $preset_result_echo);
             echo $preset_result_echo . "<br>";
