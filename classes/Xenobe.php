@@ -24,7 +24,7 @@ namespace Tki;
 
 class Xenobe
 {
-    public static function xenobeTrade(\PDO $pdo_db, $db, Array $playerinfo, Reg $tkireg)
+    public static function xenobeTrade(\PDO $pdo_db, Array $playerinfo, Reg $tkireg)
     {
         // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
         $tkireg->ore_price = 11;
@@ -167,10 +167,24 @@ class Xenobe
             $newore = $playerinfo['ship_ore'] + $amount_ore;
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
             $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
-            $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET rating = rating + 1, credits = ?, ship_ore = ?, ship_organics = ?, ship_goods = ? WHERE ship_id = ?;", array($newcredits, $newore, $neworganics, $newgoods, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
-            $trade_result2 = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_organics = port_organics + ?, port_goods = port_goods + ? WHERE sector_id = ?;", array($amount_ore, $amount_organics, $amount_goods, $sectorinfo['sector_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
+
+            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':credits', $newcredits);
+            $stmt->bindParam(':ship_ore', $ship_ore);
+            $stmt->bindParam(':ship_organics', $neworganics);
+            $stmt->bindParam(':ship_goods', $newgoods);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->execute();
+
+            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':port_ore', $amount_ore);
+            $stmt->bindParam(':port_organics', $amount_organics);
+            $stmt->bindParam(':port_goods', $amount_goods);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->execute();
+
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
         }
 
@@ -200,10 +214,24 @@ class Xenobe
             $newore = max(0, $playerinfo['ship_ore'] - $amount_ore);
             $neworganics = $playerinfo['ship_organics'] + $amount_organics;
             $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
-            $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET rating = rating + 1, credits = ?, ship_ore = ?, ship_organics = ?, ship_goods = ? WHERE ship_id = ?;", array($newcredits, $newore, $neworganics, $newgoods, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
-            $trade_result2 = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore + ?, port_organics = port_organics - ?, port_goods = port_goods + ? WHERE sector_id = ?;", array($amount_ore, $amount_organics, $amount_goods, $sectorinfo['sector_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
+
+            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':credits', $newcredits);
+            $stmt->bindParam(':ship_ore', $newore);
+            $stmt->bindParam(':ship_organics', $neworganics);
+            $stmt->bindParam(':ship_goods', $newgoods);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->execute();
+
+            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':port_ore', $amount_ore);
+            $stmt->bindParam(':port_organics', $amount_organics);
+            $stmt->bindParam(':port_goods', $amount_goods);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->execute();
+
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
         }
 
@@ -233,10 +261,24 @@ class Xenobe
             $newore = max(0, $playerinfo['ship_ore'] - $amount_ore);
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
             $newgoods = $playerinfo['ship_goods'] + $amount_goods;
-            $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET rating=rating+1, credits = ?, ship_ore = ?, ship_organics = ?, ship_goods = ? WHERE ship_id = ?;", array($newcredits, $newore, $neworganics, $newgoods, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
-            $trade_result2 = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore + ?, port_organics = port_organics + ?, port_goods = port_goods - ? WHERE sector_id = ?;", array($amount_ore, $amount_organics, $amount_goods, $sectorinfo['sector_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
+
+            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':credits', $newcredits);
+            $stmt->bindParam(':ship_ore', $newore);
+            $stmt->bindParam(':ship_organics', $neworganics);
+            $stmt->bindParam(':ship_goods', $newgoods);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->execute();
+
+            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':port_ore', $amount_ore);
+            $stmt->bindParam(':port_organics', $amount_organics);
+            $stmt->bindParam(':port_goods', $amount_goods);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->execute();
+
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
         }
     }
