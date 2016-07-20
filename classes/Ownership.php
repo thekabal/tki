@@ -28,7 +28,7 @@ class Ownership
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();
-        $bases_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $bases_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $i = 0;
         $bases = array();
         if ($bases_present !== null)
@@ -242,13 +242,13 @@ class Ownership
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner', $owners[$winner]['id']);
             $stmt->execute();
-            $zone = $stmt->fetch(PDO::FETCH_ASSOC);
+            $zone = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $sql = "SELECT team_name FROM {$pdo_db->prefix}teams WHERE id=:id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':id', $owners[$winner]['id']);
             $stmt->execute();
-            $team = $stmt->fetch(PDO::FETCH_ASSOC);
+            $team = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=:zone_id WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
