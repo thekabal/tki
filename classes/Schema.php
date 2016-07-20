@@ -35,15 +35,18 @@ class Schema
 
             if ($schema_filename->isFile() && $schema_filename->getExtension() == 'sql')
             {
+                // Since we are using strict types, the Directory Iterator returns an object, and we want a string to pass to mb_substr.
+                $simple_filename = (string) $schema_filename->getFilename();
+
                 // Routine to handle persistent database tables. If a SQL schema file starts with persist-, then it is a persistent table. Fix the name.
-                $persist_file = (mb_substr($schema_filename, 0, 8) === 'persist-');
+                $persist_file = (mb_substr($simple_filename, 0, 8) === 'persist-');
                 if ($persist_file)
                 {
-                    $tablename = mb_substr($schema_filename, 8, -4);
+                    $tablename = mb_substr($simple_filename, 8, -4);
                 }
                 else
                 {
-                    $tablename = mb_substr($schema_filename, 0, -4);
+                    $tablename = mb_substr($simple_filename, 0, -4);
                 }
 
                 if (!$persist_file)
@@ -179,15 +182,18 @@ class Schema
 
             if ($schema_filename->isFile() && $schema_filename->getExtension() == 'sql')
             {
+                // Since we are using strict types, the Directory Iterator returns an object, and we want a string to pass to mb_substr.
+                $simple_filename = (string) $schema_filename->getFilename();
+
                 // Routine to handle persistent database tables. If a SQL schema file starts with persist-, then it is a persistent table
-                $persist_file = (mb_substr($schema_filename, 0, 8) === 'persist-');
+                $persist_file = (mb_substr($simple_filename, 0, 8) === 'persist-');
                 if ($persist_file)
                 {
-                    $tablename = mb_substr($schema_filename, 8, -4);
+                    $tablename = mb_substr($simple_filename, 8, -4);
                 }
                 else
                 {
-                    $tablename = mb_substr($schema_filename, 0, -4);
+                    $tablename = mb_substr($simple_filename, 0, -4);
                 }
 
                 // Slurp the SQL call from schema, and turn it into an SQL string

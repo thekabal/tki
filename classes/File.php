@@ -39,7 +39,8 @@ class File
         $start_tran_res = $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
         Db::logDbErrors($pdo_db, $start_tran_res, __LINE__, __FILE__);
 
-        $insert_sql = 'INSERT into ' . $pdo_db->prefix. $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
+        $insert_sql = 'INSERT into ' . $pdo_db->prefix . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
+//        var_dump($insert_sql);
         $stmt = $pdo_db->prepare($insert_sql);
 
         foreach ($ini_keys as $config_category => $config_line)
@@ -66,7 +67,7 @@ class File
 
         for ($k = 1; $k < $j; $k++)
         {
-            // Status Array will continue the results of individual executes. It should be === true unless something went horribly wrong.
+            // Status array will continue the results of individual executes. It should be === true unless something went horribly wrong.
             if ($status_array[$k] !== true)
             {
                 $final_result = false;
