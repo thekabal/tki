@@ -292,7 +292,7 @@ class Ownership
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':email', $owners[$winner]['id']);
                 $stmt->execute();
-                $ship = $stmt->fetch(PDO::FETCH_ASSOC);
+                $ship = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                 $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=:zone_id WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);

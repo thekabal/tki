@@ -88,7 +88,7 @@ class Team
         $stmt->bindParam(':team_name', $name);
         $stmt->bindParam(':creator', $creator);
         $stmt->execute();
-        $num_res = $stmt->fetch(PDO::FETCH_ASSOC);
+        $num_res = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $returnvalue = (!($num_res['found'] > 0));
         return (bool) $returnvalue;
