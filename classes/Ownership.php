@@ -286,7 +286,7 @@ class Ownership
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':owner', $owners[$winner]['id']);
                 $stmt->execute();
-                $zone = $stmt->fetch(PDO::FETCH_ASSOC);
+                $zone = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                 $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
