@@ -52,9 +52,9 @@ $lang_file_import_results = array();
 
 foreach ($language_files as $language_filename)
 {
-    if ($language_filename->isFile() && $language_filename->getExtension() == 'php')
+    if ($language_filename->isFile() && $language_filename->getExtension() == 'ini')
     {
-        $lang_name = mb_substr($language_filename->getFilename(), 0, -8);
+        $lang_name = mb_substr($language_filename->getFilename(), 0, -4);
 
         // Import Languages
         $local_table_timer->start(); // Start benchmarking
