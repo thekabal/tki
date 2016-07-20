@@ -57,7 +57,7 @@ class Bounty
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on);
         $stmt->execute();
-        $bounty_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $bounty_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($bounty_present !== null)
         {
             foreach ($bounty_present as $tmp_bounty)
