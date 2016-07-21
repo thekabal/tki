@@ -30,7 +30,7 @@ $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type ='F' ORDER BY quantity DESC;", array($sector));
 Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
-// Put the defense information into the array "defenses"
+// Put the defense information into the array defenses
 $i = 0;
 $total_sector_fighters = 0;
 $owner = true;

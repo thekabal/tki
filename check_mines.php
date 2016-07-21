@@ -27,7 +27,7 @@ $stmt->bindParam(':sector_id', $sector);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Put the defense information into the array "defenseinfo"
+// Put the defense information into the array defenseinfo
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type ='M'", array($sector));
 Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
@@ -50,7 +50,7 @@ while (!$result3->EOF)
     $result3->MoveNext();
 }
 
-// Compute the ship average...if its too low then the ship will not hit mines...
+// Compute the ship average. If it's too low then the ship will not hit mines.
 $shipavg = Tki\CalcLevels::avgTech($targetship, "ship");
 
 // The mines will attack if 4 conditions are met
@@ -73,10 +73,10 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
         echo "<h1>" . $title . "</h1>\n";
         $ok=0;
         $totalmines = $total_sector_mines;
-        // Before we had a issue where if there where a lot of mines in the sector the result will go -
-        // I changed the behaivor so that rand will chose a % of mines to attack will
+        // Before we had an issue where if there were a lot of mines in the sector the result will go -
+        // I changed the behaivor so that rand will chose a % of mines to attack at will
         // (it will always be at least 5% of the mines or at the very least 1 mine);
-        // and if you are very unlucky they all will hit you
+        // and if you are very unlucky they will all hit you
         $pren = (random_int(5, 100)/100);
         $roll = round($pren * $total_sector_mines - 1) + 1;
         $totalmines = $totalmines - $roll;
@@ -86,7 +86,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
         echo $langvars['l_chm_youhitsomemines'] . "<br>";
         Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_HIT_MINES, "$roll|$sector");
 
-        // Tell the owner that his mines where hit
+        // Tell the owner that his mines were hit
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hehitminesinsector']);
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_roll]", "$roll", $langvars['l_chm_hehitminesinsector']);
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_sector]", $sector, $langvars['l_chm_hehitminesinsector']);

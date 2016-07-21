@@ -36,7 +36,7 @@ if (array_key_exists('ship_id', $_GET))
     $ship_id = (int) filter_input(INPUT_GET, 'ship_id', FILTER_SANITIZE_NUMBER_INT);
 }
 
-// Kami Multi Browser Window Attack Fix
+// Kami multi-browser window attack fix
 if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_selected'] != $ship_id)
 {
     echo "You need to click on the ship first.<br><br>";
@@ -47,7 +47,7 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
 unset ($_SESSION['ship_selected']);
 
 // Need to also set a WRITE LOCK on {$db->prefix}adodb_logsql WRITE
-// or it will fail to log the sql.
+// or it will fail to log the sql
 $result = $db->Execute(
     "LOCK TABLES {$db->prefix}adodb_logsql WRITE, {$db->prefix}languages READ, " .
     "{$db->prefix}ibank_accounts READ, {$db->prefix}sector_defense WRITE, " .
@@ -95,7 +95,7 @@ elseif ($_SESSION['in_combat'] !== null && $_SESSION['in_combat'] === true)
 }
 else
 {
-    // Set In Combat Flag
+    // Set in combat flag
     $_SESSION['in_combat'] = (boolean) true;
 
     // Determine percent chance of success in detecting target ship - based on player's sensors and opponent's cloak
@@ -151,7 +151,7 @@ else
     }
     else
     {
-        // If scan succeeds, show results and inform target.
+        // If scan succeeds, show results and inform target
         $shipavg = Tki\CalcLevels::avgTech($targetinfo, "ship");
 
         if ($shipavg > $tkireg->max_ewdhullsize)
@@ -189,7 +189,7 @@ else
         }
         else
         {
-            // Bounty-free Xenobe attacking allowed.
+            // Bounty-free Xenobe attacking allowed
             if (($targetscore / $playerscore < $bounty_ratio || $targetinfo['turns_used'] < $bounty_minturns) && ( preg_match("/(\@xenobe)$/", $targetinfo['email']) === 0))
             {
                 // Changed xenobe check to a regexp cause a player could put
@@ -235,7 +235,7 @@ else
             $playerenergy = $playerinfo['ship_energy'];
             // I added these two so we can have a value for debugging and
             // reporting totals. If we use the variables in calcs below,
-            // change the display of stats too
+            // change the display of stats also
 
             $targetbeams = Tki\CalcLevels::beams($targetinfo['beams'], $tkireg);
             if ($targetbeams > $targetinfo['ship_energy'])
@@ -641,7 +641,7 @@ else
                     // xenobe and the credits they are carrying
                     $salv_credits = 0;
 
-                    // Double Death Attack Bug Fix - Returns 0 for real
+                    // Double death attack bug fix - Returns 0 for real
                     // players, 1 for Xenobe players
                     // He is a Xenobe
                     if (preg_match("/(\@xenobe)$/", $targetinfo['email']) !== 0)
@@ -712,7 +712,7 @@ else
                     }
                     $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $targetinfo['hull'])) + round(pow($upgrade_factor, $targetinfo['engines'])) + round(pow($upgrade_factor, $targetinfo['power'])) + round(pow($upgrade_factor, $targetinfo['computer'])) + round(pow($upgrade_factor, $targetinfo['sensors'])) + round(pow($upgrade_factor, $targetinfo['beams'])) + round(pow($upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($upgrade_factor, $targetinfo['shields'])) + round(pow($upgrade_factor, $targetinfo['armor'])) + round(pow($upgrade_factor, $targetinfo['cloak'])));
                     $ship_salvage_rate = random_int(10, 20);
-                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for xenobe - 0 if normal player
+                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Xenobe - 0 if normal player
 
                     $langvars['l_att_ysalv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_ysalv']);
                     $langvars['l_att_ysalv'] = str_replace("[salv_organics]", $salv_organics, $langvars['l_att_ysalv']);
@@ -852,7 +852,7 @@ else
                     }
                     $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $playerinfo['hull'])) + round(pow($upgrade_factor, $playerinfo['engines'])) + round(pow($upgrade_factor, $playerinfo['power'])) + round(pow($upgrade_factor, $playerinfo['computer'])) + round(pow($upgrade_factor, $playerinfo['sensors'])) + round(pow($upgrade_factor, $playerinfo['beams'])) + round(pow($upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($upgrade_factor, $playerinfo['shields'])) + round(pow($upgrade_factor, $playerinfo['armor'])) + round(pow($upgrade_factor, $playerinfo['cloak'])));
                     $ship_salvage_rate = random_int(10, 20);
-                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for xenobe - 0 if normal player
+                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Xenobe - 0 if normal player
 
                     $langvars['l_att_salv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_salv']);
                     $langvars['l_att_salv'] = str_replace("[salv_organics]", $salv_organics, $langvars['l_att_salv']);
