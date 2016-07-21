@@ -11,7 +11,7 @@
     "minimum-stability": "alpha",
     "require": {
         "smarty/smarty": "~3.1.29",
-        "ezyang/htmlpurifier": "~4.7.0",
+        "ezyang/htmlpurifier": "~4.8.0",
         "swiftmailer/swiftmailer": "~5.4.3",
         "adodb/adodb-php": "v5.20.4"
     },
