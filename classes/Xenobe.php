@@ -69,17 +69,20 @@ class Xenobe
         // Check for negative credits or cargo
         if ($playerinfo['ship_ore'] < 0)
         {
-            $playerinfo['ship_ore'] = $shipore = 0;
+            $playerinfo['ship_ore'] = 0;
+            $shipore = 0;
         }
 
         if ($playerinfo['ship_organics'] < 0)
         {
-            $playerinfo['ship_organics'] = $shiporganics = 0;
+            $playerinfo['ship_organics'] = 0;
+            $shiporganics = 0;
         }
 
         if ($playerinfo['ship_goods'] < 0)
         {
-            $playerinfo['ship_goods'] = $shipgoods = 0;
+            $playerinfo['ship_goods'] = 0;
+            $shipgoods = 0;
         }
 
         if ($playerinfo['credits'] < 0)
