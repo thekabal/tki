@@ -176,30 +176,30 @@ class PlanetReportCE
 
     public static function changePlanetProduction(\PDO $pdo_db, $db, Array $langvars, $prodpercentarray, Reg $tkireg)
     {
-    //  Declare default production values from the config.php file
-    //
-    //  We need to track what the player_id is and what team they belong to if they belong to a team,
-    //    these two values are not passed in as arrays
-    //    ship_id = the owner of the planet          ($ship_id = $prodpercentarray['ship_id'])
-    //    team_id = the team creators ship_id ($team_id = $prodpercentarray['team_id'])
-    //
-    //  First we generate a list of values based on the commodity
-    //    (ore, organics, goods, energy, fighters, torps, team, sells)
-    //
-    //  Second we generate a second list of values based on the planet_id
-    //  Because team and ship_id are not arrays we do not pass them through the second list command.
-    //  When we write the ore production percent we also clear the selling and team values out of the db
-    //  When we pass through the team array we set the value to $team we grabbed out of the array.
-    //  in the sells and team the prodpercent = the planet_id.
-    //
-    //  We run through the database checking to see if any planet production is greater than 100, or possibly negative
-    //    if so we set the planet to the default values and report it to the player.
-    //
-    //  There has got to be a better way, but at this time I am not sure how to do it.
-    //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
-    //  This would save us from having to run through the database a second time checking our work.
+        //  Declare default production values from the config.php file
+        //
+        //  We need to track what the player_id is and what team they belong to if they belong to a team,
+        //    these two values are not passed in as arrays
+        //    ship_id = the owner of the planet          ($ship_id = $prodpercentarray['ship_id'])
+        //    team_id = the team creators ship_id ($team_id = $prodpercentarray['team_id'])
+        //
+        //  First we generate a list of values based on the commodity
+        //    (ore, organics, goods, energy, fighters, torps, team, sells)
+        //
+        //  Second we generate a second list of values based on the planet_id
+        //  Because team and ship_id are not arrays we do not pass them through the second list command.
+        //  When we write the ore production percent we also clear the selling and team values out of the db
+        //  When we pass through the team array we set the value to $team we grabbed out of the array.
+        //  in the sells and team the prodpercent = the planet_id.
+        //
+        //  We run through the database checking to see if any planet production is greater than 100, or possibly negative
+        //    if so we set the planet to the default values and report it to the player.
+        //
+        //  There has got to be a better way, but at this time I am not sure how to do it.
+        //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
+        //  This would save us from having to run through the database a second time checking our work.
 
-    //  This should patch the game from being hacked with planet Hack.
+        //  This should patch the game from being hacked with planet Hack.
 
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);

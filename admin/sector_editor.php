@@ -78,19 +78,19 @@ else
         $variables['port_energy'] = $row['port_energy'];
         $variables['sector'] = $row['sector_id'];
 
-//        $oportnon = $oportspe = $oportorg = $oportore = $oportgoo = $oportene = "value";
-//        if ($row['port_type'] == "none") $oportnon = "selected='none' value";
-//        if ($row['port_type'] == "special") $oportspe = "selected='special' value";
-//        if ($row['port_type'] == "organics") $oportorg = "selected='organics' value";
-//        if ($row['port_type'] == "ore") $oportore = "selected='ore' value";
-//        if ($row['port_type'] == "goods") $oportgoo = "selected='goods' value";
-//        if ($row['port_type'] == "energy") $oportene = "selected='energy' value";
-//        echo "<option $oportnon='none'>" . $langvars['l_none'] . "</option>";
-//        echo "<option $oportspe='special'>" . $langvars['l_special'] . "</option>";
-//        echo "<option $oportorg='organics'>" . $langvars['l_organics'] . "</option>";
-//        echo "<option $oportore='ore'>" . $langvars['l_ore'] . "</option>";
-//        echo "<option $oportgoo='goods'>" . $langvars['l_goods'] . "</option>";
-//        echo "<option $oportene='energy'>" . $langvars['l_energy'] . "</option>";
+        // $oportnon = $oportspe = $oportorg = $oportore = $oportgoo = $oportene = "value";
+        // if ($row['port_type'] == "none") $oportnon = "selected='none' value";
+        // if ($row['port_type'] == "special") $oportspe = "selected='special' value";
+        // if ($row['port_type'] == "organics") $oportorg = "selected='organics' value";
+        // if ($row['port_type'] == "ore") $oportore = "selected='ore' value";
+        // if ($row['port_type'] == "goods") $oportgoo = "selected='goods' value";
+        // if ($row['port_type'] == "energy") $oportene = "selected='energy' value";
+        // echo "<option $oportnon='none'>" . $langvars['l_none'] . "</option>";
+        // echo "<option $oportspe='special'>" . $langvars['l_special'] . "</option>";
+        // echo "<option $oportorg='organics'>" . $langvars['l_organics'] . "</option>";
+        // echo "<option $oportore='ore'>" . $langvars['l_ore'] . "</option>";
+        // echo "<option $oportgoo='goods'>" . $langvars['l_goods'] . "</option>";
+        // echo "<option $oportene='energy'>" . $langvars['l_energy'] . "</option>";
     }
     elseif ($_POST['operation'] == "save")
     {

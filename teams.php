@@ -131,154 +131,51 @@ else
 
 switch ($teamwhat)
 {
-        case 1: // Info on single team
-            Tki\Team::showInfo($pdo_db, $db, $langvars, $whichteam, 0, $playerinfo, $invite_info, $team, $tkireg);
+    case 1: // Info on single team
+        Tki\Team::showInfo($pdo_db, $db, $langvars, $whichteam, 0, $playerinfo, $invite_info, $team, $tkireg);
+        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+        break;
+
+    case 2: // Leave the team
+        if (!Tki\Team::isTeamMember($team, $playerinfo))
+        {
+            echo "<strong><font color=red>An error occured</font></strong><br>You are not a member of this Team.";
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
+        }
 
-        case 2: // Leave the team
-            if (!Tki\Team::isTeamMember($team, $playerinfo))
+        if ($confirmleave === null)
+        {
+            echo $langvars['l_team_confirmleave'] . " <strong>" . $team['team_name'] . "</strong> ? <a href=\"teams.php?teamwhat=$teamwhat&confirmleave=1&whichteam=$whichteam\">" . $langvars['l_yes'] . "</a> - <a href=\"teams.php\">" . $langvars['l_no'] . "</a><br><br>";
+        }
+        elseif ($confirmleave == 1)
+        {
+            if ($team['number_of_members'] == 1)
             {
-                echo "<strong><font color=red>An error occured</font></strong><br>You are not a member of this Team.";
-                echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                break;
-            }
-
-            if ($confirmleave === null)
-            {
-                echo $langvars['l_team_confirmleave'] . " <strong>" . $team['team_name'] . "</strong> ? <a href=\"teams.php?teamwhat=$teamwhat&confirmleave=1&whichteam=$whichteam\">" . $langvars['l_yes'] . "</a> - <a href=\"teams.php\">" . $langvars['l_no'] . "</a><br><br>";
-            }
-            elseif ($confirmleave == 1)
-            {
-                if ($team['number_of_members'] == 1)
+                if (!Tki\Team::isTeamOwner($team, $playerinfo))
                 {
-                    if (!Tki\Team::isTeamOwner($team, $playerinfo))
-                    {
-                        $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
-                        echo $langvars['l_team_error'];
-                        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                        continue;
-                    }
-
-                    $resx = $db->Execute("DELETE FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-
-                    $resy = $db->Execute("UPDATE {$db->prefix}ships SET team='0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
-
-                    $resz = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE team_invite = ?;", array($whichteam));
-                    Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
-
-                    $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y';", array($playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                    $i = 0;
-                    while (!$res->EOF)
-                    {
-                        $row = $res->fields;
-                        $sectors[$i] = $row['sector_id'];
-                        $i++;
-                        $res->MoveNext();
-                    }
-
-                    $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                    if ($sectors !== null)
-                    {
-                        foreach ($sectors as $sector)
-                        {
-                            Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
-                        }
-                    }
-                    Tki\defense::defenseVsdefense($pdo_db, $playerinfo['ship_id'], $langvars);
-                    Tki\Ship::leavePlanet($pdo_db, $playerinfo['ship_id']);
-
-                    $langvars['l_team_onlymember'] = str_replace("[team_name]", "<strong>$team[team_name]</strong>", $langvars['l_team_onlymember']);
-                    echo $langvars['l_team_onlymember'] . "<br><br>";
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
+                    $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
+                    echo $langvars['l_team_error'];
+                    echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+                    continue;
                 }
-                else
-                {
-                    if (Tki\Team::isTeamOwner($team, $playerinfo))
-                    {
-                        echo $langvars['l_team_youarecoord'] . " <strong>$team[team_name]</strong>. " . $langvars['l_team_relinq'] . "<br><br>";
-                        echo "<form accept-charset='utf-8' action='teams.php' method=post>";
-                        echo "<table><input type=hidden name=teamwhat value=$teamwhat><input type=hidden name=confirmleave value=2><input type=hidden name=whichteam value=$whichteam>";
-                        echo "<tr><td>" . $langvars['l_team_newc'] . "</td><td><select name=newcreator>";
 
-                        $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team = ? ORDER BY character_name ASC;", array($whichteam));
-                        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                        while (!$res->EOF)
-                        {
-                            $row = $res->fields;
-                            if (!Tki\Team::isTeamOwner($team, $row))
-                            {
-                                echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
-                            }
-                            $res->MoveNext();
-                        }
-                        echo "</select></td></tr>";
-                        echo "<tr><td><input type=submit value=" . $langvars['l_submit'] . "></td></tr>";
-                        echo "</table>";
-                        echo "</form>";
-                    }
-                    else
-                    {
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET team='0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whichteam));
-                        Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
-
-                        $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
-                        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                        $i = 0;
-                        while (!$res->EOF)
-                        {
-                            $sectors[$i] = $res->fields['sector_id'];
-                            $i++;
-                            $res->MoveNext();
-                        }
-
-                        $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
-                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        if ($sectors !== null)
-                        {
-                            foreach ($sectors as $sector)
-                            {
-                                Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
-                            }
-                        }
-
-                        echo $langvars['l_team_youveleft'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
-                        Tki\defense::defenseVsdefense($pdo_db, $playerinfo['ship_id'], $langvars);
-                        Tki\Ship::leavePlanet($pdo_db, $playerinfo['ship_id']);
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
-                        Tki\PlayerLog::WriteLog($pdo_db, $team['creator'], LOG_TEAM_NOT_LEAVE, $playerinfo['character_name']);
-                    }
-                }
-            }
-            elseif ($confirmleave == 2)
-            {
-                // owner of a team is leaving and set a new owner
-                $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($newcreator));
-                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                $newcreatorname = $res->fields;
-                echo $langvars['l_team_youveleft'] . " <strong>" . $team['team_name'] . "</strong> " . $langvars['l_team_relto'] . " " . $newcreatorname['character_name'] . ".<br><br>";
-
-                $resx = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+                $resx = $db->Execute("DELETE FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
                 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
-                $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = ? WHERE team = ?;", array($newcreator, $whichteam));
+                $resy = $db->Execute("UPDATE {$db->prefix}ships SET team='0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                 Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
-                $resz = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1, creator = ? WHERE id = ?;", array($newcreator, $whichteam));
+                $resz = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE team_invite = ?;", array($whichteam));
                 Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
 
-                $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
+                $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y';", array($playerinfo['ship_id']));
                 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 $i = 0;
                 while (!$res->EOF)
                 {
-                    $sectors[$i] = $res->fields['sector_id'];
+                    $row = $res->fields;
+                    $sectors[$i] = $row['sector_id'];
                     $i++;
                     $res->MoveNext();
                 }
@@ -293,307 +190,420 @@ switch ($teamwhat)
                     }
                 }
 
-                Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_NEWLEAD, $team['team_name'] . "|" . $newcreatorname['character_name']);
-                Tki\PlayerLog::WriteLog($pdo_db, $newcreator, LOG_TEAM_LEAD, $team['team_name']);
-            }
+                Tki\defense::defenseVsdefense($pdo_db, $playerinfo['ship_id'], $langvars);
+                Tki\Ship::leavePlanet($pdo_db, $playerinfo['ship_id']);
 
-            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-            break;
-
-        case 3: // Join a team
-            if ($playerinfo['team'] != 0)
-            {
-                echo $langvars['l_team_leavefirst'] . "<br>";
+                $langvars['l_team_onlymember'] = str_replace("[team_name]", "<strong>$team[team_name]</strong>", $langvars['l_team_onlymember']);
+                echo $langvars['l_team_onlymember'] . "<br><br>";
+                Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
             }
             else
             {
-                if ($playerinfo['team_invite'] == $whichteam)
+                if (Tki\Team::isTeamOwner($team, $playerinfo))
                 {
-                    $resx = $db->Execute("UPDATE {$db->prefix}ships SET team = ?, team_invite = 0 WHERE ship_id = ?;", array($whichteam, $playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    echo $langvars['l_team_youarecoord'] . " <strong>$team[team_name]</strong>. " . $langvars['l_team_relinq'] . "<br><br>";
+                    echo "<form accept-charset='utf-8' action='teams.php' method=post>";
+                    echo "<table><input type=hidden name=teamwhat value=$teamwhat><input type=hidden name=confirmleave value=2><input type=hidden name=whichteam value=$whichteam>";
+                    echo "<tr><td>" . $langvars['l_team_newc'] . "</td><td><select name=newcreator>";
 
-                    $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members + 1 WHERE id = ?;", array($whichteam));
-                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
-
-                    echo $langvars['l_team_welcome'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_JOIN, $team['team_name']);
-                    Tki\PlayerLog::WriteLog($pdo_db, $team['creator'], LOG_TEAM_NEWMEMBER, $team['team_name'] . "|" . $playerinfo['character_name']);
-                }
-                else
-                {
-                    echo $langvars['l_team_noinviteto'] . "<br>";
-                }
-            }
-            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-            break;
-
-        case 4: // Not implemented yet
-            echo "Not implemented yet. Sorry! :)<br><br>";
-            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-            break;
-
-        case 5: // Eject member
-            // Check if Co-ordinator of team.
-            // If not display "An error occured, You are not the leader of this Team." message.
-            // Then show link back and break;
-
-            if (Tki\Team::isTeamOwner($team, $playerinfo) === false)
-            {
-                $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
-                echo $langvars['l_team_error'];
-                echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                continue;
-            }
-            else
-            {
-                $who = preg_replace('/[^0-9]/', '', $who);
-                $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
-                Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-                $whotoexpel = $result->fields;
-
-                if ($confirmed === null)
-                {
-                    echo $langvars['l_team_ejectsure'] . " " . $whotoexpel['character_name'] . "? <a href=\"teams.php?teamwhat=$teamwhat&confirmed=1&who=$who\">" . $langvars['l_yes'] . "</a> - <a href=\"teams.php\">" . $langvars['l_no'] . "</a><br>";
-                }
-                else
-                {
-                    // check whether the player we are ejecting might have already left in the meantime
-                    // should go here if ($whotoexpel[team] ==
-
-                    $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = '0' WHERE owner = ?;", array($who));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-
-                    $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($who));
-                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
-
-                    // No more necessary due to COUNT(*) in previous SQL statement
-                    $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whotoexpel['team']));
-
-                    Tki\PlayerLog::WriteLog($pdo_db, $who, LOG_TEAM_KICK, $team['team_name']);
-                    echo $whotoexpel['character_name'] . " " . $langvars['l_team_ejected'] . "<br>";
-                }
-                echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-            }
-            break;
-
-        case 6: // Create team
-            if ($playerinfo['team'] != 0)
-            {
-                echo $langvars['l_team_leavefirst'] . "<br>";
-                echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                continue;
-            }
-
-            if ($teamname === null)
-            {
-                echo "<form accept-charset='utf-8' action='teams.php' method='post'>\n";
-                echo $langvars['l_team_entername'] . ": ";
-                echo "<input type='hidden' name='teamwhat' value='{$teamwhat}'>\n";
-                echo "<input type='text' name='teamname' size='40' maxlength='40'><br>\n";
-                echo $langvars['l_team_enterdesc'] . ": ";
-                echo "<input type='text' name='teamdesc' size='40' maxlength='254'><br>\n";
-                echo "<input type='submit' value='" . $langvars['l_submit'] . "'><input type='reset' value='" . $langvars['l_reset'] . "'>\n";
-                echo "</form>\n";
-                echo "<br><br>\n";
-            }
-            else
-            {
-                $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
-                $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
-
-                if (!Tki\Team::validateTeam($pdo_db, $teamname, $teamdesc, $playerinfo['ship_id']))
-                {
-                    echo "<span style='color:#f00;'>Team Creation Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
-                    echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                    break;
-                }
-
-                $res = $db->Execute("INSERT INTO {$db->prefix}teams (id, creator, team_name, number_of_members, description) VALUES (?, ?, ?, '1', ?);", array($playerinfo['ship_id'], $playerinfo['ship_id'], $teamname, $teamdesc));
-                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES(NULL, ?, ?, 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array("{$teamname}\'s Empire", $playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                $resy = $db->Execute("UPDATE {$db->prefix}ships SET team=? WHERE ship_id = ?;", array($playerinfo['ship_id'], $playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
-                echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hcreated'] . ".<br><br>";
-                Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_CREATE, $teamname);
-            }
-            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-            break;
-
-        case 7: // Invite a player to a team
-            if (Tki\Team::isTeamMember($team, $playerinfo) === false)
-            {
-                echo "<br>You are not in this team!<br>";
-                echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                break;
-            }
-
-            if ($invited === null)
-            {
-                echo "<form accept-charset='utf-8' action='teams.php' method=post>";
-                echo "<table><input type=hidden name=teamwhat value=$teamwhat><input type=hidden name=invited value=1><input type=hidden name=whichteam value=$whichteam>";
-                echo "<tr><td>" . $langvars['l_team_selectp'] . ":</td><td><select name=who style='width:200px;'>";
-
-                $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team <> ? AND ship_destroyed ='N' AND turns_used > 0 ORDER BY character_name ASC;", array($whichteam));
-                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                while (!$res->EOF)
-                {
-                    $row = $res->fields;
-                    if (Tki\Team::isTeamOwner($team, $row) === false)
-                    {
-                        echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
-                    }
-                    $res->MoveNext();
-                }
-
-                echo "</select></td></tr>";
-                echo "<tr><td><input type='submit' value='" . $langvars['l_submit'] . "'></td></tr>";
-                echo "</table>";
-                echo "</form>";
-            }
-            else
-            {
-                if ($playerinfo['team'] == $whichteam)
-                {
-                    if ($who === null)
-                    {
-                        echo "No player was selected.<br>\n";
-                                echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . "<br><br>";
-                                break;
-                    }
-                    $res = $db->Execute("SELECT character_name,team_invite FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
+                    $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team = ? ORDER BY character_name ASC;", array($whichteam));
                     Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                    $newpl = $res->fields;
-                    if ($newpl['team_invite'])
+                    while (!$res->EOF)
                     {
-                        $langvars['l_team_isorry'] = str_replace("[name]", $newpl['character_name'], $langvars['l_team_isorry']);
-                        echo $langvars['l_team_isorry'] . "<br><br>";
+                        $row = $res->fields;
+                        if (!Tki\Team::isTeamOwner($team, $row))
+                        {
+                            echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
+                        }
+                        $res->MoveNext();
                     }
-                    else
-                    {
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = ? WHERE ship_id = ?;", array($whichteam, $who));
-                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        echo $langvars['l_team_plinvted'] . "<br>" . $langvars['l_team_plinvted2'] . "<br>";
-                        Tki\PlayerLog::WriteLog($pdo_db, $who, LOG_TEAM_INVITE, $team['team_name']);
-                    }
+
+                    echo "</select></td></tr>";
+                    echo "<tr><td><input type=submit value=" . $langvars['l_submit'] . "></td></tr>";
+                    echo "</table>";
+                    echo "</form>";
                 }
                 else
                 {
-                    echo $langvars['l_team_notyours'] . "<br>";
+                    $resx = $db->Execute("UPDATE {$db->prefix}ships SET team='0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whichteam));
+                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
+
+                    $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
+                    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                    $i = 0;
+                    while (!$res->EOF)
+                    {
+                        $sectors[$i] = $res->fields['sector_id'];
+                        $i++;
+                        $res->MoveNext();
+                    }
+
+                    $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
+                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    if ($sectors !== null)
+                    {
+                        foreach ($sectors as $sector)
+                        {
+                            Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
+                        }
+                    }
+
+                    echo $langvars['l_team_youveleft'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
+                    Tki\defense::defenseVsdefense($pdo_db, $playerinfo['ship_id'], $langvars);
+                    Tki\Ship::leavePlanet($pdo_db, $playerinfo['ship_id']);
+                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_LEAVE, $team['team_name']);
+                    Tki\PlayerLog::WriteLog($pdo_db, $team['creator'], LOG_TEAM_NOT_LEAVE, $playerinfo['character_name']);
                 }
             }
-            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . "<br><br>";
-            break;
+        }
+        elseif ($confirmleave == 2)
+        {
+            // Owner of a team is leaving and set a new owner
+            $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($newcreator));
+            Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            $newcreatorname = $res->fields;
+            echo $langvars['l_team_youveleft'] . " <strong>" . $team['team_name'] . "</strong> " . $langvars['l_team_relto'] . " " . $newcreatorname['character_name'] . ".<br><br>";
 
-        case 8: // Decline invitation to a team
-            echo $langvars['l_team_refuse'] . " <strong>" . $invite_info['team_name'] . "</strong>.<br><br>";
-            $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE ship_id = ?;", array($playerinfo['ship_id']));
+            $resx = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($playerinfo['ship_id']));
             Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-            Tki\PlayerLog::WriteLog($pdo_db, $team['creator'], LOG_TEAM_REJECT, $playerinfo['character_name'] . "|" . $invite_info['team_name']);
-            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-            break;
 
-        case 9: // Edit Team
+            $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = ? WHERE team = ?;", array($newcreator, $whichteam));
+            Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
+
+            $resz = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1, creator = ? WHERE id = ?;", array($newcreator, $whichteam));
+            Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
+
+            $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
+            Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+
+            $i = 0;
+            while (!$res->EOF)
+            {
+                $sectors[$i] = $res->fields['sector_id'];
+                $i++;
+                $res->MoveNext();
+            }
+
+            $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = 0 WHERE owner = ?;", array($playerinfo['ship_id']));
+            Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+            if ($sectors !== null)
+            {
+                foreach ($sectors as $sector)
+                {
+                    Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
+                }
+            }
+
+            Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_NEWLEAD, $team['team_name'] . "|" . $newcreatorname['character_name']);
+            Tki\PlayerLog::WriteLog($pdo_db, $newcreator, LOG_TEAM_LEAD, $team['team_name']);
+        }
+
+        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+        break;
+
+    case 3: // Join a team
+        if ($playerinfo['team'] != 0)
+        {
+            echo $langvars['l_team_leavefirst'] . "<br>";
+        }
+        else
+        {
+            if ($playerinfo['team_invite'] == $whichteam)
+            {
+                $resx = $db->Execute("UPDATE {$db->prefix}ships SET team = ?, team_invite = 0 WHERE ship_id = ?;", array($whichteam, $playerinfo['ship_id']));
+                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+                $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members + 1 WHERE id = ?;", array($whichteam));
+                Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
+
+                echo $langvars['l_team_welcome'] . " <strong>" . $team['team_name'] . "</strong>.<br><br>";
+                Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_JOIN, $team['team_name']);
+                Tki\PlayerLog::WriteLog($pdo_db, $team['creator'], LOG_TEAM_NEWMEMBER, $team['team_name'] . "|" . $playerinfo['character_name']);
+            }
+            else
+            {
+                echo $langvars['l_team_noinviteto'] . "<br>";
+            }
+        }
+
+        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+        break;
+
+    case 4: // Not implemented yet
+        echo "Not implemented yet. Sorry! :)<br><br>";
+        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+        break;
+
+    case 5: // Eject member
             // Check if Co-ordinator of team.
             // If not display "An error occured, You are not the leader of this Team." message.
             // Then show link back and break;
 
-            if (Tki\Team::isTeamOwner($team, $playerinfo) === false)
+        if (Tki\Team::isTeamOwner($team, $playerinfo) === false)
+        {
+            $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
+            echo $langvars['l_team_error'];
+            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+            continue;
+        }
+        else
+        {
+            $who = preg_replace('/[^0-9]/', '', $who);
+            $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
+            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            $whotoexpel = $result->fields;
+
+            if ($confirmed === null)
             {
-                $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
-                echo $langvars['l_team_error'];
+                echo $langvars['l_team_ejectsure'] . " " . $whotoexpel['character_name'] . "? <a href=\"teams.php?teamwhat=$teamwhat&confirmed=1&who=$who\">" . $langvars['l_yes'] . "</a> - <a href=\"teams.php\">" . $langvars['l_no'] . "</a><br>";
+            }
+            else
+            {
+                // Check whether the player we are ejecting might have already left in the meantime
+                // should go here if ($whotoexpel[team] ==
+
+                $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = '0' WHERE owner = ?;", array($who));
+                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+                $resy = $db->Execute("UPDATE {$db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($who));
+                Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
+
+                // No more necessary due to COUNT(*) in previous SQL statement
+                $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whotoexpel['team']));
+
+                Tki\PlayerLog::WriteLog($pdo_db, $who, LOG_TEAM_KICK, $team['team_name']);
+                echo $whotoexpel['character_name'] . " " . $langvars['l_team_ejected'] . "<br>";
+            }
+            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+        }
+        break;
+
+    case 6: // Create team
+        if ($playerinfo['team'] != 0)
+        {
+            echo $langvars['l_team_leavefirst'] . "<br>";
+            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+            continue;
+        }
+
+        if ($teamname === null)
+        {
+            echo "<form accept-charset='utf-8' action='teams.php' method='post'>\n";
+            echo $langvars['l_team_entername'] . ": ";
+            echo "<input type='hidden' name='teamwhat' value='{$teamwhat}'>\n";
+            echo "<input type='text' name='teamname' size='40' maxlength='40'><br>\n";
+            echo $langvars['l_team_enterdesc'] . ": ";
+            echo "<input type='text' name='teamdesc' size='40' maxlength='254'><br>\n";
+            echo "<input type='submit' value='" . $langvars['l_submit'] . "'><input type='reset' value='" . $langvars['l_reset'] . "'>\n";
+            echo "</form>\n";
+            echo "<br><br>\n";
+        }
+        else
+        {
+            $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
+            $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
+
+            if (!Tki\Team::validateTeam($pdo_db, $teamname, $teamdesc, $playerinfo['ship_id']))
+            {
+                echo "<span style='color:#f00;'>Team Creation Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
                 echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
                 break;
             }
 
-            if ($update === null)
-            {
-                echo "<form accept-charset='utf-8' action='teams.php' method='post'>";
-                echo $langvars['l_team_edname'] . " . : <br>";
-                echo "<input type='hidden' name='teamwhat' value='{$teamwhat}'>";
-                echo "<input type='hidden' name='whichteam' value='{$whichteam}'>";
-                echo "<input type='hidden' name='update' value='true'>";
-                echo "<input type='text' name='teamname' size='40' maxlength='40' value='{$team['team_name']}'><br>";
-                echo $langvars['l_team_eddesc'] . " . : <br>";
-                echo "<input type='text' name='teamdesc' size='40' maxlength='254' value='{$team['description']}'><br>";
-                echo "<input type='submit' value='" . $langvars['l_submit'] . "'><input type='reset' value='{" . $langvars['l_reset'] . "'>";
-                echo "</form>";
-                echo "<br><br>";
-            }
-            else
-            {
-                $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
-                $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
+            $res = $db->Execute("INSERT INTO {$db->prefix}teams (id, creator, team_name, number_of_members, description) VALUES (?, ?, ?, '1', ?);", array($playerinfo['ship_id'], $playerinfo['ship_id'], $teamname, $teamdesc));
+            Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
-                if (Tki\Team::validateTeam($pdo_db, $teamname, $teamdesc, $playerinfo['ship_id']) === false)
-                {
-                    echo "<span style='color:#f00;'>Team Edit Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
-                    echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                    break;
-                }
+            $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES(NULL, ?, ?, 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array("{$teamname}\'s Empire", $playerinfo['ship_id']));
+            Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
-                $res = $db->Execute("UPDATE {$db->prefix}teams SET team_name = ?, description = ? WHERE id = ?;", array($teamname, $teamdesc, $whichteam));
-                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hasbeenr'] . "<br><br>";
+            $resy = $db->Execute("UPDATE {$db->prefix}ships SET team=? WHERE ship_id = ?;", array($playerinfo['ship_id'], $playerinfo['ship_id']));
+            Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
-                // Adding a log entry to all members of the renamed team
-                $result_team_name = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE team = ? AND ship_id <> ?;", array($whichteam, $playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $result_team_name, __LINE__, __FILE__);
-                Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_RENAME, $teamname);
-                while (!$result_team_name->EOF)
-                {
-                    $teamname_array = $result_team_name->fields;
-                    Tki\PlayerLog::WriteLog($pdo_db, $teamname_array['ship_id'], LOG_TEAM_M_RENAME, $teamname);
-                    $result_team_name->MoveNext();
-                }
-            }
+            echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hcreated'] . ".<br><br>";
+            Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_CREATE, $teamname);
+        }
+        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+        break;
+
+    case 7: // Invite a player to a team
+        if (Tki\Team::isTeamMember($team, $playerinfo) === false)
+        {
+            echo "<br>You are not in this team!<br>";
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
+        }
 
-        default:
-            if ($playerinfo['team'] == 0)
+        if ($invited === null)
+        {
+            echo "<form accept-charset='utf-8' action='teams.php' method=post>";
+            echo "<table><input type=hidden name=teamwhat value=$teamwhat><input type=hidden name=invited value=1><input type=hidden name=whichteam value=$whichteam>";
+            echo "<tr><td>" . $langvars['l_team_selectp'] . ":</td><td><select name=who style='width:200px;'>";
+
+            $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team <> ? AND ship_destroyed ='N' AND turns_used > 0 ORDER BY character_name ASC;", array($whichteam));
+            Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            while (!$res->EOF)
             {
-                echo $langvars['l_team_notmember'];
-                Tki\Team::displayInviteInfo($langvars, $playerinfo, $invite_info);
+                $row = $res->fields;
+                if (Tki\Team::isTeamOwner($team, $row) === false)
+                {
+                    echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
+                }
+                $res->MoveNext();
+            }
+
+            echo "</select></td></tr>";
+            echo "<tr><td><input type='submit' value='" . $langvars['l_submit'] . "'></td></tr>";
+            echo "</table>";
+            echo "</form>";
+        }
+        else
+        {
+            if ($playerinfo['team'] == $whichteam)
+            {
+                if ($who === null)
+                {
+                    echo "No player was selected.<br>\n";
+                    echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . "<br><br>";
+                    break;
+                }
+
+                $res = $db->Execute("SELECT character_name,team_invite FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
+                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                $newpl = $res->fields;
+                if ($newpl['team_invite'])
+                {
+                    $langvars['l_team_isorry'] = str_replace("[name]", $newpl['character_name'], $langvars['l_team_isorry']);
+                    echo $langvars['l_team_isorry'] . "<br><br>";
+                }
+                else
+                {
+                    $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = ? WHERE ship_id = ?;", array($whichteam, $who));
+                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    echo $langvars['l_team_plinvted'] . "<br>" . $langvars['l_team_plinvted2'] . "<br>";
+                    Tki\PlayerLog::WriteLog($pdo_db, $who, LOG_TEAM_INVITE, $team['team_name']);
+                }
             }
             else
             {
-                if ($playerinfo['team'] < 0)
-                {
-                    $playerinfo['team'] = -$playerinfo['team'];
-                    $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
-                    Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-                    $whichteam = $result->fields;
-                    echo $langvars['l_team_urejected'] . " <strong>" . $whichteam['team_name'] . "</strong><br><br>";
-                    echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                    break;
-                }
+                echo $langvars['l_team_notyours'] . "<br>";
+            }
+        }
+        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . "<br><br>";
+        break;
+
+    case 8: // Decline invitation to a team
+        echo $langvars['l_team_refuse'] . " <strong>" . $invite_info['team_name'] . "</strong>.<br><br>";
+        $resx = $db->Execute("UPDATE {$db->prefix}ships SET team_invite = 0 WHERE ship_id = ?;", array($playerinfo['ship_id']));
+        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\PlayerLog::WriteLog($pdo_db, $team['creator'], LOG_TEAM_REJECT, $playerinfo['character_name'] . "|" . $invite_info['team_name']);
+        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+        break;
+
+    case 9: // Edit Team
+            // Check if Co-ordinator of team.
+            // If not display "An error occured, You are not the leader of this Team." message.
+            // Then show link back and break;
+
+        if (Tki\Team::isTeamOwner($team, $playerinfo) === false)
+        {
+            $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
+            echo $langvars['l_team_error'];
+            echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+            break;
+        }
+
+        if ($update === null)
+        {
+            echo "<form accept-charset='utf-8' action='teams.php' method='post'>";
+            echo $langvars['l_team_edname'] . " . : <br>";
+            echo "<input type='hidden' name='teamwhat' value='{$teamwhat}'>";
+            echo "<input type='hidden' name='whichteam' value='{$whichteam}'>";
+            echo "<input type='hidden' name='update' value='true'>";
+            echo "<input type='text' name='teamname' size='40' maxlength='40' value='{$team['team_name']}'><br>";
+            echo $langvars['l_team_eddesc'] . " . : <br>";
+            echo "<input type='text' name='teamdesc' size='40' maxlength='254' value='{$team['description']}'><br>";
+            echo "<input type='submit' value='" . $langvars['l_submit'] . "'><input type='reset' value='{" . $langvars['l_reset'] . "'>";
+            echo "</form>";
+            echo "<br><br>";
+        }
+        else
+        {
+            $teamname = trim(htmlentities($teamname, ENT_HTML5, 'UTF-8'));
+            $teamdesc = trim(htmlentities($teamdesc, ENT_HTML5, 'UTF-8'));
+
+            if (Tki\Team::validateTeam($pdo_db, $teamname, $teamdesc, $playerinfo['ship_id']) === false)
+            {
+                echo "<span style='color:#f00;'>Team Edit Failed</span><br>Sorry you have either entered an invalid Team name or Team Description.<br>\n";
+                echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+                break;
+            }
+
+            $res = $db->Execute("UPDATE {$db->prefix}teams SET team_name = ?, description = ? WHERE id = ?;", array($teamname, $teamdesc, $whichteam));
+            Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hasbeenr'] . "<br><br>";
+
+            // Adding a log entry to all members of the renamed team
+            $result_team_name = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE team = ? AND ship_id <> ?;", array($whichteam, $playerinfo['ship_id']));
+            Tki\Db::LogDbErrors($pdo_db, $result_team_name, __LINE__, __FILE__);
+            Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_RENAME, $teamname);
+            while (!$result_team_name->EOF)
+            {
+                $teamname_array = $result_team_name->fields;
+                Tki\PlayerLog::WriteLog($pdo_db, $teamname_array['ship_id'], LOG_TEAM_M_RENAME, $teamname);
+                $result_team_name->MoveNext();
+            }
+        }
+
+        echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+        break;
+
+    default:
+        if ($playerinfo['team'] == 0)
+        {
+            echo $langvars['l_team_notmember'];
+            Tki\Team::displayInviteInfo($langvars, $playerinfo, $invite_info);
+        }
+        else
+        {
+            if ($playerinfo['team'] < 0)
+            {
+                $playerinfo['team'] = -$playerinfo['team'];
                 $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
                 Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                 $whichteam = $result->fields;
-                if ($playerinfo['team_invite'])
-                {
-                    $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team_invite']));
-                    Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-                    $whichinvitingteam = $result->fields;
-                }
-                $isowner = Tki\Team::isTeamOwner($whichteam, $playerinfo);
-                Tki\Team::showInfo($pdo_db, $db, $langvars, $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
+                echo $langvars['l_team_urejected'] . " <strong>" . $whichteam['team_name'] . "</strong><br><br>";
+                echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
+                break;
             }
 
-            $res = $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
-            Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-            $num_res = $res->fields;
+            $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
+            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            $whichteam = $result->fields;
+            if ($playerinfo['team_invite'])
+            {
+                $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team_invite']));
+                Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+                $whichinvitingteam = $result->fields;
+            }
+            $isowner = Tki\Team::isTeamOwner($whichteam, $playerinfo);
+            Tki\Team::showInfo($pdo_db, $db, $langvars, $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
+        }
 
-            if ($num_res['total'] > 0)
-            {
-                Tki\Team::displayAllTeams($pdo_db, $db, $langvars, $tkireg, $order, $type);
-            }
-            else
-            {
-                echo $langvars['l_team_noteams'] . "<br><br>";
-            }
-            break;
+        $res = $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
+        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        $num_res = $res->fields;
+
+        if ($num_res['total'] > 0)
+        {
+            Tki\Team::displayAllTeams($pdo_db, $db, $langvars, $tkireg, $order, $type);
+        }
+        else
+        {
+            echo $langvars['l_team_noteams'] . "<br><br>";
+        }
+        break;
 }
 
 echo "<br><br>";

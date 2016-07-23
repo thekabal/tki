@@ -831,11 +831,11 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     echo "<td>???</td></tr>";
                 }
                 echo "</table><br>";
-//            $roll=random_int(1, 100);
-//            if ($ownerinfo[sector] == $playerinfo[sector] && $ownerinfo[on_planet] == 'Y' && $roll < $success)
-//            {
-//               echo "<strong>" . $ownerinfo['character_name'] . " " . $langvars['l_planet_ison'] . "</strong><br>";
-//            }
+                // $roll=random_int(1, 100);
+                // if ($ownerinfo[sector] == $playerinfo[sector] && $ownerinfo[on_planet] == 'Y' && $roll < $success)
+                // {
+                       // echo "<strong>" . $ownerinfo['character_name'] . " " . $langvars['l_planet_ison'] . "</strong><br>";
+                // }
 
                 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE on_planet = 'Y' and planet_id = ?;", array($planet_id));
                 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);

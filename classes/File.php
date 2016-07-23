@@ -40,7 +40,6 @@ class File
         Db::logDbErrors($pdo_db, $start_tran_res, __LINE__, __FILE__);
 
         $insert_sql = 'INSERT into ' . $pdo_db->prefix . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
-//        var_dump($insert_sql);
         $stmt = $pdo_db->prepare($insert_sql);
 
         foreach ($ini_keys as $config_category => $config_line)

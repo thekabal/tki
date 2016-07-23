@@ -24,10 +24,10 @@ class Score
 {
     public static function updateScore(\PDO $pdo_db, $ship_id, Reg $tkireg, Array $playerinfo) : int
     {
-//      Not currently used in calculation!
-//        $base_ore = $tkireg->base_ore;
-//        $base_goods = $tkireg->base_goods;
-//        $base_organics = $tkireg->base_organics;
+        // Not currently used in calculation!
+        // $base_ore = $tkireg->base_ore;
+        // $base_goods = $tkireg->base_goods;
+        // $base_organics = $tkireg->base_organics;
 
         // These are all SQL Queries, so treat them like them.
         $calc_hull              = "ROUND(POW($tkireg->upgrade_factor, hull))";
