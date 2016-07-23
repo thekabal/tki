@@ -107,7 +107,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         die();
     }
 
-    if (($planetinfo['owner'] == 0  || $planetinfo['defeated'] == 'Y') && $command != "capture")
+    if (($planetinfo['owner'] == 0 || $planetinfo['defeated'] == 'Y') && $command != "capture")
     {
         if ($planetinfo['owner'] == 0)
         {
@@ -865,7 +865,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             $update = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
             Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
         }
-        elseif ($command == "capture" &&  $planetinfo['owner'] == 0)
+        elseif ($command == "capture" && $planetinfo['owner'] == 0)
         {
             echo $langvars['l_planet_captured'] . "<br>";
             $update = $db->Execute("UPDATE {$db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
@@ -897,7 +897,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_PLANET_CAPTURED, "$planetinfo[colonists]|$planetinfo[credits]|$planetowner");
         }
-        elseif ($command == "capture" &&  ($planetinfo['owner'] == 0 || $planetinfo['defeated'] == 'Y'))
+        elseif ($command == "capture" && ($planetinfo['owner'] == 0 || $planetinfo['defeated'] == 'Y'))
         {
             echo $langvars['l_planet_notdef'] . "<br>";
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET defeated='N' WHERE planet_id = ?;", array($planetinfo['planet_id']));

@@ -109,7 +109,7 @@ if ($playerfound)
     if (password_verify($filtered_post_password, $playerinfo['password']))
     {
         $ban_result = Tki\CheckBan::isBanned($pdo_db, $playerinfo);
-        if ($ban_result === false ||  (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
+        if ($ban_result === false || (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
         {
 
             if ($playerinfo['ship_destroyed'] == "N")
