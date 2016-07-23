@@ -106,7 +106,7 @@ class Schema
                     {
                          $errorinfo = $pdo_db->errorInfo();
                          $destroy_sequence_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
-                     }
+                    }
 
                     $destroy_sequence_results[$i]['name'] = $db_prefix . $seqname;
                     $table_timer->stop();
