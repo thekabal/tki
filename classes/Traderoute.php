@@ -1841,7 +1841,7 @@ class Traderoute
             }
         }
 
-      // Check ports compatibility
+        // Check ports compatibility
         if ($type1 == 'port')
         {
             if ($src['port_type'] == 'special')
