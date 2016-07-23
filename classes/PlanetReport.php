@@ -65,7 +65,7 @@ class PlanetReport
             {
                 $query .= " $sort ASC";
             }
-            elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" ||$sort == "colonists" || $sort == "credits" || $sort == "fighters")
+            elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" || $sort == "colonists" || $sort == "credits" || $sort == "fighters")
             {
                 $query .= " $sort DESC, sector_id ASC";
             }
