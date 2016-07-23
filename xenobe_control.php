@@ -526,9 +526,9 @@ else
 
                 // Create emailname from character
                 $emailname = str_replace(" ", "_", $character) . "@xenobe";
-//                $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-//                $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
-//                Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+                // $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+                // $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
+                // Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                 $sql = "SELECT email, character_name, ship_name FROM {$pdo_db->prefix}ships WHERE email=:email OR character_name=:character_name OR ship_name=:ship_name";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':email', $emailname);

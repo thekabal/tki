@@ -81,7 +81,7 @@ Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 <?php
 if ($res->EOF)
 {
-//  echo $langvars['l_readm_nomessage'];
+    // echo $langvars['l_readm_nomessage'];
     ?>
             <tr>
               <td width="100%" bgcolor="black" bordercolorlight="black" bordercolordark="silver">
@@ -105,7 +105,7 @@ else
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($msg['sender_id']));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $sender = $result->fields;
-//      $isAdmin = isAdmin($sender);
+        // $isAdmin = isAdmin($sender);
         ?>
             <tr>
               <td width="100%" align="center" bgcolor="black" height="4"></td>

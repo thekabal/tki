@@ -571,10 +571,10 @@ else
         $trade_goods     =  Tki\Ports::trade($tkireg->goods_price, $tkireg->goods_delta, $sectorinfo['port_goods'], $tkireg->goods_limit, $tkireg->inventory_factor, "goods", $trade_goods, $price_array, $sectorinfo);
         $trade_energy    =  Tki\Ports::trade($tkireg->energy_price, $tkireg->energy_delta, $sectorinfo['port_energy'], $tkireg->energy_limit, $tkireg->inventory_factor, "energy", $trade_energy, $price_array, $sectorinfo);
 
-//        $tkireg->ore_price       =  $price_array['ore'];
-//        $tkireg->organics_price  =  $price_array['organics'];
-//        $tkireg->goods_price     =  $price_array['goods'];
-//        $tkireg->energy_price    =  $price_array['energy'];
+        // $tkireg->ore_price       =  $price_array['ore'];
+        // $tkireg->organics_price  =  $price_array['organics'];
+        // $tkireg->goods_price     =  $price_array['goods'];
+        // $tkireg->energy_price    =  $price_array['energy'];
 
         $cargo_exchanged = $trade_ore + $trade_organics + $trade_goods;
 
