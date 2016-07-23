@@ -71,12 +71,14 @@ class Team
             return (bool) false;
         }
 
-        if (($res = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $name, $matches)) != 0)
+        $res_new = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $name, $matches);
+        if ($res_new != 0)
         {
             return (bool) false;
         }
 
-        if (($res = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $desc, $matches)) != 0)
+        $res_new2 = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $desc, $matches);
+        if ($res_new2 != 0)
         {
             return (bool) false;
         }
