@@ -19,7 +19,8 @@
 
 //adodb_perf::table("{$db->prefix}adodb_logsql");
 $perf = NewPerfMonitor($db);
-$perf->UI($pollsecs=5);
+$pollsecs = 5;
+$perf->UI($pollsecs);
 
 echo '<style type="text/css"><!--  table { background-color: transparent; border:1px solid white}; --></style>';
 
