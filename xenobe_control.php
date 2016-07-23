@@ -196,7 +196,10 @@ else
                     echo "<tr><td>Destroyed?</td><td><input type=checkbox name=ship_destroyed value=ON " . \Tki\Checked::check($row['ship_destroyed']) . "></td></tr>";
                     echo "<tr><td>Orders</td><td>";
                     echo "<select size=1 name=orders>";
-                    $oorder0 = $oorder1 = $oorder2 = $oorder3 = "value";
+                    $oorder0 = "value";
+                    $oorder1 = "value";
+                    $oorder2 = "value";
+                    $oorder3 = "value";
                     if ($row['orders'] == 0)
                     {
                         $oorder0 = "selected=0 value";
@@ -223,7 +226,9 @@ else
                     echo "<option $oorder3=3>Roam and Hunt</option>";
                     echo "</select></td></tr>";
                     echo "<tr><td>Aggression</td><td>";
-                    $oaggr0 = $oaggr1 = $oaggr2 = "value";
+                    $oaggr0 = "value";
+                    $oaggr1 = "value";
+                    $oaggr2 = "value";
                     if ($row['aggression'] == 0)
                     {
                         $oaggr0 = "selected=0 value";
