@@ -29,8 +29,8 @@ header('Vary: Accept-Encoding, Accept-Language');  // Tell CDN's or proxies to k
 header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP connections (15sec), which give better per-client performance, but can be worse (for a server) for many.
 
 // Set cookies for cookie test
-SetCookie('TestCookie', '', 0);
-SetCookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
+setcookie('TestCookie', '', 0);
+setcookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
 
 // Database configuration.
 $db_host = \Tki\SecureConfig::DB_HOST;
