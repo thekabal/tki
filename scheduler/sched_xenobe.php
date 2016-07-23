@@ -26,7 +26,16 @@ echo "<br><strong>Xenobe TURNS</strong><br><br>";
 $langvars = Tki\Translate::load($pdo_db, $lang, array('sched_xenobe', 'common', 'global_includes', 'combat', 'footer', 'news'));
 
 // Make Xenobe selection
-$furcount = $furcount0 = $furcount0a = $furcount1 = $furcount1a = $furcount2 = $furcount2a = $furcount3 = $furcount3a = $furcount3h = 0;
+$furcount = 0;
+$furcount0 = 0;
+$furcount0a = 0;
+$furcount1 = 0;
+$furcount1a = 0;
+$furcount2 = 0;
+$furcount2a = 0;
+$furcount3 = 0;
+$furcount3a = 0;
+$furcount3h = 0;
 
 // Lock the tables
 $resa = $db->Execute("LOCK TABLES {$db->prefix}xenobe WRITE, {$db->prefix}ships WRITE");
