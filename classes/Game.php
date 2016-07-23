@@ -24,7 +24,6 @@ class Game
 {
     public static function isGameClosed(\PDO $pdo_db, Reg $tkireg, $lang, $template, Array $langvars) : bool
     {
-
         if ($tkireg->game_closed)
         {
             $title = $langvars['l_login_closed_message'];
