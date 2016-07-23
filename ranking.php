@@ -134,7 +134,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         }
         else
         {
-           $row['type'] = 'player';
+            $row['type'] = 'player';
         }
 
         // Check for banned players.
