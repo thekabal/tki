@@ -122,7 +122,7 @@ switch ($response)
             die();
         }
 
-        $sector = $playerinfo['sector'] ;
+        $sector = $playerinfo['sector'];
         if ($defenseinfo['defense_type'] == 'F')
         {
             $countres = $db->Execute("SELECT SUM(quantity) AS totalfighters FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'F';", array($sector));
