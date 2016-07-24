@@ -64,6 +64,7 @@ if ($defense_present !== null)
         $i++;
     }
 }
+
 $num_links = $i;
 
 // Put the defense information into the array "defenseinfo"
@@ -116,6 +117,7 @@ if ($defense_present)
                 $mine_id = $defenses[$i]['defense_id'];
             }
         }
+
         $i++;
     }
 }
@@ -212,18 +214,22 @@ else
         {
             $nummines = 0;
         }
+
         if (empty ($numfighters))
         {
             $numfighters = 0;
         }
+
         if ($nummines < 0)
         {
             $nummines = 0;
         }
+
         if ($numfighters < 0)
         {
             $numfighters = 0;
         }
+
         if ($nummines > $playerinfo['torps'])
         {
             echo $langvars['l_mines_notorps'] . "<br>";

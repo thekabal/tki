@@ -142,10 +142,12 @@ switch ($response)
             {
                 $playerbeams = $playerinfo['ship_energy'];
             }
+
             if ($playerbeams > $total_sector_mines)
             {
                 $playerbeams = $total_sector_mines;
             }
+
             echo $langvars['l_md_bmines'] . " " . $playerbeams . " " . $langvars['l_mines'] . "<br>";
             $update4b = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ship_energy - ? WHERE ship_id = ?;", array($playerbeams, $playerinfo['ship_id']));
             Tki\Mines::explode($pdo_db, $sector, $playerbeams);
@@ -167,6 +169,7 @@ switch ($response)
              Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
              die();
         }
+
         $quantity = preg_replace('/[^0-9]/', '', $quantity);
         if ($quantity < 0)
         {
@@ -195,6 +198,7 @@ switch ($response)
                 $quantity = $torpedo_max;
             }
         }
+
         if ($quantity > 0)
         {
             $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity=quantity - ? WHERE defense_id = ?", array($quantity, $defense_id));
@@ -206,8 +210,10 @@ switch ($response)
             {
                 $db->Execute("UPDATE {$db->prefix}ships SET ship_fighters = ship_fighters + ? WHERE ship_id = ?", array($quantity, $playerinfo['ship_id']));
             }
+
             $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0");
         }
+
         $stamp = date("Y-m-d H:i:s");
 
         $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($stamp, $playerinfo['sector'], $playerinfo['ship_id']));

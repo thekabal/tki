@@ -126,6 +126,7 @@ switch ($response) {
                 {
                     echo "<td>" . $details['character_name'] . "</td>";
                 }
+
                 if ($bounty_details[$j]['placed_by'] == $playerinfo['ship_id'])
                 {
                     echo "<td><a href=bounty.php?bid=" . $bounty_details[$j]['bounty_id'] . "&response=cancel>" . $langvars['l_by_cancel'] . "</a></td>";
@@ -146,6 +147,7 @@ switch ($response) {
                     $color = $tkireg->color_line1;
                 }
             }
+
             echo "</table>";
         }
         break;
@@ -161,7 +163,7 @@ switch ($response) {
 
         $res = $db->Execute("SELECT * FROM {$db->prefix}bounty WHERE bounty_id = ?;", array($bid));
         Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        if (!$res || $res->RowCount() ==0)
+        if (!$res || $res->RowCount() == 0)
         {
             echo $langvars['l_by_nobounty'] . "<br><br>";
             Tki\Text::gotomain($pdo_db, $lang);
@@ -339,7 +341,6 @@ switch ($response) {
                 $stmt->bindParam(':ship_id', $bounties[$i]['bounty_on']);
                 $stmt->execute();
                 $details = $stmt->fetch(PDO::FETCH_ASSOC);
-
                 echo "<tr bgcolor=\"$color\">";
                 echo "<td><a href=bounty.php?bounty_on=" . $bounties[$i]['bounty_on'] . "&response=display>". $details['character_name'] . "</a></td>";
                 echo "<td>" . $bounties[$i]['total_bounty'] . "</td>";
@@ -354,8 +355,10 @@ switch ($response) {
                     $color = $tkireg->color_line1;
                 }
             }
+
             echo "</table>";
         }
+
         echo "<br><br>";
         break;
 }

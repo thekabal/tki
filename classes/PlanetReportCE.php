@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -161,6 +161,7 @@ class PlanetReportCE
             {
                 echo "<br>" . $langvars['l_pr_low_turns'] . "<br>";
             }
+
             echo "<br>";
         }
 
@@ -542,7 +543,7 @@ class PlanetReportCE
                 $nsresult = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fighters_owner['ship_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $nsresult, __LINE__, __FILE__);
                 $nsfighters = $nsresult->fields;
-                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team']==0)
+                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
                     $hostile = 1;
                 }
@@ -556,7 +557,7 @@ class PlanetReportCE
                 $nsresult = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fighters_owner['ship_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $nsresult, __LINE__, __FILE__);
                 $nsfighters = $nsresult->fields;
-                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team']==0)
+                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
                     $hostile = 1;
                 }
@@ -580,6 +581,7 @@ class PlanetReportCE
                 $retval = "GO";
             }
         }
+
         return ($retval);
     }
 }

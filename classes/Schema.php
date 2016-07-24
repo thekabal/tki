@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -204,7 +204,7 @@ class Schema
 
                 // Remove comments from SQL
                 $RXSQLComments = '@(--[^\r\n]*)|(\#[^\r\n]*)|(/\*[\w\W]*?(?=\*/)\*/)@ms';
-                $sql_query = (($sql_query == '') ?  '' : preg_replace($RXSQLComments, '', $sql_query));
+                $sql_query = (($sql_query == '') ? '' : preg_replace($RXSQLComments, '', $sql_query));
 
                 // FUTURE: Test handling invalid SQL to ensure it hits the error logger below AND the visible output during running
                 $sth = $pdo_db->prepare($sql_query);

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -110,6 +110,7 @@ class Sessions
                 $stmt->bindParam(':expiry', $this->expiry);
                 $result = $stmt->execute();
             }
+
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, $err_mode);
             return $result;
         }

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -29,7 +29,7 @@ class Planet
     public function getOwner(\PDO $pdo_db, $db = null, int $planet_id = null, &$owner_info = null)
     {
         $owner_info = null;
-        if (!is_null($planet_id) && is_numeric($planet_id) && $planet_id > 0)
+        if (($planet_id !== null) && is_numeric($planet_id) && $planet_id > 0)
         {
             $sql  = "SELECT ship_id, character_name, team FROM {$db->prefix}planets ";
             $sql .= "LEFT JOIN {$db->prefix}ships ON {$db->prefix}ships.ship_id = {$db->prefix}planets.owner ";
@@ -42,6 +42,7 @@ class Planet
                 return true;
             }
         }
+
         return false;
     }
 
@@ -103,12 +104,12 @@ class Planet
                 if ($ownerfightercapacity / $attackerfightercapacity > 1)
                 {
                     $planetfighterslost = $attackerfighters - $attackerfighterslost;
-
                 }
                 else
                 {
                     $planetfighterslost = round(($attackerfighters - $attackerfighterslost) * $ownerfightercapacity / $attackerfightercapacity);
                 }
+
                 if ($planetfighterslost > $planetfighters)
                 {
                     $planetfighterslost = $planetfighters;
@@ -158,6 +159,7 @@ class Planet
         {
             $attackerbeams = $playerinfo['ship_energy'];
         }
+
         $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $attackerbeams;
 
         // Shields
@@ -165,6 +167,7 @@ class Planet
         {
             $attackershields = $playerinfo['ship_energy'];
         }
+
         $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $attackershields;
 
         // Torpedos
@@ -172,6 +175,7 @@ class Planet
         {
             $attackertorps = $playerinfo['torps'];
         }
+
         $playerinfo['torps'] = $playerinfo['torps'] - $attackertorps;
 
         // Setup torp damage rate for both Planet and Ship
@@ -262,6 +266,7 @@ class Planet
                 $planetbeams = 0;
             }
         }
+
         if ($attackerbeams > 0)
         {
             if ($attackerbeams > $planetshields)
@@ -278,6 +283,7 @@ class Planet
                 $attackerbeams = 0;
             }
         }
+
         if ($planetbeams > 0)
         {
             if ($planetbeams > $attackershields)
@@ -294,6 +300,7 @@ class Planet
                 $planetbeams = 0;
             }
         }
+
         if ($planetbeams > 0)
         {
             if ($planetbeams > $attackerarmor)
@@ -308,6 +315,7 @@ class Planet
                 echo "<tr align='center'><td></td><td><font color='#6098F8'><strong>" . $langvars['l_cmb_destroyedyourarmor'] . "</font></strong></td>";
             }
         }
+
         echo "<tr align='center'><td><font color='YELLOW'><strong>" . $langvars['l_cmb_torpedoexchangephase'] . "</strong></font></td><td><strong><font color='YELLOW'>" . $langvars['l_cmb_torpedoexchangephase'] . "</strong></font></td><br>";
         if ($planetfighters > 0 && $attackertorpdamage > 0)
         {
@@ -326,6 +334,7 @@ class Planet
                 $attackertorpdamage = 0;
             }
         }
+
         if ($attackerfighters > 0 && $planettorpdamage > 0)
         {
             if ($planettorpdamage > round($attackerfighters / 2))
@@ -345,6 +354,7 @@ class Planet
                 $planettorpdamage = 0;
             }
         }
+
         if ($planettorpdamage > 0)
         {
             if ($planettorpdamage > $attackerarmor)
@@ -359,6 +369,7 @@ class Planet
                 echo "<tr align='center'><td><font color='red'><strong>" . $langvars['l_cmb_planettorpsdestroy3'] . "</strong></font></td><td></td>";
             }
         }
+
         if ($attackertorpdamage > 0 && $planetfighters > 0)
         {
             $planetfighters = $planetfighters - $attackertorpdamage;
@@ -373,6 +384,7 @@ class Planet
                 echo "<tr align='center'><td><font color='red'><strong>" . $langvars['l_cmb_youdestroyplanetfighters'] . "</strong></font></td><td></td>";
             }
         }
+
         echo "<tr align='center'><td><font color='YELLOW'><strong>" . $langvars['l_cmb_fightercombatphase'] . "</strong></font></td><td><strong><font color='YELLOW'>" . $langvars['l_cmb_fightercombatphase'] . "</strong></font></td><br>";
         if ($attackerfighters > 0 && $planetfighters > 0)
         {
@@ -387,6 +399,7 @@ class Planet
                 echo "<tr align='center'><td><font color='red'><strong>" . $langvars['l_cmb_youdestroyplanetfighters2'] . "</strong></font></td><td></td>";
                 $tempplanetfighters = $planetfighters - $attackerfighters;
             }
+
             if ($planetfighters > $attackerfighters)
             {
                 echo "<tr align='center'><td><font color='red'><strong>" . $langvars['l_cmb_allyourfightersdestroyed'] . "</strong></font></td><td></td>";
@@ -398,9 +411,11 @@ class Planet
                 $langvars['l_cmb_fightertofighterlost'] = str_replace("[cmb_planetfighters]", $planetfighters, $langvars['l_cmb_fightertofighterlost']);
                 echo "<tr align='center'><td><font color='red'><strong>" . $langvars['l_cmb_fightertofighterlost'] . "</strong></font></td><td></td>";
             }
+
             $attackerfighters = $tempplayfighters;
             $planetfighters = $tempplanetfighters;
         }
+
         if ($attackerfighters > 0 && $planetshields > 0)
         {
             if ($attackerfighters > $planetshields)
@@ -416,6 +431,7 @@ class Planet
                 $planetshields = $planetshields - $attackerfighters;
             }
         }
+
         if ($planetfighters > 0)
         {
             if ($planetfighters > $attackerarmor)
@@ -449,22 +465,22 @@ class Planet
                     $attackerfighters = 0;
                 }
 
-                if ($attackertorps    < 0)
+                if ($attackertorps < 0)
                 {
                     $attackertorps = 0;
                 }
 
-                if ($attackershields  < 0)
+                if ($attackershields < 0)
                 {
                     $attackershields = 0;
                 }
 
-                if ($attackerbeams    < 0)
+                if ($attackerbeams < 0)
                 {
                     $attackerbeams = 0;
                 }
 
-                if ($attackerarmor    < 1)
+                if ($attackerarmor < 1)
                 {
                     break;
                 }
@@ -517,6 +533,7 @@ class Planet
             {
                 $rating_change = -100;
             }
+
             echo "<center><br><strong><font size='+2'>" . $langvars['l_cmb_finalcombatstats'] . "</font></strong><br><br>";
             $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
             $langvars['l_cmb_youlostfighters'] = str_replace("[cmb_fighters_lost]", $fighters_lost, $langvars['l_cmb_youlostfighters']);
@@ -612,6 +629,7 @@ class Planet
             $update7b = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($energy, $fighters_lost, $planettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
             \Tki\Db::LogDbErrors($pdo_db, $update7b, __LINE__, __FILE__);
         }
+
         $update = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?", array($playerinfo['ship_id']));
         \Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
     }
@@ -640,19 +658,21 @@ class Planet
         {
             $targetbeams = $targetinfo['ship_energy'];
         }
+
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
         $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg);
         if ($targetshields > $targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
         }
-        $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
 
+        $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
         $targettorpnum = round(pow($tkireg->level_factor, $targetinfo['torp_launchers'])) * 2;
         if ($targettorpnum > $targetinfo['torps'])
         {
             $targettorpnum = $targetinfo['torps'];
         }
+
         $targettorpdmg = $tkireg->torp_dmg_rate * $targettorpnum;
         $targetarmor = $targetinfo['armor_pts'];
         $targetfighters = $targetinfo['ship_fighters'];
@@ -685,11 +705,12 @@ class Planet
         {
             echo $langvars['l_cmb_beamshavenotarget'] . "<br>";
         }
+
         if ($attackerfighters > 0 && $targetbeams > 0)
         {
             if ($targetbeams > round($attackerfighters / 2))
             {
-                $temp=round($attackerfighters/2);
+                $temp = round($attackerfighters / 2);
                 $lost = $attackerfighters - $temp;
                 $attackerfighters = $temp;
                 $targetbeams = $targetbeams - $lost;
@@ -737,6 +758,7 @@ class Planet
             $langvars['l_cmb_nobeamslefttoattack'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_nobeamslefttoattack']);
             echo $langvars['l_cmb_nobeamslefttoattack'] . "<br>";
         }
+
         if ($targetbeams > 0)
         {
             if ($targetbeams > $attackershields)
@@ -760,11 +782,12 @@ class Planet
             $langvars['l_cmb_hehasnobeamslefttoattack'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_hehasnobeamslefttoattack']);
             echo $langvars['l_cmb_hehasnobeamslefttoattack'] . "<br>";
         }
+
         if ($attackerbeams > 0)
         {
             if ($attackerbeams > $targetarmor)
             {
-                $targetarmor=0;
+                $targetarmor = 0;
                 $langvars['l_cmb_yourbeamsbreachedhim'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_yourbeamsbreachedhim']);
                 echo "--> " . $langvars['l_cmb_yourbeamsbreachedhim'] . "<br>";
             }
@@ -781,6 +804,7 @@ class Planet
             $langvars['l_cmb_nobeamstoattackarmor'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_nobeamstoattackarmor']);
             echo $langvars['l_cmb_nobeamstoattackarmor'] . "<br>";
         }
+
         if ($targetbeams > 0)
         {
             if ($targetbeams > $attackerarmor)
@@ -802,6 +826,7 @@ class Planet
             $langvars['l_cmb_hehasnobeamslefttoattackyou'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_hehasnobeamslefttoattackyou']);
             echo $langvars['l_cmb_hehasnobeamslefttoattackyou'] . "<br>";
         }
+
         echo "<br>" . $langvars['l_cmb_torpedoexchange'] . "<br>";
         if ($targetfighters > 0 && $attackertorpdamage > 0)
         {
@@ -834,6 +859,7 @@ class Planet
             $langvars['l_cmb_hehasnofighterleft'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_hehasnofighterleft']);
             echo $langvars['l_cmb_hehasnofighterleft'] . "<br>";
         }
+
         if ($attackerfighters > 0 && $targettorpdmg > 0)
         {
             if ($targettorpdmg > round($attackerfighters / 2))
@@ -865,6 +891,7 @@ class Planet
             $langvars['l_cmb_youhavenofightersanymore'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_youhavenofightersanymore']);
             echo $langvars['l_cmb_youhavenofightersanymore'] . "<br>";
         }
+
         if ($attackertorpdamage > 0)
         {
             if ($attackertorpdamage > $targetarmor)
@@ -886,6 +913,7 @@ class Planet
             $langvars['l_cmb_notorpslefttoattackarmor'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_notorpslefttoattackarmor']);
             echo $langvars['l_cmb_notorpslefttoattackarmor'] . "<br>";
         }
+
         if ($targettorpdmg > 0)
         {
             if ($targettorpdmg > $attackerarmor)
@@ -907,6 +935,7 @@ class Planet
             $langvars['l_cmb_hehasnotorpsforyourarmor'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_hehasnotorpsforyourarmor']);
             echo $langvars['l_cmb_hehasnotorpsforyourarmor'] . "<br>";
         }
+
         echo "<br>" . $langvars['l_cmb_fightersattackexchange'] . "<br>";
         if ($attackerfighters > 0 && $targetfighters > 0)
         {
@@ -923,6 +952,7 @@ class Planet
                 echo $langvars['l_cmb_helostsomefighters'] . "<br>";
                 $temptargfighters = $targetfighters - $attackerfighters;
             }
+
             if ($targetfighters > $attackerfighters)
             {
                 echo "<-- " . $langvars['l_cmb_youlostallfighters'] . "<br>";
@@ -934,6 +964,7 @@ class Planet
                 echo "<-- " . $langvars['l_cmb_youalsolostsomefighters'] . "<br>";
                 $tempplayfighters = $attackerfighters - $targetfighters;
             }
+
             $attackerfighters = $tempplayfighters;
             $targetfighters = $temptargfighters;
         }
@@ -947,6 +978,7 @@ class Planet
             $langvars['l_cmb_younofightersattackleft'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_younofightersattackleft']);
             echo $langvars['l_cmb_younofightersattackleft'] . "<br>";
         }
+
         if ($attackerfighters > 0)
         {
             if ($attackerfighters > $targetarmor)
@@ -968,6 +1000,7 @@ class Planet
             $langvars['l_cmb_youhavenofighterstoarmor'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_youhavenofighterstoarmor']);
             echo $langvars['l_cmb_youhavenofighterstoarmor'] . "<br>";
         }
+
         if ($targetfighters > 0)
         {
             if ($targetfighters > $attackerarmor)
@@ -989,13 +1022,14 @@ class Planet
             $langvars['l_cmb_nofightersleftheforyourarmor'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_nofightersleftheforyourarmor']);
             echo $langvars['l_cmb_nofightersleftheforyourarmor'] . "<br>";
         }
+
         if ($targetarmor < 1)
         {
             $langvars['l_cmb_hehasbeendestroyed'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_hehasbeendestroyed']);
             echo "<br>" . $langvars['l_cmb_hehasbeendestroyed'] . "<br>";
             if ($attackerarmor > 0)
             {
-                $rating_change=round($targetinfo['rating'] * $tkireg->rating_combat_factor);
+                $rating_change = round($targetinfo['rating'] * $tkireg->rating_combat_factor);
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
@@ -1014,6 +1048,7 @@ class Planet
                 {
                     $salv_goods = 0;
                 }
+
                 if ($free_holds > $free_ore)
                 {
                     $salv_ore = $free_ore;
@@ -1028,6 +1063,7 @@ class Planet
                 {
                     $salv_ore = 0;
                 }
+
                 if ($free_holds > $free_organics)
                 {
                     $salv_organics = $free_organics;
@@ -1040,7 +1076,8 @@ class Planet
                 {
                     $salv_organics = 0;
                 }
-                $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull']))+round(pow($tkireg->upgrade_factor, $targetinfo['engines']))+round(pow($tkireg->upgrade_factor, $targetinfo['power']))+round(pow($tkireg->upgrade_factor, $targetinfo['computer']))+round(pow($tkireg->upgrade_factor, $targetinfo['sensors']))+round(pow($tkireg->upgrade_factor, $targetinfo['beams']))+round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $targetinfo['shields']))+round(pow($tkireg->upgrade_factor, $targetinfo['armor']))+round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
+
+                $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull'])) + round(pow($tkireg->upgrade_factor, $targetinfo['engines'])) + round(pow($tkireg->upgrade_factor, $targetinfo['power'])) + round(pow($tkireg->upgrade_factor, $targetinfo['computer'])) + round(pow($tkireg->upgrade_factor, $targetinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $targetinfo['beams'])) + round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $targetinfo['shields'])) + round(pow($tkireg->upgrade_factor, $targetinfo['armor'])) + round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
                 $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_ore]", $salv_ore, $langvars['l_cmb_yousalvaged']);
@@ -1082,6 +1119,7 @@ class Planet
             $update4 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, torps = torps - ? WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $targetinfo['ship_id']));
             \Tki\Db::LogDbErrors($pdo_db, $update4, __LINE__, __FILE__);
         }
+
         echo "<br>_+_+_+_+_+_+_<br>";
         echo $langvars['l_cmb_shiptoshipcombatstats'] . "<br>";
         echo $langvars['l_cmb_statattackerbeams'] . ": $attackerbeams<br>";

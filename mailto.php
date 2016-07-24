@@ -58,6 +58,7 @@ if (array_key_exists('subject', $_POST))
 {
     $subject = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING);
 }
+
 if (array_key_exists('subject', $_GET))
 {
     $subject = filter_input(INPUT_GET, 'subject', FILTER_SANITIZE_STRING);
@@ -107,12 +108,12 @@ if (empty ($content))
     echo "        <select name='to' style='width:200px;'>\n";
 
     // Add self to list.
-    echo "          <option" . (($playerinfo['character_name']==$name)?" selected":"") . ">{$playerinfo['character_name']}</option>\n";
+    echo "          <option" . (($playerinfo['character_name'] == $name) ? " selected" : "") . ">{$playerinfo['character_name']}</option>\n";
 
     while (!$res->EOF)
     {
         $row = $res->fields;
-        echo "          <option" . (($row['character_name']==$to)?" selected":"") . ">{$row['character_name']}</option>\n";
+        echo "          <option" . (($row['character_name'] == $to) ? " selected" : "") . ">{$row['character_name']}</option>\n";
         $res->MoveNext();
     }
 

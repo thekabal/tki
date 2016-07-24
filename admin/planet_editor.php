@@ -77,6 +77,7 @@ else
             {
                 echo "<option value='" . $rowsuba['ship_id'] . "'>" . $rowsuba['character_name'] . "</option>";
             }
+
             $ressuba->MoveNext();
         }
 

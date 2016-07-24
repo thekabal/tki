@@ -117,6 +117,7 @@ else
     {
         echo $tmp_link['link_dest'] . " ";
     }
+
     echo "<br><br>";
 }
 

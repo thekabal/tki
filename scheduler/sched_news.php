@@ -156,10 +156,9 @@ while (!$sql->EOF)
             $news = $db->Execute("INSERT INTO {$db->prefix}news (headline, newstext, user_id, date, news_type) VALUES (?, ?, ?, NOW(), 'planet5');", array($headline, $langvars['l_news_p_text52'], $row['owner']));
             Tki\Db::LogDbErrors($pdo_db, $news, __LINE__, __FILE__);
         }
-    }
-    // end generation of planet amount
+    } // end generation of planet amount
 
-    // generation of colonist amount
+    // Generation of colonist amount
     if ($row['total_colonists'] >= 1000000000)
     {
         $sql2 = $db->Execute("SELECT * FROM {$db->prefix}news WHERE user_id = ? AND news_type = 'col1000';", array($row['owner']));
@@ -220,8 +219,8 @@ while (!$sql->EOF)
             Tki\Db::LogDbErrors($pdo_db, $news, __LINE__, __FILE__);
         }
     }
-    // end generation of colonist amount
 
+    // end generation of colonist amount
     $sql->MoveNext();
 } // while
 

@@ -25,5 +25,6 @@ while (!$res->EOF)
     Tki\Score::updateScore($pdo_db, $res->fields['ship_id'], $tkireg, $playerinfo);
     $res->MoveNext();
 }
+
 echo "<br>";
 $multiplier = 0;

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -200,6 +200,7 @@ class Ibank
                 {
                     $planet['name'] = $langvars['l_ibank_unnamed'];
                 }
+
                 echo "<option value=" . $planet['planet_id'] . ">" . $planet['name'] . " " . $langvars['l_ibank_in'] . " " . $planet['sector_id'] . "</option>";
             }
         }
@@ -218,6 +219,7 @@ class Ibank
                 {
                     $planet['name'] = $langvars['l_ibank_unnamed'];
                 }
+
                 echo "<option value=" . $planet['planet_id'] . ">" . $planet['name'] . " " . $langvars['l_ibank_in'] . " " . $planet['sector_id'] . "</option>";
             }
         }
@@ -244,6 +246,7 @@ class Ibank
                 {
                     $planet['name'] = $langvars['l_ibank_unnamed'];
                 }
+
                 echo "<option value=" . $planet['planet_id'] . ">" . $planet['name'] . " " . $langvars['l_ibank_in'] . " " . $planet['sector_id'] . "</option>";
             }
         }
@@ -827,6 +830,7 @@ class Ibank
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
+
         $dest = $res->fields;
 
         if (empty($dest['name']))

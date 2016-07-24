@@ -74,7 +74,8 @@ foreach ($lang_dir as $file_info) // Get a list of the files in the languages di
         $i++;
     }
 }
-$variables['lang_list']['size'] = $i -1;
+
+$variables['lang_list']['size'] = $i - 1;
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'options', 'news'));

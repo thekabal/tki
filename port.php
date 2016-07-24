@@ -364,7 +364,7 @@ elseif ($sectorinfo['port_type'] == "special")
                 $bank_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 $bounty_payment = $bank_row['balance'];
-                if ($bounty_payment >1000)
+                if ($bounty_payment > 1000)
                 {
                     $bounty_payment -= 1000;
 
@@ -595,6 +595,7 @@ elseif ($sectorinfo['port_type'] == "special")
     {
         echo "+ (form.fuelscoop_purchase.checked ?  " . $tkireg->dev_fuelscoop_price . ": 0)\n";
     }
+
     if ($playerinfo['dev_lssd'] == 'N')
     {
         echo "+ (form.lssd_purchase.checked ? " . $tkireg->dev_lssd_price . " : 0)\n";
@@ -653,9 +654,9 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "\n// -->\n</script>\n";
 
     $onblur = "ONBLUR=\"count_total()\"";
-    $onfocus =  "ONFOCUS=\"count_total()\"";
-    $onchange =  "ONCHANGE=\"count_total()\"";
-    $onclick =  "ONCLICK=\"count_total()\"";
+    $onfocus = "ONFOCUS=\"count_total()\"";
+    $onchange = "ONCHANGE=\"count_total()\"";
+    $onclick = "ONCLICK=\"count_total()\"";
 
     echo "<p>\n";
     $langvars['l_creds_to_spend'] = str_replace("[credits]", number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_creds_to_spend']);
@@ -664,9 +665,9 @@ elseif ($sectorinfo['port_type'] == "special")
     {
         $ibanklink = "\n<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a>";
         $langvars['l_ifyouneedmore'] = str_replace("[ibank]", $ibanklink, $langvars['l_ifyouneedmore']);
-
         echo $langvars['l_ifyouneedmore'] . "<br>";
     }
+
     echo "\n";
     echo "<a href=\"bounty.php\">" . $langvars['l_by_placebounty'] . "</a><br>\n";
     echo " <form accept-charset='utf-8' action=port2.php method=post>\n";
@@ -737,6 +738,7 @@ elseif ($sectorinfo['port_type'] == "special")
         echo "0</td>\n";
         echo "    <td><input type=text readonly class='portcosts2' NAME=dev_beacon_number MAXLENGTH=10 value=" . $langvars['l_full'] . " " . $onblur . " tabindex='0'>";
     }
+
     echo "</td>\n";
     echo "    <td>" . $langvars['l_engines'] . "</td>\n";
     echo "    <td><input type=text readonly class='portcosts2' size=10 name=engine_costper value='0' tabindex='0' $onblur></td>\n";
@@ -984,6 +986,7 @@ elseif ($sectorinfo['port_type'] == "special")
     {
         echo "0<td><input type=text readonly class='portcosts2' NAME=colonist_number MAXLENGTH=10 value=" . $langvars['l_full'] . " tabindex='0' " . $onblur . ">";
     }
+
     echo "    </td>\n";
     echo "  </tr>\n";
     echo " </table><br>\n";

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -352,6 +352,7 @@ class Log
                     list ($step, $attacker_id, $target_id, $info) = explode("|", $entry['data']);
                     $retvalue['text']  = "Attacker Ship: {$attacker_id}, Target Ship: {$target_id}, Target Ship: {$info}\n";
                 }
+
                 $retvalue['title'] = "Attack Logs Stage: {$step} [Debug].";
                 break;
 

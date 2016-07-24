@@ -69,7 +69,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
             // Build the alt text for each image
             $alt = $langvars['l_sector'] . ": {$row['sector_id']} Port: {$row['port_type']} ";
 
-            if (!is_null($row['beacon']))
+            if ($row['beacon'] !== null)
             {
                 $alt .= "{$row['beacon']}";
             }
@@ -95,13 +95,14 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
                 echo "<a href=\"rsmove.php?engage=1&amp;destination=" . ($c + ($div_xmax * $r)) . "\">";
                 echo "<img class='map un' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
             }
+
             $cur_sector++;
         }
     }
 }
 
 // This is the row numbers on the side of the map
-for ($a = 1; $a < ($tkireg->max_sectors/50 +1); $a++)
+for ($a = 1; $a < ($tkireg->max_sectors / 50 + 1); $a++)
 {
     echo "\n<div style='position:absolute;left:" . ($map_width + 10) . "px;top:".(($a - 1) * ($div_h + $div_border)) . "px;'>" . (($a * 50) - 1) . "</div>";
 }

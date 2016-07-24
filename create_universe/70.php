@@ -64,6 +64,7 @@ foreach ($open_sectors_result as $element)
     $open_sectors_array[$i] = $element['sector_id']; // Lets trim that 2d array down to a single array
     $i++;
 }
+
 unset($open_sectors_result); // Clear that 2d array
 
 shuffle($open_sectors_array); // Internally, shuffle uses rand() so it isn't ideally random, but good enough for now

@@ -105,7 +105,7 @@ $info['G-PORT-LIMIT-ENERGY'] = $tkireg->energy_limit;
 $info['G-PORT-RATE-ENERGY'] = $tkireg->energy_rate;
 $info['G-PORT-DELTA-ENERGY'] = $tkireg->energy_delta;
 
-$info['G-SOFA'] = ($tkireg->allow_sofa===true ? "1" : "0");
+$info['G-SOFA'] = ($tkireg->allow_sofa === true ? "1" : "0");
 $info['G-KSM'] = ($tkireg->allow_ksm ? "1" : "0");
 
 $info['S-CLOSED'] = ($tkireg->game_closed ? "1" : "0");

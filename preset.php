@@ -55,8 +55,8 @@ if (array_key_exists('preset', $_POST))
         $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
     }
 }
-$change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
 
+$change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
 foreach ($preset_list as $index => $preset)
 {
     if ($preset === false)
@@ -68,12 +68,12 @@ foreach ($preset_list as $index => $preset)
         echo $result . "<br>\n";
     }
 }
-echo "<br>\n";
 
+echo "<br>\n";
 if ($change !== 1)
 {
     echo "<form accept-charset='utf-8' action='preset.php' method='post'>";
-    for ($x=0; $x<$tkireg->max_presets; $x++)
+    for ($x = 0; $x < $tkireg->max_presets; $x++)
     {
         echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $presetinfo[$x]['preset'] . "'></div>";
     }

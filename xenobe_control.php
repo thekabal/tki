@@ -351,6 +351,7 @@ else
                             echo "Changes to Xenobe activity record have been saved.<br><br>";
                         }
                     }
+
                     echo "<input type=submit value=\"Return to Xenobe editor\">";
                     $button_main = false;
                 }
@@ -359,6 +360,7 @@ else
                     echo "Invalid operation";
                 }
             }
+
             echo "<input type=hidden name=menu value=xenobeedit>";
             echo "<input type=hidden name=swordfish value=$swordfish>";
             echo "</form>";
@@ -565,19 +567,20 @@ else
                 if ($errflag == 0)
                 {
                     $makepass = null;
-                    $syllables ="er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
+                    $syllables = "er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
                     $syllable_array = explode(",", $syllables);
                     for ($count = 1; $count <= 4; $count++)
                     {
-                        if (random_int(0, mt_getrandmax()) %10 == 1)
+                        if (random_int(0, mt_getrandmax()) % 10 == 1)
                         {
-                            $makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() %50) + 1));
+                            $makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() % 50) + 1));
                         }
                         else
                         {
-                            $makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() %62)]);
+                            $makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() % 62)]);
                         }
                     }
+
                     if ($xenlevel === null)
                     {
                         $xenlevel = 0;
@@ -644,4 +647,5 @@ else
         }
     }
 }
+
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

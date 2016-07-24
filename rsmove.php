@@ -100,7 +100,7 @@ else
         $y = ($start['distance'] * sin($sa1) * sin($sa2)) - ($finish['distance'] * sin($fa1) * sin($fa2));
         $z = ($start['distance'] * cos($sa1)) - ($finish['distance'] * cos($fa1));
 
-        $distance = round(sqrt(pow($x, 2) + pow($y, 2)+pow($z, 2)));
+        $distance = round(sqrt(pow($x, 2) + pow($y, 2) + pow($z, 2)));
 
         // Calculate the speed of the ship.
         $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);
@@ -119,7 +119,7 @@ else
         }
 
         // Check to see if engage isn't set or if triptime is larger than 100 and engage is set to 1
-        if (is_null($engage) || ($triptime > 100 && $engage == 1))
+        if (($engage === null) || ($triptime > 100 && $engage == 1))
         {
             // Calculate the amount of fuel that was scooped during transit
             $energyscooped = Tki\Move::calcFuelScooped($playerinfo, $distance, $triptime, $tkireg);
@@ -149,7 +149,6 @@ else
                 $langvars['l_rs_engage'] = str_replace("[engage]", $langvars['l_rs_engage_link'], $langvars['l_rs_engage']);
                 echo $langvars['l_rs_engage'] . "<br><br>";
             }
-
         }
         elseif ($engage > 0)
         {
@@ -170,7 +169,7 @@ else
             }
             else
             {
-                $ok=1;
+                $ok = 1;
                 $sector = $destination;
                 $calledfrom = "rsmove.php";
                 include_once './check_fighters.php';

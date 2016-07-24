@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -87,6 +87,7 @@ class CalcLevels
         {
             $planetbeams = $energy_available;
         }
+
         $planetinfo['energy'] -= $planetbeams;
 
         return (int) $planetbeams;
@@ -115,6 +116,7 @@ class CalcLevels
         {
             $planetshields = $energy_available;
         }
+
         $planetinfo['energy'] -= $planetshields;
 
         return (int) $planetshields;
@@ -135,7 +137,7 @@ class CalcLevels
         {
             foreach ($torp_defender_present as $tmp_torp)
             {
-                $ship_torps =  round(pow($tkireg->level_factor, $tmp_torp['torp_launchers'])) * 10;
+                $ship_torps = round(pow($tkireg->level_factor, $tmp_torp['torp_launchers'])) * 10;
                 $torp_launchers = $torp_launchers + $ship_torps;
             }
         }
@@ -176,8 +178,8 @@ class CalcLevels
         {
             $shipavg += $ship_info[$calc_tech[$i]];
         }
-        $shipavg /= $count;
 
+        $shipavg /= $count;
         return $shipavg;
     }
 }

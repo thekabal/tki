@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -38,7 +38,7 @@ class Player
             $_SESSION['password'] = null;
         }
 
-        if (is_null($_SESSION['username']) === false && is_null($_SESSION['password']) === false)
+        if ($_SESSION['username'] !== null && $_SESSION['password']) !== null)
         {
             $sql = "SELECT ip_address, password, last_login, ship_id, ship_destroyed, dev_escapepod FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
@@ -72,6 +72,7 @@ class Player
                         // replacement for the (now removed) update_cookie function.
                         $_SESSION['last_activity'] = $timestamp['now'];
                     }
+
                     $flag = false;
                 }
             }
@@ -125,13 +126,14 @@ class Player
                     $error_status .= 'Your account has been Banned';
                 }
 
-                if (array_key_exists('public_info', $ban_result) && mb_strlen(trim($ban_result['public_info'])) >0)
+                if (array_key_exists('public_info', $ban_result) && mb_strlen(trim($ban_result['public_info'])) > 0)
                 {
-                    $error_status .=" for the following:<br>\n";
-                    $error_status .="<br>\n";
-                    $error_status .="<div style='font-size:16px; color:#FFFF00;'>";
+                    $error_status .= " for the following:<br>\n";
+                    $error_status .= "<br>\n";
+                    $error_status .= "<div style='font-size:16px; color:#FFFF00;'>";
                     $error_status .= $ban_result['public_info'] . "</div>\n";
                 }
+
                 $error_status .= "</div>\n";
                 $error_status .= "<br>\n";
                 $error_status .= "<div style='color:#FF0000;'>Maybe you will behave yourself next time.</div>\n";

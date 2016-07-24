@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -238,7 +238,7 @@ class Xenobe
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
         }
 
-        if ($sectorinfo['port_type']=="goods") // Port goods
+        if ($sectorinfo['port_type'] == "goods") // Port goods
         {
             // Set the prices
             $tkireg->goods_price = $tkireg->goods_price - $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
@@ -311,6 +311,7 @@ class Xenobe
         {
             $targetbeams = $planetinfo['energy'];
         }
+
         $planetinfo['energy'] -= $targetbeams;
 
         // Planet shields
@@ -319,10 +320,11 @@ class Xenobe
         {
             $targetshields = $planetinfo['energy'];
         }
+
         $planetinfo['energy'] -= $targetshields;
 
         // Planet torps
-        $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers'])+ $base_factor)) * 10;
+        $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;
         $torps = $planetinfo['torps'];
         $targettorps = $torp_launchers;
 
@@ -330,6 +332,7 @@ class Xenobe
         {
             $targettorps = $torps;
         }
+
         $planetinfo['torps'] -= $targettorps;
         $targettorpdmg = $tkireg->torp_dmg_rate * $targettorps;
 
@@ -342,6 +345,7 @@ class Xenobe
         {
             $attackerbeams = $playerinfo['ship_energy'];
         }
+
         $playerinfo['ship_energy'] -= $attackerbeams;
 
         // Attacker shields
@@ -350,6 +354,7 @@ class Xenobe
         {
             $attackershields = $playerinfo['ship_energy'];
         }
+
         $playerinfo['ship_energy'] -= $attackershields;
 
         // Attacker torps
@@ -358,6 +363,7 @@ class Xenobe
         {
             $attackertorps = $playerinfo['torps'];
         }
+
         $playerinfo['torps'] -= $attackertorps;
         $attackertorpdamage = $tkireg->torp_dmg_rate * $attackertorps;
 
@@ -477,6 +483,7 @@ class Xenobe
             {                                                                // Target fighters less than or equal to attackers fighters
                 $tempplayfighters = $attackerfighters - $targetfighters;     // Attacker will loose fighters equal to target fighters
             }
+
             $attackerfighters = $tempplayfighters;
             $targetfighters = $temptargfighters;
         }
@@ -499,22 +506,22 @@ class Xenobe
             $attackerfighters = 0;
         }
 
-        if ($attackertorps    < 0)
+        if ($attackertorps < 0)
         {
             $attackertorps = 0;
         }
 
-        if ($attackerarmor    < 0)
+        if ($attackerarmor < 0)
         {
             $attackerarmor = 0;
         }
 
-        if ($targetfighters   < 0)
+        if ($targetfighters < 0)
         {
             $targetfighters = 0;
         }
 
-        if ($targettorps      < 0)
+        if ($targettorps < 0)
         {
             $targettorps = 0;
         }
@@ -527,7 +534,7 @@ class Xenobe
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
             $free_goods = round($playerinfo['ship_goods'] / 2);
-            $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines']))+round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors']))+round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
+            $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
             $ship_salvage_rate = random_int(10, 20);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
             $fighters_lost = $planetinfo['fighters'] - $targetfighters;
@@ -685,13 +692,13 @@ class Xenobe
 
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
         $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg);
-        if ($targetshields>$targetinfo['ship_energy'])
+        if ($targetshields > $targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
         }
 
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
-        $targettorpnum = round(pow($tkireg->level_factor, $targetinfo['torp_launchers']))*2;
+        $targettorpnum = round(pow($tkireg->level_factor, $targetinfo['torp_launchers'])) * 2;
         if ($targettorpnum > $targetinfo['torps'])
         {
             $targettorpnum = $targetinfo['torps'];
@@ -707,7 +714,7 @@ class Xenobe
         {
             if ($attackerbeams > round($targetfighters / 2))           // Attacker beams GT half target fighters
             {
-                $lost = $targetfighters-(round($targetfighters/2));
+                $lost = $targetfighters - (round($targetfighters / 2));
                 $targetfighters = $targetfighters - $lost;              // T loses half all fighters
             }
             else                                                        // Attacker beams LE half target fighters
@@ -719,16 +726,16 @@ class Xenobe
 
         if ($attackerfighters > 0 && $targetbeams > 0)                      // Target has beams - Attacker has fighters - beams vs. fighters
         {
-            if ($targetbeams > round($attackerfighters / 2))               // Target beams GT half attacker fighters
+            if ($targetbeams > round($attackerfighters / 2))                // Target beams GT half attacker fighters
             {
-                $lost = $attackerfighters-(round($attackerfighters / 2));
+                $lost = $attackerfighters - (round($attackerfighters / 2));
                 $attackerfighters = $attackerfighters - $lost;               // A loses half of all fighters
                 $targetbeams = $targetbeams - $lost;                         // T loses beams EQ to half A fighters
             }
             else
             {                                                                 // Target beams LE half attacker fighters
                 $attackerfighters = $attackerfighters - $targetbeams;         // A loses fighters EQ to T beams A loses fighters
-                $targetbeams=0;                                               // T loses all beams
+                $targetbeams = 0;                                             // T loses all beams
             }
         }
 
@@ -740,9 +747,10 @@ class Xenobe
             }
             else
             {                                                               // Attacker beams LE target shields
-                $attackerbeams = 0;                                           // A loses all beams
+                $attackerbeams = 0;                                         // A loses all beams
             }
         }
+
         if ($targetbeams > 0)
         {                                                                   // Target has beams left - continue combat - beams VS shields
             if ($targetbeams > $attackershields)
@@ -778,6 +786,7 @@ class Xenobe
                 $attackerarmor = $attackerarmor - $targetbeams;             // A loses armor EQ to T beams
             }
         }
+
         if ($targetfighters > 0 && $attackertorpdamage > 0)
         {                                                                   // Attacker fires torps - target has fighters - torps VS fighters
             if ($attackertorpdamage > round($targetfighters / 2))
@@ -792,6 +801,7 @@ class Xenobe
                 $attackertorpdamage = 0;                                    // A loses all torps fired
             }
         }
+
         if ($attackerfighters > 0 && $targettorpdmg > 0)
         {                                                                   // Target fires torps - Attacker has fighters - torps VS fighters
             if ($targettorpdmg > round($attackerfighters / 2))
@@ -806,6 +816,7 @@ class Xenobe
                 $targettorpdmg = 0;                                          // T loses all torps fired
             }
         }
+
         if ($attackertorpdamage > 0)
         {                                                                   // Attacker fires torps - continue combat - torps VS armor
             if ($attackertorpdamage > $targetarmor)
@@ -817,6 +828,7 @@ class Xenobe
                 $targetarmor = $targetarmor - $attackertorpdamage;           // T loses armor EQ to A torps fired
             }
         }
+
         if ($targettorpdmg > 0)
         {                                                                   // Target fires torps - continue combat - torps VS armor
             if ($targettorpdmg > $attackerarmor)
@@ -824,6 +836,7 @@ class Xenobe
                 $attackerarmor = 0;                                         // A loses all armor (A DESTROYED)
             }
         }
+
         if ($attackerfighters > 0 && $targetfighters > 0)
         {                                                                   // Attacker has fighters - target has fighters - fighters VS fighters
             if ($attackerfighters > $targetfighters)
@@ -847,6 +860,7 @@ class Xenobe
             $attackerfighters = $tempplayfighters;
             $targetfighters = $temptargfighters;
         }
+
         if ($attackerfighters > 0)
         {                                                                   // Attacker has fighters - continue combat - fighters VS armor
             if ($attackerfighters > $targetarmor)
@@ -858,6 +872,7 @@ class Xenobe
                 $targetarmor = $targetarmor - $attackerfighters;            // T loses armor EQ to A fighters
             }
         }
+
         if ($targetfighters > 0)
         {                                                                   // Target has fighters - continue combat - fighters VS armor
             if ($targetfighters > $attackerarmor)
@@ -876,27 +891,27 @@ class Xenobe
             $attackerfighters = 0;
         }
 
-        if ($attackertorps    < 0)
+        if ($attackertorps < 0)
         {
             $attackertorps = 0;
         }
 
-        if ($attackerarmor    < 0)
+        if ($attackerarmor < 0)
         {
             $attackerarmor = 0;
         }
 
-        if ($targetfighters   < 0)
+        if ($targetfighters < 0)
         {
             $targetfighters = 0;
         }
 
-        if ($targettorpnum    < 0)
+        if ($targettorpnum < 0)
         {
             $targettorpnum = 0;
         }
 
-        if ($targetarmor      < 0)
+        if ($targetarmor < 0)
         {
             $targetarmor = 0;
         }
@@ -909,7 +924,7 @@ class Xenobe
             if ($targetinfo['dev_escapepod'] == "Y")
             // Target had no escape pod
             {
-                $rating=round($targetinfo['rating'] / 2);
+                $rating = round($targetinfo['rating'] / 2);
                 $resc = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 0, ship_ore = 0, ship_organics = 0, ship_energy = 1000, ship_colonists = 0, ship_goods = 0, ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, ship_destroyed = 'N', rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $resc, __LINE__, __FILE__);
                 \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|Y");
@@ -921,10 +936,10 @@ class Xenobe
                 \Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
             }
 
-            if ($attackerarmor>0)
+            if ($attackerarmor > 0)
             {
                 // Attacker still alive to salvage target
-                $rating_change=round($targetinfo['rating'] * $tkireg->rating_combat_factor);
+                $rating_change = round($targetinfo['rating'] * $tkireg->rating_combat_factor);
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
@@ -970,7 +985,7 @@ class Xenobe
                     $salv_organics = 0;
                 }
 
-                $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull']))+round(pow($tkireg->upgrade_factor, $targetinfo['engines']))+round(pow($tkireg->upgrade_factor, $targetinfo['power']))+round(pow($tkireg->upgrade_factor, $targetinfo['computer']))+round(pow($tkireg->upgrade_factor, $targetinfo['sensors']))+round(pow($tkireg->upgrade_factor, $targetinfo['beams']))+round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $targetinfo['shields']))+round(pow($tkireg->upgrade_factor, $targetinfo['armor']))+round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
+                $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull'])) + round(pow($tkireg->upgrade_factor, $targetinfo['engines'])) + round(pow($tkireg->upgrade_factor, $targetinfo['power'])) + round(pow($tkireg->upgrade_factor, $targetinfo['computer'])) + round(pow($tkireg->upgrade_factor, $targetinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $targetinfo['beams'])) + round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $targetinfo['shields'])) + round(pow($tkireg->upgrade_factor, $targetinfo['armor'])) + round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
                 $ship_salvage_rate = random_int (10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
@@ -1059,7 +1074,7 @@ class Xenobe
                     $salv_organics = 0;
                 }
 
-                $ship_value = $tkireg->upgrade_cost*(round(pow($tkireg->upgrade_factor, $playerinfo['hull']))+round(pow($tkireg->upgrade_factor, $playerinfo['engines']))+round(pow($tkireg->upgrade_factor, $playerinfo['power']))+round(pow($tkireg->upgrade_factor, $playerinfo['computer']))+round(pow($tkireg->upgrade_factor, $playerinfo['sensors']))+round(pow($tkireg->upgrade_factor, $playerinfo['beams']))+round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers']))+round(pow($tkireg->upgrade_factor, $playerinfo['shields']))+round(pow($tkireg->upgrade_factor, $playerinfo['armor']))+round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
+                $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
                 $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$armor_lost|$fighters_lost");
@@ -1073,6 +1088,7 @@ class Xenobe
                 \Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
             }
         }
+
         $resj = $db->Execute("UNLOCK TABLES");
         \Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
     }
@@ -1292,6 +1308,7 @@ class Xenobe
                         }
                     }
                 }
+
                 \Tki\Mines::explode($pdo_db, $targetlink, $roll); // Dispose of the mines now
             }
             else
@@ -1357,6 +1374,7 @@ class Xenobe
                     $targetlink = $wormto;
                     \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Used a wormhole to warp to a zone where attacks are allowed.");
                 }
+
                 $wormto++;
                 $wormto++;
                 $limitloop++;
@@ -1463,6 +1481,7 @@ class Xenobe
             {
                 $targetinfo = $res->fields;
             }
+
             $i++;
             $res->MoveNext();
         }
@@ -1471,7 +1490,6 @@ class Xenobe
         if (!$targetinfo)
         {
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Hunt Failed: No Target ");
-
             return;
         }
 

@@ -39,6 +39,7 @@ if ($_POST['sector'] === null)
         $sectors[] = $res->fields;
         $res->MoveNext();
     }
+
     $variables['sectors'] = $sectors;
 }
 else
@@ -63,6 +64,7 @@ else
             {
                 $variables['selected_zone'] = $rowsubb['zone_id'];
             }
+
             $zones[] = $rowsubb;
             $ressubb->MoveNext();
         }

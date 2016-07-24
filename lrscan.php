@@ -173,6 +173,7 @@ if ($sector == "*")
                 {
                     $character_name = "Unknown";
                 }
+
                 echo "<td>" . $character_name . "</td>";
             }
         }
@@ -186,8 +187,10 @@ if ($sector == "*")
         {
             $tkireg->color = $tkireg->color_line1;
         }
+
         $result->MoveNext();
     }
+
     echo "</table>";
 
     if ($num_links == 0)
@@ -221,6 +224,7 @@ else
         $i++;
         $result3->MoveNext();
     }
+
     $num_links = $i;
 
     // Get sectors which can be reached from the player's current sector
@@ -235,6 +239,7 @@ else
         {
             $flag = 1;
         }
+
         $i++;
         $result3a->MoveNext();
     }
@@ -252,6 +257,7 @@ else
     {
         echo " ($sectorinfo[sector_name])";
     }
+
     echo "</strong></tr>";
     echo "</table><br>";
 
@@ -310,6 +316,7 @@ else
                     $num_detected++;
                     echo $row['ship_name'] . "(" . $row['character_name'] . ")<br>";
                 }
+
                 $result4->MoveNext();
             }
 
@@ -340,8 +347,10 @@ else
             $icon_port_type_name = $port_type . ".png";
             $image_string = "<img align=absmiddle height=12 width=12 alt=\"$icon_alt_text\" src=\"images/$icon_port_type_name\">";
         }
+
         echo "$image_string " . Tki\Ports::getType($sectorinfo['port_type'], $langvars);
     }
+
     echo "</td></tr>";
     echo "<tr bgcolor=\"$tkireg->color_line2\"><td><strong>" . $langvars['l_planets'] . "</strong></td></tr>";
     echo "<tr><td>";
@@ -376,6 +385,7 @@ else
             $planet_owner_name = $result5->fields;
             echo " ($planet_owner_name[character_name])";
         }
+
         $query->MoveNext();
     }
 
@@ -388,11 +398,11 @@ else
 
     echo "</td></tr>";
     echo "<tr bgcolor=\"$tkireg->color_line1\"><td><strong>" . $langvars['l_mines'] . "</strong></td></tr>";
-    $has_mines =  number_format($defM['mines'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+    $has_mines = number_format($defM['mines'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
     echo "<tr><td>" . $has_mines;
     echo "</td></tr>";
     echo "<tr bgcolor=\"$tkireg->color_line2\"><td><strong>" . $langvars['l_fighters'] . "</strong></td></tr>";
-    $has_fighters =  number_format($defF['fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
+    $has_fighters = number_format($defF['fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
     echo "<tr><td>" . $has_fighters;
     echo "</td></tr>";
     if ($playerinfo['dev_lssd'] == 'Y')
@@ -427,6 +437,7 @@ else
     {
         echo "<tr><td>";
     }
+
     echo "</td></tr>";
     echo "</table><br>";
     echo "<a href='move.php?sector=" . $sector . "'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_lrs_moveto'] . " " . $sector;

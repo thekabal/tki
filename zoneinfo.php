@@ -198,6 +198,7 @@ else
          "<tr><td>&nbsp;" . $langvars['l_zi_maxhull'] . "</td><td>$hull&nbsp;</td></tr>\n" .
          "</table>\n";
 }
+
 echo "<br><br>";
 
 Tki\Text::gotomain($pdo_db, $lang);

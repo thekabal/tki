@@ -111,7 +111,6 @@ if ($playerfound)
         $ban_result = Tki\CheckBan::isBanned($pdo_db, $playerinfo);
         if ($ban_result === false || (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
         {
-
             if ($playerinfo['ship_destroyed'] == "N")
             {
                 // Player's ship has not been destroyed
@@ -163,7 +162,6 @@ if ($playerfound)
                         {
                             echo "<br><br>" . $langvars['l_login_looser'] . "<br><br>" . $langvars['l_login_looser2'];
                         }
-
                     }
                     else
                     {
@@ -184,12 +182,13 @@ if ($playerfound)
                 echo "Your account has been Banned";
             }
 
-            if (array_key_exists('public_info', $ban_result) && mb_strlen(trim($ban_result['public_info']))>0)
+            if (array_key_exists('public_info', $ban_result) && mb_strlen(trim($ban_result['public_info'])) > 0)
             {
                 echo " for the following:<br>\n";
                 echo "<br>\n";
                 echo "<div style='font-size:16px; color:#FFFF00;'>{$ban_result['public_info']}</div>\n";
             }
+
             echo "</div>\n";
             echo "<br>\n";
             echo "<div style='color:#FF0000;'>Maybe you will behave yourself next time.</div>\n";

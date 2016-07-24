@@ -104,12 +104,14 @@ if ($character_exists !== null)
             echo $langvars['l_new_inuse'] . ' ' .  $langvars['l_new_4gotpw1'] . ' <a href=mail.php?mail=' . $username . '>' . $langvars['l_clickme'] . '</a> ' . $langvars['l_new_4gotpw2'] . '<br>';
             $flag = 1;
         }
+
         if (mb_strtolower($tmp_char['character_name']) == mb_strtolower($character))
         {
             $langvars['l_new_inusechar'] = str_replace('[character]', $character, $langvars['l_new_inusechar']);
             echo $langvars['l_new_inusechar'] . '<br>';
             $flag = 1;
         }
+
         if (mb_strtolower($tmp_char['ship_name']) == mb_strtolower($shipname))
         {
             $langvars['l_new_inuseship'] = str_replace('[shipname]', $shipname, $langvars['l_new_inuseship']);
