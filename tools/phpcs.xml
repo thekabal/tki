@@ -37,7 +37,6 @@
     <rule ref="PEAR.Commenting.InlineComment"/>
     <rule ref="PEAR.Files.IncludingFile"/>
     <rule ref="PEAR.Formatting.MultiLineAssignment"/>
-    <rule ref="PEAR.Functions.FunctionCallSignature"/>
     <rule ref="PEAR.Functions.ValidDefaultValue"/>
     <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent"/>
     <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
