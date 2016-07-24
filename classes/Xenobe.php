@@ -1099,7 +1099,7 @@ class Xenobe
         if ($targetlink > 0)
         {
             $i = 0;
-            $total_sector_fighters = 0;
+            $all_sector_fighters = 0;
             $defenses = array();
 
             $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
@@ -1112,7 +1112,7 @@ class Xenobe
                 foreach ($defenses_present as $tmp_defense)
                 {
                     $defenses[$i] = $tmp_defense;
-                    $total_sector_fighters += $defenses[$i]['quantity'];
+                    $all_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
                 }
             }
@@ -1134,10 +1134,10 @@ class Xenobe
                 }
             }
 
-            if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) // Dest link has defenses so lets attack them
+            if ($all_sector_fighters > 0 || $total_sector_mines > 0 || ($all_sector_fighters > 0 && $total_sector_mines > 0)) // Dest link has defenses so lets attack them
             {
-                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENSES $total_sector_fighters fighters and $total_sector_mines mines.");
-                $targetfighters = $total_sector_fighters;
+                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENSES $all_sector_fighters fighters and $total_sector_mines mines.");
+                $targetfighters = $all_sector_fighters;
                 $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
                 if ($playerbeams > $playerinfo['ship_energy'])
                 {
@@ -1236,7 +1236,7 @@ class Xenobe
                 }
 
                 // Get rid of the sector fighters that died
-                $fighterslost = $total_sector_fighters - $targetfighters;
+                $fighterslost = $all_sector_fighters - $targetfighters;
                 \Tki\Fighters::destroy($pdo_db, $targetlink, $fighterslost);
 
                 // Message the defense owner with what happened
@@ -1385,7 +1385,7 @@ class Xenobe
         {
             // Check for sector defenses
             $i = 0;
-            $total_sector_fighters = 0;
+            $all_sector_fighters = 0;
             $total_sector_mines = 0;
             $defenses = array();
 
@@ -1399,7 +1399,7 @@ class Xenobe
                 foreach ($defenses_present as $tmp_defense)
                 {
                     $defenses[$i] = $tmp_defense;
-                    $total_sector_fighters += $defenses[$i]['quantity'];
+                    $all_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
                 }
             }
@@ -1420,7 +1420,7 @@ class Xenobe
                 }
             }
 
-            if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) // If destination link has defenses
+            if ($all_sector_fighters > 0 || $total_sector_mines > 0 || ($all_sector_fighters > 0 && $total_sector_mines > 0)) // If destination link has defenses
             {
                 if ($playerinfo['aggression'] == 2 || $playerinfo['aggression'] == 1)
                 {
@@ -1430,7 +1430,7 @@ class Xenobe
                 }
                 else
                 {
-                    \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed, the sector is defended by $total_sector_fighters fighters and $total_sector_mines mines.");
+                    \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed, the sector is defended by $all_sector_fighters fighters and $total_sector_mines mines.");
 
                     return;
                 }
@@ -1519,7 +1519,7 @@ class Xenobe
 
             // Check for sector defenses
             $i = 0;
-            $total_sector_fighters = 0;
+            $all_sector_fighters = 0;
             $defenses = array();
 
             $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
@@ -1532,7 +1532,7 @@ class Xenobe
                 foreach ($defenses_present as $tmp_defense)
                 {
                     $defenses[$i] = $tmp_defense;
-                    $total_sector_fighters += $defenses[$i]['quantity'];
+                    $all_sector_fighters += $defenses[$i]['quantity'];
                     $i++;
                 }
             }
@@ -1555,7 +1555,7 @@ class Xenobe
                 }
             }
 
-            if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) // Destination link has defenses
+            if ($all_sector_fighters > 0 || $total_sector_mines > 0 || ($all_sector_fighters > 0 && $total_sector_mines > 0)) // Destination link has defenses
             {
                 // Attack sector defenses
                 $targetlink = $targetinfo['sector'];

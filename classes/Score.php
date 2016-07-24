@@ -59,15 +59,15 @@ class Score
         $calc_dev_escapepod     = "IF(dev_escapepod='Y', $tkireg->dev_escapepod_price, 0)";
         $calc_dev_fuelscoop     = "IF(dev_fuelscoop='Y', $tkireg->dev_fuelscoop_price, 0)";
         $calc_dev_lssd          = "IF(dev_lssd='Y', $tkireg->dev_lssd_price, 0)";
-        $calc_dev_minedeflector = "dev_minedeflector * $tkireg->dev_minedeflector_price";
-        $calc_dev               = "$calc_dev_warpedit + $calc_dev_genesis + $calc_dev_beacon + $calc_dev_emerwarp + $calc_dev_escapepod + $calc_dev_fuelscoop + $calc_dev_minedeflector + $calc_dev_lssd";
+        $calc_minedeflector     = "dev_minedeflector * $tkireg->dev_minedeflector_price";
+        $calc_dev               = "$calc_dev_warpedit + $calc_dev_genesis + $calc_dev_beacon + $calc_dev_emerwarp + $calc_dev_escapepod + $calc_dev_fuelscoop + $calc_minedeflector + $calc_dev_lssd";
 
         $calc_planet_goods      = "SUM({$pdo_db->prefix}planets.organics) * $tkireg->organics_price + SUM({$pdo_db->prefix}planets.ore) * $tkireg->ore_price + SUM({$pdo_db->prefix}planets.goods) * $tkireg->goods_price + SUM({$pdo_db->prefix}planets.energy) * $tkireg->energy_price";
-        $calc_planet_colonists  = "SUM({$pdo_db->prefix}planets.colonists) * $tkireg->colonist_price";
+        $calc_planet_cols       = "SUM({$pdo_db->prefix}planets.colonists) * $tkireg->colonist_price";
         $calc_planet_defense    = "SUM({$pdo_db->prefix}planets.fighters) * $tkireg->fighter_price + IF({$pdo_db->prefix}planets.base='Y', $tkireg->base_credits + SUM({$pdo_db->prefix}planets.torps) * $tkireg->torpedo_price, 0)";
         $calc_planet_credits    = "SUM({$pdo_db->prefix}planets.credits)";
 
-        $sql = "SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_colonists + $calc_planet_defense + $calc_planet_credits, 0) AS planet_score " .
+        $sql = "SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_cols + $calc_planet_defense + $calc_planet_credits, 0) AS planet_score " .
                                      "FROM {$pdo_db->prefix}planets WHERE owner=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
