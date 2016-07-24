@@ -38,7 +38,7 @@ class Player
             $_SESSION['password'] = null;
         }
 
-        if ($_SESSION['username'] !== null && $_SESSION['password']) !== null)
+        if ($_SESSION['username'] !== null && $_SESSION['password'] !== null)
         {
             $sql = "SELECT ip_address, password, last_login, ship_id, ship_destroyed, dev_escapepod FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
