@@ -74,10 +74,10 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $beam_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($beam_defender_present !== null)
+        $beam_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($beam_defender_here !== null)
         {
-            foreach ($beam_defender_present as $tmp_beams)
+            foreach ($beam_defender_here as $tmp_beams)
             {
                 $planetbeams = $planetbeams + self::beams($tmp_beams['beams'], $tkireg->level_factor);
             }
@@ -103,10 +103,10 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $shield_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($shield_defender_present !== null)
+        $shield_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($shield_defender_here !== null)
         {
-            foreach ($shield_defender_present as $tmp_shields)
+            foreach ($shield_defender_here as $tmp_shields)
             {
                 $planetshields = $planetshields + self::shields($tmp_shields['shields'], $tkireg->level_factor);
             }
@@ -132,10 +132,10 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $torp_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($torp_defender_present !== null)
+        $torp_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($torp_defender_here !== null)
         {
-            foreach ($torp_defender_present as $tmp_torp)
+            foreach ($torp_defender_here as $tmp_torp)
             {
                 $ship_torps = round(pow($tkireg->level_factor, $tmp_torp['torp_launchers'])) * 10;
                 $torp_launchers = $torp_launchers + $ship_torps;

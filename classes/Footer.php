@@ -66,12 +66,12 @@ class Footer
         if ($last_run !== false)
         {
             $seconds_left = ($tkireg->sched_ticks * 60) - (time() - $last_run);
-            $display_update_ticker = true;
+            $show_update_ticker = true;
         }
         else
         {
             $seconds_left = (int) 0;
-            $display_update_ticker = false;
+            $show_update_ticker = false;
         }
 
         // End update counter
@@ -146,7 +146,7 @@ class Footer
         }
 
         // Set array with all used variables in page
-        $variables['update_ticker'] = array("display" => $display_update_ticker, "seconds_left" => $seconds_left, "sched_ticks" => $tkireg->sched_ticks);
+        $variables['update_ticker'] = array("display" => $show_update_ticker, "seconds_left" => $seconds_left, "sched_ticks" => $tkireg->sched_ticks);
         $variables['players_online'] = $online;
         $variables['sf_logo_type'] = $sf_logo_type;
         $variables['sf_logo_height'] = $sf_logo_height;

@@ -25,7 +25,7 @@ class Schema
     public static function dropTables(\PDO $pdo_db, $db_prefix, $dbtype) : array
     {
         $i = 0;
-        $destroy_table_results = array();
+        $destroy_results = array();
 
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)
@@ -56,33 +56,33 @@ class Schema
 
                     if ($drop_res !== false)
                     {
-                        $destroy_table_results[$i]['result'] = true;
+                        $destroy_results[$i]['result'] = true;
                     }
                     else
                     {
                         $errorinfo = $pdo_db->errorInfo();
-                        $destroy_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                        $destroy_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                     }
                 }
                 else
                 {
-                    $destroy_table_results[$i]['result'] = 'Skipped - Persistent table';
+                    $destroy_results[$i]['result'] = 'Skipped - Persistent table';
                 }
 
-                $destroy_table_results[$i]['name'] = $db_prefix . $tablename;
+                $destroy_results[$i]['name'] = $db_prefix . $tablename;
                 $table_timer->stop();
-                $destroy_table_results[$i]['time'] = $table_timer->elapsed();
+                $destroy_results[$i]['time'] = $table_timer->elapsed();
                 $i++;
             }
         }
 
-        return $destroy_table_results;
+        return $destroy_results;
     }
 
     public static function dropSequences(\PDO $pdo_db, $db_prefix, $dbtype)
     {
         $i = 0;
-        $destroy_sequence_results = array();
+        $destroy_results = array();
 
         if ($dbtype == 'postgres9')
         {
@@ -100,22 +100,22 @@ class Schema
 
                     if ($drop_res !== false)
                     {
-                        $destroy_sequence_results[$i]['result'] = true;
+                        $destroy_results[$i]['result'] = true;
                     }
                     else
                     {
                          $errorinfo = $pdo_db->errorInfo();
-                         $destroy_sequence_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                         $destroy_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                     }
 
-                    $destroy_sequence_results[$i]['name'] = $db_prefix . $seqname;
+                    $destroy_results[$i]['name'] = $db_prefix . $seqname;
                     $table_timer->stop();
-                    $destroy_sequence_results[$i]['time'] = $table_timer->elapsed();
+                    $destroy_results[$i]['time'] = $table_timer->elapsed();
                     $i++;
                 }
             }
 
-            return $destroy_sequence_results;
+            return $destroy_results;
         }
         else
         {

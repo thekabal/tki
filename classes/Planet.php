@@ -58,7 +58,7 @@ class Planet
 
         echo $langvars['l_bombsaway'] . "<br><br>\n";
         $planetfighterslost = 0;
-        $attackerfightercapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg);
+        $attackerfitscapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg);
         $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $tkireg);
 
         $res = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE");
@@ -70,7 +70,7 @@ class Planet
         $planetfighters = $planetinfo['fighters'];
         $attackerfighters = $playerinfo['ship_fighters'];
 
-        if ($ownerfightercapacity / $attackerfightercapacity < 1)
+        if ($ownerfightercapacity / $attackerfitscapacity < 1)
         {
             echo $langvars['l_bigfigs'] . "<br><br>\n";
         }
@@ -101,13 +101,13 @@ class Planet
             else
             {
                 echo $langvars['l_strafesuccess'] . "<br>\n";
-                if ($ownerfightercapacity / $attackerfightercapacity > 1)
+                if ($ownerfightercapacity / $attackerfitscapacity > 1)
                 {
                     $planetfighterslost = $attackerfighters - $attackerfighterslost;
                 }
                 else
                 {
-                    $planetfighterslost = round(($attackerfighters - $attackerfighterslost) * $ownerfightercapacity / $attackerfightercapacity);
+                    $planetfighterslost = round(($attackerfighters - $attackerfighterslost) * $ownerfightercapacity / $attackerfitscapacity);
                 }
 
                 if ($planetfighterslost > $planetfighters)
