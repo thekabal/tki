@@ -46,6 +46,7 @@ while (!$result3->EOF)
     {
         $owner = false;
     }
+
     $num_defenses++;
     $result3->MoveNext();
 }
@@ -71,13 +72,13 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
     {
         // You hit mines
         echo "<h1>" . $title . "</h1>\n";
-        $ok=0;
+        $ok = 0;
         $totalmines = $total_sector_mines;
         // Before we had an issue where if there were a lot of mines in the sector the result will go -
         // I changed the behaivor so that rand will chose a % of mines to attack at will
         // (it will always be at least 5% of the mines or at the very least 1 mine);
         // and if you are very unlucky they will all hit you
-        $pren = (random_int(5, 100)/100);
+        $pren = (random_int(5, 100) / 100);
         $roll = round($pren * $total_sector_mines - 1) + 1;
         $totalmines = $totalmines - $roll;
 
@@ -118,6 +119,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
             {
                 $playershields = $playerinfo['ship_energy'];
             }
+
             if ($playershields >= $mines_left)
             {
                 $langvars['l_chm_yourshieldshitforminesdmg'] = str_replace("[chm_mines_left]", $mines_left, $langvars['l_chm_yourshieldshitforminesdmg']);
@@ -174,6 +176,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                 }
             }
         }
+
         Tki\Mines::explode($pdo_db, $sector, $roll);
     }
 }

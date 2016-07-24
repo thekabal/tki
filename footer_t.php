@@ -59,6 +59,7 @@ else
     $seconds_left = (int) 0;
     $display_update_ticker = false;
 }
+
 // End update counter
 
 if ($tkireg->footer_show_debug === true) // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
@@ -89,8 +90,8 @@ if ($news_ticker_active === true)
     // SQL call that selects all of the news items between the start date beginning of day, and the end of day.
     $news_gateway = new \Tki\News\NewsGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
     $row = $news_gateway->selectNewsByDay(date('Y-m-d'));
-
     $news_ticker = array();
+
     if (count($row) == 0)
     {
         array_push($news_ticker, array('url' => null, 'text' => $langvars['l_news_none'], 'type' => null, 'delay' => 5));
@@ -101,8 +102,10 @@ if ($news_ticker_active === true)
         {
             array_push($news_ticker, array('url' => "news.php", 'text' => $item['headline'], 'type' => $item['news_type'], 'delay' => 5));
         }
-        array_push($news_ticker, array('url'=>null, 'text' => "End of News", 'type' => null, 'delay' => 5));
+
+        array_push($news_ticker, array('url' => null, 'text' => "End of News", 'type' => null, 'delay' => 5));
     }
+
     $news_ticker['container'] = "article";
     $template->addVariables("news", $news_ticker);
 }

@@ -96,13 +96,14 @@ $valid_vars[] = array("pref" => "_GET", "var" => "planet_id", "type" => "integer
 
 foreach ($valid_vars as $key => $value)
 {
-    // is found ?
+    // Is it found ?
     if (!isset(${$value['pref']}[$value['var']]))
     {
         // if not found set var to 0.
         ${$value['pref']}[$value['var']] = 0;
     }
-    // set var type to set type.
+
+    // Set var type to set type.
     settype(${$value['pref']}[$value['var']], $value['type']);
 }
 

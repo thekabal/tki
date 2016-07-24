@@ -40,6 +40,7 @@ if ($playershields > $playerinfo['ship_energy'])
 {
     $playershields = $playerinfo['ship_energy'];
 }
+
 $playertorpnum = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
 
 if ($playertorpnum > $playerinfo['torps'])

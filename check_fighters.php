@@ -64,6 +64,7 @@ while (!$result3->EOF)
     {
         $owner = false;
     }
+
     $i++;
     $result3->MoveNext();
 }
@@ -133,10 +134,12 @@ if ($num_defenses > 0 && $total_sector_fighters > 0 && !$owner)
                 {
                     $success = 5;
                 }
+
                 if ($success > 95)
                 {
                     $success = 95;
                 }
+
                 $roll = random_int(1, 100);
                 if ($roll < $success)
                 {
@@ -190,8 +193,8 @@ if ($num_defenses > 0 && $total_sector_fighters > 0 && !$owner)
                 echo "<input type='hidden' name='destination' value='{$destination}'>";
                 echo "</form>";
                 die();
-
         }
+
         // Clean up any sectors that have used up all mines or fighters
         $resx = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0 ");
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);

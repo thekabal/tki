@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -90,6 +90,7 @@ class Bounty
                 PlayerLog::WriteLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_PAID, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
             }
         }
+
         $sql = "DELETE FROM {$pdo_db->prefix}bounty WHERE bounty_on = :bounty_on";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on);

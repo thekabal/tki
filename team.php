@@ -74,6 +74,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
             echo "<p>" . $ownership . "<p>";
         }
     }
+
     Tki\Text::gotomain($pdo_db, $lang);
 }
 else

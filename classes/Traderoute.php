@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -219,6 +219,7 @@ class Traderoute
                     $langvars['l_tdr_nowlink2'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink2']);
                     self::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_nowlink2'], $template);
                 }
+
                 $dist['triptime'] = 4;
             }
             else
@@ -378,6 +379,7 @@ class Traderoute
         {
             echo $langvars['l_tdr_planet'] . " " . $source['name'] . " in " . $sourceport['sector_id'];
         }
+
         self::traderouteResultsSource();
 
         // Determine if Destination is Planet or Port
@@ -389,6 +391,7 @@ class Traderoute
         {
             echo $langvars['l_tdr_planet'] . " " . $dest['name'] . " in " . $destport['sector_id'];
         }
+
         self::traderouteResultsDestination($tkireg);
 
         $sourcecost = 0;
@@ -510,6 +513,7 @@ class Traderoute
                             echo $langvars['l_tdr_sold'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "<br>";
                         }
                     }
+
                     $playerinfo['ship_ore'] -= $ore_buy;
                 }
 
@@ -539,6 +543,7 @@ class Traderoute
                             echo $langvars['l_tdr_sold'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . "<br>";
                         }
                     }
+
                     $playerinfo['ship_goods'] -= $goods_buy;
                 }
 
@@ -568,6 +573,7 @@ class Traderoute
                             echo $langvars['l_tdr_sold'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . "<br>";
                         }
                     }
+
                     $playerinfo['ship_organics'] -= $organics_buy;
                 }
 
@@ -584,6 +590,7 @@ class Traderoute
                     {
                         $energy_buy = $playerinfo['ship_energy'];
                     }
+
                     $sourcecost += $energy_buy * $tkireg->energy_price1;
                     if ($energy_buy != 0)
                     {
@@ -596,6 +603,7 @@ class Traderoute
                             echo $langvars['l_tdr_sold'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
                         }
                     }
+
                     $playerinfo['ship_energy'] -= $energy_buy;
                 }
 
@@ -624,6 +632,7 @@ class Traderoute
                     {
                         echo $langvars['l_tdr_bought'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "<br>";
                     }
+
                     $playerinfo['ship_ore'] += $ore_buy;
                     $sourcecost -= $ore_buy * $tkireg->ore_price1;
                     $resc = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore-?, port_energy=port_energy-?, port_goods=port_goods-?, port_organics=port_organics-? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $source['sector_id']));
@@ -713,6 +722,7 @@ class Traderoute
                     {
                         echo $langvars['l_tdr_bought'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
                     }
+
                     $playerinfo['ship_energy'] += $energy_buy;
                     $sourcecost -= $energy_buy * $tkireg->energy_price1;
                     $resf = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore-?, port_energy=port_energy-?, port_goods=port_goods-?, port_organics=port_organics-? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $source['sector_id']));
@@ -952,6 +962,7 @@ class Traderoute
                             echo $langvars['l_tdr_sold'] . " " . number_format($ore_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_ore'] . "<br>";
                         }
                     }
+
                     $playerinfo['ship_ore'] -= $ore_buy;
                 }
 
@@ -981,6 +992,7 @@ class Traderoute
                             echo $langvars['l_tdr_sold'] . " " . number_format($goods_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_goods'] . "<br>";
                         }
                     }
+
                     $playerinfo['ship_goods'] -= $goods_buy;
                 }
 
@@ -1010,6 +1022,7 @@ class Traderoute
                             echo $langvars['l_tdr_sold'] . " " . number_format($organics_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_organics'] . "<br>";
                         }
                     }
+
                     $playerinfo['ship_organics'] -= $organics_buy;
                 }
 
@@ -1039,6 +1052,7 @@ class Traderoute
                             echo $langvars['l_tdr_sold'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
                         }
                     }
+
                     $playerinfo['ship_energy'] -= $energy_buy;
                 }
                 else
@@ -1081,6 +1095,7 @@ class Traderoute
                         $playerinfo['ship_ore'] += $ore_buy;
                         $destcost -= $ore_buy * $tkireg->ore_price1;
                     }
+
                     $resk = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
                     \Tki\Db::LogDbErrors($pdo_db, $resk, __LINE__, __FILE__);
                 }
@@ -1117,6 +1132,7 @@ class Traderoute
                         $playerinfo['ship_goods'] += $goods_buy;
                         $destcost -= $goods_buy * $tkireg->goods_price1;
                     }
+
                     $resl = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
                     \Tki\Db::LogDbErrors($pdo_db, $resl, __LINE__, __FILE__);
                 }
@@ -1135,6 +1151,7 @@ class Traderoute
                         {
                             $organics_buy = ($playerinfo['credits'] + $destcost) / $tkireg->organics_price1;
                         }
+
                         if ($dest['port_organics'] < $organics_buy)
                         {
                             $organics_buy = $dest['port_organics'];
@@ -1153,6 +1170,7 @@ class Traderoute
                         $playerinfo['ship_organics'] += $organics_buy;
                         $destcost -= $organics_buy * $tkireg->organics_price1;
                     }
+
                     $resm = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
                     \Tki\Db::LogDbErrors($pdo_db, $resm, __LINE__, __FILE__);
                 }
@@ -1208,6 +1226,7 @@ class Traderoute
                         $playerinfo['ship_energy'] = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg);
                     }
                 }
+
                 $reso = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ?, ship_energy = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_energy'], $playerinfo['ship_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $reso, __LINE__, __FILE__);
             }
@@ -1345,6 +1364,7 @@ class Traderoute
                     }
                 }
             }
+
             if ($dist['scooped2'] != 0)
             {
                 echo $langvars['l_tdr_scooped'] . " " . number_format($dist['scooped1'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
@@ -1355,6 +1375,7 @@ class Traderoute
             echo $langvars['l_tdr_onlyonewaytdr'];
             $destcost = 0;
         }
+
         self::traderouteResultsShowCost($tkireg);
 
         if ($sourcecost > 0)
@@ -1365,6 +1386,7 @@ class Traderoute
         {
             echo $langvars['l_tdr_cost'] . " : " . number_format(abs($sourcecost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
+
         self::traderouteResultsCloseCost();
 
         if ($destcost > 0)
@@ -1389,6 +1411,7 @@ class Traderoute
         {
             $newsec = $sourceport['sector_id'];
         }
+
         $rest = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - ?, credits = credits + ?, turns_used = turns_used + ?, sector = ? WHERE ship_id = ?;", array($dist['triptime'], $total_profit, $dist['triptime'], $newsec, $playerinfo['ship_id']));
         \Tki\Db::LogDbErrors($pdo_db, $rest, __LINE__, __FILE__);
         $playerinfo['credits'] += $total_profit - $sourcecost;
@@ -1410,6 +1433,7 @@ class Traderoute
                 self::traderouteResultsShowRepeat($engage);
             }
         }
+
         if ($j == 1)
         {
             self::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
@@ -1439,7 +1463,7 @@ class Traderoute
             }
         }
 
-        if ($num_traderoutes >= $tkireg->max_traderoutes_player && is_null($editroute))
+        if ($num_traderoutes >= $tkireg->max_traderoutes_player && ($editroute === null))
         {
             self::traderouteDie($pdo_db, $lang, $tkireg, '<p>' . $langvars['l_tdr_maxtdr'].'<p>', $template);
         }
@@ -1510,7 +1534,7 @@ class Traderoute
             <td><input type=radio name=\"ptype1\" value=\"port\"
             ";
 
-        if (is_null($editroute) || (!is_null($editroute) && $editroute['source_type'] == 'P'))
+        if (($editroute === null) || ($editroute !== null) && $editroute['source_type'] == 'P')
         {
             echo " checked";
         }
@@ -1520,7 +1544,7 @@ class Traderoute
             <td>&nbsp;&nbsp;<input type=text name=port_id1 size=20 align='center'
             ";
 
-        if (!is_null($editroute) && $editroute['source_type'] == 'P')
+        if (($editroute !== null) && $editroute['source_type'] == 'P')
         {
             echo " value=\"$editroute[source_id]\"";
         }
@@ -1536,7 +1560,7 @@ class Traderoute
             <td><input type=radio name=\"ptype1\" value=\"planet\"
             ";
 
-        if (!is_null($editroute) && $editroute['source_type'] == 'L')
+        if (($editroute !== null) && $editroute['source_type'] == 'L')
         {
             echo " checked";
         }
@@ -1574,7 +1598,7 @@ class Traderoute
             <td><input type=radio name=\"ptype1\" value=\"team_planet\"
             ";
 
-        if (!is_null($editroute) && $editroute['source_type'] == 'C')
+        if (($editroute !== null) && $editroute['source_type'] == 'C')
         {
             echo " checked";
         }
@@ -1619,7 +1643,7 @@ class Traderoute
             <td><input type=radio name=\"ptype2\" value=\"port\"
             ";
 
-        if (is_null($editroute) || (!is_null($editroute) && $editroute['dest_type'] == 'P'))
+        if (($editroute === null) || ($editroute !== null && $editroute['dest_type'] == 'P'))
         {
             echo " checked";
         }
@@ -1629,7 +1653,7 @@ class Traderoute
             <td>&nbsp;&nbsp;<input type=text name=port_id2 size=20 align="center"
             ';
 
-        if (!is_null($editroute) && $editroute['dest_type'] == 'P')
+        if ($editroute !== null && $editroute['dest_type'] == 'P')
         {
             echo " value=\"$editroute[dest_id]\"";
         }
@@ -1645,7 +1669,7 @@ class Traderoute
             <td><input type=radio name=\"ptype2\" value=\"planet\"
             ";
 
-        if (!is_null($editroute) && $editroute['dest_type'] == 'L')
+        if ($editroute !== null && $editroute['dest_type'] == 'L')
         {
             echo " checked";
         }
@@ -1683,7 +1707,7 @@ class Traderoute
             <td><input type=radio name=\"ptype2\" value=\"team_planet\"
             ";
 
-        if (!is_null($editroute) && $editroute['dest_type'] == 'C')
+        if ($editroute !== null && $editroute['dest_type'] == 'C')
         {
             echo " checked";
         }
@@ -1713,6 +1737,7 @@ class Traderoute
                 $i++;
             }
         }
+
         echo "
             </select>
             </tr>";
@@ -1726,7 +1751,7 @@ class Traderoute
             <td colspan=2 valign=top><font size=2><input type=radio name=\"move_type\" value=\"realspace\"
             ";
 
-        if (is_null($editroute) || (!is_null($editroute) && $editroute['move_type'] == 'R'))
+        if ($editroute === null || ($editroute !== null && $editroute['move_type'] == 'R'))
         {
             echo " checked";
         }
@@ -1735,7 +1760,7 @@ class Traderoute
             >&nbsp;" . $langvars['l_tdr_realspace'] . "&nbsp;&nbsp<font size=2><input type=radio name=\"move_type\" value=\"warp\"
             ";
 
-        if (!is_null($editroute) && $editroute['move_type'] == 'W')
+        if ($editroute !== null && $editroute['move_type'] == 'W')
         {
             echo " checked";
         }
@@ -1756,7 +1781,7 @@ class Traderoute
             >&nbsp;" . $langvars['l_tdr_oneway'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=radio name=\"circuit_type\" value=\"2\"
             ";
 
-        if (!is_null($editroute) && $editroute['circuit'] == '2')
+        if ($editroute !== null && $editroute['circuit'] == '2')
         {
             echo " checked";
         }
@@ -2077,6 +2102,7 @@ class Traderoute
                 }
             }
         }
+
         // OK we have $source, *probably* now lets see if we have ever been there
         // Attempting to fix the map the universe via traderoute bug
 
@@ -2087,8 +2113,8 @@ class Traderoute
         {
             self::traderouteDie($pdo_db, $lang, $tkireg, "You cannot create a traderoute from a sector you have not visited!", $template);
         }
-        // Note: shouldnt we, more realistically, require a ship to be *IN* the source sector to create the traderoute?
 
+        // Note: shouldnt we, more realistically, require a ship to be *IN* the source sector to create the traderoute?
         // Database sanity check for dest
         if ($ptype2 == 'port')
         {
@@ -2156,6 +2182,7 @@ class Traderoute
         {
             self::traderouteDie($pdo_db, $lang, $tkireg, "You cannot create a traderoute into a special port!", $template);
         }
+
         // Check traderoute for src => dest
         self::traderouteCheckCompatible($db, $pdo_db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
 

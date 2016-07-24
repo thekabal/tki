@@ -62,6 +62,7 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
+
 unset($_SESSION['ship_selected']);
 
 // Check to ensure target is in the same sector as player
@@ -83,6 +84,7 @@ else
         {
             $success = 5;
         }
+
         if ($success > 95)
         {
             $success = 95;

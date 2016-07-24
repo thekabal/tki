@@ -116,7 +116,7 @@ else
 }
 
 // Get Team Info
-if (!is_null($whichteam))
+if ($whichteam !== null)
 {
     $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
     Tki\Db::LogDbErrors($pdo_db, $result_team, __LINE__, __FILE__);
@@ -215,6 +215,7 @@ switch ($teamwhat)
                         {
                             echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
                         }
+
                         $res->MoveNext();
                     }
 
@@ -376,6 +377,7 @@ switch ($teamwhat)
                 Tki\PlayerLog::WriteLog($pdo_db, $who, LOG_TEAM_KICK, $team['team_name']);
                 echo $whotoexpel['character_name'] . " " . $langvars['l_team_ejected'] . "<br>";
             }
+
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         }
         break;
@@ -424,6 +426,7 @@ switch ($teamwhat)
             echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hcreated'] . ".<br><br>";
             Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_TEAM_CREATE, $teamname);
         }
+
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         break;
 
@@ -440,7 +443,6 @@ switch ($teamwhat)
             echo "<form accept-charset='utf-8' action='teams.php' method=post>";
             echo "<table><input type=hidden name=teamwhat value=$teamwhat><input type=hidden name=invited value=1><input type=hidden name=whichteam value=$whichteam>";
             echo "<tr><td>" . $langvars['l_team_selectp'] . ":</td><td><select name=who style='width:200px;'>";
-
             $res = $db->Execute("SELECT character_name, ship_id, team FROM {$db->prefix}ships WHERE team <> ? AND ship_destroyed ='N' AND turns_used > 0 ORDER BY character_name ASC;", array($whichteam));
             Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
             while (!$res->EOF)
@@ -450,6 +452,7 @@ switch ($teamwhat)
                 {
                     echo "<option value='{$row['ship_id']}'>{$row['character_name']}";
                 }
+
                 $res->MoveNext();
             }
 
@@ -490,6 +493,7 @@ switch ($teamwhat)
                 echo $langvars['l_team_notyours'] . "<br>";
             }
         }
+
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . "<br><br>";
         break;
 
@@ -587,6 +591,7 @@ switch ($teamwhat)
                 Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                 $whichinvitingteam = $result->fields;
             }
+
             $isowner = Tki\Team::isTeamOwner($whichteam, $playerinfo);
             Tki\Team::showInfo($pdo_db, $db, $langvars, $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
         }

@@ -114,6 +114,7 @@ if ($playerinfo['dev_beacon'] > 0)
             {
                 echo $langvars['l_beacon_none'] . "<br><br>";
             }
+
             echo "<form accept-charset='utf-8' action=beacon.php method=post>";
             echo "<table>";
             echo "<tr><td>" . $langvars['l_beacon_enter'];

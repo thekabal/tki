@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -66,7 +66,7 @@ class Team
         $desc = trim($desc);
         $creator = (int) $creator;
 
-        if ((is_null($name) || empty ($name)) || (is_null($desc) || empty ($desc)) || (is_null($creator) || empty ($creator)))
+        if ($name === null || empty ($name) || $desc === null || empty ($desc) || $creator === null || empty ($creator))
         {
             return (bool) false;
         }
@@ -114,6 +114,7 @@ class Team
             $type = "d";
             $by = "DESC";
         }
+
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=team_name&type=$type>" . $langvars['l_name'] . "</a></strong></td>";
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=number_of_members&type=$type>" . $langvars['l_team_members'] . "</a></strong></td>";
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=character_name&type=$type>" . $langvars['l_team_coord'] . "</a></strong></td>";
@@ -136,6 +137,7 @@ class Team
         {
             $sql_query .= " ORDER BY ? ?";
         }
+
         $sql_query .= ";";
 
         $res = $db->Execute($sql_query, array($order, $by));
@@ -173,6 +175,7 @@ class Team
 
             $res->MoveNext();
         }
+
         echo "</table><br>";
     }
 
@@ -209,13 +212,16 @@ class Team
             {
                 echo $langvars['l_team_member'] . " ";
             }
+
             echo $langvars['l_options'] . " <br><font size=2>";
             if (is_team_owner($team, $playerinfo) === true)
             {
                 echo "[<a href=teams.php?teamwhat=9&whichteam=$playerinfo[team]>" . $langvars['l_edit'] . "</a>] - ";
             }
+
             echo "[<a href=teams.php?teamwhat=7&whichteam=$playerinfo[team]>" . $langvars['l_team_inv'] . "</a>] - [<a href=teams.php?teamwhat=2&whichteam=$playerinfo[team]>" . $langvars['l_team_leave'] . "</a>]</font></font>";
         }
+
         self::displayInviteInfo($langvars, $playerinfo, $invite_info);
         echo "</div>";
 
@@ -241,6 +247,7 @@ class Team
                     echo " - " . $langvars['l_team_coord'] . " </td>";
                 }
             }
+
             echo "</tr><tr bgcolor=$tkireg->color_line2>";
             $result->MoveNext();
         }
@@ -266,6 +273,7 @@ class Team
             echo "<td>" . $langvars['l_team_noinvites'] . " <strong>" . $team['team_name'] . "</strong>.</td>";
             echo "</tr><tr>";
         }
+
         echo "</tr></table>";
     }
 }
