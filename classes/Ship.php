@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,7 +22,7 @@ namespace Tki;
 
 class Ship
 {
-    public static function isDestroyed(\PDO $pdo_db, $lang, Reg $tkireg, $langvars, $template, Array $playerinfo) : bool
+    public static function isDestroyed(\PDO $pdo_db, $lang, Reg $tkireg, Array $langvars, $template, Array $playerinfo) : bool
     {
         // Check for destroyed ship
         if ($playerinfo['ship_destroyed'] === 'Y')

@@ -107,12 +107,13 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         die();
     }
 
-    if (($planetinfo['owner'] == 0  || $planetinfo['defeated'] == 'Y') && $command != "capture")
+    if (($planetinfo['owner'] == 0 || $planetinfo['defeated'] == 'Y') && $command != "capture")
     {
         if ($planetinfo['owner'] == 0)
         {
             echo $langvars['l_planet_unowned'] . ".<br><br>";
         }
+
         $capture_link = "<a href=planet.php?planet_id=$planet_id&command=capture>" . $langvars['l_planet_capture1'] . "</a>";
         $langvars['l_planet_capture2'] = str_replace("[capture]", $capture_link, $langvars['l_planet_capture2']);
         echo $langvars['l_planet_capture2'] . ".<br><br>";
@@ -309,7 +310,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             $retOwnerInfo = null;
 
             $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
-            if ($owner_found === true && !is_null($retOwnerInfo))
+            if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
@@ -420,6 +421,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
+
             unset($_SESSION['planet_selected']);
 
             // Build a base
@@ -562,7 +564,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             $retOwnerInfo = null;
             $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
-            if ($owner_found === true && !is_null($retOwnerInfo))
+            if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
@@ -594,11 +596,11 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
-            unset($_SESSION['planet_selected']);
 
+            unset($_SESSION['planet_selected']);
             $retOwnerInfo = null;
             $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
-            if ($owner_found === true && !is_null($retOwnerInfo))
+            if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
@@ -626,7 +628,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             $langvars['l_planet_att_link'] = "<a href=planet.php?planet_id=$planet_id&command=attac>" . $langvars['l_planet_att_link'] . "</a>";
             $langvars['l_planet_att'] = str_replace("[attack]", $langvars['l_planet_att_link'], $langvars['l_planet_att']);
-            $langvars['l_planet_scn_link'] ="<a href=planet.php?planet_id=$planet_id&command=scan>" . $langvars['l_planet_scn_link'] . "</a>";
+            $langvars['l_planet_scn_link'] = "<a href=planet.php?planet_id=$planet_id&command=scan>" . $langvars['l_planet_scn_link'] . "</a>";
             $langvars['l_planet_scn'] = str_replace("[scan]", $langvars['l_planet_scn_link'], $langvars['l_planet_scn']);
             echo $langvars['l_planet_att'] . "<br>";
             echo $langvars['l_planet_scn'] . "<br>";
@@ -647,8 +649,8 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
-            unset($_SESSION['planet_selected']);
 
+            unset($_SESSION['planet_selected']);
             // Scan menu
             if ($playerinfo['turns'] < 1)
             {
@@ -664,6 +666,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             {
                 $success = 5;
             }
+
             if ($success > 95)
             {
                 $success = 95;
@@ -729,8 +732,10 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     echo "<td>???</td></tr>";
                 }
+
                 echo "<tr><td>" . $langvars['l_energy'] . ":</td>";
                 $roll = random_int(1, 100);
+
                 if ($roll < $success)
                 {
                     $sc_planet_energy = number_format(round($planetinfo['energy'] * $sc_error / 100), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
@@ -740,6 +745,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     echo "<td>???</td></tr>";
                 }
+
                 echo "<tr><td>" . $langvars['l_colonists'] . ":</td>";
                 $roll = random_int(1, 100);
                 if ($roll < $success)
@@ -751,6 +757,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     echo "<td>???</td></tr>";
                 }
+
                 echo "<tr><td>". $langvars['l_credits'] . ":</td>";
                 $roll = random_int(1, 100);
                 if ($roll < $success)
@@ -786,6 +793,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     echo "<td>???</td></tr>";
                 }
+
                 echo "<tr><td>" . $langvars['l_fighters'] . ":</td>";
                 $roll = random_int(1, 100);
                 if ($roll < $success)
@@ -797,6 +805,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     echo "<td>???</td></tr>";
                 }
+
                 echo "<tr><td>" . $langvars['l_beams'] . ":</td>";
                 $roll = random_int(1, 100);
                 if ($roll < $success)
@@ -808,6 +817,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     echo "<td>???</td></tr>";
                 }
+
                 echo "<tr><td>" . $langvars['l_torp_launch'] . ":</td>";
                 $roll = random_int(1, 100);
                 if ($roll < $success)
@@ -819,6 +829,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     echo "<td>???</td></tr>";
                 }
+
                 echo "<tr><td>" . $langvars['l_shields'] . "</td>";
                 $roll = random_int(1, 100);
                 if ($roll < $success)
@@ -830,12 +841,13 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     echo "<td>???</td></tr>";
                 }
+
                 echo "</table><br>";
-//            $roll=random_int(1, 100);
-//            if ($ownerinfo[sector] == $playerinfo[sector] && $ownerinfo[on_planet] == 'Y' && $roll < $success)
-//            {
-//               echo "<strong>" . $ownerinfo['character_name'] . " " . $langvars['l_planet_ison'] . "</strong><br>";
-//            }
+                // $roll=random_int(1, 100);
+                // if ($ownerinfo[sector] == $playerinfo[sector] && $ownerinfo[on_planet] == 'Y' && $roll < $success)
+                // {
+                       // echo "<strong>" . $ownerinfo['character_name'] . " " . $langvars['l_planet_ison'] . "</strong><br>";
+                // }
 
                 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE on_planet = 'Y' and planet_id = ?;", array($planet_id));
                 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
@@ -848,6 +860,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     {
                         $success = 5;
                     }
+
                     if ($success > 95)
                     {
                         $success = 95;
@@ -859,13 +872,15 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     {
                         echo "<strong>" . $row['character_name'] . " " . $langvars['l_planet_ison'] . "</strong><br>";
                     }
+
                     $res->MoveNext();
                 }
             }
+
             $update = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
             Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
         }
-        elseif ($command == "capture" &&  $planetinfo['owner'] == 0)
+        elseif ($command == "capture" && $planetinfo['owner'] == 0)
         {
             echo $langvars['l_planet_captured'] . "<br>";
             $update = $db->Execute("UPDATE {$db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
@@ -897,7 +912,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_PLANET_CAPTURED, "$planetinfo[colonists]|$planetinfo[credits]|$planetowner");
         }
-        elseif ($command == "capture" &&  ($planetinfo['owner'] == 0 || $planetinfo['defeated'] == 'Y'))
+        elseif ($command == "capture" && ($planetinfo['owner'] == 0 || $planetinfo['defeated'] == 'Y'))
         {
             echo $langvars['l_planet_notdef'] . "<br>";
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET defeated='N' WHERE planet_id = ?;", array($planetinfo['planet_id']));
@@ -923,6 +938,7 @@ if ($tkireg->allow_ibank)
 {
     echo $langvars['l_ifyouneedplan'] . " <a href=\"ibank.php?planet_id=$planet_id\">" . $langvars['l_ibank_term'] . "</a>.<br><br>";
 }
+
 echo "<a href =\"bounty.php\">" . $langvars['l_by_placebounty'] . "</a><p>";
 
 Tki\Text::gotomain($pdo_db, $lang);

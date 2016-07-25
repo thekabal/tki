@@ -257,7 +257,7 @@ $variables['admin_pass'] = \Tki\SecureConfig::ADMIN_PASS;
 $local_table_timer->stop();
 $variables['admin_account_results']['elapsed'] = $local_table_timer->elapsed();
 
-for ($zz=0; $zz<$tkireg->max_presets; $zz++)
+for ($zz = 0; $zz < $tkireg->max_presets; $zz++)
 {
     $local_table_timer->start(); // Start benchmarking for admin preset #$zz
     $sql = "INSERT INTO {$pdo_db->prefix}presets (ship_id, preset, type) " .

@@ -59,7 +59,7 @@ if ($content === false || $content === null)
 }
 else
 {
-    $link_to_game = "http://" . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
+    $link_to_game = "https://" . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
     mail("$tkireg->admin_mail", $langvars['l_feedback_subj'], "IP address - " . $_SERVER['REMOTE_ADDR'] . "\r\nGame Name - {$playerinfo['character_name']}\r\nServer URL - {$link_to_game}\r\n\r\n{$_POST['content']}", "From: {$playerinfo['email']}\r\nX-Mailer: PHP/" . phpversion());
     echo $langvars['l_feedback_messent'] . "<br><br>";
 }

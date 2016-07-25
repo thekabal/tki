@@ -36,7 +36,7 @@ if (array_key_exists('ship_id', $_GET))
     $ship_id = (int) filter_input(INPUT_GET, 'ship_id', FILTER_SANITIZE_NUMBER_INT);
 }
 
-// Kami Multi Browser Window Attack Fix
+// Kami multi-browser window attack fix
 if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_selected'] != $ship_id)
 {
     echo "You need to click on the ship first.<br><br>";
@@ -44,10 +44,11 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
+
 unset ($_SESSION['ship_selected']);
 
 // Need to also set a WRITE LOCK on {$db->prefix}adodb_logsql WRITE
-// or it will fail to log the sql.
+// or it will fail to log the sql
 $result = $db->Execute(
     "LOCK TABLES {$db->prefix}adodb_logsql WRITE, {$db->prefix}languages READ, " .
     "{$db->prefix}ibank_accounts READ, {$db->prefix}sector_defense WRITE, " .
@@ -95,7 +96,7 @@ elseif ($_SESSION['in_combat'] !== null && $_SESSION['in_combat'] === true)
 }
 else
 {
-    // Set In Combat Flag
+    // Set in combat flag
     $_SESSION['in_combat'] = (boolean) true;
 
     // Determine percent chance of success in detecting target ship - based on player's sensors and opponent's cloak
@@ -109,6 +110,7 @@ else
     {
         $success = 95;
     }
+
     $flee = (10 - $targetinfo['engines'] + $playerinfo['engines']) * 5;
     $roll = random_int(1, 100);
     $roll2 = random_int(1, 100);
@@ -151,7 +153,7 @@ else
     }
     else
     {
-        // If scan succeeds, show results and inform target.
+        // If scan succeeds, show results and inform target
         $shipavg = Tki\CalcLevels::avgTech($targetinfo, "ship");
 
         if ($shipavg > $tkireg->max_ewdhullsize)
@@ -162,6 +164,7 @@ else
         {
             $chance = 0;
         }
+
         $random_value = random_int(1, 100);
 
         if ($targetinfo['dev_emerwarp'] > 0 && $random_value > $chance)
@@ -189,7 +192,7 @@ else
         }
         else
         {
-            // Bounty-free Xenobe attacking allowed.
+            // Bounty-free Xenobe attacking allowed
             if (($targetscore / $playerscore < $bounty_ratio || $targetinfo['turns_used'] < $bounty_minturns) && ( preg_match("/(\@xenobe)$/", $targetinfo['email']) === 0))
             {
                 // Changed xenobe check to a regexp cause a player could put
@@ -231,41 +234,41 @@ else
             {
                 Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_EWDFAIL, $playerinfo['character_name']);
             }
-            $targetenergy = $targetinfo['ship_energy'];
-            $playerenergy = $playerinfo['ship_energy'];
+
             // I added these two so we can have a value for debugging and
             // reporting totals. If we use the variables in calcs below,
-            // change the display of stats too
-
+            // change the display of stats also
+            $targetenergy = $targetinfo['ship_energy'];
+            $playerenergy = $playerinfo['ship_energy'];
             $targetbeams = Tki\CalcLevels::beams($targetinfo['beams'], $tkireg);
             if ($targetbeams > $targetinfo['ship_energy'])
             {
                 $targetbeams = $targetinfo['ship_energy'];
             }
+
             $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
             // Why dont we set targetinfo[ship_energy] to a variable instead?
-
             $playerbeams = Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
             if ($playerbeams > $playerinfo['ship_energy'])
             {
                 $playerbeams = $playerinfo['ship_energy'];
             }
-            $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
 
+            $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
             $playershields = Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
             if ($playershields > $playerinfo['ship_energy'])
             {
                 $playershields = $playerinfo['ship_energy'];
             }
-            $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playershields;
 
+            $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playershields;
             $targetshields = Tki\CalcLevels::shields($targetinfo['shields'], $tkireg);
             if ($targetshields > $targetinfo['ship_energy'])
             {
                 $targetshields = $targetinfo['ship_energy'];
             }
-            $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
 
+            $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
             $playertorpnum = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 10;
             if ($playertorpnum > $playerinfo['torps'])
             {
@@ -277,6 +280,7 @@ else
             {
                 $targettorpnum = $targetinfo['torps'];
             }
+
             $playertorpdmg = $tkireg->torp_dmg_rate * $playertorpnum;
             $targettorpdmg = $tkireg->torp_dmg_rate * $targettorpnum;
             $playerarmor = $playerinfo['armor_pts'];
@@ -332,6 +336,7 @@ else
                     $color = $tkireg->color_line1;
                 }
             }
+
             echo "</table>\n";
             echo "  <div style='height:4px;'></div>\n";
             echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>Beams</div>\n";
@@ -562,6 +567,7 @@ else
                     echo $langvars['l_att_ylost'] . " " . $targetfighters . " " . $langvars['l_fighters'] . ".<br>";
                     $tempplayfighters = $playerfighters - $targetfighters;
                 }
+
                 $playerfighters = $tempplayfighters;
                 $targetfighters = $temptargfighters;
             }
@@ -600,6 +606,7 @@ else
             {
                 echo "No information available.<br>\n";
             }
+
             echo "  </div>\n";
             echo "  <div style='height:4px;'></div>\n";
             echo "  <div style='text-align:left; font-size:14px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>Outcome</div>\n";
@@ -623,14 +630,14 @@ else
                     );
                     Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                     Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
-                    Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                    Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                     Tki\AdminLog::writeLog($pdo_db, LOG_ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Just lost the Escape Pod.");
                 }
                 else
                 {
                     Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
                     Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
-                    Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                    Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                     Tki\AdminLog::writeLog($pdo_db, LOG_ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Didn't have the Escape Pod.");
                 }
 
@@ -641,26 +648,24 @@ else
                     // xenobe and the credits they are carrying
                     $salv_credits = 0;
 
-                    // Double Death Attack Bug Fix - Returns 0 for real
+                    // Double death attack bug fix - Returns 0 for real
                     // players, 1 for Xenobe players
                     // He is a Xenobe
                     if (preg_match("/(\@xenobe)$/", $targetinfo['email']) !== 0)
                     {
                         $resx = $db->Execute("UPDATE {$db->prefix}xenobe SET active= N WHERE xenobe_id = ?;", array($targetinfo['email']));
                         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-
                         Tki\AdminLog::writeLog($pdo_db, LOG_ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected as AI.");
 
                         if ($rating_change > 0)
                         {
                             $rating_change = 0 - $rating_change;
                             Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
-                            Tki\Bounty::collect($pdo_db, $db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                            Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                             Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
-
                             Tki\AdminLog::writeLog($pdo_db, LOG_ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Hope fully we only killed off the AI.");
-
                         }
+
                         $salv_credits = $targetinfo['credits'];
                     }
 
@@ -682,6 +687,7 @@ else
                     {
                         $salv_goods = 0;
                     }
+
                     if ($free_holds > $free_ore)
                     {
                         $salv_ore = $free_ore;
@@ -696,6 +702,7 @@ else
                     {
                         $salv_ore = 0;
                     }
+
                     if ($free_holds > $free_organics)
                     {
                         $salv_organics = $free_organics;
@@ -710,9 +717,10 @@ else
                     {
                         $salv_organics = 0;
                     }
+
                     $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $targetinfo['hull'])) + round(pow($upgrade_factor, $targetinfo['engines'])) + round(pow($upgrade_factor, $targetinfo['power'])) + round(pow($upgrade_factor, $targetinfo['computer'])) + round(pow($upgrade_factor, $targetinfo['sensors'])) + round(pow($upgrade_factor, $targetinfo['beams'])) + round(pow($upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($upgrade_factor, $targetinfo['shields'])) + round(pow($upgrade_factor, $targetinfo['armor'])) + round(pow($upgrade_factor, $targetinfo['cloak'])));
                     $ship_salvage_rate = random_int(10, 20);
-                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for xenobe - 0 if normal player
+                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Xenobe - 0 if normal player
 
                     $langvars['l_att_ysalv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_ysalv']);
                     $langvars['l_att_ysalv'] = str_replace("[salv_organics]", $salv_organics, $langvars['l_att_ysalv']);
@@ -789,13 +797,13 @@ else
                         array($tkireg->start_energy, $rating, $playerinfo['ship_id'])
                     );
                     Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                    Tki\Bounty::collect($pdo_db, $db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
+                    Tki\Bounty::collect($pdo_db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
                 }
                 else
                 {
                     echo "Didnt have pod?! $playerinfo[dev_escapepod]<br>";
                     Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
-                    Tki\Bounty::collect($pdo_db, $db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
+                    Tki\Bounty::collect($pdo_db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
                 }
 
                 if ($targetarmor > 0)
@@ -803,8 +811,8 @@ else
                     $salv_credits = 0;
 
                     $free_ore = round($playerinfo['ship_ore'] / 2);
-                    $free_organics = round($playerinfo['ship_organics']/2);
-                    $free_goods = round($playerinfo['ship_goods']/2);
+                    $free_organics = round($playerinfo['ship_organics'] / 2);
+                    $free_goods = round($playerinfo['ship_goods'] / 2);
                     $free_holds = Tki\CalcLevels::holds($targetinfo['hull'], $tkireg) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
                     if ($free_holds > $free_goods)
                     {
@@ -850,9 +858,10 @@ else
                     {
                         $salv_organics = 0;
                     }
+
                     $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $playerinfo['hull'])) + round(pow($upgrade_factor, $playerinfo['engines'])) + round(pow($upgrade_factor, $playerinfo['power'])) + round(pow($upgrade_factor, $playerinfo['computer'])) + round(pow($upgrade_factor, $playerinfo['sensors'])) + round(pow($upgrade_factor, $playerinfo['beams'])) + round(pow($upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($upgrade_factor, $playerinfo['shields'])) + round(pow($upgrade_factor, $playerinfo['armor'])) + round(pow($upgrade_factor, $playerinfo['cloak'])));
                     $ship_salvage_rate = random_int(10, 20);
-                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for xenobe - 0 if normal player
+                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Xenobe - 0 if normal player
 
                     $langvars['l_att_salv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_salv']);
                     $langvars['l_att_salv'] = str_replace("[salv_organics]", $salv_organics, $langvars['l_att_salv']);
@@ -887,6 +896,7 @@ else
         }
     }
 }
+
 $resx = $db->Execute('UNLOCK TABLES');
 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 

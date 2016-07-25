@@ -104,12 +104,14 @@ if ($character_exists !== null)
             echo $langvars['l_new_inuse'] . ' ' .  $langvars['l_new_4gotpw1'] . ' <a href=mail.php?mail=' . $username . '>' . $langvars['l_clickme'] . '</a> ' . $langvars['l_new_4gotpw2'] . '<br>';
             $flag = 1;
         }
+
         if (mb_strtolower($tmp_char['character_name']) == mb_strtolower($character))
         {
             $langvars['l_new_inusechar'] = str_replace('[character]', $character, $langvars['l_new_inusechar']);
             echo $langvars['l_new_inusechar'] . '<br>';
             $flag = 1;
         }
+
         if (mb_strtolower($tmp_char['ship_name']) == mb_strtolower($shipname))
         {
             $langvars['l_new_inuseship'] = str_replace('[shipname]', $shipname, $langvars['l_new_inuseship']);
@@ -159,12 +161,12 @@ if ($flag == 0)
         // Some reason \r\n is broken, so replace them now.
         $langvars['l_new_message'] = str_replace('\r\n', "\r\n", $langvars['l_new_message']);
 
-        $link_to_game_unsafe = 'http://' . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
+        $link_to_game_unsafe = 'https://' . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
         $link_to_game = htmlentities($link_to_game_unsafe, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $langvars['l_new_message'] = str_replace('[website]', $link_to_game, $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[npg]', $link_to_game . 'newplayerguide.php', $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[faq]', $link_to_game . 'faq.php', $langvars['l_new_message']);
-        $langvars['l_new_message'] = str_replace('[forums]', 'http://kabal.tk/forums/', $langvars['l_new_message']);
+        $langvars['l_new_message'] = str_replace('[forums]', 'https://kabal-invasion.com/forums/', $langvars['l_new_message']);
 
         mail("$username", $langvars['l_new_topic'], $langvars['l_new_message'] . "\r\n\r\n" . $link_to_game, 'From: ' . $tkireg->admin_mail . "\r\nReply-To: " . $tkireg->admin_mail . "\r\nX-Mailer: PHP/" . phpversion());
 

@@ -146,8 +146,19 @@ if ($command == 'change')
 {
     // Sanitize zone name.
     $name = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $name);
-    $resx = $db->Execute("UPDATE {$db->prefix}zones SET zone_name = ?, allow_beacon = ?, allow_attack = ?, allow_warpedit = ?, allow_planet = ?, allow_trade = ?, allow_defenses = ? WHERE zone_id = ?;", array($name, $beacons, $attacks, $warpedits, $planets, $trades, $defenses, $zone));
-    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+    $sql = "UPDATE {$pdo_db->prefix}zones SET zone_name=:zone_name, allow_beacon=:allow_beacon, allow_attack=:allow_attack, allow_warpedit=:allow_warpedit, allow_planet=:allow_planet, allow_trade=:allow_trade, allow_defenses=:allow_defenses WHERE zone_id=:zone_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':zone_name', $name);
+    $stmt->bindParam(':allow_beacon', $beacons);
+    $stmt->bindParam(':allow_attack', $attacks);
+    $stmt->bindParam(':allow_warpedit', $warpedits);
+    $stmt->bindParam(':allow_planet', $planets);
+    $stmt->bindParam(':allow_trade', $trades);
+    $stmt->bindParam(':allow_defenses', $defenses);
+    $stmt->bindParam(':zone_id', $zone);
+    $stmt->execute();
+
     echo $langvars['l_ze_saved'] . "<p>";
     echo "<a href=zoneinfo.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_ze_return'] . ".<p>";
     Tki\Text::gotomain($pdo_db, $lang);

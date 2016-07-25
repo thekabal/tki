@@ -196,7 +196,10 @@ else
                     echo "<tr><td>Destroyed?</td><td><input type=checkbox name=ship_destroyed value=ON " . \Tki\Checked::check($row['ship_destroyed']) . "></td></tr>";
                     echo "<tr><td>Orders</td><td>";
                     echo "<select size=1 name=orders>";
-                    $oorder0 = $oorder1 = $oorder2 = $oorder3 = "value";
+                    $oorder0 = "value";
+                    $oorder1 = "value";
+                    $oorder2 = "value";
+                    $oorder3 = "value";
                     if ($row['orders'] == 0)
                     {
                         $oorder0 = "selected=0 value";
@@ -223,7 +226,9 @@ else
                     echo "<option $oorder3=3>Roam and Hunt</option>";
                     echo "</select></td></tr>";
                     echo "<tr><td>Aggression</td><td>";
-                    $oaggr0 = $oaggr1 = $oaggr2 = "value";
+                    $oaggr0 = "value";
+                    $oaggr1 = "value";
+                    $oaggr2 = "value";
                     if ($row['aggression'] == 0)
                     {
                         $oaggr0 = "selected=0 value";
@@ -346,6 +351,7 @@ else
                             echo "Changes to Xenobe activity record have been saved.<br><br>";
                         }
                     }
+
                     echo "<input type=submit value=\"Return to Xenobe editor\">";
                     $button_main = false;
                 }
@@ -354,6 +360,7 @@ else
                     echo "Invalid operation";
                 }
             }
+
             echo "<input type=hidden name=menu value=xenobeedit>";
             echo "<input type=hidden name=swordfish value=$swordfish>";
             echo "</form>";
@@ -521,9 +528,9 @@ else
 
                 // Create emailname from character
                 $emailname = str_replace(" ", "_", $character) . "@xenobe";
-//                $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-//                $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
-//                Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+                // $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+                // $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
+                // Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                 $sql = "SELECT email, character_name, ship_name FROM {$pdo_db->prefix}ships WHERE email=:email OR character_name=:character_name OR ship_name=:ship_name";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':email', $emailname);
@@ -560,19 +567,20 @@ else
                 if ($errflag == 0)
                 {
                     $makepass = null;
-                    $syllables ="er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
+                    $syllables = "er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
                     $syllable_array = explode(",", $syllables);
                     for ($count = 1; $count <= 4; $count++)
                     {
-                        if (random_int(0, mt_getrandmax()) %10 == 1)
+                        if (random_int(0, mt_getrandmax()) % 10 == 1)
                         {
-                            $makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() %50) + 1));
+                            $makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() % 50) + 1));
                         }
                         else
                         {
-                            $makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() %62)]);
+                            $makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() % 62)]);
                         }
                     }
+
                     if ($xenlevel === null)
                     {
                         $xenlevel = 0;
@@ -639,4 +647,5 @@ else
         }
     }
 }
+
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

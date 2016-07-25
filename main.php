@@ -92,8 +92,8 @@ if ($link_present !== null)
         $i++;
     }
 }
-$num_links = $i;
 
+$num_links = $i;
 $i = 0;
 $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
@@ -108,8 +108,8 @@ if ($planet_present !== null)
         $i++;
     }
 }
-$num_planets = $i;
 
+$num_planets = $i;
 $i = 0;
 $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense, {$pdo_db->prefix}ships WHERE {$pdo_db->prefix}sector_defense.sector_id=:sector_id AND {$pdo_db->prefix}ships.ship_id = {$pdo_db->prefix}sector_defense.ship_id";
 $stmt = $pdo_db->prepare($sql);
@@ -124,8 +124,8 @@ if ($defense_present !== null)
         $i++;
     }
 }
-$num_defenses = $i;
 
+$num_defenses = $i;
 // Grab zoneinfo from database
 $sql = "SELECT zone_id,zone_name FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
@@ -133,17 +133,17 @@ $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$shiptypes[0]= "tinyship.png";
-$shiptypes[1]= "smallship.png";
-$shiptypes[2]= "mediumship.png";
-$shiptypes[3]= "largeship.png";
-$shiptypes[4]= "hugeship.png";
+$shiptypes[0] = "tinyship.png";
+$shiptypes[1] = "smallship.png";
+$shiptypes[2] = "mediumship.png";
+$shiptypes[3] = "largeship.png";
+$shiptypes[4] = "hugeship.png";
 
-$planettypes[0]= "tinyplanet.png";
-$planettypes[1]= "smallplanet.png";
-$planettypes[2]= "mediumplanet.png";
-$planettypes[3]= "largeplanet.png";
-$planettypes[4]= "hugeplanet.png";
+$planettypes[0] = "tinyplanet.png";
+$planettypes[1] = "smallplanet.png";
+$planettypes[2] = "mediumplanet.png";
+$planettypes[3] = "largeplanet.png";
+$planettypes[4] = "hugeplanet.png";
 
 $signame = Tki\Character::getInsignia($pdo_db, $_SESSION['username'], $langvars);
 echo "<div style='width:90%; margin:auto; background-color:#400040; color:#C0C0C0; text-align:center; border:#fff 1px solid; padding:4px;'>\n";
@@ -185,6 +185,7 @@ if (empty ($sectorinfo['beacon']) || mb_strlen(trim($sectorinfo['beacon'])) == 0
 {
     $sectorinfo['beacon'] = null;
 }
+
 echo "    <td style='text-align:center; color:#fff; font-size:12px; font-weight:bold;'>&nbsp;{$sectorinfo['beacon']}&nbsp;</td>\n";
 
 if ($zoneinfo['zone_id'] < 5)
@@ -222,7 +223,7 @@ if ($tkireg->enable_gravatars)
     echo "<table style='width:150px; margin:auto; text-align:center; border:0px; padding:0px; border-spacing:0px'>\n";
     echo "  <tr>\n";
     echo "    <td style='white-space:nowrap; border:#fff 1px solid; background-color:#500050; width:150px'>\n";
-    echo "<img style='display:block; margin-left:auto; margin-right:auto' height='80' width='80' alt='Player Avatar' src='http://www.gravatar.com/avatar/" . $gravatar_id . "?r=g&amp;d=mm'>";
+    echo "<img style='display:block; margin-left:auto; margin-right:auto' height='80' width='80' alt='Player Avatar' src='https://www.gravatar.com/avatar/" . $gravatar_id . "?r=g&amp;d=mm'>";
     echo "    <div style='padding-left:4px; text-align:left'>\n";
     echo "</div>\n";
     echo "    </td>\n";
@@ -244,11 +245,11 @@ echo "</table>\n";
 echo "<table style='width:150px; margin:auto; text-align:center; border:0px; padding:0px; border-spacing:0px'>\n";
 echo "  <tr>\n";
 echo "    <td style='white-space:nowrap; border:#fff 1px solid; background-color:#500050;'>\n";
-
 if ($playerinfo['email'] == $tkireg->admin_mail)
 {
     echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='admin.php'>{$langvars['l_admin_menu']}</a></div>\n";
 }
+
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='device.php'>{$langvars['l_devices']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='planet_report.php'>{$langvars['l_planets']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='ibank.php'>{$langvars['l_ibank']}</a></div>\n";
@@ -262,11 +263,11 @@ echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href=
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='self_destruct.php'>{$langvars['l_ohno']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='options.php'>{$langvars['l_options']}</a></div>\n";
 echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='navcomp.php'>{$langvars['l_navcomp']}</a></div>\n";
-
 if ($tkireg->allow_ksm === true)
 {
     echo "      <div style='padding-left:4px; text-align:left;'><a class='mnu' href='galaxy.php'>{$langvars['l_map']}</a></div>\n";
 }
+
 echo "    </td>\n";
 echo "  </tr>\n";
 echo "  <tr>\n";
@@ -433,6 +434,7 @@ else
                 }
             }
         }
+
         echo "</a>&nbsp;<br>";
         $i++;
         echo "</div>\n";
@@ -454,7 +456,7 @@ echo "<br>\n";
 echo "</td>\n";
 
 echo "<td style='vertical-align:top;'>\n";
-if ($sectorinfo['port_type'] != "none" && mb_strlen($sectorinfo['port_type']) >0)
+if ($sectorinfo['port_type'] != "none" && mb_strlen($sectorinfo['port_type']) > 0)
 {
     echo "<div style='color:#fff; text-align:center; font-size:14px;'>\n";
     echo "{$langvars['l_tradingport']}:&nbsp;<span style='color:#0f0;'>". ucfirst(Tki\Ports::getType($sectorinfo['port_type'], $langvars)) . "</span>\n";
@@ -541,6 +543,7 @@ if ($num_planets > 0)
         {
             echo "<br>(" . $planet_owner['character_name'] . ")";
         }
+
         echo "</span></td>";
 
         $totalcount++;
@@ -553,6 +556,7 @@ if ($num_planets > 0)
         {
             $curcount++;
         }
+
         $i++;
     }
 }
@@ -592,10 +596,12 @@ if ($playerinfo['sector'] != 0)
             {
                 $success = 5;
             }
+
             if ($success > 95)
             {
                 $success = 95;
             }
+
             $roll = random_int(1, 100);
 
             if ($roll < $success)
@@ -627,8 +633,10 @@ if ($playerinfo['sector'] != 0)
                 $ship_detected[] = $row;
                 $ships_detected ++;
             }
+
             $result4->MoveNext();
         }
+
         if ($ships_detected <= 0)
         {
             echo "<div style='color:#fff;'>{$langvars['l_none']}</div>\n";
@@ -654,11 +662,12 @@ if ($playerinfo['sector'] != 0)
                 {
                     echo "(<span style='color:#0f0; white-space:nowrap;'>{$ship_detected[$iPlayer]['team_name']}</span>)\n";
                 }
-                echo "</div>\n";
 
+                echo "</div>\n";
                 echo "</div>\n";
                 echo "</td>\n";
             }
+
             echo "  </tr>\n";
             echo "</table>\n";
             echo "</div>\n";
@@ -673,15 +682,16 @@ else
 {
         echo "<div style='color:#fff;'>{$langvars['l_sector_0']}</div>\n";
 }
+
 echo "</div>";
 
-if ($num_defenses>0)
+if ($num_defenses > 0)
 {
             echo "<div style='padding-top:4px; padding-bottom:4px; width:500px; margin:auto; background-color:#303030; text-align:center;'>" . $langvars['l_sector_def'] . "</div>\n";
             echo "<div style='width:498px; margin:auto; overflow:auto; height:125px; scrollbar-base-color: #303030; scrollbar-arrow-color: #fff; padding:0px; text-align:center;'>\n";
 }
-echo "<table><tr>";
 
+echo "<table><tr>";
 if ($num_defenses > 0)
 {
     $totalcount = 0;
@@ -704,6 +714,7 @@ if ($num_defenses > 0)
             {
                 $mode = $langvars['l_md_toll'];
             }
+
             $def_type .= $mode;
         }
         elseif ($defenses[$i]['defense_type'] == 'M')
@@ -727,8 +738,10 @@ if ($num_defenses > 0)
         {
             $curcount++;
         }
+
         $i++;
     }
+
     echo "</tr></table>";
     echo "</div>\n";
 }
@@ -737,6 +750,7 @@ else
     echo "<td style='vertical-align:top; text-align:center;'>";
     echo "</td></tr></table>";
 }
+
 echo "<br><td style='width:200px; vertical-align:top;'>";
 echo "<table style='width:140px; border:0; padding:0px; border-spacing:0px; margin-left:auto; margin-right:auto;'>\n";
 echo "  <tr style='vertical-align:top'>\n";
@@ -811,7 +825,7 @@ while (!$debug_query->EOF)
     $i++;
 }
 
-if ($i==0)
+if ($i == 0)
 {
     for ($x = 0; $x < $tkireg->max_presets; $x++)
     {
@@ -834,6 +848,7 @@ else
         $debug_query->MoveNext();
     }
 }
+
 echo "</table></td></tr>";
 echo "  <tr>\n";
 echo "    <td style='white-space:nowrap; height:2px; background-color:transparent;'></td>\n";
@@ -871,8 +886,10 @@ else
         echo "  <td style='text-align:right;'>[<a class='mnu' href='lrscan.php?sector={$links[$i]}'>" . $langvars['l_scan'] . "</a>]</td>\n";
         echo "</tr>\n";
     }
+
     echo "</table>\n";
 }
+
 echo "</div>";
 echo "</td></tr>";
 echo "  <tr>\n";

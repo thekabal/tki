@@ -21,7 +21,7 @@ See the `/README.md` file.
    set up a background task that will be called every `x` minutes. You can set
    this to any interval you want, but 5 or 6 minutes are good standard values.
    This task needs to call the web page `scheduler.php` passing the admin
-   password to it e.g `http://{{host}}/scheduler.php?swordfish=your-password`.
+   password to it e.g `https://{{host}}/scheduler.php?swordfish=your-password`.
    On UNIX and Linux, you can achieve this by using cron to call lynx to access
    the pages at specified times. Lynx is just one of many programs you can use
    to access the page. It may not be available on your server, and you will need
@@ -30,13 +30,13 @@ See the `/README.md` file.
 
    - A sample crontab follows:
 
-     `*/6 * * * * /usr/bin/lynx --dump http://{{host}}scheduler.php?swordfish=password > /dev/null`
+     `*/6 * * * * /usr/bin/lynx --dump https://{{host}}scheduler.php?swordfish=password > /dev/null`
 
    - A few alternatives:
 
-     `*/6 * * * * /usr/bin/GET http://localhost/tki/scheduler.php?swordfish=password > /dev/null`
+     `*/6 * * * * /usr/bin/GET https://localhost/tki/scheduler.php?swordfish=password > /dev/null`
 
-     `*/6 * * * * /usr/bin/wget "http://localhost/tki/scheduler.php?swordfish=password" > /dev/null`
+     `*/6 * * * * /usr/bin/wget "https://localhost/tki/scheduler.php?swordfish=password" > /dev/null`
 
    - Please note that your hosting provider may have these programs at a
      different location than /usr/bin, requiring you to change the location to
@@ -48,10 +48,10 @@ See the `/README.md` file.
      between different events, e.g turns or port regeneration.
 
 8. Create the database: `mysqladmin -uuser -ppass create dbname`.
-9. Visit the page `http://{{hostname}}/create_universe.php` in your browser.  
+9. Visit the page `https://{{hostname}}/create_universe.php` in your browser.  
    You'll need to enter your admin password to access this page.  Change the
    settings to suit the universe you'd like to create, and go for it.
-10. Open the file `http://{{hostname}}/index.php` in your browser; you should now
+10. Open the file `https://{{hostname}}/index.php` in your browser; you should now
    be able to log-in.
 11. `chmod 000 setup_info.php` - it contains sensitive information.
 12. If you'd like additional security, we have included `.htaccess` files for some

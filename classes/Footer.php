@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -65,13 +66,14 @@ class Footer
         if ($last_run !== false)
         {
             $seconds_left = ($tkireg->sched_ticks * 60) - (time() - $last_run);
-            $display_update_ticker = true;
+            $show_update_ticker = true;
         }
         else
         {
             $seconds_left = (int) 0;
-            $display_update_ticker = false;
+            $show_update_ticker = false;
         }
+
         // End update counter
 
         if ($tkireg->footer_show_debug === true) // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
@@ -114,8 +116,10 @@ class Footer
                 {
                     array_push($news_ticker, array('url' => "news.php", 'text' => $item['headline'], 'type' => $item['news_type'], 'delay' => 5));
                 }
-                array_push($news_ticker, array('url'=>null, 'text' => "End of News", 'type' => null, 'delay' => 5));
+
+                array_push($news_ticker, array('url' => null, 'text' => "End of News", 'type' => null, 'delay' => 5));
             }
+
             $news_ticker['container'] = "article";
             $template->addVariables("news", $news_ticker);
         }
@@ -142,7 +146,7 @@ class Footer
         }
 
         // Set array with all used variables in page
-        $variables['update_ticker'] = array("display" => $display_update_ticker, "seconds_left" => $seconds_left, "sched_ticks" => $tkireg->sched_ticks);
+        $variables['update_ticker'] = array("display" => $show_update_ticker, "seconds_left" => $seconds_left, "sched_ticks" => $tkireg->sched_ticks);
         $variables['players_online'] = $online;
         $variables['sf_logo_type'] = $sf_logo_type;
         $variables['sf_logo_height'] = $sf_logo_height;

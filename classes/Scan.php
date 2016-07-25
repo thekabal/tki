@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,12 +22,12 @@ namespace Tki;
 
 class Scan
 {
-    public static function success($level_scan, $level_cloak)
+    public static function success(int $level_scan, int $level_cloak)
     {
         return (5 + $level_scan - $level_cloak) * 5;
     }
 
-    public static function error($level_scan, $level_cloak, $scan_error_factor)
+    public static function error(int $level_scan, int $level_cloak, int $scan_error_factor)
     {
         $sc_error = (4 + $level_scan / 2 - $level_cloak / 2) * $scan_error_factor;
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -59,39 +60,44 @@ class Team
         return (bool) $returnvalue;
     }
 
-    public static function validateTeam(\PDO $pdo_db, $db, $name = null, $desc = null, $creator = null) : bool
+    public static function validateTeam(\PDO $pdo_db, $name = null, $desc = null, $creator = null) : bool
     {
         $name = trim($name);
         $desc = trim($desc);
         $creator = (int) $creator;
 
-        if ((is_null($name) || empty ($name)) || (is_null($desc) || empty ($desc)) || (is_null($creator) || empty ($creator)))
+        if ($name === null || empty ($name) || $desc === null || empty ($desc) || $creator === null || empty ($creator))
         {
             return (bool) false;
         }
 
-        if (($res = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $name, $matches)) != 0)
+        $res_new = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $name, $matches);
+        if ($res_new != 0)
         {
             return (bool) false;
         }
 
-        if (($res = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $desc, $matches)) != 0)
+        $res_new2 = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $desc, $matches);
+        if ($res_new2 != 0)
         {
             return (bool) false;
         }
 
         // Just a test to see if an team with a name of $name exists.
         // This is just a temp fix until we find a better one.
-        $res = $db->Execute("SELECT COUNT(*) as found FROM {$db->prefix}teams WHERE team_name = ? AND creator != ?;", array($name, $creator));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $num_res = $res->fields;
+        $sql = "SELECT COUNT(*) as found FROM {$pdo_db->prefix}teams WHERE team_name=:team_name AND creator !=:creator";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':team_name', $name);
+        $stmt->bindParam(':creator', $creator);
+        $stmt->execute();
+        $num_res = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $returnvalue = (!($num_res['found'] > 0));
         return (bool) $returnvalue;
     }
 
     // Rewritten display of teams list
-    public static function displayAllTeams(\PDO $pdo_db, $db, $langvars, Reg $tkireg, $order, $type)
+    public static function displayAllTeams(\PDO $pdo_db, $db, Array $langvars, Reg $tkireg, $order, $type)
     {
         $row2 = array();
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
@@ -108,6 +114,7 @@ class Team
             $type = "d";
             $by = "DESC";
         }
+
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=team_name&type=$type>" . $langvars['l_name'] . "</a></strong></td>";
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=number_of_members&type=$type>" . $langvars['l_team_members'] . "</a></strong></td>";
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=character_name&type=$type>" . $langvars['l_team_coord'] . "</a></strong></td>";
@@ -130,6 +137,7 @@ class Team
         {
             $sql_query .= " ORDER BY ? ?";
         }
+
         $sql_query .= ";";
 
         $res = $db->Execute($sql_query, array($order, $by));
@@ -167,10 +175,11 @@ class Team
 
             $res->MoveNext();
         }
+
         echo "</table><br>";
     }
 
-    public static function displayInviteInfo($langvars, Array $playerinfo, $invite_info)
+    public static function displayInviteInfo(Array $langvars, Array $playerinfo, $invite_info)
     {
         if (!$playerinfo['team_invite'])
         {
@@ -186,7 +195,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, $db, $langvars, $whichteam, $isowner, Array $playerinfo, $invite_info, $team, Reg $tkireg)
+    public static function showInfo(\PDO $pdo_db, $db, Array $langvars, $whichteam, $isowner, Array $playerinfo, $invite_info, $team, Reg $tkireg)
     {
         // Heading
         echo "<div align=center>";
@@ -203,13 +212,16 @@ class Team
             {
                 echo $langvars['l_team_member'] . " ";
             }
+
             echo $langvars['l_options'] . " <br><font size=2>";
             if (is_team_owner($team, $playerinfo) === true)
             {
                 echo "[<a href=teams.php?teamwhat=9&whichteam=$playerinfo[team]>" . $langvars['l_edit'] . "</a>] - ";
             }
+
             echo "[<a href=teams.php?teamwhat=7&whichteam=$playerinfo[team]>" . $langvars['l_team_inv'] . "</a>] - [<a href=teams.php?teamwhat=2&whichteam=$playerinfo[team]>" . $langvars['l_team_leave'] . "</a>]</font></font>";
         }
+
         self::displayInviteInfo($langvars, $playerinfo, $invite_info);
         echo "</div>";
 
@@ -235,6 +247,7 @@ class Team
                     echo " - " . $langvars['l_team_coord'] . " </td>";
                 }
             }
+
             echo "</tr><tr bgcolor=$tkireg->color_line2>";
             $result->MoveNext();
         }
@@ -260,6 +273,7 @@ class Team
             echo "<td>" . $langvars['l_team_noinvites'] . " <strong>" . $team['team_name'] . "</strong>.</td>";
             echo "</tr><tr>";
         }
+
         echo "</tr></table>";
     }
 }

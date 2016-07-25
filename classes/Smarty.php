@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -90,7 +91,7 @@ class Smarty
     {
         $tmpNode = $this->smarty->getTemplateVars($nodeName);
 
-        if (!is_null($tmpNode))
+        if ($tmpNode !== null)
         {
             // Now we make sure we don't want dupes which causes them to become an array.
             foreach ($variables as $key => $value)
@@ -103,6 +104,7 @@ class Smarty
 
             $variables = array_merge_recursive($tmpNode, $variables);
         }
+
         $this->smarty->assign($nodeName, $variables);
     }
 

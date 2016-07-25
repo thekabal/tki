@@ -116,6 +116,7 @@ else
             $color = $tkireg->color_line1;
         }
     }
+
     echo "</table>";
 }
 

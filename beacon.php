@@ -114,6 +114,7 @@ if ($playerinfo['dev_beacon'] > 0)
             {
                 echo $langvars['l_beacon_none'] . "<br><br>";
             }
+
             echo "<form accept-charset='utf-8' action=beacon.php method=post>";
             echo "<table>";
             echo "<tr><td>" . $langvars['l_beacon_enter'];
@@ -127,10 +128,17 @@ if ($playerinfo['dev_beacon'] > 0)
         {
             $beacon_text = trim(htmlentities($beacon_text, ENT_HTML5, 'UTF-8'));
             echo $langvars['l_beacon_nowreads'] . ": " . $beacon_text . ".<br><br>";
-            $update = $db->Execute("UPDATE {$db->prefix}universe SET beacon = ? WHERE sector_id = ?;", array($beacon_text, $sectorinfo['sector_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
-            $update = $db->Execute("UPDATE {$db->prefix}ships SET dev_beacon=dev_beacon-1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+
+            $sql = "UPDATE {$pdo_db->prefix}universe SET beacon=:beacon WHERE sector_id=:sector_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':beacon', $beacon_text);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->execute();
+
+            $sql = "UPDATE {$pdo_db->prefix}ships SET dev_beacon=dev_beacon-1 WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->execute();
         }
     }
 }

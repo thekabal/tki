@@ -49,6 +49,7 @@ if ($tkireg->allow_fullscan)
     echo " A full scan will give you an outlook on all the neighboring sectors in one wide sweep of your ";
     echo "sensors.";
 }
+
 echo "<br><br>";
 echo "<strong>Ships:</strong><br>";
 echo "Scan or attack a ship (if it shows up on your sensors) by clicking on the appropriate link on the right ";
@@ -67,6 +68,7 @@ if ($tkireg->allow_navcomp)
     echo "your computer tech level.";
     echo "<br><br>";
 }
+
 echo "<strong>RealSpace:</strong><br>";
 echo "Use your ship's engines to get to a specific sector. Upgrade your engines' tech level to use RealSpace ";
 echo "moves effectively. By clicking on the 'Presets' link you can memorize up to " . $tkireg->max_presets . " sector numbers for quick ";

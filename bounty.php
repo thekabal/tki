@@ -28,7 +28,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'port', 'common'
 $title = $langvars['l_by_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $response = null;
 $response = filter_input(INPUT_POST, 'response', FILTER_SANITIZE_STRING);
 if (mb_strlen(trim($response)) === 0)
@@ -41,7 +41,7 @@ if (array_key_exists('response', $_GET))
     $response = filter_input(INPUT_GET, 'response', FILTER_SANITIZE_STRING);
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $bounty_on = null;
 $bounty_on = (int) filter_input(INPUT_POST, 'bounty_on', FILTER_SANITIZE_NUMBER_INT);
 if (mb_strlen(trim($bounty_on)) === 0)
@@ -54,7 +54,7 @@ if (array_key_exists('bounty_on', $_GET))
     $bounty_on = filter_input(INPUT_GET, 'bounty_on', FILTER_SANITIZE_NUMBER_INT);
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $bid = null;
 $bid = (int) filter_input(INPUT_POST, 'bid', FILTER_SANITIZE_NUMBER_INT);
 if (mb_strlen(trim($bid)) === 0)
@@ -62,7 +62,7 @@ if (mb_strlen(trim($bid)) === 0)
     $bid = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $amount = null;
 $amount = (int) filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_INT);
 if (mb_strlen(trim($amount)) === 0)
@@ -126,6 +126,7 @@ switch ($response) {
                 {
                     echo "<td>" . $details['character_name'] . "</td>";
                 }
+
                 if ($bounty_details[$j]['placed_by'] == $playerinfo['ship_id'])
                 {
                     echo "<td><a href=bounty.php?bid=" . $bounty_details[$j]['bounty_id'] . "&response=cancel>" . $langvars['l_by_cancel'] . "</a></td>";
@@ -146,6 +147,7 @@ switch ($response) {
                     $color = $tkireg->color_line1;
                 }
             }
+
             echo "</table>";
         }
         break;
@@ -161,7 +163,7 @@ switch ($response) {
 
         $res = $db->Execute("SELECT * FROM {$db->prefix}bounty WHERE bounty_id = ?;", array($bid));
         Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        if (!$res || $res->RowCount() ==0)
+        if (!$res || $res->RowCount() == 0)
         {
             echo $langvars['l_by_nobounty'] . "<br><br>";
             Tki\Text::gotomain($pdo_db, $lang);
@@ -339,7 +341,6 @@ switch ($response) {
                 $stmt->bindParam(':ship_id', $bounties[$i]['bounty_on']);
                 $stmt->execute();
                 $details = $stmt->fetch(PDO::FETCH_ASSOC);
-
                 echo "<tr bgcolor=\"$color\">";
                 echo "<td><a href=bounty.php?bounty_on=" . $bounties[$i]['bounty_on'] . "&response=display>". $details['character_name'] . "</a></td>";
                 echo "<td>" . $bounties[$i]['total_bounty'] . "</td>";
@@ -354,8 +355,10 @@ switch ($response) {
                     $color = $tkireg->color_line1;
                 }
             }
+
             echo "</table>";
         }
+
         echo "<br><br>";
         break;
 }

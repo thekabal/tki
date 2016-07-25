@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,49 +22,49 @@ namespace Tki;
 
 class CalcLevels
 {
-    public static function armor($level_armor, Reg $tkireg)
+    public static function armor(int $level_armor, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_armor) * 100);
         return $result;
     }
 
-    public static function holds($level_hull, Reg $tkireg)
+    public static function holds(int $level_hull, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_hull) * 100);
         return $result;
     }
 
-    public static function shields($level_shields, Reg $tkireg)
+    public static function shields(int $level_shields, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_shields) * 100);
         return $result;
     }
 
-    public static function torpedoes($level_torp_launchers, Reg $tkireg)
+    public static function torpedoes(int $level_torp_launchers, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_torp_launchers) * 100);
         return $result;
     }
 
-    public static function beams($level_beams, Reg $tkireg)
+    public static function beams(int $level_beams, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_beams) * 100);
         return $result;
     }
 
-    public static function fighters($level_computer, Reg $tkireg)
+    public static function fighters(int $level_computer, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_computer) * 100);
         return $result;
     }
 
-    public static function energy($level_power, Reg $tkireg)
+    public static function energy(int $level_power, Reg $tkireg)
     {
         $result = round(pow($tkireg->level_factor, $level_power) * 500);
         return $result;
     }
 
-    public static function planetBeams(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo) : int
+    public static function planetBeams(\PDO $pdo_db, Array $ownerinfo, Reg $tkireg, Array $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetbeams = self::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
@@ -73,10 +74,10 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $beam_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($beam_defender_present !== null)
+        $beam_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($beam_defender_here !== null)
         {
-            foreach ($beam_defender_present as $tmp_beams)
+            foreach ($beam_defender_here as $tmp_beams)
             {
                 $planetbeams = $planetbeams + self::beams($tmp_beams['beams'], $tkireg->level_factor);
             }
@@ -86,12 +87,13 @@ class CalcLevels
         {
             $planetbeams = $energy_available;
         }
+
         $planetinfo['energy'] -= $planetbeams;
 
         return (int) $planetbeams;
     }
 
-    public static function planetShields(\PDO $pdo_db, $ownerinfo, Reg $tkireg, $planetinfo) : int
+    public static function planetShields(\PDO $pdo_db, Array $ownerinfo, Reg $tkireg, Array $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
@@ -101,10 +103,10 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $shield_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($shield_defender_present !== null)
+        $shield_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($shield_defender_here !== null)
         {
-            foreach ($shield_defender_present as $tmp_shields)
+            foreach ($shield_defender_here as $tmp_shields)
             {
                 $planetshields = $planetshields + self::shields($tmp_shields['shields'], $tkireg->level_factor);
             }
@@ -114,12 +116,13 @@ class CalcLevels
         {
             $planetshields = $energy_available;
         }
+
         $planetinfo['energy'] -= $planetshields;
 
         return (int) $planetshields;
     }
 
-    public static function planetTorps(\PDO $pdo_db, $ownerinfo, $planetinfo, Reg $tkireg) : int
+    public static function planetTorps(\PDO $pdo_db, Array $ownerinfo, Array $planetinfo, Reg $tkireg) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;
@@ -129,12 +132,12 @@ class CalcLevels
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
-        $torp_defender_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($torp_defender_present !== null)
+        $torp_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($torp_defender_here !== null)
         {
-            foreach ($torp_defender_present as $tmp_torp)
+            foreach ($torp_defender_here as $tmp_torp)
             {
-                $ship_torps =  round(pow($tkireg->level_factor, $tmp_torp['torp_launchers'])) * 10;
+                $ship_torps = round(pow($tkireg->level_factor, $tmp_torp['torp_launchers'])) * 10;
                 $torp_launchers = $torp_launchers + $ship_torps;
             }
         }
@@ -175,8 +178,8 @@ class CalcLevels
         {
             $shipavg += $ship_info[$calc_tech[$i]];
         }
-        $shipavg /= $count;
 
+        $shipavg /= $count;
         return $shipavg;
     }
 }

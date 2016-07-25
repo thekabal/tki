@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,9 +22,8 @@ namespace Tki;
 
 class Game
 {
-    public static function isGameClosed(\PDO $pdo_db, Reg $tkireg, $lang, $template, $langvars) : bool
+    public static function isGameClosed(\PDO $pdo_db, Reg $tkireg, $lang, $template, Array $langvars) : bool
     {
-
         if ($tkireg->game_closed)
         {
             $title = $langvars['l_login_closed_message'];

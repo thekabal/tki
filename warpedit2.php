@@ -180,7 +180,7 @@ if ($linkinfo)
         $stmt->bindParam(':ship_id', $playerinfo['sector']);
         $stmt->execute();
 
-        if (!is_null($oneway))
+        if ($oneway !== null)
         {
             echo $langvars['l_warp_coneway'] . " " . $target_sector . " " . "<br><br>";
         }
@@ -203,6 +203,7 @@ if ($linkinfo)
                     }
                 }
             }
+
             if ($flag2 != 1)
             {
                 $sql = "INSERT INTO {$pdo_db->prefix}links SET link_start=:link_start, link_dest=:link_dest";
@@ -211,6 +212,7 @@ if ($linkinfo)
                 $stmt->bindParam(':link_dest', $playerinfo['sector']);
                 $stmt->execute();
             }
+
             echo $langvars['l_warp_ctwoway'] . " " . $target_sector . ".<br><br>";
         }
     }

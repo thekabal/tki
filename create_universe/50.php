@@ -52,9 +52,9 @@ $lang_file_import_results = array();
 
 foreach ($language_files as $language_filename)
 {
-    if ($language_filename->isFile() && $language_filename->getExtension() == 'php')
+    if ($language_filename->isFile() && $language_filename->getExtension() == 'ini')
     {
-        $lang_name = mb_substr($language_filename->getFilename(), 0, -8);
+        $lang_name = mb_substr($language_filename->getFilename(), 0, -4);
 
         // Import Languages
         $local_table_timer->start(); // Start benchmarking
@@ -68,8 +68,8 @@ foreach ($language_files as $language_filename)
         $i++;
     }
 }
-$variables['language_count'] = ($i - 1);
 
+$variables['language_count'] = ($i - 1);
 $local_table_timer->start(); // Start benchmarking
 $gameconfig_result = Tki\File::iniToDb($pdo_db, "config/classic_config.ini", "gameconfig", "game", $tkireg);
 $local_table_timer->stop();
@@ -83,6 +83,7 @@ else
     $variables['import_config_results']['result'] = $gameconfig_result;
     $variables['import_config_results']['time'] = $local_table_timer->elapsed();
 }
+
 $catch_results[$z] = $gameconfig_result;
 $z++;
 

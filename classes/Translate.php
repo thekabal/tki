@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -28,12 +29,12 @@ class Translate
     /**
      * @param string[]|null $categories
      */
-    public static function load(\PDO $pdo_db, $language = null, $categories = null)
+    public static function load(\PDO $pdo_db, $language = null, $categories = null) : Array
     {
-        // Check if all supplied args are valid, if not return false.
-        if (is_null($pdo_db) || is_null($language) || !is_array($categories))
+        // Check if all supplied args are valid, if not return an empty Array.
+        if (($pdo_db === null) || ($language === null) || !is_array($categories))
         {
-            return false;
+            return self::$langvars;
         }
 
         if (!Db::isActive($pdo_db))
@@ -67,11 +68,13 @@ class Translate
                 $result->execute();
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
+                // FUTURE: This needs to be simplified
                 while (($row = $result->fetch()) !== false)
                 {
                     self::$langvars[$row['name']] = $row['value'];
                 }
             }
+
             return (Array) self::$langvars;
         }
     }
