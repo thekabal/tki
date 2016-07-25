@@ -40,9 +40,11 @@ $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$res2 = $db->Execute("SELECT team, ship_name, character_name, sector FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
-Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
-$othership = $res2->fields;
+$sql = "SELECT team, ship_name, character_name, sector FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':ship_id', $ship_id);
+$stmt->execute();
+$othership = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($othership['sector'] != $playerinfo['sector'])
 {

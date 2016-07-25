@@ -40,9 +40,11 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
             $targetinfo = $doomsday->fields;
             break;
         }
+
         $i++;
         $doomsday->MoveNext();
     }
+
     if ($affliction == 1) // Space Plague
     {
         echo "The horsmen release the Space Plague!<br>.";
@@ -59,4 +61,5 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
         Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['owner'], LOG_PLASMA_STORM, "$targetinfo[name]|$targetinfo[sector_id]");
     }
 }
+
 echo "<br>";

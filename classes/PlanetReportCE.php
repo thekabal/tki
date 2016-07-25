@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +26,7 @@ namespace Tki;
 
 class PlanetReportCE
 {
-    public static function buildBase(\PDO $pdo_db, $db, $langvars, $planet_id, $sector_id, Reg $tkireg)
+    public static function buildBase(\PDO $pdo_db, $db, Array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
     {
         echo "<br>";
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_status']);
@@ -100,7 +101,7 @@ class PlanetReportCE
         }
     }
 
-    public static function collectCredits(\PDO $pdo_db, $db, $langvars, $planetarray, Reg $tkireg)
+    public static function collectCredits(\PDO $pdo_db, $db, Array $langvars, $planetarray, Reg $tkireg)
     {
         $CS = "GO"; // Current State
 
@@ -160,6 +161,7 @@ class PlanetReportCE
             {
                 echo "<br>" . $langvars['l_pr_low_turns'] . "<br>";
             }
+
             echo "<br>";
         }
 
@@ -173,32 +175,32 @@ class PlanetReportCE
         echo "<br><br>";
     }
 
-    public static function changePlanetProduction(\PDO $pdo_db, $db, $langvars, $prodpercentarray, Reg $tkireg)
+    public static function changePlanetProduction(\PDO $pdo_db, $db, Array $langvars, $prodpercentarray, Reg $tkireg)
     {
-    //  Declare default production values from the config.php file
-    //
-    //  We need to track what the player_id is and what team they belong to if they belong to a team,
-    //    these two values are not passed in as arrays
-    //    ship_id = the owner of the planet          ($ship_id = $prodpercentarray['ship_id'])
-    //    team_id = the team creators ship_id ($team_id = $prodpercentarray['team_id'])
-    //
-    //  First we generate a list of values based on the commodity
-    //    (ore, organics, goods, energy, fighters, torps, team, sells)
-    //
-    //  Second we generate a second list of values based on the planet_id
-    //  Because team and ship_id are not arrays we do not pass them through the second list command.
-    //  When we write the ore production percent we also clear the selling and team values out of the db
-    //  When we pass through the team array we set the value to $team we grabbed out of the array.
-    //  in the sells and team the prodpercent = the planet_id.
-    //
-    //  We run through the database checking to see if any planet production is greater than 100, or possibly negative
-    //    if so we set the planet to the default values and report it to the player.
-    //
-    //  There has got to be a better way, but at this time I am not sure how to do it.
-    //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
-    //  This would save us from having to run through the database a second time checking our work.
+        //  Declare default production values from the config.php file
+        //
+        //  We need to track what the player_id is and what team they belong to if they belong to a team,
+        //    these two values are not passed in as arrays
+        //    ship_id = the owner of the planet          ($ship_id = $prodpercentarray['ship_id'])
+        //    team_id = the team creators ship_id ($team_id = $prodpercentarray['team_id'])
+        //
+        //  First we generate a list of values based on the commodity
+        //    (ore, organics, goods, energy, fighters, torps, team, sells)
+        //
+        //  Second we generate a second list of values based on the planet_id
+        //  Because team and ship_id are not arrays we do not pass them through the second list command.
+        //  When we write the ore production percent we also clear the selling and team values out of the db
+        //  When we pass through the team array we set the value to $team we grabbed out of the array.
+        //  in the sells and team the prodpercent = the planet_id.
+        //
+        //  We run through the database checking to see if any planet production is greater than 100, or possibly negative
+        //    if so we set the planet to the default values and report it to the player.
+        //
+        //  There has got to be a better way, but at this time I am not sure how to do it.
+        //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
+        //  This would save us from having to run through the database a second time checking our work.
 
-    //  This should patch the game from being hacked with planet Hack.
+        //  This should patch the game from being hacked with planet Hack.
 
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
@@ -372,7 +374,7 @@ class PlanetReportCE
         }
     }
 
-    public static function takeCredits(\PDO $pdo_db, $db, $langvars, $planet_id)
+    public static function takeCredits(\PDO $pdo_db, $db, Array $langvars, int $planet_id)
     {
         // Get basic Database information (ship and planet)
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
@@ -446,7 +448,7 @@ class PlanetReportCE
         return ($retval);
     }
 
-    public static function realSpaceMove(\PDO $pdo_db, $db, $langvars, $destination, Reg $tkireg)
+    public static function realSpaceMove(\PDO $pdo_db, $db, Array $langvars, $destination, Reg $tkireg)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
@@ -541,7 +543,7 @@ class PlanetReportCE
                 $nsresult = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fighters_owner['ship_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $nsresult, __LINE__, __FILE__);
                 $nsfighters = $nsresult->fields;
-                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team']==0)
+                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
                     $hostile = 1;
                 }
@@ -555,7 +557,7 @@ class PlanetReportCE
                 $nsresult = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fighters_owner['ship_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $nsresult, __LINE__, __FILE__);
                 $nsfighters = $nsresult->fields;
-                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team']==0)
+                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
                     $hostile = 1;
                 }
@@ -579,6 +581,7 @@ class PlanetReportCE
                 $retval = "GO";
             }
         }
+
         return ($retval);
     }
 }

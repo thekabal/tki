@@ -66,26 +66,31 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
         Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
         $playerinfo['ship_colonists'] = 0;
     }
+
     if ($playerinfo['ship_ore'] < 0 || $playerinfo['ship_ore'] > $maxholds)
     {
         Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
         $playerinfo['ship_ore'] = 0;
     }
+
     if ($playerinfo['ship_organics'] < 0 || $playerinfo['ship_organics'] > $maxholds)
     {
         Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
         $playerinfo['ship_organics'] = 0;
     }
+
     if ($playerinfo['ship_goods'] < 0 || $playerinfo['ship_goods'] > $maxholds)
     {
         Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
         $playerinfo['ship_goods'] = 0;
     }
+
     if ($playerinfo['ship_energy'] < 0 || $playerinfo['ship_energy'] > $maxenergy)
     {
         Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
         $playerinfo['ship_energy'] = 0;
     }
+
     if ($freeholds < 0)
     {
         $freeholds = 0;
@@ -255,6 +260,7 @@ else
                 echo "&nbsp;" . $langvars['l_tdr_cargo'] . "</font></td>";
             }
         }
+
         echo "<td><font size=2 color=white>";
 
         if ($traderoutes[$i]['dest_type'] == 'P')
@@ -275,8 +281,8 @@ else
                 echo "&nbsp;" . $langvars['l_tdr_nonexistance'] . "</font></td>";
             }
         }
-        echo "<td align='center'><font size=2 color=white>";
 
+        echo "<td align='center'><font size=2 color=white>";
         if ($traderoutes[$i]['dest_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['dest_id']));
@@ -313,16 +319,18 @@ else
 
                         echo $langvars['l_tdr_fighters'];
                     }
+
                     if ($playerinfo['trade_torps'] == 'Y')
                     {
                         echo "<br>" . $langvars['l_tdr_torps'];
                     }
                 }
+
                 echo "</font></td>";
             }
         }
-        echo "<td align='center'><font size=2 color=white>";
 
+        echo "<td align='center'><font size=2 color=white>";
         if ($traderoutes[$i]['move_type'] == 'R')
         {
             echo "&nbsp;RS, ";
@@ -387,6 +395,7 @@ else
 
         $i++;
     }
+
     echo "</table><p>";
 }
 

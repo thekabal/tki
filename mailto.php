@@ -21,10 +21,13 @@ require_once './common.php';
 
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
+$body_class = 'tki';
+$include_ckeditor = true;
+
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mailto', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
 $title = $langvars['l_sendm_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class = 'tki', $include_ckeditor = true);
+Tki\Header::display($pdo_db, $lang, $template, $title, $body_class, $include_ckeditor);
 
 // Filter to the FILTER_SANITIZE_STRING ruleset, because we need to allow spaces for names & subject (FILTER_SANITIZE_URL doesn't allow spaces)
 // $name, $to, and $subject are all sent both via post and get, so we have to do a filter input for each
@@ -55,6 +58,7 @@ if (array_key_exists('subject', $_POST))
 {
     $subject = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING);
 }
+
 if (array_key_exists('subject', $_GET))
 {
     $subject = filter_input(INPUT_GET, 'subject', FILTER_SANITIZE_STRING);
@@ -104,12 +108,12 @@ if (empty ($content))
     echo "        <select name='to' style='width:200px;'>\n";
 
     // Add self to list.
-    echo "          <option" . (($playerinfo['character_name']==$name)?" selected":"") . ">{$playerinfo['character_name']}</option>\n";
+    echo "          <option" . (($playerinfo['character_name'] == $name) ? " selected" : "") . ">{$playerinfo['character_name']}</option>\n";
 
     while (!$res->EOF)
     {
         $row = $res->fields;
-        echo "          <option" . (($row['character_name']==$to)?" selected":"") . ">{$row['character_name']}</option>\n";
+        echo "          <option" . (($row['character_name'] == $to) ? " selected" : "") . ">{$row['character_name']}</option>\n";
         $res->MoveNext();
     }
 

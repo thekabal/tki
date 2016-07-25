@@ -220,6 +220,7 @@ for ($i = 1; $i <= $loops; $i++)
             $update .= ";";
         }
     }
+
     $resx = $pdo_db->exec($update);
     $variables['insert_special_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_special_ports'][$i]['result'];
@@ -287,6 +288,7 @@ for ($i = 1; $i <= $loops; $i++)
             $update .= ";";
         }
     }
+
     $resx = $pdo_db->exec($update);
     $variables['insert_ore_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_ore_ports'][$i]['result'];
@@ -354,6 +356,7 @@ for ($i = 1; $i <= $loops; $i++)
             $update .= ";";
         }
     }
+
     $resx = $pdo_db->exec($update);
     $variables['insert_organics_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_organics_ports'][$i]['result'];
@@ -421,6 +424,7 @@ for ($i = 1; $i <= $loops; $i++)
             $update .= ";";
         }
     }
+
     $resx = $pdo_db->exec($update);
     $variables['insert_goods_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_goods_ports'][$i]['result'];

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +26,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function planetReportMenu(Array $playerinfo, $langvars)
+    public static function planetReportMenu(Array $playerinfo, Array $langvars)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -40,10 +41,11 @@ class PlanetReport
             echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> " .
                  "Commondity Report (like Planet Status) for planets marked Team by you and/or your fellow team member<br><br>";
         }
+
         echo "</div>\n";
     }
 
-    public static function standardReport(\PDO $pdo_db, $db, $langvars, Array $playerinfo, $sort, Reg $tkireg)
+    public static function standardReport(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -64,7 +66,7 @@ class PlanetReport
             {
                 $query .= " $sort ASC";
             }
-            elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" ||$sort == "colonists" || $sort == "credits" || $sort == "fighters")
+            elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" || $sort == "colonists" || $sort == "credits" || $sort == "fighters")
             {
                 $query .= " $sort DESC, sector_id ASC";
             }
@@ -128,6 +130,7 @@ class PlanetReport
             {
                 echo "<td align=right><strong>Team?</strong></td>";
             }
+
             echo "<td align=right><strong>" . $langvars['l_selling'] . "?</strong></td>";
 
             // Next block of echo 's fils the table and calculates the totals of all the commoditites as well as counting the bases and selling planets
@@ -158,14 +161,17 @@ class PlanetReport
                 {
                     $total_base++;
                 }
+
                 if ($planet[$i]['team'] > 0)
                 {
                     $total_team++;
                 }
+
                 if ($planet[$i]['sells'] == "Y")
                 {
                     $total_selling++;
                 }
+
                 if (empty ($planet[$i]['name']))
                 {
                     $planet[$i]['name'] = $langvars['l_unnamed'];
@@ -186,7 +192,7 @@ class PlanetReport
                 echo "<td align=center>" . base_build_check($langvars, $planet, $i) . "</td>";
                 if ($playerinfo['team'] > 0)
                 {
-                    echo "<td align=center>" . ($planet[$i]['team'] > 0  ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
+                    echo "<td align=center>" . ($planet[$i]['team'] > 0 ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
                 }
 
                 echo "<td align=center>" . ($planet[$i]['sells'] == 'Y' ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
@@ -231,7 +237,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function planetProductionChange(\PDO $pdo_db, $db, $langvars, Array $playerinfo, $sort, Reg $tkireg)
+    public static function planetProductionChange(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
     {
         $query = "SELECT * FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y'";
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
@@ -316,6 +322,7 @@ class PlanetReport
             {
                 echo "<td align='center'><strong>Team?</strong></td>\n";
             }
+
             echo "<td align='center'><strong>" . $langvars['l_selling'] . "?</strong></td>\n";
             echo "</tr>\n";
 

@@ -150,8 +150,10 @@ else
                 include_once './scheduler/'. $event['sched_file'];
                 $sched_i++;
             }
+
             $sched_res->MoveNext();
         }
+
         $lastRun /= $schedCount;
     }
 

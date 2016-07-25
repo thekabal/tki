@@ -173,10 +173,10 @@ $month = mb_substr($startdate, 5, 2);
 $day = mb_substr($startdate, 8, 2);
 $year = mb_substr($startdate, 0, 4);
 
-$yesterday = mktime(0, 0, 0, $month, (date("j")-1), $year);
+$yesterday = mktime(0, 0, 0, $month, (date("j") - 1), $year);
 $yesterday = date("Y-m-d", $yd1);
 
-$tomorrow = mktime(0, 0, 0, $month, (date("j")+1), $year);
+$tomorrow = mktime(0, 0, 0, $month, (date("j") + 1), $year);
 $tomorrow = date("Y-m-d", $tm);
 
 if ($mode == 'compat')
@@ -277,7 +277,6 @@ if ($mode != 'compat')
          "<p>" .
          "</center>" .
          "</div>";
-
 }
 
 echo "</div>";

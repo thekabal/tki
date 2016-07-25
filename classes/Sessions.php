@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -73,8 +73,7 @@ class Sessions
 
     public function read($sesskey) : string
     {
-        $table = $this->pdo_db->prefix . 'sessions';
-        $qry = 'SELECT sessdata FROM ' . $table . ' where sesskey=:sesskey and expiry>=:expiry';
+        $qry = "SELECT sessdata FROM {$this->pdo_db->prefix}sessions where sesskey=:sesskey and expiry>=:expiry";
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':sesskey', $sesskey);
         $stmt->bindParam(':expiry', $this->currenttime);
@@ -91,11 +90,10 @@ class Sessions
             // Set the error mode to be exceptions, so that we can catch them -- This breaks everything in game except for sessions
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-            $table = $this->pdo_db->prefix . 'sessions';
             try
             {
                 // Try to insert the record. This will fail if the record already exists, which will trigger catch below..
-                $qry = 'INSERT into ' . $table . ' (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)';
+                $qry = "INSERT into {$this->pdo_db->prefix}sessions (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
                 $stmt = $this->pdo_db->prepare($qry);
                 $stmt->bindParam(':sesskey', $sesskey);
                 $stmt->bindParam(':sessdata', $sessdata);
@@ -105,13 +103,14 @@ class Sessions
             catch (\PDOException $e)
             {
                 // Insert didn't work, use update instead
-                $qry = 'UPDATE ' . $table . ' SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey';
+                $qry = "UPDATE {$this->pdo_db->prefix}sessions SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey";
                 $stmt = $this->pdo_db->prepare($qry);
                 $stmt->bindParam(':sesskey', $sesskey);
                 $stmt->bindParam(':sessdata', $sessdata);
                 $stmt->bindParam(':expiry', $this->expiry);
                 $result = $stmt->execute();
             }
+
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, $err_mode);
             return $result;
         }
@@ -119,8 +118,7 @@ class Sessions
 
     public function destroy($sesskey)
     {
-        $table = $this->pdo_db->prefix . 'sessions';
-        $qry = 'DELETE from ' . $table . ' where sesskey=:sesskey';
+        $qry = "DELETE from {$this->pdo_db->prefix}sessions where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':sesskey', $sesskey);
         $result = $stmt->execute();
@@ -129,8 +127,7 @@ class Sessions
 
     public function gc()
     {
-        $table = $this->pdo_db->prefix . 'sessions';
-        $qry = 'DELETE from ' . $table . ' where expiry>:expiry';
+        $qry = "DELETE from {$this->pdo_db->prefix}sessions where expiry>:expiry";
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':expiry', $this->expiry);
         $result = $stmt->execute();
@@ -142,8 +139,7 @@ class Sessions
         $old_id = session_id();
         session_regenerate_id();
         $new_id = session_id();
-        $table = $this->pdo_db->prefix . 'sessions';
-        $qry = 'UPDATE ' . $table . ' SET sesskey=:newkey where sesskey=:sesskey';
+        $qry = "UPDATE {$this->pdo_db->prefix}sessions SET sesskey=:newkey where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':newkey', $new_id);
         $stmt->bindParam(':sesskey', $old_id);

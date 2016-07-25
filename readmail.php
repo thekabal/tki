@@ -81,7 +81,7 @@ Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 <?php
 if ($res->EOF)
 {
-//  echo $langvars['l_readm_nomessage'];
+    // echo $langvars['l_readm_nomessage'];
     ?>
             <tr>
               <td width="100%" bgcolor="black" bordercolorlight="black" bordercolordark="silver">
@@ -105,7 +105,7 @@ else
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($msg['sender_id']));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $sender = $result->fields;
-//      $isAdmin = isAdmin($sender);
+        // $isAdmin = isAdmin($sender);
         ?>
             <tr>
               <td width="100%" align="center" bgcolor="black" height="4"></td>
@@ -119,10 +119,10 @@ else
                       <td width="55%" style="text-align:left;"><font color="yellow" size="2">
         <?php
         echo "<span style='vertical-align:middle;'>{$sender['character_name']}</span>";
-        //if ($isAdmin === true)
-        //{
-        //    echo "&nbsp;<img style='width:64px; height:16px; border:none; padding:0px; vertical-align:text-bottom;' src='<?php echo $template->getVariables('template_dir'); ?>/images/validated_administrator2.gif' alt='Validated as Admin' />";
-        //}
+        if ($isAdmin === true)
+        {
+            echo "&nbsp;<img style='width:64px; height:16px; border:none; padding:0px; vertical-align:text-bottom;' src='<?php echo $template->getVariables('template_dir'); ?>/images/validated_administrator2.gif' alt='Validated as Admin' />";
+        }
         ?>
         </font></td>
                       <td width="21%" align="center"><font color="white" size="2"><?php echo $msg['sent']; ?></font></td>

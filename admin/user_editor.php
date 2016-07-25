@@ -33,6 +33,7 @@ if (empty ($_POST['user']))
         $players[] = $res->fields;
         $res->MoveNext();
     }
+
     $variables['user'] = null;
     $variables['players'] = $players;
 }

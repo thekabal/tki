@@ -34,6 +34,7 @@ if ($_POST['zone'] === null)
         $zones[] = $res->fields;
         $res->MoveNext();
     }
+
     $variables['zones'] = $zones;
     $variables['zone'] = null;
 }

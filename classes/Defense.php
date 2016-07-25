@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -21,7 +22,7 @@ namespace Tki;
 
 class Defense
 {
-    public static function defenseVsDefense(\PDO $pdo_db, int $ship_id, $langvars)
+    public static function defenseVsDefense(\PDO $pdo_db, int $ship_id, Array $langvars)
     {
         $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE ship_id=:ship_d";
         $stmt = $pdo_db->prepare($sql);
@@ -85,6 +86,7 @@ class Defense
                     }
                 }
             }
+
             $sql = "DELETE FROM {$pdo_db->prefix}sector_defense WHERE quantity <= 0";
             $stmt = $pdo_db->prepare($sql);
             $stmt->execute();

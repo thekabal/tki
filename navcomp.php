@@ -117,7 +117,7 @@ elseif ($state == 1)
 
         for ($i = 2; $i <= $search_depth; $i++)
         {
-            $k = $i-1;
+            $k = $i - 1;
             $search_query = $search_query . "    AND a" . $k . ".link_dest = a" . $i . ".link_start ";
         }
 
@@ -132,6 +132,7 @@ elseif ($state == 1)
             {
                 $search_query = $search_query . ",a" . $j . ".link_dest ";
             }
+
             $search_query = $search_query . ")";
         }
 

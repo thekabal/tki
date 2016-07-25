@@ -104,6 +104,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         {
             $rating = -1 * $rating;
         }
+
         $row['rating'] = $rating;
 
         // Calculate the players online status.
@@ -134,7 +135,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         }
         else
         {
-           $row['type'] = 'player';
+            $row['type'] = 'player';
         }
 
         // Check for banned players.
@@ -154,6 +155,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
 
         array_push($player_list, $row);
     }
+
     $template->addVariables('players', $player_list);
 }
 

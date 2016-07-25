@@ -55,8 +55,8 @@ if (array_key_exists('preset', $_POST))
         $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
     }
 }
-$change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
 
+$change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
 foreach ($preset_list as $index => $preset)
 {
     if ($preset === false)
@@ -68,12 +68,12 @@ foreach ($preset_list as $index => $preset)
         echo $result . "<br>\n";
     }
 }
-echo "<br>\n";
 
+echo "<br>\n";
 if ($change !== 1)
 {
     echo "<form accept-charset='utf-8' action='preset.php' method='post'>";
-    for ($x=0; $x<$tkireg->max_presets; $x++)
+    for ($x = 0; $x < $tkireg->max_presets; $x++)
     {
         echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $presetinfo[$x]['preset'] . "'></div>";
     }
@@ -89,8 +89,12 @@ else
     {
         if ($key < $tkireg->max_presets)
         {
-            $update = $db->Execute("UPDATE {$db->prefix}presets SET preset = ? WHERE preset_id = ?;", array($preset_list[$key], $presetinfo[$key]['preset_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+            $sql = "UPDATE {$pdo_db->prefix}presets SET preset=:preset WHERE preset_id=:preset_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':preset', $preset_list[key]);
+            $stmt->bindParam(':preset_id', $presetinfo[key]['preset_id']);
+            $stmt->execute();
+
             $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);
             $preset_result_echo = str_replace("[num]", $key + 1, $preset_result_echo);
             echo $preset_result_echo . "<br>";

@@ -62,7 +62,9 @@ while (!$res->EOF)
             Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_DEFENSE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
         }
     }
+
     $res->MoveNext();
 }
+
 $resx = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0");
 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);

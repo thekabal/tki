@@ -29,8 +29,8 @@ header('Vary: Accept-Encoding, Accept-Language');  // Tell CDN's or proxies to k
 header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP connections (15sec), which give better per-client performance, but can be worse (for a server) for many.
 
 // Set cookies for cookie test
-SetCookie('TestCookie', '', 0);
-SetCookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
+setcookie('TestCookie', '', 0);
+setcookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
 
 // Database configuration.
 $db_host = \Tki\SecureConfig::DB_HOST;
@@ -46,7 +46,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 
 
 $variables = null;
 $variables['lang'] = $lang;
-$variables['link'] = 'http://kabal.tk/forums/';
+$variables['link'] = 'https://kabal-invasion.com/forums/';
 $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'tki';
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
@@ -163,8 +163,8 @@ foreach ($_SERVER as $name => $value)
 {
     $array_var = explode(";", "$value");
     $value = implode("; ", $array_var);
-    $variables['env_vars'][$id]['name']=trim($name);
-    $variables['env_vars'][$id]['value']=trim($value);
+    $variables['env_vars'][$id]['name'] = trim($name);
+    $variables['env_vars'][$id]['value'] = trim($value);
     $id++;
 }
 
