@@ -22,7 +22,7 @@ namespace Tki;
 
 class Character
 {
-    public static function kill(\PDO $pdo_db, $db, int $ship_id, Array $langvars, Reg $tkireg, $remove_planets = false)
+    public static function kill(\PDO $pdo_db, $db, int $ship_id, Array $langvars, Reg $tkireg, bool $remove_planets = false)
     {
         $sql = "UPDATE {$pdo_db->prefix}ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defenses=' ' WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);

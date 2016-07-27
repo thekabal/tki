@@ -156,7 +156,7 @@ class CalcLevels
         return (int) $planettorps;
     }
 
-    public static function avgTech($ship_info = null, $type = 'ship')
+    public static function avgTech(int $ship_info = null, string $type = 'ship')
     {
         // Used to define what devices are used to calculate the average tech level.
         $calc_ship_tech    = array('hull', 'engines', 'computer', 'armor', 'shields', 'beams', 'torp_launchers');
