@@ -22,7 +22,7 @@ namespace Tki;
 
 class BigBang
 {
-    public static function findStep($current_file) : array
+    public static function findStep(string $current_file) : array
     {
         $i = 0;
 
@@ -58,9 +58,9 @@ class BigBang
         unset($filelist);
 
         $bigbang_info['steps'] = $i;
-        if ($current_file === false)
+        if ($current_file === '')
         {
-            // If current file is set to false, just return the search from 0.
+            // If current file is set to null string, just return the search from 0.
             $bigbang_info['current_step'] = array_search('0.php', $bigbang_files);
         }
         else

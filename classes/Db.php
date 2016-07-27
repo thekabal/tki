@@ -49,7 +49,7 @@ class Db
         }
     }
 
-    public function initDb($db_layer)
+    public function initDb(string $db_layer)
     {
         $db_port = \Tki\SecureConfig::DB_PORT;
         $db_host = \Tki\SecureConfig::DB_HOST;

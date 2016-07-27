@@ -30,7 +30,7 @@ class Compress
     {
     }
 
-    public static function compress($output)
+    public static function compress(string $output)
     {
         // Check to see if we have data, if not, then return empty string
         if ($output === null)

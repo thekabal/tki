@@ -154,7 +154,7 @@ else
     else
     {
         // If scan succeeds, show results and inform target
-        $shipavg = Tki\CalcLevels::avgTech($targetinfo, "ship");
+        $shipavg = Tki\CalcLevels::avgTech($targetinfo, 'ship');
 
         if ($shipavg > $tkireg->max_ewdhullsize)
         {

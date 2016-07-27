@@ -52,7 +52,7 @@ while (!$result3->EOF)
 }
 
 // Compute the ship average. If it's too low then the ship will not hit mines.
-$shipavg = Tki\CalcLevels::avgTech($targetship, "ship");
+$shipavg = Tki\CalcLevels::avgTech($targetship, 'ship');
 
 // The mines will attack if 4 conditions are met
 //    1) There is at least 1 group of mines in the sector
