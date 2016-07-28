@@ -37,7 +37,7 @@ class PlayerLog
             $stmt->bindParam(':type', $log_type);
             $stmt->bindParam(':time', $stamp);
             $stmt->bindParam(':data', $data);
-            $res = $stmt->execute();
+            $stmt->execute();
             Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
     }
