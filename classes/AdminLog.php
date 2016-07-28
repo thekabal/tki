@@ -35,7 +35,7 @@ class AdminLog
         {                      // so we should not attempt to write (or it will fail silently)
             $prep->bindParam(':logtype', $log_type, PDO::PARAM_STR);
             $prep->bindParam(':data', $data, PDO::PARAM_STR);
-            $res = $prep->execute();
+            $prep->execute();
             Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
         }
         else

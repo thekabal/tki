@@ -284,7 +284,7 @@ class Ibank
             $sql = "SELECT UNIX_TIMESTAMP(loantime) as time FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-            $result = $stmt->execute();
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             $time = $stmt->fetch(\PDO::FETCH_COLUMN);
 
@@ -834,7 +834,7 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $sql = "UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id");
+        $sql = "UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
@@ -948,7 +948,7 @@ class Ibank
         $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $account = $stmt->fetch(\PDO::FETCH_ASSOC);
 

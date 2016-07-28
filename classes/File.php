@@ -36,7 +36,7 @@ class File
         $status_array = array();
         $j = 0;
         $final_result = null;
-        $start_tran_res = $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
+        $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
 
         $insert_sql = 'INSERT into ' . $pdo_db->prefix . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
         $stmt = $pdo_db->prepare($insert_sql);
