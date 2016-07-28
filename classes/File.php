@@ -37,10 +37,10 @@ class File
         $j = 0;
         $final_result = null;
         $start_tran_res = $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
-        Db::logDbErrors($pdo_db, $start_tran_res, __LINE__, __FILE__);
 
         $insert_sql = 'INSERT into ' . $pdo_db->prefix . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
         $stmt = $pdo_db->prepare($insert_sql);
+        Db::logDbErrors($pdo_db, $insert_sql, __LINE__, __FILE__);
 
         foreach ($ini_keys as $config_category => $config_line)
         {

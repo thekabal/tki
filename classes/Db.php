@@ -148,7 +148,7 @@ class Db
         }
     }
 
-    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
+    public static function logDbErrors(\PDO $pdo_db, string $query, int $served_line, string $served_page)
     {
         // Convert the content of SCRIPT_NAME (in case it has been tainted) to the correct html entities
         $safe_script_name = htmlentities($_SERVER['SCRIPT_NAME'], ENT_HTML5, 'UTF-8');

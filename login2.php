@@ -116,8 +116,9 @@ if ($playerfound)
                 // Player's ship has not been destroyed
                 Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_LOGIN, $_SERVER['REMOTE_ADDR']);
                 $stamp = date("Y-m-d H:i:s");
-                $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, ip_address = ? WHERE ship_id = ?;", array($stamp, $_SERVER['REMOTE_ADDR'], $playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                $sql = "UPDATE {$db->prefix}ships SET last_login = ?, ip_address = ? WHERE ship_id = ?;";
+                $update = $db->Execute($sql, array($stamp, $_SERVER['REMOTE_ADDR'], $playerinfo['ship_id']));
+                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 $_SESSION['logged_in'] = true;
                 $_SESSION['password'] = $filtered_post_password;
