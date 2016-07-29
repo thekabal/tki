@@ -16,7 +16,12 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
     by many names (Tradewars, Galactic Warzone, Ultimate Universe, and
     many other games like this) but shares no code with them.  It is
     written 100% in PHP/HTML/JS/SQL.
+
+## Why should I run this?
+    Web-based games that recreate the door game BBS experience are enjoyable, and this one is FOSS, allowing anyone to contribute!
     
+## License: [Affero GPL v 3](https://www.gnu.org/licenses/agpl-3.0.en.html)
+
 ## Requirements:
 
 ### Server:
@@ -36,6 +41,7 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 - TKI will likely run on `lighttpd` and `nginix`, but has not been tested on either. 
 - **IIS is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc).
+- We make use of [Smarty templates](http://www.smarty.net/), [HTML Purifier](http://htmlpurifier.org/), [Swiftmailer](http://swiftmailer.org/), and [Adodb](http://adodb.org/dokuwiki/doku.php) (although we are working to replace adodb with PDO).
 
 ## Credits:
 The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/projects/blacknova/), please visit their sourceforge page for more information about their project.
@@ -50,7 +56,7 @@ As is typical with releases, we highly recommend a fresh install. Upgrades are n
 The project began in the early PHP4 era, and as a result, is less than ideal. Substantial progress has been made towards modernization, and we are continuing that process. **Feedback and PR's are welcome and appreciated**.
 
 ## Contributing:
-Feel free to contribute to the project! We use GitHub for our issues tracking (provide feedback!), milestone planning, code storage, and releases.
+Feel free to contribute to the project! We use [GitHub](https://github.com/thekabal/tki/) for our issues tracking (provide feedback!), milestone planning, code storage, and releases.
 
 I hope you enjoy the game!
 <br>The Kabal
