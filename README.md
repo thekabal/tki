@@ -18,7 +18,8 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
     written 100% in PHP/HTML/JS/SQL.
 
 ## Why should I run this?
-    Web-based games that recreate the door game BBS experience are enjoyable, and this one is FOSS, allowing anyone to contribute!
+    Web-based games that recreate the door game BBS experience can be fun!
+    Since it is Free and open source software, anyone can examine, learn, and contribute.
     
 ## License: [Affero GPL v 3](https://www.gnu.org/licenses/agpl-3.0.en.html)
 
