@@ -155,14 +155,14 @@ class Db
         $db_log = false;
         $error = null;
         $db_error = null;
-        if ($pdo_db instanceof PDO)
+        if ($pdo_db instanceof \PDO)
         {
             $error = $pdo_db->errorInfo()[1];
             $db_error = $pdo_db->errorInfo()[2];
             $db_log = true; // We need to create a method for disabling db logging on PDO
         }
 
-        if ($error === 'null' || $error == '')
+        if ($error === null || $error == '')
         {
             return (bool) true;
         }
@@ -176,9 +176,9 @@ class Db
             $text_error = 'A Database error occurred in ' . $served_page .
                             ' on line ' . $served_line .
                             ' (called from: ' . $safe_script_name . ' the error message was: ' . $db_error .
-                            'and the query was ' . $query;
+                            ' and the query was ' . $query;
 
-            if (!self::isActive($pdo_db))
+            if (self::isActive($pdo_db))
             {
                 if ($db_log)
                 {

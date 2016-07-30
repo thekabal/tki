@@ -32,9 +32,13 @@ $picsperrow = 7;
 // Get playerinfo from database
 $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
-$stmt->execute();
-$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+if ($sql_test === true)
+{
+    $stmt->bindParam(':email', $_SESSION['username']);
+    $stmt->execute();
+    $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 if (!array_key_exists('command', $_GET))
 {
@@ -150,10 +154,22 @@ echo "<div style='width:90%; margin:auto; background-color:#400040; color:#C0C0C
 echo "{$signame} <span style='color:#fff; font-weight:bold;'>{$playerinfo['character_name']}</span>{$langvars['l_aboard']} <span style='color:#fff; font-weight:bold;'><a class='new_link' style='font-size:14px;' href='report.php'>{$playerinfo['ship_name']}</a></span>\n";
 echo "</div>\n";
 
-$result = $db->Execute("SELECT * FROM {$pdo_db->prefix}messages WHERE recp_id = ? AND notified = ?;", array($playerinfo['ship_id'], "N"));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+$num_messages = 0;
+$sql = "SELECT COUNT(*) FROM {$pdo_db->prefix}messages WHERE recp_id=:recp_id AND notified='N'";
+$stmt = $pdo_db->prepare($sql);
+$sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-if ($result->RecordCount() > 0)
+if ($sql_test === true)
+{
+    $stmt->bindParam(':recp_id', $playerinfo['ship_id']);
+    $result = $stmt->execute();
+    if ($result)
+    {
+        $num_messages = $stmt->fetchColumn();
+    }
+}
+
+if ($num_messages > 0)
 {
     $alert_message = "{$langvars['l_youhave']} {$result->RecordCount()} {$langvars['l_messages_wait']}";
     echo "<script>\n";
