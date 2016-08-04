@@ -18,9 +18,9 @@ declare(strict_types = 1);
 //
 // File: classes/CheckBan.php
 //
-// Returns a Boolean false when no account info or no ban found.
+// Returns a Bool false when no account info or no ban found.
 // Returns an array which contains the ban information when it has found something.
-// Calling code needs to act on the returned information (boolean false or array of ban info).
+// Calling code needs to act on the returned information (bool false or array of ban info).
 
 namespace Tki;
 
@@ -89,7 +89,7 @@ class CheckBan
             return (array) $multiban_res->fields;
         }
 
-        // Well we got here, so we haven't found anything, so we return a Boolean false.
-        return (boolean) false;
+        // Well we got here, so we haven't found anything, so we return a Bool false.
+        return (bool) false;
     }
 }
