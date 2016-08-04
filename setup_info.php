@@ -107,7 +107,7 @@ $variables['smarty_path_test'] = file_exists(realpath("vendor/smarty/smarty/dist
 $variables['title'] = $langvars['l_setup_info_title'];
 
 // Test Smarty
-$test_smarty = new \Smarty;
+$test_smarty = new \Smarty();
 $test_smarty->setCompileDir('templates/_compile/');
 $test_smarty->setCacheDir('templates/_cache/');
 $test_smarty->setConfigDir('templates/_configs/');

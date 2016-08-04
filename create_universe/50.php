@@ -44,7 +44,7 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
 
-$local_table_timer = new Tki\Timer;
+$local_table_timer = new Tki\Timer();
 $z = 0;
 $i = 0;
 $language_files = new DirectoryIterator("languages/");

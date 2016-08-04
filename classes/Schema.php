@@ -30,7 +30,7 @@ class Schema
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)
         {
-            $table_timer = new Timer;
+            $table_timer = new Timer();
             $table_timer->start(); // Start benchmarking
 
             if ($schema_filename->isFile() && $schema_filename->getExtension() == 'sql')
@@ -89,7 +89,7 @@ class Schema
             $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
             foreach ($seq_files as $seq_filename)
             {
-                $table_timer = new Timer;
+                $table_timer = new Timer();
                 $table_timer->start(); // Start benchmarking
 
                 if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
@@ -134,7 +134,7 @@ class Schema
             $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
             foreach ($seq_files as $seq_filename)
             {
-                $table_timer = new Timer;
+                $table_timer = new Timer();
                 $table_timer->start(); // Start benchmarking
 
                 if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
@@ -177,7 +177,7 @@ class Schema
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)
         {
-            $table_timer = new Timer;
+            $table_timer = new Timer();
             $table_timer->start(); // Start benchmarking
 
             if ($schema_filename->isFile() && $schema_filename->getExtension() == 'sql')

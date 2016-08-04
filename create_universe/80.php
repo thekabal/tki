@@ -44,7 +44,7 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
 $variables['update_ticks_results']['sched'] = $tkireg->sched_ticks;
-$local_table_timer = new Tki\Timer;
+$local_table_timer = new Tki\Timer();
 
 $now = time();
 $local_table_timer->start(); // Start benchmarking for turns scheduler

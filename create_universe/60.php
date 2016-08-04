@@ -53,7 +53,7 @@ $initbore = $tkireg->ore_limit * $variables['initbcommod'] / 100.0;
 $initborganics = $tkireg->organics_limit * $variables['initbcommod'] / 100.0;
 $initbgoods = $tkireg->goods_limit * $variables['initbcommod'] / 100.0;
 $initbenergy = $tkireg->energy_limit * $variables['initbcommod'] / 100.0;
-$local_table_timer = new Tki\Timer;
+$local_table_timer = new Tki\Timer();
 $local_table_timer->start(); // Start benchmarking
 $insert = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}universe (sector_id, sector_name, zone_id, port_type, port_organics, port_ore, port_goods, port_energy, beacon, angle1, angle2, distance) VALUES ('1', 'Sol', '1', 'special', '0', '0', '0', '0', 'Sol: Hub of the Universe', '0', '0', '0')");
 $variables['create_sol_results']['result'] = Tki\Db::logDbErrors($pdo_db, $insert, __LINE__, __FILE__);
