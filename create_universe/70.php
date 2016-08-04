@@ -46,7 +46,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'foo
 
 $z = 0;
 
-$local_table_timer = new Tki\Timer;
+$local_table_timer = new Tki\Timer();
 $local_table_timer->start(); // Start benchmarking
 
 // Get the sector id for any sector that allows planets
