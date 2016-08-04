@@ -193,7 +193,7 @@ class Ownership
                 }
             }
 
-            $query = $query . ' AND team!=0';
+            $query = $query . ' AND team != 0';
             $select_team_res = $db->Execute($query);
             Db::LogDbErrors($pdo_db, $select_team_res, __LINE__, __FILE__);
 
