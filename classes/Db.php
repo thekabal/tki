@@ -83,7 +83,7 @@ class Db
 
                 $db_init_result = $db->Connect($db_host, $db_user, $db_pwd, $db_name);
 
-                // Returns Boolean true or false.
+                // Returns Bool true or false.
                 // However ADOdb's postgres driver returns null if postgres insn't installed.
                 if ($db_init_result === false || $db_init_result === 0)
                 {
@@ -124,11 +124,13 @@ class Db
                     }
 
                     $pdo_db = new PDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;", $db_user, $db_pwd);
+//                    $pdo_db = new TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
                 else
                 {
                     // Include the charset when connecting
                     $pdo_db = new PDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd);
+//                    $pdo_db = new TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
             }
             catch (\PDOException $e)
@@ -148,7 +150,7 @@ class Db
         }
     }
 
-    public static function logDbErrors(\PDO $pdo_db, string $query, int $served_line, string $served_page)
+    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
     {
         // Convert the content of SCRIPT_NAME (in case it has been tainted) to the correct html entities
         $safe_script_name = htmlentities($_SERVER['SCRIPT_NAME'], ENT_HTML5, 'UTF-8');

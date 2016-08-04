@@ -52,7 +52,7 @@ class PlanetReportCE
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_invalid_info'] . "</div>\n";
 
-            return (boolean) false;
+            return (bool) false;
         }
 
         if (!is_numeric($planet_id) || !is_numeric($sector_id))
@@ -62,7 +62,7 @@ class PlanetReportCE
             \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
 
-            return (boolean) false;
+            return (bool) false;
         }  // Build a base
 
         self::realSpaceMove($pdo_db, $db, $langvars, $sector_id, $tkireg);
