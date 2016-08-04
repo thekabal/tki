@@ -94,12 +94,12 @@ $variables['template'] = $tkireg->default_template;
 
 if (empty ($_SESSION['username']))
 {
-    $variables['loggedin'] = (boolean) true;
+    $variables['loggedin'] = (bool) true;
     $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');
 }
 else
 {
-    $variables['loggedin'] = (boolean) false;
+    $variables['loggedin'] = (bool) false;
     $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
 }
 
