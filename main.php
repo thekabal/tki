@@ -28,7 +28,6 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 
 $stylefontsize = "12pt";
 $picsperrow = 7;
-
 // Get playerinfo from database
 $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
