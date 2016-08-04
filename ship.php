@@ -28,10 +28,8 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('ship', 'planet', 'main', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 
-if (!isset($ship_id))
-{
-    $ship_id = null;
-}
+// PHP7 Null coalescing operator - if it is set, great, if not, set to null
+$ship_id = $ship_id ?? null;
 
 // Get playerinfo from database
 $sql = "SELECT team, ship_name, character_name, sector FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
