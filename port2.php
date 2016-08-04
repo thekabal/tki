@@ -130,7 +130,7 @@ else
             die();
         }
 
-        // Clear variables that are not selected in the form, and filter them to be only the correct variable type (Int, float, and boolean)
+        // Clear variables that are not selected in the form, and filter them to be only the correct variable type (Int, float, and bool)
         $hull_upgrade               = (int) filter_input(INPUT_POST, 'hull_upgrade', FILTER_SANITIZE_NUMBER_INT);
         $engine_upgrade             = (int) filter_input(INPUT_POST, 'engine_upgrade', FILTER_SANITIZE_NUMBER_INT);
         $power_upgrade              = (int) filter_input(INPUT_POST, 'power_upgrade', FILTER_SANITIZE_NUMBER_INT);
