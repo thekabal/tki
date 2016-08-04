@@ -18,6 +18,7 @@
 // File: login2.php
 
 require_once './common.php';
+
 // Test to see if server is closed to logins
 $playerfound = false;
 
