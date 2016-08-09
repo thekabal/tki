@@ -25,18 +25,18 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 
 ## Requirements:
 
-### Server:
+### Server (generally, the most recent/current version of each is our recommendation, but these should suffice):
 - A webserver capable of supporting htaccess, and TLS.
-- `apache v2.2.22+` is supported (we have not determined a required minimum).
-- `php v7.1.0+` (needed for void return types)
-- `mysql v5.5.3+` (needed for utf8mb4 schemas)
+- `apache v2.4+` (we have not determined a required minimum).
+- `php v7.1.0+` (needed for void return types).
+- `mariadb v5.5+ or v10.0+` (needed for utf8mb4 schemas).
 - `mbstring` PHP extension.
 - `pdo` PHP extension.
 
 ### Web:
-- Firefox or Chrome `v30+` (recommended).
-- Safari `v6+`.
-- IE `v9+`.
+- Chrome v50+ or Firefox v40+ (recommended).
+- Safari `v9.1.2+`.
+- IE `v11`.
 
 ### Notes:
 - TKI will likely run on `lighttpd` and `nginix`, but has not been tested on either. 
