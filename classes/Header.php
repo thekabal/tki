@@ -25,7 +25,7 @@ namespace Tki;
 
 class Header
 {
-    public static function display(\PDO $pdo_db, $lang, Smarty $template, $title = null, $body_class = 'tki', $include_ckeditor = false)
+    public static function display(\PDO $pdo_db, $lang, Smarty $template, $title = null, $body_class = 'tki', $include_ckeditor = null)
     {
         $langvars = Translate::load($pdo_db, $lang, array('common'));
 
@@ -42,7 +42,14 @@ class Header
         }
 
         // Some pages (like mailto) include ckeditor js, check if this is one of those.
-        $variables['include_ckeditor'] = $include_ckeditor;
+        if (isset($include_ckeditor))
+        {
+            $variables['include_ckeditor'] = $include_ckeditor;
+        }
+        else
+        {
+            unset ($variables['include_ckeditor']); // Otherwise, we make sure it is NOT set
+        }
 
         $template->addVariables('langvars', $langvars);
         $template->addVariables('variables', $variables);
