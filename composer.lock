@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "69fb684a67b6dbbd66bb40c3bdad8572",
-    "content-hash": "634e4882e12f191a1b46c64eeedafc38",
+    "hash": "1ed4587b851c975cb332589ce3ffafd2",
+    "content-hash": "b236d58dee1f5ec11d4abc01d1b3e5be",
     "packages": [
         {
             "name": "adodb/adodb-php",
@@ -107,16 +107,16 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.29",
+            "version": "v3.1.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "35480f10e7ce9b0fdaf23d3799d7b79463919b1e"
+                "reference": "ed2b7f1146cfda13df1eea8a5f707a1b771b6e7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/35480f10e7ce9b0fdaf23d3799d7b79463919b1e",
-                "reference": "35480f10e7ce9b0fdaf23d3799d7b79463919b1e",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/ed2b7f1146cfda13df1eea8a5f707a1b771b6e7e",
+                "reference": "ed2b7f1146cfda13df1eea8a5f707a1b771b6e7e",
                 "shasum": ""
             },
             "require": {
@@ -158,7 +158,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-12-21 01:57:06"
+            "time": "2016-08-07 18:46:49"
         },
         {
             "name": "swiftmailer/swiftmailer",
