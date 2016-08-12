@@ -164,7 +164,13 @@ $local_table_timer->stop();
 $variables['create_warzone_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
-$update = $pdo_db->exec("UPDATE ::prefix::universe SET zone_id='2' WHERE sector_id<=" . $variables['fedsecs']);
+//$update = $pdo_db->exec("UPDATE ::prefix::universe SET zone_id='2' WHERE sector_id<=:fedsecs");
+$sql = "UPDATE ::prefix::universe SET zone_id='2' WHERE sector_id<=:fedsecs";
+
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':fedsecs', $variables['fedsecs']);
+$update = $stmt->execute();
+
 $variables['create_fed_sectors_results']['result'] = Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 $catch_results[$z] = $variables['create_fed_sectors_results']['result'];
 $z++;
