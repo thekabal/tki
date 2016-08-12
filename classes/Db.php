@@ -28,7 +28,7 @@ use PDO;
 
 class Db
 {
-    public static function isActive(\PDO $pdo_db)
+    public static function isActive(\PDO $pdo_db) : bool
     {
         // Get the config_values from the DB
         $results = $pdo_db->query("SELECT * FROM ::prefix::gameconfig LIMIT 1");
@@ -38,14 +38,8 @@ class Db
         }
         else
         {
-            if ($results->rowCount() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            $are_there_results = ($results->rowCount() > 0);
+            return $are_there_results; // Will be either true or false
         }
     }
 
@@ -123,12 +117,12 @@ class Db
                         $db_port = '5432';
                     }
 
-                    $pdo_db = new TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
+                    $pdo_db = new \Tki\TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
                 else
                 {
                     // Include the charset when connecting
-                    $pdo_db = new TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
+                    $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
             }
             catch (\PDOException $e)
