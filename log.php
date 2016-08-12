@@ -39,7 +39,7 @@ $body_class = 'log';
 Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -63,7 +63,7 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS) // Check if called by admin scr
     else
     {
         // Get playerinfo from database
-        $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $player);
         $stmt->execute();
@@ -113,7 +113,7 @@ if (empty ($startdate))
     $startdate = date("Y-m-d");
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
+$sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
 $stmt->bindParam(':start_date', $startdate);
@@ -190,7 +190,7 @@ if ($mode != 'compat')
     $entry = $$log_months_temp . " " . mb_substr($yesterday, 8, 2) . " " . mb_substr($yesterday, 0, 4);
 
     unset($logs);
-    $sql = "SELECT * FROM {$pdo_db->prefix}logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
+    $sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
     $stmt->bindParam(':start_date', $yesterday);
@@ -234,7 +234,7 @@ if ($mode != 'compat')
     $entry = $$log_months_temp . " " . mb_substr($tomorrow, 8, 2) . " " . mb_substr($tomorrow, 0, 4);
 
     unset($logs);
-    $sql = "SELECT * FROM {$pdo_db->prefix}logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
+    $sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
     $stmt->bindParam(':start_date', $tomorrow);

@@ -75,14 +75,14 @@ class Ibank
              "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $sql = "UPDATE {$pdo_db->prefix}ibank_accounts SET loan = :amount, loantime=NOW() WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ibank_accounts SET loan = :amount, loantime=NOW() WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount3);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $sql = "UPDATE {$pdo_db->prefix}ships SET credits = credits + :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET credits = credits + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
@@ -152,12 +152,12 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $sql = "UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance - :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance - :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $sql = "UPDATE {$pdo_db->prefix}ships SET credits = credits + :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET credits = credits + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
@@ -165,14 +165,14 @@ class Ibank
 
     public static function ibankTransfer(\PDO $pdo_db, Array $langvars, Array $playerinfo, Reg $tkireg)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
+        $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $sql = "SELECT name, planet_id, sector_id FROM {$pdo_db->prefix}planets WHERE owner=:owner ORDER BY sector_id ASC";
+        $sql = "SELECT name, planet_id, sector_id FROM ::prefix::planets WHERE owner=:owner ORDER BY sector_id ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $playerinfo['ship_id']);
         $result = $stmt->execute();
@@ -281,7 +281,7 @@ class Ibank
         {
             $curtime = time();
 
-            $sql = "SELECT UNIX_TIMESTAMP(loantime) as time FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id";
+            $sql = "SELECT UNIX_TIMESTAMP(loantime) as time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
@@ -396,7 +396,7 @@ class Ibank
              "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $sql = "UPDATE {$pdo_db->prefix}ibank_accounts SET loan = loan - :loanamount, loantime=:loantime WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ibank_accounts SET loan = loan - :loanamount, loantime=:loantime WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':loanamount', $amount);
         $stmt->bindParam(':loantime', $account['loantime']);
@@ -404,7 +404,7 @@ class Ibank
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $sql = "UPDATE {$pdo_db->prefix}ships SET credits = credits - :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
@@ -448,7 +448,7 @@ class Ibank
                 self::ibankError($pdo_db, $langvars, $langvars['l_ibank_sendyourself'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
 
-            $stmt = $pdo_db->prepare("SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
+            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
             $stmt->bindParam(':ship_id', $ship_id);
             $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -834,12 +834,12 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $sql = "UPDATE {$pdo_db->prefix}ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $sql = "UPDATE {$pdo_db->prefix}ships SET credits = credits - :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
@@ -945,7 +945,7 @@ class Ibank
 
     public static function isLoanPending(\PDO $pdo_db, int $ship_id, Reg $tkireg)
     {
-        $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id";
+        $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();

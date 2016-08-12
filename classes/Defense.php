@@ -24,7 +24,7 @@ class Defense
 {
     public static function defenseVsDefense(\PDO $pdo_db, int $ship_id, Array $langvars)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE ship_id=:ship_d";
+        $sql = "SELECT * FROM ::prefix::sector_defense WHERE ship_id=:ship_d";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
@@ -37,7 +37,7 @@ class Defense
                 $deftype = $tmp_defense['defense_type'] == 'F' ? 'Fighters' : 'Mines';
                 $qty = $tmp_defense['quantity'];
 
-                $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id AND ship_id<>:ship_d ORDER BY quantity DESC";
+                $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND ship_id<>:ship_d ORDER BY quantity DESC";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':sector_id', $tmp_defense['sector_id']);
                 $stmt->bindParam(':ship_id', $ship_id);
@@ -51,13 +51,13 @@ class Defense
                         $targetdeftype = $tmp_other_defense['defense_type'] == 'F' ? $langvars['l_fighters'] : $langvars['l_mines'];
                         if ($qty > $tmp_other_defense['quantity'])
                         {
-                            $sql = "DELETE FROM {$pdo_db->prefix}sector_defense WHERE defense_id = :defense_id";
+                            $sql = "DELETE FROM ::prefix::sector_defense WHERE defense_id = :defense_id";
                             $stmt = $pdo_db->prepare($sql);
                             $stmt->bindParam(':defense_id', $tmp_other_defense['sector_id']);
                             $stmt->execute();
                             $qty -= $tmp_other_defense['quantity'];
 
-                            $sql = "UPDATE {$pdo_db->prefix}sector_defense SET quantity = :quantity_id WHERE defense_id = :defense_id";
+                            $sql = "UPDATE ::prefix::sector_defense SET quantity = :quantity_id WHERE defense_id = :defense_id";
                             $stmt = $pdo_db->prepare($sql);
                             $stmt->bindParam(':quantity_id', $qty);
                             $stmt->bindParam(':defense_id', $tmp_defense['sector_id']);
@@ -68,12 +68,12 @@ class Defense
                         }
                         else
                         {
-                            $sql = "DELETE FROM {$pdo_db->prefix}sector_defense WHERE defense_id = :defense_id";
+                            $sql = "DELETE FROM ::prefix::sector_defense WHERE defense_id = :defense_id";
                             $stmt = $pdo_db->prepare($sql);
                             $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
                             $stmt->execute();
 
-                            $sql = "UPDATE {$pdo_db->prefix}sector_defense SET quantity = quantity - :quantity_id WHERE defense_id = :defense_id";
+                            $sql = "UPDATE ::prefix::sector_defense SET quantity = quantity - :quantity_id WHERE defense_id = :defense_id";
                             $stmt = $pdo_db->prepare($sql);
                             $stmt->bindParam(':quantity_id', $qty);
                             $stmt->bindParam(':defense_id', $tmp_other_defense['defense_id']);
@@ -87,7 +87,7 @@ class Defense
                 }
             }
 
-            $sql = "DELETE FROM {$pdo_db->prefix}sector_defense WHERE quantity <= 0";
+            $sql = "DELETE FROM ::prefix::sector_defense WHERE quantity <= 0";
             $stmt = $pdo_db->prepare($sql);
             $stmt->execute();
         }

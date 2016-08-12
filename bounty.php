@@ -71,7 +71,7 @@ if (mb_strlen(trim($amount)) === 0)
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -110,7 +110,7 @@ switch ($response) {
             $color = $tkireg->color_line1;
             for ($j = 0; $j < $num_details; $j++)
             {
-                $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $bounty_details[$j]['placed_by']);
                 $stmt->execute();
@@ -336,7 +336,7 @@ switch ($response) {
             $color = $tkireg->color_line1;
             for ($i = 0; $i < $num_bounties; $i++)
             {
-                $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $bounties[$i]['bounty_on']);
                 $stmt->execute();

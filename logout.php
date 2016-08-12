@@ -29,7 +29,7 @@ if (array_key_exists('username', $_SESSION))
     $current_score = 0;
 
     // Get playerinfo from database
-    $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+    $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':email', $_SESSION['username']);
     $stmt->execute();

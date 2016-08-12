@@ -30,7 +30,7 @@ Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 echo "<body class=" . $body_class . "><br>";
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -67,7 +67,7 @@ if ($playerinfo['ship_goods'] < 0)
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
@@ -101,7 +101,7 @@ if ($sectorinfo['port_energy'] < 0)
     $sectorinfo['port_energy'] = 0;
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
 $stmt->execute();
@@ -131,7 +131,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
     if ($zoneinfo['team_zone'] == 'N')
     {
         // Get playerinfo from database
-        $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $zoneinfo['owner']);
         $stmt->execute();
@@ -327,7 +327,7 @@ elseif ($sectorinfo['port_type'] == "special")
         $bty = $res2->fields;
         if ($bty['total_bounty'] > 0)
         {
-            $sql = "SELECT * FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
+            $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
@@ -357,7 +357,7 @@ elseif ($sectorinfo['port_type'] == "special")
             }
             elseif ($pay !== null && $pay == 2)
             {
-                $sql = "SELECT * FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
+                $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
                 $stmt->execute();

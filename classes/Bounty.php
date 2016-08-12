@@ -24,7 +24,7 @@ class Bounty
 {
     public static function cancel(\PDO $pdo_db, int $bounty_on)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}bounty WHERE bounty_on=:bounty_on AND bounty_on=ship_id";
+        $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on=:bounty_on AND bounty_on=ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on);
         $stmt->execute();
@@ -35,7 +35,7 @@ class Bounty
             {
                 if ($tmp_bounty['placed_by'] != 0)
                 {
-                    $sql = "UPDATE {$pdo_db->prefix}ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
+                    $sql = "UPDATE ::prefix::ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':bounty_amount', $tmp_bounty['amount']);
                     $stmt->bindParam(':ship_id', $tmp_bounty['placed_by']);
@@ -43,7 +43,7 @@ class Bounty
                     PlayerLog::WriteLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_CANCELLED, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
                 }
 
-                $sql = "DELETE FROM {$pdo_db->prefix}bounty WHERE bounty_id = :bounty_id";
+                $sql = "DELETE FROM ::prefix::bounty WHERE bounty_id = :bounty_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':bounty_id', $tmp_bounty['bounty_id']);
                 $stmt->execute();
@@ -53,7 +53,7 @@ class Bounty
 
     public static function collect(\PDO $pdo_db, Array $langvars, int $attacker, int $bounty_on)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}bounty,{$pdo_db->prefix}ships WHERE bounty_on=:bounty_on AND bounty_on=ship_id AND planced_by <> 0";
+        $sql = "SELECT * FROM ::prefix::bounty,::prefix::ships WHERE bounty_on=:bounty_on AND bounty_on=ship_id AND planced_by <> 0";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on);
         $stmt->execute();
@@ -68,20 +68,20 @@ class Bounty
                 }
                 else
                 {
-                    $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                    $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $tmp_bounty['placed_by']);
                     $stmt->execute();
                     $placed = $stmt->fetch(\PDO::FETCH_ASSOC);
                 }
 
-                $sql = "UPDATE {$pdo_db->prefix}ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
+                $sql = "UPDATE ::prefix::ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':bounty_amount', $tmp_bounty['amount']);
                 $stmt->bindParam(':ship_id', $attacker);
                 $stmt->execute();
 
-                $sql = "DELETE FROM {$pdo_db->prefix}bounty WHERE bounty_id = :bounty_id";
+                $sql = "DELETE FROM ::prefix::bounty WHERE bounty_id = :bounty_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':bounty_id', $tmp_bounty['bounty_id']);
                 $stmt->execute();
@@ -91,7 +91,7 @@ class Bounty
             }
         }
 
-        $sql = "DELETE FROM {$pdo_db->prefix}bounty WHERE bounty_on = :bounty_on";
+        $sql = "DELETE FROM ::prefix::bounty WHERE bounty_on = :bounty_on";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on);
         $stmt->execute();

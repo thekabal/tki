@@ -42,7 +42,7 @@ class Score
         $calc_cloak             = "ROUND(POW($tkireg->upgrade_factor, cloak))";
         $calc_levels            = "($calc_hull + $calc_engines + $calc_power + $calc_computer + $calc_sensors + $calc_beams + $calc_torp_launchers + $calc_shields + $calc_armor + $calc_cloak) * $tkireg->upgrade_cost";
 
-        $calc_torps             = "{$pdo_db->prefix}ships.torps * $tkireg->torpedo_price";
+        $calc_torps             = "::prefix::ships.torps * $tkireg->torpedo_price";
         $calc_armor_pts         = "armor_pts * $tkireg->armor_price";
         $calc_ship_ore          = "ship_ore * $tkireg->ore_price";
         $calc_ship_organics     = "ship_organics * $tkireg->organics_price";
@@ -62,26 +62,26 @@ class Score
         $calc_minedeflector     = "dev_minedeflector * $tkireg->dev_minedeflector_price";
         $calc_dev               = "$calc_dev_warpedit + $calc_dev_genesis + $calc_dev_beacon + $calc_dev_emerwarp + $calc_dev_escapepod + $calc_dev_fuelscoop + $calc_minedeflector + $calc_dev_lssd";
 
-        $calc_planet_goods      = "SUM({$pdo_db->prefix}planets.organics) * $tkireg->organics_price + SUM({$pdo_db->prefix}planets.ore) * $tkireg->ore_price + SUM({$pdo_db->prefix}planets.goods) * $tkireg->goods_price + SUM({$pdo_db->prefix}planets.energy) * $tkireg->energy_price";
-        $calc_planet_cols       = "SUM({$pdo_db->prefix}planets.colonists) * $tkireg->colonist_price";
-        $calc_planet_defense    = "SUM({$pdo_db->prefix}planets.fighters) * $tkireg->fighter_price + IF({$pdo_db->prefix}planets.base='Y', $tkireg->base_credits + SUM({$pdo_db->prefix}planets.torps) * $tkireg->torpedo_price, 0)";
-        $calc_planet_credits    = "SUM({$pdo_db->prefix}planets.credits)";
+        $calc_planet_goods      = "SUM(::prefix::planets.organics) * $tkireg->organics_price + SUM(::prefix::planets.ore) * $tkireg->ore_price + SUM(::prefix::planets.goods) * $tkireg->goods_price + SUM(::prefix::planets.energy) * $tkireg->energy_price";
+        $calc_planet_cols       = "SUM(::prefix::planets.colonists) * $tkireg->colonist_price";
+        $calc_planet_defense    = "SUM(::prefix::planets.fighters) * $tkireg->fighter_price + IF(::prefix::planets.base='Y', $tkireg->base_credits + SUM(::prefix::planets.torps) * $tkireg->torpedo_price, 0)";
+        $calc_planet_credits    = "SUM(::prefix::planets.credits)";
 
         $sql = "SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_cols + $calc_planet_defense + $calc_planet_credits, 0) AS planet_score " .
-                                     "FROM {$pdo_db->prefix}planets WHERE owner=:ship_id";
+                                     "FROM ::prefix::planets WHERE owner=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
         $planet_score = $stmt->fetch(\PDO::FETCH_COLUMN);
 
-        $sql = "SELECT IF(COUNT(*)>0, $calc_levels + $calc_equip + $calc_dev + {$pdo_db->prefix}ships.credits, 0) AS ship_score " .
-               "FROM {$pdo_db->prefix}ships LEFT JOIN {$pdo_db->prefix}planets ON {$pdo_db->prefix}planets.owner=ship_id WHERE ship_id = :ship_id AND ship_destroyed='N'";
+        $sql = "SELECT IF(COUNT(*)>0, $calc_levels + $calc_equip + $calc_dev + ::prefix::ships.credits, 0) AS ship_score " .
+               "FROM ::prefix::ships LEFT JOIN ::prefix::planets ON ::prefix::planets.owner=ship_id WHERE ship_id = :ship_id AND ship_destroyed='N'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
         $ship_score = $stmt->fetch(\PDO::FETCH_COLUMN);
 
-        $sql = "SELECT (balance-loan) AS bank_score FROM {$pdo_db->prefix}ibank_accounts WHERE ship_id = :ship_id";
+        $sql = "SELECT (balance-loan) AS bank_score FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
@@ -95,7 +95,7 @@ class Score
 
         $score = (int) round(sqrt($score));
 
-        $stmt = $pdo_db->prepare("UPDATE {$pdo_db->prefix}ships SET score = :score WHERE ship_id=:ship_id");
+        $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET score = :score WHERE ship_id=:ship_id");
         $stmt->bindParam(':score', $score);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();

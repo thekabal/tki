@@ -21,7 +21,7 @@
 $langvars = Tki\Translate::load($pdo_db, $lang, array('check_fighters', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 
 // Get sectorinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $sector);
 $stmt->execute();

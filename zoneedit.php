@@ -100,7 +100,7 @@ if (mb_strlen(trim($trades)) === 0)
     $trades = false;
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $zone);
 $stmt->execute();
@@ -119,7 +119,7 @@ $curzone['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $curzone['
 
 if ($curzone['team_zone'] == 'N')
 {
-    $sql = "SELECT ship_id FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+    $sql = "SELECT ship_id FROM ::prefix::ships WHERE email=:email LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':email', $_SESSION['username']);
     $stmt->execute();
@@ -127,7 +127,7 @@ if ($curzone['team_zone'] == 'N')
 }
 else
 {
-    $sql = "SELECT creator, id FROM {$pdo_db->prefix}teams WHERE creator=:creator LIMIT 1";
+    $sql = "SELECT creator, id FROM ::prefix::teams WHERE creator=:creator LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':creator', $curzone['owner']);
     $stmt->execute();
@@ -147,7 +147,7 @@ if ($command == 'change')
     // Sanitize zone name.
     $name = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $name);
 
-    $sql = "UPDATE {$pdo_db->prefix}zones SET zone_name=:zone_name, allow_beacon=:allow_beacon, allow_attack=:allow_attack, allow_warpedit=:allow_warpedit, allow_planet=:allow_planet, allow_trade=:allow_trade, allow_defenses=:allow_defenses WHERE zone_id=:zone_id";
+    $sql = "UPDATE ::prefix::zones SET zone_name=:zone_name, allow_beacon=:allow_beacon, allow_attack=:allow_attack, allow_warpedit=:allow_warpedit, allow_planet=:allow_planet, allow_trade=:allow_trade, allow_defenses=:allow_defenses WHERE zone_id=:zone_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':zone_name', $name);
     $stmt->bindParam(':allow_beacon', $beacons);

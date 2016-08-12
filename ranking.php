@@ -61,7 +61,7 @@ switch ($sort)
         $by = 'rating ASC, character_name ASC';
         break;
     case 'team':
-        $by = "{$pdo_db->prefix}teams.team_name DESC, character_name ASC";
+        $by = "::prefix::teams.team_name DESC, character_name ASC";
         break;
     case 'efficiency':
         $by = 'efficiency DESC';

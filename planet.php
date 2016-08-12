@@ -54,7 +54,7 @@ if (mb_strlen(trim($planet_id)) === 0)
 echo '<h1>' . $title . '</h1>';
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -72,13 +72,13 @@ if ($planet_id <= 0)
     die();
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id";
+$sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':planet_id', $planet_id);
 $stmt->execute();
@@ -125,7 +125,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
     if ($planetinfo['owner'] != 0)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $planetinfo['owner']);
         $stmt->execute();
@@ -443,7 +443,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     Tki\Db::LogDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
 
                     // Refresh Planet Info
-                    $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
+                    $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':planet_id', $planet_id);
                     $stmt->execute();
@@ -899,7 +899,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             if ($planetinfo['owner'] != 0)
             {
-                $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $planetinfo['owner']);
                 $stmt->execute();

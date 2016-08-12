@@ -44,7 +44,7 @@ else
     if (empty($operation))
     {
         // Get planet info from database
-        $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet);
         $stmt->execute();

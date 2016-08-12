@@ -29,7 +29,7 @@ class CheckBan
     public static function isBanned(\PDO $pdo_db, array $playerinfo)
     {
         // Check for IP Ban
-        $sql = "SELECT * FROM {$pdo_db->prefix}bans WHERE (ban_type = :ban_type AND ban_mask = :ban_mask1) OR (ban_mask = :ban_mask2)";
+        $sql = "SELECT * FROM ::prefix::bans WHERE (ban_type = :ban_type AND ban_mask = :ban_mask1) OR (ban_mask = :ban_mask2)";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindValue(':ban_type', IP_BAN);
         $stmt->bindParam(':ban_mask1', $playerinfo['ip_address']);
@@ -46,7 +46,7 @@ class CheckBan
         }
 
         // Check for ID Watch, Ban, Lock, 24H Ban etc linked to the platyers ShipID.
-        $sql = "SELECT * FROM {$pdo_db->prefix}bans WHERE ban_ship = :ban_ship";
+        $sql = "SELECT * FROM ::prefix::bans WHERE ban_ship = :ban_ship";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ban_ship', $playerinfo['ship_id']);
         $stmt->execute();
@@ -72,7 +72,7 @@ class CheckBan
         }
 
         // Check for Multi Ban (IP, ID)
-        $sql = "SELECT * FROM {$pdo_db->prefix}bans WHERE ban_type = :ban_type AND (ban_mask = :ban_mask1 OR ban_mask = :ban_mask2 OR ban_ship = :ban_ship)";
+        $sql = "SELECT * FROM ::prefix::bans WHERE ban_type = :ban_type AND (ban_mask = :ban_mask1 OR ban_mask = :ban_mask2 OR ban_ship = :ban_ship)";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindValue(':ban_type', MULTI_BAN);
         $stmt->bindParam(':ban_mask1', $playerinfo['ip_address']);

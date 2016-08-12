@@ -24,7 +24,7 @@ class SectorDefense
 {
     public static function messageDefenseOwner(\PDO $pdo_db, int $sector, string $message)
     {
-        $sql = "SELECT ship_id FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id";
+        $sql = "SELECT ship_id FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();

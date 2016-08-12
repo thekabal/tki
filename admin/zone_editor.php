@@ -43,7 +43,7 @@ else
     $variables['zone'] = null;
     if ($_POST['operation'] == "edit")
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':email', $_POST['zone']);
         $stmt->execute();

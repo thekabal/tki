@@ -252,7 +252,7 @@ class Traderoute
         if (!$result99->EOF)
         {
             $fighters_owner = $result99->fields;
-            $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
             $stmt->execute();
@@ -270,7 +270,7 @@ class Traderoute
         {
             $fighters_owner = $result98->fields;
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
             $stmt->execute();
@@ -296,7 +296,7 @@ class Traderoute
         // Check if zone allows trading  SRC
         if ($traderoute['source_type'] == 'P')
         {
-            $sql = "SELECT * FROM {$pdo_db->prefix}zones,{$pdo_db->prefix}universe WHERE {$pdo_db->prefix}universe.sector_id=:sector_id AND {$pdo_db->prefix}zones.zone_id={$pdo_db->prefix}universe.zone_id";
+            $sql = "SELECT * FROM ::prefix::zones,::prefix::universe WHERE ::prefix::universe.sector_id=:sector_id AND ::prefix::zones.zone_id=::prefix::universe.zone_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $traderoute['source_id']);
             $stmt->execute();
@@ -310,7 +310,7 @@ class Traderoute
             {
                 if ($zoneinfo['team_zone'] == 'N')
                 {
-                    $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+                    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $zoneinfo['owner']);
                     $stmt->execute();
@@ -334,7 +334,7 @@ class Traderoute
         // Check if zone allows trading  DEST
         if ($traderoute['dest_type'] == 'P')
         {
-            $sql = "SELECT * FROM {$pdo_db->prefix}zones,{$pdo_db->prefix}universe WHERE {$pdo_db->prefix}universe.sector_id=:sector_id AND {$pdo_db->prefix}zones.zone_id={$pdo_db->prefix}universe.zone_id";
+            $sql = "SELECT * FROM ::prefix::zones,::prefix::universe WHERE ::prefix::universe.sector_id=:sector_id AND ::prefix::zones.zone_id=::prefix::universe.zone_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':zone_id', $traderoute['dest_id']);
             $stmt->execute();
@@ -348,7 +348,7 @@ class Traderoute
             {
                 if ($zoneinfo['team_zone'] == 'N')
                 {
-                    $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+                    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $zoneinfo['owner']);
                     $stmt->execute();
@@ -1913,7 +1913,7 @@ class Traderoute
 
         if ($type1 == 'L')
         {
-            $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $start);
             $stmt->execute();
@@ -1922,7 +1922,7 @@ class Traderoute
 
         if ($type2 == 'L')
         {
-            $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':dest', $dest);
             $stmt->execute();
