@@ -58,7 +58,7 @@ class Translate
             foreach ($categories as $category)
             {
                 // Select from the database and return the value of the language variables requested, but do not use caching
-                $query = "SELECT name, value FROM {$pdo_db->prefix}languages WHERE category = :category AND section = :language;";
+                $query = "SELECT name, value FROM ::prefix::languages WHERE category = :category AND section = :language;";
                 $result = $pdo_db->prepare($query);
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 

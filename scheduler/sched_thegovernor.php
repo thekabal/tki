@@ -322,7 +322,7 @@ if ($detected === false)
 echo "<br>\n";
 echo "Clearing stale session data...<br>\n";
 
-$sql = "DELETE FROM {$pdo_db->prefix}sessions WHERE expiry < NOW()";
+$sql = "DELETE FROM ::prefix::sessions WHERE expiry < NOW()";
 $stmt = $pdo_db->prepare($sql);
 $stmt->execute();
 

@@ -44,7 +44,7 @@ else
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -118,7 +118,7 @@ if ($sector == "*")
         $num_ships = $row2['count'];
 
         // Get sectorinfo from database
-        $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $row['link_dest']);
         $stmt->execute();
@@ -207,7 +207,7 @@ else
     // User requested a single sector (standard) long range scan
 
     // Get playerinfo from database
-    $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+    $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':sector_id', $sector);
     $stmt->execute();

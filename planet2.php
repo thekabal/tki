@@ -160,14 +160,14 @@ if ($planet_id <= 0)
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get the Planet Info
-$sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id AND planet_id > 0 LIMIT 1";
+$sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id AND planet_id > 0 LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':planet_id', $planet_id);
 $stmt->execute();
@@ -623,7 +623,7 @@ else
                     $transfer_credits = 0;
                 }
 
-                $sql = "UPDATE {$pdo_db->prefix}ships SET ship_ore=ship_ore+:ship_ore, ship_organics=ship_organics+:ship_organics, ship_goods=ship_goods+:ship_goods, ship_energy=ship_energy+:ship_energy, ship_colonists=ship_colonists+:ship_colonists, torps=torps+:torps, ship_fighters=ship_fighters+:ship_fighters, credits=credits+:credits, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+                $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:ship_ore, ship_organics=ship_organics+:ship_organics, ship_goods=ship_goods+:ship_goods, ship_energy=ship_energy+:ship_energy, ship_colonists=ship_colonists+:ship_colonists, torps=torps+:torps, ship_fighters=ship_fighters+:ship_fighters, credits=credits+:credits, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_ore', $transfer_ore);
                 $stmt->bindParam(':ship_organics', $transfer_organics);
@@ -636,7 +636,7 @@ else
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
                 $stmt->execute();
 
-                $sql = "UPDATE {$pdo_db->prefix}planets SET ore=ore-:ore, organics=organics-:organics, goods=goods-:goods, energy=energy-:energy, colonists=colonists-:colonists, torps=torps-:torps, fighters=fighters-:fighters, credits=credits-:credits WHERE planet_id=:planet_id";
+                $sql = "UPDATE ::prefix::planets SET ore=ore-:ore, organics=organics-:organics, goods=goods-:goods, energy=energy-:energy, colonists=colonists-:colonists, torps=torps-:torps, fighters=fighters-:fighters, credits=credits-:credits WHERE planet_id=:planet_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ore', $transfer_ore);
                 $stmt->bindParam(':organics', $transfer_organics);

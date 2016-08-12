@@ -30,7 +30,7 @@ class Ship
             // if the player has an escapepod, set the player up with a new ship
             if ($playerinfo['dev_escapepod'] === 'Y')
             {
-                $sql = "UPDATE {$pdo_db->prefix}ships SET hull=0, engines=0, power=0," .
+                $sql = "UPDATE ::prefix::ships SET hull=0, engines=0, power=0," .
                                "computer=0, sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, " .
                                "armor_pts=100, cloak=0, shields=0, sector=1, ship_ore=0, " .
                                "ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, " .
@@ -70,7 +70,7 @@ class Ship
     // FUTURE: Reduce the number of SQL calls needed to accomplish this. Maybe do the update without two selects?
     public static function leavePlanet(\PDO $pdo_db, int $ship_id)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE owner=:owner";
+        $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $ship_id);
         $stmt->execute();
@@ -80,7 +80,7 @@ class Ship
         {
             foreach ($planets_owned as $tmp_planet)
             {
-                $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
+                $sql = "SELECT * FROM ::prefix::ships WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':planet_id', $tmp_planet['planet_id']);
                 $stmt->bindParam(':ship_id', $ship_id);
@@ -91,7 +91,7 @@ class Ship
                 {
                     foreach ($ships_on_planet as $tmp_ship)
                     {
-                        $sql = "UPDATE {$pdo_db->prefix}ships SET on_planet='N', planet_id = '0' WHERE ship_id = :ship_id";
+                        $sql = "UPDATE ::prefix::ships SET on_planet='N', planet_id = '0' WHERE ship_id = :ship_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':ship_id', $tmp_ship['ship_id']);
                         $stmt->execute();

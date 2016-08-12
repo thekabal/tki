@@ -40,7 +40,7 @@ class Player
 
         if ($_SESSION['username'] !== null && $_SESSION['password'] !== null)
         {
-            $sql = "SELECT ip_address, password, last_login, ship_id, ship_destroyed, dev_escapepod FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+            $sql = "SELECT ip_address, password, last_login, ship_id, ship_destroyed, dev_escapepod FROM ::prefix::ships WHERE email=:email LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':email', $_SESSION['username']);
             $stmt->execute();
@@ -60,7 +60,7 @@ class Player
                     // Update the players last_login every 60 seconds to cut back SQL Queries.
                     if ($timestamp['now'] >= ($timestamp['last'] + 60))
                     {
-                        $sql = "UPDATE {$pdo_db->prefix}ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
+                        $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':last_login', $stamp);
                         $stmt->bindParam(':ip_address', $_SERVER['REMOTE_ADDR']);

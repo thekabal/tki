@@ -25,7 +25,7 @@ class Reg
     public function __construct(\PDO $pdo_db)
     {
         // Get the config_values from the DB - This is a pdo operation
-        $stmt = "SELECT name,value,type FROM {$pdo_db->prefix}gameconfig";
+        $stmt = "SELECT name,value,type FROM ::prefix::gameconfig";
         $result = $pdo_db->query($stmt);
         Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
 

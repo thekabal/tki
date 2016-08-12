@@ -39,7 +39,7 @@ foreach ($lang_dir as $file_info) // Get a list of the files in the languages di
         $lang_file = mb_substr($file_info->getFilename(), 0, -8); // The actual file name
 
         // Select from the database and return the localized name of the language
-        $query = "SELECT value FROM {$pdo_db->prefix}languages WHERE category = 'regional' AND section = :section AND name = 'local_lang_name';";
+        $query = "SELECT value FROM ::prefix::languages WHERE category = 'regional' AND section = :section AND name = 'local_lang_name';";
         $result = $pdo_db->prepare($query);
         Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 

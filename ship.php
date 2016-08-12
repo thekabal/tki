@@ -32,13 +32,13 @@ echo "<h1>" . $title . "</h1>\n";
 $ship_id = $ship_id ?? null;
 
 // Get playerinfo from database
-$sql = "SELECT team, ship_name, character_name, sector FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT team, ship_name, character_name, sector FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT team, ship_name, character_name, sector FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+$sql = "SELECT team, ship_name, character_name, sector FROM ::prefix::ships WHERE ship_id=:ship_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ship_id', $ship_id);
 $stmt->execute();

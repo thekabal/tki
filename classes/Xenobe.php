@@ -35,14 +35,14 @@ class Xenobe
         $shipgoods = null;
 
         // Obtain sector information
-        $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id";
+        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $playerinfo['sector']);
         $stmt->execute();
         $sectorinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Obtain zone information
-        $sql = "SELECT zone_id, allow_attack, allow_trade FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+        $sql = "SELECT zone_id, allow_attack, allow_trade FROM ::prefix::zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
         $stmt->execute();
@@ -171,7 +171,7 @@ class Xenobe
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
             $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
 
-            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits);
             $stmt->bindParam(':ship_ore', $newore);
@@ -180,7 +180,7 @@ class Xenobe
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
 
-            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore);
             $stmt->bindParam(':port_organics', $amount_organics);
@@ -218,7 +218,7 @@ class Xenobe
             $neworganics = $playerinfo['ship_organics'] + $amount_organics;
             $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
 
-            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits);
             $stmt->bindParam(':ship_ore', $newore);
@@ -227,7 +227,7 @@ class Xenobe
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
 
-            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore);
             $stmt->bindParam(':port_organics', $amount_organics);
@@ -265,7 +265,7 @@ class Xenobe
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
             $newgoods = $playerinfo['ship_goods'] + $amount_goods;
 
-            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits);
             $stmt->bindParam(':ship_ore', $newore);
@@ -274,7 +274,7 @@ class Xenobe
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
 
-            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore);
             $stmt->bindParam(':port_organics', $amount_organics);
@@ -291,13 +291,13 @@ class Xenobe
         $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
         \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
 
-        $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id"; // Get target planet information
+        $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id"; // Get target planet information
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet_id);
         $stmt->execute();
         $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id"; // Get target player information
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $planetinfo['owner']);
         $stmt->execute();
@@ -1102,7 +1102,7 @@ class Xenobe
             $all_sector_fighters = 0;
             $defenses = array();
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
@@ -1119,7 +1119,7 @@ class Xenobe
 
             $i = 0;
             $total_sector_mines = 0;
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
@@ -1327,7 +1327,7 @@ class Xenobe
             $targetlink = 0;
         }
 
-        $sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start = :link_start";
+        $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $playerinfo['sector']);
         $stmt->execute();
@@ -1389,7 +1389,7 @@ class Xenobe
             $total_sector_mines = 0;
             $defenses = array();
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
@@ -1405,7 +1405,7 @@ class Xenobe
             }
 
             $i = 0;
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
@@ -1522,7 +1522,7 @@ class Xenobe
             $all_sector_fighters = 0;
             $defenses = array();
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetinfo['sector']);
             $stmt->execute();
@@ -1540,7 +1540,7 @@ class Xenobe
             $i = 0;
             $total_sector_mines = 0;
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetinfo['sector']);
             $stmt->execute();
@@ -1650,7 +1650,7 @@ class Xenobe
         }
 
         // Update Xenobe record
-        $sql = "UPDATE {$pdo_db->prefix}ships SET ship_energy = :ship_energy, armor_pts = :armor_pts, ship_fighters = :ship_fighters, torps = :torps, credits = :credits WHERE ship_id = :ship_id";
+        $sql = "UPDATE ::prefix::ships SET ship_energy = :ship_energy, armor_pts = :armor_pts, ship_fighters = :ship_fighters, torps = :torps, credits = :credits WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_energy', $playerinfo['ship_energy']);
         $stmt->bindParam(':armor_pts', $playerinfo['armor_pts']);

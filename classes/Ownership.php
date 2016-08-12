@@ -24,7 +24,7 @@ class Ownership
 {
     public static function calc(\PDO $pdo_db, $db, int $sector, Reg $tkireg, Array $langvars) : string
     {
-        $sql = "SELECT owner, team FROM {$pdo_db->prefix}planets WHERE sector_id=:sector_id AND base='Y'";
+        $sql = "SELECT owner, team FROM ::prefix::planets WHERE sector_id=:sector_id AND base='Y'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();
@@ -135,7 +135,7 @@ class Ownership
         // More than one team, war
         if ($nbteams > 1)
         {
-            $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=4 WHERE sector_id=:sector_id";
+            $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $sector);
             $stmt->execute();
@@ -155,7 +155,7 @@ class Ownership
 
         if ($numunallied > 1)
         {
-            $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=4 WHERE sector_id=:sector_id";
+            $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $sector);
             $stmt->execute();
@@ -166,7 +166,7 @@ class Ownership
         // Unallied ship, another team present, war
         if ($numunallied > 0 && $nbteams > 0)
         {
-            $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=4 WHERE sector_id=:sector_id";
+            $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $sector);
             $stmt->execute();
@@ -199,7 +199,7 @@ class Ownership
 
             if ($select_team_res !== false && ($select_team_res->RecordCount() != 0))
             {
-                $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=4 WHERE sector_id=:sector_id";
+                $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':sector_id', $sector);
                 $stmt->execute();
@@ -230,7 +230,7 @@ class Ownership
 
         if ($owners[$winner]['num'] < $tkireg->min_bases_to_own)
         {
-            $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=1 WHERE sector_id=:sector_id";
+            $sql = "UPDATE ::prefix::universe SET zone_id=1 WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $sector);
             $stmt->execute();
@@ -240,19 +240,19 @@ class Ownership
 
         if ($owners[$winner]['type'] == 'C')
         {
-            $sql = "SELECT zone_id FROM {$pdo_db->prefix}zones WHERE team_zone='Y' AND owner=:owner";
+            $sql = "SELECT zone_id FROM ::prefix::zones WHERE team_zone='Y' AND owner=:owner";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner', $owners[$winner]['id']);
             $stmt->execute();
             $zone = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            $sql = "SELECT team_name FROM {$pdo_db->prefix}teams WHERE id=:id";
+            $sql = "SELECT team_name FROM ::prefix::teams WHERE id=:id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':id', $owners[$winner]['id']);
             $stmt->execute();
             $team = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=:zone_id WHERE sector_id=:sector_id";
+            $sql = "UPDATE ::prefix::universe SET zone_id=:zone_id WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':zone_id', $zone['zone_id']);
             $stmt->bindParam(':sector_id', $sector);
@@ -275,7 +275,7 @@ class Ownership
             // Two allies have the same number of bases
             if ($onpar == 1)
             {
-                $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=1 WHERE sector_id=:sector_id";
+                $sql = "UPDATE ::prefix::universe SET zone_id=1 WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':sector_id', $sector);
                 $stmt->execute();
@@ -284,19 +284,19 @@ class Ownership
             }
             else
             {
-                $sql = "SELECT zone_id FROM {$pdo_db->prefix}zones WHERE team_zone='N' AND owner=:owner";
+                $sql = "SELECT zone_id FROM ::prefix::zones WHERE team_zone='N' AND owner=:owner";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':owner', $owners[$winner]['id']);
                 $stmt->execute();
                 $zone = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+                $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':email', $owners[$winner]['id']);
                 $stmt->execute();
                 $ship = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                $sql = "UPDATE {$pdo_db->prefix}universe SET zone_id=:zone_id WHERE sector_id=:sector_id";
+                $sql = "UPDATE ::prefix::universe SET zone_id=:zone_id WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':zone_id', $zone['zone_id']);
                 $stmt->bindParam(':sector_id', $sector);

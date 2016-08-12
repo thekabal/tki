@@ -81,7 +81,7 @@ else
 }
 
 $flag = 0;
-$sql = "SELECT email, character_name, ship_name FROM {$pdo_db->prefix}ships WHERE email=:email || character_name=:character_name || ship_name=:shipname";
+$sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email || character_name=:character_name || ship_name=:shipname";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $username);
 $stmt->bindParam(':character_name', $character);
@@ -126,7 +126,7 @@ if ($flag == 0)
     // Insert code to add player to database
     $stamp = date('Y-m-d H:i:s');
 
-    $sql = "SELECT MAX(turns_used + turns) AS mturns FROM {$pdo_db->prefix}ships";
+    $sql = "SELECT MAX(turns_used + turns) AS mturns FROM ::prefix::ships";
     $stmt = $pdo_db->prepare($sql);
     $stmt->execute();
     $turns_info = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -180,7 +180,7 @@ if ($flag == 0)
         // Add presets for new player
         for ($zz = 0; $zz < $tkireg->max_presets; $zz++)
         {
-            $sql = "INSERT INTO {$pdo_db->prefix}presets (ship_id, preset, type) " .
+            $sql = "INSERT INTO ::prefix::presets (ship_id, preset, type) " .
                    "VALUES (:ship_id, :preset, :type)";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $shipid['ship_id']);
