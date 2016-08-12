@@ -79,14 +79,14 @@ class Ibank
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount3);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE ::prefix::ships SET credits = credits + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
@@ -154,12 +154,12 @@ class Ibank
 
         $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance - :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
+        $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE ::prefix::ships SET credits = credits + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
+        $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
@@ -168,14 +168,14 @@ class Ibank
         $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT name, planet_id, sector_id FROM ::prefix::planets WHERE owner=:owner ORDER BY sector_id ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $playerinfo['ship_id']);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -401,14 +401,14 @@ class Ibank
         $stmt->bindParam(':loanamount', $amount);
         $stmt->bindParam(':loantime', $account['loantime']);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
@@ -699,15 +699,15 @@ class Ibank
                  "</tr>";
 
             $sql = "UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?";
-            $resx = $db->Execute($sql, array($amount, $playerinfo['ship_id']));
+            $db->Execute($sql, array($amount, $playerinfo['ship_id']));
             \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $sql = "UPDATE {$db->prefix}ibank_accounts SET balance = balance + ? WHERE ship_id = ?";
-            $resx = $db->Execute($sql, array($transfer, $target['ship_id']));
+            $db->Execute($sql, array($transfer, $target['ship_id']));
             \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $sql = "INSERT INTO {$db->prefix}ibank_transfers VALUES (NULL, ?, ?, NOW(), ?)";
-            $resx = $db->Execute($sql, array($playerinfo['ship_id'], $target['ship_id'], $transfer));
+            $db->Execute($sql, array($playerinfo['ship_id'], $target['ship_id'], $transfer));
             \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
         else
@@ -779,11 +779,11 @@ class Ibank
                  "</tr>";
 
             $sql = "UPDATE {$db->prefix}planets SET credits=credits - ? WHERE planet_id = ?";
-            $resx = $db->Execute($sql, array($amount, $splanet_id));
+            $db->Execute($sql, array($amount, $splanet_id));
             \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $sql = "UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id = ?";
-            $resx = $db->Execute($sql, array($transfer, $dplanet_id));
+            $db->Execute($sql, array($transfer, $dplanet_id));
             \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
     }
@@ -836,12 +836,12 @@ class Ibank
 
         $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
+        $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $result = $stmt->execute(array($amount, $playerinfo['ship_id']));
+        $stmt->execute(array($amount, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
@@ -1081,15 +1081,15 @@ class Ibank
             $query .= " AND credits <= $maximum";
         }
 
-        $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
+        $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
         $sql = "UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id = ?;";
-        $res = $db->Execute($sql, array($transfer, $dplanet_id));
+        $db->Execute($sql, array($transfer, $dplanet_id));
         \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE {$db->prefix}ships SET turns=turns - ? WHERE ship_id = ?;";
-        $res = $db->Execute($sql, array($tcost, $playerinfo['ship_id']));
+        $db->Execute($sql, array($tcost, $playerinfo['ship_id']));
         \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
