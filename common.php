@@ -26,10 +26,6 @@ ini_set('session.use_strict_mode', 1);             // Ensure that PHP will not a
 ini_set('session.use_only_cookies', 1);            // Ensure that sessions will only be stored in a cookie
 ini_set('session.cookie_httponly', 1);             // Ensure that javascript cannot tamper with session cookies
 ini_set('session.use_trans_sid', 0);               // Prevent session ID from being put in URLs
-ini_set('session.entropy_file', '/dev/urandom');   // Use urandom as entropy source, to increase randomness
-ini_set('session.entropy_length', '512');          // Increase the length of entropy gathered
-ini_set('session.hash_function', 'sha512');        // Provides improved reduction for session collision
-ini_set('session.hash_bits_per_character', 5);     // Explicitly set the number of bits per character of the hash
 ini_set('session.cookie_secure', on);              // Cookies should only be sent over secure connections (SSL)
 ini_set('url_rewriter.tags', '');                  // Do not pass Session id on the url for improved security on login
 ini_set('default_charset', 'utf-8');               // Set PHP's default character set to utf-8
