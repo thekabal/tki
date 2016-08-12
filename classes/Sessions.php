@@ -73,7 +73,7 @@ class Sessions
 
     public function read($sesskey) : string
     {
-        $qry = "SELECT sessdata FROM {$this->pdo_db->prefix}sessions where sesskey=:sesskey and expiry>=:expiry";
+        $qry = "SELECT sessdata FROM ::prefix::sessions where sesskey=:sesskey and expiry>=:expiry";
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':sesskey', $sesskey);
         $stmt->bindParam(':expiry', $this->currenttime);
@@ -93,7 +93,7 @@ class Sessions
             try
             {
                 // Try to insert the record. This will fail if the record already exists, which will trigger catch below..
-                $qry = "INSERT into {$this->pdo_db->prefix}sessions (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
+                $qry = "INSERT into ::prefix::sessions (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
                 $stmt = $this->pdo_db->prepare($qry);
                 $stmt->bindParam(':sesskey', $sesskey);
                 $stmt->bindParam(':sessdata', $sessdata);
@@ -103,7 +103,7 @@ class Sessions
             catch (\PDOException $e)
             {
                 // Insert didn't work, use update instead
-                $qry = "UPDATE {$this->pdo_db->prefix}sessions SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey";
+                $qry = "UPDATE ::prefix::sessions SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey";
                 $stmt = $this->pdo_db->prepare($qry);
                 $stmt->bindParam(':sesskey', $sesskey);
                 $stmt->bindParam(':sessdata', $sessdata);
@@ -118,7 +118,7 @@ class Sessions
 
     public function destroy($sesskey)
     {
-        $qry = "DELETE from {$this->pdo_db->prefix}sessions where sesskey=:sesskey";
+        $qry = "DELETE from ::prefix::sessions where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':sesskey', $sesskey);
         $result = $stmt->execute();
@@ -127,7 +127,7 @@ class Sessions
 
     public function gc()
     {
-        $qry = "DELETE from {$this->pdo_db->prefix}sessions where expiry>:expiry";
+        $qry = "DELETE from ::prefix::sessions where expiry>:expiry";
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':expiry', $this->expiry);
         $result = $stmt->execute();
@@ -139,7 +139,7 @@ class Sessions
         $old_id = session_id();
         session_regenerate_id();
         $new_id = session_id();
-        $qry = "UPDATE {$this->pdo_db->prefix}sessions SET sesskey=:newkey where sesskey=:sesskey";
+        $qry = "UPDATE ::prefix::sessions SET sesskey=:newkey where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);
         $stmt->bindParam(':newkey', $new_id);
         $stmt->bindParam(':sesskey', $old_id);

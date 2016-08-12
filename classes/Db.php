@@ -136,8 +136,6 @@ class Db
             // Disable emulated prepares so that we get true prepared statements
             // These are slightly slower, but also far safer in a number of cases that matter
             $pdo_db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-            $pdo_db->prefix = $db_prefix;
             return $pdo_db;
         }
     }

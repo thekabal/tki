@@ -38,8 +38,8 @@ class PlayersGateway // Gateway for SQL calls related to Players
         // SQL call that selected the number (count) of logged in ships (should be players)
         // where last login time is between the since_stamp, and the current timestamp ($stamp)
         // But it excludes xenobes.
-        $sql = "SELECT COUNT(*) AS loggedin FROM {$this->pdo_db->prefix}ships " .
-               "WHERE {$this->pdo_db->prefix}ships.last_login BETWEEN timestamp '"
+        $sql = "SELECT COUNT(*) AS loggedin FROM ::prefix::ships " .
+               "WHERE ::prefix::ships.last_login BETWEEN timestamp '"
                . $since_stamp . "' AND timestamp '" . $stamp . "' AND email NOT LIKE '%@xenobe'";
         $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
@@ -50,7 +50,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
 
     public function selectPlayerInfo($email)
     {
-        $sql = "SELECT * FROM {$this->pdo_db->prefix}ships WHERE email = :email";
+        $sql = "SELECT * FROM ::prefix::ships WHERE email = :email";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
