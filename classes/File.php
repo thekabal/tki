@@ -38,7 +38,7 @@ class File
         $final_result = null;
         $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
 
-        $insert_sql = 'INSERT into ' . $pdo_db->prefix . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
+        $insert_sql = 'INSERT into ::prefix::' . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
         $stmt = $pdo_db->prepare($insert_sql);
         Db::logDbErrors($pdo_db, $insert_sql, __LINE__, __FILE__);
 
