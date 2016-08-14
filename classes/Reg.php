@@ -77,6 +77,9 @@ class Reg
         $this->vars[$key] = $value;
     }
 
+    /**
+     * @return mixed
+     */
     public function &__get($key)
     {
         if (array_key_exists($key, $this->vars))
