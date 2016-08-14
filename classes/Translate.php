@@ -68,8 +68,8 @@ class Translate
                 $result->execute();
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
-                // FUTURE: This needs to be simplified
-                while (($row = $result->fetch()) !== false)
+                $lang_entries = $result->fetchAll();
+                foreach ($lang_entries as $row)
                 {
                     self::$langvars[$row['name']] = $row['value'];
                 }
