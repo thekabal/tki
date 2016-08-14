@@ -32,7 +32,6 @@ class Languages
         $stmt->bindValue(':name2', 'local_lang_flag');
         $stmt->execute();
         $lang_rs = $stmt->fetchAll();
-
         $list_of_langs = array();
         if (is_array($lang_rs) === true && count($lang_rs) >= 2)
         {

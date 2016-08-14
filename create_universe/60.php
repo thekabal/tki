@@ -140,7 +140,9 @@ $local_table_timer->stop();
 $variables['create_unchartered_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
-$replace = $pdo_db->exec("INSERT INTO ::prefix::zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Federation space', 0, 'N', 'N', 'N', 'N', 'N', 'N',  'Y', 'N', '$tkireg->max_fed_hull')");
+$max_fed_hull = (string) $tkireg->max_fed_hull;
+
+$replace = $pdo_db->exec("INSERT INTO ::prefix::zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Federation space', 0, 'N', 'N', 'N', 'N', 'N', 'N',  'Y', 'N', '$max_fed_hull')");
 $variables['create_fedspace_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
 $catch_results[$z] = $variables['create_fedspace_results']['result'];
 $z++;

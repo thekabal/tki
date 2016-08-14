@@ -22,6 +22,8 @@ namespace Tki;
 
 class Reg
 {
+    protected $vars = array();
+
     public function __construct(\PDO $pdo_db)
     {
         // Get the config_values from the DB - This is a pdo operation
@@ -38,10 +40,8 @@ class Reg
                 foreach ($big_array as $row)
                 {
                     settype($row['value'], $row['type']);
-                    $this->{$row['name']} = $row['value'];
+                    $this->vars[$row['name']] = $row['value'];
                 }
-
-                return $this;
             }
             else
             {
@@ -55,8 +55,6 @@ class Reg
                         $this->$config_key = $config_value;
                     }
                 }
-
-                return $this;
             }
         }
         else
@@ -71,8 +69,23 @@ class Reg
                     $this->$config_key = $config_value;
                 }
             }
+        }
+    }
 
-            return $this;
+    public function __set($key, $value)
+    {
+        $this->vars[$key] = $value;
+    }
+
+    public function &__get($key)
+    {
+        if (array_key_exists($key, $this->vars))
+        {
+            return $this->vars[$key];
+        }
+        else
+        {
+            return null;
         }
     }
 }

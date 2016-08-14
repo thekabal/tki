@@ -16,7 +16,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: common.php
-
 require_once './vendor/autoload.php';              // Load the auto-loader
 require_once './global_defines.php';               // Defines used in many places
 mb_http_output('UTF-8');                           // Our output should be served in UTF-8 no matter what.
