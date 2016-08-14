@@ -20,58 +20,6 @@ declare(strict_types = 1);
 
 namespace Tki;
 
-class Reg
-{
-    protected $vars = array();
-
-    public function __construct(\PDO $pdo_db)
-    {
-        // Get the config_values from the DB - This is a pdo operation
-        $stmt = "SELECT name,value,type FROM ::prefix::gameconfig";
-        $result = $pdo_db->query($stmt);
-        Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
-
-        if ($result !== false) // If the database is not live, this will give false, and db calls will fail silently
-        {
-            $big_array = $result->fetchAll();
-            Db::logDbErrors($pdo_db, 'fetchAll from gameconfig', __LINE__, __FILE__);
-            if (!empty($big_array))
-            {
-                foreach ($big_array as $row)
-                {
-                    settype($row['value'], $row['type']);
-                    $this->vars[$row['name']] = $row['value'];
-                }
-            }
-            else
-            {
-                // Slurp in config variables from the ini file directly
-                $ini_file = 'config/classic_config.ini'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
-                $ini_keys = parse_ini_file($ini_file, true);
-                foreach ($ini_keys as $config_category => $config_line)
-                {
-                    foreach ($config_line as $config_key => $config_value)
-                    {
-                        $this->$config_key = $config_value;
-                    }
-                }
-            }
-        }
-        else
-        {
-            // Slurp in config variables from the ini file directly
-            $ini_file = 'config/classic_config.ini'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
-            $ini_keys = parse_ini_file($ini_file, true);
-            foreach ($ini_keys as $config_category => $config_line)
-            {
-                foreach ($config_line as $config_key => $config_value)
-                {
-                    $this->$config_key = $config_value;
-                }
-            }
-        }
-    }
-
     /**
      * @property mixed account_creation_closed
      * @property mixed admin_mail
@@ -226,6 +174,7 @@ class Reg
      * @property mixed start_turns
      * @property mixed starvation_death_rate
      * @property mixed team_planet_transfers
+     * @property mixed tkitimer
      * @property mixed torp_dmg_rate
      * @property mixed torpedo_prate
      * @property mixed torpedo_price
@@ -239,6 +188,58 @@ class Reg
      * @property mixed xen_unemployment
      *
      */
+class Reg
+{
+    protected $vars = array();
+
+    public function __construct(\PDO $pdo_db)
+    {
+        // Get the config_values from the DB - This is a pdo operation
+        $stmt = "SELECT name,value,type FROM ::prefix::gameconfig";
+        $result = $pdo_db->query($stmt);
+        Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+
+        if ($result !== false) // If the database is not live, this will give false, and db calls will fail silently
+        {
+            $big_array = $result->fetchAll();
+            Db::logDbErrors($pdo_db, 'fetchAll from gameconfig', __LINE__, __FILE__);
+            if (!empty($big_array))
+            {
+                foreach ($big_array as $row)
+                {
+                    settype($row['value'], $row['type']);
+                    $this->vars[$row['name']] = $row['value'];
+                }
+            }
+            else
+            {
+                // Slurp in config variables from the ini file directly
+                $ini_file = 'config/classic_config.ini'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+                $ini_keys = parse_ini_file($ini_file, true);
+                foreach ($ini_keys as $config_category => $config_line)
+                {
+                    foreach ($config_line as $config_key => $config_value)
+                    {
+                        $this->$config_key = $config_value;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Slurp in config variables from the ini file directly
+            $ini_file = 'config/classic_config.ini'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+            $ini_keys = parse_ini_file($ini_file, true);
+            foreach ($ini_keys as $config_category => $config_line)
+            {
+                foreach ($config_line as $config_key => $config_value)
+                {
+                    $this->$config_key = $config_value;
+                }
+            }
+        }
+    }
+
     public function __set($key, $value)
     {
         $this->vars[$key] = $value;
