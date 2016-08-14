@@ -115,11 +115,11 @@ class Ports
         return $delta_cost;
     }
 
+    // Here is the trade fonction to strip out some "spaghetti code". The function saves about 60 lines of code, I hope it will be
+    // easier to modify/add something in this part.
     /*
      * @return mixed
      */
-    // Here is the trade fonction to strip out some "spaghetti code". The function saves about 60 lines of code, I hope it will be
-    // easier to modify/add something in this part.
     public static function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, Array $price_array, Array $sectorinfo)
     {
         if ($sectorinfo['port_type'] == $port_type)
