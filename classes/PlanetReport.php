@@ -26,25 +26,6 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function planetReportMenu(Array $playerinfo, Array $langvars)
-    {
-        echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
-        echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
-             "Displays the number of each Commodity on the planet (Ore, Organics, Goods, Energy, Colonists, Credits, Fighters, and Torpedoes)<br>" .
-             "<br>" .
-             "<strong><a href=\"planet_report.php?preptype=2\" name=\"Planet Status\">Change Production</a></strong> &nbsp;&nbsp; <strong>Base Required</strong> on Planet<br>" .
-             "This Report allows you to change the rate of production of commondits on planets that have a base<br>" .
-             "-- You must travel to the planet to build a base set the planet to coporate or change the name (celebrations and such)<br>";
-
-        if ($playerinfo['team'] > 0)
-        {
-            echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> " .
-                 "Commondity Report (like Planet Status) for planets marked Team by you and/or your fellow team member<br><br>";
-        }
-
-        echo "</div>\n";
-    }
-
     public static function standardReport(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
@@ -392,6 +373,25 @@ class PlanetReport
             echo "<input type=hidden name=team_id   value=$playerinfo[team]>\n";
             echo "<input type=submit value=submit>  <input type=reset value=reset>\n";
             echo "</form>\n";
+        }
+
+        echo "</div>\n";
+    }
+
+    public static function planetReportMenu(Array $playerinfo, Array $langvars)
+    {
+        echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
+        echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
+             "Displays the number of each Commodity on the planet (Ore, Organics, Goods, Energy, Colonists, Credits, Fighters, and Torpedoes)<br>" .
+             "<br>" .
+             "<strong><a href=\"planet_report.php?preptype=2\" name=\"Planet Status\">Change Production</a></strong> &nbsp;&nbsp; <strong>Base Required</strong> on Planet<br>" .
+             "This Report allows you to change the rate of production of commondits on planets that have a base<br>" .
+             "-- You must travel to the planet to build a base set the planet to coporate or change the name (celebrations and such)<br>";
+
+        if ($playerinfo['team'] > 0)
+        {
+            echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> " .
+                 "Commondity Report (like Planet Status) for planets marked Team by you and/or your fellow team member<br><br>";
         }
 
         echo "</div>\n";
