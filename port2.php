@@ -108,7 +108,7 @@ else
         // Kami multi-browser window upgrade fix
         if (array_key_exists('port_shopping', $_SESSION) === false || $_SESSION['port_shopping'] !== true)
         {
-            Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
+            Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
             echo "<META HTTP-EQUIV='Refresh' CONTENT='2; URL=main.php'>";
             echo "<div style='color:#f00; font-size:18px;'>Your last Sales Transaction has already been delivered, Please enter the Special Port and select your order.</div>\n";
             echo "<br>\n";

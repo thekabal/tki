@@ -24,10 +24,14 @@ declare(strict_types = 1);
 
 namespace Tki;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class CheckBan
 {
     public static function isBanned(\PDO $pdo_db, array $playerinfo)
     {
+        $request = Request::createFromGlobals();
+
         // Check for IP Ban
         $sql = "SELECT * FROM ::prefix::bans WHERE (ban_type = :ban_type AND ban_mask = :ban_mask1) OR (ban_mask = :ban_mask2)";
         $stmt = $pdo_db->prepare($sql);
@@ -76,7 +80,7 @@ class CheckBan
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindValue(':ban_type', MULTI_BAN);
         $stmt->bindParam(':ban_mask1', $playerinfo['ip_address']);
-        $stmt->bindParam(':ban_mask2', $_SERVER['REMOTE_ADDR']);
+        $stmt->bindParam(':ban_mask2', $request->server->get('REMOTE_ADDR'));
         $stmt->bindParam(':ban_ship', $playerinfo['ship_id']);
         $stmt->execute();
         $multiban_count = $stmt->rowCount();

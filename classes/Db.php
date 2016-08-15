@@ -25,6 +25,7 @@
 namespace Tki;
 
 use PDO;
+use \Symfony\Component\HttpFoundation\Request;
 
 class Db
 {
@@ -142,8 +143,10 @@ class Db
 
     public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
     {
+        $request = Request::createFromGlobals();
+
         // Convert the content of SCRIPT_NAME (in case it has been tainted) to the correct html entities
-        $safe_script_name = htmlentities($_SERVER['SCRIPT_NAME'], ENT_HTML5, 'UTF-8');
+        $safe_script_name = htmlentities($request->server->get('SCRIPT_NAME'), ENT_HTML5, 'UTF-8');
         $db_log = false;
         $error = null;
         $db_error = null;

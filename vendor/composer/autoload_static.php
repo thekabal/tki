@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
 {
     public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'bf9f5270ae66ac6fa0290b4bf47867b7' => __DIR__ . '/..' . '/adodb/adodb-php/adodb.inc.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
@@ -17,6 +18,11 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
         array (
             'Tki\\' => 4,
         ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\HttpFoundation\\' => 33,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -24,6 +30,14 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
         array (
             0 => __DIR__ . '/../..' . '/classes',
             1 => __DIR__ . '/../..' . '/config',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Component\\HttpFoundation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-foundation',
         ),
     );
 

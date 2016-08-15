@@ -94,7 +94,7 @@ $banned = 0;
 
 if ($playerinfo !== null && $playerfound !== false)
 {
-    $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask OR ? LIKE ban_mask;", array($_SERVER['REMOTE_ADDR'], $playerinfo['ip_address']));
+    $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask OR ? LIKE ban_mask;", array($request->server->get('REMOTE_ADDR'), $playerinfo['ip_address']));
     Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     if ($res->RecordCount() != 0)
     {
@@ -115,10 +115,10 @@ if ($playerfound)
             if ($playerinfo['ship_destroyed'] == "N")
             {
                 // Player's ship has not been destroyed
-                Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_LOGIN, $_SERVER['REMOTE_ADDR']);
+                Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_LOGIN, $request->server->get('REMOTE_ADDR'));
                 $stamp = date("Y-m-d H:i:s");
                 $sql = "UPDATE {$db->prefix}ships SET last_login = ?, ip_address = ? WHERE ship_id = ?;";
-                $update = $db->Execute($sql, array($stamp, $_SERVER['REMOTE_ADDR'], $playerinfo['ship_id']));
+                $update = $db->Execute($sql, array($stamp, $request->server->get('REMOTE_ADDR'), $playerinfo['ship_id']));
                 Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 $_SESSION['logged_in'] = true;
@@ -201,9 +201,9 @@ if ($playerfound)
     else
     {
         // password is incorrect
-        echo $langvars['l_login_4gotpw1a'] . "<br><br>" . $langvars['l_login_4gotpw1b'] . " <a href='mail.php?mail=" . $email . "'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw2a'] . "<br><br>" . $langvars['l_login_4gotpw2b'] . " <a href='index.php'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw3'] . " " . $_SERVER['REMOTE_ADDR'] . "...";
-        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_BADLOGIN, $_SERVER['REMOTE_ADDR']);
-        Tki\AdminLog::writeLog($pdo_db, (1000 + LOG_BADLOGIN), "{$_SERVER['REMOTE_ADDR']}|{$email}|{$filtered_post_password}");
+        echo $langvars['l_login_4gotpw1a'] . "<br><br>" . $langvars['l_login_4gotpw1b'] . " <a href='mail.php?mail=" . $email . "'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw2a'] . "<br><br>" . $langvars['l_login_4gotpw2b'] . " <a href='index.php'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw3'] . " " . $request->server->get('REMOTE_ADDR') . "...";
+        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_BADLOGIN, $request->server->get('REMOTE_ADDR'));
+        Tki\AdminLog::writeLog($pdo_db, (1000 + LOG_BADLOGIN), "{$request->server->get('REMOTE_ADDR')}|{$email}|{$filtered_post_password}");
     }
 }
 else
