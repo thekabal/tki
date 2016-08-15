@@ -13,7 +13,8 @@
         "smarty/smarty": "^3.1.29",
         "ezyang/htmlpurifier": "^4.8.0",
         "swiftmailer/swiftmailer": "^5.4.3",
-        "adodb/adodb-php": "v5.20.4"
+        "adodb/adodb-php": "v5.20.4",
+        "symfony/http-foundation": "^3.1"
     },
     "autoload": {
         "psr-4": { "Tki\\": ["classes/", "config/"]}

@@ -24,11 +24,14 @@ declare(strict_types = 1);
 
 namespace Tki;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class SetPaths
 {
     public static function setGamepath() : string
     {
-        $gamepath = dirname($_SERVER['SCRIPT_NAME']);
+        $request = Request::createFromGlobals();
+        $gamepath = dirname($request->server->get('SCRIPT_NAME'));
         if ($gamepath !== null && mb_strlen($gamepath) > 0)
         {
             if ($gamepath === "\\")
@@ -61,8 +64,9 @@ class SetPaths
 
     public static function setGamedomain() : string
     {
+        $request = Request::createFromGlobals();
         $remove_port = true;
-        $gamedomain = $_SERVER['HTTP_HOST'];
+        $gamedomain = $request->server->get('HTTP_HOST');
 
         if ($gamedomain !== null && mb_strlen($gamedomain) > 0)
         {

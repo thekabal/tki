@@ -24,10 +24,14 @@ declare(strict_types = 1);
 
 namespace Tki;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class PlanetReportCE
 {
     public static function buildBase(\PDO $pdo_db, $db, Array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
     {
+        $request = Request::createFromGlobals();
+
         echo "<br>";
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_status']);
         echo "<br><br>";
@@ -57,7 +61,7 @@ class PlanetReportCE
 
         if (!is_numeric($planet_id) || !is_numeric($sector_id))
         {
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $ip = $request->query->get('REMOTE_ADDR');
             $hack_id = 0x1337;
             \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
@@ -103,6 +107,8 @@ class PlanetReportCE
 
     public static function collectCredits(\PDO $pdo_db, $db, Array $langvars, $planetarray, Reg $tkireg)
     {
+        $request = Request::createFromGlobals();
+
         $CS = "GO"; // Current State
 
         // Look up the info for the player that wants to collect the credits.
@@ -128,7 +134,7 @@ class PlanetReportCE
             else
             {
                 $hack_id = 20100401;
-                $ip = $_SERVER['REMOTE_ADDR'];
+                $ip = $request->query->get('REMOTE_ADDR');
                 $planet_id = $res->fields['planet_id'];
                 $sector_id = $res->fields['sector_id'];
                 \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
@@ -225,7 +231,7 @@ class PlanetReportCE
                         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                         if ($res->fields['owned_planet'] == 0)
                         {
-                            $ip = $_SERVER['REMOTE_ADDR'];
+                            $ip = $request->query->get('REMOTE_ADDR');
                             $planet_hack = true;
                             $hack_id = 0x18582;
                             $hack_count[0]++;
@@ -265,7 +271,7 @@ class PlanetReportCE
                         if (array_key_exists("team_id", $prodpercentarray) === true && $prodpercentarray['team_id'] != $team_id)
                         {
                             // They are different so send admin a log
-                            $ip = $_SERVER['REMOTE_ADDR'];
+                            $ip = $request->query->get('REMOTE_ADDR');
                             $planet_hack = true;
                             $hack_id = 0x18531;
                             $hack_count[1]++;
@@ -274,7 +280,7 @@ class PlanetReportCE
                     }
                     else
                     {
-                        $ip = $_SERVER['REMOTE_ADDR'];
+                        $ip = $request->query->get('REMOTE_ADDR');
                         $planet_hack = true;
                         $hack_id = 0x18598;
                         $hack_count[2]++;

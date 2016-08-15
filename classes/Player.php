@@ -20,10 +20,13 @@ declare(strict_types = 1);
 
 namespace Tki;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class Player
 {
     public static function handleAuth(\PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, $template)
     {
+        $request = Request::createFromGlobals();
         $flag = true;
         $error_status = null;
         $playerinfo = array();
@@ -63,7 +66,7 @@ class Player
                         $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':last_login', $stamp);
-                        $stmt->bindParam(':ip_address', $_SERVER['REMOTE_ADDR']);
+                        $stmt->bindParam(':ip_address', $request->server->get('REMOTE_ADDR'));
                         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
                         $stmt->execute();
                         Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);

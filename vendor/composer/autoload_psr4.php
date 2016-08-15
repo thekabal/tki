@@ -7,4 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Tki\\' => array($baseDir . '/classes', $baseDir . '/config'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
 );

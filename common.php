@@ -83,3 +83,7 @@ if ($pdo_db !== null && Tki\Db::isActive($pdo_db))
 }
 
 $lang = $tkireg->default_lang;
+
+use Symfony\Component\HttpFoundation\Request;
+
+$request = Request::createFromGlobals();
