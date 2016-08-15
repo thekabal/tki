@@ -208,6 +208,8 @@ class PlanetReportCE
 
         //  This should patch the game from being hacked with planet Hack.
 
+        $request = Request::createFromGlobals();
+
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $ship_id = $result->fields['ship_id'];

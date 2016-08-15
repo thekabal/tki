@@ -76,11 +76,12 @@ class CheckBan
         }
 
         // Check for Multi Ban (IP, ID)
+        $remote_ip = $request->server->get('REMOTE_ADDR');
         $sql = "SELECT * FROM ::prefix::bans WHERE ban_type = :ban_type AND (ban_mask = :ban_mask1 OR ban_mask = :ban_mask2 OR ban_ship = :ban_ship)";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindValue(':ban_type', MULTI_BAN);
         $stmt->bindParam(':ban_mask1', $playerinfo['ip_address']);
-        $stmt->bindParam(':ban_mask2', $request->server->get('REMOTE_ADDR'));
+        $stmt->bindParam(':ban_mask2', $remote_ip);
         $stmt->bindParam(':ban_ship', $playerinfo['ship_id']);
         $stmt->execute();
         $multiban_count = $stmt->rowCount();
