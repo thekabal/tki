@@ -26,26 +26,6 @@ namespace Tki;
 
 class Planet
 {
-    public function getOwner(\PDO $pdo_db, $db = null, int $planet_id = null, &$owner_info = null)
-    {
-        $owner_info = null;
-        if (($planet_id !== null) && is_numeric($planet_id) && $planet_id > 0)
-        {
-            $sql  = "SELECT ship_id, character_name, team FROM {$db->prefix}planets ";
-            $sql .= "LEFT JOIN {$db->prefix}ships ON {$db->prefix}ships.ship_id = {$db->prefix}planets.owner ";
-            $sql .= "WHERE {$db->prefix}planets.planet_id = ?;";
-            $res = $db->Execute($sql, array($planet_id));
-            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-            if ($res->RecordCount() > 0)
-            {
-                $owner_info = (array) $res->fields;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public static function planetBombing(\PDO $pdo_db, $db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, Array $ownerinfo, Array $planetinfo, $template)
     {
         if ($playerinfo['turns'] < 1)
@@ -1131,5 +1111,24 @@ class Planet
         echo "_+_+_+_+_+_+<br>";
         $resx = $db->Execute("UNLOCK TABLES");
         \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    }
+
+    public function getOwner(\PDO $pdo_db, $db = null, int $planet_id = null, &$owner_info = null)
+    {
+        $owner_info = null;
+        if (($planet_id !== null) && is_numeric($planet_id) && $planet_id > 0)
+        {
+            $sql  = "SELECT ship_id, character_name, team FROM {$db->prefix}planets ";
+            $sql .= "LEFT JOIN {$db->prefix}ships ON {$db->prefix}ships.ship_id = {$db->prefix}planets.owner ";
+            $sql .= "WHERE {$db->prefix}planets.planet_id = ?;";
+            $res = $db->Execute($sql, array($planet_id));
+            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            if ($res->RecordCount() > 0)
+            {
+                $owner_info = (array) $res->fields;
+                return true;
+            }
+        }
+        return false;
     }
 }
