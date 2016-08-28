@@ -845,7 +845,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate2($db, \PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, Reg $tkireg, int $dplanet_id, $minimum, $maximum, $template)
+    public static function ibankConsolidate2($db, \PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, $template)
     {
         $sql = "SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?";
         $res = $db->Execute($sql, array($dplanet_id));
@@ -867,9 +867,6 @@ class Ibank
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
-
-        $minimum = preg_replace("/[^0-9]/", '', $minimum);
-        $maximum = preg_replace("/[^0-9]/", '', $maximum);
 
         $query = "SELECT SUM(credits) AS total, COUNT(*) AS count FROM {$db->prefix}planets WHERE owner = ? AND credits != 0 AND planet_id != ?";
 
@@ -1006,17 +1003,18 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankConsolidate3($db, \PDO $pdo_db, Array $langvars, Array $playerinfo, Reg $tkireg, int $dplanet_id, $minimum, $maximum, $lang, $template)
+    public static function ibankConsolidate3(\PDO $pdo_db, Array $langvars, Array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, $lang, $template)
     {
-        $sql = "SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?";
-        $res = $db->Execute($sql, array($dplanet_id));
-        \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        if (!$res || $res->EOF)
+        $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $dplanet_id);
+        $stmt->execute();
+        $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($dest === null)
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
-
-        $dest = $res->fields;
 
         if (empty($dest['name']))
         {
@@ -1028,30 +1026,33 @@ class Ibank
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
 
-        $minimum = preg_replace("/[^0-9]/", '', $minimum);
-        $maximum = preg_replace("/[^0-9]/", '', $maximum);
-
-        $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM {$db->prefix}planets WHERE owner = ? AND credits != 0 AND planet_id != ?";
-
         if ($minimum != 0)
         {
-            $query .= " AND credits >= $minimum";
+            $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits >= :minimum";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':dplanet_id', $dplanet_id);
+            $stmt->bindParam(':minimum', $minimum);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $amount = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         if ($maximum != 0)
         {
-            $query .= " AND credits <= $maximum";
+            $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits <= :maximum";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':dplanet_id', $dplanet_id);
+            $stmt->bindParam(':maximum', $maximum);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $amount = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
-        $res = $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
-        \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-        $amount = $res->fields;
-
         $fee = $tkireg->ibank_paymentfee * $amount['total'];
-
         $tcost = ceil($amount['count'] / $tkireg->ibank_tconsolidate);
         $transfer = $amount['total'] - $fee;
-
         $cplanet = $transfer + $dest['credits'];
 
         if ($tcost > $playerinfo['turns'])
@@ -1069,27 +1070,40 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout ']. "</a></td>" .
              "</tr>";
 
-        $query = "UPDATE {$db->prefix}planets SET credits=0 WHERE owner = ? AND credits != 0 AND planet_id != ?";
-
         if ($minimum != 0)
         {
-            $query .= " AND credits >= $minimum";
+            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits != 0 AND planet_id != :dplanet_id AND credxits >= :minimum";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':dplanet_id', $dplanet_id);
+            $stmt->bindParam(':minimum', $minimum);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
         if ($maximum != 0)
         {
-            $query .= " AND credits <= $maximum";
+            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits != 0 AND planet_id != :dplanet_id AND credxits <= :maximum";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':dplanet_id', $dplanet_id);
+            $stmt->bindParam(':maximum', $maximum);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
-        $db->Execute($query, array($playerinfo['ship_id'], $dplanet_id));
-        \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::planets SET credits = credits + :credits WHERE planet_id = :planet_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':credits', $credits);
+        $stmt->bindParam(':planet_id', $dplanet_id);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $sql = "UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id = ?;";
-        $db->Execute($sql, array($transfer, $dplanet_id));
-        \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-
-        $sql = "UPDATE {$db->prefix}ships SET turns=turns - ? WHERE ship_id = ?;";
-        $db->Execute($sql, array($tcost, $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::ships SET turns = turns - :turns WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':turns', $tcost);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }

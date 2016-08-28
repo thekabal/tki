@@ -68,6 +68,38 @@ if (mb_strlen(trim($amount)) === 0)
     $amount = false;
 }
 
+// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+$dplanet_id = null;
+$dplanet_id = (int) filter_input(INPUT_POST, 'dplanet_id', FILTER_SANITIZE_NUMBER_INT);
+if (mb_strlen(trim($dplanet_id)) === 0)
+{
+    $dplanet_id = false;
+}
+
+// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+$minimum = null;
+$minimum = (int) filter_input(INPUT_POST, 'minimum', FILTER_SANITIZE_NUMBER_INT);
+if (mb_strlen(trim($minimum)) === 0)
+{
+    $minimum = false;
+}
+else
+{
+        $minimum = preg_replace("/[^0-9]/", '', $minimum);
+}
+
+// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+$maximum = null;
+$maximum = (int) filter_input(INPUT_POST, 'maximum', FILTER_SANITIZE_NUMBER_INT);
+if (mb_strlen(trim($maximum)) === 0)
+{
+    $maximum = false;
+}
+else
+{
+    $maximum = preg_replace("/[^0-9]/", '', $maximum);
+}
+
 if ($command == 'login') // Main menu
 {
     Tki\Ibank::ibankLogin($langvars, $playerinfo, $account);
@@ -122,7 +154,7 @@ elseif ($command == 'consolidate2') // Consolidate compute
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Tki\Ibank::ibankConsolidate3($db, $pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
+    Tki\Ibank::ibankConsolidate3($pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
 }
 else
 {
