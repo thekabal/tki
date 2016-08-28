@@ -31,10 +31,6 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('genesis', 'common', 'glob
 $title = $langvars['l_gns_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
-// Adding db lock to prevent more than 5 planets in a sector
-$resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}universe READ, {$db->prefix}zones READ, {$db->prefix}adodb_logsql WRITE");
-Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
@@ -144,8 +140,6 @@ else
     }
 }
 
-$resx = $db->Execute("UNLOCK TABLES");
-Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 echo "<br><br>";
 
 Tki\Text::gotomain($pdo_db, $lang);

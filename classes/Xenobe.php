@@ -288,9 +288,6 @@ class Xenobe
 
     public static function xenobeToPlanet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, Array $playerinfo, Array $langvars)
     {
-        $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
-        \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
-
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id"; // Get target planet information
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet_id);
@@ -605,9 +602,6 @@ class Xenobe
                 // No salvage for planet because it went to the ship that won
             }
         }
-
-        $resx = $db->Execute("UNLOCK TABLES");
-        \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
 
     public static function xenobeToShip(\PDO $pdo_db, $db, int $ship_id, Reg $tkireg, Array $playerinfo, Array $langvars)
@@ -616,8 +610,6 @@ class Xenobe
         $fighters_lost = null;
 
         // Lookup target details
-        $resa = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}zones READ, {$db->prefix}planets READ, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
-        \Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
         $resultt = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
         \Tki\Db::LogDbErrors($pdo_db, $resultt, __LINE__, __FILE__);
         $targetinfo = $resultt->fields;
@@ -626,9 +618,6 @@ class Xenobe
         // Added because the xenobe were killing each other off
         if (mb_strstr($targetinfo['email'], '@xenobe'))                       // He's a xenobe
         {
-            $resb = $db->Execute("UNLOCK TABLES");
-            \Tki\Db::LogDbErrors($pdo_db, $resb, __LINE__, __FILE__);
-
             return;
         }
 
@@ -1088,9 +1077,6 @@ class Xenobe
                 \Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
             }
         }
-
-        $resj = $db->Execute("UNLOCK TABLES");
-        \Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
     }
 
     public static function xenobeToSecDef(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, int $targetlink, Reg $tkireg)
