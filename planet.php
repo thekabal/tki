@@ -309,7 +309,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             $retOwnerInfo = null;
 
-            $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Tki\Planet::getOwner($pdo_db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
@@ -563,7 +563,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             }
 
             $retOwnerInfo = null;
-            $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Tki\Planet::getOwner($pdo_db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
@@ -599,7 +599,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             unset($_SESSION['planet_selected']);
             $retOwnerInfo = null;
-            $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Tki\Planet::getOwner($pdo_db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))

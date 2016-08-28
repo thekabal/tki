@@ -1113,19 +1113,22 @@ class Planet
         echo "_+_+_+_+_+_+<br>";
     }
 
-    public function getOwner(\PDO $pdo_db, $db = null, int $planet_id = null, &$owner_info = null)
+    public function getOwner(\PDO $pdo_db, int $planet_id, &$owner_info)
     {
         $owner_info = null;
         if (($planet_id !== null) && is_numeric($planet_id) && $planet_id > 0)
         {
-            $sql  = "SELECT ship_id, character_name, team FROM {$db->prefix}planets ";
-            $sql .= "LEFT JOIN {$db->prefix}ships ON {$db->prefix}ships.ship_id = {$db->prefix}planets.owner ";
-            $sql .= "WHERE {$db->prefix}planets.planet_id = ?;";
-            $res = $db->Execute($sql, array($planet_id));
-            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-            if ($res->RecordCount() > 0)
+            $sql  = "SELECT ship_id, character_name, team FROM ::prefix::planets ";
+            $sql .= "LEFT JOIN ::prefix::ships ON ::prefix::ships.ship_id = ::prefix::planets.owner ";
+            $sql .= "WHERE ::prefix::planets.planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_id', $planet_id);
+            $result = $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+
+            if ($result !== null)
             {
-                $owner_info = (array) $res->fields;
+                $owner_info = (array) $stmt->fetch(PDO::FETCH_ASSOC);
                 return true;
             }
         }
