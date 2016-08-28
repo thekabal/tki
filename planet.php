@@ -608,7 +608,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 }
                 else
                 {
-                    BadPlanet::planetCombat($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo);
+                    Planet::planetCombat($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo);
                 }
             }
         }
@@ -636,7 +636,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         }
         elseif ($command == "bomb" && $tkireg->allow_sofa)
         {
-            BadPlanet::planetBombing($pdo_db, $db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
+            Planet::planetBombing($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
         }
         elseif ($command == "scan")
         {
