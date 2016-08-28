@@ -621,9 +621,6 @@ class Planet
 
     public static function shipToShip(\PDO $pdo_db, $db, Array $langvars, int $ship_id, Reg $tkireg, Array $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
     {
-        $resx = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}planets WRITE, {$db->prefix}sector_defense WRITE, {$db->prefix}universe WRITE, {$db->prefix}adodb_logsql WRITE, {$db->prefix}logs WRITE, {$db->prefix}bounty WRITE, {$db->prefix}news WRITE, {$db->prefix}zones READ");
-        \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-
         $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?", array($ship_id));
         \Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $targetinfo = $result2->fields;
@@ -1114,8 +1111,6 @@ class Planet
         echo $langvars['l_cmb_statattackerarmor'] . ": $attackerarmor<br>";
         echo $langvars['l_cmb_statattackertorpdamage'] . ": $attackertorpdamage<br>";
         echo "_+_+_+_+_+_+<br>";
-        $resx = $db->Execute("UNLOCK TABLES");
-        \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
 
     public function getOwner(\PDO $pdo_db, $db = null, int $planet_id = null, &$owner_info = null)

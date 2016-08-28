@@ -47,17 +47,6 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
 
 unset ($_SESSION['ship_selected']);
 
-// Need to also set a WRITE LOCK on {$db->prefix}adodb_logsql WRITE
-// or it will fail to log the sql
-$result = $db->Execute(
-    "LOCK TABLES {$db->prefix}adodb_logsql WRITE, {$db->prefix}languages READ, " .
-    "{$db->prefix}ibank_accounts READ, {$db->prefix}sector_defense WRITE, " .
-    "{$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}bounty WRITE, " .
-    "{$db->prefix}zones READ, {$db->prefix}planets WRITE, " .
-    "{$db->prefix}news WRITE, {$db->prefix}movement_log WRITE, {$db->prefix}logs WRITE;"
-);
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
@@ -896,9 +885,6 @@ else
         }
     }
 }
-
-$resx = $db->Execute('UNLOCK TABLES');
-Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
 $_SESSION['in_combat'] = (bool) false;
 
