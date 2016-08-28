@@ -851,7 +851,7 @@ class Ibank
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $dplanet_id);
         $stmt->execute();
-        $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+        $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if ($dest === null)
         {
@@ -870,14 +870,14 @@ class Ibank
 
         if ($minimum != 0)
         {
-            $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits >= :minimum";
+            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
             $stmt->bindParam(':minimum', $minimum);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            $amount = $stmt->fetch(PDO::FETCH_ASSOC);
+            $amount = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         if ($maximum != 0)
@@ -1015,7 +1015,7 @@ class Ibank
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $dplanet_id);
         $stmt->execute();
-        $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+        $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if ($dest === null)
         {
@@ -1034,26 +1034,26 @@ class Ibank
 
         if ($minimum != 0)
         {
-            $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits >= :minimum";
+            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
             $stmt->bindParam(':minimum', $minimum);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            $amount = $stmt->fetch(PDO::FETCH_ASSOC);
+            $amount = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         if ($maximum != 0)
         {
-            $query = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits <= :maximum";
+            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits <= :maximum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
             $stmt->bindParam(':maximum', $maximum);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            $amount = $stmt->fetch(PDO::FETCH_ASSOC);
+            $amount = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         $fee = $tkireg->ibank_paymentfee * $amount['total'];
