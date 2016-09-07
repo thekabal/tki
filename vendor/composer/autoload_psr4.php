@@ -9,4 +9,8 @@ return array(
     'Tki\\' => array($baseDir . '/classes', $baseDir . '/config'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
+    'Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
+    'Symfony\\Component\\DependencyInjection\\' => array($vendorDir . '/symfony/dependency-injection'),
+    'Symfony\\Component\\Config\\' => array($vendorDir . '/symfony/config'),
+    'PDepend\\' => array($vendorDir . '/pdepend/pdepend/src/main/php/PDepend'),
 );
