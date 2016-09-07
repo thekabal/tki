@@ -1132,6 +1132,7 @@ class Planet
                 return true;
             }
         }
+
         return false;
     }
 }
