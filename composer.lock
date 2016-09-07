@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "72e6c8d8960670149b70cbc9306e07e0",
-    "content-hash": "f219b1ec78bbf88459770a732a8a3c49",
+    "hash": "a0adf31c0822e68c556328e318c81f9f",
+    "content-hash": "b080d556fff7ad9124114847a0c5ce2f",
     "packages": [
         {
             "name": "adodb/adodb-php",
@@ -2525,8 +2525,7 @@
     "aliases": [],
     "minimum-stability": "alpha",
     "stability-flags": {
-        "phpmd/phpmd": 0,
-        "friendsofphp/php-cs-fixer": 15
+        "phpmd/phpmd": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
