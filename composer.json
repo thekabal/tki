@@ -17,8 +17,12 @@
         "symfony/http-foundation": "^3.1"
     },
     "require-dev": {
-            "squizlabs/php_codesniffer": "2.*",
-            "phpmd/phpmd" : "@stable"
+            "squizlabs/php_codesniffer": "v3.0.0RC1",
+            "phpmd/phpmd" : "@stable",
+            "sebastian/phpcpd": "^2.0.4",
+            "sebastian/phpdcd": "^1.0.2",
+            "phpunit/phpunit": "^5.5.4",
+            "friendsofphp/php-cs-fixer": "v2.0.0-alpha"
     },
     "autoload": {
         "psr-4": { "Tki\\": ["classes/", "config/"]}
