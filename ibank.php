@@ -110,7 +110,7 @@ elseif ($command == 'withdraw') // Withdraw menu
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Tki\Ibank::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\Ibank2::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
@@ -118,7 +118,7 @@ elseif ($command == 'deposit') // Deposit menu
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Tki\Ibank::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\Ibank2::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
@@ -126,11 +126,11 @@ elseif ($command == 'transfer') // Main transfer menu
 }
 elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 {
-    Tki\Ibank::ibankTransfer2($db, $pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $template);
+    Tki\Ibank2::ibankTransfer2($db, $pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $template);
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
-    Tki\Ibank::ibankTransfer3($db, $pdo_db, $lang, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $template);
+    Tki\Ibank2::ibankTransfer3($db, $pdo_db, $lang, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $template);
 }
 elseif ($command == 'loans') // Loans menu
 {
@@ -150,11 +150,11 @@ elseif ($command == 'consolidate') // Consolidate menu
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Tki\Ibank::ibankConsolidate2($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
+    Tki\Ibank2::ibankConsolidate2($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Tki\Ibank::ibankConsolidate3($pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
+    Tki\Ibank2::ibankConsolidate3($pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
 }
 else
 {
