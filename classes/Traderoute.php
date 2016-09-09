@@ -1433,7 +1433,7 @@ class Traderoute
 
         if ($j == 1)
         {
-            Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
+            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
         }
     }
 }
