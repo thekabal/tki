@@ -37,7 +37,7 @@ class Planet
 
             if ($result !== null)
             {
-                $owner_info = (array) $stmt->fetch(PDO::FETCH_ASSOC);
+                $owner_info = (array) $stmt->fetch(\PDO::FETCH_ASSOC);
                 return true;
             }
         }
