@@ -43,7 +43,7 @@ $num_traderoutes = $result->RecordCount();
 if ($traderoutes !== null)
 {
     Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
-    Tki\Traderoute::traderouteDie($pdo_db, $lang, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
+    \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
 }
 
 $traderoutes = array();
@@ -122,32 +122,32 @@ if (mb_strlen(trim($command)) === 0)
 if ($command == 'new')
 {
     // Displays new trade route form
-    Tki\Traderoute::traderouteNew($pdo_db, $db, $lang, $tkireg, null, $template, $num_traderoutes, $playerinfo);
+    \Tki\Traderoute2::traderouteNew($pdo_db, $db, $lang, $tkireg, null, $template, $num_traderoutes, $playerinfo);
 }
 elseif ($command == 'create')
 {
     // Enters new route in db
-    Tki\Traderoute::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing);
+    \Tki\Traderoute2::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing);
 }
 elseif ($command == 'edit')
 {
     // Displays new trade route form, edit
-    Tki\Traderoute::traderouteNew($pdo_db, $db, $lang, $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo);
+    \Tki\Traderoute2::traderouteNew($pdo_db, $db, $lang, $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo);
 }
 elseif ($command == 'delete')
 {
     // Displays delete info
-    Tki\Traderoute::traderouteDelete($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
+    \Tki\Traderoute2::traderouteDelete($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
 }
 elseif ($command == 'settings')
 {
     // Global traderoute settings form
-    Tki\Traderoute::traderouteSettings($pdo_db, $lang, $tkireg, $template, $playerinfo);
+    \Tki\Traderoute2::traderouteSettings($pdo_db, $lang, $tkireg, $template, $playerinfo);
 }
 elseif ($command == 'setsettings')
 {
     // Enters settings in db
-    Tki\Traderoute::traderouteSetsettings($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
+    \Tki\Traderoute2::traderouteSetsettings($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
 }
 elseif ($engage !== null)
 {
@@ -158,7 +158,7 @@ elseif ($engage !== null)
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
-        Tki\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
+        \Tki\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
         $i--;
     }
 }
@@ -353,7 +353,7 @@ else
                 $dst = $planet2['sector_id'];
             }
 
-            $dist = Tki\Traderoute::traderouteDistance($pdo_db, $traderoutes[$i]['source_type'], $traderoutes[$i]['dest_type'], $src, $dst, $traderoutes[$i]['circuit'], $playerinfo, $tkireg);
+            $dist = \Tki\Traderoute2::traderouteDistance($pdo_db, $traderoutes[$i]['source_type'], $traderoutes[$i]['dest_type'], $src, $dst, $traderoutes[$i]['circuit'], $playerinfo, $tkireg);
 
             $langvars['l_tdr_escooped_temp'] = str_replace("[tdr_dist_triptime]", $dist['triptime'], $langvars['l_tdr_escooped']);
             $langvars['l_tdr_escooped2_temp'] = str_replace("[tdr_dist_scooped]", $dist['scooped'], $langvars['l_tdr_escooped2']);
