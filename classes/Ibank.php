@@ -1078,7 +1078,7 @@ class Ibank
 
         if ($minimum != 0)
         {
-            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits != 0 AND planet_id != :dplanet_id AND credxits >= :minimum";
+            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits != 0 AND planet_id != :dplanet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
@@ -1098,9 +1098,9 @@ class Ibank
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
-        $sql = "UPDATE ::prefix::planets SET credits = credits + :credits WHERE planet_id = :planet_id";
+        $sql = "UPDATE ::prefix::planets SET credits = :credits WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':credits', $credits);
+        $stmt->bindParam(':credits', $cplanet);
         $stmt->bindParam(':planet_id', $dplanet_id);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
