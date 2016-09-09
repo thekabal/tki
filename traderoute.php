@@ -127,7 +127,7 @@ if ($command == 'new')
 elseif ($command == 'create')
 {
     // Enters new route in db
-    \Tki\Traderoute2::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing);
+    \Tki\Traderoute3::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing);
 }
 elseif ($command == 'edit')
 {
@@ -137,7 +137,7 @@ elseif ($command == 'edit')
 elseif ($command == 'delete')
 {
     // Displays delete info
-    \Tki\Traderoute2::traderouteDelete($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
+    \Tki\Traderoute3::traderouteDelete($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
 }
 elseif ($command == 'settings')
 {
@@ -147,7 +147,7 @@ elseif ($command == 'settings')
 elseif ($command == 'setsettings')
 {
     // Enters settings in db
-    \Tki\Traderoute2::traderouteSetsettings($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
+    \Tki\Traderoute3::traderouteSetsettings($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
 }
 elseif ($engage !== null)
 {
@@ -353,7 +353,7 @@ else
                 $dst = $planet2['sector_id'];
             }
 
-            $dist = \Tki\Traderoute2::traderouteDistance($pdo_db, $traderoutes[$i]['source_type'], $traderoutes[$i]['dest_type'], $src, $dst, $traderoutes[$i]['circuit'], $playerinfo, $tkireg);
+            $dist = \Tki\Traderoute3::traderouteDistance($pdo_db, $traderoutes[$i]['source_type'], $traderoutes[$i]['dest_type'], $src, $dst, $traderoutes[$i]['circuit'], $playerinfo, $tkireg);
 
             $langvars['l_tdr_escooped_temp'] = str_replace("[tdr_dist_triptime]", $dist['triptime'], $langvars['l_tdr_escooped']);
             $langvars['l_tdr_escooped2_temp'] = str_replace("[tdr_dist_scooped]", $dist['scooped'], $langvars['l_tdr_escooped2']);
