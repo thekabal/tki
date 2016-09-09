@@ -572,7 +572,7 @@ class Ibank2
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\Ibank3::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
+            \Tki\Ibank2::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
 
         if ($minimum != 0)
