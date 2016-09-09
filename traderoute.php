@@ -142,7 +142,7 @@ elseif ($command == 'delete')
 elseif ($command == 'settings')
 {
     // Global traderoute settings form
-    \Tki\Traderoute2::traderouteSettings($pdo_db, $lang, $tkireg, $template, $playerinfo);
+    \Tki\Traderoute3::traderouteSettings($pdo_db, $lang, $tkireg, $template, $playerinfo);
 }
 elseif ($command == 'setsettings')
 {
