@@ -121,7 +121,7 @@ else
         }
 
         unset ($_SESSION['port_shopping']);
-        if (Tki\Ibank::isLoanPending($pdo_db, $playerinfo['ship_id'], $tkireg))
+        if (Tki\Loan::isPending($pdo_db, $playerinfo['ship_id'], $tkireg))
         {
             echo $langvars['l_port_loannotrade'] . "<p>";
             echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";

@@ -946,30 +946,6 @@ class Ibank
         die();
     }
 
-    public static function isLoanPending(\PDO $pdo_db, int $ship_id, Reg $tkireg)
-    {
-        $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
-        $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        $account = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-        if ($account['loan'] > 0)
-        {
-            $curtime = time();
-            $difftime = ($curtime - $account['time']) / 60;
-            if ($difftime > $tkireg->ibank_lrate)
-            {
-                return true;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     public static function ibankDeposit(\PDO $pdo_db, $lang, $account, Array $playerinfo)
     {
         // Database driven language entries
