@@ -496,7 +496,7 @@ class Ibank2
 
         if ($minimum != 0)
         {
-            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits >= :minimum";
+            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :planet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
@@ -508,7 +508,7 @@ class Ibank2
 
         if ($maximum != 0)
         {
-            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits != 0 AND planet_id != :dplanet_id AND credxits <= :maximum";
+            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :dplanet_id AND credxits <= :maximum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
@@ -577,7 +577,7 @@ class Ibank2
 
         if ($minimum != 0)
         {
-            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits >= :minimum";
+            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :planet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
@@ -589,7 +589,7 @@ class Ibank2
 
         if ($maximum != 0)
         {
-            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits != 0 AND planet_id != :planet_id AND credits <= :maximum";
+            $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :planet_id AND credits <= :maximum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
@@ -621,7 +621,7 @@ class Ibank2
 
         if ($minimum != 0)
         {
-            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits != 0 AND planet_id != :dplanet_id AND credits >= :minimum";
+            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :dplanet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);
@@ -632,7 +632,7 @@ class Ibank2
 
         if ($maximum != 0)
         {
-            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits != 0 AND planet_id != :dplanet_id AND credxits <= :maximum";
+            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :dplanet_id AND credxits <= :maximum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
             $stmt->bindParam(':dplanet_id', $dplanet_id);

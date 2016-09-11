@@ -84,7 +84,7 @@ class Traderoute2
             $result->MoveNext();
         }
 
-        $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE team = ? AND team != 0 AND owner <> ? ORDER BY sector_id", array($playerinfo['team'], $playerinfo['ship_id']));
+        $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE team = ? AND team <> 0 AND owner <> ? ORDER BY sector_id", array($playerinfo['team'], $playerinfo['ship_id']));
         \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
         $num_team_planets = $result->RecordCount();
