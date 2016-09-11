@@ -76,7 +76,7 @@ class PlanetReportCE
         for ($i = 0; $i < $temp_count2 && $CS == "GO"; $i++)
         {
             echo "<br>";
-            $CS = \Tki\Realspace\realSpaceMove($pdo_db, $db, $langvars, $s_p_pair[$i][0], $tkireg);
+            $CS = \Tki\Realspace\realSpaceMove($pdo_db, $langvars, $s_p_pair[$i][0], $tkireg);
 
             if ($CS == "HOSTILE")
             {
