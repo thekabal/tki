@@ -22,19 +22,25 @@ namespace Tki;
 
 class Realspace
 {
-    public static function realSpaceMove(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, $destination, Reg $tkireg)
+    public static function realSpaceMove(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, int $destination, Reg $tkireg)
     {
-        $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $playerinfo = $res->fields;
+        $sql = "SELECT * FROM ::prefix::ships WHERE email=:email";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':email', $_SESSION['username']);
+        $stmt->execute();
+        $playerinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $result2 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-        \Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-        $start = $result2->fields;
+        $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:playersector";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':playersector', $playerinfo['sector']);
+        $stmt->execute();
+        $start = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $result3 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($destination));
-        \Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-        $finish = $result3->fields;
+        $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:destination";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':destination', $destination);
+        $stmt->execute();
+        $finish = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $deg = pi() / 180;
         $sa1 = $start['angle1'] * $deg;
@@ -99,8 +105,11 @@ class Realspace
             $langvars['l_rs_movetime'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_movetime']);
             echo $langvars['l_rs_movetime'] . "<br><br>";
             echo $langvars['l_rs_noturns'];
-            $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+            $sql = "UPDATE ::prefix::ships SET cleared_defenses = ' ' WHERE ship_id = :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->execute();
 
             $retval = "BREAK-TURNS";
         }
@@ -114,9 +123,13 @@ class Realspace
             if (!$result99->EOF)
             {
                 $fighters_owner = $result99->fields;
-                $nsresult = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fighters_owner['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $nsresult, __LINE__, __FILE__);
-                $nsfighters = $nsresult->fields;
+
+                $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
+                $stmt->execute();
+                $nsfighters = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
                 if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
                     $hostile = 1;
@@ -128,9 +141,13 @@ class Realspace
             if (!$result98->EOF)
             {
                 $fighters_owner = $result98->fields;
-                $nsresult = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fighters_owner['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $nsresult, __LINE__, __FILE__);
-                $nsfighters = $nsresult->fields;
+
+                $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
+                $stmt->execute();
+                $nsfighters = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
                 if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
                     $hostile = 1;
@@ -145,8 +162,19 @@ class Realspace
             else
             {
                 $stamp = date("Y-m-d H:i:s");
-                $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+
+                $sql = "UPDATE ::prefix::ships SET last_login = :last_login, sector = :destination, " .
+                       "ship_energy = ship_energy + :ship_energy, turns = turns - :turns, " .
+                       "turns_used = turns_used + :turns_used WHERE ship_id = :ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':last_login', $stamp);
+                $stmt->bindParam(':sector', $destination);
+                $stmt->bindParam(':ship_energy', $energyscooped);
+                $stmt->bindParam(':turns', $triptime);
+                $stmt->bindParam(':turns_used', $triptime);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->execute();
+
                 $langvars['l_rs_ready_result'] = null;
                 $langvars['l_rs_ready_result'] = str_replace("[sector]", $destination, $langvars['l_rs_ready']);
                 $langvars['l_rs_ready_result'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready_result']);
@@ -156,6 +184,6 @@ class Realspace
             }
         }
 
-        return ($retval);
+        return (string) $retval;
     }
 }
