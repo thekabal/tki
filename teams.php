@@ -231,7 +231,7 @@ switch ($teamwhat)
                     $resy = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whichteam));
                     Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
-                    $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
+                    $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team <> 0;", array($playerinfo['ship_id']));
                     Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                     $i = 0;
                     while (!$res->EOF)
@@ -276,7 +276,7 @@ switch ($teamwhat)
             $resz = $db->Execute("UPDATE {$db->prefix}teams SET number_of_members = number_of_members - 1, creator = ? WHERE id = ?;", array($newcreator, $whichteam));
             Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
 
-            $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team != 0;", array($playerinfo['ship_id']));
+            $res = $db->Execute("SELECT DISTINCT sector_id FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y' AND team <> 0;", array($playerinfo['ship_id']));
             Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
             $i = 0;
