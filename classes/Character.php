@@ -22,7 +22,7 @@ namespace Tki;
 
 class Character
 {
-    public static function kill(\PDO $pdo_db, \ADODB_mysqli $db, int $ship_id, Array $langvars, Reg $tkireg, bool $remove_planets = false)
+    public static function kill(\PDO $pdo_db, int $ship_id, Array $langvars, Reg $tkireg, bool $remove_planets = false)
     {
         $sql = "UPDATE ::prefix::ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defenses=' ' WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
@@ -59,7 +59,7 @@ class Character
         {
             foreach ($sectors_owned as $tmp_sector)
             {
-                Ownership::calc($pdo_db, $db, $tmp_sector, $tkireg->min_bases_to_own, $langvars);
+                Ownership::calc($pdo_db, $tmp_sector, $tkireg->min_bases_to_own, $langvars);
             }
         }
 

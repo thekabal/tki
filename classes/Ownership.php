@@ -22,7 +22,7 @@ namespace Tki;
 
 class Ownership
 {
-    public static function calc(\PDO $pdo_db, \ADODB_mysqli $db, int $sector, Reg $tkireg, Array $langvars) : string
+    public static function calc(\PDO $pdo_db, int $sector, Reg $tkireg, Array $langvars) : string
     {
         $sql = "SELECT owner, team FROM ::prefix::planets WHERE sector_id=:sector_id AND base='Y'";
         $stmt = $pdo_db->prepare($sql);
@@ -118,13 +118,15 @@ class Ownership
             }
             else
             {
-                $team_res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id=?", array($owners[$loop]['id']));
-                Db::LogDbErrors($pdo_db, $team_res, __LINE__, __FILE__);
-                if ($team_res && $team_res->RecordCount() != 0)
+                $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $owners[$loop]['id']);
+                $stmt->execute();
+                $team_owner = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                if ($team_owner !== null)
                 {
-                    $curship = $team_res->fields;
                     $ships[$nbships] = $owners[$loop]['id'];
-                    $steams[$nbships] = $curship['team'];
+                    $steams[$nbships] = $team_owner['team'];
                     $nbships++;
                 }
             }
@@ -177,33 +179,18 @@ class Ownership
         // Unallied ship, another ship in a team, war
         if ($numunallied > 0)
         {
-            $query = "SELECT team FROM {$db->prefix}ships WHERE (";
-            $i = 0;
-            foreach ($ships as $ship)
-            {
-                $query = $query . 'ship_id=' . $ship;
-                $i++;
-                if ($i != $nbships)
-                {
-                    $query = $query . ' OR ';
-                }
-                else
-                {
-                    $query = $query . ')';
-                }
-            }
+            $questionMarks = join(",", array_pad(array(), count($ships), "?"));
+            $sql = "SELECT team FROM ::prefix::ships WHERE ship_id in ($questionMarks) AND team <> 0";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->execute($ships);
+            $select_team = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-            $query = $query . ' AND team != 0';
-            $select_team_res = $db->Execute($query);
-            Db::LogDbErrors($pdo_db, $select_team_res, __LINE__, __FILE__);
-
-            if ($select_team_res !== false && ($select_team_res->RecordCount() != 0))
+            if ($select_team !== null)
             {
                 $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':sector_id', $sector);
                 $stmt->execute();
-
                 return (string) $langvars['l_global_warzone'];
             }
         }

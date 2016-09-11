@@ -517,7 +517,7 @@ class Planet
             }
             else
             {
-                \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                 \Tki\Bounty::collect($pdo_db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
         }
@@ -618,7 +618,7 @@ class Planet
                 \Tki\Db::LogDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
             }
 
-            \Tki\Ownership::calc($pdo_db, $db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
+            \Tki\Ownership::calc($pdo_db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
         }
         else
         {

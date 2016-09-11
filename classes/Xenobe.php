@@ -526,7 +526,7 @@ class Xenobe
         if (!$attackerarmor > 0) // Check if attackers ship destroyed
         {
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
-            \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
@@ -591,7 +591,7 @@ class Xenobe
                 $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $resl, __LINE__, __FILE__);
 
-                \Tki\Ownership::calc($pdo_db, $db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
+                \Tki\Ownership::calc($pdo_db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
             }
             else
             {
@@ -922,7 +922,7 @@ class Xenobe
             // Target had no pod
             {
                 \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|N");
-                \Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
             }
 
             if ($attackerarmor > 0)
@@ -1011,7 +1011,7 @@ class Xenobe
         if (!$attackerarmor > 0)
         {
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "$targetinfo[character_name] destroyed your ship!");
-            \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
             if ($targetarmor > 0)
             {
                 // Target still alive to salvage attacker
@@ -1245,7 +1245,7 @@ class Xenobe
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                    \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                    \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     return;
                 }
 
@@ -1285,7 +1285,7 @@ class Xenobe
 
                             // Actually kill the Xenobe now
                             \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                            \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
                             // Lets get rid of the mines now and return out of this function
                             \Tki\Mines::explode($pdo_db, $targetlink, $roll);
