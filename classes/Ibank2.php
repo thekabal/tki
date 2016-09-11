@@ -65,7 +65,7 @@ class Ibank2
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankTransfer2($db, \PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $template)
+    public static function ibankTransfer2(\ADODB_mysqli $db, \PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $template)
     {
         if ($ship_id !== null) // Ship transfer
         {
@@ -220,7 +220,7 @@ class Ibank2
         }
     }
 
-    public static function ibankTransfer3($db, \PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, $template)
+    public static function ibankTransfer3(\ADODB_mysqli $db, \PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, $template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 

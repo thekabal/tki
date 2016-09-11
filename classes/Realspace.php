@@ -22,7 +22,7 @@ namespace Tki;
 
 class Realspace
 {
-    public static function realSpaceMove(\PDO $pdo_db, $db, Array $langvars, $destination, Reg $tkireg)
+    public static function realSpaceMove(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, $destination, Reg $tkireg)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
