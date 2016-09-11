@@ -353,7 +353,7 @@ class Traderoute
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
-                        Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_tradedestportoutsider'], $template);
+                        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_tradedestportoutsider'], $template);
                     }
                 }
                 else
