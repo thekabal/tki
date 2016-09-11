@@ -22,7 +22,7 @@ namespace Tki;
 
 class Realspace
 {
-    public static function realSpaceMove(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, int $destination, Reg $tkireg)
+    public static function realSpaceMove(\PDO $pdo_db, Array $langvars, int $destination, Reg $tkireg)
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email";
         $stmt = $pdo_db->prepare($sql);
@@ -118,33 +118,17 @@ class Realspace
             // Modified from traderoute.php - sector defense check
             $hostile = 0;
 
-            $result99 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?;", array($destination, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $result99, __LINE__, __FILE__);
-            if (!$result99->EOF)
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND ship_id <> :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $destination);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->execute();
+            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($defenses_present !== null)
             {
-                $fighters_owner = $result99->fields;
-
                 $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
-                $stmt->execute();
-                $nsfighters = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
-                {
-                    $hostile = 1;
-                }
-            }
-
-            $result98 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?;", array($destination, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $result98, __LINE__, __FILE__);
-            if (!$result98->EOF)
-            {
-                $fighters_owner = $result98->fields;
-
-                $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $fighters_owner['ship_id']);
+                $stmt->bindParam(':ship_id', $defenses_present['ship_id']);
                 $stmt->execute();
                 $nsfighters = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
