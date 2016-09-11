@@ -198,8 +198,7 @@ class Team
     public static function showInfo(\PDO $pdo_db, $db, Array $langvars, $whichteam, $isowner, Array $playerinfo, $invite_info, $team, Reg $tkireg)
     {
         // Heading
-        echo "<div align=center>";
-        echo "<h3><font color=white><strong>$team[team_name]</strong>";
+        echo "<div align=center><h3><font color=white><strong>$team[team_name]</strong>";
         echo "<br><font size=2>\"<i>$team[description]</i>\"</font></h3>";
         if ($playerinfo['team'] == $team['id'])
         {
@@ -226,10 +225,8 @@ class Team
         echo "</div>";
 
         // Main table
-        echo "<table border=2 cellspacing=2 cellpadding=2 bgcolor=\"#400040\" width=\"75%\" align=center>";
-        echo "<tr>";
-        echo "<td><font color=white>" . $langvars['l_team_members'] . "</font></td>";
-        echo "</tr><tr bgcolor=$tkireg->color_line2>";
+        echo "<table border=2 cellspacing=2 cellpadding=2 bgcolor=\"#400040\" width=\"75%\" align=center><tr>";
+        echo "<td><font color=white>" . $langvars['l_team_members'] . "</font></td></tr><tr bgcolor=$tkireg->color_line2>";
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE team = ?;", array($whichteam));
         \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         while (!$result->EOF)
@@ -270,8 +267,7 @@ class Team
         }
         else
         {
-            echo "<td>" . $langvars['l_team_noinvites'] . " <strong>" . $team['team_name'] . "</strong>.</td>";
-            echo "</tr><tr>";
+            echo "<td>" . $langvars['l_team_noinvites'] . " <strong>" . $team['team_name'] . "</strong>.</td></tr><tr>";
         }
 
         echo "</tr></table>";
