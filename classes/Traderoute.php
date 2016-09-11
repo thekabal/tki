@@ -360,7 +360,7 @@ class Traderoute
                 {
                     if ($playerinfo['team'] != $zoneinfo['owner'])
                     {
-                        Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_tradedestportoutsider'], $template);
+                        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_tradedestportoutsider'], $template);
                     }
                 }
             }
