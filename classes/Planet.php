@@ -131,7 +131,7 @@ class Planet
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function planetCombat(\PDO $pdo_db, $db, $lang, Array $langvars, Reg $tkireg, $template, Array $playerinfo, $ownerinfo, $planetinfo)
+    public static function planetCombat(\PDO $pdo_db, \ADODB_mysqli $db, $lang, Array $langvars, Reg $tkireg, $template, Array $playerinfo, $ownerinfo, $planetinfo)
     {
         if ($playerinfo['turns'] < 1)
         {

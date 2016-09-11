@@ -65,7 +65,7 @@ class PlanetReport
         }
     }
 
-    public static function standardReport(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
+    public static function standardReport(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
