@@ -196,8 +196,7 @@ class Ibank
              "</td></tr></form>";
 
         // Begin consolidate credits form
-        echo "<tr valign=top>" .
-             "<td><br>" . $langvars['l_ibank_conspl'] . " :<br><br>" .
+        echo "<tr valign=top><td><br>" . $langvars['l_ibank_conspl'] . " :<br><br>" .
              "<form accept-charset='utf-8' action='ibank.php?command=consolidate' method=post>" .
              $langvars['l_ibank_destination'] . " <select class=term name=dplanet_id>";
 
@@ -220,8 +219,7 @@ class Ibank
 
         echo "</select></td><td valign=top align=right>" .
              "<br><input class=term type=submit name=planetc value='" . $langvars['l_ibank_consolidate'] . "'>" .
-             "</td></tr>" .
-             "</form>";
+             "</td></tr></form>";
         // End consolidate credits form
 
         echo "</form><tr valign=bottom>" .
