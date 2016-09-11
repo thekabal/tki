@@ -186,7 +186,7 @@ switch ($teamwhat)
                 {
                     foreach ($sectors as $sector)
                     {
-                        Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
+                        Tki\Ownership::calc($pdo_db, $sector, $tkireg->min_bases_to_own, $langvars);
                     }
                 }
 
@@ -247,7 +247,7 @@ switch ($teamwhat)
                     {
                         foreach ($sectors as $sector)
                         {
-                            Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
+                            Tki\Ownership::calc($pdo_db, $sector, $tkireg->min_bases_to_own, $langvars);
                         }
                     }
 
@@ -293,7 +293,7 @@ switch ($teamwhat)
             {
                 foreach ($sectors as $sector)
                 {
-                    Tki\Ownership::calc($pdo_db, $db, $sector, $tkireg->min_bases_to_own, $langvars);
+                    Tki\Ownership::calc($pdo_db, $sector, $tkireg->min_bases_to_own, $langvars);
                 }
             }
 
