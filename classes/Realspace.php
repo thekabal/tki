@@ -28,19 +28,19 @@ class Realspace
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':email', $_SESSION['username']);
         $stmt->execute();
-        $playerinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $playerinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:playersector";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':playersector', $playerinfo['sector']);
         $stmt->execute();
-        $start = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $start = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:destination";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':destination', $destination);
         $stmt->execute();
-        $finish = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $finish = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $deg = pi() / 180;
         $sa1 = $start['angle1'] * $deg;
@@ -123,14 +123,14 @@ class Realspace
             $stmt->bindParam(':sector_id', $destination);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
-            $defenses_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
             {
                 $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $defenses_present['ship_id']);
                 $stmt->execute();
-                $nsfighters = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $nsfighters = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
                 if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
