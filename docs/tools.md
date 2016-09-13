@@ -9,14 +9,6 @@ found in the `/vendor/bin` directory.
 
   `php vendor/bin/phpcpd . --exclude=templates --exclude=vendor`
 
-- [`phpdcd`](https://github.com/sebastianbergmann/phpdcd) is a Dead Code
-  Detector (DCD) for PHP code. It scans a PHP project for all declared functions
-  and methods and reports those as being "dead code" that are not called at
-  least once. We have not resolved all errors it identifies yet, but are making
-  progress towards doing so. We use it like this:
-
-  `php vendor/bin/phpdcd . --exclude=templates --exclude=vendor`
-
 - [`phpcs`](https://github.com/squizlabs/PHP_CodeSniffer) is PHP Code Sniffer.
   PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations
   of a defined set of coding standards. We use it like this:
