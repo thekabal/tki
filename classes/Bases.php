@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Bases
 {
-    public static function buildBase(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
+    public static function buildBase(\PDO $pdo_db, Array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
     {
         $request = Request::createFromGlobals();
 
@@ -73,12 +73,24 @@ class Bases
         if ($planetinfo['ore'] >= $tkireg->base_ore && $planetinfo['organics'] >= $tkireg->base_organics && $planetinfo['goods'] >= $tkireg->base_goods && $planetinfo['credits'] >= $tkireg->base_credits)
         {
             // Create The Base
-            $update1 = $db->Execute("UPDATE {$db->prefix}planets SET base='Y', ore= ? - ?, organics = ? - ?, goods = ? - ?, credits = ? - ? WHERE planet_id = ?;", array($planetinfo['ore'], $tkireg->base_ore, $planetinfo['organics'], $tkireg->base_organics, $planetinfo['goods'], $tkireg->base_goods, $planetinfo['credits'], $tkireg->base_credits, $planet_id));
-            \Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+            $stmt = $pdo_db->prepare("UPDATE ::prefix::planets SET base='Y', ore = :planetore - :baseore, organics = :planetorg - :baseorg, goods = :planetgoods - :basegoods, credits = :planetcredits - :basecredits WHERE planet_id = :planet_id");
+            $stmt->bindParam(':planetore', $planetinfo['ore']);
+            $stmt->bindParam(':baseore', $tkireg->base_ore);
+            $stmt->bindParam(':planetorg', $planetinfo['organics']);
+            $stmt->bindParam(':baseorg', $tkireg->base_organics);
+            $stmt->bindParam(':planetgoods', $planetinfo['goods']);
+            $stmt->bindParam(':basegoods', $tkireg->base_goods);
+            $stmt->bindParam(':planetcredits', $planetinfo['credits']);
+            $stmt->bindParam(':basecredits', $tkireg->base_credits);
+            $stmt->bindParam(':planet_id', $planet_id);
+            $result = $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             // Update User Turns
-            $update1b = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
+            $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id");
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $result = $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             // Refresh Planet Info
             $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";

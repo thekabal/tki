@@ -46,7 +46,7 @@ if ($tpcreds !== null && $tpcreds !== false)
 }
 elseif ($buildp !== null && $builds !== null)
 {
-    Tki\Bases::buildBase($pdo_db, $db, $langvars, $buildp, $builds, $tkireg);
+    Tki\Bases::buildBase($pdo_db, $langvars, $buildp, $builds, $tkireg);
 }
 else
 {
