@@ -162,7 +162,7 @@ class Ibank2
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':planet_id', $splanet_id);
             $stmt->execute();
-            $source = $stmt->fetch(PDO::FETCH_ASSOC);
+            $source = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($source === null)
             {
@@ -178,7 +178,7 @@ class Ibank2
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':planet_id', $dplanet_id);
             $stmt->execute();
-            $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+            $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($dest === null)
             {
