@@ -65,7 +65,7 @@ class Ibank2
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankTransfer2(\ADODB_mysqli $db, \PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $template)
+    public static function ibankTransfer2(\PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $template)
     {
         if ($ship_id !== null) // Ship transfer
         {
@@ -101,12 +101,15 @@ class Ibank2
             {
                 $curtime = time();
                 $curtime -= $tkireg->ibank_trate * 60;
-                $sql = "SELECT UNIX_TIMESTAMP(time) as time FROM {$db->prefix}ibank_transfers WHERE UNIX_TIMESTAMP(time) > ? AND source_id = ? AND dest_id = ?";
-                $res = $db->Execute($sql, array($curtime, $playerinfo['ship_id'], $target['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-                if (!$res->EOF)
+
+                $stmt = $pdo_db->prepare("SELECT UNIX_TIMESTAMP(time) as time FROM ::prefix::ibank_transfers WHERE UNIX_TIMESTAMP(time) > :curtime AND source_id = :source_id AND dest_id = :dest_id");
+                $stmt->bindParam(':curtime', $curtime);
+                $stmt->bindParam(':source_id', $playerinfo['ship_id']);
+                $stmt->bindParam(':dest_id', $target['ship_id']);
+                $time = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+                if ($time !== null)
                 {
-                    $time = $res->fields;
                     $difftime = ($time['time'] - $curtime) / 60;
                     $langvars['l_ibank_mustwait'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait']);
                     $langvars['l_ibank_mustwait'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
@@ -155,30 +158,32 @@ class Ibank2
                 \TkiIbank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errplanetsrcanddest'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
 
-            $sql = "SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?";
-            $res = $db->Execute($sql, array($splanet_id));
-            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-            if (!$res || $res->EOF)
+            $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_id', $splanet_id);
+            $stmt->execute();
+            $source = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($source === null)
             {
                 \TkiIbank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
-
-            $source = $res->fields;
 
             if (empty($source['name']))
             {
                 $source['name'] = $langvars['l_ibank_unnamed'];
             }
 
-            $sql = "SELECT name, credits, owner, sector_id, base FROM {$db->prefix}planets WHERE planet_id = ?";
-            $res = $db->Execute($sql, array($dplanet_id));
-            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-            if (!$res || $res->EOF)
+            $sql = "SELECT name, credits, owner, sector_id, base FROM ::prefix::planets WHERE planet_id=:planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_id', $dplanet_id);
+            $stmt->execute();
+            $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($dest === null)
             {
                 \TkiIbank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
-
-            $dest = $res->fields;
 
             if (empty($dest['name']))
             {
