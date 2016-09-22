@@ -236,23 +236,21 @@ class Ibank2
 
         if ($ship_id !== null) // Ship transfer
         {
-            // Need to check again to prevent cheating by manual posts
-
-            $sql = "SELECT * FROM {$db->prefix}ships WHERE ship_id = ? AND ship_destroyed ='N' AND turns_used > ?";
-            $res = $db->Execute($sql, array($ship_id, $tkireg->ibank_min_turns));
-            \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-
             if ($playerinfo['ship_id'] == $ship_id)
             {
                 \TkiIbank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errsendyourself'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
 
-            if (!$res || $res->EOF)
+            // Need to check again to prevent cheating by manual posts
+            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
+            $stmt->bindParam(':ship_id', $ship_id);
+            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
+            $target = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($target == null)
             {
                 \TkiIbank::ibankError($pdo_db, $langvars, $langvars['l_ibank_unknowntargetship'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
-
-            $target = $res->fields;
 
             if ($target['turns_used'] < $tkireg->ibank_min_turns)
             {
@@ -271,10 +269,16 @@ class Ibank2
             {
                 $curtime = time();
                 $curtime -= $tkireg->ibank_trate * 60;
-                $sql = "SELECT UNIX_TIMESTAMP(time) as time FROM {$db->prefix}ibank_transfers WHERE UNIX_TIMESTAMP(time) > ? AND source_id = ? AND dest_id = ?";
-                $res = $db->Execute($sql, array($curtime, $playerinfo['ship_id'], $target['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-                if (!$res->EOF)
+
+                $sql = "SELECT UNIX_TIMESTAMP(time) as time FROM ::prefix::ibank_transfers WHERE " .
+                       "UNIX_TIMESTAMP(time) > :curtime AND source_id = :source_id AND dest_id = :dest_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':curtime', $curtime);
+                $stmt->bindParam(':source_id', $playerinfo['ship_id']);
+                $stmt->bindParam(':dest_id', $target['ship_id']);
+                $target = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+                if ($target !== null)
                 {
                     $time = $res->fields;
                     $difftime = ($time['time'] - $curtime) / 60;
