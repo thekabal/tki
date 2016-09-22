@@ -247,7 +247,7 @@ class Ibank2
             $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if ($target == null)
+            if ($target === null)
             {
                 \TkiIbank::ibankError($pdo_db, $langvars, $langvars['l_ibank_unknowntargetship'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
@@ -276,11 +276,10 @@ class Ibank2
                 $stmt->bindParam(':curtime', $curtime);
                 $stmt->bindParam(':source_id', $playerinfo['ship_id']);
                 $stmt->bindParam(':dest_id', $target['ship_id']);
-                $target = $stmt->fetch(\PDO::FETCH_ASSOC);
+                $time = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                if ($target !== null)
+                if ($time !== null)
                 {
-                    $time = $res->fields;
                     $difftime = ($time['time'] - $curtime) / 60;
                     $langvars['l_ibank_mustwait2'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait2']);
                     $langvars['l_ibank_mustwait2'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait2']);
