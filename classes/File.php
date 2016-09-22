@@ -77,7 +77,7 @@ class File
             }
         }
 
-        unset ($ini_keys);
+        unset($ini_keys);
         if ($final_result !== true) // If the final result is not true, rollback our transaction, and return false.
         {
             $pdo_db->rollBack();

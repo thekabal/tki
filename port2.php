@@ -120,7 +120,7 @@ else
             die();
         }
 
-        unset ($_SESSION['port_shopping']);
+        unset($_SESSION['port_shopping']);
         if (Tki\Loan::isPending($pdo_db, $playerinfo['ship_id'], $tkireg))
         {
             echo $langvars['l_port_loannotrade'] . "<p>";
