@@ -45,7 +45,7 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
     die();
 }
 
-unset ($_SESSION['ship_selected']);
+unset($_SESSION['ship_selected']);
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";

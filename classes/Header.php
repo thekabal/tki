@@ -48,7 +48,7 @@ class Header
         }
         else
         {
-            unset ($variables['include_ckeditor']); // Otherwise, we make sure it is NOT set
+            unset($variables['include_ckeditor']); // Otherwise, we make sure it is NOT set
         }
 
         $template->addVariables('langvars', $langvars);
