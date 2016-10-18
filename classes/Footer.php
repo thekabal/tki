@@ -98,10 +98,10 @@ class Footer
             // Database driven language entries
             $langvars_temp = Translate::load($pdo_db, $lang, array('news', 'common', 'footer', 'global_includes', 'logout'));
 
-            // Use Array merge so that we do not clobber the langvars array, and only add to it the items needed for footer
+            // Use array merge so that we do not clobber the langvars array, and only add to it the items needed for footer
             $langvars = array_merge($langvars, $langvars_temp);
 
-            // Use Array unique so that we don't end up with duplicate lang array entries
+            // Use array unique so that we don't end up with duplicate lang array entries
             // This is resulting in an array with blank values for specific keys, so array_unique isn't entirely what we want
             // $langvars = array_unique ($langvars);
 

@@ -34,7 +34,7 @@ class Team
         }
     }
 
-    public static function isTeamMember($team, Array $playerinfo) : bool
+    public static function isTeamMember($team, array $playerinfo) : bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
@@ -47,7 +47,7 @@ class Team
         return (bool) $returnvalue;
     }
 
-    public static function isTeamOwner($team, Array $playerinfo) : bool
+    public static function isTeamOwner($team, array $playerinfo) : bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
@@ -97,7 +97,7 @@ class Team
     }
 
     // Rewritten display of teams list
-    public static function displayAllTeams(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, Reg $tkireg, $order, $type)
+    public static function displayAllTeams(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, Reg $tkireg, $order, $type)
     {
         $row2 = array();
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
@@ -179,7 +179,7 @@ class Team
         echo "</table><br>";
     }
 
-    public static function displayInviteInfo(Array $langvars, Array $playerinfo, $invite_info)
+    public static function displayInviteInfo(array $langvars, array $playerinfo, $invite_info)
     {
         if (!$playerinfo['team_invite'])
         {
@@ -195,7 +195,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, $whichteam, $isowner, Array $playerinfo, $invite_info, $team, Reg $tkireg)
+    public static function showInfo(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, $whichteam, $isowner, array $playerinfo, $invite_info, $team, Reg $tkireg)
     {
         // Heading
         echo "<div align=center><h3><font color=white><strong>$team[team_name]</strong>";

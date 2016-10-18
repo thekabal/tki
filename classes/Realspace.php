@@ -22,7 +22,7 @@ namespace Tki;
 
 class Realspace
 {
-    public static function realSpaceMove(\PDO $pdo_db, Array $langvars, int $destination, Reg $tkireg)
+    public static function realSpaceMove(\PDO $pdo_db, array $langvars, int $destination, Reg $tkireg)
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email";
         $stmt = $pdo_db->prepare($sql);

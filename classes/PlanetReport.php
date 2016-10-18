@@ -22,7 +22,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function planetReportMenu(Array $playerinfo, Array $langvars)
+    public static function planetReportMenu(array $playerinfo, array $langvars)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -65,7 +65,7 @@ class PlanetReport
         }
     }
 
-    public static function standardReport(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
+    public static function standardReport(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, array $playerinfo, $sort, Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 

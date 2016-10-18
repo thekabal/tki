@@ -22,7 +22,7 @@ namespace Tki;
 
 class Combat
 {
-    public static function shipToShip(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, int $ship_id, Reg $tkireg, Array $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
+    public static function shipToShip(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, int $ship_id, Reg $tkireg, array $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage)
     {
         $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?", array($ship_id));
         \Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
