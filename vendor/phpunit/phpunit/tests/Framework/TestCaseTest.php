@@ -639,4 +639,18 @@ class Framework_TestCaseTest extends PHPUnit_Framework_TestCase
         $cloned = clone $mock;
         $this->assertFalse($cloned->cloned);
     }
+
+    public function testConfiguredMockCanBeCreated()
+    {
+        /** @var Mockable $mock */
+        $mock = $this->createConfiguredMock(
+            Mockable::class,
+            [
+                'foo' => false
+            ]
+        );
+
+        $this->assertFalse($mock->foo());
+        $this->assertNull($mock->bar());
+    }
 }
