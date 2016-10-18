@@ -29,9 +29,9 @@ class Translate
     /**
      * @param string[]|null $categories
      */
-    public static function load(\PDO $pdo_db, $language = null, $categories = null) : Array
+    public static function load(\PDO $pdo_db, $language = null, $categories = null) : array
     {
-        // Check if all supplied args are valid, if not return an empty Array.
+        // Check if all supplied args are valid, if not return an empty array.
         if (($pdo_db === null) || ($language === null) || !is_array($categories))
         {
             return self::$langvars;
@@ -50,7 +50,7 @@ class Translate
                 }
             }
 
-            return (Array) self::$langvars;
+            return (array) self::$langvars;
         }
         else
         {
@@ -75,7 +75,7 @@ class Translate
                 }
             }
 
-            return (Array) self::$langvars;
+            return (array) self::$langvars;
         }
     }
 }

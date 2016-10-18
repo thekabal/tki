@@ -37,7 +37,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 echo "<h1>" . $title . "</h1>\n";
 
-// Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
+// Returns null if it doesn't have it set, bool false if its set but fails to validate and the actual value if it all passes.
 $destination = filter_input(INPUT_GET, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
 if ($destination === null)
 {

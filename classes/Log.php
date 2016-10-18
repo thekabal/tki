@@ -26,7 +26,7 @@ namespace Tki;
 
 class Log
 {
-    public static function logParse(Array $langvars, $entry) : array
+    public static function logParse(array $langvars, $entry) : array
     {
         $log_list = array();
         $retvalue = array();

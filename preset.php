@@ -51,7 +51,7 @@ if (array_key_exists('preset', $_POST))
 {
     foreach ($_POST['preset'] as $key => $value)
     {
-        // Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
+        // Returns null if it doesn't have it set, bool false if its set but fails to validate and the actual value if it all passes.
         $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
     }
 }

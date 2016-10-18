@@ -22,7 +22,7 @@ namespace Tki;
 
 class Game
 {
-    public static function isGameClosed(\PDO $pdo_db, Reg $tkireg, $lang, $template, Array $langvars) : bool
+    public static function isGameClosed(\PDO $pdo_db, Reg $tkireg, $lang, $template, array $langvars) : bool
     {
         if ($tkireg->game_closed)
         {

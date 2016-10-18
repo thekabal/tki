@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PlanetReportCE
 {
-    public static function collectCredits(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, $planetarray, Reg $tkireg)
+    public static function collectCredits(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, $planetarray, Reg $tkireg)
     {
         $request = Request::createFromGlobals();
 
@@ -104,7 +104,7 @@ class PlanetReportCE
         echo "<br><br>";
     }
 
-    public static function takeCredits(\PDO $pdo_db, \ADODB_mysqli $db, Array $langvars, int $planet_id)
+    public static function takeCredits(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, int $planet_id)
     {
         // Get basic Database information (ship and planet)
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));

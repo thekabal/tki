@@ -22,7 +22,7 @@ namespace Tki;
 
 class Ibank2
 {
-    public static function ibankWithdraw2(\PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $amount, $account, Reg $tkireg, $template)
+    public static function ibankWithdraw2(\PDO $pdo_db, $lang, array $langvars, array $playerinfo, $amount, $account, Reg $tkireg, $template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -65,7 +65,7 @@ class Ibank2
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankTransfer2(\PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $template)
+    public static function ibankTransfer2(\PDO $pdo_db, $lang, array $langvars, Reg $tkireg, array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $template)
     {
         if ($ship_id !== null) // Ship transfer
         {
@@ -225,7 +225,7 @@ class Ibank2
         }
     }
 
-    public static function ibankTransfer3(\ADODB_mysqli $db, \PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, $template)
+    public static function ibankTransfer3(\ADODB_mysqli $db, \PDO $pdo_db, $lang, array $langvars, array $playerinfo, $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, $template)
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 
@@ -422,7 +422,7 @@ class Ibank2
         }
     }
 
-    public static function ibankDeposit2(\PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, $amount, $account, Reg $tkireg, $template)
+    public static function ibankDeposit2(\PDO $pdo_db, $lang, array $langvars, array $playerinfo, $amount, $account, Reg $tkireg, $template)
     {
         $max_credits_allowed = 18446744073709000000;
 
@@ -479,7 +479,7 @@ class Ibank2
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate2(\PDO $pdo_db, $lang, Array $langvars, Array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, $template)
+    public static function ibankConsolidate2(\PDO $pdo_db, $lang, array $langvars, array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, $template)
     {
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
         $stmt = $pdo_db->prepare($sql);
@@ -560,7 +560,7 @@ class Ibank2
              "</tr>";
     }
 
-    public static function ibankConsolidate3(\PDO $pdo_db, Array $langvars, Array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, $lang, $template)
+    public static function ibankConsolidate3(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, $lang, $template)
     {
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
         $stmt = $pdo_db->prepare($sql);

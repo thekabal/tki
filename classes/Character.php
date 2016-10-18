@@ -22,7 +22,7 @@ namespace Tki;
 
 class Character
 {
-    public static function kill(\PDO $pdo_db, int $ship_id, Array $langvars, Reg $tkireg, bool $remove_planets = false)
+    public static function kill(\PDO $pdo_db, int $ship_id, array $langvars, Reg $tkireg, bool $remove_planets = false)
     {
         $sql = "UPDATE ::prefix::ships SET ship_destroyed='Y', on_planet='N', sector=0, cleared_defenses=' ' WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
@@ -98,7 +98,7 @@ class Character
 
     // Choosing to use a method instead of a property.
     // If we went with a method, and it needed to be changed, we would have to change lots of property->method calls.
-    public static function getInsignia(\PDO $pdo_db, $a_username, Array $langvars) : string
+    public static function getInsignia(\PDO $pdo_db, $a_username, array $langvars) : string
     {
         // Lookup players score.
         $sql = "SELECT score FROM ::prefix::ships WHERE email =:email";

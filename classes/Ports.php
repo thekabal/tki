@@ -22,7 +22,7 @@ namespace Tki;
 
 class Ports
 {
-    public static function getType(string $ptype, Array $langvars) : string
+    public static function getType(string $ptype, array $langvars) : string
     {
         $ret = '';
         switch ($ptype)
@@ -120,7 +120,7 @@ class Ports
     /*
      * @return mixed
      */
-    public static function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, Array $price_array, Array $sectorinfo)
+    public static function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, array $price_array, array $sectorinfo)
     {
         if ($sectorinfo['port_type'] == $port_type)
         {
