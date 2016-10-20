@@ -240,7 +240,7 @@ class Reg
         }
     }
 
-    public function __set($key, $value)
+    public function __set(string $key, $value)
     {
         $this->vars[$key] = $value;
     }
@@ -248,7 +248,7 @@ class Reg
     /**
      * @return mixed
      */
-    public function &__get($key)
+    public function &__get(string $key)
     {
         if (array_key_exists($key, $this->vars))
         {

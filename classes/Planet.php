@@ -45,7 +45,7 @@ class Planet
         return false;
     }
 
-    public static function planetBombing(\PDO $pdo_db, $lang, array $langvars, Reg $tkireg, array $playerinfo, array $ownerinfo, array $planetinfo, $template)
+    public static function planetBombing(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $ownerinfo, array $planetinfo, string $template)
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -131,7 +131,7 @@ class Planet
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function planetCombat(\PDO $pdo_db, \ADODB_mysqli $db, $lang, array $langvars, Reg $tkireg, $template, array $playerinfo, $ownerinfo, $planetinfo)
+    public static function planetCombat(\PDO $pdo_db, \ADODB_mysqli $db, string $lang, array $langvars, Reg $tkireg, string $template, array $playerinfo, $ownerinfo, $planetinfo)
     {
         if ($playerinfo['turns'] < 1)
         {
