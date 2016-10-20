@@ -22,7 +22,7 @@ namespace Tki;
 
 class Login
 {
-    public static function checkLogin(\PDO $pdo_db, string $lang, Reg $tkireg, string $template) : bool
+    public static function checkLogin(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template) : bool
     {
         // Database driven language entries
         $langvars = Translate::load($pdo_db, $lang, array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
