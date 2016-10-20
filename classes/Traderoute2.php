@@ -22,7 +22,7 @@ namespace Tki;
 
 class Traderoute2
 {
-    public static function traderouteNew(\PDO $pdo_db, \ADODB_mysqli $db, string $lang, Reg $tkireg, int $traderoute_id, string $template, $num_traderoutes, array $playerinfo)
+    public static function traderouteNew(\PDO $pdo_db, \ADODB_mysqli $db, string $lang, Reg $tkireg, int $traderoute_id, Smarty $template, $num_traderoutes, array $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
@@ -402,7 +402,7 @@ class Traderoute2
         die();
     }
 
-    public static function traderouteDie(\PDO $pdo_db, string $lang, Reg $tkireg, string $error_msg, string $template)
+    public static function traderouteDie(\PDO $pdo_db, string $lang, Reg $tkireg, string $error_msg, Smarty $template)
     {
         echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
@@ -412,7 +412,7 @@ class Traderoute2
         die();
     }
 
-    public static function traderouteCheckCompatible(\ADODB_mysqli $db, \PDO $pdo_db, string $lang, $type1, $type2, $move, $circuit, $src, $dest, array $playerinfo, Reg $tkireg, string $template)
+    public static function traderouteCheckCompatible(\ADODB_mysqli $db, \PDO $pdo_db, string $lang, $type1, $type2, $move, $circuit, $src, $dest, array $playerinfo, Reg $tkireg, Smarty $template)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
