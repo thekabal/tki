@@ -84,10 +84,7 @@ class Smarty
         $this->addVariables('template_dir', "templates/{$themeName}");
     }
 
-    /**
-     * @param string $nodeName
-     */
-    public function addVariables($nodeName, $variables)
+    public function addVariables(string $nodeName, $variables)
     {
         $tmpNode = $this->smarty->getTemplateVars($nodeName);
 
