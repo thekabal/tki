@@ -71,7 +71,7 @@ class Sessions
         return true;
     }
 
-    public function read($sesskey) : string
+    public function read(string $sesskey) : string
     {
         $qry = "SELECT sessdata FROM ::prefix::sessions where sesskey=:sesskey and expiry>=:expiry";
         $stmt = $this->pdo_db->prepare($qry);
@@ -82,7 +82,7 @@ class Sessions
         return (string) $result['sessdata']; // PHP7 change requires return to be string: https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
     }
 
-    public function write($sesskey, $sessdata)
+    public function write(string $sesskey, string $sessdata)
     {
         if (Db::isActive($this->pdo_db))
         {
@@ -116,7 +116,7 @@ class Sessions
         }
     }
 
-    public function destroy($sesskey)
+    public function destroy(string $sesskey)
     {
         $qry = "DELETE from ::prefix::sessions where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);

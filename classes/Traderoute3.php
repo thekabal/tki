@@ -578,7 +578,7 @@ class Traderoute3
         //echo "<font size='2'>\n";
     }
 
-    public static function traderouteResultsShowRepeat($engage)
+    public static function traderouteResultsShowRepeat(int $engage)
     {
         echo "<form accept-charset='utf-8' action='traderoute.php?engage=" . $engage . "' method='post'>\n";
         echo "<br>Enter times to repeat <input type='text' name='tr_repeat' value='1' size='5'> <input type='submit' value='submit'>\n";

@@ -48,7 +48,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
         return (int) $online;
     }
 
-    public function selectPlayerInfo($email)
+    public function selectPlayerInfo(string $email)
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email = :email";
         $stmt = $this->pdo_db->prepare($sql);
