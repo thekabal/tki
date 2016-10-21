@@ -41,7 +41,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function teamPlanetCheckboxes($planet, $i) : string
+    public static function teamPlanetCheckboxes(int $planet, $i) : string
     {
         if ($planet[$i]['team'] <= 0)
         {
@@ -53,7 +53,7 @@ class PlanetReport
         }
     }
 
-    public static function sellingCheckboxes($planet, $i) : string
+    public static function sellingCheckboxes(int $planet, $i) : string
     {
         if ($planet[$i]['sells'] != 'Y')
         {

@@ -34,7 +34,7 @@ class Team
         }
     }
 
-    public static function isTeamMember($team, array $playerinfo) : bool
+    public static function isTeamMember(int $team, array $playerinfo) : bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
@@ -47,7 +47,7 @@ class Team
         return (bool) $returnvalue;
     }
 
-    public static function isTeamOwner($team, array $playerinfo) : bool
+    public static function isTeamOwner(int $team, array $playerinfo) : bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)

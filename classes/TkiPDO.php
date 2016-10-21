@@ -32,21 +32,21 @@ class TkiPDO extends \PDO
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
-    public function exec($statement)
+    public function exec(string $statement)
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::exec($statement);
         return $replaced_statement;
     }
 
-    public function prepare($statement, $driver_options = array())
+    public function prepare(string $statement, $driver_options = array())
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::prepare($statement, $driver_options);
         return $replaced_statement;
     }
 
-    public function query($statement)
+    public function query(string $statement)
     {
         $statement = $this->tablePrefix($statement);
         $args = func_get_args();
@@ -62,7 +62,7 @@ class TkiPDO extends \PDO
         }
     }
 
-    protected function tablePrefix($statement): string
+    protected function tablePrefix(string $statement): string
     {
         $statement_with_prefix = str_replace('::prefix::', $this->table_prefix, $statement);
         return (string) $statement_with_prefix;
