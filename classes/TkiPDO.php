@@ -26,20 +26,20 @@ class TkiPDO extends \PDO
 {
     protected $table_prefix;
 
-    public function __construct($dsn, $user = null, $password = null, $prefix = null, $driver_options = array())
+    public function __construct(string $dsn, string $user = null, string $password = null, string $prefix = null, array $driver_options = array())
     {
         $this->table_prefix = $prefix;
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
-    public function exec(string $statement)
+    public function exec($statement)
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::exec($statement);
         return $replaced_statement;
     }
 
-    public function prepare(string $statement, $driver_options = array())
+    public function prepare($statement, $drive_options = array())
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::prepare($statement, $driver_options);
