@@ -22,7 +22,7 @@ namespace Tki;
 
 class Score
 {
-    public static function updateScore(\PDO $pdo_db, $ship_id, Reg $tkireg, array $playerinfo) : int
+    public static function updateScore(\PDO $pdo_db, int $ship_id, Reg $tkireg, array $playerinfo) : int
     {
         // Not currently used in calculation!
         // $base_ore = $tkireg->base_ore;

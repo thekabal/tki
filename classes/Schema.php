@@ -22,7 +22,7 @@ namespace Tki;
 
 class Schema
 {
-    public static function dropTables(\PDO $pdo_db, $db_prefix, $dbtype) : array
+    public static function dropTables(\PDO $pdo_db, string $db_prefix, string $dbtype) : array
     {
         $i = 0;
         $destroy_results = array();
@@ -79,7 +79,7 @@ class Schema
         return $destroy_results;
     }
 
-    public static function dropSequences(\PDO $pdo_db, $db_prefix, $dbtype)
+    public static function dropSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
     {
         $i = 0;
         $destroy_results = array();
@@ -123,7 +123,7 @@ class Schema
         }
     }
 
-    public static function createSequences(\PDO $pdo_db, $db_prefix, $dbtype)
+    public static function createSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
     {
         if ($dbtype == 'postgres9')
         {
@@ -168,7 +168,7 @@ class Schema
         }
     }
 
-    public static function createTables(\PDO $pdo_db, $db_prefix, $dbtype)
+    public static function createTables(\PDO $pdo_db, string $db_prefix, string $dbtype)
     {
         $create_table_results = array();
         $i = 0;
