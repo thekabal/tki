@@ -97,9 +97,6 @@ class Player
         }
     }
 
-    /**
-     * @param Reg $tkireg
-     */
     public static function handleBan(\PDO $pdo_db, string $lang, $timestamp, Smarty $template, array $playerinfo, array $langvars, Reg $tkireg)
     {
         // Check to see if the player is banned every 60 seconds (may need to ajust this).
