@@ -141,7 +141,7 @@ class Db
         }
     }
 
-    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
+    public static function logDbErrors(\PDO $pdo_db, string $query, int $served_line, string $served_page)
     {
         $request = Request::createFromGlobals();
 

@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PlanetReportCE
 {
-    public static function collectCredits(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, $planetarray, Reg $tkireg)
+    public static function collectCredits(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, array $planetarray, Reg $tkireg)
     {
         $request = Request::createFromGlobals();
 

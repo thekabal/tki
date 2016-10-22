@@ -22,7 +22,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function traderouteEngage(\ADODB_mysqli $db, \PDO $pdo_db, string $lang, $j, array $langvars, Reg $tkireg, array $playerinfo, int $engage, $dist, $traderoutes, $portfull, Smarty $template)
+    public static function traderouteEngage(\ADODB_mysqli $db, \PDO $pdo_db, string $lang, int $j, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $dist, array $traderoutes, int $portfull, Smarty $template)
     {
         $traderoute = array();
         $source = array();
