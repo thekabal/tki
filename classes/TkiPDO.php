@@ -39,7 +39,7 @@ class TkiPDO extends \PDO
         return $replaced_statement;
     }
 
-    public function prepare($statement, $drive_options = array())
+    public function prepare($statement, $driver_options = array())
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::prepare($statement, $driver_options);
