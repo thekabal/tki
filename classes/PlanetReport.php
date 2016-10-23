@@ -109,6 +109,7 @@ class PlanetReport
         $stmt->execute();
         $planet_owner_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $i = 0;
+        $planet = array();
         if ($planet_owner_present !== null)
         {
             foreach ($planet_owner_present as $tmp_owner)
