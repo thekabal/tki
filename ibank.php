@@ -73,7 +73,7 @@ $dplanet_id = null;
 $dplanet_id = (int) filter_input(INPUT_POST, 'dplanet_id', FILTER_SANITIZE_NUMBER_INT);
 if (mb_strlen(trim($dplanet_id)) === 0)
 {
-    $dplanet_id = false;
+    $dplanet_id = 0;
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
