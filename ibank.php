@@ -81,11 +81,11 @@ $minimum = null;
 $minimum = (int) filter_input(INPUT_POST, 'minimum', FILTER_SANITIZE_NUMBER_INT);
 if (mb_strlen(trim($minimum)) === 0)
 {
-    $minimum = false;
+    $minimum = 0;
 }
 else
 {
-        $minimum = preg_replace("/[^0-9]/", '', $minimum);
+    $minimum = preg_replace("/[^0-9]/", '', $minimum);
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -93,7 +93,7 @@ $maximum = null;
 $maximum = (int) filter_input(INPUT_POST, 'maximum', FILTER_SANITIZE_NUMBER_INT);
 if (mb_strlen(trim($maximum)) === 0)
 {
-    $maximum = false;
+    $maximum = 0;
 }
 else
 {
