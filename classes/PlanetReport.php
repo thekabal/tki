@@ -65,7 +65,7 @@ class PlanetReport
         }
     }
 
-    public static function standardReport(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, array $playerinfo, $sort, Reg $tkireg)
+    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, $sort, Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -77,45 +77,44 @@ class PlanetReport
             echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> <br>";
         }
 
-        $query = "SELECT * FROM {$db->prefix}planets WHERE owner=$playerinfo[ship_id]";
+        $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
 
         if ($sort !== null)
         {
-            $query .= " ORDER BY";
+            $sql .= " ORDER BY";
             if ($sort == "name")
             {
-                $query .= " $sort ASC";
+                $sql .= " name ASC";
             }
             elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" || $sort == "colonists" || $sort == "credits" || $sort == "fighters")
             {
-                $query .= " $sort DESC, sector_id ASC";
+                $sql .= " $sort DESC, sector_id ASC";
             }
             elseif ($sort == "torp")
             {
-                $query .= " torps DESC, sector_id ASC";
+                $sql .= " torps DESC, sector_id ASC";
             }
             else
             {
-                $query .= " sector_id ASC";
+                $sql .= " sector_id ASC";
             }
         }
         else
         {
-            $query .= " ORDER BY sector_id ASC";
+            $sql .= " ORDER BY sector_id ASC";
         }
 
-        $res = $db->Execute($query);
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $playerinfo['ship_id']);
+        $stmt->execute();
+        $planet_owner_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $i = 0;
-        $planet = array();
-        if ($res)
+        if ($planet_owner_present !== null)
         {
-            while (!$res->EOF)
+            foreach ($planet_owner_present as $tmp_owner)
             {
-                $planet[$i] = $res->fields;
+                $planet[$i] = $tmp_owner['link_dest'];
                 $i++;
-                $res->MoveNext();
             }
         }
 
