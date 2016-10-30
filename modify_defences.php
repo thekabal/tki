@@ -44,13 +44,13 @@ if (mb_strlen(trim($response)) === 0)
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
@@ -64,7 +64,7 @@ if ($playerinfo['turns'] < 1)
     die();
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE defense_id=:defense_id";
+$sql = "SELECT * FROM ::prefix::sector_defense WHERE defense_id=:defense_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':defense_id', $defense_id);
 $stmt->execute();

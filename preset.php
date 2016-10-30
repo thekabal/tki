@@ -32,14 +32,14 @@ echo "<h1>" . $title . "</h1>\n";
 echo "<body class ='" . $body_class . "'>";
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Pull the presets for the player from the db.
-$sql = "SELECT * FROM {$pdo_db->prefix}presets WHERE ship_id=:ship_id";
+$sql = "SELECT * FROM ::prefix::presets WHERE ship_id=:ship_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
 $stmt->execute();
@@ -51,7 +51,7 @@ if (array_key_exists('preset', $_POST))
 {
     foreach ($_POST['preset'] as $key => $value)
     {
-        // Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
+        // Returns null if it doesn't have it set, bool false if its set but fails to validate and the actual value if it all passes.
         $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
     }
 }
@@ -89,7 +89,7 @@ else
     {
         if ($key < $tkireg->max_presets)
         {
-            $sql = "UPDATE {$pdo_db->prefix}presets SET preset=:preset WHERE preset_id=:preset_id";
+            $sql = "UPDATE ::prefix::presets SET preset=:preset WHERE preset_id=:preset_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':preset', $preset_list[key]);
             $stmt->bindParam(':preset_id', $presetinfo[key]['preset_id']);

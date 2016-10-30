@@ -24,7 +24,7 @@ namespace Tki;
 
 class Xenobe
 {
-    public static function xenobeTrade(\PDO $pdo_db, Array $playerinfo, Reg $tkireg)
+    public static function xenobeTrade(\PDO $pdo_db, array $playerinfo, Reg $tkireg)
     {
         // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
         $tkireg->ore_price = 11;
@@ -35,14 +35,14 @@ class Xenobe
         $shipgoods = null;
 
         // Obtain sector information
-        $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id";
+        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $playerinfo['sector']);
         $stmt->execute();
         $sectorinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Obtain zone information
-        $sql = "SELECT zone_id, allow_attack, allow_trade FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+        $sql = "SELECT zone_id, allow_attack, allow_trade FROM ::prefix::zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
         $stmt->execute();
@@ -147,7 +147,7 @@ class Xenobe
         if ($sectorinfo['port_type'] == "ore") // Port ore
         {
             // Set the prices
-            $tkireg->ore_price = $tkireg->ore_price - $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limitt * $tkireg->inventory_factor;
+            $tkireg->ore_price = $tkireg->ore_price - $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
             $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
             $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
 
@@ -171,7 +171,7 @@ class Xenobe
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
             $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
 
-            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits);
             $stmt->bindParam(':ship_ore', $newore);
@@ -180,7 +180,7 @@ class Xenobe
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
 
-            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore);
             $stmt->bindParam(':port_organics', $amount_organics);
@@ -195,7 +195,7 @@ class Xenobe
         {
             // Set the prices
             $tkireg->organics_price = $tkireg->organics_price - $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
-            $tkireg->ore_price = $tkireg->ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limitt * $tkireg->inventory_factor;
+            $tkireg->ore_price = $tkireg->ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
             $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
 
             // Set cargo buy / sell
@@ -218,7 +218,7 @@ class Xenobe
             $neworganics = $playerinfo['ship_organics'] + $amount_organics;
             $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
 
-            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits);
             $stmt->bindParam(':ship_ore', $newore);
@@ -227,7 +227,7 @@ class Xenobe
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
 
-            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore);
             $stmt->bindParam(':port_organics', $amount_organics);
@@ -242,7 +242,7 @@ class Xenobe
         {
             // Set the prices
             $tkireg->goods_price = $tkireg->goods_price - $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
-            $tkireg->ore_price = $tkireg->ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limitt * $tkireg->inventory_factor;
+            $tkireg->ore_price = $tkireg->ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
             $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
 
             // Set cargo buy / sell
@@ -265,7 +265,7 @@ class Xenobe
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
             $newgoods = $playerinfo['ship_goods'] + $amount_goods;
 
-            $sql = "UPDATE {$pdo_db->prefix}ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits);
             $stmt->bindParam(':ship_ore', $newore);
@@ -274,7 +274,7 @@ class Xenobe
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
 
-            $sql = "UPDATE {$pdo_db->prefix}universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore);
             $stmt->bindParam(':port_organics', $amount_organics);
@@ -286,18 +286,15 @@ class Xenobe
         }
     }
 
-    public static function xenobeToPlanet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, Array $playerinfo, Array $langvars)
+    public static function xenobeToPlanet(\PDO $pdo_db, \ADODB_mysqli $db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars)
     {
-        $resh = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}planets WRITE, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
-        \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
-
-        $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id"; // Get target planet information
+        $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id"; // Get target planet information
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet_id);
         $stmt->execute();
         $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id"; // Get target player information
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $planetinfo['owner']);
         $stmt->execute();
@@ -529,7 +526,7 @@ class Xenobe
         if (!$attackerarmor > 0) // Check if attackers ship destroyed
         {
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
-            \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
@@ -594,7 +591,7 @@ class Xenobe
                 $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
                 \Tki\Db::LogDbErrors($pdo_db, $resl, __LINE__, __FILE__);
 
-                \Tki\Ownership::calc($pdo_db, $db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
+                \Tki\Ownership::calc($pdo_db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
             }
             else
             {
@@ -605,19 +602,14 @@ class Xenobe
                 // No salvage for planet because it went to the ship that won
             }
         }
-
-        $resx = $db->Execute("UNLOCK TABLES");
-        \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
 
-    public static function xenobeToShip(\PDO $pdo_db, $db, int $ship_id, Reg $tkireg, Array $playerinfo, Array $langvars)
+    public static function xenobeToShip(\PDO $pdo_db, \ADODB_mysqli $db, int $ship_id, Reg $tkireg, array $playerinfo, array $langvars)
     {
         $armor_lost = null;
         $fighters_lost = null;
 
         // Lookup target details
-        $resa = $db->Execute("LOCK TABLES {$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}zones READ, {$db->prefix}planets READ, {$db->prefix}news WRITE, {$db->prefix}logs WRITE");
-        \Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
         $resultt = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
         \Tki\Db::LogDbErrors($pdo_db, $resultt, __LINE__, __FILE__);
         $targetinfo = $resultt->fields;
@@ -626,9 +618,6 @@ class Xenobe
         // Added because the xenobe were killing each other off
         if (mb_strstr($targetinfo['email'], '@xenobe'))                       // He's a xenobe
         {
-            $resb = $db->Execute("UNLOCK TABLES");
-            \Tki\Db::LogDbErrors($pdo_db, $resb, __LINE__, __FILE__);
-
             return;
         }
 
@@ -933,7 +922,7 @@ class Xenobe
             // Target had no pod
             {
                 \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|N");
-                \Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
             }
 
             if ($attackerarmor > 0)
@@ -1022,7 +1011,7 @@ class Xenobe
         if (!$attackerarmor > 0)
         {
             \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "$targetinfo[character_name] destroyed your ship!");
-            \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
             if ($targetarmor > 0)
             {
                 // Target still alive to salvage attacker
@@ -1088,12 +1077,9 @@ class Xenobe
                 \Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
             }
         }
-
-        $resj = $db->Execute("UNLOCK TABLES");
-        \Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
     }
 
-    public static function xenobeToSecDef(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, int $targetlink, Reg $tkireg)
+    public static function xenobeToSecDef(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg)
     {
         // Check for sector defenses
         if ($targetlink > 0)
@@ -1102,7 +1088,7 @@ class Xenobe
             $all_sector_fighters = 0;
             $defenses = array();
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
@@ -1119,7 +1105,7 @@ class Xenobe
 
             $i = 0;
             $total_sector_mines = 0;
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
@@ -1259,7 +1245,7 @@ class Xenobe
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                    \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                    \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     return;
                 }
 
@@ -1299,7 +1285,7 @@ class Xenobe
 
                             // Actually kill the Xenobe now
                             \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                            \Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
                             // Lets get rid of the mines now and return out of this function
                             \Tki\Mines::explode($pdo_db, $targetlink, $roll);
@@ -1319,7 +1305,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove(\PDO $pdo_db, $db, Array $playerinfo, int $targetlink, Array $langvars, Reg $tkireg)
+    public static function xenobeMove(\PDO $pdo_db, \ADODB_mysqli $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg)
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1327,7 +1313,7 @@ class Xenobe
             $targetlink = 0;
         }
 
-        $sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start = :link_start";
+        $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $playerinfo['sector']);
         $stmt->execute();
@@ -1389,7 +1375,7 @@ class Xenobe
             $total_sector_mines = 0;
             $defenses = array();
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
@@ -1405,7 +1391,7 @@ class Xenobe
             }
 
             $i = 0;
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink);
             $stmt->execute();
@@ -1455,7 +1441,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter(\PDO $pdo_db, $db, Array $playerinfo, $xenobeisdead, Array $langvars, Reg $tkireg)
+    public static function xenobeHunter(\PDO $pdo_db, \ADODB_mysqli $db, array $playerinfo, $xenobeisdead, array $langvars, Reg $tkireg)
     {
         $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
@@ -1522,7 +1508,7 @@ class Xenobe
             $all_sector_fighters = 0;
             $defenses = array();
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetinfo['sector']);
             $stmt->execute();
@@ -1540,7 +1526,7 @@ class Xenobe
             $i = 0;
             $total_sector_mines = 0;
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetinfo['sector']);
             $stmt->execute();
@@ -1584,7 +1570,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeRegen(\PDO $pdo_db, Array $playerinfo, $xen_unemployment, Reg $tkireg)
+    public static function xenobeRegen(\PDO $pdo_db, array $playerinfo, $xen_unemployment, Reg $tkireg)
     {
         $gena = null;
         $gene = null;
@@ -1650,7 +1636,7 @@ class Xenobe
         }
 
         // Update Xenobe record
-        $sql = "UPDATE {$pdo_db->prefix}ships SET ship_energy = :ship_energy, armor_pts = :armor_pts, ship_fighters = :ship_fighters, torps = :torps, credits = :credits WHERE ship_id = :ship_id";
+        $sql = "UPDATE ::prefix::ships SET ship_energy = :ship_energy, armor_pts = :armor_pts, ship_fighters = :ship_fighters, torps = :torps, credits = :credits WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_energy', $playerinfo['ship_energy']);
         $stmt->bindParam(':armor_pts', $playerinfo['armor_pts']);

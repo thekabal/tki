@@ -27,10 +27,11 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'global_includes
 $title = $langvars['l_news_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
+// Default to today's date in case it isn't supplied
 $startdate = date('Y/m/d');
 if (array_key_exists('startdate', $_GET) && ($_GET['startdate'] !== null))
 {
-    // The date wasn't supplied so use today's date
+    // The date was supplied so use it
     $startdate = $_GET['startdate'];
 }
 

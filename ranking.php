@@ -61,7 +61,7 @@ switch ($sort)
         $by = 'rating ASC, character_name ASC';
         break;
     case 'team':
-        $by = "{$pdo_db->prefix}teams.team_name DESC, character_name ASC";
+        $by = "::prefix::teams.team_name DESC, character_name ASC";
         break;
     case 'efficiency':
         $by = 'efficiency DESC';
@@ -118,10 +118,10 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         }
 
         // Set the players online/offline status.
-        $row['online'] = (boolean) false;
+        $row['online'] = (bool) false;
         if ($difftime <= 5)
         {
-            $row['online'] = (boolean) true;
+            $row['online'] = (bool) true;
         }
 
         // Set the characters Insignia.
@@ -143,12 +143,12 @@ if ($rankings !== null && ($variables['num_players'] > 0))
 
         if ($ban_result === false || (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
         {
-            $row['banned'] = (boolean) false;
+            $row['banned'] = (bool) false;
             $row['ban_info'] = null;
         }
         else
         {
-            $row['banned'] = (boolean) true;
+            $row['banned'] = (bool) true;
             $row['ban_info'] = array('type' => $ban_result['ban_type'],
                 'public_info' => "Player banned/locked for the following:\n{$ban_result['public_info']}");
         }
@@ -161,12 +161,12 @@ if ($rankings !== null && ($variables['num_players'] > 0))
 
 if (empty ($_SESSION['username']))
 {
-    $variables['loggedin'] = (boolean) true;
+    $variables['loggedin'] = (bool) true;
     $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');
 }
 else
 {
-    $variables['loggedin'] = (boolean) false;
+    $variables['loggedin'] = (bool) false;
     $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
 }
 

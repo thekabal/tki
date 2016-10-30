@@ -38,20 +38,20 @@ elseif (array_key_exists('op', $_POST) === true)
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $i = 0;
-$sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id";
+$sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
@@ -148,7 +148,7 @@ else
         {
             $defense_owner = $defenses[0]['ship_id'];
 
-            $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $defense_owner);
             $stmt->execute();
@@ -167,7 +167,7 @@ else
     {
         $zone_owner = $zoneinfo['owner'];
 
-        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $zone_owner);
         $stmt->execute();

@@ -13,10 +13,8 @@ auto-loaded where possible, files are being converted to use templates for outpu
   include common.php.
     1. common.php will in turn include the database settings, the global defines, and the autoloader.
     2. After common is complete, the file will continue its processing. 
-- The ideal state that we are moving towards is that all unique units of code are encapsulated in classes, which are
-  auto loaded. For some files this is not done yet, but is planned. For those, we directly include a file instead,
-  which has a single function defined.
-- We try to stay close to psr 1, 2 and 4, with the notable exceptions of our braces being on their own line always.
+- We try to stay close to psr 1, 2, 4, and 12, with the notable exceptions of using the BSD/Allman
+  brace/bracket style and do not follow line-length limits yet.
 - In a templated file, header-t loads the needed HTML headers. Similarly, footer-t loads the needed HTML closing
   statements, copyright notices, and so on. This is a temporary measure until all of the game is templated.
 - Translation support is improving in game. Language outputs should be done via the $langvars array, with

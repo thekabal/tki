@@ -29,7 +29,7 @@ $title = $langvars['l_rs_title'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -37,7 +37,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 echo "<h1>" . $title . "</h1>\n";
 
-// Returns null if it doesn't have it set, boolean false if its set but fails to validate and the actual value if it all passes.
+// Returns null if it doesn't have it set, bool false if its set but fails to validate and the actual value if it all passes.
 $destination = filter_input(INPUT_GET, 'destination', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
 if ($destination === null)
 {

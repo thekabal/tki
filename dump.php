@@ -28,13 +28,13 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('dump', 'main', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
@@ -56,7 +56,7 @@ if ($playerinfo['ship_colonists'] == 0)
 }
 elseif ($sectorinfo['port_type'] == "special")
 {
-    $sql = "UPDATE {$pdo_db->prefix}ships SET ship_colonists=0, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+    $sql = "UPDATE ::prefix::ships SET ship_colonists=0, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
     $stmt->execute();

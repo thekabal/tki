@@ -26,17 +26,17 @@ use PDO;
 
 class AdminLog
 {
-    public static function writeLog(\PDO $pdo_db, int $log_type, $data = null)
+    public static function writeLog(\PDO $pdo_db, int $log_type, string $data = null)
     {
         $result = false;
-        $query = "INSERT INTO {$pdo_db->prefix}logs VALUES (NULL, 0, :logtype, NOW(), :data)";
+        $query = "INSERT INTO ::prefix::logs VALUES (NULL, 0, :logtype, NOW(), :data)";
         $prep = $pdo_db->prepare($query);
         if ($prep !== false) // If the database is not live, this will return false
         {                      // so we should not attempt to write (or it will fail silently)
             $prep->bindParam(':logtype', $log_type, PDO::PARAM_STR);
             $prep->bindParam(':data', $data, PDO::PARAM_STR);
-            $res = $prep->execute();
-            Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            $prep->execute();
+            Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
         }
         else
         {

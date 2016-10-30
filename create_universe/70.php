@@ -46,11 +46,11 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'foo
 
 $z = 0;
 
-$local_table_timer = new Tki\Timer;
+$local_table_timer = new Tki\Timer();
 $local_table_timer->start(); // Start benchmarking
 
 // Get the sector id for any sector that allows planets
-$sth = $pdo_db->prepare("SELECT {$pdo_db->prefix}universe.sector_id FROM {$pdo_db->prefix}universe, {$pdo_db->prefix}zones WHERE {$pdo_db->prefix}zones.zone_id={$pdo_db->prefix}universe.zone_id AND {$pdo_db->prefix}zones.allow_planet='Y'");
+$sth = $pdo_db->prepare("SELECT ::prefix::universe.sector_id FROM ::prefix::universe, ::prefix::zones WHERE ::prefix::zones.zone_id=::prefix::universe.zone_id AND ::prefix::zones.allow_planet='Y'");
 $sth->execute();
 
 // Place those id's into an array.
@@ -71,7 +71,14 @@ shuffle($open_sectors_array); // Internally, shuffle uses rand() so it isn't ide
 
 // Prep the beginning of the insert SQL call
 $p_add = 0;
-$planet_insert_sql = "INSERT INTO {$pdo_db->prefix}planets (colonists, owner, team, prod_ore, prod_organics, prod_goods, prod_energy, prod_fighters, prod_torp, sector_id) VALUES (2, 0, 0, $tkireg->default_prod_ore, $tkireg->default_prod_organics, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, $open_sectors_array[$p_add])";
+$default_prod_ore = $tkireg->default_prod_ore;
+$default_prod_organics = $tkireg->default_prod_organics;
+$default_prod_goods = $tkireg->default_prod_goods;
+$default_prod_energy = $tkireg->default_prod_energy;
+$default_prod_fighters = $tkireg->default_prod_fighters;
+$default_prod_torp = $tkireg->default_prod_torp;
+$planet_insert_sql = "INSERT INTO ::prefix::planets (colonists, owner, team, prod_ore, prod_organics, prod_goods, prod_energy, prod_fighters, prod_torp, sector_id) VALUES (2, 0, 0, $default_prod_ore, $default_prod_organics, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, $open_sectors_array[$p_add])";
+
 $p_add++;
 do
 {
@@ -86,7 +93,7 @@ do
         for ($q = 1; $q <= $add_more; $q++)
         {
             // Add a line of values for every iteration
-            $planet_insert_sql .= ", (2, 0, 0, $tkireg->default_prod_ore, $tkireg->default_prod_organics, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, $open_sectors_array[$p_add])";
+            $planet_insert_sql .= ", (2, 0, 0, $default_prod_ore, $default_prod_organics, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, $open_sectors_array[$p_add])";
             $p_add++;
         }
     }
@@ -95,7 +102,7 @@ do
         if ($p_add < $variables['nump'])
         {
             // Add a line of values for every iteration - but only one, not random amounts
-            $planet_insert_sql .= ", (2, 0, 0, $tkireg->default_prod_ore, $tkireg->default_prod_organics, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, $open_sectors_array[$p_add])";
+            $planet_insert_sql .= ", (2, 0, 0, $default_prod_ore, $default_prod_organics, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, $open_sectors_array[$p_add])";
             $p_add++;
         }
     }
@@ -133,7 +140,7 @@ $start = 1;
 for ($i = 1; $i <= $loops; $i++)
 {
     $local_table_timer->start(); // Start benchmarking
-    $update = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
+    $update = "INSERT INTO ::prefix::links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
         $k = $j + 1;
@@ -187,7 +194,7 @@ $start = 1;
 for ($i = 1; $i <= $loops; $i++)
 {
     $local_table_timer->start(); // Start benchmarking
-    $insert = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
+    $insert = "INSERT INTO ::prefix::links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
         $link1 = random_int(1, (int) $tkireg->max_sectors - 1);
@@ -243,7 +250,7 @@ $start = 1;
 for ($i = 1; $i <= $loops; $i++)
 {
     $local_table_timer->start(); // Start benchmarking
-    $insert = "INSERT INTO {$pdo_db->prefix}links (link_start,link_dest) VALUES ";
+    $insert = "INSERT INTO ::prefix::links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
         $link1 = random_int(1, (int) $tkireg->max_sectors - 1);
@@ -280,7 +287,7 @@ for ($i = 1; $i <= $loops; $i++)
 }
 
 $local_table_timer->start(); // Start benchmarking
-$sql = "DELETE FROM {$pdo_db->prefix}links WHERE link_start = :linkstart OR link_dest = :linkdest";
+$sql = "DELETE FROM ::prefix::links WHERE link_start = :linkstart OR link_dest = :linkdest";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':linkstart', $tkireg->max_sectors);
 $stmt->bindParam(':linkdest', $tkireg->max_sectors);

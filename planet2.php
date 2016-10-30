@@ -60,39 +60,39 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'planet'
 // Array list of valid vars and their types that are alowed for this page.
 // I know this is rather crude but it works.
 $valid_vars = null;
-$valid_vars[] = array("pref" => "_POST", "var" => "transfer_ore", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "tpore", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "allore", "type" => "integer");
+$valid_vars[] = array("pref" => "_POST", "var" => "transfer_ore", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "tpore", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "allore", "type" => "int");
 
-$valid_vars[] = array("pref" => "_POST", "var" => "transfer_organics", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "tporganics", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "allorganics", "type" => "integer");
+$valid_vars[] = array("pref" => "_POST", "var" => "transfer_organics", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "tporganics", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "allorganics", "type" => "int");
 
-$valid_vars[] = array("pref" => "_POST", "var" => "transfer_goods", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "tpgoods", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "allgoods", "type" => "integer");
+$valid_vars[] = array("pref" => "_POST", "var" => "transfer_goods", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "tpgoods", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "allgoods", "type" => "int");
 
-$valid_vars[] = array("pref" => "_POST", "var" => "transfer_energy", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "tpenergy", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "allenergy", "type" => "integer");
+$valid_vars[] = array("pref" => "_POST", "var" => "transfer_energy", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "tpenergy", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "allenergy", "type" => "int");
 
-$valid_vars[] = array("pref" => "_POST", "var" => "transfer_colonists", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "tpcolonists", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "allcolonists", "type" => "integer");
+$valid_vars[] = array("pref" => "_POST", "var" => "transfer_colonists", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "tpcolonists", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "allcolonists", "type" => "int");
 
-$valid_vars[] = array("pref" => "_POST", "var" => "transfer_fighters", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "tpfighters", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "allfighters", "type" => "integer");
+$valid_vars[] = array("pref" => "_POST", "var" => "transfer_fighters", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "tpfighters", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "allfighters", "type" => "int");
 
-$valid_vars[] = array("pref" => "_POST", "var" => "transfer_torps", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "tptorps", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "alltorps", "type" => "integer");
+$valid_vars[] = array("pref" => "_POST", "var" => "transfer_torps", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "tptorps", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "alltorps", "type" => "int");
 
-$valid_vars[] = array("pref" => "_POST", "var" => "transfer_credits", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "tpcredits", "type" => "integer");
-$valid_vars[] = array("pref" => "_POST", "var" => "allcredits", "type" => "integer");
+$valid_vars[] = array("pref" => "_POST", "var" => "transfer_credits", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "tpcredits", "type" => "int");
+$valid_vars[] = array("pref" => "_POST", "var" => "allcredits", "type" => "int");
 
-$valid_vars[] = array("pref" => "_GET", "var" => "planet_id", "type" => "integer");
+$valid_vars[] = array("pref" => "_GET", "var" => "planet_id", "type" => "int");
 
 foreach ($valid_vars as $key => $value)
 {
@@ -160,14 +160,14 @@ if ($planet_id <= 0)
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get the Planet Info
-$sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id AND planet_id > 0 LIMIT 1";
+$sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id AND planet_id > 0 LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':planet_id', $planet_id);
 $stmt->execute();
@@ -623,7 +623,7 @@ else
                     $transfer_credits = 0;
                 }
 
-                $sql = "UPDATE {$pdo_db->prefix}ships SET ship_ore=ship_ore+:ship_ore, ship_organics=ship_organics+:ship_organics, ship_goods=ship_goods+:ship_goods, ship_energy=ship_energy+:ship_energy, ship_colonists=ship_colonists+:ship_colonists, torps=torps+:torps, ship_fighters=ship_fighters+:ship_fighters, credits=credits+:credits, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+                $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:ship_ore, ship_organics=ship_organics+:ship_organics, ship_goods=ship_goods+:ship_goods, ship_energy=ship_energy+:ship_energy, ship_colonists=ship_colonists+:ship_colonists, torps=torps+:torps, ship_fighters=ship_fighters+:ship_fighters, credits=credits+:credits, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_ore', $transfer_ore);
                 $stmt->bindParam(':ship_organics', $transfer_organics);
@@ -636,7 +636,7 @@ else
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
                 $stmt->execute();
 
-                $sql = "UPDATE {$pdo_db->prefix}planets SET ore=ore-:ore, organics=organics-:organics, goods=goods-:goods, energy=energy-:energy, colonists=colonists-:colonists, torps=torps-:torps, fighters=fighters-:fighters, credits=credits-:credits WHERE planet_id=:planet_id";
+                $sql = "UPDATE ::prefix::planets SET ore=ore-:ore, organics=organics-:organics, goods=goods-:goods, energy=energy-:energy, colonists=colonists-:colonists, torps=torps-:torps, fighters=fighters-:fighters, credits=credits-:credits WHERE planet_id=:planet_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ore', $transfer_ore);
                 $stmt->bindParam(':organics', $transfer_organics);

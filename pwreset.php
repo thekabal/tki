@@ -83,7 +83,7 @@ else
 // FUTURE
 
 /// Send email to user & admin notifying of password change
-//$langvars['l_mail_message'] = str_replace ("[ip]", $_SERVER['REMOTE_ADDR'], $langvars['l_mail_message']);
+//$langvars['l_mail_message'] = str_replace ("[ip]", $request->server->get('REMOTE_ADDR'), $langvars['l_mail_message']);
 //$langvars['l_mail_message'] = str_replace ("[game_name]", $tkireg->game_name, $langvars['l_mail_message']);
 
 /// Some reason \r\n is broken, so replace them now.

@@ -32,13 +32,13 @@ echo "<body class=" . $body_class . ">";
 $zone = (int) filter_input(INPUT_GET, 'zone', FILTER_SANITIZE_NUMBER_INT);
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $zone);
 $stmt->execute();
@@ -79,7 +79,7 @@ else
 
         if ($zoneinfo['team_zone'] == 'N')
         {
-            $sql = "SELECT ship_id, character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+            $sql = "SELECT ship_id, character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $zoneinfo['owner']);
             $stmt->execute();
@@ -88,7 +88,7 @@ else
         }
         else
         {
-            $sql = "SELECT team_name, creator, id FROM {$pdo_db->prefix}teams WHERE id=:id LIMIT 1";
+            $sql = "SELECT team_name, creator, id FROM ::prefix::teams WHERE id=:id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':id', $zoneinfo['owner']);
             $stmt->execute();

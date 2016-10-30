@@ -45,27 +45,16 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
     die();
 }
 
-unset ($_SESSION['ship_selected']);
-
-// Need to also set a WRITE LOCK on {$db->prefix}adodb_logsql WRITE
-// or it will fail to log the sql
-$result = $db->Execute(
-    "LOCK TABLES {$db->prefix}adodb_logsql WRITE, {$db->prefix}languages READ, " .
-    "{$db->prefix}ibank_accounts READ, {$db->prefix}sector_defense WRITE, " .
-    "{$db->prefix}ships WRITE, {$db->prefix}universe WRITE, {$db->prefix}bounty WRITE, " .
-    "{$db->prefix}zones READ, {$db->prefix}planets WRITE, " .
-    "{$db->prefix}news WRITE, {$db->prefix}movement_log WRITE, {$db->prefix}logs WRITE;"
-);
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+unset($_SESSION['ship_selected']);
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ship_id', $ship_id);
 $stmt->execute();
@@ -97,7 +86,7 @@ elseif ($_SESSION['in_combat'] !== null && $_SESSION['in_combat'] === true)
 else
 {
     // Set in combat flag
-    $_SESSION['in_combat'] = (boolean) true;
+    $_SESSION['in_combat'] = (bool) true;
 
     // Determine percent chance of success in detecting target ship - based on player's sensors and opponent's cloak
     $success = (10 - $targetinfo['cloak'] + $playerinfo['sensors']) * 5;
@@ -154,7 +143,7 @@ else
     else
     {
         // If scan succeeds, show results and inform target
-        $shipavg = Tki\CalcLevels::avgTech($targetinfo, "ship");
+        $shipavg = Tki\CalcLevels::avgTech($targetinfo, 'ship');
 
         if ($shipavg > $tkireg->max_ewdhullsize)
         {
@@ -636,7 +625,7 @@ else
                 else
                 {
                     Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
-                    Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                    Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
                     Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                     Tki\AdminLog::writeLog($pdo_db, LOG_ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Didn't have the Escape Pod.");
                 }
@@ -662,7 +651,7 @@ else
                             $rating_change = 0 - $rating_change;
                             Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
                             Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
-                            Tki\Character::kill($pdo_db, $db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                            Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
                             Tki\AdminLog::writeLog($pdo_db, LOG_ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Hope fully we only killed off the AI.");
                         }
 
@@ -802,7 +791,7 @@ else
                 else
                 {
                     echo "Didnt have pod?! $playerinfo[dev_escapepod]<br>";
-                    Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                    Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     Tki\Bounty::collect($pdo_db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);
                 }
 
@@ -897,10 +886,7 @@ else
     }
 }
 
-$resx = $db->Execute('UNLOCK TABLES');
-Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-
-$_SESSION['in_combat'] = (boolean) false;
+$_SESSION['in_combat'] = (bool) false;
 
 Tki\Text::gotomain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

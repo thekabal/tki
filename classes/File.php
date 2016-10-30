@@ -25,7 +25,7 @@ namespace Tki;
 
 class File
 {
-    public static function iniToDb(\PDO $pdo_db, $ini_file, $ini_table, $section, Reg $tkireg) : bool
+    public static function iniToDb(\PDO $pdo_db, string $ini_file, string $ini_table, string $section, Reg $tkireg) : bool
     {
         // This is a loop, that reads a ini file, of the type variable = value.
         // It will loop thru the list of the ini variables, and push them into the db.
@@ -36,11 +36,11 @@ class File
         $status_array = array();
         $j = 0;
         $final_result = null;
-        $start_tran_res = $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
-        Db::logDbErrors($pdo_db, $start_tran_res, __LINE__, __FILE__);
+        $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
 
-        $insert_sql = 'INSERT into ' . $pdo_db->prefix . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
+        $insert_sql = 'INSERT into ::prefix::' . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
         $stmt = $pdo_db->prepare($insert_sql);
+        Db::logDbErrors($pdo_db, $insert_sql, __LINE__, __FILE__);
 
         foreach ($ini_keys as $config_category => $config_line)
         {
@@ -77,7 +77,7 @@ class File
             }
         }
 
-        unset ($ini_keys);
+        unset($ini_keys);
         if ($final_result !== true) // If the final result is not true, rollback our transaction, and return false.
         {
             $pdo_db->rollBack();
@@ -96,7 +96,7 @@ class File
 
     // Very close to a drop-in replacement for parse_ini_file, although without the second parameter
     // This defaults to the equivalent of "true" for the second param of parse_ini, ie, process sections
-    public static function betterParseIni($file) : array
+    public static function betterParseIni(string $file) : array
     {
         $ini = file($file, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
 

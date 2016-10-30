@@ -29,14 +29,14 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('warpedit', 'common', 'glo
 echo "<h1>" . $title . "</h1>\n";
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get sectorinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
@@ -59,7 +59,7 @@ if ($playerinfo['dev_warpedit'] < 1)
 }
 
 // Get playerinfo from database
-$sql = "SELECT allow_warpedit FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+$sql = "SELECT allow_warpedit FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
 $stmt->execute();
@@ -76,14 +76,14 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 if ($zoneinfo['allow_warpedit'] == 'L')
 {
     // Get playerinfo from database
-    $sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+    $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
     $stmt->execute();
     $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Get playerinfo from database
-    $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':sector_id', $zoneowner_info['owner']);
     $stmt->execute();
@@ -101,7 +101,7 @@ if ($zoneinfo['allow_warpedit'] == 'L')
     }
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start=:link_start ORDER BY link_dest ASC";
+$sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start ORDER BY link_dest ASC";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':link_start', $playerinfo['sector']);
 $stmt->execute();

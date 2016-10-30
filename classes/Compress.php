@@ -20,6 +20,8 @@ declare(strict_types = 1);
 
 namespace Tki;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class Compress
 {
     public function __construct()
@@ -30,8 +32,10 @@ class Compress
     {
     }
 
-    public static function compress($output)
+    public static function compress(string $output)
     {
+        $request = Request::createFromGlobals();
+
         // Check to see if we have data, if not, then return empty string
         if ($output === null)
         {
@@ -40,9 +44,9 @@ class Compress
 
         // Handle the supported compressions.
         $supported_enc = array();
-        if (array_key_exists('HTTP_ACCEPT_ENCODING', $_SERVER))
+        if ($request->headers->get('HTTP_ACCEPT_ENCODING'))
         {
-            $supported_enc = explode(',', $_SERVER['HTTP_ACCEPT_ENCODING']);
+            $supported_enc = explode(',', $request->headers->get('HTTP_ACCEPT_ENCODING'));
         }
 
         if (in_array('gzip', $supported_enc) === true)

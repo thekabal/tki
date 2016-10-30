@@ -21,7 +21,7 @@
 $langvars = Tki\Translate::load($pdo_db, $lang, array('check_mines', 'common', 'global_includes', 'combat', 'footer', 'news'));
 
 // Get sectorinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $sector);
 $stmt->execute();
@@ -52,7 +52,7 @@ while (!$result3->EOF)
 }
 
 // Compute the ship average. If it's too low then the ship will not hit mines.
-$shipavg = Tki\CalcLevels::avgTech($targetship, "ship");
+$shipavg = Tki\CalcLevels::avgTech($targetship, 'ship');
 
 // The mines will attack if 4 conditions are met
 //    1) There is at least 1 group of mines in the sector
@@ -171,7 +171,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                     {
                         // Or they lose!
                         Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                        Tki\Character::kill($pdo_db, $db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                        Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     }
                 }
             }
