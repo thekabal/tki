@@ -37,10 +37,6 @@ $furcount3 = 0;
 $furcount3a = 0;
 $furcount3h = 0;
 
-// Lock the tables
-$resa = $db->Execute("LOCK TABLES {$db->prefix}xenobe WRITE, {$db->prefix}ships WRITE");
-Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
-
 /*
 //Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}xenobe WHERE email=xenobe_id and active='Y' and ship_destroyed='N' ORDER BY ship_id");
@@ -309,7 +305,3 @@ echo "$furcount3 Xenobe players had ROAM AND HUNT orders of which $furcount3a la
 echo "Xenobe TURNS COMPLETE. <br>";
 echo "<br>";
 // END OF Xenobe TURNS
-
-// Unlock the tables.
-$result = $db->Execute("UNLOCK TABLES");
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);

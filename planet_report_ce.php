@@ -46,11 +46,11 @@ if ($tpcreds !== null && $tpcreds !== false)
 }
 elseif ($buildp !== null && $builds !== null)
 {
-    Tki\PlanetReportCE::buildBase($pdo_db, $db, $langvars, $buildp, $builds, $tkireg);
+    Tki\Bases::buildBase($pdo_db, $langvars, $buildp, $builds, $tkireg);
 }
 else
 {
-    Tki\PlanetReportCE::changePlanetProduction($pdo_db, $db, $langvars, $_POST, $tkireg);
+    Tki\PlanetProduction::productionChange($pdo_db, $db, $langvars, $_POST, $tkireg);
 }
 
 echo '<br><br>';

@@ -47,7 +47,7 @@ else
     if ($_POST['operation'] === null)
     {
         // Get playerinfo from database
-        $sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $_POST['sector']);
         $stmt->execute();

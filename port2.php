@@ -28,20 +28,20 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
 $stmt->execute();
@@ -60,7 +60,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
 {
     if ($zoneinfo['team_zone'] == 'N')
     {
-        $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $zoneinfo['owner']);
         $stmt->execute();
@@ -108,7 +108,7 @@ else
         // Kami multi-browser window upgrade fix
         if (array_key_exists('port_shopping', $_SESSION) === false || $_SESSION['port_shopping'] !== true)
         {
-            Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
+            Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
             echo "<META HTTP-EQUIV='Refresh' CONTENT='2; URL=main.php'>";
             echo "<div style='color:#f00; font-size:18px;'>Your last Sales Transaction has already been delivered, Please enter the Special Port and select your order.</div>\n";
             echo "<br>\n";
@@ -120,8 +120,8 @@ else
             die();
         }
 
-        unset ($_SESSION['port_shopping']);
-        if (Tki\Ibank::isLoanPending($pdo_db, $playerinfo['ship_id'], $tkireg))
+        unset($_SESSION['port_shopping']);
+        if (Tki\Loan::isPending($pdo_db, $playerinfo['ship_id'], $tkireg))
         {
             echo $langvars['l_port_loannotrade'] . "<p>";
             echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
@@ -130,7 +130,7 @@ else
             die();
         }
 
-        // Clear variables that are not selected in the form, and filter them to be only the correct variable type (Int, float, and boolean)
+        // Clear variables that are not selected in the form, and filter them to be only the correct variable type (Int, float, and bool)
         $hull_upgrade               = (int) filter_input(INPUT_POST, 'hull_upgrade', FILTER_SANITIZE_NUMBER_INT);
         $engine_upgrade             = (int) filter_input(INPUT_POST, 'engine_upgrade', FILTER_SANITIZE_NUMBER_INT);
         $power_upgrade              = (int) filter_input(INPUT_POST, 'power_upgrade', FILTER_SANITIZE_NUMBER_INT);

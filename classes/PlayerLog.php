@@ -30,15 +30,15 @@ class PlayerLog
         // Write log_entry to the player's log - identified by player's ship_id.
         if ($ship_id !== null && $log_type !== null)
         {
-            $sql = "INSERT INTO {$pdo_db->prefix}logs (ship_id, type, time, data) " .
+            $sql = "INSERT INTO ::prefix::logs (ship_id, type, time, data) " .
                    "VALUES (:ship_id, :type, :time, :data)";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $ship_id);
             $stmt->bindParam(':type', $log_type);
             $stmt->bindParam(':time', $stamp);
             $stmt->bindParam(':data', $data);
-            $res = $stmt->execute();
-            Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            $stmt->execute();
+            Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
     }
 }

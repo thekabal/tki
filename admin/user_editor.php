@@ -41,7 +41,7 @@ else
 {
     if ($_POST['operation'] === null)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $_POST['user']);
         $stmt->execute();

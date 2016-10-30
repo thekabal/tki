@@ -20,10 +20,13 @@ declare(strict_types = 1);
 
 namespace Tki;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class Player
 {
-    public static function handleAuth(\PDO $pdo_db, $lang, Array $langvars, Reg $tkireg, $template)
+    public static function handleAuth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template)
     {
+        $request = Request::createFromGlobals();
         $flag = true;
         $error_status = null;
         $playerinfo = array();
@@ -40,7 +43,7 @@ class Player
 
         if ($_SESSION['username'] !== null && $_SESSION['password'] !== null)
         {
-            $sql = "SELECT ip_address, password, last_login, ship_id, ship_destroyed, dev_escapepod FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+            $sql = "SELECT ip_address, password, last_login, ship_id, ship_destroyed, dev_escapepod FROM ::prefix::ships WHERE email=:email LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':email', $_SESSION['username']);
             $stmt->execute();
@@ -60,10 +63,11 @@ class Player
                     // Update the players last_login every 60 seconds to cut back SQL Queries.
                     if ($timestamp['now'] >= ($timestamp['last'] + 60))
                     {
-                        $sql = "UPDATE {$pdo_db->prefix}ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
+                        $remote_ip = $request->server->get('REMOTE_ADDR');
+                        $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':last_login', $stamp);
-                        $stmt->bindParam(':ip_address', $_SERVER['REMOTE_ADDR']);
+                        $stmt->bindParam(':ip_address', $remote_ip);
                         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
                         $stmt->execute();
                         Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
@@ -93,10 +97,7 @@ class Player
         }
     }
 
-    /**
-     * @param Reg $tkireg
-     */
-    public static function handleBan(\PDO $pdo_db, $lang, $timestamp, $template, Array $playerinfo, Array $langvars, Reg $tkireg)
+    public static function handleBan(\PDO $pdo_db, string $lang, $timestamp, Smarty $template, array $playerinfo, array $langvars, Reg $tkireg)
     {
         // Check to see if the player is banned every 60 seconds (may need to ajust this).
         if ($timestamp['now'] >= ($timestamp['last'] + 60))

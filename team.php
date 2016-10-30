@@ -28,7 +28,7 @@ Tki\Header::display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('team', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -51,7 +51,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         echo $langvars['l_teamm_toteam'] . "<br>";
         $result = $db->Execute("UPDATE {$db->prefix}planets SET team=?, owner=? WHERE planet_id = ?;", array($playerinfo['team'], $playerinfo['ship_id'], $planet_id));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-        $ownership = Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+        $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
 
         if ($ownership !== null)
         {
@@ -64,7 +64,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         echo $langvars['l_teamm_topersonal'] . "<br>";
         $result = $db->Execute("UPDATE {$db->prefix}planets SET team='0', owner = ? WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-        $ownership = Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+        $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
 
         // Kick other players off the planet
         $result = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = ? AND ship_id <> ?;", array($planet_id, $playerinfo['ship_id']));

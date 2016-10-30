@@ -17,16 +17,12 @@ declare(strict_types = 1);
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: classes/PlanetReport.php
-//
-// FUTURE: These are horribly bad. They should be broken out of classes, and turned mostly into template
-// behaviors. But in the interest of saying goodbye to the includes directory, and raw functions, this
-// will at least allow us to auto-load and use classes instead. Plenty to do in the future, though!
 
 namespace Tki;
 
 class PlanetReport
 {
-    public static function planetReportMenu(Array $playerinfo, Array $langvars)
+    public static function planetReportMenu(array $playerinfo, array $langvars)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -45,7 +41,31 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
+    public static function teamPlanetCheckboxes(int $planet, $i) : string
+    {
+        if ($planet[$i]['team'] <= 0)
+        {
+            return (string) "<input type='checkbox' name='team[" . $i . "]' value='" . $planet[$i]['planet_id'] ."' />";
+        }
+        elseif ($planet[$i]['team'] > 0)
+        {
+            return (string) "<input type='checkbox' name='team[" . $i . "]' value='{" . $planet[$i]['planet_id'] . "' checked />";
+        }
+    }
+
+    public static function sellingCheckboxes(int $planet, $i) : string
+    {
+        if ($planet[$i]['sells'] != 'Y')
+        {
+            return (string) "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' />";
+        }
+        elseif ($planet[$i]['sells'] == 'Y')
+        {
+            return (string) "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' checked />";
+        }
+    }
+
+    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, $sort, Reg $tkireg)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -57,45 +77,45 @@ class PlanetReport
             echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> <br>";
         }
 
-        $query = "SELECT * FROM {$db->prefix}planets WHERE owner=$playerinfo[ship_id]";
+        $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
 
         if ($sort !== null)
         {
-            $query .= " ORDER BY";
+            $sql .= " ORDER BY";
             if ($sort == "name")
             {
-                $query .= " $sort ASC";
+                $sql .= " name ASC";
             }
             elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" || $sort == "colonists" || $sort == "credits" || $sort == "fighters")
             {
-                $query .= " $sort DESC, sector_id ASC";
+                $sql .= " $sort DESC, sector_id ASC";
             }
             elseif ($sort == "torp")
             {
-                $query .= " torps DESC, sector_id ASC";
+                $sql .= " torps DESC, sector_id ASC";
             }
             else
             {
-                $query .= " sector_id ASC";
+                $sql .= " sector_id ASC";
             }
         }
         else
         {
-            $query .= " ORDER BY sector_id ASC";
+            $sql .= " ORDER BY sector_id ASC";
         }
 
-        $res = $db->Execute($query);
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $playerinfo['ship_id']);
+        $stmt->execute();
+        $planet_owner_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $i = 0;
         $planet = array();
-        if ($res)
+        if ($planet_owner_present !== null)
         {
-            while (!$res->EOF)
+            foreach ($planet_owner_present as $tmp_owner)
             {
-                $planet[$i] = $res->fields;
+                $planet[$i] = $tmp_owner['link_dest'];
                 $i++;
-                $res->MoveNext();
             }
         }
 
@@ -235,189 +255,5 @@ class PlanetReport
         }
 
         echo "</div>\n";
-    }
-
-    public static function planetProductionChange(\PDO $pdo_db, $db, Array $langvars, Array $playerinfo, $sort, Reg $tkireg)
-    {
-        $query = "SELECT * FROM {$db->prefix}planets WHERE owner = ? AND base = 'Y'";
-        echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
-
-        echo "Planetary report <strong><a href=\"planet_report.php?preptype=0\">menu</a></strong><br><br>" .
-             "<strong><a href=\"planet_report.php?preptype=1\">Planet Status</a></strong><br>";
-
-        if ($playerinfo['team'] > 0)
-        {
-            echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> <br>";
-        }
-
-        if ($sort !== null)
-        {
-            $query .= " ORDER BY";
-            if ($sort == "name")
-            {
-                $query .= " $sort ASC";
-            }
-            elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" || $sort == "fighters")
-            {
-                $query .= " prod_$sort DESC, sector_id ASC";
-            }
-            elseif ($sort == "colonists" || $sort == "credits")
-            {
-                $query .= " $sort DESC, sector_id ASC";
-            }
-            elseif ($sort == "torp")
-            {
-                $query .= " prod_torp DESC, sector_id ASC";
-            }
-            else
-            {
-                $query .= " sector_id ASC";
-            }
-        }
-        else
-        {
-            $query .= " ORDER BY sector_id ASC";
-        }
-
-        $res = $db->Execute($query, array($playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-
-        $i = 0;
-        $planet = array();
-        if ($res)
-        {
-            while (!$res->EOF)
-            {
-                $planet[$i] = $res->fields;
-                $i++;
-                $res->MoveNext();
-            }
-        }
-
-        $num_planets = $i;
-        if ($num_planets < 1)
-        {
-            echo "<br>" . $langvars['l_pr_noplanet'];
-        }
-        else
-        {
-            echo "<form accept-charset='utf-8' action='planet_report_ce.php' method='post'>\n";
-
-            // Next block of echo 's creates the header of the table
-            echo $langvars['l_pr_clicktosort'] . "<br><br>\n";
-            echo "<table width='100%' border='0' cellspacing='0' cellpadding='2'>\n";
-            echo "<tr bgcolor='{$tkireg->color_header}' valign='bottom'>\n";
-            echo "<td align='left'>  <strong><a href='planet_report.php?preptype=2&amp;sort=sector_id'>" . $langvars['l_sector'] . "</a></strong></td>\n";
-            echo "<td align='left'>  <strong><a href='planet_report.php?preptype=2&amp;sort=name'>" . $langvars['l_name'] . "</a></strong></td>\n";
-            echo "<td align='center'><strong><a href='planet_report.php?preptype=2&amp;sort=ore'>" . $langvars['l_ore'] . "</a></strong></td>\n";
-            echo "<td align='center'><strong><a href='planet_report.php?preptype=2&amp;sort=organics'>" . $langvars['l_organics'] . "</a></strong></td>\n";
-            echo "<td align='center'><strong><a href='planet_report.php?preptype=2&amp;sort=goods'>" . $langvars['l_goods'] . "</a></strong></td>\n";
-            echo "<td align='center'><strong><a href='planet_report.php?preptype=2&amp;sort=energy'>" . $langvars['l_energy'] . "</a></strong></td>\n";
-            echo "<td align='right'> <strong><a href='planet_report.php?preptype=2&amp;sort=colonists'>" . $langvars['l_colonists'] . "</a></strong></td>\n";
-            echo "<td align='right'> <strong><a href='planet_report.php?preptype=2&amp;sort=credits'>" . $langvars['l_credits'] . "</a></strong></td>\n";
-            echo "<td align='center'><strong><a href='planet_report.php?preptype=2&amp;sort=fighters'>" . $langvars['l_fighters'] . "</a></strong></td>\n";
-            echo "<td align='center'><strong><a href='planet_report.php?preptype=2&amp;sort=torp'>" . $langvars['l_torps'] . "</a></strong></td>\n";
-            //    echo "<td align='center'><strong>" . $langvars['l_base'] . "?</strong></td>\n";
-            if ($playerinfo['team'] > 0)
-            {
-                echo "<td align='center'><strong>Team?</strong></td>\n";
-            }
-
-            echo "<td align='center'><strong>" . $langvars['l_selling'] . "?</strong></td>\n";
-            echo "</tr>\n";
-
-            $total_colonists = 0;
-            $total_credits = 0;
-            $color = $tkireg->color_line1;
-
-            for ($i = 0; $i < $num_planets; $i++)
-            {
-                $total_colonists += $planet[$i]['colonists'];
-                $total_credits += $planet[$i]['credits'];
-                if (empty ($planet[$i]['name']))
-                {
-                    $planet[$i]['name'] = $langvars['l_unnamed'];
-                }
-
-                echo "<tr bgcolor=\"$color\">\n";
-                echo "<td><a href=rsmove.php?engage=1&amp;destination=". $planet[$i]['sector_id'] . ">". $planet[$i]['sector_id'] . "</a></td>\n";
-                echo "<td>" . $planet[$i]['name'] . "</td>\n";
-                echo "<td align=center>" . "<input size=6 type=text name=\"prod_ore["      . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_ore']      . "\">" . "</td>\n";
-                echo "<td align=center>" . "<input size=6 type=text name=\"prod_organics[" . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_organics'] . "\">" . "</td>\n";
-                echo "<td align=center>" . "<input size=6 type=text name=\"prod_goods["    . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_goods']    . "\">" . "</td>\n";
-                echo "<td align=center>" . "<input size=6 type=text name=\"prod_energy["   . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_energy']   . "\">" . "</td>\n";
-                echo "<td align=right>"  . number_format($planet[$i]['colonists'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])              . "</td>\n";
-                echo "<td align=right>"  . number_format($planet[$i]['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])        . "</td>\n";
-                echo "<td align=center>" . "<input size=6 type=text name=\"prod_fighters[" . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_fighters'] . "\">" . "</td>\n";
-                echo "<td align=center>" . "<input size=6 type=text name=\"prod_torp["     . $planet[$i]['planet_id'] . "]\" value=\"" . $planet[$i]['prod_torp']     . "\">" . "</td>\n";
-                if ($playerinfo['team'] > 0)
-                {
-                    echo "<td align=center>" . team_planet_checkboxes($planet, $i) . "</td>\n";
-                }
-
-                echo "<td align=center>" . selling_checkboxes($planet, $i)     . "</td>\n";
-                echo "</tr>\n";
-
-                if ($color == $tkireg->color_line1)
-                {
-                    $color = $tkireg->color_line2;
-                }
-                else
-                {
-                    $color = $tkireg->color_line1;
-                }
-            }
-
-            echo "<tr bgcolor=$color>\n";
-            echo "<td colspan=2 align=center>" . $langvars['l_pr_totals'] . "</td>\n";
-            echo "<td>" . "" . "</td>\n";
-            echo "<td>" . "" . "</td>\n";
-            echo "<td>" . "" . "</td>\n";
-            echo "<td>" . "" . "</td>\n";
-            echo "<td align=right>" . number_format($total_colonists, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
-            echo "<td align=right>" . number_format($total_credits, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])   . "</td>\n";
-            echo "<td>" . "" . "</td>\n";
-            echo "<td>" . "" . "</td>\n";
-            if ($playerinfo['team'] > 0)
-            {
-                echo "<td></td>\n";
-            }
-
-            echo "<td></td>\n";
-            echo "</tr>\n";
-            echo "</table>\n";
-
-            echo "<br>\n";
-            echo "<input type=hidden name=ship_id value=$playerinfo[ship_id]>\n";
-            echo "<input type=hidden name=team_id   value=$playerinfo[team]>\n";
-            echo "<input type=submit value=submit>  <input type=reset value=reset>\n";
-            echo "</form>\n";
-        }
-
-        echo "</div>\n";
-    }
-
-    public static function teamPlanetCheckboxes($planet, $i) : string
-    {
-        if ($planet[$i]['team'] <= 0)
-        {
-            return (string) "<input type='checkbox' name='team[" . $i . "]' value='" . $planet[$i]['planet_id'] ."' />";
-        }
-        elseif ($planet[$i]['team'] > 0)
-        {
-            return (string) "<input type='checkbox' name='team[" . $i . "]' value='{" . $planet[$i]['planet_id'] . "' checked />";
-        }
-    }
-
-    public static function sellingCheckboxes($planet, $i) : string
-    {
-        if ($planet[$i]['sells'] != 'Y')
-        {
-            return (string) "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' />";
-        }
-        elseif ($planet[$i]['sells'] == 'Y')
-        {
-            return (string) "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' checked />";
-        }
     }
 }

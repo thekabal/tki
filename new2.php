@@ -81,7 +81,7 @@ else
 }
 
 $flag = 0;
-$sql = "SELECT email, character_name, ship_name FROM {$pdo_db->prefix}ships WHERE email=:email || character_name=:character_name || ship_name=:shipname";
+$sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email || character_name=:character_name || ship_name=:shipname";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $username);
 $stmt->bindParam(':character_name', $character);
@@ -126,7 +126,7 @@ if ($flag == 0)
     // Insert code to add player to database
     $stamp = date('Y-m-d H:i:s');
 
-    $sql = "SELECT MAX(turns_used + turns) AS mturns FROM {$pdo_db->prefix}ships";
+    $sql = "SELECT MAX(turns_used + turns) AS mturns FROM ::prefix::ships";
     $stmt = $pdo_db->prepare($sql);
     $stmt->execute();
     $turns_info = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -141,7 +141,7 @@ if ($flag == 0)
     $hashed_pass = password_hash($filtered_post_password, PASSWORD_DEFAULT); // PASSWORD_DEFAULT is the strongest algorithm available to PHP at the current time - today, it is BCRYPT.
 
     $result2 = $db->Execute("INSERT INTO {$db->prefix}ships (ship_name, ship_destroyed, character_name, password, email, armor_pts, credits, ship_energy, ship_fighters, turns, on_planet, dev_warpedit, dev_genesis, dev_beacon, dev_emerwarp, dev_escapepod, dev_fuelscoop, dev_minedeflector, last_login, ip_address, trade_colonists, trade_fighters, trade_torps, trade_energy, cleared_defenses, lang, dev_lssd)
-                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, $tkireg->start_armor, $tkireg->start_credits, $tkireg->start_energy, $tkireg->start_fighters, $mturns, 'N', $tkireg->start_editors, $tkireg->start_genesis, $tkireg->start_beacon, $tkireg->start_emerwarp, $tkireg->start_escape_pod, $tkireg->start_scoop, $tkireg->start_minedeflectors, $stamp, $_SERVER['REMOTE_ADDR'], 'Y', 'N', 'N', 'Y', NULL, $lang, $tkireg->start_lssd));
+                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, $tkireg->start_armor, $tkireg->start_credits, $tkireg->start_energy, $tkireg->start_fighters, $mturns, 'N', $tkireg->start_editors, $tkireg->start_genesis, $tkireg->start_beacon, $tkireg->start_emerwarp, $tkireg->start_escape_pod, $tkireg->start_scoop, $tkireg->start_minedeflectors, $stamp, $request->server->get('REMOTE_ADDR'), 'Y', 'N', 'N', 'Y', NULL, $lang, $tkireg->start_lssd));
     Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
     if (!$result2)
@@ -156,12 +156,12 @@ if ($flag == 0)
 
         // To do: build a bit better "new player" message
         $langvars['l_new_message'] = str_replace('[pass]', $filtered_post_password, $langvars['l_new_message']);
-        $langvars['l_new_message'] = str_replace('[ip]', $_SERVER['REMOTE_ADDR'], $langvars['l_new_message']);
+        $langvars['l_new_message'] = str_replace('[ip]', $request->server->get('REMOTE_ADDR'), $langvars['l_new_message']);
 
         // Some reason \r\n is broken, so replace them now.
         $langvars['l_new_message'] = str_replace('\r\n', "\r\n", $langvars['l_new_message']);
 
-        $link_to_game_unsafe = 'https://' . $_SERVER['HTTP_HOST'] . Tki\SetPaths::setGamepath();
+        $link_to_game_unsafe = 'https://' . $request->server->get('HTTP_HOST') . Tki\SetPaths::setGamepath();
         $link_to_game = htmlentities($link_to_game_unsafe, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $langvars['l_new_message'] = str_replace('[website]', $link_to_game, $langvars['l_new_message']);
         $langvars['l_new_message'] = str_replace('[npg]', $link_to_game . 'newplayerguide.php', $langvars['l_new_message']);
@@ -180,7 +180,7 @@ if ($flag == 0)
         // Add presets for new player
         for ($zz = 0; $zz < $tkireg->max_presets; $zz++)
         {
-            $sql = "INSERT INTO {$pdo_db->prefix}presets (ship_id, preset, type) " .
+            $sql = "INSERT INTO ::prefix::presets (ship_id, preset, type) " .
                    "VALUES (:ship_id, :preset, :type)";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $shipid['ship_id']);

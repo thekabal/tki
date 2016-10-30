@@ -54,7 +54,7 @@ if (mb_strlen(trim($planet_id)) === 0)
 echo '<h1>' . $title . '</h1>';
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -72,13 +72,13 @@ if ($planet_id <= 0)
     die();
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id";
+$sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':planet_id', $planet_id);
 $stmt->execute();
@@ -125,7 +125,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
     if ($planetinfo['owner'] != 0)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $planetinfo['owner']);
         $stmt->execute();
@@ -167,7 +167,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     Tki\Db::LogDbErrors($pdo_db, $update2, __LINE__, __FILE__);
                     $update3 = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE planet_id = ?;", array($planet_id));
                     Tki\Db::LogDbErrors($pdo_db, $update3, __LINE__, __FILE__);
-                    Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+                    Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
                     header("Location: main.php");
                 }
                 else
@@ -309,7 +309,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             $retOwnerInfo = null;
 
-            $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Tki\Planet::getOwner($pdo_db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
@@ -415,7 +415,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             // Kami Multi Browser Window Attack Fix
             if ($_SESSION['planet_selected'] !== $planet_id && $_SESSION['planet_selected'] !== null)
             {
-                Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to create a base without clicking on the Planet.");
+                Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to create a base without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -443,7 +443,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     Tki\Db::LogDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
 
                     // Refresh Planet Info
-                    $sql = "SELECT * FROM {$pdo_db->prefix}planets WHERE planet_id=:planet_id LIMIT 1";
+                    $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':planet_id', $planet_id);
                     $stmt->execute();
@@ -453,7 +453,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     echo $langvars['l_planet_bbuild'] . "<br><br>";
 
                     // Calc Ownership and Notify User Of Results
-                    $ownership = Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+                    $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
                     if ($ownership !== null)
                     {
                         echo $ownership . '<p>';
@@ -543,7 +543,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to start an attack without clicking on the Planet.");
+                Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to start an attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -563,7 +563,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             }
 
             $retOwnerInfo = null;
-            $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Tki\Planet::getOwner($pdo_db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
@@ -590,7 +590,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Attack without clicking on the Planet.");
+                Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to Attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -599,7 +599,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             unset($_SESSION['planet_selected']);
             $retOwnerInfo = null;
-            $owner_found = Tki\Planet::getOwner($pdo_db, $db, $planetinfo['planet_id'], $retOwnerInfo);
+            $owner_found = Tki\Planet::getOwner($pdo_db, $planetinfo['planet_id'], $retOwnerInfo);
             if ($owner_found === true && $retOwnerInfo !== null)
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
@@ -608,7 +608,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 }
                 else
                 {
-                    BadPlanet::planetCombat($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo);
+                    Planet::planetCombat($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo);
                 }
             }
         }
@@ -636,14 +636,14 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         }
         elseif ($command == "bomb" && $tkireg->allow_sofa)
         {
-            BadPlanet::planetBombing($pdo_db, $db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
+            Planet::planetBombing($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
         }
         elseif ($command == "scan")
         {
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$_SERVER['REMOTE_ADDR']}|{$playerinfo['ship_id']}|Tried to Scan without clicking on the Planet.");
+                Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to Scan without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotomain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -885,7 +885,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             echo $langvars['l_planet_captured'] . "<br>";
             $update = $db->Execute("UPDATE {$db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
             Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
-            $ownership = Tki\Ownership::calc($pdo_db, $db, $playerinfo['sector'], $tkireg, $langvars);
+            $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg, $langvars);
 
             if ($ownership !== null)
             {
@@ -899,7 +899,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             if ($planetinfo['owner'] != 0)
             {
-                $sql = "SELECT character_name FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id LIMIT 1";
+                $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $planetinfo['owner']);
                 $stmt->execute();

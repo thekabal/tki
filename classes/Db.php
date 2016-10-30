@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+// declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,31 +25,26 @@ declare(strict_types = 1);
 namespace Tki;
 
 use PDO;
+use \Symfony\Component\HttpFoundation\Request;
 
 class Db
 {
-    public static function isActive(\PDO $pdo_db)
+    public static function isActive(\PDO $pdo_db) : bool
     {
         // Get the config_values from the DB
-        $results = $pdo_db->query("SELECT * FROM {$pdo_db->prefix}gameconfig LIMIT 1");
+        $results = $pdo_db->query("SELECT * FROM ::prefix::gameconfig LIMIT 1");
         if (!$results)
         {
             return false;
         }
         else
         {
-            if ($results->rowCount() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            $are_there_results = ($results->rowCount() > 0);
+            return $are_there_results; // Will be either true or false
         }
     }
 
-    public function initDb($db_layer)
+    public function initDb(string $db_layer)
     {
         $db_port = \Tki\SecureConfig::DB_PORT;
         $db_host = \Tki\SecureConfig::DB_HOST;
@@ -83,7 +78,7 @@ class Db
 
                 $db_init_result = $db->Connect($db_host, $db_user, $db_pwd, $db_name);
 
-                // Returns Boolean true or false.
+                // Returns Bool true or false.
                 // However ADOdb's postgres driver returns null if postgres insn't installed.
                 if ($db_init_result === false || $db_init_result === 0)
                 {
@@ -123,12 +118,12 @@ class Db
                         $db_port = '5432';
                     }
 
-                    $pdo_db = new PDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;", $db_user, $db_pwd);
+                    $pdo_db = new \Tki\TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
                 else
                 {
                     // Include the charset when connecting
-                    $pdo_db = new PDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd);
+                    $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
             }
             catch (\PDOException $e)
@@ -142,27 +137,27 @@ class Db
             // Disable emulated prepares so that we get true prepared statements
             // These are slightly slower, but also far safer in a number of cases that matter
             $pdo_db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-            $pdo_db->prefix = $db_prefix;
             return $pdo_db;
         }
     }
 
     public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
     {
+        $request = Request::createFromGlobals();
+
         // Convert the content of SCRIPT_NAME (in case it has been tainted) to the correct html entities
-        $safe_script_name = htmlentities($_SERVER['SCRIPT_NAME'], ENT_HTML5, 'UTF-8');
+        $safe_script_name = htmlentities($request->server->get('SCRIPT_NAME'), ENT_HTML5, 'UTF-8');
         $db_log = false;
         $error = null;
         $db_error = null;
-        if ($pdo_db instanceof PDO)
+        if ($pdo_db instanceof \PDO)
         {
             $error = $pdo_db->errorInfo()[1];
             $db_error = $pdo_db->errorInfo()[2];
             $db_log = true; // We need to create a method for disabling db logging on PDO
         }
 
-        if ($error === 'null' || $error == '')
+        if ($error === null || $error == '')
         {
             return (bool) true;
         }
@@ -176,9 +171,9 @@ class Db
             $text_error = 'A Database error occurred in ' . $served_page .
                             ' on line ' . $served_line .
                             ' (called from: ' . $safe_script_name . ' the error message was: ' . $db_error .
-                            'and the query was ' . $query;
+                            ' and the query was ' . $query;
 
-            if (!self::isActive($pdo_db))
+            if (self::isActive($pdo_db))
             {
                 if ($db_log)
                 {

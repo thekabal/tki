@@ -24,7 +24,7 @@ class Toll
 {
     public static function distribute(\PDO $pdo_db, int $sector, $toll, $total_fighters)
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}sector_defense WHERE sector_id=:sector_id AND defense_type='F'";
+        $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type='F'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector);
         $stmt->execute();
@@ -34,7 +34,7 @@ class Toll
             foreach ($defense_present as $tmp_defense)
             {
                 $toll_amount = round(($tmp_defense['quantity'] / $total_fighters) * $toll);
-                $sql = "UPDATE {$pdo_db->prefix}ships SET credits=credits + :toll_amount WHERE ship_id = :ship_id";
+                $sql = "UPDATE ::prefix::ships SET credits=credits + :toll_amount WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':toll_amount', $toll_amount);
                 $stmt->bindParam(':ship_id', $tmp_defense['ship_id']);

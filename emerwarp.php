@@ -28,7 +28,7 @@ $variables = null;
 $langvars = Tki\Translate::load($pdo_db, $lang, array('emerwarp', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -38,7 +38,7 @@ if ($playerinfo['dev_emerwarp'] > 0)
 {
     $dest_sector = random_int(0, (int) $max_sectors - 1);
 
-    $sql = "UPDATE {$pdo_db->prefix}ships SET sector=:sector, dev_emerwarp=dev_emerwarp-1 WHERE ship_id=:ship_id";
+    $sql = "UPDATE ::prefix::ships SET sector=:sector, dev_emerwarp=dev_emerwarp-1 WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':sector', $dest_sector);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id']);

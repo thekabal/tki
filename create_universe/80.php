@@ -44,12 +44,12 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
 $variables['update_ticks_results']['sched'] = $tkireg->sched_ticks;
-$local_table_timer = new Tki\Timer;
+$local_table_timer = new Tki\Timer();
 
 $now = time();
 $local_table_timer->start(); // Start benchmarking for turns scheduler
 $sched_file = 'sched_turns.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_turns);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -61,7 +61,7 @@ $local_table_timer->stop();
 $variables['update_turns_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for Xenobe
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_turns);
 $stmt->bindValue(':sched_file', 'sched_xenobe.php');
@@ -74,7 +74,7 @@ $variables['update_xenobe_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for Ibank scheduler
 $sched_file = 'sched_ibank.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_ibank);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -87,7 +87,7 @@ $variables['update_ibank_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for news scheduler
 $sched_file = 'sched_news.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_news);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -100,7 +100,7 @@ $variables['update_news_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for planets scheduler
 $sched_file = 'sched_planets.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_planets);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -113,7 +113,7 @@ $variables['update_planets_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for ports scheduler
 $sched_file = 'sched_ports.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_ports);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -126,7 +126,7 @@ $variables['update_ports_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for tow scheduler
 $sched_file = 'sched_tow.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_turns);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -139,7 +139,7 @@ $variables['update_tow_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for ranking scheduler
 $sched_file = 'sched_ranking.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_ranking);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -152,7 +152,7 @@ $variables['update_ranking_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for degrade scheduler
 $sched_file = 'sched_degrade.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_degrade);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -165,7 +165,7 @@ $variables['update_degrade_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for apocalypse scheduler
 $sched_file = 'sched_apocalypse.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_apocalypse);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -178,7 +178,7 @@ $variables['update_apoc_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for the governor scheduler
 $sched_file = 'sched_thegovernor.php';
-$sql = "INSERT INTO {$pdo_db->prefix}scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
+$sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_thegovernor);
 $stmt->bindParam(':sched_file', $sched_file);
@@ -194,7 +194,7 @@ $local_table_timer->start(); // Start benchmarking for big bang news event
 $headline = 'Big Bang';
 $newstext = 'Scientists have just discovered the Universe exists!';
 $news_type = 'col25';
-$sql = "INSERT INTO {$pdo_db->prefix}news (headline, newstext, date, news_type) VALUES (:headline, :newstext, :date, :news_type)";
+$sql = "INSERT INTO ::prefix::news (headline, newstext, date, news_type) VALUES (:headline, :newstext, :date, :news_type)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':headline', $headline);
 $stmt->bindParam(':newstext', $newstext);
@@ -207,14 +207,14 @@ $local_table_timer->stop();
 $variables['first_news_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for ibank accounts for admin
-$update = $pdo_db->exec("INSERT INTO {$pdo_db->prefix}ibank_accounts (ship_id,balance,loan) VALUES (1,0,0)");
+$update = $pdo_db->exec("INSERT INTO ::prefix::ibank_accounts (ship_id,balance,loan) VALUES (1,0,0)");
 $variables['ibank_results']['result'] = Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 $local_table_timer->stop();
 $variables['ibank_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for add admin account
 
-$sql = "INSERT INTO {$pdo_db->prefix}ships " .
+$sql = "INSERT INTO ::prefix::ships " .
        "(ship_name, ship_destroyed, character_name, password, " .
        "recovery_time, " .
        "email, turns, armor_pts, credits, sector, ship_energy, " .
@@ -260,7 +260,7 @@ $variables['admin_account_results']['elapsed'] = $local_table_timer->elapsed();
 for ($zz = 0; $zz < $tkireg->max_presets; $zz++)
 {
     $local_table_timer->start(); // Start benchmarking for admin preset #$zz
-    $sql = "INSERT INTO {$pdo_db->prefix}presets (ship_id, preset, type) " .
+    $sql = "INSERT INTO ::prefix::presets (ship_id, preset, type) " .
            "VALUES (:ship_id, :preset, :type)";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindValue(':ship_id', 1);
@@ -273,7 +273,7 @@ for ($zz = 0; $zz < $tkireg->max_presets; $zz++)
 }
 
 $local_table_timer->start(); // Start benchmarking for admin zone ownership
-$sql = "INSERT INTO {$pdo_db->prefix}zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) " .
+$sql = "INSERT INTO ::prefix::zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) " .
        "VALUES (:zone_name, :owner, :team_zone, :allow_beacon, :allow_attack, :allow_planetattack, :allow_warpedit, :allow_planet, :allow_trade, :allow_defenses, :max_hull)";
 $owner = 1;
 $team_zone = 'N';

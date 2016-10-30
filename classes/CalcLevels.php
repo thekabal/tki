@@ -64,13 +64,13 @@ class CalcLevels
         return $result;
     }
 
-    public static function planetBeams(\PDO $pdo_db, Array $ownerinfo, Reg $tkireg, Array $planetinfo) : int
+    public static function planetBeams(\PDO $pdo_db, array $ownerinfo, Reg $tkireg, array $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetbeams = self::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
-        $sql = "SELECT beams FROM {$pdo_db->prefix}ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
+        $sql = "SELECT beams FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
@@ -93,13 +93,13 @@ class CalcLevels
         return (int) $planetbeams;
     }
 
-    public static function planetShields(\PDO $pdo_db, Array $ownerinfo, Reg $tkireg, Array $planetinfo) : int
+    public static function planetShields(\PDO $pdo_db, array $ownerinfo, Reg $tkireg, array $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
-        $sql = "SELECT shields FROM {$pdo_db->prefix}ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
+        $sql = "SELECT shields FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
@@ -122,13 +122,13 @@ class CalcLevels
         return (int) $planetshields;
     }
 
-    public static function planetTorps(\PDO $pdo_db, Array $ownerinfo, Array $planetinfo, Reg $tkireg) : int
+    public static function planetTorps(\PDO $pdo_db, array $ownerinfo, array $planetinfo, Reg $tkireg) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;
         $torps = $planetinfo['torps'];
 
-        $sql = "SELECT torp_launchers FROM {$pdo_db->prefix}ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
+        $sql = "SELECT torp_launchers FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
         $stmt->execute();
@@ -156,7 +156,7 @@ class CalcLevels
         return (int) $planettorps;
     }
 
-    public static function avgTech($ship_info = null, $type = 'ship')
+    public static function avgTech(array $ship_info = null, string $type = 'ship')
     {
         // Used to define what devices are used to calculate the average tech level.
         $calc_ship_tech    = array('hull', 'engines', 'computer', 'armor', 'shields', 'beams', 'torp_launchers');

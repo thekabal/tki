@@ -45,7 +45,7 @@ if (mb_strlen(trim($target_sector)) === 0)
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -75,7 +75,7 @@ if ($target_sector === null)
     die();
 }
 
-$sql = "SELECT allow_warpedit,{$pdo_db->prefix}universe.zone_id FROM {$pdo_db->prefix}zones,{$pdo_db->prefix}universe WHERE sector_id=:sector_id AND {$pdo_db->prefix}universe.zone_id={$pdo_db->prefix}zones.zone_id;";
+$sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
@@ -90,13 +90,13 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 }
 
 $target_sector = round($target_sector);
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT allow_warpedit,{$pdo_db->prefix}universe.zone_id FROM {$pdo_db->prefix}zones,{$pdo_db->prefix}universe WHERE sector_id=:sector_id AND {$pdo_db->prefix}universe.zone_id={$pdo_db->prefix}zones.zone_id;";
+$sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $target_sector);
 $stmt->execute();
@@ -111,7 +111,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
     die();
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id = :sector_id";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :sector_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $target_sector);
 $stmt->execute();
@@ -124,7 +124,7 @@ if (!$tmpinfo)
     die();
 }
 
-$sql = "SELECT * FROM {$pdo_db->prefix}links WHERE link_start = :link_start";
+$sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':link_start', $playerinfo['sector']);
 $stmt->execute();
@@ -148,14 +148,14 @@ if ($linkinfo !== false)
     }
     else
     {
-        $sql = "DELETE FROM {$pdo_db->prefix}links WHERE link_start=:link_start AND link_dest=:link_dest";
+        $sql = "DELETE FROM ::prefix::links WHERE link_start=:link_start AND link_dest=:link_dest";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $playerinfo['sector']);
         $stmt->bindParam(':link_dest', $target_sector);
         $stmt->execute();
         $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $sql = "UPDATE {$pdo_db->prefix}ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
+        $sql = "UPDATE ::prefix::ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $playerinfo['ship_id']);
         $stmt->execute();
@@ -167,7 +167,7 @@ if ($linkinfo !== false)
         }
         else
         {
-            $sql = "DELETE {$pdo_db->prefix}links link_start = :link_start AND link_dest = :link_dest";
+            $sql = "DELETE ::prefix::links link_start = :link_start AND link_dest = :link_dest";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':link_start', $target_sector);
             $stmt->bindParam(':link_start', $playerinfo['sector']);

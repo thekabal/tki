@@ -18,18 +18,22 @@ declare(strict_types = 1);
 //
 // File: classes/CheckBan.php
 //
-// Returns a Boolean false when no account info or no ban found.
+// Returns a Bool false when no account info or no ban found.
 // Returns an array which contains the ban information when it has found something.
-// Calling code needs to act on the returned information (boolean false or array of ban info).
+// Calling code needs to act on the returned information (bool false or array of ban info).
 
 namespace Tki;
+
+use Symfony\Component\HttpFoundation\Request;
 
 class CheckBan
 {
     public static function isBanned(\PDO $pdo_db, array $playerinfo)
     {
+        $request = Request::createFromGlobals();
+
         // Check for IP Ban
-        $sql = "SELECT * FROM {$pdo_db->prefix}bans WHERE (ban_type = :ban_type AND ban_mask = :ban_mask1) OR (ban_mask = :ban_mask2)";
+        $sql = "SELECT * FROM ::prefix::bans WHERE (ban_type = :ban_type AND ban_mask = :ban_mask1) OR (ban_mask = :ban_mask2)";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindValue(':ban_type', IP_BAN);
         $stmt->bindParam(':ban_mask1', $playerinfo['ip_address']);
@@ -46,7 +50,7 @@ class CheckBan
         }
 
         // Check for ID Watch, Ban, Lock, 24H Ban etc linked to the platyers ShipID.
-        $sql = "SELECT * FROM {$pdo_db->prefix}bans WHERE ban_ship = :ban_ship";
+        $sql = "SELECT * FROM ::prefix::bans WHERE ban_ship = :ban_ship";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ban_ship', $playerinfo['ship_id']);
         $stmt->execute();
@@ -72,11 +76,12 @@ class CheckBan
         }
 
         // Check for Multi Ban (IP, ID)
-        $sql = "SELECT * FROM {$pdo_db->prefix}bans WHERE ban_type = :ban_type AND (ban_mask = :ban_mask1 OR ban_mask = :ban_mask2 OR ban_ship = :ban_ship)";
+        $remote_ip = $request->server->get('REMOTE_ADDR');
+        $sql = "SELECT * FROM ::prefix::bans WHERE ban_type = :ban_type AND (ban_mask = :ban_mask1 OR ban_mask = :ban_mask2 OR ban_ship = :ban_ship)";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindValue(':ban_type', MULTI_BAN);
         $stmt->bindParam(':ban_mask1', $playerinfo['ip_address']);
-        $stmt->bindParam(':ban_mask2', $_SERVER['REMOTE_ADDR']);
+        $stmt->bindParam(':ban_mask2', $remote_ip);
         $stmt->bindParam(':ban_ship', $playerinfo['ship_id']);
         $stmt->execute();
         $multiban_count = $stmt->rowCount();
@@ -89,7 +94,7 @@ class CheckBan
             return (array) $multiban_res->fields;
         }
 
-        // Well we got here, so we haven't found anything, so we return a Boolean false.
-        return (boolean) false;
+        // Well we got here, so we haven't found anything, so we return a Bool false.
+        return (bool) false;
     }
 }

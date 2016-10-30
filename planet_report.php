@@ -33,7 +33,7 @@ if (array_key_exists('preptype', $_GET))
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
@@ -44,13 +44,13 @@ if ($preptype == 1 || !isset($preptype)) // Display the commodities on the plane
 {
     $title = $title . ": Status";
     echo "<h1>" . $title . "</h1>\n";
-    Tki\PlanetReport::standardReport($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
+    Tki\PlanetReport::standardReport($pdo_db, $langvars, $playerinfo, $sort, $tkireg);
 }
 elseif ($preptype == 2)                  // Display the production values of your planets and allow changing
 {
     $title = $title . ": Production";
     echo "<h1>" . $title . "</h1>\n";
-    Tki\PlanetReport::planetProductionChange($pdo_db, $db, $langvars, $playerinfo, $sort, $tkireg);
+    Tki\PlanetProduction::productionChange($pdo_db, $db, $langvars, $sort, $tkireg);
 }
 elseif ($preptype == 0)                  // For typing in manually to get a report menu
 {

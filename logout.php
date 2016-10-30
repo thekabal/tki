@@ -29,7 +29,7 @@ if (array_key_exists('username', $_SESSION))
     $current_score = 0;
 
     // Get playerinfo from database
-    $sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+    $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':email', $_SESSION['username']);
     $stmt->execute();
@@ -38,7 +38,7 @@ if (array_key_exists('username', $_SESSION))
     $current_score = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 
     $langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
-    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_LOGOUT, $_SERVER['REMOTE_ADDR']);
+    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_LOGOUT, $request->server->get('REMOTE_ADDR'));
     $langvars['l_logout_text'] = str_replace("[name]", $_SESSION['username'], $langvars['l_logout_text']);
     $langvars['l_logout_text'] = str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_logout_text']);
 

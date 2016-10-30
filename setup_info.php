@@ -30,7 +30,7 @@ header('Keep-Alive: timeout=15, max=100');         // Ask for persistent HTTP co
 
 // Set cookies for cookie test
 setcookie('TestCookie', '', 0);
-setcookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $_SERVER['HTTP_HOST']);
+setcookie('TestCookie', 'Shuzbutt', time() + 3600, Tki\SetPaths::setGamepath(), $request->server->get('HTTP_HOST'));
 
 // Database configuration.
 $db_host = \Tki\SecureConfig::DB_HOST;
@@ -64,15 +64,15 @@ if($sapi === 'apache')
 else
 {
     // This logic presumes nginx is being used.
-    $nameVersionPair = explode('/', $_SERVER['SERVER_SOFTWARE']);
+    $nameVersionPair = explode('/', $request->server->get('SERVER_SOFTWARE'));
     $serverType = $nameVersionPair[0];
     $serverVersion = array_pop($nameVersionPair);
 }
 
 $variables['selected_lang'] = null;
 $variables['system'] = php_uname();
-$variables['remote_addr'] = $_SERVER['REMOTE_ADDR'];
-$variables['server_addr'] = $_SERVER['HTTP_HOST'] . ':' . $_SERVER['SERVER_PORT'];
+$variables['remote_addr'] = $request->server->get('REMOTE_ADDR');
+$variables['server_addr'] = $request->server->get('HTTP_HOST') . ':' . $request->server->get('SERVER_PORT');
 $variables['zend_version'] = zend_version();
 $variables['php_version'] = PHP_VERSION;
 $variables['php_sapi_name'] = php_sapi_name();
@@ -107,7 +107,7 @@ $variables['smarty_path_test'] = file_exists(realpath("vendor/smarty/smarty/dist
 $variables['title'] = $langvars['l_setup_info_title'];
 
 // Test Smarty
-$test_smarty = new \Smarty;
+$test_smarty = new \Smarty();
 $test_smarty->setCompileDir('templates/_compile/');
 $test_smarty->setCacheDir('templates/_cache/');
 $test_smarty->setConfigDir('templates/_configs/');

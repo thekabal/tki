@@ -31,14 +31,14 @@ echo "<h1>" . $title . "</h1>\n";
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Get playerinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}ships WHERE email=:email LIMIT 1";
+$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $_SESSION['username']);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get sectorinfo from database
-$sql = "SELECT * FROM {$pdo_db->prefix}universe WHERE sector_id=:sector_id LIMIT 1";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector']);
 $stmt->execute();
@@ -57,7 +57,7 @@ if (mb_strlen(trim($beacon_text)) === 0)
 if ($playerinfo['dev_beacon'] > 0)
 {
     // Get playerinfo from database
-    $sql = "SELECT allow_beacon FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id LIMIT 1";
+    $sql = "SELECT allow_beacon FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
     $stmt->execute();
@@ -69,13 +69,13 @@ if ($playerinfo['dev_beacon'] > 0)
     }
     elseif ($zoneinfo['allow_beacon'] == 'L')
     {
-        $sql = "SELECT * FROM {$pdo_db->prefix}zones WHERE zone_id=:zone_id";
+        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
         $stmt->execute();
         $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $sql = "SELECT team FROM {$pdo_db->prefix}ships WHERE ship_id=:ship_id";
+        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $zoneowner_info['owner']);
         $stmt->execute();
@@ -129,13 +129,13 @@ if ($playerinfo['dev_beacon'] > 0)
             $beacon_text = trim(htmlentities($beacon_text, ENT_HTML5, 'UTF-8'));
             echo $langvars['l_beacon_nowreads'] . ": " . $beacon_text . ".<br><br>";
 
-            $sql = "UPDATE {$pdo_db->prefix}universe SET beacon=:beacon WHERE sector_id=:sector_id";
+            $sql = "UPDATE ::prefix::universe SET beacon=:beacon WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':beacon', $beacon_text);
             $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
             $stmt->execute();
 
-            $sql = "UPDATE {$pdo_db->prefix}ships SET dev_beacon=dev_beacon-1 WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET dev_beacon=dev_beacon-1 WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
