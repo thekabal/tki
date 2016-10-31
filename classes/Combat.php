@@ -28,7 +28,7 @@ class Combat
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
-        $targetinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $targetinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         echo "<br><br>-=-=-=-=-=-=-=--<br>
         " . $langvars['l_cmb_startingstats'] . ":<br>
@@ -482,7 +482,7 @@ class Combat
                 $stmt->bindParam(':salv_goods', $salv_goods);
                 $stmt->bindParam(':salv_salvage', $salv_salvage);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-                $update = $stmt->execute();
+                $stmt->execute();
             }
 
             if ($targetinfo['dev_escapepod'] == "Y")

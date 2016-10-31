@@ -107,7 +107,7 @@ class PlanetReport
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $playerinfo['ship_id']);
         $stmt->execute();
-        $planet_owner_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $planet_owner_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $i = 0;
         $planet = array();
         if ($planet_owner_present !== null)
