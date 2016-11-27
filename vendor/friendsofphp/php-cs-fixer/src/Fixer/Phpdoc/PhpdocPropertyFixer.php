@@ -15,11 +15,19 @@ namespace PhpCsFixer\Fixer\Phpdoc;
 use PhpCsFixer\AbstractProxyFixer;
 
 /**
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
 final class PhpdocPropertyFixer extends AbstractProxyFixer
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription()
+    {
+        return '@property tags should be used rather than other variants.';
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -32,13 +40,5 @@ final class PhpdocPropertyFixer extends AbstractProxyFixer
         ));
 
         return $fixer;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDescription()
-    {
-        return '@property tags should be used rather than other variants.';
     }
 }

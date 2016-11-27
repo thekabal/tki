@@ -16,7 +16,7 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  */
 final class SimplifiedNullReturnFixer extends AbstractFixer
 {
@@ -26,6 +26,14 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
     public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(T_RETURN);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRisky()
+    {
+        return true;
     }
 
     /**

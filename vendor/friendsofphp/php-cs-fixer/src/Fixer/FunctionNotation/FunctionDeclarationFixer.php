@@ -13,6 +13,7 @@
 namespace PhpCsFixer\Fixer\FunctionNotation;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
 
@@ -47,7 +48,11 @@ final class FunctionDeclarationFixer extends AbstractFixer
                 continue;
             }
 
-            $startParenthesisIndex = $tokens->getNextTokenOfKind($index, array('('));
+            $startParenthesisIndex = $tokens->getNextTokenOfKind($index, array('(', ';', array(T_CLOSE_TAG)));
+            if (!$tokens[$startParenthesisIndex]->equals('(')) {
+                continue;
+            }
+
             $endParenthesisIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $startParenthesisIndex);
             $startBraceIndex = $tokens->getNextTokenOfKind($endParenthesisIndex, array(';', '{'));
 
@@ -67,29 +72,27 @@ final class FunctionDeclarationFixer extends AbstractFixer
             $afterParenthesisIndex = $tokens->getNextNonWhitespace($endParenthesisIndex);
             $afterParenthesisToken = $tokens[$afterParenthesisIndex];
 
-            if ($afterParenthesisToken->isGivenKind(CT_USE_LAMBDA)) {
+            if ($afterParenthesisToken->isGivenKind(CT::T_USE_LAMBDA)) {
+                // fix whitespace after CT:T_USE_LAMBDA (we might add a token, so do this before determining start and end parenthesis)
+                $tokens->ensureWhitespaceAtIndex($afterParenthesisIndex + 1, 0, ' ');
+
                 $useStartParenthesisIndex = $tokens->getNextTokenOfKind($afterParenthesisIndex, array('('));
                 $useEndParenthesisIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $useStartParenthesisIndex);
-
-                // fix whitespace after CT_USE_LAMBDA
-                $tokens->ensureWhitespaceAtIndex($afterParenthesisIndex + 1, 0, ' ');
 
                 // remove single-line edge whitespaces inside use parentheses
                 $this->fixParenthesisInnerEdge($tokens, $useStartParenthesisIndex, $useEndParenthesisIndex);
 
-                // fix whitespace before CT_USE_LAMBDA
+                // fix whitespace before CT::T_USE_LAMBDA
                 $tokens->ensureWhitespaceAtIndex($afterParenthesisIndex - 1, 1, ' ');
             }
 
             // remove single-line edge whitespaces inside parameters list parentheses
             $this->fixParenthesisInnerEdge($tokens, $startParenthesisIndex, $endParenthesisIndex);
 
-            if (!$tokensAnalyzer->isLambda($index)) {
-                // remove whitespace before (
-                // eg: `function foo () {}` => `function foo() {}`
-                if ($tokens[$startParenthesisIndex - 1]->isWhitespace()) {
-                    $tokens[$startParenthesisIndex - 1]->clear();
-                }
+            // remove whitespace before (
+            // eg: `function foo () {}` => `function foo() {}`
+            if (!$tokensAnalyzer->isLambda($index) && $tokens[$startParenthesisIndex - 1]->isWhitespace()) {
+                $tokens[$startParenthesisIndex - 1]->clear();
             }
 
             // fix whitespace after T_FUNCTION

@@ -28,13 +28,10 @@ abstract class AbstractProxyFixer extends AbstractFixer
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->proxyFixer = $this->createProxyFixer();
     }
-
-    /**
-     * @return FixerInterface
-     */
-    abstract protected function createProxyFixer();
 
     /**
      * {@inheritdoc}
@@ -59,4 +56,9 @@ abstract class AbstractProxyFixer extends AbstractFixer
     {
         $this->proxyFixer->fix($file, $tokens);
     }
+
+    /**
+     * @return FixerInterface
+     */
+    abstract protected function createProxyFixer();
 }

@@ -118,6 +118,7 @@ final class PhpdocToCommentFixer extends AbstractFixer
             T_PRIVATE,
             T_PROTECTED,
             T_PUBLIC,
+            T_VAR,
             T_FUNCTION,
             T_ABSTRACT,
             T_CONST,
@@ -203,10 +204,6 @@ final class PhpdocToCommentFixer extends AbstractFixer
     {
         $nextIndex = $tokens->getNextMeaningfulToken($variableIndex);
 
-        if (!$tokens[$nextIndex]->equals('=')) {
-            return false;
-        }
-
-        return false !== strpos($docsToken->getContent(), $tokens[$variableIndex]->getContent());
+        return $tokens[$nextIndex]->equals('=');
     }
 }

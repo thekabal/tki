@@ -51,6 +51,23 @@ class Token
     private $changed = false;
 
     /**
+     * Constructor.
+     *
+     * @param string|array $token token prototype
+     */
+    public function __construct($token)
+    {
+        if (is_array($token)) {
+            $this->isArray = true;
+            $this->id = $token[0];
+            $this->content = $token[1];
+        } else {
+            $this->isArray = false;
+            $this->content = $token;
+        }
+    }
+
+    /**
      * Get cast token kinds.
      *
      * @return int[]
@@ -80,41 +97,6 @@ class Token
         }
 
         return $classTokens;
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param string|array $token token prototype
-     */
-    public function __construct($token)
-    {
-        if (is_array($token)) {
-            $this->isArray = true;
-            $this->id = $token[0];
-            $this->content = $token[1];
-        } else {
-            $this->isArray = false;
-            $this->content = $token;
-        }
-    }
-
-    /**
-     * @param string[] $tokenNames
-     *
-     * @return array<int, int>
-     */
-    private static function getTokenKindsForNames(array $tokenNames)
-    {
-        $keywords = array();
-        foreach ($tokenNames as $keywordName) {
-            if (defined($keywordName)) {
-                $keyword = constant($keywordName);
-                $keywords[$keyword] = $keyword;
-            }
-        }
-
-        return $keywords;
     }
 
     /**
@@ -181,13 +163,13 @@ class Token
      * Check if token is equals to one of given.
      *
      * @param array $others        array of tokens or token prototypes
-     * @param bool  $caseSensitive perform a case sensitive comparison.
+     * @param bool  $caseSensitive perform a case sensitive comparison
      *
      * @return bool
      */
     public function equalsAny(array $others, $caseSensitive = true)
     {
-        foreach ($others as $key => $other) {
+        foreach ($others as $other) {
             if ($this->equals($other, $caseSensitive)) {
                 return true;
             }
@@ -201,7 +183,7 @@ class Token
      *
      * @param bool|bool[] $caseSensitive global case sensitiveness or an array of booleans, whose keys should match
      *                                   the ones used in $others. If any is missing, the default case-sensitive
-     *                                   comparison is used.
+     *                                   comparison is used
      * @param int         $key           the key of the token that has to be looked up
      *
      * @return bool
@@ -263,10 +245,8 @@ class Token
             return;
         }
 
-        $transformers = Transformers::create();
-
-        if ($transformers->hasCustomToken($this->id)) {
-            return $transformers->getCustomToken($this->id);
+        if (CT::has($this->id)) {
+            return CT::getName($this->id);
         }
 
         return token_name($this->id);
@@ -292,8 +272,15 @@ class Token
                 'T_NAMESPACE', 'T_NEW', 'T_PRINT', 'T_PRIVATE', 'T_PROTECTED', 'T_PUBLIC', 'T_REQUIRE',
                 'T_REQUIRE_ONCE', 'T_RETURN', 'T_STATIC', 'T_SWITCH', 'T_THROW', 'T_TRAIT', 'T_TRY',
                 'T_UNSET', 'T_USE', 'T_VAR', 'T_WHILE', 'T_YIELD',
-                'CT_ARRAY_TYPEHINT', 'CT_CLASS_CONSTANT', 'CT_CONST_IMPORT', 'CT_FUNCTION_IMPORT', 'CT_NAMESPACE_OPERATOR', 'CT_USE_TRAIT', 'CT_USE_LAMBDA',
-            ));
+            )) + array(
+                CT::T_ARRAY_TYPEHINT => CT::T_ARRAY_TYPEHINT,
+                CT::T_CLASS_CONSTANT => CT::T_CLASS_CONSTANT,
+                CT::T_CONST_IMPORT => CT::T_CONST_IMPORT,
+                CT::T_FUNCTION_IMPORT => CT::T_FUNCTION_IMPORT,
+                CT::T_NAMESPACE_OPERATOR => CT::T_NAMESPACE_OPERATOR,
+                CT::T_USE_TRAIT => CT::T_USE_TRAIT,
+                CT::T_USE_LAMBDA => CT::T_USE_LAMBDA,
+            );
         }
 
         return $keywords;
@@ -512,14 +499,43 @@ class Token
         );
     }
 
-    public function toJson()
+    /**
+     * @param string[]|null $options JSON encode option
+     *
+     * @return string
+     */
+    public function toJson(array $options = null)
     {
-        static $options = null;
+        static $defaultOptions = null;
 
         if (null === $options) {
-            $options = Utils::calculateBitmask(array('JSON_PRETTY_PRINT', 'JSON_NUMERIC_CHECK'));
+            if (null === $defaultOptions) {
+                $defaultOptions = Utils::calculateBitmask(array('JSON_PRETTY_PRINT', 'JSON_NUMERIC_CHECK'));
+            }
+
+            $options = $defaultOptions;
+        } else {
+            $options = Utils::calculateBitmask($options);
         }
 
         return json_encode($this->toArray(), $options);
+    }
+
+    /**
+     * @param string[] $tokenNames
+     *
+     * @return array<int, int>
+     */
+    private static function getTokenKindsForNames(array $tokenNames)
+    {
+        $keywords = array();
+        foreach ($tokenNames as $keywordName) {
+            if (defined($keywordName)) {
+                $keyword = constant($keywordName);
+                $keywords[$keyword] = $keyword;
+            }
+        }
+
+        return $keywords;
     }
 }

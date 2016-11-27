@@ -229,10 +229,14 @@ class Engine
      */
     public function addFile($file)
     {
-        $fileName = realpath($file);
+        if ($file === '-' || $file === 'php://stdin') {
+            $fileName = 'php://stdin';
+        } else {
+            $fileName = realpath($file);
 
-        if (!is_file($fileName)) {
-            throw new \InvalidArgumentException(sprintf('The given file "%s" does not exist.', $file));
+            if (!is_file($fileName)) {
+                throw new \InvalidArgumentException(sprintf('The given file "%s" does not exist.', $file));
+            }
         }
 
         $this->files[] = $fileName;
@@ -629,7 +633,10 @@ class Engine
         }
 
         $fileIterator = new \AppendIterator();
-        $fileIterator->append(new \ArrayIterator($this->files));
+
+        foreach ($this->files as $file) {
+            $fileIterator->append(new Iterator(new \GlobIterator($file), $this->fileFilter));
+        }
 
         foreach ($this->directories as $directory) {
             $fileIterator->append(

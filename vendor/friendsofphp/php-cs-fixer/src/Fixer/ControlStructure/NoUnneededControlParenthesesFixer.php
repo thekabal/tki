@@ -23,11 +23,9 @@ use PhpCsFixer\Tokenizer\Tokens;
 final class NoUnneededControlParenthesesFixer extends AbstractFixer
 {
     /**
-     * To be removed when PHP support will be 5.5+.
-     *
-     * @var string[] List of statements to fix.
+     * @var string[]
      */
-    private $controlStatements = array(
+    private static $defaultConfiguration = array(
         'break',
         'clone',
         'continue',
@@ -37,12 +35,17 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer
         'yield',
     );
 
+    /**
+     * @var string[] List of statements to fix
+     */
+    private $controlStatements;
+
     private static $loops = array(
         'break' => array('lookupTokens' => T_BREAK, 'neededSuccessors' => array(';')),
-        'clone' => array('lookupTokens' => T_CLONE, 'neededSuccessors' => array(';', ':', ',', ')')),
+        'clone' => array('lookupTokens' => T_CLONE, 'neededSuccessors' => array(';', ':', ',', ')'), 'forbiddenContents' => array('?', ':')),
         'continue' => array('lookupTokens' => T_CONTINUE, 'neededSuccessors' => array(';')),
         'echo_print' => array('lookupTokens' => array(T_ECHO, T_PRINT), 'neededSuccessors' => array(';', array(T_CLOSE_TAG))),
-        'return' => array('lookupTokens' => T_RETURN, 'neededSuccessors' => array(';')),
+        'return' => array('lookupTokens' => T_RETURN, 'neededSuccessors' => array(';', array(T_CLOSE_TAG))),
         'switch_case' => array('lookupTokens' => T_CASE, 'neededSuccessors' => array(';', ':')),
     );
 
@@ -51,7 +54,9 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer
      */
     public function __construct()
     {
-        // To be moved back on static when PHP support will be 5.5+
+        parent::__construct();
+
+        // To be moved back to compile time property declaration when PHP support of PHP CS Fixer will be 5.5+
         if (defined('T_YIELD')) {
             self::$loops['yield'] = array('lookupTokens' => T_YIELD, 'neededSuccessors' => array(';', ')'));
         }
@@ -63,6 +68,8 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer
     public function configure(array $controlStatements = null)
     {
         if (null === $controlStatements) {
+            $this->controlStatements = self::$defaultConfiguration;
+
             return;
         }
 
@@ -110,6 +117,14 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer
 
                 if (!$tokens[$blockEndNextIndex]->equalsAny($loop['neededSuccessors'])) {
                     continue;
+                }
+
+                if (array_key_exists('forbiddenContents', $loop)) {
+                    $forbiddenTokenIndex = $tokens->getNextTokenOfKind($blockStartIndex, $loop['forbiddenContents']);
+                    // A forbidden token is found and is inside the parenthesis.
+                    if (null !== $forbiddenTokenIndex && $forbiddenTokenIndex < $blockEndIndex) {
+                        continue;
+                    }
                 }
 
                 if ($tokens[$blockStartIndex - 1]->isWhitespace() || $tokens[$blockStartIndex - 1]->isComment()) {

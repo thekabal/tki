@@ -913,8 +913,8 @@ Failed asserting that two DateTime objects are equal.
 --- Expected
 +++ Actual
 @@ @@
--2013-03-29T04:13:35-0400
-+2013-03-29T04:13:35-0500
+-2013-03-29T04:13:35.000000-0400
++2013-03-29T04:13:35.000000-0500
 
 EOF
             ],
@@ -931,12 +931,14 @@ Failed asserting that two objects are equal.
 -        'obj' => stdClass Object &$ahash (
 -            'foo' => 'bar'
 -        )
+-        'inf' => null
+-    )
+-    '$bhash' => Array &1 (
 +SplObjectStorage Object &$storage2hash (
 +    '$bhash' => Array &0 (
-+        'obj' => stdClass Object &$bhash ()
+         'obj' => stdClass Object &$bhash ()
          'inf' => null
      )
--    '$bhash' => Array &0
  )
 
 EOF
@@ -952,12 +954,14 @@ Failed asserting that two objects are equal.
 -        'obj' => stdClass Object &$ahash (
 -            'foo' => 'bar'
 -        )
+-        'inf' => null
+-    )
+-    '$bhash' => Array &1 (
 +SplObjectStorage Object &$storage2hash (
 +    '$bhash' => Array &0 (
-+        'obj' => stdClass Object &$bhash ()
+         'obj' => stdClass Object &$bhash ()
          'inf' => null
      )
--    '$bhash' => Array &0
  )
 
 EOF

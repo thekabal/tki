@@ -28,9 +28,17 @@ final class WhitespacyCommentTransformer extends AbstractTransformer
     /**
      * {@inheritdoc}
      */
-    public function getCustomTokenNames()
+    public function getCustomTokens()
     {
         return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequiredPhpVersionId()
+    {
+        return 50000;
     }
 
     /**

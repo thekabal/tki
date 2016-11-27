@@ -13,6 +13,7 @@
 namespace PhpCsFixer\Fixer\FunctionNotation;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
@@ -50,6 +51,49 @@ final class MethodArgumentSpaceFixer extends AbstractFixer
             if ($token->equals('(') && !$tokens[$index - 1]->isGivenKind(T_ARRAY)) {
                 $this->fixFunction($tokens, $index);
             }
+        }
+    }
+
+    /**
+     * Method to insert space after comma and remove space before comma.
+     *
+     * @param Tokens $tokens
+     * @param int    $index
+     */
+    public function fixSpace(Tokens $tokens, $index)
+    {
+        // remove space before comma if exist
+        if ($tokens[$index - 1]->isWhitespace()) {
+            $prevIndex = $tokens->getPrevNonWhitespace($index - 1);
+
+            if (!$tokens[$prevIndex]->equalsAny(array(',', array(T_END_HEREDOC)))) {
+                $tokens[$index - 1]->clear();
+            }
+        }
+
+        $nextToken = $tokens[$index + 1];
+
+        // Two cases for fix space after comma (exclude multiline comments)
+        //  1) multiple spaces after comma
+        //  2) no space after comma
+        if ($nextToken->isWhitespace()) {
+            if ($this->isCommentLastLineToken($tokens, $index + 2)) {
+                return;
+            }
+
+            $newContent = ltrim($nextToken->getContent(), " \t");
+
+            if ('' === $newContent) {
+                $newContent = ' ';
+            }
+
+            $nextToken->setContent($newContent);
+
+            return;
+        }
+
+        if (!$this->isCommentLastLineToken($tokens, $index + 1)) {
+            $tokens->insertAt($index + 1, new Token(array(T_WHITESPACE, ' ')));
         }
     }
 
@@ -96,7 +140,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer
                 continue;
             }
 
-            if ($token->isGivenKind(CT_ARRAY_SQUARE_BRACE_CLOSE)) {
+            if ($token->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_CLOSE)) {
                 $index = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE, $index, false);
                 continue;
             }
@@ -104,49 +148,6 @@ final class MethodArgumentSpaceFixer extends AbstractFixer
             if ($token->equals(',')) {
                 $this->fixSpace($tokens, $index);
             }
-        }
-    }
-
-    /**
-     * Method to insert space after comma and remove space before comma.
-     *
-     * @param Tokens $tokens
-     * @param int    $index
-     */
-    public function fixSpace(Tokens $tokens, $index)
-    {
-        // remove space before comma if exist
-        if ($tokens[$index - 1]->isWhitespace()) {
-            $prevIndex = $tokens->getPrevNonWhitespace($index - 1);
-
-            if (!$tokens[$prevIndex]->equalsAny(array(',', array(T_END_HEREDOC)))) {
-                $tokens[$index - 1]->clear();
-            }
-        }
-
-        $nextToken = $tokens[$index + 1];
-
-        // Two cases for fix space after comma (exclude multiline comments)
-        //  1) multiple spaces after comma
-        //  2) no space after comma
-        if ($nextToken->isWhitespace()) {
-            if ($this->isCommentLastLineToken($tokens, $index + 2)) {
-                return;
-            }
-
-            $newContent = ltrim($nextToken->getContent(), " \t");
-
-            if ('' === $newContent) {
-                $newContent = ' ';
-            }
-
-            $nextToken->setContent($newContent);
-
-            return;
-        }
-
-        if (!$this->isCommentLastLineToken($tokens, $index + 1)) {
-            $tokens->insertAt($index + 1, new Token(array(T_WHITESPACE, ' ')));
         }
     }
 }

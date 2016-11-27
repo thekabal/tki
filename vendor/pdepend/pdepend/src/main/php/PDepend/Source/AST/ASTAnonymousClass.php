@@ -52,8 +52,159 @@ use PDepend\Source\ASTVisitor\ASTVisitor;
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 2.3
  */
-class ASTAnonymousClass extends ASTClass
+class ASTAnonymousClass extends ASTClass implements ASTNode
 {
+    /**
+     * The parent node of this node or <b>null</b> when this node is the root
+     * of a node tree.
+     *
+     * @var \PDepend\Source\AST\ASTNode
+     */
+    protected $parent = null;
+
+    /**
+     * Metadata for this node instance, serialized in a string. This string
+     * contains the start, end line, and the start, end column and the node
+     * image in a colon separated string.
+     *
+     * @var string
+     * @since 0.10.4
+     */
+    protected $metadata = ':::';
+
+    /**
+     * @param string $image
+     * @return void
+     */
+    public function setImage($image)
+    {
+        $this->setName($image);
+    }
+
+    /**
+     * Returns the source image of this ast node.
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->getName();
+    }
+
+    /**
+     * Returns the start line for this ast node.
+     *
+     * @return integer
+     */
+    public function getStartLine()
+    {
+        return $this->getMetadataInteger(0);
+    }
+
+    /**
+     * Returns the start column for this ast node.
+     *
+     * @return integer
+     */
+    public function getStartColumn()
+    {
+        return $this->getMetadataInteger(2);
+    }
+
+    /**
+     * Returns the end line for this ast node.
+     *
+     * @return integer
+     */
+    public function getEndLine()
+    {
+        return $this->getMetadataInteger(1);
+    }
+
+    /**
+     * Returns the end column for this ast node.
+     *
+     * @return integer
+     */
+    public function getEndColumn()
+    {
+        return $this->getMetadataInteger(3);
+    }
+
+    /**
+     * For better performance we have moved the single setter methods for the
+     * node columns and lines into this configure method.
+     *
+     * @param integer $startLine
+     * @param integer $endLine
+     * @param integer $startColumn
+     * @param integer $endColumn
+     * @return void
+     * @since 0.9.10
+     */
+    public function configureLinesAndColumns($startLine, $endLine, $startColumn, $endColumn)
+    {
+        $this->setMetadataInteger(0, $startLine);
+        $this->setMetadataInteger(1, $endLine);
+        $this->setMetadataInteger(2, $startColumn);
+        $this->setMetadataInteger(3, $endColumn);
+    }
+
+    /**
+     * Returns the parent node of this node or <b>null</b> when this node is
+     * the root of a node tree.
+     *
+     * @return \PDepend\Source\AST\ASTNode
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Sets the parent node of this node.
+     *
+     * @param \PDepend\Source\AST\ASTNode $node
+     * @return void
+     */
+    public function setParent(ASTNode $node)
+    {
+        $this->parent = $node;
+    }
+
+    /**
+     * Traverses up the node tree and finds all parent nodes that are instances
+     * of <b>$parentType</b>.
+     *
+     * @param string $parentType
+     * @return \PDepend\Source\AST\ASTNode[]
+     */
+    public function getParentsOfType($parentType)
+    {
+        $parents = array();
+
+        $parentNode = $this->parent;
+        while (is_object($parentNode)) {
+            if ($parentNode instanceof $parentType) {
+                array_unshift($parents, $parentNode);
+            }
+            $parentNode = $parentNode->getParent();
+        }
+        return $parents;
+    }
+
+    /**
+     * This method adds a new child node at the first position of the children.
+     *
+     * @param \PDepend\Source\AST\ASTNode $node
+     * @return void
+     */
+    public function prependChild(ASTNode $node)
+    {
+        array_unshift($this->nodes, $node);
+        $node->setParent($this);
+    }
+
     /**
      * Will return <b>true</b> if this class was declared anonymous in an
      * allocation expression.
@@ -66,14 +217,26 @@ class ASTAnonymousClass extends ASTClass
     }
 
     /**
-     * ASTVisitor method for node tree traversal.
-     *
      * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor
+     * @param mixed $data
      * @return void
      */
-    public function accept(ASTVisitor $visitor)
+    public function accept(ASTVisitor $visitor, $data = null)
     {
-        $visitor->visitClass($this);
+        return $visitor->visitAnonymousClass($this, $data);
+    }
+
+    /**
+     * The magic sleep method will be called by PHP's runtime environment right
+     * before an instance of this class gets serialized. It should return an
+     * array with those property names that should be serialized for this class.
+     *
+     * @return array
+     * @since 0.10.0
+     */
+    public function __sleep()
+    {
+        return array_merge(array('metadata'), parent::__sleep());
     }
 
     /**
@@ -87,5 +250,79 @@ class ASTAnonymousClass extends ASTClass
     public function __wakeup()
     {
         $this->methods = null;
+
+        foreach ($this->nodes as $node) {
+            $node->setParent($this);
+        }
+
+        parent::__wakeup();
+
+    }
+
+    /**
+     * Returns an integer value that was stored under the given index.
+     *
+     * @param integer $index
+     * @return integer
+     * @since 0.10.4
+     */
+    protected function getMetadataInteger($index)
+    {
+        return (int) $this->getMetadata($index);
+    }
+
+    /**
+     * Stores an integer value under the given index in the internally used data
+     * string.
+     *
+     * @param integer $index
+     * @param integer $value
+     * @return void
+     * @since 0.10.4
+     */
+    protected function setMetadataInteger($index, $value)
+    {
+        $this->setMetadata($index, $value);
+    }
+
+    /**
+     * Returns the value that was stored under the given index.
+     *
+     * @param integer $index
+     * @return mixed
+     * @since 0.10.4
+     */
+    protected function getMetadata($index)
+    {
+        $metadata = explode(':', $this->metadata, $this->getMetadataSize());
+        return $metadata[$index];
+    }
+
+    /**
+     * Stores the given value under the given index in an internal storage
+     * container.
+     *
+     * @param integer $index
+     * @param mixed $value
+     * @return void
+     * @since 0.10.4
+     */
+    protected function setMetadata($index, $value)
+    {
+        $metadata         = explode(':', $this->metadata, $this->getMetadataSize());
+        $metadata[$index] = $value;
+
+        $this->metadata = join(':', $metadata);
+    }
+
+    /**
+     * Returns the total number of the used property bag.
+     *
+     * @return integer
+     * @since 0.10.4
+     */
+    protected function getMetadataSize()
+    {
+        return 4;
     }
 }

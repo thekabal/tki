@@ -18,7 +18,7 @@ use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Utils;
 
 /**
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  */
 final class NoBlankLinesAfterPhpdocFixer extends AbstractFixer
 {
@@ -65,6 +65,15 @@ final class NoBlankLinesAfterPhpdocFixer extends AbstractFixer
     public function getDescription()
     {
         return 'There should not be blank lines between docblock and the documented element.';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        // should be ran before the SingleBlankLineBeforeNamespaceFixer.
+        return 1;
     }
 
     /**

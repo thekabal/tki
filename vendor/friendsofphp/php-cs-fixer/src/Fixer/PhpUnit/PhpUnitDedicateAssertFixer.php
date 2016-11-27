@@ -46,7 +46,10 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer
         'is_string' => true,
     );
 
-    private $configuration = array(
+    /**
+     * @var string[]
+     */
+    private static $defaultConfiguration = array(
         'array_key_exists',
         'empty',
         'file_exists',
@@ -71,11 +74,18 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer
     );
 
     /**
+     * @var string[]
+     */
+    private $configuration;
+
+    /**
      * @param array|null $configuration
      */
     public function configure(array $configuration = null)
     {
         if (null === $configuration) {
+            $this->configuration = self::$defaultConfiguration;
+
             return;
         }
 
@@ -149,9 +159,9 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer
 
     /**
      * @param Tokens $tokens
-     * @param int    $assertCallIndex Token index of assert method call.
+     * @param int    $assertCallIndex Token index of assert method call
      *
-     * @return int|int[] indexes of assert call, test call and positive flag, or last index checked.
+     * @return int|int[] indexes of assert call, test call and positive flag, or last index checked
      */
     private function getAssertCandidate(Tokens $tokens, $assertCallIndex)
     {
@@ -217,7 +227,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer
         list(
             $isPositive,
             $assertCallIndex,
-            $assertCallOpenIndex,
+            ,
             $testDefaultNamespaceTokenIndex,
             $testIndex,
             $testOpenIndex,

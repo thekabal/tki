@@ -45,7 +45,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
                 continue;
             }
 
-            list($previousUnset, $previousUnsetBraceStart, $previousUnsetBraceEnd, $previousUnsetSemicolon) = $previousUnsetCall;
+            list($previousUnset, , $previousUnsetBraceEnd) = $previousUnsetCall;
 
             // Merge the tokens inside the 'unset' call into the previous one 'unset' call.
             $tokensAddCount = $this->moveTokens(
@@ -88,7 +88,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
      */
     public function getPriority()
     {
-        // should ran before SpacesAfterSemicolonFixer, WhitespacyLinesFixer, TrailingSpacesFixer and ExtraEmptyLinesFixer and after NoEmptyStatementFixer.
+        // should ran before SpaceAfterSemicolonFixer, NoWhitespaceInBlankLineFixer, NoTrailingWhitespaceFixer and NoExtraConsecutiveBlankLinesFixer and after NoEmptyStatementFixer.
         return 24;
     }
 

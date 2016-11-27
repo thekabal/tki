@@ -13,20 +13,15 @@
 namespace PhpCsFixer\Runner;
 
 use PhpCsFixer\Cache\CacheManagerInterface;
-use PhpCsFixer\Cache\FileCacheManager;
-use PhpCsFixer\Cache\FileHandler;
-use PhpCsFixer\Cache\NullCacheManager;
-use PhpCsFixer\Cache\Signature;
-use PhpCsFixer\ConfigInterface;
 use PhpCsFixer\Differ\DifferInterface;
 use PhpCsFixer\Error\Error;
 use PhpCsFixer\Error\ErrorsManager;
 use PhpCsFixer\FixerFileProcessedEvent;
+use PhpCsFixer\FixerInterface;
 use PhpCsFixer\Linter\LinterInterface;
 use PhpCsFixer\Linter\LintingException;
 use PhpCsFixer\Linter\LintingResultInterface;
 use PhpCsFixer\Tokenizer\Tokens;
-use PhpCsFixer\ToolInfo;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -37,11 +32,6 @@ use Symfony\Component\Finder\SplFileInfo as SymfonySplFileInfo;
  */
 final class Runner
 {
-    /**
-     * @var ConfigInterface
-     */
-    private $config;
-
     /**
      * @var DifferInterface
      */
@@ -72,49 +62,34 @@ final class Runner
      */
     private $linter;
 
+    /**
+     * @var \Traversable
+     */
+    private $finder;
+
+    /**
+     * @var FixerInterface[]
+     */
+    private $fixers;
+
     public function __construct(
-        ConfigInterface $config,
+        $finder,
+        array $fixers,
         DifferInterface $differ,
         EventDispatcher $eventDispatcher = null,
         ErrorsManager $errorsManager,
         LinterInterface $linter,
-        $isDryRun
+        $isDryRun,
+        CacheManagerInterface $cacheManager
     ) {
-        $this->config = $config;
+        $this->finder = $finder;
+        $this->fixers = $fixers;
         $this->differ = $differ;
         $this->eventDispatcher = $eventDispatcher;
         $this->errorsManager = $errorsManager;
         $this->linter = $linter;
         $this->isDryRun = $isDryRun;
-
-        $this->cacheManager = $this->createCacheManager(
-            $config,
-            $isDryRun
-        );
-    }
-
-    /**
-     * @param ConfigInterface $config
-     * @param bool            $isDryRun
-     *
-     * @return CacheManagerInterface
-     */
-    private function createCacheManager(ConfigInterface $config, $isDryRun)
-    {
-        if ($config->usingCache() && (ToolInfo::isInstalledAsPhar() || ToolInfo::isInstalledByComposer())) {
-            return new FileCacheManager(
-                new FileHandler($config->getCacheFile()),
-                new Signature(
-                    PHP_VERSION,
-                    ToolInfo::getVersion(),
-                    $config->usingLinter(),
-                    $config->getRules()
-                ),
-                $isDryRun
-            );
-        }
-
-        return new NullCacheManager();
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -123,19 +98,18 @@ final class Runner
     public function fix()
     {
         $changed = array();
-        $config = $this->config;
 
-        $finder = $config->getFinder();
+        $finder = $this->finder;
         $finderIterator = $finder instanceof \IteratorAggregate ? $finder->getIterator() : $finder;
-
-        $collection = new FileLintingIterator(
-            new FileFilterIterator(
-                $finderIterator,
-                $this->eventDispatcher,
-                $this->cacheManager
-            ),
-            $this->linter
+        $fileFilteredFileIterator = new FileFilterIterator(
+            $finderIterator,
+            $this->eventDispatcher,
+            $this->cacheManager
         );
+
+        $collection = $this->linter->isAsync()
+            ? new FileCachingLintingIterator($fileFilteredFileIterator, $this->linter)
+            : new FileLintingIterator($fileFilteredFileIterator, $this->linter);
 
         foreach ($collection as $file) {
             $fixInfo = $this->fixFile($file, $collection->currentLintingResult());
@@ -144,6 +118,9 @@ final class Runner
                 $name = $this->getFileRelativePathname($file);
                 $changed[$name] = $fixInfo;
             }
+
+            // we do not need Tokens to still caching just fixed file - so clear the cache
+            Tokens::clearCache();
         }
 
         return $changed;
@@ -158,7 +135,7 @@ final class Runner
         } catch (LintingException $e) {
             $this->dispatchEvent(
                 FixerFileProcessedEvent::NAME,
-                FixerFileProcessedEvent::create()->setStatus(FixerFileProcessedEvent::STATUS_INVALID)
+                new FixerFileProcessedEvent(FixerFileProcessedEvent::STATUS_INVALID)
             );
 
             $this->errorsManager->report(new Error(Error::TYPE_INVALID, $name));
@@ -166,22 +143,17 @@ final class Runner
             return;
         }
 
-        $fixers = $this->config->getFixers();
-
         $old = file_get_contents($file->getRealPath());
+        $tokens = Tokens::fromCode($old);
+        $oldHash = $tokens->getCodeHash();
+
+        $newHash = $oldHash;
         $new = $old;
-        $name = $this->getFileRelativePathname($file);
 
         $appliedFixers = array();
 
-        // we do not need Tokens to still caching previously fixed file - so clear the cache
-        Tokens::clearCache();
-
-        $tokens = Tokens::fromCode($old);
-        $newHash = $oldHash = $tokens->getCodeHash();
-
         try {
-            foreach ($fixers as $fixer) {
+            foreach ($this->fixers as $fixer) {
                 if (!$fixer->supports($file) || !$fixer->isCandidate($tokens)) {
                     continue;
                 }
@@ -196,6 +168,15 @@ final class Runner
             }
         } catch (\Exception $e) {
             $this->processException($name);
+
+            return;
+        } catch (\ParseError $e) {
+            $this->dispatchEvent(
+                FixerFileProcessedEvent::NAME,
+                new FixerFileProcessedEvent(FixerFileProcessedEvent::STATUS_LINT)
+            );
+
+            $this->errorsManager->report(new Error(Error::TYPE_LINT, $name));
 
             return;
         } catch (\Throwable $e) {
@@ -221,7 +202,7 @@ final class Runner
             } catch (LintingException $e) {
                 $this->dispatchEvent(
                     FixerFileProcessedEvent::NAME,
-                    FixerFileProcessedEvent::create()->setStatus(FixerFileProcessedEvent::STATUS_LINT)
+                    new FixerFileProcessedEvent(FixerFileProcessedEvent::STATUS_LINT)
                 );
 
                 $this->errorsManager->report(new Error(Error::TYPE_LINT, $name));
@@ -232,9 +213,10 @@ final class Runner
             if (!$this->isDryRun) {
                 if (false === @file_put_contents($file->getRealPath(), $new)) {
                     $error = error_get_last();
-                    if ($error) {
+                    if (null !== $error) {
                         throw new IOException(sprintf('Failed to write file "%s", "%s".', $file->getRealPath(), $error['message']), 0, null, $file->getRealPath());
                     }
+
                     throw new IOException(sprintf('Failed to write file "%s".', $file->getRealPath()), 0, null, $file->getRealPath());
                 }
             }
@@ -249,7 +231,7 @@ final class Runner
 
         $this->dispatchEvent(
             FixerFileProcessedEvent::NAME,
-            FixerFileProcessedEvent::create()->setStatus($fixInfo ? FixerFileProcessedEvent::STATUS_FIXED : FixerFileProcessedEvent::STATUS_NO_CHANGES)
+            new FixerFileProcessedEvent($fixInfo ? FixerFileProcessedEvent::STATUS_FIXED : FixerFileProcessedEvent::STATUS_NO_CHANGES)
         );
 
         return $fixInfo;
@@ -264,7 +246,7 @@ final class Runner
     {
         $this->dispatchEvent(
             FixerFileProcessedEvent::NAME,
-            FixerFileProcessedEvent::create()->setStatus(FixerFileProcessedEvent::STATUS_EXCEPTION)
+            new FixerFileProcessedEvent(FixerFileProcessedEvent::STATUS_EXCEPTION)
         );
 
         $this->errorsManager->report(new Error(Error::TYPE_EXCEPTION, $name));

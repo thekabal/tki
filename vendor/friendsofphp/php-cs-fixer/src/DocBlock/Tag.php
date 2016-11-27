@@ -15,7 +15,7 @@ namespace PhpCsFixer\DocBlock;
 /**
  * This represents a tag, as defined by the proposed PSR PHPDoc standard.
  *
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  */
 class Tag
 {
@@ -89,7 +89,7 @@ class Tag
         $current = $this->getName();
 
         if ('other' === $current) {
-            throw new \RuntimeException('Cannot set name on unknown tag');
+            throw new \RuntimeException('Cannot set name on unknown tag.');
         }
 
         $this->line->setContent(preg_replace("/@$current/", "@$name", $this->line->getContent(), 1));

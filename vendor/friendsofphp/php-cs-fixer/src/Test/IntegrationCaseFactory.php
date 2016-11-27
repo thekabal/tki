@@ -12,9 +12,8 @@
 
 namespace PhpCsFixer\Test;
 
-use PhpCsFixer\FixerFactory;
-use PhpCsFixer\FixerInterface;
 use PhpCsFixer\RuleSet;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
@@ -24,30 +23,53 @@ use PhpCsFixer\RuleSet;
 final class IntegrationCaseFactory
 {
     /**
-     * @param string $fileName
-     * @param string $content
+     * @param SplFileInfo $file
      *
      * @return IntegrationCase
      */
-    public function create($fileName, $content)
+    public function create(SplFileInfo $file)
     {
         try {
-            if (!preg_match('/--TEST--\n(?<title>.*?)\s--CONFIG--\n(?<config>.*?)(\s--SETTINGS--\n(?<settings>.*?))?(\s--REQUIREMENTS--\n(?<requirements>.*?))?\s--EXPECT--\n(?<expect>.*?\n*)(?:\n--INPUT--\s(?<input>.*)|$)/s', $content, $match)) {
+            if (!preg_match(
+                '/^
+                            --TEST--           \r?\n(?<title>          .*?)
+                       \s   --RULESET--        \r?\n(?<ruleset>        .*?)
+                    (?:\s   --CONFIG--         \r?\n(?<config>         .*?))?
+                    (?:\s   --SETTINGS--       \r?\n(?<settings>       .*?))?
+                    (?:\s   --REQUIREMENTS--   \r?\n(?<requirements>   .*?))?
+                    (?:\s   --EXPECT--         \r?\n(?<expect>         .*?\r?\n*))?
+                    (?:\s   --INPUT--          \r?\n(?<input>          .*))?
+                $/sx',
+                $file->getContents(),
+                $match
+            )) {
                 throw new \InvalidArgumentException('File format is invalid.');
             }
 
-            return IntegrationCase::create()
-                ->setFileName($fileName)
-                ->setTitle($match['title'])
-                ->setFixers($this->determineFixers($match['config']))
-                ->setRequirements($this->determineRequirements($match['requirements']))
-                ->setSettings($this->determineSettings($match['settings']))
-                ->setExpectedCode($match['expect'])
-                ->setInputCode(isset($match['input']) ? $match['input'] : null)
-            ;
+            $match = array_merge(
+                array(
+                    'config' => null,
+                    'settings' => null,
+                    'requirements' => null,
+                    'expect' => null,
+                    'input' => null,
+                ),
+                $match
+            );
+
+            return new IntegrationCase(
+                $file->getRelativePathname(),
+                $match['title'],
+                $this->determineSettings($match['settings']),
+                $this->determineRequirements($match['requirements']),
+                $this->determineConfig($match['config']),
+                $this->determineRuleset($match['ruleset']),
+                $this->determineExpectedCode($match['expect'], $file),
+                $this->determineInputCode($match['input'], $file)
+            );
         } catch (\InvalidArgumentException $e) {
             throw new \InvalidArgumentException(
-                sprintf('%s Test file: "%s".', $e->getMessage(), $fileName),
+                sprintf('%s Test file: "%s".', $e->getMessage(), $file->getRelativePathname()),
                 $e->getCode(),
                 $e
             );
@@ -55,25 +77,34 @@ final class IntegrationCaseFactory
     }
 
     /**
-     * Parses the '--CONFIG--' block of a '.test' file and determines what fixers should be used.
+     * Parses the '--CONFIG--' block of a '.test' file.
      *
      * @param string $config
      *
-     * @return FixerInterface[]
+     * @return array
      */
-    protected function determineFixers($config)
+    protected function determineConfig($config)
     {
-        $ruleSet = json_decode($config, true);
+        $parsed = $this->parseJson($config, array(
+            'indent' => '    ',
+            'lineEnding' => "\n",
+        ));
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new \InvalidArgumentException('Malformed JSON configuration.');
+        if (!is_string($parsed['indent'])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected string value for "indent", got "%s".',
+                is_object($parsed['indent']) ? get_class($parsed['indent']) : gettype($parsed['indent']).'#'.$parsed['indent'])
+            );
         }
 
-        return FixerFactory::create()
-            ->registerBuiltInFixers()
-            ->useRuleSet(new RuleSet($ruleSet))
-            ->getFixers()
-        ;
+        if (!is_string($parsed['lineEnding'])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected string value for "lineEnding", got "%s".',
+                is_object($parsed['lineEnding']) ? get_class($parsed['lineEnding']) : gettype($parsed['lineEnding']).'#'.$parsed['lineEnding'])
+            );
+        }
+
+        return $parsed;
     }
 
     /**
@@ -85,39 +116,38 @@ final class IntegrationCaseFactory
      */
     protected function determineRequirements($config)
     {
-        $requirements = array('hhvm' => true, 'php' => PHP_VERSION);
+        $parsed = $this->parseJson($config, array(
+            'hhvm' => true,
+            'php' => PHP_VERSION_ID,
+        ));
 
-        if ('' === $config) {
-            return $requirements;
+        if (!is_int($parsed['php']) || $parsed['php'] < 50306) {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected int >= 50306 value for "php", got "%s".',
+                is_object($parsed['php']) ? get_class($parsed['php']) : gettype($parsed['php']).'#'.$parsed['php'])
+            );
         }
 
-        $lines = explode("\n", $config);
-        if (empty($lines)) {
-            return $requirements;
+        if (!is_bool($parsed['hhvm'])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected bool value for "hhvm", got "%s".',
+                is_object($parsed['hhvm']) ? get_class($parsed['hhvm']) : gettype($parsed['hhvm']).'#'.$parsed['hhvm'])
+            );
         }
 
-        foreach ($lines as $line) {
-            $labelValuePair = explode('=', $line);
-            if (2 !== count($labelValuePair)) {
-                throw new \InvalidArgumentException(sprintf('Invalid REQUIREMENTS line: "%d".', $line));
-            }
+        return $parsed;
+    }
 
-            $label = strtolower(trim($labelValuePair[0]));
-            $value = trim($labelValuePair[1]);
-
-            switch ($label) {
-                case 'hhvm':
-                    $requirements['hhvm'] = 'false' !== $value;
-                    break;
-                case 'php':
-                    $requirements['php'] = $value;
-                    break;
-                default:
-                    throw new \InvalidArgumentException(sprintf('Unknown REQUIREMENTS line: "%d".', $line));
-            }
-        }
-
-        return $requirements;
+    /**
+     * Parses the '--RULESET--' block of a '.test' file and determines what fixers should be used.
+     *
+     * @param string $config
+     *
+     * @return RuleSet
+     */
+    protected function determineRuleset($config)
+    {
+        return new RuleSet($this->parseJson($config));
     }
 
     /**
@@ -129,35 +159,96 @@ final class IntegrationCaseFactory
      */
     protected function determineSettings($config)
     {
-        $settings = array('checkPriority' => true);
+        $parsed = $this->parseJson($config, array(
+            'checkPriority' => true,
+        ));
 
-        if ('' === $config) {
-            return $settings;
+        if (!is_bool($parsed['checkPriority'])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected bool value for "checkPriority", got "%s".',
+                is_object($parsed['checkPriority']) ? get_class($parsed['checkPriority']) : gettype($parsed['checkPriority']).'#'.$parsed['checkPriority'])
+            );
         }
 
-        $lines = explode("\n", $config);
-        if (empty($lines)) {
-            return $settings;
+        return $parsed;
+    }
+
+    /**
+     * @param string|null $code
+     * @param SplFileInfo $file
+     *
+     * @return string
+     */
+    protected function determineExpectedCode($code, SplFileInfo $file)
+    {
+        $code = $this->determineCode($code, $file, '-out.php');
+
+        if (null === $code) {
+            throw new \InvalidArgumentException('Missing expected code.');
         }
 
-        foreach ($lines as $line) {
-            $labelValuePair = explode('=', $line);
-            if (2 !== count($labelValuePair)) {
-                throw new \InvalidArgumentException(sprintf('Invalid SETTINGS line: "%d".', $line));
+        return $code;
+    }
+
+    /**
+     * @param string|null $code
+     * @param SplFileInfo $file
+     *
+     * @return string|null
+     */
+    protected function determineInputCode($code, SplFileInfo $file)
+    {
+        return $this->determineCode($code, $file, '-in.php');
+    }
+
+    /**
+     * @param string|null $code
+     * @param SplFileInfo $file
+     * @param string      $suffix
+     *
+     * @return string|null
+     */
+    private function determineCode($code, SplFileInfo $file, $suffix)
+    {
+        if (null !== $code) {
+            return $code;
+        }
+
+        $candidateFile = new SplFileInfo($file->getPathname().$suffix, '', '');
+        if ($candidateFile->isFile()) {
+            return $candidateFile->getContents();
+        }
+    }
+
+    /**
+     * @param string|null $encoded
+     * @param array|null  $template
+     *
+     * @return array
+     */
+    private function parseJson($encoded, array $template = null)
+    {
+        // content is optional if template is provided
+        if (!$encoded && null !== $template) {
+            $decoded = array();
+        } else {
+            $decoded = json_decode($encoded, true);
+
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                throw new \InvalidArgumentException(sprintf('Malformed JSON: "%s".', $encoded));
             }
-
-            $label = trim($labelValuePair[0]);
-            $value = trim($labelValuePair[1]);
-
-            switch ($label) {
-                case 'checkPriority':
-                    $settings['checkPriority'] = 'false' !== $value;
-                    break;
-                default:
-                    throw new \InvalidArgumentException(sprintf('Unknown SETTINGS line: "%d".', $line));
-            }
         }
 
-        return $settings;
+        if (null !== $template) {
+            $decoded = array_merge(
+                $template,
+                array_intersect_key(
+                    $decoded,
+                    array_flip(array_keys($template))
+                )
+            );
+        }
+
+        return $decoded;
     }
 }

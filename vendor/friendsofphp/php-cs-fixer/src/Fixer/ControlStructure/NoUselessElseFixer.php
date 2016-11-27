@@ -67,7 +67,7 @@ final class NoUselessElseFixer extends AbstractFixer
      */
     public function getPriority()
     {
-        // should be run before NoDuplicateSemicolonsFixer, NoWhitespaceInBlankLinesFixer, NoExtraConsecutiveBlankLinesFixer and BracesFixer.
+        // should be run before NoWhitespaceInBlankLineFixer, NoExtraConsecutiveBlankLinesFixer, BracesFixer and after NoEmptyStatementFixer.
         return 25;
     }
 
@@ -96,12 +96,12 @@ final class NoUselessElseFixer extends AbstractFixer
                 return;
             }
 
-            $candidateIndex = $tokens->getTokenOfKindSibling(
+            $candidateIndex = $tokens->getPrevTokenOfKind(
                 $previous,
-                -1,
                 array(
                     ';',
                     array(T_CLOSE_TAG),
+                    array(T_IF),
                     array(T_BREAK),
                     array(T_CONTINUE),
                     array(T_EXIT),
@@ -113,8 +113,7 @@ final class NoUselessElseFixer extends AbstractFixer
 
             if (
                 null === $candidateIndex ||
-                $tokens[$candidateIndex]->equals(';') ||
-                $tokens[$candidateIndex]->isGivenKind(T_CLOSE_TAG) ||
+                $tokens[$candidateIndex]->equalsAny(array(';', array(T_CLOSE_TAG), array(T_IF))) ||
                 $this->isInConditional($tokens, $candidateIndex, $previousBlockStart)
             ) {
                 return;
@@ -205,13 +204,13 @@ final class NoUselessElseFixer extends AbstractFixer
     /**
      * @param Tokens $tokens
      * @param int    $index           Index of the token to check
-     * @param int    $lowerLimitIndex Lower limit index. Since the token to check will always be in a conditional we must stop checking at this index.
+     * @param int    $lowerLimitIndex Lower limit index. Since the token to check will always be in a conditional we must stop checking at this index
      *
      * @return bool
      */
     private function isInConditional(Tokens $tokens, $index, $lowerLimitIndex)
     {
-        $candidateIndex = $tokens->getTokenOfKindSibling($index, -1, array(')', ';', ':'));
+        $candidateIndex = $tokens->getPrevTokenOfKind($index, array(')', ';', ':'));
         if ($tokens[$candidateIndex]->equals(':')) {
             return true;
         }

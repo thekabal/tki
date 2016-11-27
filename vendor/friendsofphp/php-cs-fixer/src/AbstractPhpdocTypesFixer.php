@@ -19,7 +19,7 @@ use PhpCsFixer\Tokenizer\Tokens;
 /**
  * This abstract fixer provides a base for fixers to fix types in phpdoc.
  *
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  *
  * @internal
  */
@@ -37,6 +37,8 @@ abstract class AbstractPhpdocTypesFixer extends AbstractFixer
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->tags = Annotation::getTagsWithTypes();
     }
 
@@ -72,6 +74,15 @@ abstract class AbstractPhpdocTypesFixer extends AbstractFixer
             $token->setContent($doc->getContent());
         }
     }
+
+    /**
+     * Actually normalize the given type.
+     *
+     * @param string $type
+     *
+     * @return string
+     */
+    abstract protected function normalize($type);
 
     /**
      * Fix the types at the given line.
@@ -124,13 +135,4 @@ abstract class AbstractPhpdocTypesFixer extends AbstractFixer
 
         return $this->normalize($type);
     }
-
-    /**
-     * Actually normalize the given type.
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    abstract protected function normalize($type);
 }

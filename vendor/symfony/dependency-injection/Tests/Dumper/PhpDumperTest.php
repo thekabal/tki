@@ -11,11 +11,13 @@
 
 namespace Symfony\Component\DependencyInjection\Tests\Dumper;
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Variable;
 use Symfony\Component\ExpressionLanguage\Expression;
 
@@ -285,6 +287,30 @@ class PhpDumperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(file_get_contents(self::$fixturesPath.'/php/services24.php'), $dumper->dump());
     }
 
+    public function testEnvParameter()
+    {
+        $container = new ContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator(self::$fixturesPath.'/yaml'));
+        $loader->load('services26.yml');
+        $container->compile();
+        $dumper = new PhpDumper($container);
+
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/services26.php', $dumper->dump(), '->dump() dumps inline definitions which reference service_container');
+    }
+
+    /**
+     * @expectedException \Symfony\Component\DependencyInjection\Exception\EnvParameterException
+     * @expectedExceptionMessage Incompatible use of dynamic environment variables "FOO" found in parameters.
+     */
+    public function testUnusedEnvParameter()
+    {
+        $container = new ContainerBuilder();
+        $container->getParameter('env(FOO)');
+        $container->compile();
+        $dumper = new PhpDumper($container);
+        $dumper->dump();
+    }
+
     public function testInlinedDefinitionReferencingServiceContainer()
     {
         $container = new ContainerBuilder();
@@ -294,5 +320,24 @@ class PhpDumperTest extends \PHPUnit_Framework_TestCase
 
         $dumper = new PhpDumper($container);
         $this->assertStringEqualsFile(self::$fixturesPath.'/php/services13.php', $dumper->dump(), '->dump() dumps inline definitions which reference service_container');
+    }
+
+    public function testInitializePropertiesBeforeMethodCalls()
+    {
+        require_once self::$fixturesPath.'/includes/classes.php';
+
+        $container = new ContainerBuilder();
+        $container->register('foo', 'stdClass');
+        $container->register('bar', 'MethodCallClass')
+            ->setProperty('simple', 'bar')
+            ->setProperty('complex', new Reference('foo'))
+            ->addMethodCall('callMe');
+        $container->compile();
+
+        $dumper = new PhpDumper($container);
+        eval('?>'.$dumper->dump(array('class' => 'Symfony_DI_PhpDumper_Test_Properties_Before_Method_Calls')));
+
+        $container = new \Symfony_DI_PhpDumper_Test_Properties_Before_Method_Calls();
+        $this->assertTrue($container->get('bar')->callPassed(), '->dump() initializes properties before method calls');
     }
 }

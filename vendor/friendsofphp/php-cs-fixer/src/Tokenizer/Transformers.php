@@ -12,6 +12,7 @@
 
 namespace PhpCsFixer\Tokenizer;
 
+use PhpCsFixer\Utils;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -31,18 +32,15 @@ final class Transformers
     private $items = array();
 
     /**
-     * Array mapping custom token value => custom token name.
-     *
-     * @var array
-     */
-    private $customTokens = array();
-
-    /**
      * Constructor. Register built in Transformers.
      */
     private function __construct()
     {
         $this->registerBuiltInTransformers();
+
+        usort($this->items, function (TransformerInterface $a, TransformerInterface $b) {
+            return Utils::cmpInt($b->getPriority(), $a->getPriority());
+        });
     }
 
     /**
@@ -62,55 +60,6 @@ final class Transformers
     }
 
     /**
-     * Get name for registered custom token.
-     *
-     * @param int $value custom token value
-     *
-     * @return string
-     */
-    public function getCustomToken($value)
-    {
-        if (!$this->hasCustomToken($value)) {
-            throw new \InvalidArgumentException(sprintf('No custom token was found for: %s', $value));
-        }
-
-        return $this->customTokens[$value];
-    }
-
-    public function getTransformers()
-    {
-        return $this->items;
-    }
-
-    /**
-     * Check if given custom token was added to collection.
-     *
-     * @param int $value custom token value
-     *
-     * @return bool
-     */
-    public function hasCustomToken($value)
-    {
-        return isset($this->customTokens[$value]);
-    }
-
-    /**
-     * Register Transformer.
-     *
-     * @param TransformerInterface $transformer Transformer
-     */
-    public function registerTransformer(TransformerInterface $transformer)
-    {
-        $this->items[] = $transformer;
-
-        $transformer->registerCustomTokens();
-
-        foreach ($transformer->getCustomTokenNames() as $name) {
-            $this->addCustomToken(constant($name), $name);
-        }
-    }
-
-    /**
      * Transform given Tokens collection through all Transformer classes.
      *
      * @param Tokens $tokens Tokens collection
@@ -125,23 +74,15 @@ final class Transformers
     }
 
     /**
-     * Add custom token.
+     * Register Transformer.
      *
-     * @param int    $value custom token value
-     * @param string $name  custom token name
+     * @param TransformerInterface $transformer Transformer
      */
-    private function addCustomToken($value, $name)
+    private function registerTransformer(TransformerInterface $transformer)
     {
-        if ($this->hasCustomToken($value)) {
-            throw new \LogicException(
-                sprintf(
-                    'Trying to register token %s (%s), token with this value was already defined: %s',
-                    $name, $value, $this->getCustomToken($value)
-                )
-            );
+        if (PHP_VERSION_ID >= $transformer->getRequiredPhpVersionId()) {
+            $this->items[] = $transformer;
         }
-
-        $this->customTokens[$value] = $name;
     }
 
     /**

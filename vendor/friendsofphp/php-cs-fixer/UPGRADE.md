@@ -11,7 +11,7 @@ Default ruleset was changed from Symfony standard to more generic PSR2. You can 
 
 The term of risky fixers was introduced. Risky fixer is a fixer that may change the meaning of code (like `StrictComparisonFixer` fixer, which will change `==` into `===`). No rules that are followed by risky fixers are run by default. You need to explicitly permit risky fixers to run them.
 
-Default configuraton changes
+Default configuration changes
 ----------------------------
 By default, PSR2 rules are used instead of Symfony rules.
 Files that will be fixed are php/phpt/twig instead of php/twig/xml/yml.
@@ -71,13 +71,15 @@ Config and Finder classes
 -------------------------
 All off `Symfony\CS\Config\*` and `Symfony\CS\Finder\*` classes have been removed, instead use `PhpCsFixer\Config` and `PhpCsFixer\Finder`.
 
-For that reason you can not set config class by `--config` CLI argument, from now it is used to set configuration file. Thanks to this the `--config-file` CLI argument is no longer available.
+For that reason you can not set config class by `--config` CLI argument, from now it is used to set configuration file. Therefor the `--config-file` CLI argument is no longer available.
 
 Renamed rules
 -------------
 
 Old name | New name | Note
 -------- | -------- | ----
+align_double_arrow                             | binary_operator_spaces                            | use configuration option 'align_double_arrow: true'
+align_equals                                   | binary_operator_spaces                            | use configuration option 'align_equals: true'
 array_element_no_space_before_comma            | no_whitespace_before_comma_in_array
 array_element_white_space_after_comma          | whitespace_after_comma_in_array
 blankline_after_open_tag                       | blank_line_after_opening_tag
@@ -90,10 +92,11 @@ function_call_space                            | no_spaces_after_function_name
 indentation                                    | no_tab_indentation
 join_function                                  | no_alias_functions                                | new one fixes more aliases
 line_after_namespace                           | blank_line_after_namespace
-linefeed                                       | unix_line_endings
+linefeed                                       | line_ending                                       | whitespaces type aware
 list_commas                                    | no_trailing_comma_in_list_call
 logical_not_operators_with_spaces              | not_operator_with_space
 logical_not_operators_with_successor_space     | not_operator_with_successor_space
+long_array_syntax                              | array_syntax                                      | use configuration ['syntax' => 'long']
 method_argument_default_value                  | no_unreachable_default_argument_value
 multiline_array_trailing_comma                 | trailing_comma_in_multiline_array
 multiline_spaces_before_semicolon              | no_multiline_whitespace_before_semicolons
@@ -101,6 +104,7 @@ multiple_use                                   | single_import_per_statement
 namespace_no_leading_whitespace                | no_leading_namespace_whitespace
 newline_after_open_tag                         | linebreak_after_opening_tag
 no_empty_lines_after_phpdocs                   | no_blank_lines_after_phpdoc
+no_tab_indentation                             | indentation_type                                  | whitespaces type aware
 object_operator                                | object_operator_without_whitespace
 operators_spaces                               | binary_operator_spaces
 ordered_use                                    | ordered_imports
@@ -112,6 +116,7 @@ phpdoc_short_description                       | phpdoc_summary
 remove_leading_slash_use                       | no_leading_import_slash
 remove_lines_between_uses                      | no_extra_consecutive_blank_lines                  | use configuration option 'use'
 return                                         | blank_line_before_return
+short_array_syntax                             | array_syntax                                      | use configuration ['syntax' => 'short']
 short_bool_cast                                | no_short_bool_cast
 short_echo_tag                                 | no_short_echo_tag
 short_tag                                      | full_opening_tag
@@ -123,11 +128,13 @@ standardize_not_equal                          | standardize_not_equals
 strict                                         | strict_comparison
 ternary_spaces                                 | ternary_operator_spaces
 trailing_spaces                                | no_trailing_whitespace
+unalign_double_arrow                           | binary_operator_spaces                            | use configuration option 'align_double_arrow: false'
+unalign_equals                                 | binary_operator_spaces                            | use configuration option 'align_equals: false'
 unary_operators_spaces                         | unary_operator_spaces
 unneeded_control_parentheses                   | no_unneeded_control_parentheses
 unused_use                                     | no_unused_imports
 visibility                                     | visibility_required
-whitespacy_lines                               | no_whitespace_in_blank_lines
+whitespacy_lines                               | no_whitespace_in_blank_line
 
 Changes to Fixers
 -----------------

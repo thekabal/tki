@@ -15,11 +15,12 @@ namespace PhpCsFixer\Fixer\PhpTag;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
+use PhpCsFixer\WhitespacesFixerConfigAwareInterface;
 
 /**
  * @author Ceeram <ceeram@cakephp.org>
  */
-final class BlankLineAfterOpeningTagFixer extends AbstractFixer
+final class BlankLineAfterOpeningTagFixer extends AbstractFixer implements WhitespacesFixerConfigAwareInterface
 {
     /**
      * {@inheritdoc}
@@ -34,20 +35,17 @@ final class BlankLineAfterOpeningTagFixer extends AbstractFixer
      */
     public function fix(\SplFileInfo $file, Tokens $tokens)
     {
-        // ignore non-monolithic files
-        if (!$tokens->isMonolithicPhp()) {
-            return;
-        }
+        $lineEnding = $this->whitespacesConfig->getLineEnding();
 
-        // ignore files with short open tag
-        if (!$tokens[0]->isGivenKind(T_OPEN_TAG)) {
+        // ignore files with short open tag and ignore non-monolithic files
+        if (!$tokens[0]->isGivenKind(T_OPEN_TAG) || !$tokens->isMonolithicPhp()) {
             return;
         }
 
         $newlineFound = false;
         /** @var Token $token */
         foreach ($tokens as $token) {
-            if ($token->isWhitespace("\n")) {
+            if ($token->isWhitespace() && false !== strpos($token->getContent(), "\n")) {
                 $newlineFound = true;
                 break;
             }
@@ -61,11 +59,11 @@ final class BlankLineAfterOpeningTagFixer extends AbstractFixer
         $token = $tokens[0];
 
         if (false === strpos($token->getContent(), "\n")) {
-            $token->setContent(rtrim($token->getContent())."\n");
+            $token->setContent(rtrim($token->getContent()).$lineEnding);
         }
 
         if (!$tokens[1]->isWhitespace() && false === strpos($tokens[1]->getContent(), "\n")) {
-            $tokens->insertAt(1, new Token(array(T_WHITESPACE, "\n")));
+            $tokens->insertAt(1, new Token(array(T_WHITESPACE, $lineEnding)));
         }
     }
 

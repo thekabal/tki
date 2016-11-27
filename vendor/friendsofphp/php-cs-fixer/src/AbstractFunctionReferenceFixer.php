@@ -12,6 +12,7 @@
 
 namespace PhpCsFixer;
 
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -29,6 +30,20 @@ abstract class AbstractFunctionReferenceFixer extends AbstractFixer
     public function isRisky()
     {
         return true;
+    }
+
+    /**
+     * Count amount of parameters in a function/method reference.
+     *
+     * @param Tokens $tokens
+     * @param int    $openParenthesis
+     * @param int    $closeParenthesis
+     *
+     * @return int
+     */
+    protected function countArguments(Tokens $tokens, $openParenthesis, $closeParenthesis)
+    {
+        return count($this->getArguments($tokens, $openParenthesis, $closeParenthesis));
     }
 
     /**
@@ -70,7 +85,7 @@ abstract class AbstractFunctionReferenceFixer extends AbstractFixer
         if ($functionNamePrecedingToken->isGivenKind(T_NS_SEPARATOR)) {
             $namespaceCandidate = $tokens->getPrevMeaningfulToken($functionNamePrefix);
             $namespaceCandidateToken = $tokens[$namespaceCandidate];
-            if ($namespaceCandidateToken->isGivenKind(array(T_NEW, T_STRING, CT_NAMESPACE_OPERATOR))) {
+            if ($namespaceCandidateToken->isGivenKind(array(T_NEW, T_STRING, CT::T_NAMESPACE_OPERATOR))) {
                 // here can be added complete namespace scan
                 // this expression is differs from expected, resume
                 return $this->find($functionNameToSearch, $tokens, $openParenthesis, $end);
@@ -84,23 +99,30 @@ abstract class AbstractFunctionReferenceFixer extends AbstractFixer
     }
 
     /**
-     * Count amount of parameters in a function/method reference.
+     * Returns start and end token indexes of arguments.
+     *
+     * Return an array which each index being the first token af an
+     * argument and the value the last. Including non-function tokens
+     * such as comments and white space tokens, but without the separation
+     * tokens like '(', ',' and ')'.
      *
      * @param Tokens $tokens
      * @param int    $openParenthesis
      * @param int    $closeParenthesis
      *
-     * @return int
+     * @return array<int, int>
      */
-    protected function countArguments(Tokens $tokens, $openParenthesis, $closeParenthesis)
+    protected function getArguments(Tokens $tokens, $openParenthesis, $closeParenthesis)
     {
+        $arguments = array();
         $firstSensibleToken = $tokens->getNextMeaningfulToken($openParenthesis);
         if ($tokens[$firstSensibleToken]->equals(')')) {
-            return 0;
+            return $arguments;
         }
 
-        $argumentsCount = 1;
-        for ($paramContentIndex = $openParenthesis + 1; $paramContentIndex < $closeParenthesis; ++$paramContentIndex) {
+        $paramContentIndex = $openParenthesis + 1;
+        $argumentsStart = $paramContentIndex;
+        for (; $paramContentIndex < $closeParenthesis; ++$paramContentIndex) {
             $token = $tokens[$paramContentIndex];
 
             // skip nested (), [], {} constructs
@@ -113,10 +135,13 @@ abstract class AbstractFunctionReferenceFixer extends AbstractFixer
 
             // if comma matched, increase arguments counter
             if ($token->equals(',')) {
-                ++$argumentsCount;
+                $arguments[$argumentsStart] = $paramContentIndex - 1;
+                $argumentsStart = $paramContentIndex + 1;
             }
         }
 
-        return $argumentsCount;
+        $arguments[$argumentsStart] = $paramContentIndex - 1;
+
+        return $arguments;
     }
 }

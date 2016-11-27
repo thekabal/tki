@@ -12,11 +12,6 @@
 
 namespace PhpCsFixer\Linter;
 
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
-
 /**
  * Handle PHP code linting process.
  *
@@ -27,41 +22,28 @@ use Symfony\Component\Process\ProcessUtils;
 final class Linter implements LinterInterface
 {
     /**
-     * Temporary file for code linting.
-     *
-     * @var string|null
+     * @var LinterInterface
      */
-    private $temporaryFile;
-
-    /**
-     * PHP executable.
-     *
-     * @var string
-     */
-    private $executable;
+    private $sublinter;
 
     /**
      * @param string|null $executable PHP executable, null for autodetection
      */
     public function __construct($executable = null)
     {
-        if (null === $executable) {
-            $executableFinder = new PhpExecutableFinder();
-            $executable = $executableFinder->find(false);
-
-            if (false === $executable) {
-                throw new UnavailableLinterException();
-            }
+        try {
+            $this->sublinter = new TokenizerLinter();
+        } catch (UnavailableLinterException $e) {
+            $this->sublinter = new ProcessLinter($executable);
         }
-
-        $this->executable = $executable;
     }
 
-    public function __destruct()
+    /**
+     * {@inheritdoc}
+     */
+    public function isAsync()
     {
-        if (null !== $this->temporaryFile) {
-            unlink($this->temporaryFile);
-        }
+        return $this->sublinter->isAsync();
     }
 
     /**
@@ -69,7 +51,7 @@ final class Linter implements LinterInterface
      */
     public function lintFile($path)
     {
-        return new LintingResult($this->createProcessForFile($path));
+        return $this->sublinter->lintFile($path);
     }
 
     /**
@@ -77,69 +59,6 @@ final class Linter implements LinterInterface
      */
     public function lintSource($source)
     {
-        return new LintingResult($this->createProcessForSource($source));
-    }
-
-    /**
-     * Create process that lint PHP file.
-     *
-     * @param string $path path to file
-     *
-     * @return Process
-     */
-    private function createProcessForFile($path)
-    {
-        // in case php://stdin
-        if (!is_file($path)) {
-            return $this->createProcessForSource(file_get_contents($path));
-        }
-
-        $process = new Process($this->prepareCommand($path));
-        $process->setTimeout(null);
-        $process->start();
-
-        return $process;
-    }
-
-    /**
-     * Create process that lint PHP code.
-     *
-     * @param string $source code
-     *
-     * @return Process
-     */
-    private function createProcessForSource($source)
-    {
-        if (null === $this->temporaryFile) {
-            $this->temporaryFile = tempnam('.', 'cs_fixer_tmp_');
-        }
-
-        if (false === @file_put_contents($this->temporaryFile, $source)) {
-            throw new IOException(sprintf('Failed to write file "%s".', $this->temporaryFile), 0, null, $this->temporaryFile);
-        }
-
-        $process = $this->createProcessForFile($this->temporaryFile);
-
-        return $process;
-    }
-
-    /**
-     * Prepare command that will lint a file.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    private function prepareCommand($path)
-    {
-        $executable = ProcessUtils::escapeArgument($this->executable);
-
-        if (defined('HHVM_VERSION')) {
-            $executable .= ' --php';
-        }
-
-        $path = ProcessUtils::escapeArgument($path);
-
-        return sprintf('%s -l %s', $executable, $path);
+        return $this->sublinter->lintSource($source);
     }
 }

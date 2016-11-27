@@ -15,13 +15,14 @@ namespace PhpCsFixer\Fixer\NamespaceNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
+use PhpCsFixer\WhitespacesFixerConfigAwareInterface;
 
 /**
  * Fixer for rules defined in PSR2 ¶3.
  *
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
-final class BlankLineAfterNamespaceFixer extends AbstractFixer
+final class BlankLineAfterNamespaceFixer extends AbstractFixer implements WhitespacesFixerConfigAwareInterface
 {
     /**
      * {@inheritdoc}
@@ -36,26 +37,32 @@ final class BlankLineAfterNamespaceFixer extends AbstractFixer
      */
     public function fix(\SplFileInfo $file, Tokens $tokens)
     {
-        for ($index = $tokens->count() - 1; $index >= 0; --$index) {
+        $ending = $this->whitespacesConfig->getLineEnding();
+        $lastIndex = $tokens->count() - 1;
+
+        for ($index = $lastIndex; $index >= 0; --$index) {
             $token = $tokens[$index];
 
             if (!$token->isGivenKind(T_NAMESPACE)) {
                 continue;
             }
 
-            $semicolonIndex = $tokens->getNextTokenOfKind($index, array(';', '{'));
+            $semicolonIndex = $tokens->getNextTokenOfKind($index, array(';', '{', array(T_CLOSE_TAG)));
             $semicolonToken = $tokens[$semicolonIndex];
 
             if (!isset($tokens[$semicolonIndex + 1]) || !$semicolonToken->equals(';')) {
                 continue;
             }
 
-            $nextToken = $tokens[$semicolonIndex + 1];
+            $nextIndex = $semicolonIndex + 1;
+            $nextToken = $tokens[$nextIndex];
 
             if (!$nextToken->isWhitespace()) {
-                $tokens->insertAt($semicolonIndex + 1, new Token(array(T_WHITESPACE, "\n\n")));
+                $tokens->insertAt($semicolonIndex + 1, new Token(array(T_WHITESPACE, $ending.$ending)));
             } else {
-                $nextToken->setContent("\n\n".ltrim($nextToken->getContent()));
+                $nextToken->setContent(
+                    ($nextIndex === $lastIndex ? $ending : $ending.$ending).ltrim($nextToken->getContent())
+                );
             }
         }
     }

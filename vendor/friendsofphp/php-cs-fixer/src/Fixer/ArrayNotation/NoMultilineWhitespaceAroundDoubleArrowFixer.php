@@ -19,7 +19,7 @@ use PhpCsFixer\Tokenizer\Tokens;
 /**
  * @author Carlos Cirello <carlos.cirello.nl@gmail.com>
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  */
 final class NoMultilineWhitespaceAroundDoubleArrowFixer extends AbstractFixer
 {
@@ -62,7 +62,7 @@ final class NoMultilineWhitespaceAroundDoubleArrowFixer extends AbstractFixer
      */
     public function getPriority()
     {
-        // should be run before the TrailingCommaInMultilineArrayFixer and AlignDoubleArrowFixer
+        // should be run before the TrailingCommaInMultilineArrayFixer and BinaryOperatorSpacesFixer.
         return 1;
     }
 

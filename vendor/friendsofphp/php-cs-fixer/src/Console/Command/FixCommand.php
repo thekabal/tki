@@ -14,6 +14,7 @@ namespace PhpCsFixer\Console\Command;
 
 use PhpCsFixer\Config;
 use PhpCsFixer\ConfigInterface;
+use PhpCsFixer\ConfigurationException\UnallowedFixerConfigurationException;
 use PhpCsFixer\Console\ConfigurationResolver;
 use PhpCsFixer\Console\Output\NullOutput;
 use PhpCsFixer\Console\Output\ProcessOutput;
@@ -23,10 +24,6 @@ use PhpCsFixer\Error\Error;
 use PhpCsFixer\Error\ErrorsManager;
 use PhpCsFixer\FixerFactory;
 use PhpCsFixer\FixerInterface;
-use PhpCsFixer\Linter\Linter;
-use PhpCsFixer\Linter\NullLinter;
-use PhpCsFixer\Linter\UnavailableLinterException;
-use PhpCsFixer\Report\ReporterFactory;
 use PhpCsFixer\Report\ReportSummary;
 use PhpCsFixer\RuleSet;
 use PhpCsFixer\Runner\Runner;
@@ -109,7 +106,7 @@ final class FixCommand extends Command
                     new InputOption('using-cache', '', InputOption::VALUE_REQUIRED, 'Does cache should be used (can be yes or no)', null),
                     new InputOption('cache-file', '', InputOption::VALUE_REQUIRED, 'The path to the cache file'),
                     new InputOption('diff', '', InputOption::VALUE_NONE, 'Also produce diff for each file'),
-                    new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats', 'txt'),
+                    new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats', null),
                 )
             )
             ->setDescription('Fixes a directory or a file')
@@ -117,55 +114,57 @@ final class FixCommand extends Command
 The <info>%command.name%</info> command tries to fix as much coding standards
 problems as possible on a given file or files in a given directory and its subdirectories:
 
-    <info>php %command.full_name% /path/to/dir</info>
-    <info>php %command.full_name% /path/to/file</info>
+    <info>$ php %command.full_name% /path/to/dir</info>
+    <info>$ php %command.full_name% /path/to/file</info>
 
-The <comment>--format</comment> option for the output format. Supported formats are ``txt`` (default one), ``json`` and ``xml``.
+The <comment>--format</comment> option for the output format. Supported formats are ``txt`` (default one), ``json``, ``xml`` and ``junit``.
 
-The <comment>--verbose</comment> option will show the applied fixers. When using the ``txt`` format it will also displays progress notifications.
+NOTE: When using ``junit`` format report generates in accordance with JUnit xml schema from Jenkins (see docs/junit-10.xsd).
+
+The <comment>--verbose</comment> option will show the applied rules. When using the ``txt`` format it will also displays progress notifications.
 
 The <comment>--rules</comment> option limits the rules to apply on the
 project:
 
-    <info>php %command.full_name% /path/to/project --rules=@PSR2</info>
+    <info>$ php %command.full_name% /path/to/project --rules=@PSR2</info>
 
-By default, all PSR fixers are run.
+By default, all PSR rules are run.
 
-The <comment>--rules</comment> option lets you choose the exact fixers to
-apply (the fixer names must be separated by a comma):
+The <comment>--rules</comment> option lets you choose the exact rules to
+apply (the rule names must be separated by a comma):
 
-    <info>php %command.full_name% /path/to/dir --rules=unix_line_endings,full_opening_tag,no_tab_indentation</info>
+    <info>$ php %command.full_name% /path/to/dir --rules=line_ending,full_opening_tag,indentation_type</info>
 
-You can also blacklist the fixers you don't want by placing a dash in front of the fixer name, if this is more convenient,
+You can also blacklist the rules you don't want by placing a dash in front of the rule name, if this is more convenient,
 using <comment>-name_of_fixer</comment>:
 
-    <info>php %command.full_name% /path/to/dir --rules=-full_opening_tag,-no_tab_indentation</info>
+    <info>$ php %command.full_name% /path/to/dir --rules=-full_opening_tag,-indentation_type</info>
 
-When using combinations of exact and blacklist fixers, applying exact fixers along with above blacklisted results:
+When using combinations of exact and blacklist rules, applying exact ruless along with above blacklisted results:
 
-    <info>php %command.full_name% /path/to/project --rules=@Symfony,-@PSR1,-return,strict</info>
+    <info>$ php %command.full_name% /path/to/project --rules=@Symfony,-@PSR1,-blank_line_before_return,strict_comparison</info>
 
 A combination of <comment>--dry-run</comment> and <comment>--diff</comment> will
 display a summary of proposed fixes, leaving your files unchanged.
 
-The <comment>--allow-risky</comment> option allows you to set whether riskys fixer may run. Default value is taken from config file.
-Risky fixer is a fixer, which could change code behaviour. By default no risky fixers are run.
+The <comment>--allow-risky</comment> option allows you to set whether riskys rule may run. Default value is taken from config file.
+Risky rule is a rule, which could change code behaviour. By default no risky rules are run.
 
 The command can also read from standard input, in which case it won't
 automatically fix anything:
 
-    <info>cat foo.php | php %command.full_name% --diff -</info>
+    <info>$ cat foo.php | php %command.full_name% --diff -</info>
 
-Choose from the list of available fixers:
+Choose from the list of available rules:
 
 {$this->getFixersHelp()}
 
 The <comment>--dry-run</comment> option displays the files that need to be
 fixed but without actually modifying them:
 
-    <info>php %command.full_name% /path/to/code --dry-run</info>
+    <info>$ php %command.full_name% /path/to/code --dry-run</info>
 
-Instead of using command line options to customize the fixer, you can save the
+Instead of using command line options to customize the rule, you can save the
 project configuration in a <comment>.php_cs.dist</comment> file in the root directory
 of your project. The file must return an instance of ``PhpCsFixer\ConfigInterface``,
 which lets you configure the rules, the files and directories that
@@ -175,7 +174,7 @@ is a good practice to add that file into your <comment>.gitignore</comment> file
 With the <comment>--config</comment> option you can specify the path to the
 <comment>.php_cs</comment> file.
 
-The example below will add two fixers to the default list of PSR2 set fixers:
+The example below will add two rules to the default list of PSR2 set rules:
 
     <?php
 
@@ -189,9 +188,9 @@ The example below will add two fixers to the default list of PSR2 set fixers:
         ->setRules(array(
             '@PSR2' => true,
             'strict_param' => true,
-            'short_array_syntax' => true,
+            'array_syntax' => array('syntax' => 'short'),
         ))
-        ->finder(\$finder)
+        ->setFinder(\$finder)
     ;
 
     ?>
@@ -201,8 +200,8 @@ The example below will add two fixers to the default list of PSR2 set fixers:
 See `Symfony\\\\Finder <http://symfony.com/doc/current/components/finder.html>`_
 online documentation for other `Finder` methods.
 
-You may also use a blacklist for the Fixers instead of the above shown whitelist approach.
-The following example shows how to use all ``Symfony`` Fixers but the ``full_opening_tag`` Fixer.
+You may also use a blacklist for the rules instead of the above shown whitelist approach.
+The following example shows how to use all ``Symfony`` rules but the ``full_opening_tag`` rule.
 
     <?php
 
@@ -216,7 +215,20 @@ The following example shows how to use all ``Symfony`` Fixers but the ``full_ope
             '@Symfony' => true,
             'full_opening_tag' => false,
         ))
-        ->finder(\$finder)
+        ->setFinder(\$finder)
+    ;
+
+    ?>
+
+You may want to use non-linux whitespaces in your project. Then you need to
+configure them in your config file. Please be aware that this feature is
+experimental.
+
+    <?php
+
+    return PhpCsFixer\Config::create()
+        ->setIndent("\\t")
+        ->setLineEnding("\\r\\n")
     ;
 
     ?>
@@ -229,7 +241,7 @@ Caching
 
 The caching mechanism is enabled by default. This will speed up further runs by
 fixing only files that were modified since the last run. The tool will fix all
-files if the tool version has changed or the list of fixers has changed.
+files if the tool version has changed or the list of rules has changed.
 Cache is supported only for tool downloaded as phar file or installed via
 composer.
 
@@ -262,7 +274,7 @@ Require ``friendsofphp/php-cs-fixer`` as a `dev`` dependency:
 
 Then, add the following command to your CI:
 
-    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist --path-mode=intersection `git diff --name-only \$COMMIT_RANGE`
+    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection `git diff --name-only --diff-filter=ACMRTUXB \$COMMIT_RANGE`
 
 Where ``\$COMMIT_RANGE`` is your range of commits, eg ``\$TRAVIS_COMMIT_RANGE`` or ``HEAD~..HEAD``.
 
@@ -287,29 +299,26 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $verbosity = $output->getVerbosity();
-        $resolver = new ConfigurationResolver();
-        $resolver
-            ->setCwd(getcwd())
-            ->setDefaultConfig($this->defaultConfig)
-            ->setOptions(array(
+
+        $resolver = new ConfigurationResolver(
+            $this->defaultConfig,
+            array(
                 'allow-risky' => $input->getOption('allow-risky'),
                 'config' => $input->getOption('config'),
                 'dry-run' => $input->getOption('dry-run'),
                 'rules' => $input->getOption('rules'),
                 'path' => $input->getArgument('path'),
                 'path-mode' => $input->getOption('path-mode'),
-                'progress' => (OutputInterface::VERBOSITY_VERBOSE <= $verbosity) && 'txt' === $input->getOption('format'),
                 'using-cache' => $input->getOption('using-cache'),
                 'cache-file' => $input->getOption('cache-file'),
                 'format' => $input->getOption('format'),
-            ))
-            ->resolve()
-        ;
+                'diff' => $input->getOption('diff'),
+                'verbosity' => $verbosity,
+            ),
+            getcwd()
+        );
 
-        $reporter = ReporterFactory::create()
-            ->registerBuiltInReporters()
-            ->getReporter($resolver->getFormat())
-        ;
+        $reporter = $resolver->getReporter();
 
         $stdErr = $output instanceof ConsoleOutputInterface
             ? $output->getErrorOutput()
@@ -320,26 +329,14 @@ EOF
             $stdErr->writeln(sprintf($stdErr->isDecorated() ? '<bg=yellow;fg=black;>%s</>' : '%s', 'You are running php-cs-fixer with xdebug enabled. This has a major impact on runtime performance.'));
         }
 
-        $config = $resolver->getConfig();
         $configFile = $resolver->getConfigFile();
 
-        if (null !== $stdErr && $configFile) {
-            $stdErr->writeln(sprintf('Loaded config from "%s".', $configFile));
+        if (null !== $stdErr) {
+            $stdErr->writeln(sprintf('Loaded config <comment>%s</comment>%s.', $resolver->getConfig()->getName(), null === $configFile ? '' : ' from "'.$configFile.'"'));
         }
 
-        $linter = new NullLinter();
-        if ($config->usingLinter()) {
-            try {
-                $linter = new Linter($config->getPhpExecutable());
-            } catch (UnavailableLinterException $e) {
-                if (null !== $stdErr && $configFile) {
-                    $stdErr->writeln('Unable to use linter, can not find PHP executable.');
-                }
-            }
-        }
-
-        if (null !== $stdErr && $config->usingCache()) {
-            $cacheFile = $config->getCacheFile();
+        if (null !== $stdErr && $resolver->getUsingCache()) {
+            $cacheFile = $resolver->getCacheFile();
             if (is_file($cacheFile)) {
                 $stdErr->writeln(sprintf('Using cache file "%s".', $cacheFile));
             }
@@ -347,12 +344,14 @@ EOF
 
         $showProgress = $resolver->getProgress();
         $runner = new Runner(
-            $config,
+            $resolver->getFinder(),
+            $resolver->getFixers(),
             $input->getOption('diff') ? new SebastianBergmannDiffer() : new NullDiffer(),
             $showProgress ? $this->eventDispatcher : null,
             $this->errorsManager,
-            $linter,
-            $resolver->isDryRun()
+            $resolver->getLinter(),
+            $resolver->isDryRun(),
+            $resolver->getCacheManager()
         );
 
         $progressOutput = $showProgress && $stdErr
@@ -368,18 +367,20 @@ EOF
 
         $fixEvent = $this->stopwatch->getEvent('fixFiles');
 
-        $reportSummary = ReportSummary::create()
-            ->setChanged($changed)
-            ->setAddAppliedFixers(OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity())
-            ->setIsDecoratedOutput($output->isDecorated())
-            ->setIsDryRun($resolver->isDryRun())
-            ->setMemory($fixEvent->getMemory())
-            ->setTime($fixEvent->getDuration())
-        ;
-
-        $output->write(
-            $reporter->generate($reportSummary)
+        $reportSummary = new ReportSummary(
+            $changed,
+            $fixEvent->getDuration(),
+            $fixEvent->getMemory(),
+            OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity(),
+            $resolver->isDryRun(),
+            $output->isDecorated()
         );
+
+        if ($output->isDecorated()) {
+            $output->write($reporter->generate($reportSummary));
+        } else {
+            $output->write($reporter->generate($reportSummary), false, OutputInterface::OUTPUT_RAW);
+        }
 
         $invalidErrors = $this->errorsManager->getInvalidErrors();
         $exceptionErrors = $this->errorsManager->getExceptionErrors();
@@ -405,6 +406,74 @@ EOF
             count($invalidErrors) > 0,
             count($exceptionErrors) > 0
         );
+    }
+
+    protected function getFixersHelp()
+    {
+        $help = '';
+        $fixerFactory = new FixerFactory();
+        $fixers = $fixerFactory->registerBuiltInFixers()->getFixers();
+
+        // sort fixers by name
+        usort(
+            $fixers,
+            function (FixerInterface $a, FixerInterface $b) {
+                return strcmp($a->getName(), $b->getName());
+            }
+        );
+
+        $ruleSets = array();
+        foreach (RuleSet::create()->getSetDefinitionNames() as $setName) {
+            $ruleSets[$setName] = new RuleSet(array($setName => true));
+        }
+
+        $getSetsWithRule = function ($rule) use ($ruleSets) {
+            $sets = array();
+
+            foreach ($ruleSets as $setName => $ruleSet) {
+                if ($ruleSet->hasRule($rule)) {
+                    $sets[] = $setName;
+                }
+            }
+
+            return $sets;
+        };
+
+        $count = count($fixers) - 1;
+        foreach ($fixers as $i => $fixer) {
+            $sets = $getSetsWithRule($fixer->getName());
+
+            $description = $fixer->getDescription();
+
+            $attributes = array();
+
+            if ($fixer->isRisky()) {
+                $attributes[] = 'risky';
+            }
+
+            if ($this->isFixerConfigurable($fixer)) {
+                $attributes[] = 'configurable';
+            }
+
+            $description = wordwrap($description, 72, "\n   | ");
+
+            if (!empty($sets)) {
+                $help .= sprintf(" * <comment>%s</comment> [%s]\n   | %s\n", $fixer->getName(), implode(', ', $sets), $description);
+            } else {
+                $help .= sprintf(" * <comment>%s</comment>\n   | %s\n", $fixer->getName(), $description);
+            }
+
+            if (count($attributes)) {
+                sort($attributes);
+                $help .= sprintf("   | *Rule is: %s.*\n", implode(', ', $attributes));
+            }
+
+            if ($count !== $i) {
+                $help .= "\n";
+            }
+        }
+
+        return $help;
     }
 
     /**
@@ -454,71 +523,21 @@ EOF
         }
     }
 
-    protected function getFixersHelp()
+    /**
+     * @param FixerInterface $fixer
+     *
+     * @return bool
+     */
+    private function isFixerConfigurable(FixerInterface $fixer)
     {
-        $help = '';
-        $maxName = 0;
-        $fixerFactory = new FixerFactory();
-        $fixers = $fixerFactory->registerBuiltInFixers()->getFixers();
+        try {
+            $fixer->configure(array());
 
-        // sort fixers by name
-        usort(
-            $fixers,
-            function (FixerInterface $a, FixerInterface $b) {
-                return strcmp($a->getName(), $b->getName());
-            }
-        );
-
-        foreach ($fixers as $fixer) {
-            if (strlen($fixer->getName()) > $maxName) {
-                $maxName = strlen($fixer->getName());
-            }
+            return true;
+        } catch (UnallowedFixerConfigurationException $e) {
+            return false;
+        } catch (\Exception $e) {
+            return true;
         }
-
-        $ruleSets = array();
-        foreach (RuleSet::create()->getSetDefinitionNames() as $setName) {
-            $ruleSets[$setName] = new RuleSet(array($setName => true));
-        }
-
-        $getSetsWithRule = function ($rule) use ($ruleSets) {
-            $sets = array();
-
-            foreach ($ruleSets as $setName => $ruleSet) {
-                if ($ruleSet->hasRule($rule)) {
-                    $sets[] = $setName;
-                }
-            }
-
-            return $sets;
-        };
-
-        $count = count($fixers) - 1;
-        foreach ($fixers as $i => $fixer) {
-            $sets = $getSetsWithRule($fixer->getName());
-
-            $description = $fixer->getDescription();
-
-            if ($fixer->isRisky()) {
-                $description .= ' (Risky fixer!)';
-            }
-
-            if (!empty($sets)) {
-                $chunks = explode("\n", wordwrap(sprintf("[%s]\n%s", implode(', ', $sets), $description), 72 - $maxName, "\n"));
-                $help .= sprintf(" * <comment>%s</comment>%s %s\n", $fixer->getName(), str_repeat(' ', $maxName - strlen($fixer->getName())), array_shift($chunks));
-            } else {
-                $chunks = explode("\n", wordwrap(sprintf("\n%s", $description), 72 - $maxName, "\n"));
-                $help .= sprintf(" * <comment>%s</comment>%s\n", $fixer->getName(), array_shift($chunks));
-            }
-
-            while ($c = array_shift($chunks)) {
-                $help .= str_repeat(' ', $maxName + 4).$c."\n";
-            }
-
-            if ($count !== $i) {
-                $help .= "\n";
-            }
-        }
-
-        return $help;
     }
 }
