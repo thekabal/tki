@@ -14,26 +14,37 @@ namespace PhpCsFixer\Fixer\Whitespace;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
-use PhpCsFixer\Tokenizer\Transformers;
+use PhpCsFixer\WhitespacesFixerConfigAwareInterface;
 
 /**
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
- * @author SpacePossum <possumfromspace@gmail.com>
+ * @author SpacePossum
  */
-final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
+final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer implements WhitespacesFixerConfigAwareInterface
 {
     /**
      * @var array<int, string> key is token id, value is name of callback
      */
-    private $tokenKindCallbackMap = array(T_WHITESPACE => 'removeMultipleBlankLines');
+    private static $defaultTokenKindCallbackMap = array(T_WHITESPACE => 'removeMultipleBlankLines');
 
     /**
      * @var array<string, string> token prototype, value is name of callback
      */
-    private $tokenEqualsMap = array();
+    private static $defaultTokenEqualsMap = array();
+
+    /**
+     * @var array<int, string> key is token id, value is name of callback
+     */
+    private $tokenKindCallbackMap;
+
+    /**
+     * @var array<string, string> token prototype, value is name of callback
+     */
+    private $tokenEqualsMap;
 
     /**
      * @var Tokens
@@ -56,18 +67,19 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
      * - 'throw' remove blank lines after a line with a 'throw' statement
      * - 'use' remove blank lines between 'use' import statements
      * - 'useTrait' remove blank lines between 'use' trait statements
-     * - 'curly_brace_open' remove blank lines after a curly opening brace ('{')
+     * - 'curly_brace_block' remove blank lines after a curly opening block brace ('{') and/or end block brace ('}')
+     * - 'parenthesis_brace_block' remove blank lines after a parenthesis opening block brace ('(') and/or end block brace (')')
+     * - 'square_brace_block' remove blank lines after a square opening block brace ('[') and/or end block brace (']')
      *
      * @param string[]|null $configuration
      */
     public function configure(array $configuration = null)
     {
         if (null === $configuration) {
-            return;
-        }
+            $this->tokenKindCallbackMap = self::$defaultTokenKindCallbackMap;
+            $this->tokenEqualsMap = self::$defaultTokenEqualsMap;
 
-        if (!defined('CT_USE_TRAIT')) {
-            Transformers::create(); // TODO could use a better fix
+            return;
         }
 
         $this->tokenKindCallbackMap = array();
@@ -93,10 +105,16 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
                     $this->tokenKindCallbackMap[T_USE] = 'removeBetweenUse';
                     break;
                 case 'useTrait':
-                    $this->tokenKindCallbackMap[CT_USE_TRAIT] = 'removeBetweenUse';
+                    $this->tokenKindCallbackMap[CT::T_USE_TRAIT] = 'removeBetweenUse';
                     break;
-                case 'curly_brace_open':
-                    $this->tokenEqualsMap['{'] = 'fixAfterToken';
+                case 'curly_brace_block':
+                    $this->tokenEqualsMap['{'] = 'fixStructureOpenCloseIfMultiLine'; // i.e. not: CT::T_ARRAY_INDEX_CURLY_BRACE_OPEN
+                    break;
+                case 'parenthesis_brace_block':
+                    $this->tokenEqualsMap['('] = 'fixStructureOpenCloseIfMultiLine'; // i.e. not: CT::T_BRACE_CLASS_INSTANTIATION_OPEN
+                    break;
+                case 'square_brace_block':
+                    $this->tokenKindCallbackMap[CT::T_ARRAY_SQUARE_BRACE_OPEN] = 'fixStructureOpenCloseIfMultiLine'; // typeless '[' tokens should not be fixed (too rare)
                     break;
                 default:
                     throw new InvalidFixerConfigurationException($this->getName(), sprintf('Unknown configuration item "%s" passed.', $item));
@@ -109,7 +127,7 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
      */
     public function isCandidate(Tokens $tokens)
     {
-        return $tokens->isTokenKindFound(T_WHITESPACE);
+        return true;
     }
 
     /**
@@ -159,6 +177,8 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
             }
 
             $this->$callback($index);
+
+            return;
         }
     }
 
@@ -193,7 +213,7 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
             }
 
             if ($i !== $last && $count < 3) {
-                $content .= "\n";
+                $content .= $this->whitespacesConfig->getLineEnding();
             }
         }
 
@@ -219,12 +239,35 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
         $this->removeEmptyLinesAfterLineWithTokenAt($index);
     }
 
+    /**
+     * Remove white line(s) after the index of a block type,
+     * but only if the block is not on one line.
+     *
+     * @param int $index body start
+     */
+    private function fixStructureOpenCloseIfMultiLine($index)
+    {
+        $blockTypeInfo = $this->tokens->detectBlockType($this->tokens[$index]);
+        $bodyEnd = $this->tokens->findBlockEnd($blockTypeInfo['type'], $index);
+
+        for ($i = $bodyEnd - 1; $i >= $index; --$i) {
+            if (false !== strpos($this->tokens[$i]->getContent(), "\n")) {
+                $this->removeEmptyLinesAfterLineWithTokenAt($i);
+                $this->removeEmptyLinesAfterLineWithTokenAt($index);
+                break;
+            }
+        }
+    }
+
     private function removeEmptyLinesAfterLineWithTokenAt($index)
     {
         // find the line break
         $tokenCount = count($this->tokens);
         for ($end = $index; $end < $tokenCount; ++$end) {
-            if (false !== strpos($this->tokens[$end]->getContent(), "\n")) {
+            if (
+                $this->tokens[$end]->equals('}')
+                || false !== strpos($this->tokens[$end]->getContent(), "\n")
+            ) {
                 break;
             }
         }
@@ -239,11 +282,13 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
                 continue;
             }
 
+            $ending = $this->whitespacesConfig->getLineEnding();
+
             $pos = strrpos($content, "\n");
             if ($pos + 2 < strlen($content)) { // preserve indenting where possible
-                $this->tokens[$i]->setContent("\n".substr($content, $pos + 1));
+                $this->tokens[$i]->setContent($ending.substr($content, $pos + 1));
             } else {
-                $this->tokens[$i]->setContent("\n");
+                $this->tokens[$i]->setContent($ending);
             }
         }
     }

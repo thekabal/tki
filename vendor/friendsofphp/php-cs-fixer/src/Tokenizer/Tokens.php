@@ -33,6 +33,8 @@ class Tokens extends \SplFixedArray
     const BLOCK_TYPE_ARRAY_SQUARE_BRACE = 4;
     const BLOCK_TYPE_DYNAMIC_PROP_BRACE = 5;
     const BLOCK_TYPE_DYNAMIC_VAR_BRACE = 6;
+    const BLOCK_TYPE_ARRAY_INDEX_CURLY_BRACE = 7;
+    const BLOCK_TYPE_GROUP_IMPORT_BRACE = 8;
 
     /**
      * Static class cache.
@@ -67,6 +69,16 @@ class Tokens extends \SplFixedArray
      * @var bool[]
      */
     private $foundTokenKinds;
+
+    /**
+     * Clone tokens collection.
+     */
+    public function __clone()
+    {
+        foreach ($this as $key => $val) {
+            $this[$key] = clone $val;
+        }
+    }
 
     /**
      * Clear cache - one position or all of them.
@@ -188,69 +200,26 @@ class Tokens extends \SplFixedArray
                 'end' => ']',
             ),
             self::BLOCK_TYPE_ARRAY_SQUARE_BRACE => array(
-                'start' => array(CT_ARRAY_SQUARE_BRACE_OPEN, '['),
-                'end' => array(CT_ARRAY_SQUARE_BRACE_CLOSE, ']'),
+                'start' => array(CT::T_ARRAY_SQUARE_BRACE_OPEN, '['),
+                'end' => array(CT::T_ARRAY_SQUARE_BRACE_CLOSE, ']'),
             ),
             self::BLOCK_TYPE_DYNAMIC_PROP_BRACE => array(
-                'start' => array(CT_DYNAMIC_PROP_BRACE_OPEN, '{'),
-                'end' => array(CT_DYNAMIC_PROP_BRACE_CLOSE, '}'),
+                'start' => array(CT::T_DYNAMIC_PROP_BRACE_OPEN, '{'),
+                'end' => array(CT::T_DYNAMIC_PROP_BRACE_CLOSE, '}'),
             ),
             self::BLOCK_TYPE_DYNAMIC_VAR_BRACE => array(
-                'start' => array(CT_DYNAMIC_VAR_BRACE_OPEN, '{'),
-                'end' => array(CT_DYNAMIC_VAR_BRACE_CLOSE, '}'),
+                'start' => array(CT::T_DYNAMIC_VAR_BRACE_OPEN, '{'),
+                'end' => array(CT::T_DYNAMIC_VAR_BRACE_CLOSE, '}'),
+            ),
+            self::BLOCK_TYPE_ARRAY_INDEX_CURLY_BRACE => array(
+                'start' => array(CT::T_ARRAY_INDEX_CURLY_BRACE_OPEN, '{'),
+                'end' => array(CT::T_ARRAY_INDEX_CURLY_BRACE_CLOSE, '}'),
+            ),
+            self::BLOCK_TYPE_GROUP_IMPORT_BRACE => array(
+                'start' => array(CT::T_GROUP_IMPORT_BRACE_OPEN, '{'),
+                'end' => array(CT::T_GROUP_IMPORT_BRACE_CLOSE, '}'),
             ),
         );
-    }
-
-    /**
-     * Calculate hash for code.
-     *
-     * @param string $code
-     *
-     * @return string
-     */
-    private static function calculateCodeHash($code)
-    {
-        return crc32($code);
-    }
-
-    /**
-     * Get cache value for given key.
-     *
-     * @param string $key item key
-     *
-     * @return Tokens
-     */
-    private static function getCache($key)
-    {
-        if (!self::hasCache($key)) {
-            throw new \OutOfBoundsException(sprintf('Unknown cache key: "%s".', $key));
-        }
-
-        return self::$cache[$key];
-    }
-
-    /**
-     * Check if given key exists in cache.
-     *
-     * @param string $key item key
-     *
-     * @return bool
-     */
-    private static function hasCache($key)
-    {
-        return isset(self::$cache[$key]);
-    }
-
-    /**
-     * Set cache item.
-     *
-     * @param string $key   item key
-     * @param Tokens $value item value
-     */
-    private static function setCache($key, Tokens $value)
-    {
-        self::$cache[$key] = $value;
     }
 
     /**
@@ -353,11 +322,12 @@ class Tokens extends \SplFixedArray
         $removeLastCommentLine = function (Token $token, $indexOffset) {
             // because comments tokens are greedy and may consume single \n if we are putting whitespace after it let trim that \n
             if (1 === $indexOffset && $token->isComment()) {
-                $content = $token->getContent();
-
-                if ("\n" === $content[strlen($content) - 1]) {
-                    $token->setContent(substr($content, 0, -1));
-                }
+                $token->setContent(preg_replace(
+                    "#\r\n$|\n$#",
+                    '',
+                    $token->getContent(),
+                    1
+                ));
             }
         };
 
@@ -735,19 +705,22 @@ class Tokens extends \SplFixedArray
      * @param int        $end           end index, defaulting to the end of the file
      * @param bool|array $caseSensitive global case sensitiveness or an array of booleans, whose keys should match
      *                                  the ones used in $others. If any is missing, the default case-sensitive
-     *                                  comparison is used.
+     *                                  comparison is used
      *
      * @return array|null an array containing the tokens matching the sequence elements, indexed by their position
      */
     public function findSequence(array $sequence, $start = 0, $end = null, $caseSensitive = true)
     {
-        // $end defaults to the end of the collection
-        if (null === $end) {
-            $end = count($this) - 1;
+        $sequenceCount = count($sequence);
+        if (0 === $sequenceCount) {
+            throw new \InvalidArgumentException('Invalid sequence.');
         }
 
-        if (!count($sequence)) {
-            throw new \InvalidArgumentException('Invalid sequence.');
+        // $end defaults to the end of the collection
+        $end = null === $end ? count($this) - 1 : min($end, count($this) - 1);
+
+        if ($start + $sequenceCount - 1 > $end) {
+            return;
         }
 
         // make sure the sequence content is "meaningful"
@@ -840,7 +813,7 @@ class Tokens extends \SplFixedArray
 
         for ($i = 0; $i < $itemsCnt; ++$i) {
             if ('' === $items[$i]->getContent()) {
-                throw new \InvalidArgumentException('Must not add empty item to collection');
+                throw new \InvalidArgumentException('Must not add empty token to collection.');
             }
 
             $this[$i + $index] = $items[$i];
@@ -970,7 +943,10 @@ class Tokens extends \SplFixedArray
         // clear memory
         $this->setSize(0);
 
-        $tokens = token_get_all($code);
+        $tokens = defined('TOKEN_PARSE')
+            ? token_get_all($code, TOKEN_PARSE)
+            : token_get_all($code);
+
         $this->setSize(count($tokens));
 
         foreach ($tokens as $index => $token) {
@@ -1058,16 +1034,6 @@ class Tokens extends \SplFixedArray
     }
 
     /**
-     * Clone tokens collection.
-     */
-    public function __clone()
-    {
-        foreach ($this as $key => $val) {
-            $this[$key] = clone $val;
-        }
-    }
-
-    /**
      * Clear tokens in the given range.
      *
      * @param int $indexStart
@@ -1101,42 +1067,25 @@ class Tokens extends \SplFixedArray
             return false;
         }
 
-        $kinds = $this->findGivenKind(array(T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, T_INLINE_HTML));
-
-        /*
-         * Fix HHVM incompatibilities
-         */
-        $hhvmOpenTagsWithEcho = array();
-        $hhvmHashBangs = array();
-
-        if (defined('HHVM_VERSION')) {
-            /*
-             * HHVM parses '<?=' as T_ECHO instead of T_OPEN_TAG_WITH_ECHO
-             *
-             * @see https://github.com/facebook/hhvm/issues/4809
-             */
-            $hhvmEchoes = $this->findGivenKind(T_ECHO);
-            foreach ($hhvmEchoes as $token) {
-                if (0 === strpos($token->getContent(), '<?=')) {
-                    $hhvmOpenTagsWithEcho[] = $token;
-                }
-            }
-
-            /*
-             * HHVM parses "#!/usr/bin/env php\n" as T_HASHBANG (not defined in
-             * PHP and T_HASHBANG. Moreover, HHVM does not define T_HASHBANG
-             * as a constant
-             *
-             * @see https://github.com/facebook/hhvm/issues/4810
-             */
-            $tokens = self::fromCode("#!/usr/bin/env php\n");
-            if (!$tokens[0]->isGivenKind(T_INLINE_HTML)) {
-                $hashBangId = $tokens[0]->getId();
-                $hhvmHashBangs = $this->findGivenKind($hashBangId);
+        for ($index = 1; $index < $size; ++$index) {
+            if (
+                $this[$index]->isGivenKind(array(T_INLINE_HTML, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO))
+                || (
+                    /*
+                     * HHVM parses '<?=' as T_ECHO instead of T_OPEN_TAG_WITH_ECHO
+                     *
+                     * @see https://github.com/facebook/hhvm/issues/4809
+                     * @see https://github.com/facebook/hhvm/issues/7161
+                     */
+                    defined('HHVM_VERSION')
+                    && $this[$index]->equals(array(T_ECHO, '<?='))
+                )
+            ) {
+                return false;
             }
         }
 
-        return 0 === count($kinds[T_INLINE_HTML]) + count($hhvmHashBangs) && 1 === count($kinds[T_OPEN_TAG]) + count($kinds[T_OPEN_TAG_WITH_ECHO]) + count($hhvmOpenTagsWithEcho);
+        return true;
     }
 
     /**
@@ -1156,6 +1105,88 @@ class Tokens extends \SplFixedArray
         }
 
         return false;
+    }
+
+    /**
+     * Clear token and merge surrounding whitespace tokens.
+     *
+     * @param int $index
+     */
+    public function clearTokenAndMergeSurroundingWhitespace($index)
+    {
+        $count = count($this);
+        $this[$index]->clear();
+
+        if ($index === $count - 1) {
+            return;
+        }
+
+        $nextIndex = $this->getNonEmptySibling($index, 1);
+
+        if (null === $nextIndex || !$this[$nextIndex]->isWhitespace()) {
+            return;
+        }
+
+        $prevIndex = $this->getNonEmptySibling($index, -1);
+
+        if ($this[$prevIndex]->isWhitespace()) {
+            $this[$prevIndex]->setContent($this[$prevIndex]->getContent().$this[$nextIndex]->getContent());
+        } elseif ($this[$prevIndex + 1]->isEmpty()) {
+            $this[$prevIndex + 1]->override(array(T_WHITESPACE, $this[$nextIndex]->getContent()));
+        }
+
+        $this[$nextIndex]->clear();
+    }
+
+    /**
+     * Calculate hash for code.
+     *
+     * @param string $code
+     *
+     * @return int
+     */
+    private static function calculateCodeHash($code)
+    {
+        return crc32($code);
+    }
+
+    /**
+     * Get cache value for given key.
+     *
+     * @param string $key item key
+     *
+     * @return Tokens
+     */
+    private static function getCache($key)
+    {
+        if (!self::hasCache($key)) {
+            throw new \OutOfBoundsException(sprintf('Unknown cache key: "%s".', $key));
+        }
+
+        return self::$cache[$key];
+    }
+
+    /**
+     * Check if given key exists in cache.
+     *
+     * @param string $key item key
+     *
+     * @return bool
+     */
+    private static function hasCache($key)
+    {
+        return isset(self::$cache[$key]);
+    }
+
+    /**
+     * Set cache item.
+     *
+     * @param string $key   item key
+     * @param Tokens $value item value
+     */
+    private static function setCache($key, Tokens $value)
+    {
+        self::$cache[$key] = $value;
     }
 
     /**
@@ -1188,36 +1219,5 @@ class Tokens extends \SplFixedArray
         ;
 
         $this->foundTokenKinds[$tokenKind] = true;
-    }
-
-    /**
-     * Clear token and merge surrounding whitespace tokens.
-     *
-     * @param int $index
-     */
-    public function clearTokenAndMergeSurroundingWhitespace($index)
-    {
-        $count = count($this);
-        $this[$index]->clear();
-
-        if ($index === $count - 1) {
-            return;
-        }
-
-        $nextIndex = $this->getNonEmptySibling($index, 1);
-
-        if (null === $nextIndex || !$this[$nextIndex]->isWhitespace()) {
-            return;
-        }
-
-        $prevIndex = $this->getNonEmptySibling($index, -1);
-
-        if ($this[$prevIndex]->isWhitespace()) {
-            $this[$prevIndex]->setContent($this[$prevIndex]->getContent().$this[$nextIndex]->getContent());
-        } elseif ($this[$prevIndex + 1]->isEmpty()) {
-            $this[$prevIndex + 1]->override(array(T_WHITESPACE, $this[$nextIndex]->getContent()));
-        }
-
-        $this[$nextIndex]->clear();
     }
 }

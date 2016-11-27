@@ -27,6 +27,43 @@ namespace PhpCsFixer\Tokenizer;
 interface TransformerInterface
 {
     /**
+     * Get tokens created by Transformer.
+     *
+     * @return array
+     */
+    public function getCustomTokens();
+
+    /**
+     * Return the name of the transformer.
+     *
+     * The name must be all lowercase and without any spaces.
+     *
+     * @return string The name of the fixer
+     */
+    public function getName();
+
+    /**
+     * Returns the priority of the transformer.
+     *
+     * The default priority is 0 and higher priorities are executed first.
+     *
+     * @return int
+     */
+    public function getPriority();
+
+    /**
+     * Return minimal required PHP version id to transform the code.
+     *
+     * Custom Token kinds from Transformers are always registered, but sometimes
+     * there is no need to analyse the Tokens if for sure we cannot find examined
+     * token kind, eg transforming `T_FUNCTION` in `<?php use function Foo\\bar;`
+     * code.
+     *
+     * @return int
+     */
+    public function getRequiredPhpVersionId();
+
+    /**
      * Process Token to transform it into custom token when needed.
      *
      * @param Tokens $tokens
@@ -34,25 +71,4 @@ interface TransformerInterface
      * @param int    $index
      */
     public function process(Tokens $tokens, Token $token, $index);
-
-    /**
-     * Register constants for custom tokens created by Transformer.
-     */
-    public function registerCustomTokens();
-
-    /**
-     * Get names of custom tokens created by Transformer.
-     *
-     * @return array
-     */
-    public function getCustomTokenNames();
-
-    /**
-     * Returns the name of the fixer.
-     *
-     * The name must be all lowercase and without any spaces.
-     *
-     * @return string The name of the fixer
-     */
-    public function getName();
 }

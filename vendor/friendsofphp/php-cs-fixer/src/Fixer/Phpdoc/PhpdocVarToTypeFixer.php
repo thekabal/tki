@@ -15,11 +15,19 @@ namespace PhpCsFixer\Fixer\Phpdoc;
 use PhpCsFixer\AbstractProxyFixer;
 
 /**
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
 final class PhpdocVarToTypeFixer extends AbstractProxyFixer
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription()
+    {
+        return '@var should always be written as @type.';
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -31,13 +39,5 @@ final class PhpdocVarToTypeFixer extends AbstractProxyFixer
         ));
 
         return $fixer;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDescription()
-    {
-        return '@var should always be written as @type.';
     }
 }

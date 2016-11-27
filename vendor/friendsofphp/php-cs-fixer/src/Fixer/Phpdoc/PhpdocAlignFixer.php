@@ -15,38 +15,42 @@ namespace PhpCsFixer\Fixer\Phpdoc;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Utils;
+use PhpCsFixer\WhitespacesFixerConfigAwareInterface;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Sebastiaan Stok <s.stok@rollerscapes.net>
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
-final class PhpdocAlignFixer extends AbstractFixer
+final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesFixerConfigAwareInterface
 {
+    private $regex;
+    private $regexCommentLine;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $indent = '(?P<indent>(?: {2}|\t)*)';
+        // e.g. @param <hint> <$var>
+        $paramTag = '(?P<tag>param)\s+(?P<hint>[^$]+?)\s+(?P<var>&?\$[^\s]+)';
+        // e.g. @return <hint>
+        $otherTags = '(?P<tag2>return|throws|var|type)\s+(?P<hint2>[^\s]+?)';
+        // optional <desc>
+        $desc = '(?:\s+(?P<desc>\V*))';
+
+        $this->regex = '/^'.$indent.' \* @(?:'.$paramTag.'|'.$otherTags.')'.$desc.'\s*$/';
+        $this->regexCommentLine = '/^'.$indent.' \*(?! @)(?:\s+(?P<desc>\V+))(?<!\*\/)$/';
+    }
+
     /**
      * {@inheritdoc}
      */
     public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(T_DOC_COMMENT);
-    }
-
-    private $regex;
-    private $regexCommentLine;
-
-    public function __construct()
-    {
-        // e.g. @param <hint> <$var>
-        $paramTag = '(?P<tag>param)\s+(?P<hint>[^$]+?)\s+(?P<var>&?\$[^\s]+)';
-        // e.g. @return <hint>
-        $otherTags = '(?P<tag2>return|throws|var|type)\s+(?P<hint2>[^\s]+?)';
-        // optional <desc>
-        $desc = '(?:\s+(?P<desc>.*)|\s*)';
-
-        $this->regex = '/^(?P<indent>(?: {4})*) \* @(?:'.$paramTag.'|'.$otherTags.')'.$desc.'$/';
-        $this->regexCommentLine = '/^(?P<indent>(?: {4})*) \*(?! @)(?:\s+(?P<desc>.+))(?<!\*\/)$/';
     }
 
     /**
@@ -93,6 +97,7 @@ final class PhpdocAlignFixer extends AbstractFixer
      */
     private function fixDocBlock($content)
     {
+        $lineEnding = $this->whitespacesConfig->getLineEnding();
         $lines = Utils::splitLines($content);
 
         $l = count($lines);
@@ -133,7 +138,7 @@ final class PhpdocAlignFixer extends AbstractFixer
             foreach ($items as $j => $item) {
                 if (null === $item['tag']) {
                     if ($item['desc'][0] === '@') {
-                        $lines[$current + $j] = $item['indent'].' * '.$item['desc']."\n";
+                        $lines[$current + $j] = $item['indent'].' * '.$item['desc'].$lineEnding;
                         continue;
                     }
 
@@ -142,7 +147,7 @@ final class PhpdocAlignFixer extends AbstractFixer
                         .' *  '
                         .str_repeat(' ', $tagMax + $hintMax + $varMax + ('param' === $currTag ? 3 : 2))
                         .$item['desc']
-                        ."\n";
+                        .$lineEnding;
 
                     $lines[$current + $j] = $line;
 
@@ -165,14 +170,14 @@ final class PhpdocAlignFixer extends AbstractFixer
                         .$item['var']
                         .(
                             !empty($item['desc'])
-                            ? str_repeat(' ', $varMax - strlen($item['var']) + 1).$item['desc']."\n"
-                            : "\n"
+                            ? str_repeat(' ', $varMax - strlen($item['var']) + 1).$item['desc'].$lineEnding
+                            : $lineEnding
                         )
                     ;
                 } elseif (!empty($item['desc'])) {
-                    $line .= str_repeat(' ', $hintMax - strlen($item['hint']) + 1).$item['desc']."\n";
+                    $line .= str_repeat(' ', $hintMax - strlen($item['hint']) + 1).$item['desc'].$lineEnding;
                 } else {
-                    $line .= "\n";
+                    $line .= $lineEnding;
                 }
 
                 $lines[$current + $j] = $line;

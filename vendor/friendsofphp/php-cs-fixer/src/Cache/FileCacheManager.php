@@ -80,31 +80,11 @@ final class FileCacheManager implements CacheManagerInterface
         $this->writeCache();
     }
 
-    private function readCache()
-    {
-        $cache = $this->handler->read();
-
-        if (!$cache || !$this->signature->equals($cache->getSignature())) {
-            $cache = new Cache($this->signature);
-        }
-
-        $this->cache = $cache;
-    }
-
-    private function writeCache()
-    {
-        $this->handler->write($this->cache);
-    }
-
     public function needFixing($file, $fileContent)
     {
         $file = $this->cacheDirectory->getRelativePathTo($file);
 
-        if (!$this->cache->has($file) || $this->cache->get($file) !== $this->calcHash($fileContent)) {
-            return true;
-        }
-
-        return false;
+        return !$this->cache->has($file) || $this->cache->get($file) !== $this->calcHash($fileContent);
     }
 
     public function setFile($file, $fileContent)
@@ -120,6 +100,22 @@ final class FileCacheManager implements CacheManagerInterface
         }
 
         $this->cache->set($file, $hash);
+    }
+
+    private function readCache()
+    {
+        $cache = $this->handler->read();
+
+        if (!$cache || !$this->signature->equals($cache->getSignature())) {
+            $cache = new Cache($this->signature);
+        }
+
+        $this->cache = $cache;
+    }
+
+    private function writeCache()
+    {
+        $this->handler->write($this->cache);
     }
 
     private function calcHash($content)

@@ -39,7 +39,7 @@ final class FixerFactory
     /**
      * Fixers by name.
      *
-     * @var FixerInterface[] Associative array of fixers with names as keys.
+     * @var FixerInterface[] Associative array of fixers with names as keys
      */
     private $fixersByName = array();
 
@@ -51,6 +51,17 @@ final class FixerFactory
     public static function create()
     {
         return new self();
+    }
+
+    public function setWhitespacesConfig(WhitespacesFixerConfig $config)
+    {
+        foreach ($this->fixers as $fixer) {
+            if ($fixer instanceof WhitespacesFixerConfigAwareInterface) {
+                $fixer->setWhitespacesConfig($config);
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -79,7 +90,10 @@ final class FixerFactory
 
             foreach (SymfonyFinder::create()->files()->in(__DIR__.'/Fixer') as $file) {
                 $relativeNamespace = $file->getRelativePath();
-                $builtInFixers[] = 'PhpCsFixer\\Fixer\\'.($relativeNamespace ? $relativeNamespace.'\\' : '').$file->getBasename('.php');
+                $fixerClass = 'PhpCsFixer\\Fixer\\'.($relativeNamespace ? $relativeNamespace.'\\' : '').$file->getBasename('.php');
+                if ('Fixer' === substr($fixerClass, -5)) {
+                    $builtInFixers[] = $fixerClass;
+                }
             }
         }
 
@@ -147,7 +161,12 @@ final class FixerFactory
             }
 
             $fixer = $this->fixersByName[$name];
-            $fixer->configure($ruleSet->getRuleConfiguration($name));
+
+            $config = $ruleSet->getRuleConfiguration($name);
+            if (null !== $config) {
+                $fixer->configure($config);
+            }
+
             $fixers[] = $fixer;
             $fixersByName[$name] = $fixer;
 
@@ -212,9 +231,6 @@ final class FixerFactory
     private function getFixersConflicts(FixerInterface $fixer)
     {
         static $conflictMap = array(
-            'short_array_syntax' => array('long_array_syntax'),
-            'align_double_arrow' => array('unalign_double_arrow'),
-            'align_equals' => array('unalign_equals'),
             'concat_with_spaces' => array('concat_without_spaces'),
             'echo_to_print' => array('print_to_echo'),
             'no_blank_lines_before_namespace' => array('single_blank_line_before_namespace'),

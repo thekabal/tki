@@ -26,7 +26,17 @@ final class NoShortEchoTagFixer extends AbstractFixer
      */
     public function isCandidate(Tokens $tokens)
     {
-        return $tokens->isTokenKindFound(T_OPEN_TAG_WITH_ECHO);
+        return $tokens->isTokenKindFound(T_OPEN_TAG_WITH_ECHO)
+            /*
+             * HHVM parses '<?=' as T_ECHO instead of T_OPEN_TAG_WITH_ECHO
+             *
+             * @see https://github.com/facebook/hhvm/issues/4809
+             * @see https://github.com/facebook/hhvm/issues/7161
+             */
+            || (
+                defined('HHVM_VERSION')
+                && $tokens->isTokenKindFound(T_ECHO)
+            );
     }
 
     /**
@@ -37,7 +47,21 @@ final class NoShortEchoTagFixer extends AbstractFixer
         $i = count($tokens);
 
         while ($i--) {
-            if (!$tokens[$i]->isGivenKind(T_OPEN_TAG_WITH_ECHO)) {
+            $token = $tokens[$i];
+
+            if (
+                !$token->isGivenKind(T_OPEN_TAG_WITH_ECHO)
+                && !(
+                    /*
+                     * HHVM parses '<?=' as T_ECHO instead of T_OPEN_TAG_WITH_ECHO
+                     *
+                     * @see https://github.com/facebook/hhvm/issues/4809
+                     * @see https://github.com/facebook/hhvm/issues/7161
+                     */
+                    defined('HHVM_VERSION')
+                    && $token->equals(array(T_ECHO, '<?='))
+                )
+            ) {
                 continue;
             }
 

@@ -44,6 +44,7 @@
 namespace PDepend\Source\Language\PHP;
 
 use PDepend\Source\AST\ASTAllocationExpression;
+use PDepend\Source\Tokenizer\Token;
 use PDepend\Source\Tokenizer\Tokens;
 
 /**
@@ -65,6 +66,20 @@ use PDepend\Source\Tokenizer\Tokens;
  */
 abstract class PHPParserVersion70 extends PHPParserVersion56
 {
+    /**
+     * @param integer $tokenType
+     * @return bool
+     */
+    protected function isMethodName($tokenType)
+    {
+        switch ($tokenType) {
+            case Tokens::T_EMPTY:
+            case Tokens::T_LIST:
+                return true;
+        }
+        return parent::isMethodName($tokenType);
+    }
+
     /**
      * @param \PDepend\Source\AST\AbstractASTCallable $callable
      * @return \PDepend\Source\AST\AbstractASTCallable
@@ -191,12 +206,21 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
         return parent::parseAllocationExpressionTypeReference($allocation);
     }
 
+    /**
+     * Attempts to the next sequence of tokens as an anonymous class and adds it to the allocation expression
+     *
+     * @param \PDepend\Source\AST\ASTAllocationExpression $allocation
+     *
+     * @return null|\PDepend\Source\AST\ASTAnonymousClass
+     */
     protected function parseAnonymousClassDeclaration(ASTAllocationExpression $allocation)
     {
         $this->consumeComments();
 
         switch ($this->tokenizer->peek()) {
             case Tokens::T_CLASS:
+                $this->tokenStack->push();
+
                 $this->consumeToken(Tokens::T_CLASS);
                 $this->consumeComments();
 
@@ -211,10 +235,8 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
                 $class->setCompilationUnit($this->compilationUnit);
                 $class->setUserDefined();
 
-                $allocation->addChild($class);
-
                 if ($this->isNextTokenArguments()) {
-                    $allocation->addChild($this->parseArguments());
+                    $class->addChild($this->parseArguments());
                 }
 
                 $this->consumeComments();
@@ -232,7 +254,15 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
                     $this->parseInterfaceList($class);
                 }
 
-                return $class;
+                $allocation->addChild(
+                    $this->setNodePositionsAndReturn(
+                        $this->parseTypeBody($class),
+                        $tokens
+                    )
+                );
+                $class->setTokens($tokens);
+
+                return $allocation;
         }
         return null;
     }
@@ -263,10 +293,12 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
     protected function parseExpressionVersion70()
     {
         $this->consumeComments();
+        $nextTokenType = $this->tokenizer->peek();
 
-        switch ($this->tokenizer->peek()) {
+        switch ($nextTokenType) {
             case Tokens::T_SPACESHIP:
-                $token = $this->consumeToken(Tokens::T_SPACESHIP);
+            case Tokens::T_COALESCE:
+                $token = $this->consumeToken($nextTokenType);
 
                 $expr = $this->builder->buildAstExpression($token->image);
                 $expr->configureLinesAndColumns(

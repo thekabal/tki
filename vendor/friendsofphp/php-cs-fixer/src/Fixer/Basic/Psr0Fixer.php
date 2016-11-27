@@ -12,17 +12,16 @@
 
 namespace PhpCsFixer\Fixer\Basic;
 
-use PhpCsFixer\AbstractFixer;
-use PhpCsFixer\StdinFileInfo;
-use PhpCsFixer\Tokenizer\Token;
+use PhpCsFixer\AbstractPsrAutoloadingFixer;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  * @author Bram Gotink <bram@gotink.me>
+ * @author Graham Campbell <graham@alt-three.com>
  */
-final class Psr0Fixer extends AbstractFixer
+final class Psr0Fixer extends AbstractPsrAutoloadingFixer
 {
     private $configuration = array();
 
@@ -32,28 +31,14 @@ final class Psr0Fixer extends AbstractFixer
     public function configure(array $configuration = null)
     {
         if (null === $configuration) {
+            $this->configuration = array();
+
             return;
         }
 
         if (isset($configuration['dir'])) {
             $this->configuration['dir'] = $configuration['dir'];
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRisky()
-    {
-        return true;
     }
 
     /**
@@ -99,6 +84,11 @@ final class Psr0Fixer extends AbstractFixer
 
             if (isset($this->configuration['dir'])) {
                 $dir = substr($dir, strlen(realpath($this->configuration['dir'])) + 1);
+
+                if (false === $dir) {
+                    $dir = '';
+                }
+
                 if (strlen($normNamespace) > strlen($dir)) {
                     if ('' !== $dir) {
                         $normNamespace = substr($normNamespace, -strlen($dir));
@@ -147,45 +137,8 @@ final class Psr0Fixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function getPriority()
-    {
-        return -10;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDescription()
     {
         return 'Classes must be in a path that matches their namespace, be at least one namespace deep and the class name should match the file name.';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(\SplFileInfo $file)
-    {
-        if ($file instanceof StdinFileInfo) {
-            return false;
-        }
-
-        $filenameParts = explode('.', $file->getBasename(), 2);
-
-        if (
-            // ignore file with extension other than php
-            (!isset($filenameParts[1]) || 'php' !== $filenameParts[1])
-            // ignore file with name that cannot be a class name
-            || 0 === preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $filenameParts[0])
-        ) {
-            return false;
-        }
-
-        $tokens = Tokens::fromCode(sprintf('<?php %s {}', $filenameParts[0]));
-        if ($tokens[1]->isKeyword() || $tokens[1]->isMagicConstant()) {
-            return false;
-        }
-
-        // ignore stubs/fixtures, since they are typically containing invalid files for various reasons
-        return !preg_match('{[/\\\\](stub|fixture)s?[/\\\\]}i', $file->getRealPath());
     }
 }

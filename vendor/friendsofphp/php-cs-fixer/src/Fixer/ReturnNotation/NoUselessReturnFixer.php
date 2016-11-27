@@ -58,14 +58,14 @@ final class NoUselessReturnFixer extends AbstractFixer
      */
     public function getPriority()
     {
-        // should be run before BlankLineBeforeReturnFixer, NoExtraConsecutiveBlankLinesFixer, NoWhitespaceInBlankLinesFixer and after SimplifiedNullReturnFixer and NoDuplicateSemicolonFixer.
+        // should be run before BlankLineBeforeReturnFixer, NoExtraConsecutiveBlankLinesFixer, NoWhitespaceInBlankLineFixer and after SimplifiedNullReturnFixer and NoEmptyStatementFixer.
         return -18;
     }
 
     /**
      * @param Tokens $tokens
-     * @param int    $start  Token index of the opening brace token of the function.
-     * @param int    $end    Token index of the closing brace token of the function.
+     * @param int    $start  Token index of the opening brace token of the function
+     * @param int    $end    Token index of the closing brace token of the function
      */
     private function fixFunction(Tokens $tokens, $start, $end)
     {

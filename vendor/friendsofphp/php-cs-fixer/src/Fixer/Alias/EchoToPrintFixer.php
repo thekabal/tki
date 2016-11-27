@@ -13,6 +13,7 @@
 namespace PhpCsFixer\Fixer\Alias;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -38,13 +39,26 @@ final class EchoToPrintFixer extends AbstractFixer
                 continue;
             }
 
+            /*
+             * HHVM parses '<?=' as T_ECHO instead of T_OPEN_TAG_WITH_ECHO
+             *
+             * @see https://github.com/facebook/hhvm/issues/4809
+             * @see https://github.com/facebook/hhvm/issues/7161
+             */
+            if (
+                defined('HHVM_VERSION')
+                && 0 === strpos($token->getContent(), '<?=')
+            ) {
+                continue;
+            }
+
             $nextTokenIndex = $tokens->getNextMeaningfulToken($index);
             $endTokenIndex = $tokens->getNextTokenOfKind($index, array(';', array(T_CLOSE_TAG)));
             $canBeConverted = true;
 
             for ($i = $nextTokenIndex; $i < $endTokenIndex; ++$i) {
-                if ($tokens[$i]->equalsAny(array('(', array(CT_ARRAY_SQUARE_BRACE_OPEN)))) {
-                    $blockType = $tokens->detectBlockType($tokens[$i]);
+                if ($tokens[$i]->equalsAny(array('(', array(CT::T_ARRAY_SQUARE_BRACE_OPEN)))) {
+                    $blockType = Tokens::detectBlockType($tokens[$i]);
                     $i = $tokens->findBlockEnd($blockType['type'], $i);
                 }
 

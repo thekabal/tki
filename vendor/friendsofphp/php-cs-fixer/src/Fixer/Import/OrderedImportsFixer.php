@@ -13,15 +13,22 @@
 namespace PhpCsFixer\Fixer\Import;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Tokenizer\CT;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
 
 /**
  * @author Sebastiaan Stok <s.stok@rollerscapes.net>
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * @author SpacePossum
  */
 final class OrderedImportsFixer extends AbstractFixer
 {
+    const IMPORT_TYPE_CLASS = 1;
+    const IMPORT_TYPE_CONST = 2;
+    const IMPORT_TYPE_FUNCTION = 3;
+
     /**
      * {@inheritdoc}
      */
@@ -37,32 +44,42 @@ final class OrderedImportsFixer extends AbstractFixer
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
         $namespacesImports = $tokensAnalyzer->getImportUseIndexes(true);
-        $usesOrder = array();
 
-        if (!count($namespacesImports)) {
+        if (0 === count($namespacesImports)) {
             return;
         }
 
+        $usesOrder = array();
         foreach ($namespacesImports as $uses) {
-            $uses = array_reverse($uses);
-            $usesOrder = array_replace($usesOrder, $this->getNewOrder($uses, $tokens));
+            $usesOrder = array_replace($usesOrder, $this->getNewOrder(array_reverse($uses), $tokens));
         }
 
         $usesOrder = array_reverse($usesOrder, true);
         $mapStartToEnd = array();
 
         foreach ($usesOrder as $use) {
-            $mapStartToEnd[$use[1]] = $use[2];
+            $mapStartToEnd[$use['startIndex']] = $use['endIndex'];
         }
 
         // Now insert the new tokens, starting from the end
         foreach ($usesOrder as $index => $use) {
-            $declarationTokens = Tokens::fromCode('<?php use '.$use[0].';');
+            $declarationTokens = Tokens::fromCode('<?php use '.$use['namespace'].';');
             $declarationTokens->clearRange(0, 2); // clear `<?php use `
             $declarationTokens[count($declarationTokens) - 1]->clear(); // clear `;`
             $declarationTokens->clearEmptyTokens();
 
             $tokens->overrideRange($index, $mapStartToEnd[$index], $declarationTokens);
+            if ($use['group']) {
+                // a group import must start with `use` and cannot be part of comma separated import list
+                $prev = $tokens->getPrevMeaningfulToken($index);
+                if ($tokens[$prev]->equals(',')) {
+                    $tokens[$prev]->setContent(';');
+                    $tokens->insertAt($prev + 1, new Token(array(T_USE, 'use')));
+                    if (!$tokens[$prev + 2]->isWhitespace()) {
+                        $tokens->insertAt($prev + 2, new Token(array(T_WHITESPACE, ' ')));
+                    }
+                }
+            }
         }
     }
 
@@ -95,42 +112,121 @@ final class OrderedImportsFixer extends AbstractFixer
      */
     public static function sortingCallBack(array $first, array $second)
     {
-        $a = trim(preg_replace('%/\*(.*)\*/%s', '', $first[0]));
-        $b = trim(preg_replace('%/\*(.*)\*/%s', '', $second[0]));
+        if ($first['importType'] !== $second['importType']) {
+            return $first['importType'] > $second['importType'] ? 1 : -1;
+        }
+
+        $firstNamespace = trim(preg_replace('%/\*(.*)\*/%s', '', $first['namespace']));
+        $secondNamespace = trim(preg_replace('%/\*(.*)\*/%s', '', $second['namespace']));
 
         // Replace backslashes by spaces before sorting for correct sort order
-        $a = str_replace('\\', ' ', $a);
-        $b = str_replace('\\', ' ', $b);
-
-        return strcasecmp($a, $b);
+        return strcasecmp(
+            str_replace('\\', ' ', $firstNamespace),
+            str_replace('\\', ' ', $secondNamespace)
+        );
     }
 
     private function getNewOrder(array $uses, Tokens $tokens)
     {
-        $uses = array_reverse($uses);
-
         $indexes = array();
         $originalIndexes = array();
 
-        foreach ($uses as $index) {
-            $endIndex = $tokens->getNextTokenOfKind($index, array(';'));
-            $startIndex = $tokens->getTokenNotOfKindSibling($index + 1, 1, array(array(T_WHITESPACE)));
+        for ($i = count($uses) - 1; $i >= 0; --$i) {
+            $index = $uses[$i];
 
-            $namespace = '';
+            $startIndex = $tokens->getTokenNotOfKindSibling($index + 1, 1, array(array(T_WHITESPACE)));
+            $endIndex = $tokens->getNextTokenOfKind($startIndex, array(';', array(T_CLOSE_TAG)));
+            $previous = $tokens->getPrevMeaningfulToken($endIndex);
+
+            $group = $tokens[$previous]->isGivenKind(CT::T_GROUP_IMPORT_BRACE_CLOSE);
+            if ($tokens[$startIndex]->isGivenKind(array(CT::T_CONST_IMPORT))) {
+                $type = self::IMPORT_TYPE_CONST;
+            } elseif ($tokens[$startIndex]->isGivenKind(array(CT::T_FUNCTION_IMPORT))) {
+                $type = self::IMPORT_TYPE_FUNCTION;
+            } else {
+                $type = self::IMPORT_TYPE_CLASS;
+            }
+
+            $namespaceTokens = array();
             $index = $startIndex;
 
             while ($index <= $endIndex) {
                 $token = $tokens[$index];
 
-                if ($index === $endIndex || $token->equals(',')) {
-                    $indexes[$startIndex] = array($namespace, $startIndex, $index - 1);
+                if ($index === $endIndex || (!$group && $token->equals(','))) {
+                    if ($group) {
+                        // if group import, sort the items within the group definition
+
+                        // figure out where the list of namespace parts within the group def. starts
+                        $namespaceTokensCount = count($namespaceTokens) - 1;
+                        $namespace = '';
+                        for ($k = 0; $k < $namespaceTokensCount; ++$k) {
+                            if ($namespaceTokens[$k]->isGivenKind(CT::T_GROUP_IMPORT_BRACE_OPEN)) {
+                                $namespace .= '{';
+                                break;
+                            }
+
+                            $namespace .= $namespaceTokens[$k]->getContent();
+                        }
+
+                        // fetch all parts, split up in an array of strings, move comments to the end
+                        $parts = array();
+                        for ($k1 = $k + 1; $k1 < $namespaceTokensCount; ++$k1) {
+                            $comment = '';
+                            $namespacePart = '';
+                            for ($k2 = $k1; ; ++$k2) {
+                                if ($namespaceTokens[$k2]->equalsAny(array(',', array(CT::T_GROUP_IMPORT_BRACE_CLOSE)))) {
+                                    break;
+                                }
+
+                                if ($namespaceTokens[$k2]->isComment()) {
+                                    $comment .= $namespaceTokens[$k2]->getContent();
+
+                                    continue;
+                                }
+
+                                $namespacePart .= $namespaceTokens[$k2]->getContent();
+                            }
+
+                            $namespacePart = trim($namespacePart);
+                            $comment = trim($comment);
+                            if ('' !== $comment) {
+                                $namespacePart .= ' '.$comment;
+                            }
+
+                            $parts[] = $namespacePart.', ';
+
+                            $k1 = $k2;
+                        }
+
+                        $sortedParts = $parts;
+                        sort($parts);
+
+                        // check if the order needs to be updated, otherwise don't touch as we might change valid CS (to other valid CS).
+                        if ($sortedParts === $parts) {
+                            $namespace = Tokens::fromArray($namespaceTokens)->generateCode();
+                        } else {
+                            $namespace .= substr(implode('', $parts), 0, -2).'}';
+                        }
+                    } else {
+                        $namespace = Tokens::fromArray($namespaceTokens)->generateCode();
+                    }
+
+                    $indexes[$startIndex] = array(
+                        'namespace' => $namespace,
+                        'startIndex' => $startIndex,
+                        'endIndex' => $index - 1,
+                        'importType' => $type,
+                        'group' => $group,
+                    );
+
                     $originalIndexes[] = $startIndex;
 
                     if ($index === $endIndex) {
                         break;
                     }
 
-                    $namespace = '';
+                    $namespaceTokens = array();
                     $nextPartIndex = $tokens->getTokenNotOfKindSibling($index, 1, array(array(','), array(T_WHITESPACE)));
                     $startIndex = $nextPartIndex;
                     $index = $nextPartIndex;
@@ -138,20 +234,19 @@ final class OrderedImportsFixer extends AbstractFixer
                     continue;
                 }
 
-                $namespace .= $token->getContent();
+                $namespaceTokens[] = $token;
                 ++$index;
             }
         }
 
         uasort($indexes, 'self::sortingCallBack');
 
-        $i = -1;
-
+        $index = -1;
         $usesOrder = array();
 
         // Loop trough the index but use original index order
         foreach ($indexes as $v) {
-            $usesOrder[$originalIndexes[++$i]] = $v;
+            $usesOrder[$originalIndexes[++$index]] = $v;
         }
 
         return $usesOrder;

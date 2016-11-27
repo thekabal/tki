@@ -13,7 +13,7 @@
 namespace PhpCsFixer\Console\Output;
 
 use PhpCsFixer\FixerFileProcessedEvent;
-use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -48,15 +48,20 @@ final class ProcessOutput implements ProcessOutputInterface
     /**
      * Stream output instance.
      *
-     * @var StreamOutput
+     * @var OutputInterface
      */
     private $output;
 
-    public function __construct(StreamOutput $output, EventDispatcher $dispatcher)
+    public function __construct(OutputInterface $output, EventDispatcher $dispatcher)
     {
         $this->output = $output;
         $this->eventDispatcher = $dispatcher;
         $this->eventDispatcher->addListener(FixerFileProcessedEvent::NAME, array($this, 'onFixerFileProcessed'));
+    }
+
+    public function __destruct()
+    {
+        $this->eventDispatcher->removeListener(FixerFileProcessedEvent::NAME, array($this, 'onFixerFileProcessed'));
     }
 
     public function onFixerFileProcessed(FixerFileProcessedEvent $event)
@@ -79,10 +84,5 @@ final class ProcessOutput implements ProcessOutputInterface
         }
 
         $this->output->write(sprintf("\nLegend: %s\n", implode(', ', $symbols)));
-    }
-
-    public function __destruct()
-    {
-        $this->eventDispatcher->removeListener(FixerFileProcessedEvent::NAME, array($this, 'onFixerFileProcessed'));
     }
 }

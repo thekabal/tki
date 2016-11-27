@@ -15,7 +15,7 @@ namespace PhpCsFixer\Fixer\Phpdoc;
 use PhpCsFixer\AbstractPhpdocTypesFixer;
 
 /**
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  */
 final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer
 {
@@ -34,6 +34,7 @@ final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer
         'float',
         'int',
         'integer',
+        'iterable',
         'mixed',
         'null',
         'object',

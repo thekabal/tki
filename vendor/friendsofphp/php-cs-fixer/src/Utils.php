@@ -16,7 +16,7 @@ use PhpCsFixer\Tokenizer\Token;
 
 /**
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
- * @author Graham Campbell <graham@mineuk.com>
+ * @author Graham Campbell <graham@alt-three.com>
  * @author Odín del Río <odin.drp@gmail.com>
  *
  * @internal
@@ -101,7 +101,7 @@ final class Utils
     }
 
     /**
-     * Calculate the trailing whitespace no_tab_indentation.
+     * Calculate the trailing whitespace.
      *
      * What we're doing here is grabbing everything after the final newline.
      *
@@ -115,6 +115,15 @@ final class Utils
             throw new \InvalidArgumentException(sprintf('The given token must be whitespace, got "%s".', $token->getName()));
         }
 
-        return ltrim(strrchr(str_replace(array("\r\n", "\r"), "\n", $token->getContent()), 10), "\n");
+        $str = strrchr(
+            str_replace(array("\r\n", "\r"), "\n", $token->getContent()),
+            "\n"
+        );
+
+        if (false === $str) {
+            return '';
+        }
+
+        return ltrim($str, "\n");
     }
 }

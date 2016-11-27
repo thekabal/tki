@@ -13,11 +13,12 @@
 namespace PhpCsFixer\Tokenizer\Transformer;
 
 use PhpCsFixer\Tokenizer\AbstractTransformer;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
- * Transform `class` class' constant from T_CLASS into CT_CLASS_CONSTANT.
+ * Transform `class` class' constant from T_CLASS into CT::T_CLASS_CONSTANT.
  *
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
@@ -28,9 +29,17 @@ final class ClassConstantTransformer extends AbstractTransformer
     /**
      * {@inheritdoc}
      */
-    public function getCustomTokenNames()
+    public function getCustomTokens()
     {
-        return array('CT_CLASS_CONSTANT');
+        return array(CT::T_CLASS_CONSTANT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequiredPhpVersionId()
+    {
+        return 50500;
     }
 
     /**
@@ -38,7 +47,10 @@ final class ClassConstantTransformer extends AbstractTransformer
      */
     public function process(Tokens $tokens, Token $token, $index)
     {
-        if (!$token->isGivenKind(T_CLASS)) {
+        if (!$token->equalsAny(array(
+            array(T_CLASS, 'class'),
+            array(T_STRING, 'class'),
+        ), false)) {
             return;
         }
 
@@ -46,7 +58,7 @@ final class ClassConstantTransformer extends AbstractTransformer
         $prevToken = $tokens[$prevIndex];
 
         if ($prevToken->isGivenKind(T_DOUBLE_COLON)) {
-            $token->override(array(CT_CLASS_CONSTANT, $token->getContent()));
+            $token->override(array(CT::T_CLASS_CONSTANT, $token->getContent()));
         }
     }
 }

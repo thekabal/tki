@@ -12,7 +12,8 @@
 
 namespace PhpCsFixer;
 
-use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
+use PhpCsFixer\ConfigurationException\RequiredFixerConfigurationException;
+use PhpCsFixer\ConfigurationException\UnallowedFixerConfigurationException;
 
 /**
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
@@ -22,12 +23,30 @@ use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
 abstract class AbstractFixer implements FixerInterface
 {
     /**
+     * @var WhitespacesFixerConfig
+     */
+    protected $whitespacesConfig;
+
+    public function __construct()
+    {
+        try {
+            $this->configure(null);
+        } catch (RequiredFixerConfigurationException $e) {
+            // ignore
+        }
+
+        if ($this instanceof WhitespacesFixerConfigAwareInterface) {
+            $this->whitespacesConfig = $this->getDefaultWhitespacesFixerConfig();
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configure(array $configuration = null)
     {
         if (null !== $configuration) {
-            throw new InvalidFixerConfigurationException($this->getName(), 'Configuration is not allowed.');
+            throw new UnallowedFixerConfigurationException($this->getName(), 'Configuration is not allowed.');
         }
     }
 
@@ -64,5 +83,21 @@ abstract class AbstractFixer implements FixerInterface
     public function supports(\SplFileInfo $file)
     {
         return true;
+    }
+
+    public function setWhitespacesConfig(WhitespacesFixerConfig $config)
+    {
+        $this->whitespacesConfig = $config;
+    }
+
+    private function getDefaultWhitespacesFixerConfig()
+    {
+        static $defaultWhitespacesFixerConfig = null;
+
+        if (null === $defaultWhitespacesFixerConfig) {
+            $defaultWhitespacesFixerConfig = new WhitespacesFixerConfig('    ', "\n");
+        }
+
+        return $defaultWhitespacesFixerConfig;
     }
 }
