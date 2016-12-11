@@ -22,7 +22,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function baseBuildCheck($langvars, $tkireg, $planet, $i)
+    public static function baseBuildCheck($langvars, Reg $tkireg, $planet, int $i)
     {
         if($planet[$i][base] == 'Y')
         {
