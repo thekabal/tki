@@ -547,10 +547,7 @@ class Traderoute3
         // echo "<p><center><font size=3 color=white><strong>\n";
     }
 
-    /**
-     * @param double $total_profit
-     */
-    public static function traderouteResultsDisplayTotals(\PDO $pdo_db, string $lang, $total_profit)
+    public static function traderouteResultsDisplayTotals(\PDO $pdo_db, string $lang, int $total_profit)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
