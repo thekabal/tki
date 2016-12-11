@@ -141,7 +141,7 @@ class Team
         $sql_query .= ";";
 
         $res = $db->Execute($sql_query, array($order, $by));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $color = $tkireg->color_line1;
 
         while (!$res->EOF)
@@ -153,7 +153,7 @@ class Team
 
             // This fixes it so that it actually displays the coordinator, and not the first member of the team.
             $res2 = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['creator']));
-            \Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
             while (!$res2->EOF)
             {
                 $row2 = $res2->fields;
@@ -228,7 +228,7 @@ class Team
         echo "<table border=2 cellspacing=2 cellpadding=2 bgcolor=\"#400040\" width=\"75%\" align=center><tr>";
         echo "<td><font color=white>" . $langvars['l_team_members'] . "</font></td></tr><tr bgcolor=$tkireg->color_line2>";
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE team = ?;", array($whichteam));
-        \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         while (!$result->EOF)
         {
             $member = $result->fields;
@@ -251,7 +251,7 @@ class Team
 
         // Displays for members name
         $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE team_invite = ?;", array($whichteam));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         echo "<td bgcolor=$tkireg->color_line2><font color=white>" . $langvars['l_team_pending'] . " <strong>" . $team['team_name'] . "</strong></font></td>";
         echo "</tr><tr>";
         if ($res->RecordCount() > 0)

@@ -12,6 +12,7 @@
 
 namespace PhpCsFixer\Console;
 
+use PhpCsFixer\Console\Command\DescribeCommand;
 use PhpCsFixer\Console\Command\FixCommand;
 use PhpCsFixer\Console\Command\ReadmeCommand;
 use PhpCsFixer\Console\Command\SelfUpdateCommand;
@@ -19,12 +20,13 @@ use Symfony\Component\Console\Application as BaseApplication;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
+ * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
  * @internal
  */
 final class Application extends BaseApplication
 {
-    const VERSION = '2.0.0-RC';
+    const VERSION = '2.0.0';
 
     /**
      * Constructor.
@@ -35,6 +37,7 @@ final class Application extends BaseApplication
 
         parent::__construct('PHP CS Fixer', self::VERSION);
 
+        $this->add(new DescribeCommand());
         $this->add(new FixCommand());
         $this->add(new ReadmeCommand());
         $this->add(new SelfUpdateCommand());

@@ -13,6 +13,8 @@
 namespace PhpCsFixer\Fixer\Alias;
 
 use PhpCsFixer\AbstractFunctionReferenceFixer;
+use PhpCsFixer\FixerDefinition\CodeSample;
+use PhpCsFixer\FixerDefinition\ShortFixerDefinition;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -28,7 +30,7 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
     public function isCandidate(Tokens $tokens)
     {
         // minimal candidate to fix is seven tokens: pow(x,x);
-        return PHP_VERSION_ID > 50600 && $tokens->count() > 7 && $tokens->isTokenKindFound(T_STRING);
+        return PHP_VERSION_ID >= 50600 && $tokens->count() > 7 && $tokens->isTokenKindFound(T_STRING);
     }
 
     /**
@@ -70,9 +72,22 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDefinition()
     {
-        return 'Converts \'pow()\' to \'**\'.';
+        /* @TODO That code should be in use, but for now it will fail on lower PHP version...
+        return new FixerDefinition(
+           'Converts \'pow()\' to \'**\' operator. Requires PHP >= 5.6.',
+            array(new CodeSample("<?php\n pow(\$a, 1);")),
+            null,
+            null,
+            null,
+            'Risky when the function \'pow()\' function is overridden.'
+        );
+        */
+
+        return new ShortFixerDefinition(
+            'Converts \'pow()\' to \'**\' operator. Requires PHP >= 5.6.'
+        );
     }
 
     /**
@@ -82,6 +97,14 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
     {
         // must be run before BinaryOperatorSpacesFixer
         return 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRisky()
+    {
+        return true;
     }
 
     /**

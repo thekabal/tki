@@ -156,7 +156,7 @@ switch ($response) {
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_by_noturn'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -166,7 +166,7 @@ switch ($response) {
         if (!$res || $res->RowCount() == 0)
         {
             echo $langvars['l_by_nobounty'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -175,7 +175,7 @@ switch ($response) {
         if ($bty['placed_by'] != $playerinfo['ship_id'])
         {
             echo $langvars['l_by_notyours'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -187,7 +187,7 @@ switch ($response) {
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns-1, turns_used = turns_used + 1, credits = credits + ? WHERE ship_id = ?;", array($stamp, $refund, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         echo $langvars['l_by_canceled'] . "<br>";
-        Tki\Text::gotomain($pdo_db, $lang);
+        Tki\Text::gotoMain($pdo_db, $lang);
         die();
     case 'place':
         echo "<h1>" . $title . "</h1>\n";
@@ -196,7 +196,7 @@ switch ($response) {
         if (!$ex)
         {
             echo $langvars['l_by_notexists'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -205,7 +205,7 @@ switch ($response) {
         if ($bty['ship_destroyed'] == "Y")
         {
             echo $langvars['l_by_destroyed'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -213,7 +213,7 @@ switch ($response) {
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_by_noturn'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -221,7 +221,7 @@ switch ($response) {
         if ($amount <= 0)
         {
             echo $langvars['l_by_zeroamount'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -229,7 +229,7 @@ switch ($response) {
         if ($bounty_on == $playerinfo['ship_id'])
         {
             echo $langvars['l_by_yourself'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -237,7 +237,7 @@ switch ($response) {
         if ($amount > $playerinfo['credits'])
         {
             echo $langvars['l_by_notenough'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -261,7 +261,7 @@ switch ($response) {
             {
                 $langvars['l_by_toomuch'] = str_replace("[percent]", $percent, $langvars['l_by_toomuch']);
                 echo $langvars['l_by_toomuch'] . "<br><br>";
-                Tki\Text::gotomain($pdo_db, $lang);
+                Tki\Text::gotoMain($pdo_db, $lang);
                 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
@@ -273,7 +273,7 @@ switch ($response) {
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, credits = credits - ? WHERE ship_id = ?;", array($stamp, $amount, $playerinfo['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         echo $langvars['l_by_placed'] . "<br>";
-        Tki\Text::gotomain($pdo_db, $lang);
+        Tki\Text::gotoMain($pdo_db, $lang);
         die();
     default:
         echo "<h1>" . $title . "</h1>\n";
@@ -363,5 +363,5 @@ switch ($response) {
         break;
 }
 
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

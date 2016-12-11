@@ -176,7 +176,7 @@ class Traderoute3
             }
 
             $query = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($port_id1));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if (!$query || $query->EOF)
             {
                 $langvars['l_tdr_errnotvalidport'] = str_replace("[tdr_port_id]", $port_id1, $langvars['l_tdr_errnotvalidport']);
@@ -194,7 +194,7 @@ class Traderoute3
         else
         {
             $query = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id1));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $source = $query->fields;
             if (!$query || $query->EOF)
             {
@@ -226,7 +226,7 @@ class Traderoute3
         // Attempting to fix the map the universe via traderoute bug
 
         $pl1query = $db->Execute("SELECT * FROM {$db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($source['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $pl1query, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pl1query, __LINE__, __FILE__);
         $num_res1 = $pl1query->numRows();
         if ($num_res1 == 0)
         {
@@ -244,7 +244,7 @@ class Traderoute3
             }
 
             $query = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($port_id2));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if (!$query || $query->EOF)
             {
                 $langvars['l_tdr_errnotvaliddestport'] = str_replace("[tdr_port_id]", $port_id2, $langvars['l_tdr_errnotvaliddestport']);
@@ -262,7 +262,7 @@ class Traderoute3
         else
         {
             $query = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id2));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $destination = $query->fields;
             if (!$query || $query->EOF)
             {
@@ -289,7 +289,7 @@ class Traderoute3
 
         // OK now we have $destination lets see if we've been there.
         $pl2query = $db->Execute("SELECT * FROM {$db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($destination['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $pl2query, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $pl2query, __LINE__, __FILE__);
         $num_res2 = $pl2query->numRows();
         if ($num_res2 == 0)
         {
@@ -369,13 +369,13 @@ class Traderoute3
         if (empty ($editing))
         {
             $query = $db->Execute("INSERT INTO {$db->prefix}traderoutes VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             echo "<p>" . $langvars['l_tdr_newtdrcreated'];
         }
         else
         {
             $query = $db->Execute("UPDATE {$db->prefix}traderoutes SET source_id = ?, dest_id = ?, source_type = ?, dest_type = ?, move_type = ?, owner = ?, circuit = ? WHERE traderoute_id = ?;", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type, $editing));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             echo "<p>" . $langvars['l_tdr_modified'];
         }
 
@@ -387,7 +387,7 @@ class Traderoute3
     public static function traderouteDelete(\PDO $pdo_db, \ADODB_mysqli $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $confirm, int $traderoute_id)
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
-        \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
         if (!$query || $query->EOF)
         {
@@ -404,7 +404,7 @@ class Traderoute3
         if (!empty ($confirm))
         {
             $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
             echo $langvars['l_tdr_deleted'] . " " . $langvars['l_tdr_returnmenu'];
             \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
@@ -486,7 +486,7 @@ class Traderoute3
         empty ($torps) ? $torps = 'N' : $torps = 'Y';
 
         $resa = $db->Execute("UPDATE {$db->prefix}ships SET trade_colonists = ?, trade_fighters = ?, trade_torps = ?, trade_energy = ? WHERE ship_id = ?;", array($colonists, $fighters, $torps, $energy, $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
 
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_globalsetsaved'] . " " . $langvars['l_tdr_returnmenu'];

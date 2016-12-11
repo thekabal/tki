@@ -12,8 +12,9 @@
 
 namespace PhpCsFixer\Test;
 
+use GeckoPackages\PHPUnit\Constraints\SameStringsConstraint;
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\FixerFactory;
-use PhpCsFixer\FixerInterface;
 use PhpCsFixer\Linter\Linter;
 use PhpCsFixer\Linter\LinterInterface;
 use PhpCsFixer\RuleSet;
@@ -42,7 +43,7 @@ abstract class AbstractFixerTestCase extends \PHPUnit_Framework_TestCase
      */
     private $fixerClassName;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->linter = $this->getLinter();
         $this->fixer = $this->createFixer();
@@ -54,9 +55,8 @@ abstract class AbstractFixerTestCase extends \PHPUnit_Framework_TestCase
     protected function createFixer()
     {
         $fixerClassName = $this->getFixerClassName();
-        $fixer = new $fixerClassName();
 
-        return $fixer;
+        return new $fixerClassName();
     }
 
     /**
@@ -132,7 +132,11 @@ abstract class AbstractFixerTestCase extends \PHPUnit_Framework_TestCase
                 $this->assertNull($fixResult, '->fix method must return null.');
             }
 
-            $this->assertSame($expected, $tokens->generateCode(), 'Code build on input code must match expected code.');
+            $this->assertThat(
+                $tokens->generateCode(),
+                new SameStringsConstraint($expected),
+                'Code build on input code must match expected code.'
+            );
             $this->assertTrue($tokens->isChanged(), 'Tokens collection built on input code must be marked as changed after fixing.');
 
             $tokens->clearEmptyTokens();
@@ -167,7 +171,11 @@ abstract class AbstractFixerTestCase extends \PHPUnit_Framework_TestCase
             $this->assertNull($fixResult, '->fix method must return null.');
         }
 
-        $this->assertSame($expected, $tokens->generateCode(), 'Code build on expected code must not change.');
+        $this->assertThat(
+            $tokens->generateCode(),
+            new SameStringsConstraint($expected),
+            'Code build on expected code must not change.'
+        );
         $this->assertFalse($tokens->isChanged(), 'Tokens collection built on expected code must not be marked as changed after fixing.');
     }
 

@@ -400,7 +400,7 @@ else
 }
 
 echo "<div style='text-align:left;'>\n";
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 echo "</div>\n";
 
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

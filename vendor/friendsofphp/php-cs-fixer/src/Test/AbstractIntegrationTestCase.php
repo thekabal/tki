@@ -12,16 +12,16 @@
 
 namespace PhpCsFixer\Test;
 
+use GeckoPackages\PHPUnit\Constraints\SameStringsConstraint;
 use PhpCsFixer\Cache\NullCacheManager;
 use PhpCsFixer\Differ\SebastianBergmannDiffer;
 use PhpCsFixer\Error\Error;
 use PhpCsFixer\Error\ErrorsManager;
 use PhpCsFixer\FileRemoval;
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\FixerFactory;
-use PhpCsFixer\FixerInterface;
 use PhpCsFixer\Linter\Linter;
 use PhpCsFixer\Linter\LinterInterface;
-use PhpCsFixer\RuleSet;
 use PhpCsFixer\Runner\Runner;
 use PhpCsFixer\WhitespacesFixerConfig;
 use Prophecy\Argument;
@@ -90,7 +90,7 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
         self::$fileRemoval->delete($tmpFile);
     }
 
-    public function setUp()
+    protected function setUp()
     {
         $this->linter = $this->getLinter();
     }
@@ -99,6 +99,8 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
      * @dataProvider getTests
      *
      * @see doTest()
+     *
+     * @param IntegrationCase $case
      */
     public function testIntegration(IntegrationCase $case)
     {
@@ -227,9 +229,9 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($changed, sprintf('Expected changes made to test "%s" in "%s".', $case->getTitle(), $case->getFileName()));
         $fixedInputCode = file_get_contents($tmpFile);
-        $this->assertSame(
-            $expected,
+        $this->assertThat(
             $fixedInputCode,
+            new SameStringsConstraint($expected),
             sprintf(
                 "Expected changes do not match result for \"%s\" in \"%s\".\nFixers applied:\n%s.",
                 $case->getTitle(),

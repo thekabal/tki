@@ -171,7 +171,7 @@ if ($playerarmor < 1)
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
         $ok = 0;
-        Tki\Text::gotomain($pdo_db, $lang);
+        Tki\Text::gotoMain($pdo_db, $lang);
         die();
     }
     else
@@ -179,7 +179,7 @@ if ($playerarmor < 1)
         Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
         Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
         $ok = 0;
-        Tki\Text::gotomain($pdo_db, $lang);
+        Tki\Text::gotoMain($pdo_db, $lang);
         die();
     }
 }

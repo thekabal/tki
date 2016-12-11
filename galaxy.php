@@ -117,5 +117,5 @@ echo "    <div><img style='height:20px; width:20px' alt='" . $langvars['l_port']
 echo "    <div><img style='height:20px; width:20px' alt='" . $langvars['l_port'] . ": " . $langvars['l_unexplored'] . "' src='" . $template->getVariables('template_dir') . "/images/{$tile['unknown']}'> &lt;- " . $langvars['l_unexplored'] . "</div>\n";
 
 echo "<br><br>";
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

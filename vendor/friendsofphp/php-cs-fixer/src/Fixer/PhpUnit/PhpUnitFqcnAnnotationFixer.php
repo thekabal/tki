@@ -35,17 +35,12 @@ final class PhpUnitFqcnAnnotationFixer extends AbstractFixer
     {
         foreach ($tokens as $token) {
             if ($token->isGivenKind(T_DOC_COMMENT)) {
-                $token->setContent(preg_replace('~^(\s*\*\s*@expectedException\h+)(\w.*)$~m', '$1\\\\$2', $token->getContent()));
+                $token->setContent(preg_replace(
+                    '~^(\s*\*\s*@(?:expectedException|covers|coversDefaultClass|uses)\h+)(\w.*)$~m', '$1\\\\$2',
+                    $token->getContent()
+                ));
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDescription()
-    {
-        return 'PHPUnit @expectedException annotation should be a FQCN including a root namespace.';
     }
 
     /**
@@ -55,5 +50,13 @@ final class PhpUnitFqcnAnnotationFixer extends AbstractFixer
     {
         // should be run before NoUnusedImportsFixer
         return -9;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDescription()
+    {
+        return 'PHPUnit annotations should be a FQCNs including a root namespace.';
     }
 }

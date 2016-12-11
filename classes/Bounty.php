@@ -40,7 +40,7 @@ class Bounty
                     $stmt->bindParam(':bounty_amount', $tmp_bounty['amount']);
                     $stmt->bindParam(':ship_id', $tmp_bounty['placed_by']);
                     $stmt->execute();
-                    PlayerLog::WriteLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_CANCELLED, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
+                    PlayerLog::writeLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_CANCELLED, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
                 }
 
                 $sql = "DELETE FROM ::prefix::bounty WHERE bounty_id = :bounty_id";
@@ -86,8 +86,8 @@ class Bounty
                 $stmt->bindParam(':bounty_id', $tmp_bounty['bounty_id']);
                 $stmt->execute();
 
-                PlayerLog::WriteLog($pdo_db, $attacker, LOG_BOUNTY_CLAIMED, "$tmp_bounty[amount]|$tmp_bounty[character_name]|$placed");
-                PlayerLog::WriteLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_PAID, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
+                PlayerLog::writeLog($pdo_db, $attacker, LOG_BOUNTY_CLAIMED, "$tmp_bounty[amount]|$tmp_bounty[character_name]|$placed");
+                PlayerLog::writeLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_PAID, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
             }
         }
 

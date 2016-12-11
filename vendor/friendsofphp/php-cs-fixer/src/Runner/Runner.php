@@ -16,8 +16,8 @@ use PhpCsFixer\Cache\CacheManagerInterface;
 use PhpCsFixer\Differ\DifferInterface;
 use PhpCsFixer\Error\Error;
 use PhpCsFixer\Error\ErrorsManager;
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\FixerFileProcessedEvent;
-use PhpCsFixer\FixerInterface;
 use PhpCsFixer\Linter\LinterInterface;
 use PhpCsFixer\Linter\LintingException;
 use PhpCsFixer\Linter\LintingResultInterface;
@@ -213,11 +213,13 @@ final class Runner
             if (!$this->isDryRun) {
                 if (false === @file_put_contents($file->getRealPath(), $new)) {
                     $error = error_get_last();
-                    if (null !== $error) {
-                        throw new IOException(sprintf('Failed to write file "%s", "%s".', $file->getRealPath(), $error['message']), 0, null, $file->getRealPath());
-                    }
 
-                    throw new IOException(sprintf('Failed to write file "%s".', $file->getRealPath()), 0, null, $file->getRealPath());
+                    throw new IOException(
+                        sprintf('Failed to write file "%s", "%s".', $file->getPathname(), $error ? $error['message'] : 'no reason available'),
+                        0,
+                        null,
+                        $file->getRealPath()
+                    );
                 }
             }
 

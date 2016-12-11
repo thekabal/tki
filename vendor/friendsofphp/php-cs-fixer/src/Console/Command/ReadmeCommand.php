@@ -18,24 +18,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
+ * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
  * @internal
  */
 final class ReadmeCommand extends Command
 {
     /**
-     * @see Command
+     * {@inheritdoc}
      */
     protected function configure()
     {
         $this
             ->setName('readme')
-            ->setDescription('Generates the README content, based on the fix command help')
+            ->setDescription('Generates the README content, based on the fix command help.')
         ;
     }
 
     /**
-     * @see Command
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -199,7 +200,7 @@ projects for instance).
 .. _PhpStorm:          http://tzfrs.de/2015/01/automatically-format-code-to-match-psr-standards-with-phpstorm
 .. _Sublime Text:      https://github.com/benmatselby/sublime-phpcs
 .. _Vim:               https://github.com/stephpy/vim-php-cs-fixer
-.. _contribute:        https://github.com/FriendsOfPhp/php-cs-fixer/blob/master/CONTRIBUTING.md
+.. _contribute:        https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/CONTRIBUTING.md
 
 EOF;
 

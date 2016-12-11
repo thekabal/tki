@@ -50,7 +50,7 @@ class Planet
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
-            \Tki\Text::gotomain($pdo_db, $lang);
+            \Tki\Text::gotoMain($pdo_db, $lang);
             \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -114,7 +114,7 @@ class Planet
         }
 
         echo "<br><br>\n";
-        \Tki\PlayerLog::WriteLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
+        \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
 
         $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1, ship_fighters = ship_fighters - :ship_fighters WHERE ship_id=:ship_id");
         $stmt->bindParam(':ship_fighters', $attackerfighters);
@@ -136,7 +136,7 @@ class Planet
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
-            \Tki\Text::gotomain($pdo_db, $lang);
+            \Tki\Text::gotoMain($pdo_db, $lang);
             \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -453,7 +453,7 @@ class Planet
         echo "</table></center>\n";
         // Send each docked ship in sequence to attack agressor
         $result4 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $result4, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
         $shipsonplanet = $result4->RecordCount();
 
         if ($shipsonplanet > 0)
@@ -512,7 +512,7 @@ class Planet
             {
                 echo "<center><font color='white'>" . $langvars['l_cmb_escapepod'] . "</font></center><br><br>";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy = ?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id = ?;", array($tkireg->start_energy, $playerinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 \Tki\Bounty::collect($pdo_db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
             else
@@ -554,11 +554,11 @@ class Planet
             $langvars['l_cmb_energyused'] = str_replace("[cmb_playerinfo_ship_energy]", $tkireg->start_energy, $langvars['l_cmb_energyused']);
             echo $langvars['l_cmb_energyused'] . "<br></center>";
             $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ?, rating = rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         }
 
         $result4 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $result4, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
         $shipsonplanet = $result4->RecordCount();
 
         if ($planetshields < 1 && $planetfighters < 1 && $attackerarmor > 0 && $shipsonplanet == 0)
@@ -577,7 +577,7 @@ class Planet
                 $sql .= "SET organics = '0', ore = '0', goods = '0', energy = '0', colonists = '2', credits = '0', fighters = '0', torps = '0', team = '0', base = 'N', sells = 'N', prod_organics = '20', prod_ore = '20', prod_goods = '20', prod_energy = '20', prod_fighters = '10', prod_torp = '10' ";
                 $sql .= "WHERE planet_id = ? LIMIT 1;";
                 $resx = $db->Execute($sql, array($planetinfo['planet_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 echo "<div style='text-align:center; font-size:18px; color:#f00;'>The planet become unstable due to not being looked after, and all life and assets have been destroyed.</div>\n";
             }
 
@@ -593,8 +593,8 @@ class Planet
                 {
                     echo "<center>" . $langvars['l_cmb_citizenswanttodie'] . "</center><br><br>";
                     $resx = $db->Execute("DELETE FROM {$db->prefix}planets WHERE planet_id = ?;", array($planetinfo['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                    \Tki\PlayerLog::WriteLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                    \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                     \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
                     \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
                 }
@@ -602,20 +602,20 @@ class Planet
                 {
                     $langvars['l_cmb_youmaycapture'] = str_replace("[capture]", "<a href='planet.php?planet_id=". $planetinfo['planet_id'] . "&amp;command=capture'>" . $langvars['l_planet_capture1'] . "</a>", $langvars['l_cmb_youmaycapture']);
                     echo "<center><font color=red>" . $langvars['l_cmb_youmaycapture'] . "</font></center><br><br>";
-                    \Tki\PlayerLog::WriteLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                    \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                     \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
                     $update7a = $db->Execute("UPDATE {$db->prefix}planets SET owner=0, fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id = ?;", array($planettorps, $planetinfo['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
                 }
             }
             else
             {
                 $langvars['l_cmb_youmaycapture'] = str_replace("[capture]", "<a href='planet.php?planet_id=". $planetinfo['planet_id'] . "&amp;command=capture'>" . $langvars['l_planet_capture1'] . "</a>", $langvars['l_cmb_youmaycapture']);
                 echo "<center>" . $langvars['l_cmb_youmaycapture'] . "</center><br><br>";
-                \Tki\PlayerLog::WriteLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                 \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
                 $update7a = $db->Execute("UPDATE {$db->prefix}planets SET owner=0,fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id = ?;", array($planettorps, $planetinfo['planet_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
             }
 
             \Tki\Ownership::calc($pdo_db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
@@ -628,13 +628,13 @@ class Planet
             $langvars['l_cmb_fighterloststat'] = str_replace("[cmb_planetinfo_fighters]", $planetinfo['fighters'], $langvars['l_cmb_fighterloststat']);
             $langvars['l_cmb_fighterloststat'] = str_replace("[cmb_planetfighters]", $planetfighters, $langvars['l_cmb_fighterloststat']);
             $energy = $planetinfo['energy'];
-            \Tki\PlayerLog::WriteLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
+            \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
             \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
             $update7b = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($energy, $fighters_lost, $planettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $update7b, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $update7b, __LINE__, __FILE__);
         }
 
         $update = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?", array($playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
     }
 }

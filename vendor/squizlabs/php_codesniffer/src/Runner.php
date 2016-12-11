@@ -221,8 +221,12 @@ class Runner
      *
      * @return void
      */
-    private function init()
+    public function init()
     {
+        if (defined('PHP_CODESNIFFER_CBF') === false) {
+            define('PHP_CODESNIFFER_CBF', false);
+        }
+
         // Ensure this option is enabled or else line endings will not always
         // be detected properly for files created on a Mac with the /r line ending.
         ini_set('auto_detect_line_endings', true);
@@ -513,7 +517,7 @@ class Runner
      *
      * @return void
      */
-    private function processFile($file)
+    public function processFile($file)
     {
         if (PHP_CODESNIFFER_VERBOSITY > 0) {
             $startTime = microtime(true);

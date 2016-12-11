@@ -188,7 +188,7 @@ class Xenobe
             $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
             $stmt->execute();
 
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
         }
 
         if ($sectorinfo['port_type'] == "organics") // Port organics
@@ -235,7 +235,7 @@ class Xenobe
             $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
             $stmt->execute();
 
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
         }
 
         if ($sectorinfo['port_type'] == "goods") // Port goods
@@ -282,7 +282,7 @@ class Xenobe
             $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
             $stmt->execute();
 
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
         }
     }
 
@@ -525,7 +525,7 @@ class Xenobe
 
         if (!$attackerarmor > 0) // Check if attackers ship destroyed
         {
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
             \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
             $free_ore = round($playerinfo['ship_ore'] / 2);
@@ -537,34 +537,34 @@ class Xenobe
             $fighters_lost = $planetinfo['fighters'] - $targetfighters;
 
             // Log attack to planet owner
-            \Tki\PlayerLog::WriteLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
+            \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
 
             // Update planet
             $resi = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($planetinfo['energy'], $fighters_lost, $targettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
         }
         else  // Must have made it past planet defenses
         {
             $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
             $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Made it past defenses on planet $planetinfo[name]");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Made it past defenses on planet $planetinfo[name]");
 
             // Update attackers
             $resj = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ? WHERE ship_id = ?;", array($playerinfo['ship_energy'], $fighters_lost, $attackertorps, $armor_lost, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $resj, __LINE__, __FILE__);
             $playerinfo['ship_fighters'] = $attackerfighters;
             $playerinfo['torps'] = $attackertorps;
             $playerinfo['armor_pts'] = $attackerarmor;
 
             // Update planet
             $resk = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = ?, torps = torps - ? WHERE planet_id = ?", array($planetinfo['energy'], $targetfighters, $targettorps, $planetinfo['planet_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resk, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $resk, __LINE__, __FILE__);
             $planetinfo['fighters'] = $targetfighters;
             $planetinfo['torps'] = $targettorps;
 
             // Now we must attack all ships on the planet one by one
             $resultps = $db->Execute("SELECT ship_id,ship_name FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
             $shipsonplanet = $resultps->RecordCount();
             if ($shipsonplanet > 0)
             {
@@ -577,28 +577,28 @@ class Xenobe
             }
 
             $resultps = $db->Execute("SELECT ship_id,ship_name FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
             $shipsonplanet = $resultps->RecordCount();
             if ($shipsonplanet == 0)
             {
                 // Must have killed all ships on the planet
-                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Defeated all ships on planet $planetinfo[name]");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Defeated all ships on planet $planetinfo[name]");
 
                 // Log attack to planet owner
-                \Tki\PlayerLog::WriteLog($pdo_db, $planetinfo['owner'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
                 // Update planet
                 $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resl, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resl, __LINE__, __FILE__);
 
                 \Tki\Ownership::calc($pdo_db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);
             }
             else
             {
                 // Must have died trying
-                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "We were KILLED by ships defending planet $planetinfo[name]");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "We were KILLED by ships defending planet $planetinfo[name]");
                 // Log attack to planet owner
-                \Tki\PlayerLog::WriteLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|0|0|0|0|0");
+                \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|0|0|0|0|0");
                 // No salvage for planet because it went to the ship that won
             }
         }
@@ -611,7 +611,7 @@ class Xenobe
 
         // Lookup target details
         $resultt = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
-        \Tki\Db::LogDbErrors($pdo_db, $resultt, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $resultt, __LINE__, __FILE__);
         $targetinfo = $resultt->fields;
 
         // Verify not attacking another Xenobe
@@ -623,14 +623,14 @@ class Xenobe
 
         // Verify sector allows attack
         $sectres = $db->Execute("SELECT sector_id,zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($targetinfo['sector']));
-        \Tki\Db::LogDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
         $sectrow = $sectres->fields;
         $zoneres = $db->Execute("SELECT zone_id,allow_attack FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
         $zonerow = $zoneres->fields;
         if ($zonerow['allow_attack'] == "N")                        //  Dest link must allow attacking
         {
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack failed, you are in a sector that prohibits attacks.");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack failed, you are in a sector that prohibits attacks.");
 
             return;
         }
@@ -638,10 +638,10 @@ class Xenobe
         // Use emergency warp device
         if ($targetinfo['dev_emerwarp'] > 0)
         {
-            \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "Xenobe $playerinfo[character_name]");
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "Xenobe $playerinfo[character_name]");
             $dest_sector = random_int(0, (int) $tkireg->max_sectors);
             $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $targetinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $result_warp, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $result_warp, __LINE__, __FILE__);
 
             return;
         }
@@ -915,13 +915,13 @@ class Xenobe
             {
                 $rating = round($targetinfo['rating'] / 2);
                 $resc = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 0, ship_ore = 0, ship_organics = 0, ship_energy = 1000, ship_colonists = 0, ship_goods = 0, ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, ship_destroyed = 'N', rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resc, __LINE__, __FILE__);
-                \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|Y");
+                \Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|Y");
             }
             else
             // Target had no pod
             {
-                \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|N");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|N");
                 \Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
             }
 
@@ -977,14 +977,14 @@ class Xenobe
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull'])) + round(pow($tkireg->upgrade_factor, $targetinfo['engines'])) + round(pow($tkireg->upgrade_factor, $targetinfo['power'])) + round(pow($tkireg->upgrade_factor, $targetinfo['computer'])) + round(pow($tkireg->upgrade_factor, $targetinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $targetinfo['beams'])) + round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $targetinfo['shields'])) + round(pow($tkireg->upgrade_factor, $targetinfo['armor'])) + round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
                 $ship_salvage_rate = random_int (10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
                 $resd = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resd, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resd, __LINE__, __FILE__);
                 $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
                 $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
                 $energy = $playerinfo['ship_energy'];
                 $rese = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ?, rating = rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $rese, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $rese, __LINE__, __FILE__);
             }
         }
 
@@ -999,18 +999,18 @@ class Xenobe
             $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $target_energy = $targetinfo['ship_energy'];
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack failed, $targetinfo[character_name] survived.");
-            \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack failed, $targetinfo[character_name] survived.");
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
             $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ? , armor_pts = armor_pts - ?, rating=rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resf, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
             $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts=armor_pts - ?, torps=torps - ?, rating = ? WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $target_rating_change, $targetinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $resg, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $resg, __LINE__, __FILE__);
         }
 
         // Attacker ship destroyed
         if (!$attackerarmor > 0)
         {
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "$targetinfo[character_name] destroyed your ship!");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "$targetinfo[character_name] destroyed your ship!");
             \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
             if ($targetarmor > 0)
             {
@@ -1066,15 +1066,15 @@ class Xenobe
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
                 $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-                \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$armor_lost|$fighters_lost");
-                \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_RAW, "You destroyed the Xenobe ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$armor_lost|$fighters_lost");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_RAW, "You destroyed the Xenobe ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
                 $resh = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $targetinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resh, __LINE__, __FILE__);
                 $armor_lost = $targetinfo['armor_pts'] - $targetarmor;
                 $fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
                 $energy = $targetinfo['ship_energy'];
                 $resi = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ? , ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ?, rating=rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $targettorpnum, $armor_lost, $rating_change, $targetinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
             }
         }
     }
@@ -1122,7 +1122,7 @@ class Xenobe
 
             if ($all_sector_fighters > 0 || $total_sector_mines > 0 || ($all_sector_fighters > 0 && $total_sector_mines > 0)) // Dest link has defenses so lets attack them
             {
-                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENSES $all_sector_fighters fighters and $total_sector_mines mines.");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENSES $all_sector_fighters fighters and $total_sector_mines mines.");
                 $targetfighters = $all_sector_fighters;
                 $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
                 if ($playerbeams > $playerinfo['ship_energy'])
@@ -1236,7 +1236,7 @@ class Xenobe
                 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
                 $energy = $playerinfo['ship_energy'];
                 $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?,torps = torps - ? WHERE ship_id = ?", array($energy, $fighters_lost, $armor_lost, $playertorpnum, $playerinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
 
                 // Check to see if Xenobe is dead
                 if ($playerarmor < 1)
@@ -1264,7 +1264,7 @@ class Xenobe
                     if ($playershields >= $mines_left)
                     {
                         $update2 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy=ship_energy-? WHERE ship_id = ?;", array($mines_left, $playerinfo['ship_id']));
-                        \Tki\Db::LogDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $update2, __LINE__, __FILE__);
                     }
                     else
                     {
@@ -1274,7 +1274,7 @@ class Xenobe
                         if ($playerarmor >= $mines_left)
                         {
                             $update2 = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts=armor_pts-?, ship_energy=0 WHERE ship_id = ?;", array($mines_left, $playerinfo['ship_id']));
-                            \Tki\Db::LogDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+                            \Tki\Db::logDbErrors($pdo_db, $update2, __LINE__, __FILE__);
                         }
                         else
                         {
@@ -1324,11 +1324,11 @@ class Xenobe
             {
                 // Obtain sector information
                 $sectres = $db->Execute("SELECT sector_id,zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($row['link_dest']));
-                \Tki\Db::LogDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
                 $sectrow = $sectres->fields;
 
                 $zoneres = $db->Execute("SELECT zone_id,allow_attack FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
                 $zonerow = $zoneres->fields;
                 if ($zonerow['allow_attack'] == "Y") // Dest link must allow attacking
                 {
@@ -1349,16 +1349,16 @@ class Xenobe
             {
                 // Obtain sector information
                 $sectres = $db->Execute("SELECT sector_id,zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($wormto));
-                \Tki\Db::LogDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
                 $sectrow = $sectres->fields;
 
                 $zoneres = $db->Execute("SELECT zone_id,allow_attack FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
                 $zonerow = $zoneres->fields;
                 if ($zonerow['allow_attack'] == "Y")
                 {
                     $targetlink = $wormto;
-                    \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Used a wormhole to warp to a zone where attacks are allowed.");
+                    \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Used a wormhole to warp to a zone where attacks are allowed.");
                 }
 
                 $wormto++;
@@ -1416,7 +1416,7 @@ class Xenobe
                 }
                 else
                 {
-                    \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed, the sector is defended by $all_sector_fighters fighters and $total_sector_mines mines.");
+                    \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed, the sector is defended by $all_sector_fighters fighters and $total_sector_mines mines.");
 
                     return;
                 }
@@ -1428,16 +1428,16 @@ class Xenobe
             $stamp = date("Y-m-d H:i:s");
 
             $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?", array($stamp, $targetlink, $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
             if (!$move_result)
             {
                 $error = $db->ErrorMsg();
-                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed with error: $error ");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed with error: $error ");
             }
         }
         else
         {
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed due to lack of target link."); // We have no target link for some reason
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed due to lack of target link."); // We have no target link for some reason
         }
     }
 
@@ -1445,7 +1445,7 @@ class Xenobe
     {
         $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
-        \Tki\Db::LogDbErrors($pdo_db, $rescount, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $rescount, __LINE__, __FILE__);
         $rowcount = $rescount->fields;
         $topnum = min(10, $rowcount['num_players']);
 
@@ -1456,7 +1456,7 @@ class Xenobe
         }
 
         $res = $db->SelectLimit("SELECT * FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1 ORDER BY score DESC", $topnum);
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
         // Choose a target from the top player list
         $i = 1;
@@ -1475,17 +1475,17 @@ class Xenobe
         // Make sure we have a target
         if (!$targetinfo)
         {
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Hunt Failed: No Target ");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Hunt Failed: No Target ");
             return;
         }
 
         // Jump to target sector
         $sectres = $db->Execute("SELECT sector_id, zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($targetinfo['sector']));
-        \Tki\Db::LogDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
         $sectrow = $sectres->fields;
 
         $zoneres = $db->Execute("SELECT zone_id,allow_attack FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
         $zonerow = $zoneres->fields;
 
         // Only travel there if we can attack in the target sector
@@ -1493,12 +1493,12 @@ class Xenobe
         {
             $stamp = date("Y-m-d H:i:s");
             $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?", array($stamp, $targetinfo['sector'], $playerinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
+            \Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
             if (!$move_result)
             {
                 $error = $db->ErrorMsg();
-                \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed with error: $error ");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed with error: $error ");
 
                 return;
             }
@@ -1553,7 +1553,7 @@ class Xenobe
                 return; // Sector defenses killed the Xenobe
             }
 
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe launching an attack on $targetinfo[character_name]."); // Attack the target
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe launching an attack on $targetinfo[character_name]."); // Attack the target
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
@@ -1566,7 +1566,7 @@ class Xenobe
         }
         else
         {
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe hunt failed, target $targetinfo[character_name] was in a no attack zone (sector $targetinfo[sector]).");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe hunt failed, target $targetinfo[character_name] was in a no attack zone (sector $targetinfo[sector]).");
         }
     }
 
@@ -1648,7 +1648,7 @@ class Xenobe
 
         if (!$gene === null || !$gena === null || !$genf === null || !$gent === null)
         {
-            \Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe $gene $gena $genf $gent and has been updated.");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe $gene $gena $genf $gent and has been updated.");
         }
     }
 }

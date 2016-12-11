@@ -30,7 +30,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('modify_defenses', 'common
 if (!isset($defense_id))
 {
     echo $langvars['l_md_invalid'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -59,7 +59,7 @@ $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_md_noturn'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -73,14 +73,14 @@ $defenseinfo = $stmt->fetchAll(PDO::FETCH_ASSOC); // Put the defense information
 if (!$defenseinfo)  // Not too sure, may need more checks on this.
 {
     echo $langvars['l_md_nolonger'] . "<br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }
 
 if ($defenseinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_md_nothere'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -117,7 +117,7 @@ switch ($response)
         if ($defenseinfo['ship_id'] == $playerinfo['ship_id'])
         {
             echo $langvars['l_md_yours'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -156,7 +156,7 @@ switch ($response)
             $langvars['l_md_msgdownerb'] = str_replace("[mines]", $playerbeams, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[name]", $char_name, $langvars['l_md_msgdownerb']);
             Tki\Sectordefense::messagedefenseOwner($pdo_db, $sector, $langvars['l_md_msgdownerb']);
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             die();
         }
         break;
@@ -165,7 +165,7 @@ switch ($response)
         if ($defenseinfo['ship_id'] != $playerinfo['ship_id'])
         {
              echo $langvars['l_md_notyours'] . "<br><br>";
-             Tki\Text::gotomain($pdo_db, $lang);
+             Tki\Text::gotoMain($pdo_db, $lang);
              Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
              die();
         }
@@ -219,7 +219,7 @@ switch ($response)
         $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($stamp, $playerinfo['sector'], $playerinfo['ship_id']));
         echo "<h1>" . $title . "</h1>\n";
         echo $langvars['l_md_retr'] . " " . $quantity . " " . $defense_type . ".<br>";
-        Tki\Text::gotomain($pdo_db, $lang);
+        Tki\Text::gotoMain($pdo_db, $lang);
         die();
 
     case 'change':
@@ -227,7 +227,7 @@ switch ($response)
         if ($defenseinfo['ship_id'] != $playerinfo['ship_id'])
         {
             echo $langvars['l_md_notyours'] . "<br><br>";
-            Tki\Text::gotomain($pdo_db, $lang);
+            Tki\Text::gotoMain($pdo_db, $lang);
             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -246,7 +246,7 @@ switch ($response)
 
         $langvars['l_md_mode'] = str_replace("[mode]", $mode, $langvars['l_md_mode']);
         echo $langvars['l_md_mode'] . "<br>";
-        Tki\Text::gotomain($pdo_db, $lang);
+        Tki\Text::gotoMain($pdo_db, $lang);
         die();
 
     default:
@@ -293,9 +293,9 @@ switch ($response)
             }
         }
 
-        Tki\Text::gotomain($pdo_db, $lang);
+        Tki\Text::gotoMain($pdo_db, $lang);
         die();
 }
 
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

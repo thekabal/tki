@@ -30,7 +30,7 @@ class Traderoute2
         if ($traderoute_id !== null)
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
-            \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
             {
@@ -66,7 +66,7 @@ class Traderoute2
         // Get Planet info Team and Personal
 
         $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ? ORDER BY sector_id", array($playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
         $num_planets = $result->RecordCount();
         $i = 0;
@@ -85,7 +85,7 @@ class Traderoute2
         }
 
         $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE team = ? AND team <> 0 AND owner <> ? ORDER BY sector_id", array($playerinfo['team'], $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
         $num_team_planets = $result->RecordCount();
         $i = 0;
@@ -395,7 +395,7 @@ class Traderoute2
             ";
 
         echo "<div style='text-align:left;'>\n";
-        \Tki\Text::gotomain($pdo_db, $lang);
+        \Tki\Text::gotoMain($pdo_db, $lang);
         echo "</div>\n";
 
         \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
@@ -406,7 +406,7 @@ class Traderoute2
     {
         echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
-        \Tki\Text::gotomain($pdo_db, $lang);
+        \Tki\Text::gotoMain($pdo_db, $lang);
         echo "</div>\n";
         \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
         die();
@@ -427,7 +427,7 @@ class Traderoute2
         if ($move == 'warp')
         {
             $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($src['sector_id'], $dest['sector_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if ($query->EOF)
             {
                 $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $src['sector_id'], $langvars['l_tdr_nowlink1']);
@@ -438,7 +438,7 @@ class Traderoute2
             if ($circuit == '2')
             {
                 $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($dest['sector_id'], $src['sector_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
                 if ($query->EOF)
                 {
                     $langvars['l_tdr_nowlink2'] = str_replace("[tdr_src_sector_id]", $src['sector_id'], $langvars['l_tdr_nowlink2']);

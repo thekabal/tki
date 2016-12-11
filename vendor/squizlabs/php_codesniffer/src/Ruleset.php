@@ -37,7 +37,7 @@ class Ruleset
      *
      * @var string[]
      */
-    public $paths = '';
+    public $paths = array();
 
     /**
      * A list of regular expressions used to ignore specific sniffs for files and folders.
@@ -134,8 +134,9 @@ class Ruleset
         }
 
         $this->config = $config;
+        $sniffs       = array();
 
-        $sniffs = array();
+        $standardPaths = array();
         foreach ($config->standards as $standard) {
             $installed = Util\Standards::getInstalledStandardPath($standard);
             if ($installed === null) {
@@ -149,26 +150,35 @@ class Ruleset
                 $standard = $installed;
             }
 
-            $ruleset = simplexml_load_string(file_get_contents($standard));
-            if ($ruleset !== false) {
-                $standardName = (string) $ruleset['name'];
-                if ($this->name !== '') {
-                    $this->name .= ', ';
+            $standardPaths[] = $standard;
+        }
+
+        if (defined('PHP_CODESNIFFER_IN_TESTS') === true && empty($restrictions) === false) {
+            // Should be one standard and one sniff being tested at a time.
+            $sniffs = $this->expandRulesetReference($restrictions[0], dirname($standardPaths[0]));
+        } else {
+            foreach ($standardPaths as $standard) {
+                $ruleset = simplexml_load_string(file_get_contents($standard));
+                if ($ruleset !== false) {
+                    $standardName = (string) $ruleset['name'];
+                    if ($this->name !== '') {
+                        $this->name .= ', ';
+                    }
+
+                    $this->name   .= $standardName;
+                    $this->paths[] = $standard;
                 }
 
-                $this->name   .= $standardName;
-                $this->paths[] = $standard;
-            }
-
-            if (PHP_CODESNIFFER_VERBOSITY === 1) {
-                echo "Registering sniffs in the $standardName standard... ";
-                if (count($config->standards) > 1 || PHP_CODESNIFFER_VERBOSITY > 2) {
-                    echo PHP_EOL;
+                if (PHP_CODESNIFFER_VERBOSITY === 1) {
+                    echo "Registering sniffs in the $standardName standard... ";
+                    if (count($config->standards) > 1 || PHP_CODESNIFFER_VERBOSITY > 2) {
+                        echo PHP_EOL;
+                    }
                 }
-            }
 
-            $sniffs = array_merge($sniffs, $this->processRuleset($standard));
-        }//end foreach
+                $sniffs = array_merge($sniffs, $this->processRuleset($standard));
+            }//end foreach
+        }//end if
 
         $sniffRestrictions = array();
         foreach ($restrictions as $sniffCode) {
