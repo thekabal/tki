@@ -95,7 +95,7 @@ class Ship
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':ship_id', $tmp_ship['ship_id']);
                         $stmt->execute();
-                        PlayerLog::WriteLog($pdo_db, $tmp_ship['ship_id'], LOG_PLANET_EJECT, $tmp_ship['sector'] .'|'. $tmp_ship['character_name']);
+                        PlayerLog::writeLog($pdo_db, $tmp_ship['ship_id'], LOG_PLANET_EJECT, $tmp_ship['sector'] .'|'. $tmp_ship['character_name']);
                     }
                 }
             }

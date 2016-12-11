@@ -40,7 +40,7 @@ if (array_key_exists('ship_id', $_GET))
 if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_selected'] != $ship_id)
 {
     echo "You need to click on the ship first.<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -888,5 +888,5 @@ else
 
 $_SESSION['in_combat'] = (bool) false;
 
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

@@ -22,6 +22,22 @@ namespace Tki;
 
 class PlanetReport
 {
+    public static function baseBuildCheck($langvars, $tkireg, $planet, $i)
+    {
+        if($planet[$i][base] == 'Y')
+        {
+            return $langvars['l_yes'];
+        }
+        elseif($planet[$i]['ore'] >= $tkireg->base_ore && $planet[$i]['organics'] >= $tkireg->base_organics && $planet[$i]['goods'] >= $tkireg->base_goods && $planet[$i]['credits'] >= $tkireg->base_credits)
+        {
+            return "<a href=planet-report-ce.php?buildp=" . $planet[$i]['planet_id'] . "&builds=" . $planet[$i]['sector_id'] . ">Build</a>";
+        }
+        else
+        {
+            return $langvars['l_no'];
+        }
+    }
+
     public static function planetReportMenu(array $playerinfo, array $langvars)
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
@@ -209,7 +225,8 @@ class PlanetReport
                 echo "<td align=center>" . "<input type=checkbox name=TPCreds[] value=\"" . $planet[$i]['planet_id'] . "\">" . "</td>";
                 echo "<td align=right>"  . number_format($planet[$i]['fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td align=right>"  . number_format($planet[$i]['torps'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=center>" . base_build_check($langvars, $planet, $i) . "</td>";
+                echo "<td align=center>" . \Tki\PlanetReport::baseBuildCheck($langvars, $tkireg, $planet, $i) . "</td>";
+
                 if ($playerinfo['team'] > 0)
                 {
                     echo "<td align=center>" . ($planet[$i]['team'] > 0 ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";

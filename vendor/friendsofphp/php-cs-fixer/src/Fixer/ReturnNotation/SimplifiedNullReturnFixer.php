@@ -13,6 +13,8 @@
 namespace PhpCsFixer\Fixer\ReturnNotation;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\FixerDefinition\CodeSample;
+use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -20,22 +22,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class SimplifiedNullReturnFixer extends AbstractFixer
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isTokenKindFound(T_RETURN);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRisky()
-    {
-        return true;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -55,9 +41,16 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDefinition()
     {
-        return 'A return statement wishing to return nothing should be simply "return".';
+        return new FixerDefinition(
+            'A return statement wishing to return "void" should not return "null".',
+            array(new CodeSample('<?php return null;')),
+            null,
+            null,
+            null,
+            'Risky as of PHP 7.1 as since than a difference between returning "null" and "void" can be hinted as return type.'
+        );
     }
 
     /**
@@ -67,6 +60,37 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
     {
         // should be run before NoUselessReturnFixer
         return -17;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCandidate(Tokens $tokens)
+    {
+        return $tokens->isTokenKindFound(T_RETURN);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRisky()
+    {
+        return true;
+    }
+
+    /**
+     * Clear the return statement located at a given index.
+     *
+     * @param Tokens $tokens
+     * @param int    $index
+     */
+    private function clear(Tokens $tokens, $index)
+    {
+        while (!$tokens[++$index]->equals(';')) {
+            if ($this->shouldClearToken($tokens, $index)) {
+                $tokens[$index]->clear();
+            }
+        }
     }
 
     /**
@@ -94,21 +118,6 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
     }
 
     /**
-     * Clear the return statement located at a given index.
-     *
-     * @param Tokens $tokens
-     * @param int    $index
-     */
-    private function clear(Tokens $tokens, $index)
-    {
-        while (!$tokens[++$index]->equals(';')) {
-            if ($this->shouldClearToken($tokens, $index)) {
-                $tokens[$index]->clear();
-            }
-        }
-    }
-
-    /**
      * Should we clear the specific token?
      *
      * If the token is a comment, or is whitespace that is immediately before a
@@ -123,14 +132,6 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
     {
         $token = $tokens[$index];
 
-        if ($token->isComment()) {
-            return false;
-        }
-
-        if ($token->isWhitespace() && $tokens[$index + 1]->isComment()) {
-            return false;
-        }
-
-        return true;
+        return !$token->isComment() && !($token->isWhitespace() && $tokens[$index + 1]->isComment());
     }
 }

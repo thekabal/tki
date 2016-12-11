@@ -54,7 +54,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_warp_turn'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -62,7 +62,7 @@ if ($playerinfo['turns'] < 1)
 if ($playerinfo['dev_warpedit'] < 1)
 {
     echo $langvars['l_warp_none'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -72,7 +72,7 @@ if ($target_sector === null)
     // This is the best that I can do without adding a new language variable.
     $langvars['l_warp_twoerror'] = str_replace('[target_sector]', $langvars['l_unknown'], $langvars['l_warp_twoerror']);
     echo $langvars['l_warp_twoerror'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }
 
@@ -85,7 +85,7 @@ $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -107,7 +107,7 @@ $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$sectorinfo)
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }
 
@@ -120,7 +120,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && !$oneway)
 {
     $langvars['l_warp_twoerror'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_twoerror']);
     echo $langvars['l_warp_twoerror'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -136,7 +136,7 @@ if ($numlink_start >= $max_links)
 {
     $langvars['l_warp_sectex'] = str_replace("[link_max]", $max_links, $langvars['l_warp_sectex']);
     echo $langvars['l_warp_sectex'] . "<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -218,5 +218,5 @@ if ($linkinfo)
     }
 }
 
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

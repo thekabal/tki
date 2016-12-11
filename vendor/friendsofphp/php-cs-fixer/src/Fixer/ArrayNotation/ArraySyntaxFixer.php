@@ -14,6 +14,9 @@ namespace PhpCsFixer\Fixer\ArrayNotation;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
+use PhpCsFixer\Fixer\ConfigurableFixerInterface;
+use PhpCsFixer\FixerDefinition\CodeSample;
+use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -24,7 +27,7 @@ use PhpCsFixer\Tokenizer\Tokens;
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  * @author SpacePossum
  */
-final class ArraySyntaxFixer extends AbstractFixer
+final class ArraySyntaxFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
     private $config = array();
     private $candidateTokenKind;
@@ -66,14 +69,6 @@ final class ArraySyntaxFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
-    {
-        return 'PHP arrays should be declared using the configured syntax.';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function fix(\SplFileInfo $file, Tokens $tokens)
     {
         $callback = $this->fixCallback;
@@ -82,6 +77,31 @@ final class ArraySyntaxFixer extends AbstractFixer
                 $this->$callback($tokens, $index);
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefinition()
+    {
+        return new FixerDefinition(
+            'PHP arrays should be declared using the configured syntax (requires PHP >= 5.4 for short syntax).',
+            array(
+                new CodeSample(
+                    "<?php\n[1,2];",
+                    array('syntax' => 'long')
+                ),
+                /* @TODO That code should be in use, but for now it will fail on lower PHP version...
+                new CodeSample(
+                    "<?php\narray(1,2);",
+                    array('syntax' => 'short')
+                ),
+                */
+            ),
+            null,
+            'Configure to use "long" or "short" array declaration syntax.',
+            array('syntax' => 'long')
+        );
     }
 
     /**

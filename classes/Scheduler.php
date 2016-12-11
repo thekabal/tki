@@ -24,7 +24,7 @@ class Scheduler
 {
     public static function isQueryOk(\PDO $pdo_db, $res)
     {
-        $test_result = Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        $test_result = Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if ($test_result)
         {
             echo ' ok.<br>';

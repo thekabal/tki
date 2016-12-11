@@ -811,6 +811,30 @@ class PHP extends Tokenizer
             }
 
             /*
+                Tokens after a double colon may be look like scope openers,
+                such as when writing code like Foo::NAMESAPCE, but they are
+                only ever variables or strings.
+            */
+
+            if ($stackPtr > 1
+                && $tokens[($stackPtr - 1)][0] === T_PAAMAYIM_NEKUDOTAYIM
+                && $tokenIsArray === true
+                && $token[0] !== T_STRING
+                && $token[0] !== T_VARIABLE
+                && $token[0] !== T_DOLLAR
+                && isset(Util\Tokens::$emptyTokens[$token[0]]) === false
+            ) {
+                $newToken            = array();
+                $newToken['code']    = T_STRING;
+                $newToken['type']    = 'T_STRING';
+                $newToken['content'] = $token[1];
+                $finalTokens[$newStackPtr] = $newToken;
+
+                $newStackPtr++;
+                continue;
+            }
+
+            /*
                 Before PHP 7, the <=> operator was tokenized as
                 T_IS_SMALLER_OR_EQUAL followed by T_GREATER_THAN.
                 So look for and combine these tokens in earlier versions.
@@ -829,29 +853,6 @@ class PHP extends Tokenizer
 
                 $newStackPtr++;
                 $stackPtr++;
-                continue;
-            }
-
-            /*
-                Emulate traits in PHP versions less than 5.4.
-            */
-
-            if ($tokenIsArray === true
-                && $token[0] === T_STRING
-                && strtolower($token[1]) === 'trait'
-                && $tokens[($stackPtr - 1)][0] !== T_OBJECT_OPERATOR
-            ) {
-                $finalTokens[$newStackPtr] = array(
-                                              'content' => $token[1],
-                                              'code'    => T_TRAIT,
-                                              'type'    => 'T_TRAIT',
-                                             );
-
-                if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                    echo "\t\t* token $stackPtr changed from T_STRING to T_TRAIT".PHP_EOL;
-                }
-
-                $newStackPtr++;
                 continue;
             }
 
@@ -1077,7 +1078,8 @@ class PHP extends Tokenizer
 
                 // This is a special case for the PHP 5.5 classname::class syntax
                 // where "class" should be T_STRING instead of T_CLASS.
-                if ($newToken['code'] === T_CLASS
+                if (($newToken['code'] === T_CLASS
+                    || $newToken['code'] === T_FUNCTION)
                     && $finalTokens[($newStackPtr - 1)]['code'] === T_DOUBLE_COLON
                 ) {
                     $newToken['code'] = T_STRING;
@@ -1391,25 +1393,6 @@ class PHP extends Tokenizer
                 }
 
                 if ($this->tokens[$x]['code'] !== T_STRING) {
-                    if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                        $line = $this->tokens[$x]['line'];
-                        $type = $this->tokens[$x]['type'];
-                        echo "\t* token $x on line $line changed from $type to T_STRING".PHP_EOL;
-                    }
-
-                    $this->tokens[$x]['code'] = T_STRING;
-                    $this->tokens[$x]['type'] = 'T_STRING';
-                }
-            } else if ($this->tokens[$i]['code'] === T_PAAMAYIM_NEKUDOTAYIM) {
-                // Context sensitive keywords support.
-                for ($x = ($i + 1); $i < $numTokens; $x++) {
-                    if (isset(Util\Tokens::$emptyTokens[$this->tokens[$x]['code']]) === false) {
-                        // Non-whitespace content.
-                        break;
-                    }
-                }
-
-                if (in_array($this->tokens[$x]['code'], array(T_STRING, T_VARIABLE, T_DOLLAR), true) === false) {
                     if (PHP_CODESNIFFER_VERBOSITY > 1) {
                         $line = $this->tokens[$x]['line'];
                         $type = $this->tokens[$x]['type'];

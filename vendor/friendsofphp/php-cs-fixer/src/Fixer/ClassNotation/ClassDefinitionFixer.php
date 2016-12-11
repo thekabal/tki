@@ -14,17 +14,18 @@ namespace PhpCsFixer\Fixer\ClassNotation;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
+use PhpCsFixer\Fixer\ConfigurableFixerInterface;
+use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
-use PhpCsFixer\WhitespacesFixerConfigAwareInterface;
 
 /**
  * Fixer for part of the rules defined in PSR2 ¶4.1 Extends and Implements.
  *
  * @author SpacePossum
  */
-final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFixerConfigAwareInterface
+final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFixerInterface, WhitespacesAwareFixerInterface
 {
     /**
      * @var array<string, bool>
@@ -44,13 +45,13 @@ final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFix
     private $config;
 
     /**
-     * @param array $configuration
+     * @param null|array $configuration
      *
      * @throws InvalidFixerConfigurationException
      */
     public function configure(array $configuration = null)
     {
-        if (null === $configuration || count($configuration) < 1) {
+        if (null === $configuration) {
             $this->config = self::$defaultConfig;
 
             return;
@@ -95,7 +96,7 @@ final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFix
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    protected function getDescription()
     {
         return 'Whitespace around the key words of a class, trait or interfaces definition should be one space.';
     }
@@ -137,12 +138,10 @@ final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFix
             $end = $tokens->getPrevNonWhitespace($classDefInfo['open']);
         }
 
-        $tokensAnalyzer = new TokensAnalyzer($tokens);
-
         // 4.1 The extends and implements keywords MUST be declared on the same line as the class name.
         $this->makeClassyDefinitionSingleLine(
             $tokens,
-            $tokensAnalyzer->isAnonymousClass($classyIndex) ? $tokens->getPrevMeaningfulToken($classyIndex) : $classDefInfo['start'],
+            $classDefInfo['anonymousClass'] ? $tokens->getPrevMeaningfulToken($classyIndex) : $classDefInfo['start'],
             $end
         );
     }
@@ -215,6 +214,8 @@ final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFix
 
         $extends = false;
         $implements = false;
+        $anonymousClass = false;
+
         if (!(defined('T_TRAIT') && $tokens[$classyIndex]->isGivenKind(T_TRAIT))) {
             $extends = $tokens->findGivenKind(T_EXTENDS, $classyIndex, $openIndex);
             $extends = count($extends) ? $this->getClassyInheritanceInfo($tokens, key($extends), $openIndex, 'numberOfExtends') : false;
@@ -222,6 +223,8 @@ final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFix
             if (!$tokens[$classyIndex]->isGivenKind(T_INTERFACE)) {
                 $implements = $tokens->findGivenKind(T_IMPLEMENTS, $classyIndex, $openIndex);
                 $implements = count($implements) ? $this->getClassyInheritanceInfo($tokens, key($implements), $openIndex, 'numberOfImplements') : false;
+                $tokensAnalyzer = new TokensAnalyzer($tokens);
+                $anonymousClass = $tokensAnalyzer->isAnonymousClass($classyIndex);
             }
         }
 
@@ -231,6 +234,7 @@ final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFix
             'open' => $openIndex,
             'extends' => $extends,
             'implements' => $implements,
+            'anonymousClass' => $anonymousClass,
         );
     }
 
@@ -268,7 +272,7 @@ final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFix
      */
     private function makeClassyDefinitionSingleLine(Tokens $tokens, $startIndex, $endIndex)
     {
-        for ($i = $endIndex - 1; $i >= $startIndex; --$i) {
+        for ($i = $endIndex; $i >= $startIndex; --$i) {
             if ($tokens[$i]->isWhitespace()) {
                 if (
                     $tokens[$i + 1]->equalsAny(array(',', '(', ')'))
@@ -286,12 +290,22 @@ final class ClassDefinitionFixer extends AbstractFixer implements WhitespacesFix
                 continue;
             }
 
-            if (
-                !$tokens[$i + 1]->equalsAny(array(',', '(', ')', array(T_NS_SEPARATOR)))
-                && !$tokens[$i]->equalsAny(array('(', array(T_NS_SEPARATOR)))
-                && false === strpos($tokens[$i]->getContent(), "\n")
-            ) {
+            if ($tokens[$i]->equals(',') && !$tokens[$i + 1]->isWhitespace()) {
                 $tokens->insertAt($i + 1, new Token(array(T_WHITESPACE, ' ')));
+
+                continue;
+            }
+
+            if (!$tokens[$i]->isComment()) {
+                continue;
+            }
+
+            if (!$tokens[$i + 1]->isWhitespace() && !$tokens[$i + 1]->isComment() && false === strpos($tokens[$i]->getContent(), "\n")) {
+                $tokens->insertAt($i + 1, new Token(array(T_WHITESPACE, ' ')));
+            }
+
+            if (!$tokens[$i - 1]->isWhitespace() && !$tokens[$i - 1]->isComment()) {
+                $tokens->insertAt($i, new Token(array(T_WHITESPACE, ' ')));
             }
         }
     }

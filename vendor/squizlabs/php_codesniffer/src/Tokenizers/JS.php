@@ -256,10 +256,7 @@ class JS extends Tokenizer
 
 
     /**
-     * Creates an array of tokens when given some PHP code.
-     *
-     * Starts by using token_get_all() but does a lot of extra processing
-     * to insert information about the context of the token.
+     * Creates an array of tokens when given some JS code.
      *
      * @param string $string The string to tokenize.
      *
@@ -524,7 +521,14 @@ class JS extends Tokenizer
                         echo "\t\t* look ahead found nothing *".PHP_EOL;
                     }
 
-                    $value    = $this->tokenValues[strtolower($buffer)];
+                    $value = $this->tokenValues[strtolower($buffer)];
+
+                    if ($value === 'T_FUNCTION' && $buffer !== 'function') {
+                        // The function keyword needs to be all lowercase or else
+                        // it is just a function called "Function".
+                        $value = 'T_STRING';
+                    }
+
                     $tokens[] = array(
                                  'code'    => constant($value),
                                  'type'    => $value,
@@ -885,6 +889,9 @@ class JS extends Tokenizer
     {
         $beforeTokens = array(
                          T_EQUAL               => true,
+                         T_IS_NOT_EQUAL        => true,
+                         T_IS_IDENTICAL        => true,
+                         T_IS_NOT_IDENTICAL    => true,
                          T_OPEN_PARENTHESIS    => true,
                          T_OPEN_SQUARE_BRACKET => true,
                          T_RETURN              => true,

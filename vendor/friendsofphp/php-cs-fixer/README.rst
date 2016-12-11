@@ -30,13 +30,13 @@ your system:
 
 .. code-block:: bash
 
-    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v1.12.3/php-cs-fixer.phar -O php-cs-fixer
+    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.0.0/php-cs-fixer.phar -O php-cs-fixer
 
 or with curl:
 
 .. code-block:: bash
 
-    $ curl -L https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v1.12.3/php-cs-fixer.phar -o php-cs-fixer
+    $ curl -L https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.0.0/php-cs-fixer.phar -o php-cs-fixer
 
 then:
 
@@ -162,7 +162,7 @@ When using combinations of exact and blacklist rules, applying exact ruless alon
 A combination of ``--dry-run`` and ``--diff`` will
 display a summary of proposed fixes, leaving your files unchanged.
 
-The ``--allow-risky`` option allows you to set whether riskys rule may run. Default value is taken from config file.
+The ``--allow-risky`` option allows you to set whether risky rules may run. Default value is taken from config file.
 Risky rule is a rule, which could change code behaviour. By default no risky rules are run.
 
 The command can also read from standard input, in which case it won't
@@ -175,7 +175,8 @@ automatically fix anything:
 Choose from the list of available rules:
 
 * **array_syntax**
-   | PHP arrays should be declared using the configured syntax.
+   | PHP arrays should be declared using the configured syntax (requires PHP
+   | >= 5.4 for short syntax).
    | *Rule is: configurable.*
 
 * **binary_operator_spaces** [@Symfony]
@@ -210,25 +211,20 @@ Choose from the list of available rules:
 * **combine_consecutive_unsets**
    | Calling unset on multiple items should be done in one call.
 
-* **concat_with_spaces**
-   | Concatenation should be used with at least one whitespace around.
-
-* **concat_without_spaces** [@Symfony]
-   | Concatenation should be used without spaces.
+* **concat_space** [@Symfony]
+   | Concatenation should be spaced according configuration.
+   | *Rule is: configurable.*
 
 * **declare_equal_normalize** [@Symfony]
    | Equal sign in declare statement should not be surrounded by spaces.
 
 * **declare_strict_types**
-   | Force strict types declaration in all files.
+   | Force strict types declaration in all files. Requires PHP >= 7.0.
    | *Rule is: risky.*
 
 * **dir_constant**
    | Replaces dirname(__FILE__) expression with equivalent __DIR__ constant.
    | *Rule is: risky.*
-
-* **echo_to_print**
-   | Converts echo language construct to print if possible.
 
 * **elseif** [@PSR2, @Symfony]
    | The keyword elseif should be used instead of else if so that all control
@@ -253,10 +249,6 @@ Choose from the list of available rules:
 
 * **general_phpdoc_annotation_remove**
    | Configured annotations should be omitted from phpdocs.
-   | *Rule is: configurable.*
-
-* **general_phpdoc_annotation_rename**
-   | Configured annotations inside phpdocs should be renamed.
    | *Rule is: configurable.*
 
 * **hash_to_slash_comment** [@Symfony]
@@ -348,6 +340,10 @@ Choose from the list of available rules:
 
 * **no_leading_namespace_whitespace** [@Symfony]
    | The namespace declaration line shouldn't contain leading whitespace.
+
+* **no_mixed_echo_print** [@Symfony]
+   | Either language construct `print` or `echo` should be used.
+   | *Rule is: configurable.*
 
 * **no_multiline_whitespace_around_double_arrow** [@Symfony]
    | Operator => should not be surrounded by multi-line whitespaces.
@@ -445,13 +441,16 @@ Choose from the list of available rules:
    | *Rule is: configurable, risky.*
 
 * **php_unit_fqcn_annotation** [@Symfony]
-   | PHPUnit @expectedException annotation should be a FQCN including a root
-   | namespace.
+   | PHPUnit annotations should be a FQCNs including a root namespace.
 
 * **php_unit_strict**
    | PHPUnit methods like "assertSame" should be used instead of
    | "assertEquals".
    | *Rule is: configurable, risky.*
+
+* **phpdoc_add_missing_param_annotation**
+   | Phpdoc should contain @param for all params.
+   | *Rule is: configurable.*
 
 * **phpdoc_align** [@Symfony]
    | All items of the @param, @throws, @return, @var, and @type phpdoc tags
@@ -469,6 +468,10 @@ Choose from the list of available rules:
 * **phpdoc_no_access** [@Symfony]
    | @access annotations should be omitted from phpdocs.
 
+* **phpdoc_no_alias_tag** [@Symfony]
+   | No alias PHPDoc tags should be used.
+   | *Rule is: configurable.*
+
 * **phpdoc_no_empty_return** [@Symfony]
    | @return void and @return null annotations should be omitted from
    | phpdocs.
@@ -479,9 +482,6 @@ Choose from the list of available rules:
 * **phpdoc_order**
    | Annotations in phpdocs should be ordered so that param annotations come
    | first, then throws annotations, then return annotations.
-
-* **phpdoc_property**
-   | @property tags should be used rather than other variants.
 
 * **phpdoc_scalar** [@Symfony]
    | Scalar types should always be written in the same form. "int", not
@@ -506,27 +506,18 @@ Choose from the list of available rules:
    | Phpdocs should start and end with content, excluding the very first and
    | last line of the docblocks.
 
-* **phpdoc_type_to_var** [@Symfony]
-   | @type should always be written as @var.
-
 * **phpdoc_types** [@Symfony]
    | The correct case must be used for standard PHP types in phpdoc.
-
-* **phpdoc_var_to_type**
-   | @var should always be written as @type.
 
 * **phpdoc_var_without_name** [@Symfony]
    | @var and @type annotations should not contain the variable name.
 
 * **pow_to_exponentiation** [@PHP56Migration, @PHP70Migration, @PHP71Migration]
-   | Converts 'pow()' to '**'.
+   | Converts 'pow()' to '**' operator. Requires PHP >= 5.6.
    | *Rule is: risky.*
 
 * **pre_increment** [@Symfony]
    | Pre incrementation/decrementation should be used if possible.
-
-* **print_to_echo** [@Symfony]
-   | Converts print language construct to echo if possible.
 
 * **protected_to_private**
    | Converts protected variables and methods to private where possible.
@@ -565,7 +556,7 @@ Choose from the list of available rules:
    | *Rule is: risky.*
 
 * **simplified_null_return**
-   | A return statement wishing to return nothing should be simply "return".
+   | A return statement wishing to return "void" should not return "null".
    | *Rule is: risky.*
 
 * **single_blank_line_at_eof** [@PSR2, @Symfony]
@@ -596,7 +587,7 @@ Choose from the list of available rules:
    | Replace all <> with !=.
 
 * **strict_comparison**
-   | Comparison should be strict.
+   | Comparisons should be strict.
    | *Rule is: risky.*
 
 * **strict_param**
@@ -762,12 +753,15 @@ Exit codes
 
 Exit code is build using following bit flags:
 
-*  0 OK
-*  4 Some files have invalid syntax (only in dry-run mode)
-*  8 Some files need fixing (only in dry-run mode)
-* 16 Configuration error of the application
-* 32 Configuration error of a Fixer
-* 64 Exception raised within the application
+*  0 OK.
+*  1 General error (or PHP/HHVM minimal requirement not matched).
+*  4 Some files have invalid syntax (only in dry-run mode).
+*  8 Some files need fixing (only in dry-run mode).
+* 16 Configuration error of the application.
+* 32 Configuration error of a Fixer.
+* 64 Exception raised within the application.
+
+(applies to exit codes of the `fix` command only)
 
 Helpers
 -------
@@ -800,10 +794,10 @@ scanned by the tool when run in the directory of your project. It is useful for
 projects that follow a well-known directory structures (like for Symfony
 projects for instance).
 
-.. _php-cs-fixer.phar: https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v1.12.3/php-cs-fixer.phar
+.. _php-cs-fixer.phar: https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.0.0/php-cs-fixer.phar
 .. _Atom:              https://github.com/Glavin001/atom-beautify
 .. _NetBeans:          http://plugins.netbeans.org/plugin/49042/php-cs-fixer
 .. _PhpStorm:          http://tzfrs.de/2015/01/automatically-format-code-to-match-psr-standards-with-phpstorm
 .. _Sublime Text:      https://github.com/benmatselby/sublime-phpcs
 .. _Vim:               https://github.com/stephpy/vim-php-cs-fixer
-.. _contribute:        https://github.com/FriendsOfPhp/php-cs-fixer/blob/master/CONTRIBUTING.md
+.. _contribute:        https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/CONTRIBUTING.md

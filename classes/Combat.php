@@ -475,12 +475,11 @@ class Combat
                 $langvars['l_cmb_yousalvaged2'] = str_replace("[cmb_number_rating_change]", number_format(abs($rating_change), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_cmb_yousalvaged2']);
                 echo $langvars['l_cmb_yousalvaged'] . "<br>" . $langvars['l_cmb_yousalvaged2'];
 
-                $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods, credits=credits+:ship_salvage WHERE ship_id = :ship_id";
+                $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':salv_ore', $salv_ore);
                 $stmt->bindParam(':salv_organics', $salv_organics);
                 $stmt->bindParam(':salv_goods', $salv_goods);
-                $stmt->bindParam(':salv_salvage', $salv_salvage);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
                 $stmt->execute();
             }
@@ -491,14 +490,14 @@ class Combat
                 echo $langvars['l_cmb_escapepodlaunched'] . "<br><br>";
                 echo "<br><br>ship_id = $targetinfo[ship_id]<br><br>";
                 $test = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy = ?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($tkireg->start_energy, $rating, $targetinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $test, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $test, __LINE__, __FILE__);
 
-                \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
                 \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
             else
             {
-                \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
                 \Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
                 \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
@@ -510,9 +509,9 @@ class Combat
             $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $target_energy = $targetinfo['ship_energy'];
-            \Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
             $update4 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, torps = torps - ? WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $targetinfo['ship_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $update4, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $update4, __LINE__, __FILE__);
         }
 
         echo "<br>_+_+_+_+_+_+_<br>";
