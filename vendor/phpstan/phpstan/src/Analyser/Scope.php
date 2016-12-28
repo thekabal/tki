@@ -101,7 +101,7 @@ class Scope
 	private $anonymousClass;
 
 	/**
-	 * @var \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|null
+	 * @var \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
 	 */
 	private $inFunctionCall;
 
@@ -379,8 +379,12 @@ class Scope
 		} elseif ($node instanceof Array_) {
 			$possiblyCallable = false;
 			if (count($node->items) === 2) {
+				$firstItem = $node->items[0]->value;
 				if (
-					$this->getType($node->items[0]->value) instanceof ObjectType
+					(
+						$this->getType($firstItem) instanceof ObjectType
+						|| $this->getType($firstItem) instanceof StringType
+					)
 					&& $this->getType($node->items[1]->value) instanceof StringType
 				) {
 					$possiblyCallable = true;
@@ -925,7 +929,7 @@ class Scope
 	}
 
 	/**
-	 * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall $functionCall
+	 * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $functionCall
 	 * @return self
 	 */
 	public function enterFunctionCall($functionCall): self
