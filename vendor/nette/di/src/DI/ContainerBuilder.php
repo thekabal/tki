@@ -169,7 +169,7 @@ class ContainerBuilder
 
 	/**
 	 * @param  string[]
-	 * @return self
+	 * @return static
 	 */
 	public function addExcludedClasses(array $classes)
 	{
@@ -439,7 +439,8 @@ class ContainerBuilder
 					$hint = Nette\Utils\ObjectMixin::getSuggestion(array_keys($ctorParams), $param->getName());
 					throw new ServiceCreationException("Unused parameter \${$param->getName()} when implementing method $interface::$methodName()" . ($hint ? ", did you mean \${$hint}?" : '.'));
 				}
-				$paramDef = $hint . ' ' . $param->getName();
+				$nullable = $hint && $param->allowsNull() && (!$param->isDefaultValueAvailable() || $param->getDefaultValue() !== NULL);
+				$paramDef = ($nullable ? '?' : '') . $hint . ' ' . $param->getName();
 				if ($param->isDefaultValueAvailable()) {
 					$def->parameters[$paramDef] = $param->getDefaultValue();
 				} else {
@@ -684,7 +685,7 @@ class ContainerBuilder
 	/**
 	 * Adds item to the list of dependencies.
 	 * @param  ReflectionClass|\ReflectionFunctionAbstract|string
-	 * @return self
+	 * @return static
 	 * @internal
 	 */
 	public function addDependency($dep)
