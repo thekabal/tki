@@ -1730,67 +1730,6 @@
         "homepage": "https://nette.org"
     },
     {
-        "name": "nette/robot-loader",
-        "version": "v2.4.1",
-        "version_normalized": "2.4.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/nette/robot-loader.git",
-            "reference": "980d7c5f20f4792d0be49285c7b2ffde8c8d9fe5"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/nette/robot-loader/zipball/980d7c5f20f4792d0be49285c7b2ffde8c8d9fe5",
-            "reference": "980d7c5f20f4792d0be49285c7b2ffde8c8d9fe5",
-            "shasum": ""
-        },
-        "require": {
-            "ext-tokenizer": "*",
-            "nette/caching": "~2.2",
-            "nette/finder": "~2.3",
-            "nette/utils": "~2.4",
-            "php": ">=5.6.0"
-        },
-        "conflict": {
-            "nette/nette": "<2.2"
-        },
-        "require-dev": {
-            "nette/tester": "~2.0",
-            "tracy/tracy": "^2.3"
-        },
-        "time": "2016-09-29T15:55:27+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "src/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause",
-            "GPL-2.0",
-            "GPL-3.0"
-        ],
-        "authors": [
-            {
-                "name": "David Grudl",
-                "homepage": "https://davidgrudl.com"
-            },
-            {
-                "name": "Nette Community",
-                "homepage": "https://nette.org/contributors"
-            }
-        ],
-        "description": "Nette RobotLoader: comfortable autoloading",
-        "homepage": "https://nette.org"
-    },
-    {
         "name": "nette/php-generator",
         "version": "v2.4.1",
         "version_normalized": "2.4.1.0",
@@ -3350,5 +3289,66 @@
             "testing",
             "xunit"
         ]
+    },
+    {
+        "name": "nette/robot-loader",
+        "version": "v2.4.2",
+        "version_normalized": "2.4.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nette/robot-loader.git",
+            "reference": "f23f8885624b249d5ec7bb525b9d6b007ab00293"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nette/robot-loader/zipball/f23f8885624b249d5ec7bb525b9d6b007ab00293",
+            "reference": "f23f8885624b249d5ec7bb525b9d6b007ab00293",
+            "shasum": ""
+        },
+        "require": {
+            "ext-tokenizer": "*",
+            "nette/caching": "~2.2",
+            "nette/finder": "~2.3",
+            "nette/utils": "~2.4",
+            "php": ">=5.6.0"
+        },
+        "conflict": {
+            "nette/nette": "<2.2"
+        },
+        "require-dev": {
+            "nette/tester": "~2.0",
+            "tracy/tracy": "^2.3"
+        },
+        "time": "2017-01-02T17:15:22+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause",
+            "GPL-2.0",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "David Grudl",
+                "homepage": "https://davidgrudl.com"
+            },
+            {
+                "name": "Nette Community",
+                "homepage": "https://nette.org/contributors"
+            }
+        ],
+        "description": "Nette RobotLoader: comfortable autoloading",
+        "homepage": "https://nette.org"
     }
 ]
