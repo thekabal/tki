@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 1.0.0
  */
@@ -49,7 +49,7 @@ use PDepend\Util\Cache\CacheDriver;
 /**
  * Represents any valid complex php type.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 1.0.0
  */
@@ -379,6 +379,17 @@ abstract class AbstractASTType extends AbstractASTArtifact
         $this->cache
             ->type('tokens')
             ->store($this->id, $tokens);
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespacedName()
+    {
+        if (null === $this->namespaceName) {
+            return $this->name;
+        }
+        return sprintf('%s\\%s', $this->namespaceName, $this->name);
     }
 
     /**

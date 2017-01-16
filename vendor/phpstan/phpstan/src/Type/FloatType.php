@@ -21,6 +21,14 @@ class FloatType implements Type
 		return null;
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array
+	{
+		return [];
+	}
+
 	public function isNullable(): bool
 	{
 		return $this->nullable;
@@ -28,7 +36,7 @@ class FloatType implements Type
 
 	public function combineWith(Type $otherType): Type
 	{
-		if ($otherType instanceof $this) {
+		if ($otherType instanceof $this || $otherType instanceof IntegerType) {
 			return new self($this->isNullable() || $otherType->isNullable());
 		}
 
@@ -36,7 +44,7 @@ class FloatType implements Type
 			return $this->makeNullable();
 		}
 
-		return new MixedType($this->isNullable() || $otherType->isNullable());
+		return new MixedType();
 	}
 
 	public function makeNullable(): Type
@@ -54,12 +62,16 @@ class FloatType implements Type
 			return true;
 		}
 
+		if ($type instanceof UnionType && UnionTypeHelper::acceptsAll($this, $type)) {
+			return true;
+		}
+
 		return $type instanceof MixedType;
 	}
 
 	public function describe(): string
 	{
-		return 'float';
+		return 'float' . ($this->nullable ? '|null' : '');
 	}
 
 	public function canAccessProperties(): bool
@@ -70,6 +82,11 @@ class FloatType implements Type
 	public function canCallMethods(): bool
 	{
 		return false;
+	}
+
+	public function isDocumentableNatively(): bool
+	{
+		return true;
 	}
 
 }

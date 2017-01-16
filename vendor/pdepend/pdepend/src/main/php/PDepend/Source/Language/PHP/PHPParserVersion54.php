@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 2.3
  */
@@ -55,7 +55,7 @@ use PDepend\Source\Tokenizer\Tokens;
  *   - break $var
  *   - continue $var
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 2.3
  */
@@ -79,6 +79,24 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
                 return true;
         }
         return false;
+    }
+
+    /**
+     * @param integer $tokenType
+     * @return boolean
+     */
+    protected function isConstantName($tokenType)
+    {
+        return $this->isFunctionName($tokenType);
+    }
+
+    /**
+     * @param integer $tokenType
+     * @return bool
+     */
+    protected function isMethodName($tokenType)
+    {
+        return $this->isFunctionName($tokenType);
     }
 
     /**
@@ -261,5 +279,18 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
                 break;
         }
         return $this->parseOptionalIndexExpression($node);
+    }
+
+    /**
+     * @return \PDepend\Source\AST\ASTNode
+     */
+    protected function parseOptionalExpressionForVersion()
+    {
+        switch ($this->tokenizer->peek()) {
+            case Tokens::T_TRAIT_C:
+                return $this->parseConstant();
+            default:
+                return parent::parseOptionalExpressionForVersion();
+        }
     }
 }

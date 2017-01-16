@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -18,6 +17,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ResourceType;
+use PHPStan\Type\StaticType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\TrueOrFalseBooleanType;
 
 class TypeSpecifier
 {
@@ -46,24 +48,24 @@ class TypeSpecifier
 	{
 		if ($expr instanceof Instanceof_ && $expr->class instanceof Name) {
 			$class = (string) $expr->class;
-			if ($class === 'static') {
-				return $types;
-			}
-
 			if ($class === 'self' && $scope->getClass() !== null) {
-				$class = $scope->getClass();
+				$type = new ObjectType($scope->getClass(), false);
+			} elseif ($class === 'static' && $scope->getClass() !== null) {
+				$type = new StaticType($scope->getClass(), false);
+			} else {
+				$type = new ObjectType($class, false);
 			}
 
 			$printedExpr = $this->printer->prettyPrintExpr($expr->expr);
-			$objectType = new ObjectType($class, false);
+
 			if ($negated) {
 				if ($source === self::SOURCE_FROM_AND) {
 					return $types;
 				}
-				return $types->addSureNotType($expr->expr, $printedExpr, $objectType);
+				return $types->addSureNotType($expr->expr, $printedExpr, $type);
 			}
 
-			return $types->addSureType($expr->expr, $printedExpr, $objectType);
+			return $types->addSureType($expr->expr, $printedExpr, $type);
 		} elseif (
 			$expr instanceof FuncCall
 			&& $expr->name instanceof Name
@@ -87,15 +89,17 @@ class TypeSpecifier
 			} elseif ($functionName === 'is_null') {
 				$specifiedType = new NullType();
 			} elseif ($functionName === 'is_array') {
-				$specifiedType = new ArrayType(new MixedType(true), false);
+				$specifiedType = new ArrayType(new MixedType(), false);
 			} elseif ($functionName === 'is_bool') {
-				$specifiedType = new BooleanType(false);
+				$specifiedType = new TrueOrFalseBooleanType(false);
 			} elseif ($functionName === 'is_callable') {
 				$specifiedType = new CallableType(false);
 			} elseif ($functionName === 'is_resource') {
 				$specifiedType = new ResourceType(false);
 			} elseif ($functionName === 'is_iterable') {
-				$specifiedType = new IterableIterableType(new MixedType(true), false);
+				$specifiedType = new IterableIterableType(new MixedType(), false);
+			} elseif ($functionName === 'is_string') {
+				$specifiedType = new StringType(false);
 			}
 
 			if ($specifiedType !== null) {

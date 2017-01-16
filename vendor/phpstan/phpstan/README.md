@@ -7,23 +7,30 @@
 PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs
 even before you write tests for the code.
 
+![PHPStan](build/phpstan.gif)
+
 PHPStan moves PHP closer to compiled languages in the sense that the correctness of each line of the code
 can be checked before you run the actual line.
 
 **[Read more about PHPStan on Medium.com »](https://medium.com/@ondrejmirtes/phpstan-2939cd0ad0e3)**
+
+## Is PHPStan helping you to avoid bugs in production?
+## Consider [supporting it on Patreon](https://www.patreon.com/phpstan) so I'm able to make it even more awesome!
 
 It currently performs the following checks on your code:
 
 * Existence of classes and interfaces in `instanceof`, `catch`, typehints, other language constructs and even annotations. PHP does not do this and just stays silent instead.
 * Existence of variables while respecting scopes of branches and loops.
 * Existence and visibility of called methods and functions.
-* Existence and visibility of accessed properties.
+* Existence and visibility of accessed properties and constants.
 * Correct types assigned to properties.
-* Correct number of parameters passed to constructors, methods and functions.
+* Correct number and types of parameters passed to constructors, methods and functions.
 * Correct types returned from methods and functions.
 * Correct number of parameters passed to `sprintf`/`printf` calls based on format strings.
-
-Future versions will also check if arguments of correct types are passed to methods and functions and assigned to properties.
+* Useless casts like `(string) 'foo'`.
+* Unused constructor parameters - they can either be deleted or the author forgot to
+use them in the class code.
+* That only objects are passed to the `clone` keyword.
 
 ## Extensibility
 
@@ -33,10 +40,17 @@ and invoking methods using `__call`.
 
 See [Class reflection extensions](#class-reflection-extensions) and [Dynamic return type extensions](#dynamic-return-type-extensions).
 
+You can also installed already created framework-specific extensions:
+
+* [Nette Framework](https://github.com/phpstan/phpstan-nette)
+* [Dibi - Database Abstraction Library](https://github.com/phpstan/phpstan-dibi)
+
+Other framework-specific extension will be coming soon!
+
 ## Prerequisities
 
-PHPStan requires PHP 7.0. You have to run it in environment with PHP 7 but the actual code does not have to use
-PHP 7 features. (Code written for PHP 5.6 and earlier can run on 7 mostly unmodified.)
+PHPStan requires PHP >= 7.0. You have to run it in environment with PHP 7.x but the actual code does not have to use
+PHP 7.x features. (Code written for PHP 5.6 and earlier can run on 7.x mostly unmodified.)
 
 PHPStan works best with modern object-oriented code. The more strongly-typed your code is, the more information
 you give PHPStan to work with.
@@ -49,10 +63,12 @@ not only static analysis tools but also other people that work with the code to 
 To start performing analysis on your code, require PHPStan in [Composer](https://getcomposer.org/):
 
 ```
-composer require phpstan/phpstan
+composer require --dev phpstan/phpstan
 ```
 
 Composer will install PHPStan's executable in its `bin-dir` which defaults to `vendor/bin`.
+
+You can also use [PHPStan via Docker](https://github.com/tommy-muehle/docker-phpstan).
 
 ## First run
 
@@ -82,6 +98,14 @@ Rule levels. If you want to use PHPStan but your codebase isn't up to speed with
 and PHPStan's strict checks, you can choose from currently 5 levels
 (0 is the loosest and 4 is the strictest) by passing `--level` to `analyse` command. Default level is `0`.
 
+This feature enables incremental adoption of PHPStan checks. You can start using PHPStan
+with a lower rule level and increase it when you feel like it.
+
+There's also **experimental** level 5 that currently enables:
+
+* Union types (Foo|Bar will be a specified type with checks performed on it instead of mixed)
+* Checking function and method argument types when calling them
+
 ## Configuration
 
 Config file is passed to the `phpstan` executable with `-c` option:
@@ -101,6 +125,8 @@ All the following options are part of the `parameters` section.
 PHPStan uses Composer autoloader so the easiest way how to autoload classes
 is through the `autoload`/`autoload-dev` sections in composer.json.
 
+#### Specify paths to scan
+
 If PHPStan complains about some nonexistent classes and you're sure the classes
 exist in the codebase AND you don't want to use Composer autoloader for some reason,
 you can specify directories to scan and concrete files to include using
@@ -116,6 +142,25 @@ parameters:
 
 `%rootDir%` is expanded to the root directory where PHPStan resides.
 
+#### Autoloading for global installation
+
+PHPStan supports global installation using [`composer global`](https://getcomposer.org/doc/03-cli.md#global).
+In this case, it's not part of the project autoloader, but it supports autodiscovery of the Composer autoloader
+from current working directory residing in `vendor/`:
+
+```bash
+cd /path/to/project
+phpstan analyse src tests # looks for autoloader at /path/to/project/vendor/autoload.php
+```
+
+If you have your dependencies installed at a different path
+or you're running PHPStan from a different directory,
+you can specify the path to the autoloader with the `--autoload-file|-a` option:
+
+```bash
+phpstan analyse --autoload-file=/path/to/autoload.php src tests
+```
+
 ### Exclude files from analysis
 
 If your codebase contains some files that are broken on purpose
@@ -126,7 +171,7 @@ is used as a pattern for the [`fnmatch`](https://secure.php.net/manual/en/functi
 ```yaml
 parameters:
 	excludes_analyse:
-		- %rootDir%/tests/*/data/*
+		- %rootDir%/../../../tests/*/data/*
 ```
 
 ### Universal object crates
@@ -359,6 +404,8 @@ interface MethodReflection
 
 	public function getDeclaringClass(): ClassReflection;
 
+	public function getPrototype(): self;
+
 	public function isStatic(): bool;
 
 	public function isPrivate(): bool;
@@ -462,10 +509,21 @@ services:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 ```
 
+There's also an analogous functionality for static methods using `DynamicStaticMethodReturnTypeExtension` interface
+and `phpstan.broker.dynamicStaticMethodReturnTypeExtension` service tag.
+
 ## Known issues
 
 * If `include` or `require` are used in the analysed code (instead of `include_once` or `require_once`),
 PHPStan will throw `Cannot redeclare class` error. Use the `_once` variants to avoid this error.
+* If PHPStan crashes without outputting any error, it's quite possible that it's
+because of a low memory limit set on your system. **Run PHPStan again** to read a couple of hints
+what you can do to prevent the crashes.
+* If you install PHPStan globally on your system, you can experience errors resulting from
+using different versions of dependencies than PHPStan uses. For example if PHPStan's
+version of Symfony Console has a method with different arguments than your version
+of Symfony Console and you use this method in the analysed code, PHPStan can mark that as error.
+This will be solved in the future by prefixing the namespaces of PHPStan's dependencies.
 
 ## Code of Conduct
 

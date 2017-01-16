@@ -3,10 +3,13 @@
 namespace PHPStan\Reflection\Php;
 
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Broker\Broker;
 use PHPStan\Parser\FunctionCallStatementFinder;
 use PHPStan\Parser\Parser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptor;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
@@ -21,6 +24,9 @@ class PhpMethodReflection implements MethodReflection
 
 	/** @var \ReflectionMethod */
 	private $reflection;
+
+	/** @var \PHPStan\Broker\Broker */
+	private $broker;
 
 	/** @var \PHPStan\Parser\Parser */
 	private $parser;
@@ -46,6 +52,7 @@ class PhpMethodReflection implements MethodReflection
 	public function __construct(
 		ClassReflection $declaringClass,
 		\ReflectionMethod $reflection,
+		Broker $broker,
 		Parser $parser,
 		FunctionCallStatementFinder $functionCallStatementFinder,
 		\Nette\Caching\Cache $cache,
@@ -55,6 +62,7 @@ class PhpMethodReflection implements MethodReflection
 	{
 		$this->declaringClass = $declaringClass;
 		$this->reflection = $reflection;
+		$this->broker = $broker;
 		$this->parser = $parser;
 		$this->functionCallStatementFinder = $functionCallStatementFinder;
 		$this->cache = $cache;
@@ -65,6 +73,27 @@ class PhpMethodReflection implements MethodReflection
 	public function getDeclaringClass(): ClassReflection
 	{
 		return $this->declaringClass;
+	}
+
+	public function getPrototype(): MethodReflection
+	{
+		try {
+			$prototypeReflection = $this->reflection->getPrototype();
+			$prototypeDeclaringClass = $this->broker->getClassFromReflection($prototypeReflection->getDeclaringClass());
+
+			return new self(
+				$prototypeDeclaringClass,
+				$prototypeReflection,
+				$this->broker,
+				$this->parser,
+				$this->functionCallStatementFinder,
+				$this->cache,
+				$this->phpDocParameterTypes,
+				$this->phpDocReturnType
+			);
+		} catch (\ReflectionException $e) {
+			return $this;
+		}
 	}
 
 	public function isStatic(): bool
@@ -96,13 +125,15 @@ class PhpMethodReflection implements MethodReflection
 				&& count($this->parameters) === 1
 			) {
 				// PHP bug #71077
-				$this->parameters[] = new DummyOptionalParameter(
+				$this->parameters[] = new DummyParameter(
 					'flags',
-					new IntegerType(false)
+					new IntegerType(false),
+					true
 				);
-				$this->parameters[] = new DummyOptionalParameter(
+				$this->parameters[] = new DummyParameter(
 					'iterator_class',
-					new StringType(false)
+					new StringType(false),
+					true
 				);
 			}
 
@@ -112,9 +143,39 @@ class PhpMethodReflection implements MethodReflection
 				&& !$this->parameters[1]->isOptional()
 			) {
 				// PHP bug #71416
-				$this->parameters[1] = new DummyOptionalParameter(
+				$this->parameters[1] = new DummyParameter(
 					'parameter',
-					new MixedType(true)
+					new MixedType(),
+					true,
+					false,
+					true
+				);
+			}
+
+			if (
+				$this->declaringClass->getName() === 'PDO'
+				&& $this->reflection->getName() === 'query'
+				&& count($this->parameters) < 4
+			) {
+				$this->parameters[] = new DummyParameter(
+					'statement',
+					new StringType(false),
+					false
+				);
+				$this->parameters[] = new DummyParameter(
+					'fetchColumn',
+					new IntegerType(false),
+					true
+				);
+				$this->parameters[] = new DummyParameter(
+					'colno',
+					new MixedType(),
+					true
+				);
+				$this->parameters[] = new DummyParameter(
+					'constructorArgs',
+					new ArrayType(new MixedType(), false),
+					true
 				);
 			}
 		}
@@ -134,7 +195,7 @@ class PhpMethodReflection implements MethodReflection
 		}
 
 		if (!$isNativelyVariadic && $this->declaringClass->getNativeReflection()->getFileName() !== false) {
-			$key = sprintf('variadic-method-%s-%s', $this->declaringClass->getName(), $this->reflection->getName());
+			$key = sprintf('variadic-method-%s-%s-v2', $this->declaringClass->getName(), $this->reflection->getName());
 			$cachedResult = $this->cache->load($key);
 			if ($cachedResult === null) {
 				$nodes = $this->parser->parseFile($this->declaringClass->getNativeReflection()->getFileName());
@@ -166,6 +227,14 @@ class PhpMethodReflection implements MethodReflection
 				continue;
 			}
 
+			if (
+				$node instanceof \PhpParser\Node\Stmt\ClassLike
+				&& isset($node->namespacedName)
+				&& $this->declaringClass->getName() !== (string) $node->namespacedName
+			) {
+				continue;
+			}
+
 			if ($node instanceof ClassMethod) {
 				if ($node->getStmts() === null) {
 					continue; // interface
@@ -173,8 +242,10 @@ class PhpMethodReflection implements MethodReflection
 
 				$methodName = $node->name;
 				if ($methodName === $this->reflection->getName()) {
-					return $this->functionCallStatementFinder->findFunctionCallInStatements('func_get_args', $node->getStmts()) !== null;
+					return $this->functionCallStatementFinder->findFunctionCallInStatements(ParametersAcceptor::VARIADIC_FUNCTIONS, $node->getStmts()) !== null;
 				}
+
+				continue;
 			}
 
 			if ($this->callsFuncGetArgs($node)) {
@@ -207,7 +278,7 @@ class PhpMethodReflection implements MethodReflection
 			) {
 				$phpDocReturnType = null;
 			}
-			$this->returnType = TypehintHelper::decideType(
+			$this->returnType = TypehintHelper::decideTypeFromReflection(
 				$returnType,
 				$phpDocReturnType,
 				$this->declaringClass->getName()

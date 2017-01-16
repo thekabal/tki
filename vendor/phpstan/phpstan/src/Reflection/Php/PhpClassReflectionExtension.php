@@ -3,6 +3,7 @@
 namespace PHPStan\Reflection\Php;
 
 use PHPStan\Broker\Broker;
+use PHPStan\PhpDoc\PhpDocBlock;
 use PHPStan\Reflection\BrokerAwareClassReflectionExtension;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -11,6 +12,7 @@ use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Type\FileTypeMapper;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\TypehintHelper;
 
 class PhpClassReflectionExtension
 	implements PropertiesClassReflectionExtension, MethodsClassReflectionExtension, BrokerAwareClassReflectionExtension
@@ -67,18 +69,25 @@ class PhpClassReflectionExtension
 		foreach ($classReflection->getNativeReflection()->getProperties() as $propertyReflection) {
 			$propertyName = $propertyReflection->getName();
 			$declaringClassReflection = $this->broker->getClass($propertyReflection->getDeclaringClass()->getName());
-			$typeString = $this->getPropertyAnnotationTypeString($propertyReflection);
-			if ($typeString === null) {
-				$type = new MixedType(false);
+			if ($propertyReflection->getDocComment() === false) {
+				$type = new MixedType();
 			} elseif (!$declaringClassReflection->getNativeReflection()->isAnonymous() && $declaringClassReflection->getNativeReflection()->getFileName() !== false) {
-				$typeMap = $this->fileTypeMapper->getTypeMap($declaringClassReflection->getNativeReflection()->getFileName());
+				$phpDocBlock = PhpDocBlock::resolvePhpDocBlockForProperty(
+					$this->broker,
+					$propertyReflection->getDocComment(),
+					$declaringClassReflection->getName(),
+					$propertyName,
+					$declaringClassReflection->getNativeReflection()->getFileName()
+				);
+				$typeMap = $this->fileTypeMapper->getTypeMap($phpDocBlock->getFile());
+				$typeString = $this->getPropertyAnnotationTypeString($phpDocBlock->getDocComment());
 				if (isset($typeMap[$typeString])) {
 					$type = $typeMap[$typeString];
 				} else {
-					$type = new MixedType(true);
+					$type = new MixedType();
 				}
 			} else {
-				$type = new MixedType(true);
+				$type = new MixedType();
 			}
 
 			$properties[$propertyName] = new PhpPropertyReflection(
@@ -92,80 +101,11 @@ class PhpClassReflectionExtension
 	}
 
 	/**
-	 * @param \ReflectionMethod $reflectionMethod
-	 * @return mixed[]
-	 */
-	private function getPhpDocParamsFromMethod(\ReflectionMethod $reflectionMethod): array
-	{
-		$phpDoc = $reflectionMethod->getDocComment();
-		if ($phpDoc === false) {
-			return [];
-		}
-
-		preg_match_all('#@param\s+' . FileTypeMapper::TYPE_PATTERN . '\s+\$([a-zA-Z0-9_]+)#', $phpDoc, $matches, PREG_SET_ORDER);
-		$phpDocParams = [];
-		foreach ($matches as $match) {
-			$typeString = $match[1];
-			$parameterName = $match[2];
-			if (!isset($phpDocParams[$parameterName])) {
-				$phpDocParams[$parameterName] = [];
-			}
-
-			$phpDocParams[$parameterName][] = $typeString;
-		}
-
-		return $phpDocParams;
-	}
-
-	/**
-	 * @param \ReflectionMethod $reflectionMethod
+	 * @param string $phpDoc
 	 * @return string|null
 	 */
-	private function getReturnTypeStringFromMethod(\ReflectionMethod $reflectionMethod)
+	private function getPropertyAnnotationTypeString(string $phpDoc)
 	{
-		$phpDoc = $reflectionMethod->getDocComment();
-		if ($phpDoc === false) {
-			return null;
-		}
-
-		$count = preg_match_all('#@return\s+' . FileTypeMapper::TYPE_PATTERN . '#', $phpDoc, $matches);
-		if ($count !== 1) {
-			return null;
-		}
-
-		return $matches[1][0];
-	}
-
-	/**
-	 * @param mixed[] $phpDocParams
-	 * @param \ReflectionParameter $parameterReflection
-	 * @return string|null
-	 */
-	private function getMethodParameterAnnotationTypeString(array $phpDocParams, \ReflectionParameter $parameterReflection)
-	{
-		if (!isset($phpDocParams[$parameterReflection->getName()])) {
-			return null;
-		}
-
-		$typeStrings = $phpDocParams[$parameterReflection->getName()];
-		if (count($typeStrings) > 1) {
-			return null;
-		}
-
-		return $typeStrings[0];
-	}
-
-	/**
-	 * @param \ReflectionProperty $propertyReflection
-	 * @return string|null
-	 */
-	private function getPropertyAnnotationTypeString(\ReflectionProperty $propertyReflection)
-	{
-		$phpDoc = $propertyReflection->getDocComment();
-		if ($phpDoc === false) {
-			return null;
-		}
-
 		$count = preg_match_all('#@var\s+' . FileTypeMapper::TYPE_PATTERN . '#', $phpDoc, $matches);
 		if ($count !== 1) {
 			return null;
@@ -185,9 +125,9 @@ class PhpClassReflectionExtension
 			$this->methods[$classReflection->getName()] = $this->createMethods($classReflection);
 		}
 
-		$methodName = strtolower($methodName);
+		$nativeMethodReflection = $classReflection->getNativeReflection()->getMethod($methodName);
 
-		return $this->methods[$classReflection->getName()][$methodName];
+		return $this->methods[$classReflection->getName()][$nativeMethodReflection->getName()];
 	}
 
 	/**
@@ -199,30 +139,31 @@ class PhpClassReflectionExtension
 		$methods = [];
 		foreach ($classReflection->getNativeReflection()->getMethods() as $methodReflection) {
 			$declaringClass = $this->broker->getClass($methodReflection->getDeclaringClass()->getName());
-			$phpDocParameters = $this->getPhpDocParamsFromMethod($methodReflection);
+
 			$phpDocParameterTypes = [];
-
+			$phpDocReturnType = null;
 			if (!$declaringClass->getNativeReflection()->isAnonymous() && $declaringClass->getNativeReflection()->getFileName() !== false) {
-				$typeMap = $this->fileTypeMapper->getTypeMap($declaringClass->getNativeReflection()->getFileName());
-				foreach ($methodReflection->getParameters() as $parameterReflection) {
-					$typeString = $this->getMethodParameterAnnotationTypeString($phpDocParameters, $parameterReflection);
-					if ($typeString === null || !isset($typeMap[$typeString])) {
-						continue;
-					}
-
-					$type = $typeMap[$typeString];
-
-					$phpDocParameterTypes[$parameterReflection->getName()] = $type;
+				if ($methodReflection->getDocComment() !== false) {
+					$phpDocBlock = PhpDocBlock::resolvePhpDocBlockForMethod(
+						$this->broker,
+						$methodReflection->getDocComment(),
+						$declaringClass->getName(),
+						$methodReflection->getName(),
+						$declaringClass->getNativeReflection()->getFileName()
+					);
+					$typeMap = $this->fileTypeMapper->getTypeMap($phpDocBlock->getFile());
+					$phpDocParameterTypes = TypehintHelper::getParameterTypesFromPhpDoc(
+						$typeMap,
+						array_map(function (\ReflectionParameter $parameterReflection): string {
+							return $parameterReflection->getName();
+						}, $methodReflection->getParameters()),
+						$phpDocBlock->getDocComment()
+					);
+					$phpDocReturnType = TypehintHelper::getReturnTypeFromPhpDoc($typeMap, $phpDocBlock->getDocComment());
 				}
 			}
 
-			$phpDocReturnType = null;
-			$returnTypeString = $this->getReturnTypeStringFromMethod($methodReflection);
-			if ($returnTypeString !== null && isset($typeMap[$returnTypeString])) {
-				$phpDocReturnType = $typeMap[$returnTypeString];
-			}
-
-			$methods[strtolower($methodReflection->getName())] = $this->methodReflectionFactory->create(
+			$methods[$methodReflection->getName()] = $this->methodReflectionFactory->create(
 				$declaringClass,
 				$methodReflection,
 				$phpDocParameterTypes,

@@ -32,7 +32,13 @@ class CatchedExceptionExistenceRule implements \PHPStan\Rules\Rule
 	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
-		$classes = $node->types;
+		if (isset($node->types)) {
+			$classes = $node->types;
+		} elseif (isset($node->type)) {
+			$classes = [$node->type];
+		} else {
+			throw new \PHPStan\ShouldNotHappenException();
+		}
 		$errors = [];
 		foreach ($classes as $className) {
 			$class = (string) $className;
@@ -43,7 +49,7 @@ class CatchedExceptionExistenceRule implements \PHPStan\Rules\Rule
 
 			$classReflection = $this->broker->getClass($class);
 			if (!$classReflection->isInterface() && !$classReflection->getNativeReflection()->implementsInterface(\Throwable::class)) {
-				$errors[] = sprintf('Catched class %s is not an exception.', $class);
+				$errors[] = sprintf('Catched class %s is not an exception.', $classReflection->getName());
 			}
 		}
 

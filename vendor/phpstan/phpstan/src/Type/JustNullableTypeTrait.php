@@ -21,6 +21,14 @@ trait JustNullableTypeTrait
 		return null;
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array
+	{
+		return [];
+	}
+
 	public function isNullable(): bool
 	{
 		return $this->nullable;
@@ -37,7 +45,7 @@ trait JustNullableTypeTrait
 			return $this->makeNullable();
 		}
 
-		return new MixedType($this->isNullable() || $otherType->isNullable());
+		return new MixedType();
 	}
 
 	public function makeNullable(): Type
@@ -56,7 +64,16 @@ trait JustNullableTypeTrait
 			return true;
 		}
 
+		if ($type instanceof UnionType && UnionTypeHelper::acceptsAll($this, $type)) {
+			return true;
+		}
+
 		return $type instanceof MixedType;
+	}
+
+	public function isDocumentableNatively(): bool
+	{
+		return true;
 	}
 
 }

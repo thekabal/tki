@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
-use PHPStan\Type\ArrayType;
 
 class ExistingClassesInPropertiesRule implements \PHPStan\Rules\Rule
 {
@@ -39,38 +38,24 @@ class ExistingClassesInPropertiesRule implements \PHPStan\Rules\Rule
 		}
 
 		$classReflection = $this->broker->getClass($className);
-		$propertyType = $classReflection->getProperty($node->name, $scope)->getType();
+		$propertyReflection = $classReflection->getProperty($node->name, $scope);
+		$propertyType = $propertyReflection->getType();
 
-		if ($propertyType instanceof ArrayType) {
-			$nestedItemType = $propertyType->getNestedItemType();
-			if ($nestedItemType->getItemType()->getClass() !== null && !$this->broker->hasClass($nestedItemType->getItemType()->getClass())) {
-				return [
-					sprintf(
-						'Property %s::$%s has unknown class %s as its array type.',
-						$className,
-						$node->name,
-						$propertyType->describe()
-					),
-				];
+		$errors = [];
+		foreach ($propertyType->getReferencedClasses() as $referencedClass) {
+			if ($this->broker->hasClass($referencedClass)) {
+				continue;
 			}
+
+			$errors[] = sprintf(
+				'Property %s::$%s has unknown class %s as its type.',
+				$propertyReflection->getDeclaringClass()->getName(),
+				$node->name,
+				$referencedClass
+			);
 		}
 
-		if ($propertyType->getClass() === null) {
-			return [];
-		}
-
-		if (!$this->broker->hasClass($propertyType->getClass())) {
-			return [
-				sprintf(
-					'Property %s::$%s has unknown class %s as its type.',
-					$className,
-					$node->name,
-					$propertyType->getClass()
-				),
-			];
-		}
-
-		return [];
+		return $errors;
 	}
 
 }

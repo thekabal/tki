@@ -1,9 +1,10 @@
 parameters:
 	bootstrap: null
-	debug_cli_browser:
 	excludes_analyse: []
 	autoload_directories: []
 	autoload_files: []
+	checkFunctionArgumentTypes: false
+	enableUnionTypes: false
 	polluteScopeWithLoopInitialAssignments: false
 	polluteCatchScopeWithTryAssignments: false
 	defineVariablesWithoutDefaultBranch: false
@@ -12,6 +13,7 @@ parameters:
 		- stdClass
 		- SimpleXMLElement
 	earlyTerminatingMethodCalls: []
+	memoryLimitFile: %tmpDir%/.memory_limit
 
 services:
 	-
@@ -60,6 +62,13 @@ services:
 
 	-
 		class: PHPStan\Command\AnalyseApplication
+		arguments:
+			memoryLimitFile: %memoryLimitFile%
+
+	-
+		class: PHPStan\FileHelper
+		arguments:
+			workingDirectory: %currentWorkingDirectory%
 
 	-
 		class: PHPStan\Parser\CachedParser
@@ -73,7 +82,13 @@ services:
 		implement: PHPStan\Reflection\FunctionReflectionFactory
 
 	-
+		class: PHPStan\Reflection\Annotations\AnnotationsPropertiesClassReflectionExtension
+
+	-
 		class: PHPStan\Reflection\Php\PhpClassReflectionExtension
+
+	-
+		class: PHPStan\Reflection\PhpDefect\PhpDefectClassReflectionExtension
 
 	-
 		implement: PHPStan\Reflection\Php\PhpMethodReflectionFactory
@@ -87,6 +102,8 @@ services:
 
 	-
 		class: PHPStan\Rules\FunctionCallParametersCheck
+		arguments:
+			checkArgumentTypes: %checkFunctionArgumentTypes%
 
 	-
 		class: PHPStan\Rules\FunctionDefinitionCheck
@@ -101,7 +118,12 @@ services:
 		class: PHPStan\Rules\RuleLevelHelper
 
 	-
+		class: PHPStan\Rules\UnusedFunctionParametersCheck
+
+	-
 		class: PHPStan\Type\FileTypeMapper
+		arguments:
+			enableUnionTypes: %enableUnionTypes%
 
 	broker:
 		class: PHPStan\Broker\Broker

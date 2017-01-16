@@ -24,6 +24,14 @@ class ObjectType implements Type
 		return $this->class;
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array
+	{
+		return [$this->getClass()];
+	}
+
 	public function isNullable(): bool
 	{
 		return $this->nullable;
@@ -31,7 +39,7 @@ class ObjectType implements Type
 
 	public function combineWith(Type $otherType): Type
 	{
-		if ($otherType instanceof self && $this->getClass() == $otherType->getClass()) {
+		if ($otherType instanceof self && $this->getClass() === $otherType->getClass()) {
 			return new self($this->getClass(), $this->isNullable() || $otherType->isNullable());
 		}
 
@@ -39,7 +47,7 @@ class ObjectType implements Type
 			return $this->makeNullable();
 		}
 
-		return new MixedType($this->isNullable() || $otherType->isNullable());
+		return new MixedType();
 	}
 
 	public function makeNullable(): Type
@@ -59,6 +67,10 @@ class ObjectType implements Type
 
 		if ($type instanceof StaticType) {
 			return $this->checkSubclassAcceptability($type->getBaseClass());
+		}
+
+		if ($type instanceof UnionType && UnionTypeHelper::acceptsAll($this, $type)) {
+			return true;
 		}
 
 		if ($type->getClass() === null) {
@@ -81,6 +93,11 @@ class ObjectType implements Type
 		$thisReflection = new \ReflectionClass($this->getClass());
 		$thatReflection = new \ReflectionClass($thatClass);
 
+		if ($thisReflection->getName() === $thatReflection->getName()) {
+			// class alias
+			return true;
+		}
+
 		if ($thisReflection->isInterface() && $thatReflection->isInterface()) {
 			return $thatReflection->implementsInterface($this->getClass());
 		}
@@ -90,7 +107,7 @@ class ObjectType implements Type
 
 	public function describe(): string
 	{
-		return $this->class;
+		return $this->class . ($this->nullable ? '|null' : '');
 	}
 
 	public function canAccessProperties(): bool
@@ -100,7 +117,12 @@ class ObjectType implements Type
 
 	public function canCallMethods(): bool
 	{
-		return $this->class !== 'stdClass';
+		return strtolower($this->class) !== 'stdclass';
+	}
+
+	public function isDocumentableNatively(): bool
+	{
+		return true;
 	}
 
 }

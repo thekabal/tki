@@ -16,6 +16,14 @@ class IterableIterableType implements IterableType
 		$this->nullable = $nullable;
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array
+	{
+		return $this->getItemType()->getReferencedClasses();
+	}
+
 	public function combineWith(Type $otherType): Type
 	{
 		if ($otherType instanceof IterableType) {
@@ -29,7 +37,7 @@ class IterableIterableType implements IterableType
 			return $this->makeNullable();
 		}
 
-		return new MixedType($this->isNullable() || $otherType->isNullable());
+		return new MixedType();
 	}
 
 	public function makeNullable(): Type
@@ -56,12 +64,45 @@ class IterableIterableType implements IterableType
 			return true;
 		}
 
+		if ($type instanceof UnionType && UnionTypeHelper::acceptsAll($this, $type)) {
+			return true;
+		}
+
 		return false;
 	}
 
 	public function describe(): string
 	{
-		return sprintf('iterable(%s[])', $this->getItemType()->describe());
+		return sprintf('iterable(%s[])', $this->getItemType()->describe()) . ($this->nullable ? '|null' : '');
+	}
+
+	public function isDocumentableNatively(): bool
+	{
+		return true;
+	}
+
+	public function resolveStatic(string $className): Type
+	{
+		if ($this->getItemType() instanceof StaticResolvableType) {
+			return new self(
+				$this->getItemType()->resolveStatic($className),
+				$this->isNullable()
+			);
+		}
+
+		return $this;
+	}
+
+	public function changeBaseClass(string $className): StaticResolvableType
+	{
+		if ($this->getItemType() instanceof StaticResolvableType) {
+			return new self(
+				$this->getItemType()->changeBaseClass($className),
+				$this->isNullable()
+			);
+		}
+
+		return $this;
 	}
 
 }

@@ -13,6 +13,14 @@ class NullType implements Type
 		return null;
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array
+	{
+		return [];
+	}
+
 	public function isNullable(): bool
 	{
 		return true;
@@ -46,6 +54,11 @@ class NullType implements Type
 	public function canCallMethods(): bool
 	{
 		return false;
+	}
+
+	public function isDocumentableNatively(): bool
+	{
+		return true;
 	}
 
 }
