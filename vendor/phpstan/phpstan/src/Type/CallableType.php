@@ -21,6 +21,14 @@ class CallableType implements Type
 		return null;
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array
+	{
+		return [];
+	}
+
 	public function isNullable(): bool
 	{
 		return $this->nullable;
@@ -40,7 +48,7 @@ class CallableType implements Type
 			return $this->makeNullable();
 		}
 
-		return new MixedType($this->isNullable() || $otherType->isNullable());
+		return new MixedType();
 	}
 
 	public function makeNullable(): Type
@@ -70,12 +78,16 @@ class CallableType implements Type
 			return true;
 		}
 
+		if ($type instanceof UnionType && UnionTypeHelper::acceptsAll($this, $type)) {
+			return true;
+		}
+
 		return $type instanceof MixedType;
 	}
 
 	public function describe(): string
 	{
-		return 'callable';
+		return 'callable' . ($this->nullable ? '|null' : '');
 	}
 
 	public function canAccessProperties(): bool
@@ -84,6 +96,11 @@ class CallableType implements Type
 	}
 
 	public function canCallMethods(): bool
+	{
+		return true;
+	}
+
+	public function isDocumentableNatively(): bool
 	{
 		return true;
 	}

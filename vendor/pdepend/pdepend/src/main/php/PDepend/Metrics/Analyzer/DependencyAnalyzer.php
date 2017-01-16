@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -54,7 +54,7 @@ use PDepend\Source\AST\ASTNamespace;
 /**
  * This visitor generates the metrics for the analyzed namespaces.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class DependencyAnalyzer extends AbstractAnalyzer
@@ -172,6 +172,8 @@ class DependencyAnalyzer extends AbstractAnalyzer
         if (isset($this->afferentNodes[$node->getId()])) {
             $afferents = $this->afferentNodes[$node->getId()];
         }
+        ksort($afferents);
+
         return $afferents;
     }
 
@@ -187,6 +189,8 @@ class DependencyAnalyzer extends AbstractAnalyzer
         if (isset($this->efferentNodes[$node->getId()])) {
             $efferents = $this->efferentNodes[$node->getId()];
         }
+        ksort($efferents);
+
         return $efferents;
     }
 

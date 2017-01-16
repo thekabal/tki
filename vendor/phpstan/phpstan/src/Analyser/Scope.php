@@ -26,6 +26,8 @@ use PHPStan\Reflection\ClassMemberReflection;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
+use PHPStan\Reflection\Php\PhpFunctionFromParserNodeReflection;
+use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -35,10 +37,14 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableIterableType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NonexistentParentClassType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StaticResolvableType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\ThisType;
+use PHPStan\Type\TrueOrFalseBooleanType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 
@@ -59,6 +65,11 @@ class Scope
 	 * @var string
 	 */
 	private $file;
+
+	/**
+	 * @var string
+	 */
+	private $analysedContextFile;
 
 	/**
 	 * @var bool
@@ -116,14 +127,39 @@ class Scope
 	private $moreSpecificTypes;
 
 	/**
+	 * @var bool
+	 */
+	private $inFirstLevelStatement;
+
+	/**
 	 * @var string[]
 	 */
 	private $currentlyAssignedVariables = [];
 
+	/**
+	 * @param \PHPStan\Broker\Broker $broker
+	 * @param \PhpParser\PrettyPrinter\Standard $printer
+	 * @param string $file
+	 * @param string|null $analysedContextFile
+	 * @param bool $declareStrictTypes
+	 * @param string|null $class
+	 * @param \PHPStan\Reflection\ParametersAcceptor|null $function
+	 * @param string|null $namespace
+	 * @param \PHPStan\Type\Type[] $variablesTypes
+	 * @param string|null $inClosureBindScopeClass
+	 * @param \PHPStan\Type\Type|null $inAnonymousFunctionReturnType
+	 * @param \PHPStan\Reflection\ClassReflection|null $anonymousClass
+	 * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null $inFunctionCall
+	 * @param bool $negated
+	 * @param \PHPStan\Type\Type[] $moreSpecificTypes
+	 * @param bool $inFirstLevelStatement
+	 * @param string[] $currentlyAssignedVariables
+	 */
 	public function __construct(
 		Broker $broker,
 		\PhpParser\PrettyPrinter\Standard $printer,
 		string $file,
+		string $analysedContextFile = null,
 		bool $declareStrictTypes = false,
 		string $class = null,
 		\PHPStan\Reflection\ParametersAcceptor $function = null,
@@ -135,6 +171,7 @@ class Scope
 		Expr $inFunctionCall = null,
 		bool $negated = false,
 		array $moreSpecificTypes = [],
+		bool $inFirstLevelStatement = true,
 		array $currentlyAssignedVariables = []
 	)
 	{
@@ -149,6 +186,7 @@ class Scope
 		$this->broker = $broker;
 		$this->printer = $printer;
 		$this->file = $file;
+		$this->analysedContextFile = $analysedContextFile !== null ? $analysedContextFile : $file;
 		$this->declareStrictTypes = $declareStrictTypes;
 		$this->class = $class;
 		$this->function = $function;
@@ -160,12 +198,18 @@ class Scope
 		$this->inFunctionCall = $inFunctionCall;
 		$this->negated = $negated;
 		$this->moreSpecificTypes = $moreSpecificTypes;
+		$this->inFirstLevelStatement = $inFirstLevelStatement;
 		$this->currentlyAssignedVariables = $currentlyAssignedVariables;
 	}
 
 	public function getFile(): string
 	{
 		return $this->file;
+	}
+
+	public function getAnalysedContextFile(): string
+	{
+		return $this->analysedContextFile;
 	}
 
 	public function isDeclareStrictTypes(): bool
@@ -179,6 +223,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			true
 		);
 	}
@@ -261,14 +306,14 @@ class Scope
 	}
 
 	/**
-	 * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|null
+	 * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
 	 */
 	public function getInFunctionCall()
 	{
 		return $this->inFunctionCall;
 	}
 
-	public function getType(Node $node): Type
+	public function getType(Expr $node): Type
 	{
 		if (
 			$node instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd
@@ -276,7 +321,7 @@ class Scope
 			|| $node instanceof \PhpParser\Node\Expr\BooleanNot
 			|| $node instanceof \PhpParser\Node\Expr\BinaryOp\LogicalXor
 		) {
-			return new BooleanType(false);
+			return new TrueOrFalseBooleanType(false);
 		}
 
 		if (
@@ -296,6 +341,22 @@ class Scope
 
 		if ($node instanceof Expr\BinaryOp\Spaceship) {
 			return new IntegerType(false);
+		}
+
+		if ($node instanceof Expr\Ternary) {
+			$elseType = $this->getType($node->else);
+			if ($node->if === null) {
+				return $this->getType($node->cond)->combineWith($elseType);
+			}
+			return $this->getType($node->if)->combineWith($elseType);
+		}
+
+		if ($node instanceof Expr\BinaryOp\Coalesce) {
+			return $this->getType($node->left)->combineWith($this->getType($node->right));
+		}
+
+		if ($node instanceof Expr\Clone_) {
+			return $this->getType($node->expr);
 		}
 
 		if (
@@ -349,11 +410,11 @@ class Scope
 			return new IntegerType(false);
 		} elseif ($node instanceof ConstFetch) {
 			$constName = strtolower((string) $node->name);
-			if (in_array($constName, ['true', 'false'], true)) {
-				return new BooleanType(false);
-			}
-
-			if ($constName === 'null') {
+			if ($constName === 'true') {
+				return new \PHPStan\Type\TrueBooleanType(false);
+			} elseif ($constName === 'false') {
+				return new \PHPStan\Type\FalseBooleanType(false);
+			} elseif ($constName === 'null') {
 				return new NullType();
 			}
 		} elseif ($node instanceof String_) {
@@ -368,7 +429,7 @@ class Scope
 					count($node->class->parts) === 1
 				) {
 					if ($node->class->parts[0] === 'static') {
-						return new MixedType(false);
+						return new StaticType($this->getClass(), false);
 					} elseif ($node->class->parts[0] === 'self') {
 						return new ObjectType($this->getClass(), false);
 					}
@@ -382,7 +443,7 @@ class Scope
 				$firstItem = $node->items[0]->value;
 				if (
 					(
-						$this->getType($firstItem) instanceof ObjectType
+						$this->getType($firstItem)->getClass() !== null
 						|| $this->getType($firstItem) instanceof StringType
 					)
 					&& $this->getType($node->items[1]->value) instanceof StringType
@@ -396,13 +457,13 @@ class Scope
 		} elseif ($node instanceof Int_) {
 				return new IntegerType(false);
 		} elseif ($node instanceof Bool_) {
-			return new BooleanType(false);
+			return new TrueOrFalseBooleanType(false);
 		} elseif ($node instanceof Double) {
 			return new FloatType(false);
 		} elseif ($node instanceof \PhpParser\Node\Expr\Cast\String_) {
 			return new StringType(false);
 		} elseif ($node instanceof \PhpParser\Node\Expr\Cast\Array_) {
-			return new ArrayType(new MixedType(true), false);
+			return new ArrayType(new MixedType(), false);
 		} elseif ($node instanceof Object_) {
 			return new ObjectType('stdClass', false);
 		} elseif ($node instanceof Unset_) {
@@ -413,7 +474,7 @@ class Scope
 				if ($constantClass === 'self') {
 					$constantClass = $this->getClass();
 				}
-			} else {
+			} elseif ($node->class instanceof Expr) {
 				$constantClassType = $this->getType($node->class);
 				if ($constantClassType->getClass() !== null) {
 					$constantClass = $constantClassType->getClass();
@@ -422,6 +483,9 @@ class Scope
 
 			if (isset($constantClass)) {
 				$constantName = $node->name;
+				if (strtolower($constantName) === 'class') {
+					return new StringType(false);
+				}
 				if ($this->broker->hasClass($constantClass)) {
 					$constantClassReflection = $this->broker->getClass($constantClass);
 					if ($constantClassReflection->hasConstant($constantName)) {
@@ -442,7 +506,7 @@ class Scope
 
 		if ($node instanceof Variable && is_string($node->name)) {
 			if (!$this->hasVariableType($node->name)) {
-				return new MixedType(true);
+				return new MixedType();
 			}
 
 			return $this->getVariableType($node->name);
@@ -465,7 +529,7 @@ class Scope
 					$methodCalledOnType->getClass()
 				);
 				if (!$methodClassReflection->hasMethod($node->name)) {
-					return new MixedType(true);
+					return new MixedType();
 				}
 
 				$methodReflection = $methodClassReflection->getMethod($node->name);
@@ -477,12 +541,9 @@ class Scope
 					return $dynamicMethodReturnTypeExtension->getTypeFromMethodCall($methodReflection, $node, $this);
 				}
 
-				if ($methodReflection->getReturnType() instanceof StaticType) {
-					if ($methodReflection->getReturnType()->isNullable()) {
-						return $methodCalledOnType->makeNullable();
-					}
-
-					return $methodCalledOnType;
+				$calledOnThis = $node->var instanceof Variable && is_string($node->var->name) && $node->var->name === 'this';
+				if (!$calledOnThis && $methodReflection->getReturnType() instanceof StaticResolvableType) {
+					return $methodReflection->getReturnType()->resolveStatic($methodCalledOnType->getClass());
 				}
 
 				return $methodReflection->getReturnType();
@@ -495,21 +556,23 @@ class Scope
 			if ($calleeClass !== null && $this->broker->hasClass($calleeClass)) {
 				$staticMethodClassReflection = $this->broker->getClass($calleeClass);
 				if (!$staticMethodClassReflection->hasMethod($node->name)) {
-					return new MixedType(true);
+					return new MixedType();
 				}
 				$staticMethodReflection = $staticMethodClassReflection->getMethod($node->name);
-				if ($staticMethodReflection->getReturnType() instanceof StaticType) {
+				foreach ($this->broker->getDynamicStaticMethodReturnTypeExtensionsForClass($calleeClass) as $dynamicStaticMethodReturnTypeExtension) {
+					if (!$dynamicStaticMethodReturnTypeExtension->isStaticMethodSupported($staticMethodReflection)) {
+						continue;
+					}
+
+					return $dynamicStaticMethodReturnTypeExtension->getTypeFromStaticMethodCall($staticMethodReflection, $node, $this);
+				}
+				if ($staticMethodReflection->getReturnType() instanceof StaticResolvableType) {
 					$nodeClassString = (string) $node->class;
 					if ($nodeClassString === 'parent' && $this->getClass() !== null) {
-						return new StaticType($this->getClass(), $staticMethodReflection->getReturnType()->isNullable());
+						return $staticMethodReflection->getReturnType()->changeBaseClass($this->getClass());
 					}
 
-					$calleeType = new ObjectType($calleeClass, false);
-					if ($staticMethodReflection->getReturnType()->isNullable()) {
-						return $calleeType->makeNullable();
-					}
-
-					return $calleeType;
+					return $staticMethodReflection->getReturnType()->resolveStatic($calleeClass);
 				}
 				return $staticMethodReflection->getReturnType();
 			}
@@ -525,7 +588,7 @@ class Scope
 					$propertyFetchedOnType->getClass()
 				);
 				if (!$propertyClassReflection->hasProperty($node->name)) {
-					return new MixedType(true);
+					return new MixedType();
 				}
 
 				return $propertyClassReflection->getProperty($node->name, $this)->getType();
@@ -539,7 +602,7 @@ class Scope
 					$staticPropertyHolderClass
 				);
 				if (!$staticPropertyClassReflection->hasProperty($node->name)) {
-					return new MixedType(true);
+					return new MixedType();
 				}
 
 				return $staticPropertyClassReflection->getProperty($node->name, $this)->getType();
@@ -558,7 +621,7 @@ class Scope
 				&& $node->args[$arrayFunctionsThatDependOnClosureReturnType[$functionName]]->value instanceof Expr\Closure
 			) {
 				$closure = $node->args[$arrayFunctionsThatDependOnClosureReturnType[$functionName]]->value;
-				$anonymousFunctionType = $this->getAnonymousFunctionType($closure->returnType, $closure->returnType === null);
+				$anonymousFunctionType = $this->getFunctionType($closure->returnType, $closure->returnType === null, false);
 				if ($functionName === 'array_reduce') {
 					return $anonymousFunctionType;
 				}
@@ -582,14 +645,27 @@ class Scope
 				return $this->getType($argumentValue);
 			}
 
+			$arrayFunctionsThatCreateArrayBasedOnArgumentType = [
+				'array_fill' => 2,
+				'array_fill_keys' => 1,
+			];
+			if (
+				isset($arrayFunctionsThatCreateArrayBasedOnArgumentType[$functionName])
+				&& isset($node->args[$arrayFunctionsThatCreateArrayBasedOnArgumentType[$functionName]])
+			) {
+				$argumentValue = $node->args[$arrayFunctionsThatCreateArrayBasedOnArgumentType[$functionName]]->value;
+
+				return new ArrayType($this->getType($argumentValue), false, true);
+			}
+
 			if (!$this->broker->hasFunction($node->name, $this)) {
-				return new MixedType(true);
+				return new MixedType();
 			}
 
 			return $this->broker->getFunction($node->name, $this)->getReturnType();
 		}
 
-		return new MixedType(false);
+		return new MixedType();
 	}
 
 	/**
@@ -624,7 +700,7 @@ class Scope
 		} elseif (is_float($value)) {
 			return new FloatType(false);
 		} elseif (is_bool($value)) {
-			return new BooleanType(false);
+			return new TrueOrFalseBooleanType(false);
 		} elseif ($value === null) {
 			return new NullType();
 		} elseif (is_string($value)) {
@@ -645,7 +721,7 @@ class Scope
 	private function getCombinedType(array $types): Type
 	{
 		if (count($types) === 0) {
-			return new MixedType(true);
+			return new MixedType();
 		}
 
 		$itemType = reset($types);
@@ -661,7 +737,7 @@ class Scope
 		return $itemType;
 	}
 
-	public function isSpecified(Node $node): bool
+	public function isSpecified(Expr $node): bool
 	{
 		$exprString = $this->printer->prettyPrintExpr($node);
 
@@ -674,19 +750,90 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$className,
 			null,
 			$this->getNamespace(),
 			[
-				'this' => new ObjectType($className, false),
+				'this' => new ThisType($className, false),
 			]
 		);
 	}
 
-	public function enterFunction(
-		ParametersAcceptor $functionReflection
+	public function changeAnalysedContextFile(string $fileName): self
+	{
+		return new self(
+			$this->broker,
+			$this->printer,
+			$this->getFile(),
+			$fileName,
+			$this->isDeclareStrictTypes(),
+			$this->getClass(),
+			$this->getFunction(),
+			$this->getNamespace(),
+			$this->getVariableTypes(),
+			$this->inClosureBindScopeClass,
+			$this->getAnonymousFunctionReturnType(),
+			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
+			$this->getInFunctionCall(),
+			$this->isNegated(),
+			$this->moreSpecificTypes
+		);
+	}
+
+	public function enterClassMethod(
+		Node\Stmt\ClassMethod $classMethod,
+		array $phpDocParameterTypes,
+		Type $phpDocReturnType = null
 	): self
+	{
+		return $this->enterFunctionLike(
+			new PhpMethodFromParserNodeReflection(
+				$this->getClass() !== null ? $this->broker->getClass($this->getClass()) : $this->getAnonymousClass(),
+				$classMethod,
+				$this->getRealParameterTypes($classMethod),
+				$phpDocParameterTypes,
+				$classMethod->returnType !== null,
+				$this->getFunctionType($classMethod->returnType, $classMethod->returnType === null, false),
+				$phpDocReturnType
+			)
+		);
+	}
+
+	private function getRealParameterTypes(Node\FunctionLike $functionLike): array
+	{
+		$realParameterTypes = [];
+		foreach ($functionLike->getParams() as $parameter) {
+			$realParameterTypes[$parameter->name] = $this->getFunctionType(
+				$parameter->type,
+				$this->isParameterValueNullable($parameter),
+				$parameter->variadic
+			);
+		}
+
+		return $realParameterTypes;
+	}
+
+	public function enterFunction(
+		Node\Stmt\Function_ $function,
+		array $phpDocParameterTypes,
+		Type $phpDocReturnType = null
+	): self
+	{
+		return $this->enterFunctionLike(
+			new PhpFunctionFromParserNodeReflection(
+				$function,
+				$this->getRealParameterTypes($function),
+				$phpDocParameterTypes,
+				$function->returnType !== null,
+				$this->getFunctionType($function->returnType, $function->returnType === null, false),
+				$phpDocReturnType
+			)
+		);
+	}
+
+	private function enterFunctionLike(ParametersAcceptor $functionReflection): self
 	{
 		$variableTypes = $this->getVariableTypes();
 		foreach ($functionReflection->getParameters() as $parameter) {
@@ -697,11 +844,15 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$functionReflection,
 			$this->getNamespace(),
-			$variableTypes
+			$variableTypes,
+			null,
+			null,
+			$this->anonymousClass
 		);
 	}
 
@@ -711,6 +862,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			null,
 			null,
@@ -736,6 +888,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -756,12 +909,13 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			null,
 			null,
 			$this->getNamespace(),
 			[
-				'this' => new MixedType(false),
+				'this' => new MixedType(),
 			],
 			$this->inClosureBindScopeClass,
 			$this->getAnonymousFunctionReturnType(),
@@ -773,7 +927,7 @@ class Scope
 	/**
 	 * @param \PhpParser\Node\Param[] $parameters
 	 * @param \PhpParser\Node\Expr\ClosureUse[] $uses
-	 * @param \PhpParser\Node\Name|string|null $returnTypehint
+	 * @param \PhpParser\Node\Name|string|\PhpParser\Node\NullableType|null $returnTypehint
 	 * @return self
 	 */
 	public function enterAnonymousFunction(
@@ -784,18 +938,15 @@ class Scope
 	{
 		$variableTypes = [];
 		foreach ($parameters as $parameter) {
-			$isNullable = false;
-			if ($parameter->default instanceof ConstFetch && $parameter->default->name instanceof Name) {
-				$isNullable = strtolower((string) $parameter->default->name) === 'null';
-			}
+			$isNullable = $this->isParameterValueNullable($parameter);
 
-			$variableTypes[$parameter->name] = $this->getAnonymousFunctionType($parameter->type, $isNullable);
+			$variableTypes[$parameter->name] = $this->getFunctionType($parameter->type, $isNullable, $parameter->variadic);
 		}
 
 		foreach ($uses as $use) {
 			if (!$this->hasVariableType($use->var)) {
 				if ($use->byRef) {
-					$variableTypes[$use->var] = new MixedType(true);
+					$variableTypes[$use->var] = new MixedType();
 				}
 				continue;
 			}
@@ -806,12 +957,13 @@ class Scope
 			$variableTypes['this'] = $this->getVariableType('this');
 		}
 
-		$returnType = $this->getAnonymousFunctionType($returnTypehint, $returnTypehint === null);
+		$returnType = $this->getFunctionType($returnTypehint, $returnTypehint === null, false);
 
 		return new self(
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -824,62 +976,99 @@ class Scope
 		);
 	}
 
+	private function isParameterValueNullable(Node\Param $parameter): bool
+	{
+		if ($parameter->default instanceof ConstFetch && $parameter->default->name instanceof Name) {
+			return strtolower((string) $parameter->default->name) === 'null';
+		}
+
+		return false;
+	}
+
 	/**
-	 * @param \PhpParser\Node\Name|string|null $type
+	 * @param \PhpParser\Node\Name|string|\PhpParser\Node\NullableType|null $type
 	 * @param bool $isNullable
+	 * @param bool $isVariadic
 	 * @return Type
 	 */
-	private function getAnonymousFunctionType($type = null, bool $isNullable): Type
+	private function getFunctionType($type = null, bool $isNullable, bool $isVariadic): Type
 	{
+		if ($isVariadic) {
+			return new ArrayType($this->getFunctionType(
+				$type,
+				$isNullable,
+				false
+			), false);
+		}
 		if ($type === null) {
-			return new MixedType(true);
+			return new MixedType();
 		} elseif ($type === 'string') {
 			return new StringType($isNullable);
 		} elseif ($type === 'int') {
 			return new IntegerType($isNullable);
 		} elseif ($type === 'bool') {
-			return new BooleanType($isNullable);
+			return new TrueOrFalseBooleanType($isNullable);
 		} elseif ($type === 'float') {
 			return new FloatType($isNullable);
 		} elseif ($type === 'callable') {
 			return new CallableType($isNullable);
 		} elseif ($type === 'array') {
-			return new ArrayType(new MixedType(true), $isNullable);
+			return new ArrayType(new MixedType(), $isNullable);
 		} elseif ($type instanceof Name) {
 			$className = (string) $type;
 			if ($className === 'self') {
 				$className = $this->getClass();
+			} elseif (
+				$className === 'parent'
+			) {
+				if (
+					$this->getClass() !== null
+					&& $this->broker->hasClass($this->getClass())
+				) {
+					$classReflection = $this->broker->getClass($this->getClass());
+				} elseif ($this->isInAnonymousClass()) {
+					$classReflection = $this->getAnonymousClass();
+				} else {
+					return new NonexistentParentClassType(false);
+				}
+
+				if ($classReflection->getParentClass() !== false) {
+					return new ObjectType($classReflection->getParentClass()->getName(), $isNullable);
+				}
+
+				return new NonexistentParentClassType(false);
 			}
 			return new ObjectType($className, $isNullable);
 		} elseif ($type === 'iterable') {
-			return new IterableIterableType(new MixedType(true), $isNullable);
+			return new IterableIterableType(new MixedType(), $isNullable);
 		} elseif ($type === 'void') {
 			return new VoidType();
 		} elseif ($type instanceof Node\NullableType) {
-			return $this->getAnonymousFunctionType($type->type, true);
+			return $this->getFunctionType($type->type, true, $isVariadic);
 		}
 
-		return new MixedType($isNullable);
+		return new MixedType();
 	}
 
-	public function enterForeach(Node $iteratee, string $valueName, string $keyName = null): self
+	public function enterForeach(Expr $iteratee, string $valueName, string $keyName = null): self
 	{
 		$iterateeType = $this->getType($iteratee);
 		$variableTypes = $this->getVariableTypes();
 		if ($iterateeType instanceof IterableType) {
 			$variableTypes[$valueName] = $iterateeType->getItemType();
 		} else {
-			$variableTypes[$valueName] = new MixedType(true);
+			$variableTypes[$valueName] = new MixedType();
 		}
 
 		if ($keyName !== null) {
-			$variableTypes[$keyName] = new MixedType(false);
+			$variableTypes[$keyName] = new MixedType();
 		}
 
 		return new self(
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -906,7 +1095,7 @@ class Scope
 		if (count($classes) === 1) {
 			$type = new ObjectType((string) $classes[0], false);
 		} else {
-			$type = new MixedType(false);
+			$type = new MixedType();
 		}
 		$variableTypes[$variableName] = $type;
 
@@ -914,6 +1103,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -938,6 +1128,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -948,7 +1139,8 @@ class Scope
 			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
 			$functionCall,
 			$this->isNegated(),
-			$this->moreSpecificTypes
+			$this->moreSpecificTypes,
+			$this->inFirstLevelStatement
 		);
 	}
 
@@ -961,6 +1153,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -972,6 +1165,7 @@ class Scope
 			$this->getInFunctionCall(),
 			$this->isNegated(),
 			$this->moreSpecificTypes,
+			$this->isInFirstLevelStatement(),
 			$currentlyAssignedVariables
 		);
 	}
@@ -989,12 +1183,13 @@ class Scope
 		$variableTypes = $this->getVariableTypes();
 		$variableTypes[$variableName] = $type !== null
 			? $type
-			: new MixedType(true);
+			: new MixedType();
 
 		return new self(
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -1005,7 +1200,8 @@ class Scope
 			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
 			$this->getInFunctionCall(),
 			$this->isNegated(),
-			$this->moreSpecificTypes
+			$this->moreSpecificTypes,
+			$this->inFirstLevelStatement
 		);
 	}
 
@@ -1021,6 +1217,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -1031,7 +1228,8 @@ class Scope
 			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
 			$this->getInFunctionCall(),
 			$this->isNegated(),
-			$this->moreSpecificTypes
+			$this->moreSpecificTypes,
+			$this->inFirstLevelStatement
 		);
 	}
 
@@ -1052,6 +1250,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -1062,7 +1261,8 @@ class Scope
 			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
 			$this->getInFunctionCall(),
 			$this->isNegated(),
-			$this->moreSpecificTypes
+			$this->moreSpecificTypes,
+			$this->inFirstLevelStatement
 		);
 	}
 
@@ -1080,6 +1280,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -1090,11 +1291,12 @@ class Scope
 			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
 			$this->getInFunctionCall(),
 			$this->isNegated(),
-			$this->moreSpecificTypes
+			$this->moreSpecificTypes,
+			$this->inFirstLevelStatement
 		);
 	}
 
-	public function specifyExpressionType(Node $expr, Type $type): self
+	public function specifyExpressionType(Expr $expr, Type $type): self
 	{
 		if ($expr instanceof Variable && is_string($expr->name)) {
 			$variableName = $expr->name;
@@ -1106,6 +1308,7 @@ class Scope
 				$this->broker,
 				$this->printer,
 				$this->getFile(),
+				$this->getAnalysedContextFile(),
 				$this->isDeclareStrictTypes(),
 				$this->getClass(),
 				$this->getFunction(),
@@ -1116,7 +1319,8 @@ class Scope
 				$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
 				$this->getInFunctionCall(),
 				$this->isNegated(),
-				$this->moreSpecificTypes
+				$this->moreSpecificTypes,
+				$this->inFirstLevelStatement
 			);
 		}
 
@@ -1132,7 +1336,16 @@ class Scope
 		$exprString = $this->printer->prettyPrintExpr($expr);
 
 		return $this->addMoreSpecificTypes([
-			$exprString => new MixedType(false),
+			$exprString => new MixedType(),
+		]);
+	}
+
+	public function specifyFetchedStaticPropertyFromIsset(Expr\StaticPropertyFetch $expr): self
+	{
+		$exprString = $this->printer->prettyPrintExpr($expr);
+
+		return $this->addMoreSpecificTypes([
+			$exprString => new MixedType(),
 		]);
 	}
 
@@ -1142,6 +1355,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -1152,8 +1366,60 @@ class Scope
 			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
 			$this->getInFunctionCall(),
 			!$this->isNegated(),
-			$this->moreSpecificTypes
+			$this->moreSpecificTypes,
+			$this->inFirstLevelStatement
 		);
+	}
+
+	public function enterFirstLevelStatements(): self
+	{
+		return new self(
+			$this->broker,
+			$this->printer,
+			$this->getFile(),
+			$this->getAnalysedContextFile(),
+			$this->isDeclareStrictTypes(),
+			$this->getClass(),
+			$this->getFunction(),
+			$this->getNamespace(),
+			$this->getVariableTypes(),
+			$this->inClosureBindScopeClass,
+			$this->getAnonymousFunctionReturnType(),
+			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
+			$this->getInFunctionCall(),
+			$this->isNegated(),
+			$this->moreSpecificTypes,
+			true,
+			$this->currentlyAssignedVariables
+		);
+	}
+
+	public function exitFirstLevelStatements(): self
+	{
+		return new self(
+			$this->broker,
+			$this->printer,
+			$this->getFile(),
+			$this->getAnalysedContextFile(),
+			$this->isDeclareStrictTypes(),
+			$this->getClass(),
+			$this->getFunction(),
+			$this->getNamespace(),
+			$this->getVariableTypes(),
+			$this->inClosureBindScopeClass,
+			$this->getAnonymousFunctionReturnType(),
+			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
+			$this->getInFunctionCall(),
+			$this->isNegated(),
+			$this->moreSpecificTypes,
+			false,
+			$this->currentlyAssignedVariables
+		);
+	}
+
+	public function isInFirstLevelStatement(): bool
+	{
+		return $this->inFirstLevelStatement;
 	}
 
 	public function isNegated(): bool
@@ -1172,6 +1438,7 @@ class Scope
 			$this->broker,
 			$this->printer,
 			$this->getFile(),
+			$this->getAnalysedContextFile(),
 			$this->isDeclareStrictTypes(),
 			$this->getClass(),
 			$this->getFunction(),
@@ -1182,7 +1449,8 @@ class Scope
 			$this->isInAnonymousClass() ? $this->getAnonymousClass() : null,
 			$this->getInFunctionCall(),
 			$this->isNegated(),
-			$moreSpecificTypes
+			$moreSpecificTypes,
+			$this->inFirstLevelStatement
 		);
 	}
 
@@ -1193,7 +1461,11 @@ class Scope
 
 	public function canCallMethod(MethodReflection $methodReflection): bool
 	{
-		return $this->canAccessClassMember($methodReflection);
+		if ($this->canAccessClassMember($methodReflection)) {
+			return true;
+		}
+
+		return $this->canAccessClassMember($methodReflection->getPrototype());
 	}
 
 	public function canAccessConstant(ClassConstantReflection $constantReflection): bool
@@ -1208,19 +1480,18 @@ class Scope
 		}
 
 		$class = $this->inClosureBindScopeClass !== null ? $this->inClosureBindScopeClass : $this->getClass();
-		if ($class === null) {
-			return false;
-		}
-		if (!$this->broker->hasClass($class)) {
+		if ($class !== null && $this->broker->hasClass($class)) {
+			$currentClassReflection = $this->broker->getClass($class);
+		} elseif ($this->isInAnonymousClass()) {
+			$currentClassReflection = $this->getAnonymousClass();
+		} else {
 			return false;
 		}
 
 		$classReflectionName = $classMemberReflection->getDeclaringClass()->getName();
 		if ($classMemberReflection->isPrivate()) {
-			return $class === $classReflectionName;
+			return $currentClassReflection->getName() === $classReflectionName;
 		}
-
-		$currentClassReflection = $this->broker->getClass($class);
 
 		// protected
 
@@ -1231,8 +1502,7 @@ class Scope
 			return true;
 		}
 
-		return $classMemberReflection->isStatic()
-			&& $classMemberReflection->getDeclaringClass()->isSubclassOf($class);
+		return $classMemberReflection->getDeclaringClass()->isSubclassOf($currentClassReflection->getName());
 	}
 
 }

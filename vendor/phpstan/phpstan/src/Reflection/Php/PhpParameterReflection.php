@@ -41,11 +41,11 @@ class PhpParameterReflection implements ParameterReflection
 			if ($phpDocType !== null && $this->reflection->isDefaultValueAvailable() && $this->reflection->getDefaultValue() === null) {
 				$phpDocType = $phpDocType->makeNullable();
 			}
-			$this->type = TypehintHelper::decideType(
+			$this->type = TypehintHelper::decideTypeFromReflection(
 				$this->reflection->getType(),
 				$phpDocType,
 				$this->reflection->getDeclaringClass() !== null ? $this->reflection->getDeclaringClass()->getName() : null,
-				$this->reflection->isVariadic()
+				$this->isVariadic()
 			);
 		}
 
@@ -55,6 +55,11 @@ class PhpParameterReflection implements ParameterReflection
 	public function isPassedByReference(): bool
 	{
 		return $this->reflection->isPassedByReference();
+	}
+
+	public function isVariadic(): bool
+	{
+		return $this->reflection->isVariadic();
 	}
 
 }

@@ -3,6 +3,7 @@
 namespace PHPStan\Analyser;
 
 use PHPStan\Broker\Broker;
+use PHPStan\FileHelper;
 use PHPStan\Parser\Parser;
 use PHPStan\Rules\Registry;
 
@@ -51,6 +52,9 @@ class Analyser
 	 */
 	private $bootstrapFile;
 
+	/** @var \PHPStan\FileHelper */
+	private $fileHelper;
+
 	/**
 	 * @param \PHPStan\Broker\Broker $broker
 	 * @param \PHPStan\Parser\Parser $parser
@@ -60,6 +64,7 @@ class Analyser
 	 * @param string[] $analyseExcludes
 	 * @param string[] $ignoreErrors
 	 * @param string|null $bootstrapFile
+	 * @param \PHPStan\FileHelper $fileHelper
 	 */
 	public function __construct(
 		Broker $broker,
@@ -69,7 +74,8 @@ class Analyser
 		\PhpParser\PrettyPrinter\Standard $printer,
 		array $analyseExcludes,
 		array $ignoreErrors,
-		string $bootstrapFile = null
+		string $bootstrapFile = null,
+		FileHelper $fileHelper
 	)
 	{
 		$this->broker = $broker;
@@ -77,19 +83,27 @@ class Analyser
 		$this->registry = $registry;
 		$this->nodeScopeResolver = $nodeScopeResolver;
 		$this->printer = $printer;
-		$this->analyseExcludes = array_map(function (string $exclude): string {
-			return str_replace('/', DIRECTORY_SEPARATOR, $exclude);
+		$this->analyseExcludes = array_map(function (string $exclude) use ($fileHelper): string {
+			$normalized = $fileHelper->normalizePath($exclude);
+
+			if ($this->isFnmatchPattern($normalized)) {
+				return $normalized;
+			}
+
+			return $fileHelper->absolutizePath($normalized);
 		}, $analyseExcludes);
 		$this->ignoreErrors = $ignoreErrors;
 		$this->bootstrapFile = $bootstrapFile;
+		$this->fileHelper = $fileHelper;
 	}
 
 	/**
 	 * @param string[] $files
+	 * @param bool $onlyFiles
 	 * @param \Closure|null $progressCallback
 	 * @return string[]|\PHPStan\Analyser\Error[] errors
 	 */
-	public function analyse(array $files, \Closure $progressCallback = null): array
+	public function analyse(array $files, bool $onlyFiles, \Closure $progressCallback = null): array
 	{
 		$errors = [];
 
@@ -119,6 +133,8 @@ class Analyser
 		}
 
 		foreach ($files as $file) {
+			$file = $this->fileHelper->normalizePath($file);
+
 			try {
 				if ($this->isExcludedFromAnalysing($file)) {
 					if ($progressCallback !== null) {
@@ -133,11 +149,14 @@ class Analyser
 					$this->parser->parseFile($file),
 					new Scope($this->broker, $this->printer, $file),
 					function (\PhpParser\Node $node, Scope $scope) use (&$fileErrors) {
+						if ($node instanceof \PhpParser\Node\Stmt\Trait_) {
+							return;
+						}
 						$classes = array_merge([get_class($node)], class_parents($node));
 						foreach ($this->registry->getRules($classes) as $rule) {
 							$ruleErrors = $this->createErrors(
 								$node,
-								$scope->getFile(),
+								$scope->getAnalysedContextFile(),
 								$rule->processNode($node, $scope)
 							);
 							$fileErrors = array_merge($fileErrors, $ruleErrors);
@@ -150,11 +169,10 @@ class Analyser
 
 				$errors = array_merge($errors, $fileErrors);
 			} catch (\PhpParser\Error $e) {
-				$errors[] = new Error($e->getMessage(), $file);
+				$errors[] = new Error($e->getMessage(), $file, $e->getStartLine() !== -1 ? $e->getStartLine() : null);
 			} catch (\PHPStan\AnalysedCodeException $e) {
 				$errors[] = new Error($e->getMessage(), $file);
 			} catch (\Throwable $t) {
-				\Tracy\Debugger::log($t);
 				$errors[] = new Error(sprintf('Internal error: %s', $t->getMessage()), $file);
 			}
 		}
@@ -171,11 +189,13 @@ class Analyser
 			return true;
 		}));
 
-		foreach ($unmatchedIgnoredErrors as $unmatchedIgnoredError) {
-			$errors[] = sprintf(
-				'Ignored error pattern %s was not matched in reported errors.',
-				$unmatchedIgnoredError
-			);
+		if (!$onlyFiles) {
+			foreach ($unmatchedIgnoredErrors as $unmatchedIgnoredError) {
+				$errors[] = sprintf(
+					'Ignored error pattern %s was not matched in reported errors.',
+					$unmatchedIgnoredError
+				);
+			}
 		}
 
 		return $errors;
@@ -200,15 +220,21 @@ class Analyser
 	public function isExcludedFromAnalysing(string $file): bool
 	{
 		foreach ($this->analyseExcludes as $exclude) {
-			$realpathedExclude = realpath($exclude);
-			if (($realpathedExclude !== false
-				&& strpos($file, $realpathedExclude) === 0)
-				|| fnmatch($exclude, $file)) {
+			if (strpos($file, $exclude) === 0) {
+				return true;
+			}
+
+			if ($this->isFnmatchPattern($exclude) && fnmatch($exclude, $file, DIRECTORY_SEPARATOR === '\\' ? FNM_NOESCAPE : 0)) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	private function isFnmatchPattern(string $path): bool
+	{
+		return preg_match('~[*?[\]]~', $path) > 0;
 	}
 
 }

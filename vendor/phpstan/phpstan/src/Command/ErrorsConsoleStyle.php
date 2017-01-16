@@ -10,12 +10,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ErrorsConsoleStyle extends \Symfony\Component\Console\Style\SymfonyStyle
 {
 
+	const OPTION_NO_PROGRESS = 'no-progress';
+
+	/** @var bool */
+	private $showProgress;
+
 	/** @var \Symfony\Component\Console\Output\OutputInterface */
 	private $output;
+
+	/** @var \Symfony\Component\Console\Helper\ProgressBar|null */
+	private $progressBar;
 
 	public function __construct(InputInterface $input, OutputInterface $output)
 	{
 		parent::__construct($input, $output);
+		$this->showProgress = !$input->getOption(self::OPTION_NO_PROGRESS);
 		$this->output = $output;
 	}
 
@@ -58,15 +67,49 @@ class ErrorsConsoleStyle extends \Symfony\Component\Console\Style\SymfonyStyle
 	 */
 	public function createProgressBar($max = 0): ProgressBar
 	{
-		$progressBar = new ThrottledProgressBar($this->output, $max);
+		$this->progressBar = parent::createProgressBar($max);
+		return $this->progressBar;
+	}
 
-		if (DIRECTORY_SEPARATOR !== '\\') {
-			$progressBar->setEmptyBarCharacter('░'); // light shade character \u2591
-			$progressBar->setProgressCharacter('');
-			$progressBar->setBarCharacter('▓'); // dark shade character \u2593
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @param int $max
+	 */
+	public function progressStart($max = 0)
+	{
+		if (!$this->showProgress) {
+			return;
+		}
+		parent::progressStart($max);
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @param int $step
+	 */
+	public function progressAdvance($step = 1)
+	{
+		if (!$this->showProgress) {
+			return;
+		}
+		if ($this->output->isDecorated() && $step > 0) {
+			$stepTime = (time() - $this->progressBar->getStartTime()) / $step;
+			if ($stepTime > 0 && $stepTime < 1) {
+				$this->progressBar->setRedrawFrequency(1 / $stepTime);
+			} else {
+				$this->progressBar->setRedrawFrequency(1);
+			}
 		}
 
-		return $progressBar;
+		$this->progressBar->setProgress($this->progressBar->getProgress() + $step);
+	}
+
+	public function progressFinish()
+	{
+		if (!$this->showProgress) {
+			return;
+		}
+		parent::progressFinish();
 	}
 
 }

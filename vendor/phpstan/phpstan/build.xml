@@ -45,11 +45,12 @@
 				passthru="true"
 				checkreturn="true"
 		>
-			<arg value="--standard=ruleset.xml"/>
+			<arg value="--standard=build/ruleset.xml"/>
 			<arg value="--extensions=php"/>
 			<arg value="--encoding=utf-8"/>
 			<arg value="--tab-width=4"/>
 			<arg value="--ignore=tests/*/data"/>
+			<arg value="--ignore=tests/*/traits"/>
 			<arg value="-sp"/>
 			<arg path="src"/>
 			<arg path="tests"/>
@@ -63,7 +64,7 @@
 				passthru="true"
 				checkreturn="true"
 		>
-			<arg value="--standard=ruleset.xml"/>
+			<arg value="--standard=build/ruleset.xml"/>
 			<arg value="--extensions=php"/>
 			<arg value="--encoding=utf-8"/>
 			<arg value="--tab-width=4"/>
@@ -89,26 +90,28 @@
 
 	<target name="phpstan">
 		<php expression="PHP_VERSION_ID &lt; 70100 ?'true':'false'" returnProperty="isPHP70" level="verbose" />
+		<php expression="\PHPStan\TestCase::isObsoletePhpParserVersion() ?'.old-php-parser':''" returnProperty="phpParserSuffix" level="verbose" />
 		<if>
 			<equals arg1="${isPHP70}" arg2="true" />
 			<then>
-				<property name="phpstan.config" value="phpstan.php7.0.neon"/>
+				<property name="phpstan.config" value="build/phpstan.php7.0${phpParserSuffix}.neon"/>
 			</then>
 			<else>
-				<property name="phpstan.config" value="phpstan.neon"/>
+				<property name="phpstan.config" value="build/phpstan${phpParserSuffix}.neon"/>
 			</else>
 		</if>
 		<exec
-				executable="bin/phpstan"
+				executable="php"
 				logoutput="true"
 				passthru="true"
 				checkreturn="true"
 		>
+			<arg path="bin/phpstan"/>
 			<arg value="analyse"/>
 			<arg value="-c"/>
 			<arg path="${phpstan.config}"/>
 			<arg value="-l"/>
-			<arg value="4"/>
+			<arg value="5"/>
 			<arg path="src"/>
 			<arg path="tests"/>
 		</exec>

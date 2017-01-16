@@ -72,11 +72,21 @@ class CallMethodsRule implements \PHPStan\Rules\Rule
 			];
 		}
 		$methodClass = $type->getClass();
-		if ($methodClass === null || !$this->broker->hasClass($methodClass)) {
+		if ($methodClass === null) {
 			return [];
 		}
 
-		$name = (string) $node->name;
+		$name = $node->name;
+		if (!$this->broker->hasClass($methodClass)) {
+			return [
+				sprintf(
+					'Call to method %s() on an unknown class %s.',
+					$name,
+					$methodClass
+				),
+			];
+		}
+
 		$methodClassReflection = $this->broker->getClass($methodClass);
 		if (!$methodClassReflection->hasMethod($name)) {
 			$parentClassReflection = $methodClassReflection->getParentClass();
@@ -113,6 +123,7 @@ class CallMethodsRule implements \PHPStan\Rules\Rule
 
 		$errors = $this->check->check(
 			$methodReflection,
+			$scope,
 			$node,
 			[
 				'Method ' . $messagesMethodName . ' invoked with %d parameter, %d required.',
@@ -121,10 +132,12 @@ class CallMethodsRule implements \PHPStan\Rules\Rule
 				'Method ' . $messagesMethodName . ' invoked with %d parameters, at least %d required.',
 				'Method ' . $messagesMethodName . ' invoked with %d parameter, %d-%d required.',
 				'Method ' . $messagesMethodName . ' invoked with %d parameters, %d-%d required.',
+				'Parameter #%d %s of method ' . $messagesMethodName . ' expects %s, %s given.',
+				'Result of method ' . $messagesMethodName . ' (void) is used.',
 			]
 		);
 
-		if ($methodReflection->getName() !== $name) {
+		if (strtolower($methodReflection->getName()) === strtolower($name) && $methodReflection->getName() !== $name) {
 			$errors[] = sprintf('Call to method %s with incorrect case: %s', $messagesMethodName, $name);
 		}
 

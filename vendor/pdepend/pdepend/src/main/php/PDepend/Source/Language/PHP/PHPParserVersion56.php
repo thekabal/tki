@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,13 +36,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 2.3
  */
 
 namespace PDepend\Source\Language\PHP;
 
+use PDepend\Source\AST\ASTArguments;
 use PDepend\Source\AST\ASTValue;
 use PDepend\Source\Parser\UnexpectedTokenException;
 use PDepend\Source\Tokenizer\Tokenizer;
@@ -51,7 +52,7 @@ use PDepend\Source\Tokenizer\Tokens;
 /**
  * Concrete parser implementation that supports features up to PHP version 5.6.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 2.3
  */
@@ -225,7 +226,6 @@ abstract class PHPParserVersion56 extends PHPParserVersion55
         if ($count == 0) {
             return null;
         } elseif ($count == 1) {
-
             // @todo ASTValue must be a valid node.
             $value->setValue($expressions[0]);
 
@@ -321,5 +321,36 @@ abstract class PHPParserVersion56 extends PHPParserVersion55
 
                 return $expr;
         }
+    }
+
+    /**
+     * @param \PDepend\Source\AST\ASTArguments $arguments
+     * @return \PDepend\Source\AST\ASTArguments
+     */
+    protected function parseArgumentList(ASTArguments $arguments)
+    {
+        while (true) {
+            $this->consumeComments();
+            if (Tokens::T_ELLIPSIS === $this->tokenizer->peek()) {
+                $this->consumeToken(Tokens::T_ELLIPSIS);
+            }
+
+            $this->consumeComments();
+            if (null === ($expr = $this->parseOptionalExpression())) {
+                break;
+            }
+
+            $arguments->addChild($expr);
+
+            $this->consumeComments();
+            if (Tokens::T_COMMA === $this->tokenizer->peek()) {
+                $this->consumeToken(Tokens::T_COMMA);
+                $this->consumeComments();
+
+                continue;
+            }
+        }
+
+        return $arguments;
     }
 }

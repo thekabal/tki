@@ -2,7 +2,7 @@
 
 namespace PHPStan\Type;
 
-class StaticType implements Type
+class StaticType implements StaticResolvableType
 {
 
 	/** @var string */
@@ -22,7 +22,15 @@ class StaticType implements Type
 	 */
 	public function getClass()
 	{
-		return null;
+		return $this->baseClass;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array
+	{
+		return [$this->getClass()];
 	}
 
 	public function getBaseClass(): string
@@ -52,7 +60,7 @@ class StaticType implements Type
 
 	public function describe(): string
 	{
-		return sprintf('static(%s)', $this->baseClass);
+		return sprintf('static(%s)', $this->baseClass) . ($this->nullable ? '|null' : '');
 	}
 
 	public function canAccessProperties(): bool
@@ -63,6 +71,22 @@ class StaticType implements Type
 	public function canCallMethods(): bool
 	{
 		return true;
+	}
+
+	public function isDocumentableNatively(): bool
+	{
+		return true;
+	}
+
+	public function resolveStatic(string $className): Type
+	{
+		return new ObjectType($className, $this->isNullable());
+	}
+
+	public function changeBaseClass(string $className): StaticResolvableType
+	{
+		$thisClass = get_class($this);
+		return new $thisClass($className, $this->isNullable());
 	}
 
 }

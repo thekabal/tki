@@ -67,7 +67,17 @@ class AccessPropertiesRule implements \PHPStan\Rules\Rule
 			return [];
 		}
 
-		$name = (string) $node->name;
+		$name = $node->name;
+		if (!$this->broker->hasClass($propertyClass)) {
+			return [
+				sprintf(
+					'Access to property $%s on an unknown class %s.',
+					$name,
+					$propertyClass
+				),
+			];
+		}
+
 		$propertyClassReflection = $this->broker->getClass($propertyClass);
 
 		if (!$propertyClassReflection->hasProperty($name)) {

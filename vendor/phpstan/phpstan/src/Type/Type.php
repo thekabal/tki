@@ -10,6 +10,11 @@ interface Type
 	 */
 	public function getClass();
 
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array;
+
 	public function isNullable(): bool;
 
 	public function combineWith(Type $otherType): Type;
@@ -23,5 +28,7 @@ interface Type
 	public function canAccessProperties(): bool;
 
 	public function canCallMethods(): bool;
+
+	public function isDocumentableNatively(): bool;
 
 }

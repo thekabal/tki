@@ -6,6 +6,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\BrokerAwareClassReflectionExtension;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflectionFactory;
+use PHPStan\Type\FileTypeMapper;
+use PHPStan\Type\TypehintHelper;
 use ReflectionClass;
 
 class Broker
@@ -20,11 +22,17 @@ class Broker
 	/** @var \PHPStan\Type\DynamicMethodReturnTypeExtension[] */
 	private $dynamicMethodReturnTypeExtensions = [];
 
+	/** @var \PHPStan\Type\DynamicStaticMethodReturnTypeExtension[] */
+	private $dynamicStaticMethodReturnTypeExtensions = [];
+
 	/** @var \PHPStan\Reflection\ClassReflection[] */
 	private $classReflections = [];
 
 	/** @var \PHPStan\Reflection\FunctionReflectionFactory */
 	private $functionReflectionFactory;
+
+	/** @var \PHPStan\Type\FileTypeMapper */
+	private $fileTypeMapper;
 
 	/** @var \PHPStan\Reflection\FunctionReflection[] */
 	private $functionReflections = [];
@@ -33,13 +41,17 @@ class Broker
 	 * @param \PHPStan\Reflection\PropertiesClassReflectionExtension[] $propertiesClassReflectionExtensions
 	 * @param \PHPStan\Reflection\MethodsClassReflectionExtension[] $methodsClassReflectionExtensions
 	 * @param \PHPStan\Type\DynamicMethodReturnTypeExtension[] $dynamicMethodReturnTypeExtensions
+	 * @param \PHPStan\Type\DynamicStaticMethodReturnTypeExtension[] $dynamicStaticMethodReturnTypeExtensions
 	 * @param \PHPStan\Reflection\FunctionReflectionFactory $functionReflectionFactory
+	 * @param \PHPStan\Type\FileTypeMapper $fileTypeMapper
 	 */
 	public function __construct(
 		array $propertiesClassReflectionExtensions,
 		array $methodsClassReflectionExtensions,
 		array $dynamicMethodReturnTypeExtensions,
-		FunctionReflectionFactory $functionReflectionFactory
+		array $dynamicStaticMethodReturnTypeExtensions,
+		FunctionReflectionFactory $functionReflectionFactory,
+		FileTypeMapper $fileTypeMapper
 	)
 	{
 		$this->propertiesClassReflectionExtensions = $propertiesClassReflectionExtensions;
@@ -54,7 +66,12 @@ class Broker
 			$this->dynamicMethodReturnTypeExtensions[$dynamicMethodReturnTypeExtension->getClass()][] = $dynamicMethodReturnTypeExtension;
 		}
 
+		foreach ($dynamicStaticMethodReturnTypeExtensions as $dynamicStaticMethodReturnTypeExtension) {
+			$this->dynamicStaticMethodReturnTypeExtensions[$dynamicStaticMethodReturnTypeExtension->getClass()][] = $dynamicStaticMethodReturnTypeExtension;
+		}
+
 		$this->functionReflectionFactory = $functionReflectionFactory;
+		$this->fileTypeMapper = $fileTypeMapper;
 	}
 
 	/**
@@ -63,17 +80,36 @@ class Broker
 	 */
 	public function getDynamicMethodReturnTypeExtensionsForClass(string $className): array
 	{
-		$extensions = [];
+		return $this->getDynamicExtensionsForType($this->dynamicMethodReturnTypeExtensions, $className);
+	}
+
+	/**
+	 * @param string $className
+	 * @return \PHPStan\Type\DynamicStaticMethodReturnTypeExtension[]
+	 */
+	public function getDynamicStaticMethodReturnTypeExtensionsForClass(string $className): array
+	{
+		return $this->getDynamicExtensionsForType($this->dynamicStaticMethodReturnTypeExtensions, $className);
+	}
+
+	/**
+	 * @param \PHPStan\Type\DynamicMethodReturnTypeExtension[]|\PHPStan\Type\DynamicStaticMethodReturnTypeExtension[] $extensions
+	 * @param string $className
+	 * @return mixed[]
+	 */
+	private function getDynamicExtensionsForType(array $extensions, string $className): array
+	{
+		$extensionsForClass = [];
 		$class = $this->getClass($className);
 		foreach (array_merge([$className], $class->getParentClassesNames()) as $extensionClassName) {
-			if (!isset($this->dynamicMethodReturnTypeExtensions[$extensionClassName])) {
+			if (!isset($extensions[$extensionClassName])) {
 				continue;
 			}
 
-			$extensions = array_merge($extensions, $this->dynamicMethodReturnTypeExtensions[$extensionClassName]);
+			$extensionsForClass = array_merge($extensionsForClass, $extensions[$extensionClassName]);
 		}
 
-		return $extensions;
+		return $extensionsForClass;
 	}
 
 	public function getClass(string $className): \PHPStan\Reflection\ClassReflection
@@ -83,7 +119,13 @@ class Broker
 		}
 
 		if (!isset($this->classReflections[$className])) {
-			$this->classReflections[$className] = $this->getClassFromReflection(new ReflectionClass($className));
+			$reflectionClass = new ReflectionClass($className);
+			$classReflection = $this->getClassFromReflection($reflectionClass);
+			$this->classReflections[$className] = $classReflection;
+			if ($className !== $reflectionClass->getName()) {
+				// class alias optimization
+				$this->classReflections[$reflectionClass->getName()] = $classReflection;
+			}
 		}
 
 		return $this->classReflections[$className];
@@ -120,7 +162,26 @@ class Broker
 
 		$lowerCasedFunctionName = strtolower($functionName);
 		if (!isset($this->functionReflections[$lowerCasedFunctionName])) {
-			$this->functionReflections[$lowerCasedFunctionName] = $this->functionReflectionFactory->create(new \ReflectionFunction($lowerCasedFunctionName));
+			$reflectionFunction = new \ReflectionFunction($lowerCasedFunctionName);
+			$phpDocParameterTypes = [];
+			$phpDocReturnType = null;
+			if ($reflectionFunction->getFileName() !== false && $reflectionFunction->getDocComment() !== false) {
+				$fileTypeMap = $this->fileTypeMapper->getTypeMap($reflectionFunction->getFileName());
+				$docComment = $reflectionFunction->getDocComment();
+				$phpDocParameterTypes = TypehintHelper::getParameterTypesFromPhpDoc(
+					$fileTypeMap,
+					array_map(function (\ReflectionParameter $parameter): string {
+						return $parameter->getName();
+					}, $reflectionFunction->getParameters()),
+					$docComment
+				);
+				$phpDocReturnType = TypehintHelper::getReturnTypeFromPhpDoc($fileTypeMap, $docComment);
+			}
+			$this->functionReflections[$lowerCasedFunctionName] = $this->functionReflectionFactory->create(
+				$reflectionFunction,
+				$phpDocParameterTypes,
+				$phpDocReturnType
+			);
 		}
 
 		return $this->functionReflections[$lowerCasedFunctionName];

@@ -64,13 +64,13 @@ class InstantiationRule implements \PHPStan\Rules\Rule
 		$classReflection = $this->broker->getClass($class);
 		if ($classReflection->isInterface()) {
 			return [
-				sprintf('Cannot instantiate interface %s.', $class),
+				sprintf('Cannot instantiate interface %s.', $classReflection->getName()),
 			];
 		}
 
 		if ($classReflection->isAbstract()) {
 			return [
-				sprintf('Instantiated class %s is abstract.', $class),
+				sprintf('Instantiated class %s is abstract.', $classReflection->getName()),
 			];
 		}
 
@@ -79,7 +79,7 @@ class InstantiationRule implements \PHPStan\Rules\Rule
 				return [
 					sprintf(
 						'Class %s does not have a constructor and must be instantiated without any parameters.',
-						$class
+						$classReflection->getName()
 					),
 				];
 			}
@@ -89,14 +89,17 @@ class InstantiationRule implements \PHPStan\Rules\Rule
 
 		return $this->check->check(
 			$classReflection->hasMethod('__construct') ? $classReflection->getMethod('__construct') : $classReflection->getMethod($class),
+			$scope,
 			$node,
 			[
-				'Class ' . $class . ' constructor invoked with %d parameter, %d required.',
-				'Class ' . $class . ' constructor invoked with %d parameters, %d required.',
-				'Class ' . $class . ' constructor invoked with %d parameter, at least %d required.',
-				'Class ' . $class . ' constructor invoked with %d parameters, at least %d required.',
-				'Class ' . $class . ' constructor invoked with %d parameter, %d-%d required.',
-				'Class ' . $class . ' constructor invoked with %d parameters, %d-%d required.',
+				'Class ' . $classReflection->getName() . ' constructor invoked with %d parameter, %d required.',
+				'Class ' . $classReflection->getName() . ' constructor invoked with %d parameters, %d required.',
+				'Class ' . $classReflection->getName() . ' constructor invoked with %d parameter, at least %d required.',
+				'Class ' . $classReflection->getName() . ' constructor invoked with %d parameters, at least %d required.',
+				'Class ' . $classReflection->getName() . ' constructor invoked with %d parameter, %d-%d required.',
+				'Class ' . $classReflection->getName() . ' constructor invoked with %d parameters, %d-%d required.',
+				'Parameter #%d %s of class ' . $classReflection->getName() . ' constructor expects %s, %s given.',
+				'', // constructor does not have a return type
 			]
 		);
 	}

@@ -13,6 +13,14 @@ class VoidType implements Type
 		return null;
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getReferencedClasses(): array
+	{
+		return [];
+	}
+
 	public function isNullable(): bool
 	{
 		return false;
@@ -24,7 +32,7 @@ class VoidType implements Type
 			return $this;
 		}
 
-		return new MixedType(true);
+		return new MixedType();
 	}
 
 	public function makeNullable(): Type
@@ -50,6 +58,11 @@ class VoidType implements Type
 	public function canCallMethods(): bool
 	{
 		return false;
+	}
+
+	public function isDocumentableNatively(): bool
+	{
+		return true;
 	}
 
 }
