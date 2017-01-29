@@ -103,7 +103,7 @@ $variables['dev_mode'] = file_exists('dev');
 $variables['php_module_pdo'] = extension_loaded('pdo_mysql');
 $variables['php_module_mysqli'] = extension_loaded('mysqli');
 $variables['adodb_path_test'] = file_exists(realpath("vendor/adodb/adodb-php/adodb.inc.php"));
-$variables['smarty_path_test'] = file_exists(realpath("vendor/smarty/smarty/distribution/libs/Smarty.class.php"));
+$variables['smarty_path_test'] = file_exists(realpath("vendor/smarty/smarty/libs/Smarty.class.php"));
 $variables['title'] = $langvars['l_setup_info_title'];
 
 // Test Smarty
