@@ -19,6 +19,7 @@ use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ErrorSuppress;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\MethodCall;
@@ -47,6 +48,7 @@ use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\Broker\Broker;
+use PHPStan\File\FileExcluder;
 use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\PhpDocBlock;
 use PHPStan\Type\ArrayType;
@@ -77,6 +79,9 @@ class NodeScopeResolver
 	/** @var \PHPStan\Analyser\TypeSpecifier */
 	private $typeSpecifier;
 
+	/** @var \PHPStan\File\FileExcluder */
+	private $fileExcluder;
+
 	/** @var bool */
 	private $polluteScopeWithLoopInitialAssignments;
 
@@ -92,12 +97,16 @@ class NodeScopeResolver
 	/** @var \PHPStan\Reflection\ClassReflection|null */
 	private $anonymousClassReflection;
 
+	/** @var bool[] filePath(string) => bool(true) */
+	private $analysedFiles;
+
 	public function __construct(
 		Broker $broker,
 		Parser $parser,
 		\PhpParser\PrettyPrinter\Standard $printer,
 		FileTypeMapper $fileTypeMapper,
 		TypeSpecifier $typeSpecifier,
+		FileExcluder $fileExcluder,
 		bool $polluteScopeWithLoopInitialAssignments,
 		bool $polluteCatchScopeWithTryAssignments,
 		bool $defineVariablesWithoutDefaultBranch,
@@ -109,10 +118,19 @@ class NodeScopeResolver
 		$this->printer = $printer;
 		$this->fileTypeMapper = $fileTypeMapper;
 		$this->typeSpecifier = $typeSpecifier;
+		$this->fileExcluder = $fileExcluder;
 		$this->polluteScopeWithLoopInitialAssignments = $polluteScopeWithLoopInitialAssignments;
 		$this->polluteCatchScopeWithTryAssignments = $polluteCatchScopeWithTryAssignments;
 		$this->defineVariablesWithoutDefaultBranch = $defineVariablesWithoutDefaultBranch;
 		$this->earlyTerminatingMethodCalls = $earlyTerminatingMethodCalls;
+	}
+
+	/**
+	 * @param string[] $files
+	 */
+	public function setAnalysedFiles(array $files)
+	{
+		$this->analysedFiles = array_fill_keys($files, true);
 	}
 
 	/**
@@ -344,6 +362,17 @@ class NodeScopeResolver
 			foreach ($node->loop as $loopExpr) {
 				$scope = $this->lookForAssigns($scope, $loopExpr);
 			}
+		} elseif ($node instanceof Array_) {
+			$scope = $scope->exitFirstLevelStatements();
+			foreach ($node->items as $item) {
+				$this->processNode($item, $scope, $nodeCallback);
+				if ($item->key !== null) {
+					$scope = $this->lookForAssigns($scope, $item->key);
+				}
+				$scope = $this->lookForAssigns($scope, $item->value);
+			}
+
+			return;
 		} elseif ($node instanceof If_) {
 			$scope = $this->lookForAssigns($scope, $node->cond)->exitFirstLevelStatements();
 			$ifScope = $scope;
@@ -372,6 +401,8 @@ class NodeScopeResolver
 
 			return;
 		} elseif ($node instanceof Switch_) {
+			$scope = $scope->exitFirstLevelStatements();
+			$this->processNode($node->cond, $scope, $nodeCallback);
 			$scope = $this->lookForAssigns($scope, $node->cond);
 			$switchScope = $scope;
 			$switchConditionIsTrue = $node->cond instanceof Expr\ConstFetch && strtolower((string) $node->cond->name) === 'true';
@@ -492,6 +523,10 @@ class NodeScopeResolver
 					}
 				}
 
+				if ($node instanceof MethodCall && $subNodeName === 'args') {
+					$scope = $this->lookForAssigns($scope, $node->var);
+				}
+
 				$this->processNodes($subNode, $scope, $nodeCallback, $argClosureBindScope);
 			} elseif ($subNode instanceof \PhpParser\Node) {
 				if ($node instanceof Coalesce && $subNodeName === 'left') {
@@ -530,6 +565,14 @@ class NodeScopeResolver
 				if ($node instanceof Expr\Empty_ && $subNodeName === 'expr') {
 					$scope = $this->specifyProperty($scope, $node->expr);
 					$scope = $this->lookForEnterVariableAssign($scope, $node->expr);
+				}
+
+				if (
+					$node instanceof ArrayItem
+					&& $subNodeName === 'value'
+					&& $node->key !== null
+				) {
+					$scope = $this->lookForAssigns($scope, $node->key);
 				}
 
 				$nodeScope = $scope->exitFirstLevelStatements();
@@ -716,6 +759,9 @@ class NodeScopeResolver
 			}
 		} elseif ($node instanceof Array_) {
 			foreach ($node->items as $item) {
+				if ($item->key !== null) {
+					$scope = $this->lookForAssigns($scope, $item->key);
+				}
 				$scope = $this->lookForAssigns($scope, $item->value);
 			}
 		} elseif ($node instanceof New_) {
@@ -806,6 +852,8 @@ class NodeScopeResolver
 
 				$scope = $scope->assignVariable($closureUse->var, new MixedType());
 			}
+		} elseif ($node instanceof Instanceof_) {
+			$scope = $this->lookForAssigns($scope, $node->expr);
 		}
 
 		$scope = $this->updateScopeForVariableAssign($scope, $node);
@@ -1032,7 +1080,7 @@ class NodeScopeResolver
 				$classReflection = $this->broker->getClass($type->getClass());
 				$methodName = $functionCall->name;
 				if ($classReflection->hasMethod($methodName)) {
-					return $classReflection->getMethod($methodName);
+					return $classReflection->getMethod($methodName, $scope);
 				}
 			}
 		} elseif (
@@ -1043,7 +1091,7 @@ class NodeScopeResolver
 			if ($this->broker->hasClass($className)) {
 				$classReflection = $this->broker->getClass($className);
 				if ($classReflection->hasMethod($functionCall->name)) {
-					return $classReflection->getMethod($functionCall->name);
+					return $classReflection->getMethod($functionCall->name, $scope);
 				}
 			}
 		}
@@ -1060,6 +1108,12 @@ class NodeScopeResolver
 			}
 			$traitReflection = $this->broker->getClass($traitName);
 			$fileName = $traitReflection->getNativeReflection()->getFileName();
+			if ($this->fileExcluder->isExcludedFromAnalysing($fileName)) {
+				return;
+			}
+			if (!isset($this->analysedFiles[$fileName])) {
+				return;
+			}
 			$parserNodes = $this->parser->parseFile($fileName);
 			$classScope = $classScope->changeAnalysedContextFile(
 				sprintf(

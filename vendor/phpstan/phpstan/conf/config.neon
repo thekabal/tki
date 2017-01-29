@@ -42,7 +42,6 @@ services:
 	-
 		class: PHPStan\Analyser\Analyser
 		arguments:
-			analyseExcludes: %excludes_analyse%
 			ignoreErrors: %ignoreErrors%
 			bootstrapFile: %bootstrap%
 
@@ -66,9 +65,14 @@ services:
 			memoryLimitFile: %memoryLimitFile%
 
 	-
-		class: PHPStan\FileHelper
+		class: PHPStan\File\FileHelper
 		arguments:
 			workingDirectory: %currentWorkingDirectory%
+
+	-
+		class: PHPStan\File\FileExcluder
+		arguments:
+			analyseExcludes: %excludes_analyse%
 
 	-
 		class: PHPStan\Parser\CachedParser
