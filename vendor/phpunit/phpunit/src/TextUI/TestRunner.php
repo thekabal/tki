@@ -114,6 +114,10 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
         return new PHPUnit_Framework_TestResult;
     }
 
+    /**
+     * @param PHPUnit_Framework_TestSuite $suite
+     * @param array                       $arguments
+     */
     private function processSuiteFilters(PHPUnit_Framework_TestSuite $suite, array $arguments)
     {
         if (!$arguments['filter'] &&
@@ -1037,6 +1041,18 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
             if (isset($loggingConfiguration['testdox-xml']) &&
                 !isset($arguments['testdoxXMLFile'])) {
                 $arguments['testdoxXMLFile'] = $loggingConfiguration['testdox-xml'];
+            }
+
+            $testdoxGroupConfiguration = $arguments['configuration']->getTestdoxGroupConfiguration();
+
+            if (isset($testdoxGroupConfiguration['include']) &&
+                !isset($arguments['testdoxGroups'])) {
+                $arguments['testdoxGroups'] = $testdoxGroupConfiguration['include'];
+            }
+
+            if (isset($testdoxGroupConfiguration['exclude']) &&
+                !isset($arguments['testdoxExcludeGroups'])) {
+                $arguments['testdoxExcludeGroups'] = $testdoxGroupConfiguration['exclude'];
             }
 
             if ((isset($arguments['coverageClover']) ||
