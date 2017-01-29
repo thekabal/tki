@@ -46,7 +46,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 
 
 $variables = null;
 $variables['lang'] = $lang;
-$variables['link'] = 'https://kabal-invasion.com/forums/';
+$variables['link'] = 'https://github.com/thekabal/tki/';
 $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'tki';
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
