@@ -49,7 +49,7 @@ class PlanetProduction
         //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
         //  This would save us from having to run through the database a second time checking our work.
 
-        //  This should patch the game from being hacked with planet Hack.
+        //  This should patch the game to prevent being hacked with the planet hack.
 
         $request = Request::createFromGlobals();
 
