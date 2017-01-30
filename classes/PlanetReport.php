@@ -24,7 +24,7 @@ class PlanetReport
 {
     public static function baseBuildCheck($langvars, Reg $tkireg, $planet, int $i)
     {
-        if($planet[$i][base] == 'Y')
+        if($planet[$i]['base'] == 'Y')
         {
             return $langvars['l_yes'];
         }
@@ -130,7 +130,7 @@ class PlanetReport
         {
             foreach ($planet_owner_present as $tmp_owner)
             {
-                $planet[$i] = $tmp_owner['link_dest'];
+                $planet[$i] = $tmp_owner;
                 $i++;
             }
         }
