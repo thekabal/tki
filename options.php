@@ -56,7 +56,7 @@ echo "<tr>\n";
 echo "<td>" . $langvars['l_opt_select'] . "</td><td><select name=newlang>\n";
 
 $avail_langs = Tki\Languages::listAvailable($pdo_db, $lang);
-foreach($avail_langs as $language_list_item_name => $language_list_item)
+foreach ($avail_langs as $language_list_item_name => $language_list_item)
 {
     if ($language_list_item_name == $playerinfo['lang'])
     {
