@@ -17,7 +17,7 @@
 //
 // File: footer_t.php
 
-$online = (int) 0;
+$online = 0;
 
 if (Tki\Db::isActive($pdo_db))
 {
@@ -27,7 +27,7 @@ if (Tki\Db::isActive($pdo_db))
     $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $stamp); // Online is the (int) count of the numbers of players currently logged in via SQL select
 }
 
-$elapsed = (int) 999; // Default value for elapsed, overridden with an actual value if its available
+$elapsed = 999; // Default value for elapsed, overridden with an actual value if its available
 if ($tkireg !== null)
 {
     if (property_exists($tkireg, 'tkitimer'))
@@ -56,7 +56,7 @@ if ($last_run !== false)
 }
 else
 {
-    $seconds_left = (int) 0;
+    $seconds_left = 0;
     $display_update_ticker = false;
 }
 
