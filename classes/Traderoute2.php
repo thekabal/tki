@@ -402,7 +402,7 @@ class Traderoute2
         die();
     }
 
-    public static function traderouteDie(\PDO $pdo_db, string $lang, Reg $tkireg, string $error_msg, Smarty $template)
+    public static function traderouteDie(\PDO $pdo_db, string $lang, Reg $tkireg, string $error_msg = null, Smarty $template)
     {
         echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";
