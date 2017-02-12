@@ -146,15 +146,15 @@ elseif ($command == 'repay') // Repay operation
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {
-    Tki\Ibank::ibankConsolidate($langvars, $tkireg, $dplanet_id);
+    Tki\IbankConsolidate::before($langvars, $tkireg, $dplanet_id);
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Tki\Ibank2::ibankConsolidate2($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
+    Tki\IbankConsolidate::after($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Tki\Ibank2::ibankConsolidate3($pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
+    Tki\IbankConsolidate::third($pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
 }
 else
 {

@@ -244,33 +244,6 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate(array $langvars, Reg $tkireg, int $dplanet_id): void
-    {
-        $percent = $tkireg->ibank_paymentfee * 100;
-
-        $langvars['l_ibank_transferrate3'] = str_replace("[ibank_num_percent]", number_format($percent, 1, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_transferrate3']);
-        $langvars['l_ibank_transferrate3'] = str_replace("[nbplanets]", $tkireg->ibank_tconsolidate, $langvars['l_ibank_transferrate3']);
-
-        echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_planetconsolidate'] . "<br>---------------------------------</td></tr>" .
-             "<form accept-charset='utf-8' action='ibank.php?command=consolidate2' method=post>" .
-             "<tr valign=top>" .
-             "<td colspan=2>" . $langvars['l_ibank_consolrates'] . " :</td>" .
-             "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_minimum'] . " :<br>" .
-             "<br>" . $langvars['l_ibank_maximum'] . " :</td>" .
-             "<td align=right>" .
-             "<input class=term type=text size=15 maxlength=20 name=minimum value=0><br><br>" .
-             "<input class=term type=text size=15 maxlength=20 name=maximum value=0><br><br>" .
-             "<input class=term type=submit value=\"" . $langvars['l_ibank_compute'] . "\"></td>" .
-             "<input type=hidden name=dplanet_id value=" . $dplanet_id . ">" .
-             "</form>" .
-             "<tr><td colspan=2 align=center>" .
-             $langvars['l_ibank_transferrate3'] .
-             "<tr valign=bottom>" .
-             "<td><a href='ibank.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
-             "</tr>";
-    }
-
     public static function ibankError(\PDO $pdo_db, array $langvars, string $errmsg, string $backlink, string $lang, Reg $tkireg, Smarty $template): void
     {
         $title = $langvars['l_ibank_ibankerrreport'];
