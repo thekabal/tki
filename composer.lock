@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "97a8bfacbae2f57452a11690cee2900b",
+    "content-hash": "b2eb4bb2944b71168b14a8d224ed3f30",
     "packages": [
         {
             "name": "adodb/adodb-php",
@@ -62,23 +62,20 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "dev-master",
+            "version": "v4.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "8e4cacf0a76458d6203f53113c47b49c6edc2dc5"
+                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/8e4cacf0a76458d6203f53113c47b49c6edc2dc5",
-                "reference": "8e4cacf0a76458d6203f53113c47b49c6edc2dc5",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
+                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
-            },
-            "require-dev": {
-                "simpletest/simpletest": "^1.1"
             },
             "type": "library",
             "autoload": {
@@ -105,7 +102,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-02-04T00:54:51+00:00"
+            "time": "2016-07-16T12:58:58+00:00"
         },
         {
             "name": "nette/bootstrap",
@@ -3280,7 +3277,6 @@
     "aliases": [],
     "minimum-stability": "alpha",
     "stability-flags": {
-        "ezyang/htmlpurifier": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,
