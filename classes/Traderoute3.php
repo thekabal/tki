@@ -22,7 +22,7 @@ namespace Tki;
 
 class Traderoute3
 {
-    public static function traderouteDistance(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, array $playerinfo, Reg $tkireg, $sells = 'N')
+    public static function traderouteDistance(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, array $playerinfo, Reg $tkireg, $sells = 'N'): array
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;

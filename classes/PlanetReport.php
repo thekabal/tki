@@ -22,7 +22,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function baseBuildCheck($langvars, Reg $tkireg, $planet, int $i)
+    public static function baseBuildCheck($langvars, Reg $tkireg, $planet, int $i): string
     {
         if($planet[$i]['base'] == 'Y')
         {
@@ -38,7 +38,7 @@ class PlanetReport
         }
     }
 
-    public static function planetReportMenu(array $playerinfo, array $langvars)
+    public static function planetReportMenu(array $playerinfo, array $langvars): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -81,7 +81,7 @@ class PlanetReport
         }
     }
 
-    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, $sort, Reg $tkireg)
+    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, $sort, Reg $tkireg): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 

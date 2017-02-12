@@ -78,13 +78,13 @@ class Smarty
     {
     }
 
-    public function setTheme($themeName = null)
+    public function setTheme($themeName = null): void
     {
         $this->smarty->setTemplateDir("templates/{$themeName}");
         $this->addVariables('template_dir', "templates/{$themeName}");
     }
 
-    public function addVariables(string $nodeName, $variables)
+    public function addVariables(string $nodeName, $variables): void
     {
         $tmpNode = $this->smarty->getTemplateVars($nodeName);
 
@@ -111,12 +111,12 @@ class Smarty
         return $temp_variable;
     }
 
-    public function test()
+    public function test(): void
     {
         $this->smarty->testInstall();
     }
 
-    public function display($template_file)
+    public function display($template_file): void
     {
         // Process template and return the output in a
         // varable so that we can compress it or not.

@@ -22,43 +22,43 @@ namespace Tki;
 
 class CalcLevels
 {
-    public static function armor(int $level_armor, Reg $tkireg)
+    public static function armor(int $level_armor, Reg $tkireg): float
     {
         $result = round(pow($tkireg->level_factor, $level_armor) * 100);
         return $result;
     }
 
-    public static function holds(int $level_hull, Reg $tkireg)
+    public static function holds(int $level_hull, Reg $tkireg): float
     {
         $result = round(pow($tkireg->level_factor, $level_hull) * 100);
         return $result;
     }
 
-    public static function shields(int $level_shields, Reg $tkireg)
+    public static function shields(int $level_shields, Reg $tkireg): float
     {
         $result = round(pow($tkireg->level_factor, $level_shields) * 100);
         return $result;
     }
 
-    public static function torpedoes(int $level_torp_launchers, Reg $tkireg)
+    public static function torpedoes(int $level_torp_launchers, Reg $tkireg): float
     {
         $result = round(pow($tkireg->level_factor, $level_torp_launchers) * 100);
         return $result;
     }
 
-    public static function beams(int $level_beams, Reg $tkireg)
+    public static function beams(int $level_beams, Reg $tkireg): float
     {
         $result = round(pow($tkireg->level_factor, $level_beams) * 100);
         return $result;
     }
 
-    public static function fighters(int $level_computer, Reg $tkireg)
+    public static function fighters(int $level_computer, Reg $tkireg): float
     {
         $result = round(pow($tkireg->level_factor, $level_computer) * 100);
         return $result;
     }
 
-    public static function energy(int $level_power, Reg $tkireg)
+    public static function energy(int $level_power, Reg $tkireg): float
     {
         $result = round(pow($tkireg->level_factor, $level_power) * 500);
         return $result;
