@@ -71,7 +71,7 @@ switch ($sort)
         break;
 }
 
-$variables['num_players'] = (int) 0;
+$variables['num_players'] = 0;
 
 $sql = "SELECT {$db->prefix}ships.ship_id, {$db->prefix}ships.email, {$db->prefix}ships.ip_address, " .
 "{$db->prefix}ships.score, {$db->prefix}ships.character_name, {$db->prefix}ships.turns_used, " .
