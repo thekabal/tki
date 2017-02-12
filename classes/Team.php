@@ -93,7 +93,7 @@ class Team
         $num_res = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $returnvalue = (!($num_res['found'] > 0));
-        return (bool) $returnvalue;
+        return $returnvalue;
     }
 
     // Rewritten display of teams list
