@@ -35,7 +35,7 @@ class Footer
         $variables = array();
         $langvars = array();
 
-        $online = (int) 0;
+        $online = 0;
 
         if (Db::isActive($pdo_db))
         {
@@ -45,7 +45,7 @@ class Footer
             $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $stamp); // Online is the (int) count of the numbers of players currently logged in via SQL select
         }
 
-        $elapsed = (int) 999; // Default value for elapsed, overridden with an actual value if its available
+        $elapsed = 999; // Default value for elapsed, overridden with an actual value if its available
         if ($tkireg !== null)
         {
             if (property_exists($tkireg, 'tkitimer'))
@@ -74,7 +74,7 @@ class Footer
         }
         else
         {
-            $seconds_left = (int) 0;
+            $seconds_left = 0;
             $show_update_ticker = false;
         }
 
