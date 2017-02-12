@@ -103,23 +103,6 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw(array $langvars, string $account): void
-    {
-        echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_withdrawfunds'] . "<br>---------------------------------</td></tr>" .
-             "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_fundsavailable'] . ":</td>" .
-             "<td align=right>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br></td>" .
-             "</tr><tr valign=top>" .
-             "<td>" . $langvars['l_ibank_selwithdrawamount'] . ":</td><td align=right>" .
-             "<form accept-charset='utf-8' action='ibank.php?command=withdraw2' method=post>" .
-             "<input class=term type=text size=15 maxlength=20 name=amount value=0>" .
-             "<br><br><input class=term type=submit value='" . $langvars['l_ibank_withdraw'] . "'>" .
-             "</form></td></tr>" .
-             "<tr valign=bottom>" .
-             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
-             "</tr>";
-    }
-
     public static function ibankLoans(\PDO $pdo_db, array $langvars, Reg $tkireg, array $playerinfo, string $account): void
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
