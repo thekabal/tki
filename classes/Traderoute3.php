@@ -154,7 +154,6 @@ class Traderoute3
 
     public static function traderouteCreate($db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, int $planet_id1=null, int $planet_id2=null, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
     {
-var_dump($db);
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
         $src_id = null;
