@@ -56,6 +56,9 @@ As is typical with releases, we highly recommend a fresh install. Upgrades are n
 ## Code quality:
 The project began in the early PHP4 era, and as a result, is less than ideal. Substantial progress has been made towards modernization, and we are continuing that process. As a general guideline, we follow PSR-1,2,4, and the upcoming 12, with the major exceptions that we use BSD/Allman brace/brackets and do not yet follow line length limits. **Feedback and PR's are welcome and appreciated**.
 
+## Security issue reporting:
+Please report all security issues to thekabal@gmail.com.
+
 ## Contributing:
 Feel free to contribute to the project! We use [GitHub](https://github.com/thekabal/tki/) for our issues tracking (provide feedback!), milestone planning, code storage, and releases.
 
