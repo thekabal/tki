@@ -152,7 +152,7 @@ class Traderoute3
         return $retvalue;
     }
 
-    public static function traderouteCreate($db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, int $planet_id1=null, int $planet_id2=null): void
+    public static function traderouteCreate(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, int $planet_id1=null, int $planet_id2=null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -303,7 +303,7 @@ class Traderoute3
         }
 
         // Check traderoute for src => dest
-        \Tki\Traderoute2::traderouteCheckCompatible($db, $pdo_db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
+        \Tki\Traderoute2::traderouteCheckCompatible($pdo_db, $db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
 
         if ($ptype1 == 'port')
         {
@@ -477,7 +477,7 @@ class Traderoute3
         \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $template, null);
     }
 
-    public static function traderouteSetsettings($db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy): void
+    public static function traderouteSetsettings(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 

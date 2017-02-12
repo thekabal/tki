@@ -412,7 +412,7 @@ class Traderoute2
         die();
     }
 
-    public static function traderouteCheckCompatible($db, \PDO $pdo_db, string $lang, $type1, $type2, $move, $circuit, $src, $dest, array $playerinfo, Reg $tkireg, Smarty $template): void
+    public static function traderouteCheckCompatible(\PDO $pdo_db, $db, string $lang, $type1, $type2, $move, $circuit, $src, $dest, array $playerinfo, Reg $tkireg, Smarty $template): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 

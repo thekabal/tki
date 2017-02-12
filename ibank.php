@@ -130,7 +130,7 @@ elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
-    Tki\Ibank2::ibankTransfer3($db, $pdo_db, $lang, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $template);
+    Tki\Ibank2::ibankTransfer3($pdo_db, $db, $lang, $langvars, $playerinfo, $account, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $template);
 }
 elseif ($command == 'loans') // Loans menu
 {
