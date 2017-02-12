@@ -252,7 +252,7 @@ elseif ($engage !== null)
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
-        \Tki\Traderoute::traderouteEngage($pdo_db, $db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
+        \Tki\Traderoute::engage($pdo_db, $db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
         $i--;
     }
 }
