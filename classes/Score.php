@@ -94,13 +94,12 @@ class Score
         }
 
         $score = (int) round(sqrt($score));
-
         $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET score = :score WHERE ship_id=:ship_id");
-        $stmt->bindParam(':score', $score);
+        $stmt->bindParam(':score', $score, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
-        return (int) $score;
+        return $score;
     }
 }
