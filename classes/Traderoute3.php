@@ -385,7 +385,7 @@ var_dump($db);
         \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteDelete(\PDO $pdo_db, \ADODB_mysqli $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $confirm, int $traderoute_id=null)
+    public static function traderouteDelete(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $confirm, int $traderoute_id=null)
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
         \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
@@ -478,7 +478,7 @@ var_dump($db);
         \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteSetsettings(\ADODB_mysqli $db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy)
+    public static function traderouteSetsettings($db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
