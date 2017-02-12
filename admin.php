@@ -34,7 +34,8 @@ $menu_location = null;
 $button_main = false;
 
 // Clear variables array before use, and set array with all variables in page
-$variables = null;
+unset ($variables);
+$variables = array();
 
 $variables['is_admin'] = false;
 $variables['module'] = null;
