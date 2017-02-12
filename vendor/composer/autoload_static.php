@@ -216,6 +216,13 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
             ),
         ),
+        'A' => 
+        array (
+            'Adodb' => 
+            array (
+                0 => __DIR__ . '/..' . '/adodb/adodb-php/adodb.inc.php',
+            ),
+        ),
     );
 
     public static $classMap = array (
