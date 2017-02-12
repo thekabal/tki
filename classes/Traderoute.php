@@ -366,7 +366,7 @@ class Traderoute
             }
         }
 
-        \Tki\Traderoute3::traderouteResultsTableTop($pdo_db, $lang, $tkireg);
+        \Tki\TraderouteResults::tableTop($pdo_db, $lang, $tkireg);
         // Determine if source is a planet or a port
         if ($traderoute['source_type'] == 'P')
         {
@@ -377,7 +377,7 @@ class Traderoute
             echo $langvars['l_tdr_planet'] . " " . $source['name'] . " in " . $sourceport['sector_id'];
         }
 
-        \Tki\Traderoute3::traderouteResultsSource();
+        \Tki\TraderouteResults::source();
 
         // Determine if destination is a planet or a port
         if ($traderoute['dest_type'] == 'P')
@@ -389,7 +389,7 @@ class Traderoute
             echo $langvars['l_tdr_planet'] . " " . $dest['name'] . " in " . $destport['sector_id'];
         }
 
-        \Tki\Traderoute3::traderouteResultsDestination($tkireg);
+        \Tki\TraderouteResults::destination($tkireg);
 
         $sourcecost = 0;
 
@@ -917,7 +917,7 @@ class Traderoute
             echo $langvars['l_tdr_scooped'] . " " . number_format($dist['scooped1'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
         }
 
-        \Tki\Traderoute3::traderouteResultsCloseCell();
+        \Tki\TraderouteResults::closeCell();
 
         if ($traderoute['circuit'] == '2')
         {
@@ -1373,7 +1373,7 @@ class Traderoute
             $destcost = 0;
         }
 
-        \Tki\Traderoute3::traderouteResultsShowCost($tkireg);
+        \Tki\TraderouteResults::showCost($tkireg);
 
         if ($sourcecost > 0)
         {
@@ -1384,7 +1384,7 @@ class Traderoute
             echo $langvars['l_tdr_cost'] . " : " . number_format(abs($sourcecost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
 
-        \Tki\Traderoute3::traderouteResultsCloseCost();
+        \Tki\TraderouteResults::closeCost();
 
         if ($destcost > 0)
         {
@@ -1395,10 +1395,10 @@ class Traderoute
             echo $langvars['l_tdr_cost'] . " : " . number_format(abs($destcost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
 
-        \Tki\Traderoute3::traderouteResultsCloseTable();
+        \Tki\TraderouteResults::closeTable();
 
         $total_profit = $sourcecost + $destcost;
-        \Tki\Traderoute3::traderouteResultsDisplayTotals($pdo_db, $lang, $total_profit);
+        \Tki\TraderouteResults::displayTotals($pdo_db, $lang, $total_profit);
 
         if ($traderoute['circuit'] == '1')
         {
@@ -1415,7 +1415,7 @@ class Traderoute
         $playerinfo['turns'] -= $dist['triptime'];
 
         $tdr_display_creds = number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-        \Tki\Traderoute3::traderouteResultsDisplaySummary($pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo);
+        \Tki\TraderouteResults::displaySummary($pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo);
         // echo $j . " -- ";
         if ($traderoute['circuit'] == 2)
         {
@@ -1427,7 +1427,7 @@ class Traderoute
             if ($j == 1)
             {
                 echo $langvars['l_tdr_engageagain'] . "\n";
-                \Tki\Traderoute3::traderouteResultsShowRepeat($engage);
+                \Tki\TraderouteResults::showRepeat($engage);
             }
         }
 
