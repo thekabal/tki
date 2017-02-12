@@ -17,8 +17,6 @@ declare(strict_types = 1);
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: classes/Kabal.php
-//
-// FUTURE: This class is horribly bad, and needs to be refactored and tested.
 
 namespace Tki;
 

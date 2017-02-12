@@ -55,7 +55,7 @@ else
     echo $langvars['l_ship_perform'] . "<br><br>";
     echo "<a href=scan.php?ship_id=$ship_id>" . $langvars['l_planet_scn_link'] . "</a><br>";
 
-    if (!Tki\Team::sameTeam($playerinfo['team'], $othership['team']))
+    if (!Tki\Team::isSameTeam($playerinfo['team'], $othership['team']))
     {
         echo "<a href=attack.php?ship_id=$ship_id>" . $langvars['l_planet_att_link'] . "</a><br>";
     }
