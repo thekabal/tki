@@ -92,7 +92,7 @@ echo "<h1>" . $title . "</h1>\n";
 
 if (empty ($content))
 {
-    $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE email NOT LIKE '%@Xenobe' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
+    $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE email NOT LIKE '%@Kabal' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
     Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
     $res2 = $db->Execute("SELECT team_name FROM {$db->prefix}teams WHERE admin ='N' ORDER BY team_name ASC;");
     Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);

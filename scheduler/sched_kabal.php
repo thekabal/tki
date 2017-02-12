@@ -15,17 +15,17 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: sched_xenobe.php
+// File: sched_kabal.php
 //
 // FUTURE: SQL bind varibles
 
-// Xenobe turn updates
-echo "<br><strong>Xenobe TURNS</strong><br><br>";
+// Kabal turn updates
+echo "<br><strong>Kabal TURNS</strong><br><br>";
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('sched_xenobe', 'common', 'global_includes', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('sched_kabal', 'common', 'global_includes', 'combat', 'footer', 'news'));
 
-// Make Xenobe selection
+// Make Kabal selection
 $furcount = 0;
 $furcount0 = 0;
 $furcount0a = 0;
@@ -39,14 +39,14 @@ $furcount3h = 0;
 
 /*
 //Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}xenobe WHERE email=xenobe_id and active='Y' and ship_destroyed='N' ORDER BY ship_id");
+$res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email=kabal_id and active='Y' and ship_destroyed='N' ORDER BY ship_id");
 while (($res instanceof ADORecordSet) && ($res != false))
 //while (!$res->EOF)
 {
-    $xenobeisdead = 0;
+    $kabalisdead = 0;
     $playerinfo = $res->fields;
     // Regenerate / Buy stats
-    Tki\Xenobe::xenobeRegen($pdo_db, $playerinfo, $xen_unemployment, $tkireg);
+    Tki\Kabal::kabalRegen($pdo_db, $playerinfo, $kabal_unemployment, $tkireg);
 
     // Run through orders
     $furcount++;
@@ -58,7 +58,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount0++;
             // Find a target in my sector, not myself, not on a planet
 
-            $reso0 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? AND email! = ? AND email NOT LIKE '%@xenobe' AND planet_id = 0 AND ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
+            $reso0 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? AND email! = ? AND email NOT LIKE '%@kabal' AND planet_id = 0 AND ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
             Tki\Db::LogDbErrors($pdo_db, $res0, __LINE__, __FILE__);
             if (!$reso0->EOF)
             {
@@ -69,13 +69,13 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 }
                 elseif ($playerinfo['aggression'] == 1)        // O = 0 & Aggression = 1 Attack sometimes O = 0
                 {
-                    // Xenobe's only compare number of fighters when determining if they have an attack advantage
+                    // Kabal's only compare number of fighters when determining if they have an attack advantage
                     if ($playerinfo['ship_fighters'] > $rowo0['ship_fighters'])
                     {
                         $furcount0a++;
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo0[character_name]");
-                        Tki\XenobeTo::ship($pdo_db, $db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
-                        if ($xenobeisdead > 0)
+                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo0[character_name]");
+                        Tki\KabalTo::ship($pdo_db, $db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
+                        if ($kabalisdead > 0)
                         {
                             $res->MoveNext();
                             continue;
@@ -85,9 +85,9 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        // O = 0 & Aggression = 2 attack always
                 {
                     $furcount0a++;
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo0[character_name]");
-                    Tki\XenobeTo::ship($pdo_db, $db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
-                    if ($xenobeisdead > 0)
+                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo0[character_name]");
+                    Tki\KabalTo::ship($pdo_db, $db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
+                    if ($kabalisdead > 0)
                     {
                         $res->MoveNext();
                         continue;
@@ -100,8 +100,8 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Tki\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
-            if ($xenobeisdead > 0)
+            Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+            if ($kabalisdead > 0)
             {
                 $res->MoveNext();
                 continue;
@@ -118,13 +118,13 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 }
                 elseif ($playerinfo['aggression'] == 1)        // O = 1 & AGRESSION = 1 ATTACK SOMETIMES
                 {
-                    // Xenobe's only compare number of fighters when determining if they have an attack advantage
+                    // Kabal's only compare number of fighters when determining if they have an attack advantage
                     if ($playerinfo['ship_fighters'] > $rowo1['ship_fighters'] && $rowo1['planet_id'] == 0)
                     {
                         $furcount1a++;
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
-                        Tki\XenobeTo::ship($pdo_db, $db, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
-                        if ($xenobeisdead > 0)
+                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo1[character_name]");
+                        Tki\KabalTo::ship($pdo_db, $db, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
+                        if ($kabalisdead > 0)
                         {
                             $res->MoveNext();
                             continue;
@@ -134,17 +134,17 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        //  O = 1 & AGRESSION = 2 ATTACK ALLWAYS
                 {
                     $furcount1a++;
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo1[character_name]");
+                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo1[character_name]");
                     if (!$rowo1['planet_id'] == 0)
                     {              // Is on planet
-                        Tki\XenobeTo::planet($pdo_db, $db, $rowo1['planet_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalTo::planet($pdo_db, $db, $rowo1['planet_id'], $tkireg, $playerinfo, $langvars);
                     }
                     else
                     {
-                        Tki\XenobeTo::ship($pdo_db, $db, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalTo::ship($pdo_db, $db, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
                     }
 
-                    if ($xenobeisdead > 0)
+                    if ($kabalisdead > 0)
                     {
                         $res->MoveNext();
                         continue;
@@ -158,15 +158,15 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Tki\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
-            if ($xenobeisdead > 0)
+            Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+            if ($kabalisdead > 0)
             {
                 $res->MoveNext();
                 continue;
             }
 
             // NOW TRADE BEFORE WE DO ANY AGGRESSION CHECKS
-            Tki\Xenobe::xenobeTrade($pdo_db, $playerinfo, $tkireg);
+            Tki\Kabal::kabalTrade($pdo_db, $playerinfo, $tkireg);
             // FIND A TARGET
             // IN MY SECTOR, NOT MYSELF
             $reso2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
@@ -180,13 +180,13 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 }
                 elseif ($playerinfo['aggression'] == 1)        // O = 2 & AGRESSION = 1 ATTACK SOMETIMES
                 {
-                    // Xenobe's only compare number of fighters when determining if they have an attack advantage
+                    // Kabal's only compare number of fighters when determining if they have an attack advantage
                     if ($playerinfo['ship_fighters'] > $rowo2['ship_fighters'] && $rowo2['planet_id'] == 0)
                     {
                         $furcount2a++;
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
-                        Tki\XenobeTo::ship($pdo_db, $db, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
-                        if ($xenobeisdead > 0)
+                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo2[character_name]");
+                        Tki\KabalTo::ship($pdo_db, $db, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
+                        if ($kabalisdead > 0)
                         {
                             $res->MoveNext();
                             continue;
@@ -196,17 +196,17 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        // O = 2 & AGRESSION = 2 ATTACK ALLWAYS
                 {
                     $furcount2a++;
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo2[character_name]");
+                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo2[character_name]");
                     if (!$rowo2['planet_id'] == 0)
                     {              // IS ON PLANET
-                        Tki\XenobeTo::planet($pdo_db, $db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalTo::planet($pdo_db, $db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
                     }
                     else
                     {
-                        Tki\XenobeTo::ship($pdo_db, $db, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalTo::ship($pdo_db, $db, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
                     }
 
-                    if ($xenobeisdead > 0)
+                    if ($kabalisdead > 0)
                     {
                         $res->MoveNext();
                         continue;
@@ -225,8 +225,8 @@ while (($res instanceof ADORecordSet) && ($res != false))
             if ($hunt == 0)
             {
                 $furcount3h++;
-                Tki\Xenobe::xenobeHunter($pdo_db, $db, $playerinfo, $xenobeisdead, $langvars, $tkireg);
-                if ($xenobeisdead > 0)
+                Tki\Kabal::kabalHunter($pdo_db, $db, $playerinfo, $kabalisdead, $langvars, $tkireg);
+                if ($kabalisdead > 0)
                 {
                     $res->MoveNext();
                     continue;
@@ -235,8 +235,8 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Tki\Xenobe::xenobeMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
-                if ($xenobeisdead > 0)
+                Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+                if ($kabalisdead > 0)
                 {
                     $res->MoveNext();
                     continue;
@@ -255,13 +255,13 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     }
                     elseif ($playerinfo['aggression'] == 1)        // O = 3 & AGRESSION = 1 ATTACK SOMETIMES
                     {
-                        // Xenobe's only compare number of fighters when determining if they have an attack advantage
+                        // Kabal's only compare number of fighters when determining if they have an attack advantage
                         if ($playerinfo['ship_fighters'] > $rowo3['ship_fighters'] && $rowo3['planet_id'] == 0)
                         {
                             $furcount3a++;
-                            Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
-                            Tki\XenobeTo::ship($pdo_db, $db, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
-                            if ($xenobeisdead > 0)
+                            Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo3[character_name]");
+                            Tki\KabalTo::ship($pdo_db, $db, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
+                            if ($kabalisdead > 0)
                             {
                                 $res->MoveNext();
                                 continue;
@@ -271,17 +271,17 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     elseif ($playerinfo['aggression'] == 2)        // O = 3 & AGRESSION = 2 ATTACK ALLWAYS
                     {
                         $furcount3a++;
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_XENOBE_ATTACK, "$rowo3[character_name]");
+                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo3[character_name]");
                         if (!$rowo3['planet_id'] == 0)
                         {              // IS ON PLANET
-                            Tki\XenobeTo::planet($pdo_db, $db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
+                            Tki\KabalTo::planet($pdo_db, $db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
                         }
                         else
                         {
-                            Tki\XenobeTo::ship($pdo_db, $db, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
+                            Tki\KabalTo::ship($pdo_db, $db, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
                         }
 
-                        if ($xenobeisdead > 0)
+                        if ($kabalisdead > 0)
                         {
                             $res->MoveNext();
                             continue;
@@ -296,12 +296,12 @@ while (($res instanceof ADORecordSet) && ($res != false))
 $res->_close();
 */
 $furnonmove = $furcount - ($furcount0 + $furcount1 + $furcount2 + $furcount3);
-echo "Counted $furcount Xenobe players that are ACTIVE with working ships.<br>";
-echo "$furnonmove Xenobe players did not do anything this round. <br>";
-echo "$furcount0 Xenobe players had SENTINEL orders of which $furcount0a launched attacks. <br>";
-echo "$furcount1 Xenobe players had ROAM orders of which $furcount1a launched attacks. <br>";
-echo "$furcount2 Xenobe players had ROAM AND TRADE orders of which $furcount2a launched attacks. <br>";
-echo "$furcount3 Xenobe players had ROAM AND HUNT orders of which $furcount3a launched attacks and $furcount3h went hunting. <br>";
-echo "Xenobe TURNS COMPLETE. <br>";
+echo "Counted $furcount Kabal players that are ACTIVE with working ships.<br>";
+echo "$furnonmove Kabal players did not do anything this round. <br>";
+echo "$furcount0 Kabal players had SENTINEL orders of which $furcount0a launched attacks. <br>";
+echo "$furcount1 Kabal players had ROAM orders of which $furcount1a launched attacks. <br>";
+echo "$furcount2 Kabal players had ROAM AND TRADE orders of which $furcount2a launched attacks. <br>";
+echo "$furcount3 Kabal players had ROAM AND HUNT orders of which $furcount3a launched attacks and $furcount3h went hunting. <br>";
+echo "Kabal TURNS COMPLETE. <br>";
 echo "<br>";
-// END OF Xenobe TURNS
+// END OF Kabal TURNS

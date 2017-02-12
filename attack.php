@@ -181,14 +181,14 @@ else
         }
         else
         {
-            // Bounty-free Xenobe attacking allowed
-            if (($targetscore / $playerscore < $bounty_ratio || $targetinfo['turns_used'] < $bounty_minturns) && ( preg_match("/(\@xenobe)$/", $targetinfo['email']) === 0))
+            // Bounty-free Kabal attacking allowed
+            if (($targetscore / $playerscore < $bounty_ratio || $targetinfo['turns_used'] < $bounty_minturns) && ( preg_match("/(\@kabal)$/", $targetinfo['email']) === 0))
             {
-                // Changed xenobe check to a regexp cause a player could put
-                // @xen or whatever in his email address
-                // so (\@xenobe) is an exact match and the $ symbol means
+                // Changed kabal check to a regexp cause a player could put
+                // @kabal or whatever in his email address
+                // so (\@kabal) is an exact match and the $ symbol means
                 // "this is the *end* of the string
-                // Our custom @xenobe names will match, nothing else will
+                // Our custom @kabal names will match, nothing else will
                 // Check to see if there is Federation bounty on the player.
                 // If there is, people can attack regardless.
                 $btyamount = 0;
@@ -634,15 +634,15 @@ else
                 {
                     $rating_change = round($targetinfo['rating'] * $rating_combat_factor);
                     // Updating to always get a positive rating increase for
-                    // xenobe and the credits they are carrying
+                    // kabal and the credits they are carrying
                     $salv_credits = 0;
 
                     // Double death attack bug fix - Returns 0 for real
-                    // players, 1 for Xenobe players
-                    // He is a Xenobe
-                    if (preg_match("/(\@xenobe)$/", $targetinfo['email']) !== 0)
+                    // players, 1 for Kabal players
+                    // He is a Kabal
+                    if (preg_match("/(\@kabal)$/", $targetinfo['email']) !== 0)
                     {
-                        $resx = $db->Execute("UPDATE {$db->prefix}xenobe SET active= N WHERE xenobe_id = ?;", array($targetinfo['email']));
+                        $resx = $db->Execute("UPDATE {$db->prefix}kabal SET active= N WHERE kabal_id = ?;", array($targetinfo['email']));
                         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         Tki\AdminLog::writeLog($pdo_db, LOG_ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected as AI.");
 
@@ -709,7 +709,7 @@ else
 
                     $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $targetinfo['hull'])) + round(pow($upgrade_factor, $targetinfo['engines'])) + round(pow($upgrade_factor, $targetinfo['power'])) + round(pow($upgrade_factor, $targetinfo['computer'])) + round(pow($upgrade_factor, $targetinfo['sensors'])) + round(pow($upgrade_factor, $targetinfo['beams'])) + round(pow($upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($upgrade_factor, $targetinfo['shields'])) + round(pow($upgrade_factor, $targetinfo['armor'])) + round(pow($upgrade_factor, $targetinfo['cloak'])));
                     $ship_salvage_rate = random_int(10, 20);
-                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Xenobe - 0 if normal player
+                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Kabal - 0 if normal player
 
                     $langvars['l_att_ysalv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_ysalv']);
                     $langvars['l_att_ysalv'] = str_replace("[salv_organics]", $salv_organics, $langvars['l_att_ysalv']);
@@ -850,7 +850,7 @@ else
 
                     $ship_value = $upgrade_cost * (round(pow($upgrade_factor, $playerinfo['hull'])) + round(pow($upgrade_factor, $playerinfo['engines'])) + round(pow($upgrade_factor, $playerinfo['power'])) + round(pow($upgrade_factor, $playerinfo['computer'])) + round(pow($upgrade_factor, $playerinfo['sensors'])) + round(pow($upgrade_factor, $playerinfo['beams'])) + round(pow($upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($upgrade_factor, $playerinfo['shields'])) + round(pow($upgrade_factor, $playerinfo['armor'])) + round(pow($upgrade_factor, $playerinfo['cloak'])));
                     $ship_salvage_rate = random_int(10, 20);
-                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Xenobe - 0 if normal player
+                    $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Kabal - 0 if normal player
 
                     $langvars['l_att_salv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_salv']);
                     $langvars['l_att_salv'] = str_replace("[salv_organics]", $salv_organics, $langvars['l_att_salv']);

@@ -16,11 +16,11 @@ declare(strict_types = 1);
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: classes/XenobeTo.php
+// File: classes/KabalTo.php
 
 namespace Tki;
 
-class XenobeTo
+class KabalTo
 {
     public static function planet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars): void
     {
@@ -273,7 +273,7 @@ class XenobeTo
             $fighters_lost = $planetinfo['fighters'] - $targetfighters;
 
             // Log attack to planet owner
-            \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
+            \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Kabal $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
 
             // Update planet
             $resi = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($planetinfo['energy'], $fighters_lost, $targettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
@@ -334,7 +334,7 @@ class XenobeTo
                 // Must have died trying
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "We were KILLED by ships defending planet $planetinfo[name]");
                 // Log attack to planet owner
-                \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|0|0|0|0|0");
+                \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Kabal $playerinfo[character_name]|0|0|0|0|0");
                 // No salvage for planet because it went to the ship that won
             }
         }
@@ -350,9 +350,9 @@ class XenobeTo
         \Tki\Db::logDbErrors($pdo_db, $resultt, __LINE__, __FILE__);
         $targetinfo = $resultt->fields;
 
-        // Verify not attacking another Xenobe
-        // Added because the xenobe were killing each other off
-        if (mb_strstr($targetinfo['email'], '@xenobe'))                       // He's a xenobe
+        // Verify not attacking another Kabal
+        // Added because the kabal were killing each other off
+        if (mb_strstr($targetinfo['email'], '@kabal'))                       // He's a kabal
         {
             return;
         }
@@ -374,7 +374,7 @@ class XenobeTo
         // Use emergency warp device
         if ($targetinfo['dev_emerwarp'] > 0)
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "Xenobe $playerinfo[character_name]");
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "Kabal $playerinfo[character_name]");
             $dest_sector = random_int(0, (int) $tkireg->max_sectors);
             $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $targetinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $result_warp, __LINE__, __FILE__);
@@ -652,12 +652,12 @@ class XenobeTo
                 $rating = round($targetinfo['rating'] / 2);
                 $resc = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 0, ship_ore = 0, ship_organics = 0, ship_energy = 1000, ship_colonists = 0, ship_goods = 0, ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, ship_destroyed = 'N', rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|Y");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Kabal $playerinfo[character_name]|Y");
             }
             else
             // Target had no pod
             {
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|N");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Kabal $playerinfo[character_name]|N");
                 \Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
             }
 
@@ -736,7 +736,7 @@ class XenobeTo
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $target_energy = $targetinfo['ship_energy'];
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack failed, $targetinfo[character_name] survived.");
-            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Kabal $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
             $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ? , armor_pts = armor_pts - ?, rating=rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
             $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts=armor_pts - ?, torps=torps - ?, rating = ? WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $target_rating_change, $targetinfo['ship_id']));
@@ -802,8 +802,8 @@ class XenobeTo
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
                 $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$armor_lost|$fighters_lost");
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_RAW, "You destroyed the Xenobe ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Kabal $playerinfo[character_name]|$armor_lost|$fighters_lost");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_RAW, "You destroyed the Kabal ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
                 $resh = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $targetinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resh, __LINE__, __FILE__);
                 $armor_lost = $targetinfo['armor_pts'] - $targetarmor;
@@ -892,7 +892,7 @@ class XenobeTo
                     $roll = 1;
                 }
 
-                $playerminedeflect = $playerinfo['ship_fighters']; // Xenobe keep as many deflectors as fighters
+                $playerminedeflect = $playerinfo['ship_fighters']; // Kabal keep as many deflectors as fighters
 
                 // Combat - Beams v fighters
                 if ($targetfighters > 0 && $playerbeams > 0)
@@ -962,22 +962,22 @@ class XenobeTo
                 \Tki\Fighters::destroy($pdo_db, $targetlink, $fighterslost);
 
                 // Message the defense owner with what happened
-                $langvars['l_sf_sendlog'] = str_replace("[player]", "Xenobe $playerinfo[character_name]", $langvars['l_sf_sendlog']);
+                $langvars['l_sf_sendlog'] = str_replace("[player]", "Kabal $playerinfo[character_name]", $langvars['l_sf_sendlog']);
                 $langvars['l_sf_sendlog'] = str_replace("[lost]", $fighterslost, $langvars['l_sf_sendlog']);
                 $langvars['l_sf_sendlog'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog']);
                 \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_sf_sendlog']);
 
-                // Update Xenobe after comnbat
+                // Update Kabal after comnbat
                 $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
                 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
                 $energy = $playerinfo['ship_energy'];
                 $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?,torps = torps - ? WHERE ship_id = ?", array($energy, $fighters_lost, $armor_lost, $playertorpnum, $playerinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
 
-                // Check to see if Xenobe is dead
+                // Check to see if Kabal is dead
                 if ($playerarmor < 1)
                 {
-                    $langvars['l_sf_sendlog2'] = str_replace("[player]", "Xenobe " . $playerinfo['character_name'], $langvars['l_sf_sendlog2']);
+                    $langvars['l_sf_sendlog2'] = str_replace("[player]", "Kabal " . $playerinfo['character_name'], $langvars['l_sf_sendlog2']);
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
@@ -985,8 +985,8 @@ class XenobeTo
                     return;
                 }
 
-                // Xenobe is still alive, so he hits mines, and logs it
-                $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_playerinfo_character_name]", "Xenobe " . $playerinfo['character_name'], $langvars['l_chm_hehitminesinsector']);
+                // Kabal is still alive, so he hits mines, and logs it
+                $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_playerinfo_character_name]", "Kabal " . $playerinfo['character_name'], $langvars['l_chm_hehitminesinsector']);
                 $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_hehitminesinsector']);
                 $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_sector]", $targetlink, $langvars['l_chm_hehitminesinsector']);
                 \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_chm_hehitminesinsector']);
@@ -1014,12 +1014,12 @@ class XenobeTo
                         }
                         else
                         {
-                            // Xenobe dies, logs the fact that he died
-                            $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_playerinfo_character_name]", "Xenobe " . $playerinfo['character_name'], $langvars['l_chm_hewasdestroyedbyyourmines']);
+                            // Kabal dies, logs the fact that he died
+                            $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_playerinfo_character_name]", "Kabal " . $playerinfo['character_name'], $langvars['l_chm_hewasdestroyedbyyourmines']);
                             $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_sector]", $targetlink, $langvars['l_chm_hewasdestroyedbyyourmines']);
                             \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_chm_hewasdestroyedbyyourmines']);
 
-                            // Actually kill the Xenobe now
+                            // Actually kill the Kabal now
                             \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
                             \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
