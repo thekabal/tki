@@ -11,7 +11,7 @@
     "minimum-stability": "alpha",
     "require": {
         "smarty/smarty": "^3.1.31",
-        "ezyang/htmlpurifier": "^4.8.0",
+        "ezyang/htmlpurifier": "dev-master",
         "swiftmailer/swiftmailer": "^5.4.5",
         "adodb/adodb-php": "v5.20.9",
         "symfony/http-foundation": "^3.1",
@@ -25,7 +25,7 @@
             "friendsofphp/php-cs-fixer": "^2.0"
     },
     "autoload": {
-        "psr-4": { "Tki\\": ["classes/", "config/"]}
+        "psr-4": { "Tki\\": ["classes/", "tests/", "config/"]}
     },
     "scripts": {
         "post-update-cmd": [
