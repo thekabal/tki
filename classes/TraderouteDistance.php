@@ -16,13 +16,13 @@ declare(strict_types = 1);
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: classes/Traderoute3.php
+// File: classes/TraderouteDistance.php
 
 namespace Tki;
 
-class Traderoute3
+class TraderouteDistance
 {
-    public static function traderouteDistance(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, array $playerinfo, Reg $tkireg, $sells = 'N'): array
+    public static function calc(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, array $playerinfo, Reg $tkireg, $sells = 'N'): array
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;
