@@ -18,7 +18,7 @@ declare(strict_types = 1);
 //
 // File: classes/File.php
 //
-// This class handles direct file functions for TKI. Included is iniToDb, a function
+// This class handles direct file methods for TKI. Included is iniToDb, a method
 // for importing values from an INI file into the database.
 
 namespace Tki;
