@@ -24,7 +24,7 @@ class IbankTransfers
 {
     public static function ibankTransferPrime(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg): void
     {
-        $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
+        $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@kabal' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
         $stmt->execute();

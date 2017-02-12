@@ -16,17 +16,17 @@ declare(strict_types = 1);
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: classes/Xenobe.php
+// File: classes/Kabal.php
 //
 // FUTURE: This class is horribly bad, and needs to be refactored and tested.
 
 namespace Tki;
 
-class Xenobe
+class Kabal
 {
-    public static function xenobeTrade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
+    public static function kabalTrade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
     {
-        // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
+        // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional kabal. :)
         $tkireg->ore_price = 11;
         $tkireg->organics_price = 5;
         $tkireg->goods_price = 15;
@@ -60,7 +60,7 @@ class Xenobe
             return;
         }
 
-        // Xenobe do not trade at energy ports since they regen energy
+        // Kabal do not trade at energy ports since they regen energy
         if ($sectorinfo['port_type'] == "energy")
         {
             return;
@@ -105,7 +105,7 @@ class Xenobe
             return;
         }
 
-        //  Check Xenobe Credits & Cargo
+        //  Check Kabal Credits & Cargo
         if ($playerinfo['ship_ore'] > 0)
         {
             $shipore = $playerinfo['ship_ore'];
@@ -188,7 +188,7 @@ class Xenobe
             $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
             $stmt->execute();
 
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
         }
 
         if ($sectorinfo['port_type'] == "organics") // Port organics
@@ -235,7 +235,7 @@ class Xenobe
             $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
             $stmt->execute();
 
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
         }
 
         if ($sectorinfo['port_type'] == "goods") // Port goods
@@ -282,11 +282,11 @@ class Xenobe
             $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
             $stmt->execute();
 
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
         }
     }
 
-    public static function xenobeMove(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
+    public static function kabalMove(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -391,7 +391,7 @@ class Xenobe
             {
                 if ($playerinfo['aggression'] == 2 || $playerinfo['aggression'] == 1)
                 {
-                    \Tki\XenobeTo::secDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defenses
+                    \Tki\KabalTo::secDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defenses
 
                     return;
                 }
@@ -422,10 +422,10 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter(\PDO $pdo_db, $db, array $playerinfo, $xenobeisdead, array $langvars, Reg $tkireg): void
+    public static function kabalHunter(\PDO $pdo_db, $db, array $playerinfo, $kabalisdead, array $langvars, Reg $tkireg): void
     {
         $targetinfo = array();
-        $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
+        $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");
         \Tki\Db::logDbErrors($pdo_db, $rescount, __LINE__, __FILE__);
         $rowcount = $rescount->fields;
         $topnum = min(10, $rowcount['num_players']);
@@ -436,7 +436,7 @@ class Xenobe
             return;
         }
 
-        $res = $db->SelectLimit("SELECT * FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1 ORDER BY score DESC", $topnum);
+        $res = $db->SelectLimit("SELECT * FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1 ORDER BY score DESC", $topnum);
         \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
         // Choose a target from the top player list
@@ -475,7 +475,7 @@ class Xenobe
             $stamp = date("Y-m-d H:i:s");
             $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?", array($stamp, $targetinfo['sector'], $playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
             if (!$move_result)
             {
                 $error = $db->ErrorMsg();
@@ -526,40 +526,40 @@ class Xenobe
             {
                 // Attack sector defenses
                 $targetlink = $targetinfo['sector'];
-                \Tki\XenobeTo::secDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
+                \Tki\KabalTo::secDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
             }
 
-            if ($xenobeisdead > 0)
+            if ($kabalisdead > 0)
             {
-                return; // Sector defenses killed the Xenobe
+                return; // Sector defenses killed the Kabal
             }
 
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe launching an attack on $targetinfo[character_name]."); // Attack the target
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal launching an attack on $targetinfo[character_name]."); // Attack the target
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                \Tki\XenobeTo::planet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
+                \Tki\KabalTo::planet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
             }
             else
             {
-                \Tki\XenobeTo::ship($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
+                \Tki\KabalTo::ship($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
             }
         }
         else
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe hunt failed, target $targetinfo[character_name] was in a no attack zone (sector $targetinfo[sector]).");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal hunt failed, target $targetinfo[character_name] was in a no attack zone (sector $targetinfo[sector]).");
         }
     }
 
-    public static function xenobeRegen(\PDO $pdo_db, array $playerinfo, $xen_unemployment, Reg $tkireg): void
+    public static function kabalRegen(\PDO $pdo_db, array $playerinfo, $kabal_unemployment, Reg $tkireg): void
     {
         $gena = null;
         $gene = null;
         $genf = null;
         $gent = null;
 
-        // Xenobe Unempoyment Check
-        $playerinfo['credits'] = $playerinfo['credits'] + $xen_unemployment;
+        // Kabal Unempoyment Check
+        $playerinfo['credits'] = $playerinfo['credits'] + $kabal_unemployment;
         $maxenergy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg); // Regenerate energy
         if ($playerinfo['ship_energy'] <= ($maxenergy - 50))  // Stop regen when within 50 of max
         {
@@ -595,7 +595,7 @@ class Xenobe
             }
         }
 
-        // Xenobe pay 3 credits per torpedo
+        // Kabal pay 3 credits per torpedo
         $available_torpedoes = \Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
         if (($playerinfo['credits'] > 2) && ($available_torpedoes > 0))
         {
@@ -616,7 +616,7 @@ class Xenobe
             }
         }
 
-        // Update Xenobe record
+        // Update Kabal record
         $sql = "UPDATE ::prefix::ships SET ship_energy = :ship_energy, armor_pts = :armor_pts, ship_fighters = :ship_fighters, torps = :torps, credits = :credits WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_energy', $playerinfo['ship_energy']);
@@ -629,7 +629,7 @@ class Xenobe
 
         if (!$gene === null || !$gena === null || !$genf === null || !$gent === null)
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Xenobe $gene $gena $genf $gent and has been updated.");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal $gene $gena $genf $gent and has been updated.");
         }
     }
 }

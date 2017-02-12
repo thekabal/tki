@@ -15,8 +15,8 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: xenobe_control.php
-// FUTURE: Change the table creation for Xenobes to use the new XML schema files
+// File: kabal_control.php
+// FUTURE: Change the table creation for kabals to use the new XML schema files
 
 require_once './common.php';
 
@@ -24,7 +24,7 @@ $title = $langvars['l_ai_control'];
 Tki\Header::display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('xenobe_control', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('kabal_control', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -50,7 +50,7 @@ if (mb_strlen(trim($swordfish)) === 0)
 
 if ($swordfish != \Tki\SecureConfig::ADMIN_PASS)
 {
-    echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
+    echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";
     echo "password: <input type=password name=swordfish size=20><br><br>";
     echo "<input type=submit value=submit><input type=reset value=reset>";
     echo "</form>";
@@ -59,15 +59,15 @@ else
 {
     if (empty($module)) // Main menu
     {
-        echo "Welcome to the Xenobe Control module for The Kabal Invasion<br><br>";
+        echo "Welcome to the kabal Control module for The Kabal Invasion<br><br>";
         echo "Select a function from the list below:<br>";
-        echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
+        echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";
         echo "<select name=menu>";
-        echo "<option value=instruct>Xenobe Instructions</option>";
-        echo "<option value=xenobeedit selected>Xenobe Character Editor</option>";
-        echo "<option value=createnew>Create A New Xenobe Character</option>";
-        echo "<option value=clearlog>Clear All Xenobe Log Files</option>";
-        echo "<option value=dropxenobe>Drop and Re-Install Xenobe Database</option>";
+        echo "<option value=instruct>kabal Instructions</option>";
+        echo "<option value=kabaledit selected>kabal Character Editor</option>";
+        echo "<option value=createnew>Create A New kabal Character</option>";
+        echo "<option value=clearlog>Clear All kabal Log Files</option>";
+        echo "<option value=dropkabal>Drop and Re-Install kabal Database</option>";
         echo "</select>";
         echo "<input type=hidden name=swordfish value=$swordfish>";
         echo "&nbsp;<input type=submit value=submit>";
@@ -79,75 +79,75 @@ else
         // Start of instructions sub
         if ($module == "instruct")
         {
-            echo "<h2>Xenobe Instructions</h2>";
-            echo "<p>&nbsp;&nbsp;&nbsp; Welcome to the Xenobe Control module.  This is the module that will control the Xenobe players in the game. ";
+            echo "<h2>kabal Instructions</h2>";
+            echo "<p>&nbsp;&nbsp;&nbsp; Welcome to the kabal Control module.  This is the module that will control the kabal players in the game. ";
             echo "It is very simple right now, but will be expanded in future versions. ";
-            echo "The ultimate goal of the Xenobe players is to create some interactivity for those games without a large user base. ";
-            echo "I need not say that the Xenobe will also make good cannon fodder for those games with a large user base. ";
+            echo "The ultimate goal of the kabal players is to create some interactivity for those games without a large user base. ";
+            echo "I need not say that the kabal will also make good cannon fodder for those games with a large user base. ";
 
-            echo "<h3>Xenobe Creation</h3>";
-            echo "<p>&nbsp;&nbsp;&nbsp; In order to create a Xenobe you must choose the <strong>\"Create A Xenobe Character\"</strong> option from the menu. ";
-            echo "This will bring up the Xenobe character creation screen.  There are only a few fields for you to edit. ";
-            echo "However, with these fields you will determine not only how your Xenobe will be created, but how he will act in the game. ";
+            echo "<h3>kabal Creation</h3>";
+            echo "<p>&nbsp;&nbsp;&nbsp; In order to create a kabal you must choose the <strong>\"Create A kabal Character\"</strong> option from the menu. ";
+            echo "This will bring up the kabal character creation screen.  There are only a few fields for you to edit. ";
+            echo "However, with these fields you will determine not only how your kabal will be created, but how he will act in the game. ";
             echo "We will now go over these fields and what they will do. ";
 
-            echo "<p>&nbsp;&nbsp;&nbsp; When creating a new Xenobe character the <strong>Xenobe Name</strong> and the <strong>Shipname</strong> are automatically generated. ";
+            echo "<p>&nbsp;&nbsp;&nbsp; When creating a new kabal character the <strong>kabal Name</strong> and the <strong>Shipname</strong> are automatically generated. ";
             echo "You can change these default values by editing these fields before submitting the character for creation. ";
             echo "Take care not to duplicate a current player or ship name, for that will result in creation failure. ";
             echo "<br>&nbsp;&nbsp;&nbsp; The starting <strong>Sector</strong> number will also be randomly generated. ";
             echo "You can change this to any sector.  However, you should take care to use a valid sector number. Otherwise the creation will fail.";
             echo "<br>&nbsp;&nbsp;&nbsp; The <strong>Level</strong> field will default to '3'.  This field refers to the starting tech level of all ship stats. ";
-            echo "So a default Xenobe will have it's Hull, Beams, Power, Engine, etc... all set to 3 unless this value is changed. ";
+            echo "So a default kabal will have it's Hull, Beams, Power, Engine, etc... all set to 3 unless this value is changed. ";
             echo "All appropriate ship stores will be set to the maximum allowed by the given tech level. ";
             echo "So, starting levels of energy, fighters, armor, torps, etc... are all affected by this setting. ";
             echo "<br>&nbsp;&nbsp;&nbsp; The <strong>Active</strong> checkbox will default to checked. ";
-            echo "This box refers to if the Xenobe AI system will see this Xenobe and execute it's orders. ";
-            echo "If this box is not checked then the Xenobe AI system will ignore this record and the next two fields are ignored. ";
+            echo "This box refers to if the kabal AI system will see this kabal and execute it's orders. ";
+            echo "If this box is not checked then the kabal AI system will ignore this record and the next two fields are ignored. ";
             echo "<br>&nbsp;&nbsp;&nbsp; The <strong>Orders</strong> selection box will default to 'SENTINEL'. ";
             echo "There are three other options available: ROAM, ROAM AND trADE, and ROAM AND HUNT. ";
             echo "These Orders and what they mean will be detailed below. ";
             echo "<br>&nbsp;&nbsp;&nbsp; The <strong>Aggression</strong> selection box will default to 'PEACEFUL'. ";
             echo "There are two other options available: ATTACK SOMETIMES, and ATTACK ALWAYS. ";
             echo "These Aggression settings and what they mean will be detailed below. ";
-            echo "<br>&nbsp;&nbsp;&nbsp; Pressing the <strong>Create</strong> button will create the Xenobe and return to the creation screen to create another. ";
+            echo "<br>&nbsp;&nbsp;&nbsp; Pressing the <strong>Create</strong> button will create the kabal and return to the creation screen to create another. ";
 
-            echo "<h3>Xenobe Orders</h3>";
-            echo "<p> Here are the Xenobe Order options and what the Xenobe AI system will do for each: ";
+            echo "<h3>kabal Orders</h3>";
+            echo "<p> Here are the kabal Order options and what the kabal AI system will do for each: ";
             echo "<ul>SENTINEL<br> ";
-            echo "This Xenobe will stay in place.  His only interactions will be with those who are in his sector at the time he takes his turn. ";
+            echo "This kabal will stay in place.  His only interactions will be with those who are in his sector at the time he takes his turn. ";
             echo "The aggression level will determine what those player interactions are.</ul> ";
             echo "<ul>ROAM<br> ";
-            echo "This Xenobe will warp from sector to sector looking for players to interact with. ";
+            echo "This kabal will warp from sector to sector looking for players to interact with. ";
             echo "The aggression level will determine what those player interactions are.</ul> ";
             echo "<ul>ROAM AND trADE<br> ";
-            echo "This Xenobe will warp from sector to sector looking for players to interact with and ports to trade with. ";
-            echo "The Xenobe will trade at a port if possible before looking for player interactions. ";
+            echo "This kabal will warp from sector to sector looking for players to interact with and ports to trade with. ";
+            echo "The kabal will trade at a port if possible before looking for player interactions. ";
             echo "The aggression level will determine what those player interactions are.</ul> ";
             echo "<ul>ROAM AND HUNT<br> ";
-            echo "This Xenobe has a taste for blood and likes the sport of a good hunt. ";
-            echo "Ocassionally (around 1/4th the time) this Xenobe has the urge to go hunting.  He will randomly choose one of the top ten players to hunt. ";
-            echo "If that player is in a sector that allows attack, then the Xenobe warps there and attacks. ";
-            echo "When he is not out hunting this Xenobe acts just like one with ROAM orders.</ul> ";
+            echo "This kabal has a taste for blood and likes the sport of a good hunt. ";
+            echo "Ocassionally (around 1/4th the time) this kabal has the urge to go hunting.  He will randomly choose one of the top ten players to hunt. ";
+            echo "If that player is in a sector that allows attack, then the kabal warps there and attacks. ";
+            echo "When he is not out hunting this kabal acts just like one with ROAM orders.</ul> ";
 
-            echo "<h3>Xenobe Aggression</h3>";
-            echo "<p> Here are the Xenobe Aggression levels and what the Xenobe AI system will do for each: ";
+            echo "<h3>kabal Aggression</h3>";
+            echo "<p> Here are the kabal Aggression levels and what the kabal AI system will do for each: ";
             echo "<ul>PEACEFUL<br> ";
-            echo "This Xenobe will not attack players.  He will continue to roam or trade as ordered but will not launch any attacks. ";
-            echo "If this Xenobe is a hunter then he will still attack players on the hunt but never otherwise.</ul> ";
+            echo "This kabal will not attack players.  He will continue to roam or trade as ordered but will not launch any attacks. ";
+            echo "If this kabal is a hunter then he will still attack players on the hunt but never otherwise.</ul> ";
             echo "<ul>ATTACK SOMETIMES<br> ";
-            echo "This Xenobe will compare it's current number of fighters to a players fighters before deciding to attack. ";
-            echo "If the Xenobe's fighters are greater then the player's, then the Xenobe will attack the player.</ul> ";
+            echo "This kabal will compare it's current number of fighters to a players fighters before deciding to attack. ";
+            echo "If the kabal's fighters are greater then the player's, then the kabal will attack the player.</ul> ";
             echo "<ul>ATTACK ALWAYS<br> ";
-            echo "This Xenobe is just mean.  He will attack anyone he comes across regardless of the odds.</ul> ";
+            echo "This kabal is just mean.  He will attack anyone he comes across regardless of the odds.</ul> ";
         }
-        elseif ($module == "xenobeedit")
+        elseif ($module == "kabaledit")
         {
-            echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #0f0 \">Xenobe Editor</span><br>";
-            echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
+            echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #0f0 \">kabal Editor</span><br>";
+            echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";
             if (empty ($user))
             {
                 echo "<select size=20 name=user>";
-                $res = $db->Execute("SELECT email, character_name, ship_destroyed, active, sector FROM {$db->prefix}ships JOIN {$db->prefix}xenobe WHERE email = xenobe_id ORDER BY sector;");
+                $res = $db->Execute("SELECT email, character_name, ship_destroyed, active, sector FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email = kabal_id ORDER BY sector;");
                 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 while (!$res->EOF)
                 {
@@ -184,11 +184,11 @@ else
             {
                 if (empty($operation))
                 {
-                    $res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}xenobe WHERE email=xenobe_id AND email = ?;", array($user));
+                    $res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email=kabal_id AND email = ?;", array($user));
                     Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                     $row = $res->fields;
                     echo "<table border=0 cellspacing=0 cellpadding=5>";
-                    echo "<tr><td>Xenobe name</td><td><input type=text name=character_name value=\"$row[character_name]\"></td></tr>";
+                    echo "<tr><td>kabal name</td><td><input type=text name=character_name value=\"$row[character_name]\"></td></tr>";
                     echo "<tr><td>Active?</td><td><input type=checkbox name=active value=ON " . \Tki\Checked::check($row['active']) . "></td></tr>";
                     echo "<tr><td>E-mail</td><td>$row[email]</td></tr>";
                     echo "<tr><td>ID</td><td>$row[ship_id]</td></tr>";
@@ -294,9 +294,9 @@ else
                     echo "<input type=hidden name=user value=$user>";
                     echo "<input type=hidden name=operation value=save>";
                     echo "<input type=submit value=Save>";
-                    // Show Xenobe log data
+                    // Show kabal log data
                     echo "<hr>";
-                    echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #0f0;\">Log Data For This Xenobe</span><br>";
+                    echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #0f0;\">Log Data For This kabal</span><br>";
 
                     $logres = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? ORDER BY time DESC, type DESC;", array($row['ship_id']));
                     Tki\Db::LogDbErrors($pdo_db, $logres, __LINE__, __FILE__);
@@ -306,7 +306,7 @@ else
                         $logtype = null;
                         switch ($logrow['type'])
                         {
-                            case LOG_XENOBE_ATTACK:
+                            case LOG_kabal_ATTACK:
                                 $logtype = "Launching an attack on ";
                                 break;
                             case LOG_ATTACK_LOSE:
@@ -333,26 +333,26 @@ else
                     Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
                     if (!$result)
                     {
-                        echo "Changes to Xenobe ship record have FAILED Due to the following Error:<br><br>";
+                        echo "Changes to kabal ship record have FAILED Due to the following Error:<br><br>";
                         echo $db->ErrorMsg() . "<br>";
                     }
                     else
                     {
-                        echo "Changes to Xenobe ship record have been saved.<br><br>";
-                        $result2 = $db->Execute("UPDATE {$db->prefix}xenobe SET active = ?, orders = ?, aggression = ? WHERE xenobe_id = ?;", array($_active, $orders, $aggression, $user));
+                        echo "Changes to kabal ship record have been saved.<br><br>";
+                        $result2 = $db->Execute("UPDATE {$db->prefix}kabal SET active = ?, orders = ?, aggression = ? WHERE kabal_id = ?;", array($_active, $orders, $aggression, $user));
                         Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                         if (!$result2)
                         {
-                            echo "Changes to Xenobe activity record have FAILED Due to the following Error:<br><br>";
+                            echo "Changes to kabal activity record have FAILED Due to the following Error:<br><br>";
                             echo $db->ErrorMsg() . "<br>";
                         }
                         else
                         {
-                            echo "Changes to Xenobe activity record have been saved.<br><br>";
+                            echo "Changes to kabal activity record have been saved.<br><br>";
                         }
                     }
 
-                    echo "<input type=submit value=\"Return to Xenobe editor\">";
+                    echo "<input type=submit value=\"Return to kabal editor\">";
                     $button_main = false;
                 }
                 else
@@ -361,43 +361,43 @@ else
                 }
             }
 
-            echo "<input type=hidden name=menu value=xenobeedit>";
+            echo "<input type=hidden name=menu value=kabaledit>";
             echo "<input type=hidden name=swordfish value=$swordfish>";
             echo "</form>";
         }
-        elseif ($module == "dropxenobe")
+        elseif ($module == "dropkabal")
         {
-            echo "<h1>Drop and Re-Install Xenobe Database</h1>";
-            echo "<h3>This will DELETE All Xenobe records from the <i>ships</i> table then DROP and reset the <i>xenobe</i> table</h3>";
-            echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
+            echo "<h1>Drop and Re-Install kabal Database</h1>";
+            echo "<h3>This will DELETE All kabal records from the <i>ships</i> table then DROP and reset the <i>kabal</i> table</h3>";
+            echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";
             if (empty($operation))
             {
                 echo "<br>";
                 echo "<h2><font COLOR=Red>Are You Sure?</font></h2><br>";
-                echo "<input type=hidden name=operation value=dropxen>";
+                echo "<input type=hidden name=operation value=dropkabal>";
                 echo "<input type=submit value=Drop>";
             }
-            elseif ($operation == "dropxen")
+            elseif ($operation == "dropkabal")
             {
-                // Delete all xenobe in the ships table
-                echo "Deleting xenobe records in the ships table...<br>";
-                $resx = $db->Execute("DELETE FROM {$db->prefix}ships WHERE email LIKE '%@xenobe'");
+                // Delete all kabal in the ships table
+                echo "Deleting kabal records in the ships table...<br>";
+                $resx = $db->Execute("DELETE FROM {$db->prefix}ships WHERE email LIKE '%@kabal'");
                 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 echo "deleted.<br>";
-                // Drop xenobe table
-                echo "Dropping xenobe table...<br>";
-                $resy = $db->Execute("DROP TABLE IF EXISTS {$db->prefix}xenobe");
+                // Drop kabal table
+                echo "Dropping kabal table...<br>";
+                $resy = $db->Execute("DROP TABLE IF EXISTS {$db->prefix}kabal");
                 Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
                 echo "dropped.<br>";
-                // Create xenobe table
-                echo "Re-Creating table: xenobe...<br>";
-                $resz = $db->Execute("CREATE table {$db->prefix}xenobe(" .
-                                     "xenobe_id char(40) NOT NULL," .
+                // Create kabal table
+                echo "Re-Creating table: kabal...<br>";
+                $resz = $db->Execute("CREATE table {$db->prefix}kabal(" .
+                                     "kabal_id char(40) NOT NULL," .
                                      "active enum('Y','N') DEFAULT 'Y' NOT NULL," .
                                      "aggression smallint(5) DEFAULT '0' NOT NULL," .
                                      "orders smallint(5) DEFAULT '0' NOT NULL," .
-                                     "PRIMARY KEY (xenobe_id)," .
-                                     "KEY xenobe_id (xenobe_id)" .
+                                     "PRIMARY KEY (kabal_id)," .
+                                     "KEY kabal_id (kabal_id)" .
                                      ")");
                 Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
                 echo "created.<br>";
@@ -407,25 +407,25 @@ else
                 echo "Invalid operation";
             }
 
-            echo "<input type=hidden name=menu value=dropxenobe>";
+            echo "<input type=hidden name=menu value=dropkabal>";
             echo "<input type=hidden name=swordfish value=$swordfish>";
             echo "</form>";
         }
         elseif ($module == "clearlog")
         {
-            echo "<h1>Clear All Xenobe Logs</h1>";
-            echo "<h3>This will DELETE All Xenobe log files</h3>";
-            echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
+            echo "<h1>Clear All kabal Logs</h1>";
+            echo "<h3>This will DELETE All kabal log files</h3>";
+            echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";
             if (empty($operation))
             {
                 echo "<br>";
                 echo "<h2><font COLOR=Red>Are You Sure?</font></h2><br>";
-                echo "<input type=hidden name=operation value=clearxenlog>";
+                echo "<input type=hidden name=operation value=clearkaballog>";
                 echo "<input type=submit value=Clear>";
             }
-            elseif ($operation == "clearxenlog")
+            elseif ($operation == "clearkaballog")
             {
-                $res = $db->Execute("SELECT email,ship_id FROM {$db->prefix}ships WHERE email LIKE '%@xenobe'");
+                $res = $db->Execute("SELECT email,ship_id FROM {$db->prefix}ships WHERE email LIKE '%@kabal'");
                 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 while (!$res->EOF)
                 {
@@ -447,12 +447,12 @@ else
         }
         elseif ($module == "createnew")
         {
-            echo "<strong>Create A New Xenobe</strong>";
+            echo "<strong>Create A New kabal</strong>";
             echo "<br>";
-            echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
+            echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";
             if (empty($operation))
             {
-                // Create Xenobe Name
+                // Create kabal Name
                 $Sylable1 = array("Ak","Al","Ar","B","Br","D","F","Fr","G","Gr","K","Kr","N","Ol","Om","P","Qu","R","S","Z");
                 $Sylable2 = array("a","ar","aka","aza","e","el","i","in","int","ili","ish","ido","ir","o","oi","or","os","ov","u","un");
                 $Sylable3 = array("ag","al","ak","ba","dar","g","ga","k","ka","kar","kil","l","n","nt","ol","r","s","ta","til","x");
@@ -482,15 +482,15 @@ else
                 }
 
                 // Create Ship Name
-                $shipname = "Xenobe-" . $character;
+                $shipname = "kabal-" . $character;
 
                 // Select Random Sector
                 $sector = random_int(1, (int) $tkireg->max_sectors);
 
                 // Display Confirmation form
                 echo "<td><table border=0 cellspacing=0 cellpadding=5>";
-                echo "<tr><td>Xenobe Name</td><td><input type=text size=20 name=character value=$character></td>";
-                echo "<td>Level <input type=text size=5 name=xenlevel value=3></td>";
+                echo "<tr><td>kabal Name</td><td><input type=text size=20 name=character value=$character></td>";
+                echo "<td>Level <input type=text size=5 name=kaballevel value=3></td>";
                 echo "<td>Ship Name <input type=text size=20 name=shipname value=$shipname></td>";
                 echo "<tr><td>Active?<input type=checkbox name=active value=on checked></td>";
                 echo "<td>Orders ";
@@ -509,10 +509,10 @@ else
                 echo "</select></td></tr>";
                 echo "</table>";
                 echo "<hr>";
-                echo "<input type=hidden name=operation value=createxenobe>";
+                echo "<input type=hidden name=operation value=createkabal>";
                 echo "<input type=submit value=Create>";
             }
-            elseif ($operation == "createxenobe")
+            elseif ($operation == "createkabal")
             {
                 // Update database
                 $_active = empty($active) ? "N" : "Y";
@@ -527,7 +527,7 @@ else
                 $shipname = str_replace(" ", "_", $shipname);
 
                 // Create emailname from character
-                $emailname = str_replace(" ", "_", $character) . "@xenobe";
+                $emailname = str_replace(" ", "_", $character) . "@kabal";
                 // $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
                 // $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
                 // Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
@@ -581,20 +581,20 @@ else
                         }
                     }
 
-                    if ($xenlevel === null)
+                    if ($kaballevel === null)
                     {
-                        $xenlevel = 0;
+                        $kaballevel = 0;
                     }
 
-                    $maxenergy = Tki\CalcLevels::energy($xenlevel, $tkireg);
-                    $maxarmor = Tki\CalcLevels::armor($xenlevel, $tkireg);
-                    $maxfighters = Tki\CalcLevels::fighters($xenlevel, $tkireg);
-                    $maxtorps = Tki\CalcLevels::torpedoes($xenlevel, $tkireg);
+                    $maxenergy = Tki\CalcLevels::energy($kaballevel, $tkireg);
+                    $maxarmor = Tki\CalcLevels::armor($kaballevel, $tkireg);
+                    $maxfighters = Tki\CalcLevels::fighters($kaballevel, $tkireg);
+                    $maxtorps = Tki\CalcLevels::torpedoes($kaballevel, $tkireg);
                     $stamp = date("Y-m-d H:i:s");
 
-                    // Add Xenobe record to ships table ... modify if the ships schema changes
+                    // Add kabal record to ships table ... modify if the ships schema changes
                     $thesql = "INSERT INTO {$db->prefix}ships ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `last_login` , `rating` , `score` , `team` , `team_invite` , `interface` , `ip_address` , `planet_id` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defenses` , `lang` , `dev_lssd` )
-                               VALUES (NULL,'$shipname','N','$character','$makepass','$emailname',$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$maxtorps,$xenlevel,$xenlevel,$maxarmor,$xenlevel,$start_credits,$sector,0,0,0,$maxenergy,0,$maxfighters,0,$start_turns,'N',0,0,0,0,'N','N',0,0, '$stamp',0,0,0,0,'N','127.0.0.1',0,'Y','N','N','Y',NULL,'$default_lang','Y')";
+                               VALUES (NULL,'$shipname','N','$character','$makepass','$emailname',$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$maxtorps,$kaballevel,$kaballevel,$maxarmor,$kaballevel,$start_credits,$sector,0,0,0,$maxenergy,0,$maxfighters,0,$start_turns,'N',0,0,0,0,'N','N',0,0, '$stamp',0,0,0,0,'N','127.0.0.1',0,'Y','N','N','Y',NULL,'$default_lang','Y')";
                     $result2 = $db->Execute($thesql);
                     Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                     if (!$result2)
@@ -603,12 +603,12 @@ else
                     }
                     else
                     {
-                        echo "Xenobe has been created.<br><br>";
+                        echo "kabal has been created.<br><br>";
                         echo "password has been set.<br><br>";
                         echo "Ship Records have been updated.<br><br>";
                     }
 
-                    $result3 = $db->Execute("INSERT INTO {$db->prefix}xenobe (xenobe_id, active, aggression, orders) values(?,?,?,?)", array($emailname, $_active, $aggression, $orders));
+                    $result3 = $db->Execute("INSERT INTO {$db->prefix}kabal (kabal_id, active, aggression, orders) values(?,?,?,?)", array($emailname, $_active, $aggression, $orders));
                     Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
                     if (!$result3)
                     {
@@ -616,11 +616,11 @@ else
                     }
                     else
                     {
-                        echo "Xenobe Records have been updated.<br><br>";
+                        echo "kabal Records have been updated.<br><br>";
                     }
                 }
 
-                echo "<input type=submit value=\"Return to Xenobe Creator \">";
+                echo "<input type=submit value=\"Return to kabal Creator \">";
                 $button_main = false;
             }
             else
@@ -640,7 +640,7 @@ else
         if ($button_main)
         {
             echo "<br><br>";
-            echo "<form accept-charset='utf-8' action=xenobe_control.php method=post>";
+            echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";
             echo "<input type=hidden name=swordfish value=$swordfish>";
             echo "<input type=submit value=\"Return to main menu\">";
             echo "</form>";

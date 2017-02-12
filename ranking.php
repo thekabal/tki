@@ -79,7 +79,7 @@ $sql = "SELECT {$db->prefix}ships.ship_id, {$db->prefix}ships.email, {$db->prefi
 "{$db->prefix}ships.rating, {$db->prefix}teams.team_name, {$db->prefix}teams.admin AS team_admin, " .
 "if ({$db->prefix}ships.turns_used < 150, 0, ROUND({$db->prefix}ships.score/{$db->prefix}ships.turns_used)) " .
 "AS efficiency FROM {$db->prefix}ships LEFT JOIN {$db->prefix}teams ON " .
-"{$db->prefix}ships.team = {$db->prefix}teams.id WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' " .
+"{$db->prefix}ships.team = {$db->prefix}teams.id WHERE ship_destroyed='N' and email NOT LIKE '%@kabal' " .
 "AND turns_used > 0 ORDER BY :order_by LIMIT :limit";
 
 $stmt = $pdo_db->prepare($sql);

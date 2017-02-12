@@ -182,10 +182,10 @@ namespace Tki;
      * @property mixed universe_size
      * @property mixed upgrade_cost
      * @property mixed upgrade_factor
-     * @property mixed xen_aggression
-     * @property mixed xen_planets
-     * @property mixed xen_start_credits
-     * @property mixed xen_unemployment
+     * @property mixed kabal_aggression
+     * @property mixed kabal_planets
+     * @property mixed kabal_start_credits
+     * @property mixed kabal_unemployment
      *
      */
 class Reg

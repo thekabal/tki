@@ -60,17 +60,17 @@ $variables['update_turns_results']['sched'] = $tkireg->sched_turns;
 $local_table_timer->stop();
 $variables['update_turns_results']['elapsed'] = $local_table_timer->elapsed();
 
-$local_table_timer->start(); // Start benchmarking for Xenobe
+$local_table_timer->start(); // Start benchmarking for Kabal
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ticks_full', $tkireg->sched_turns);
-$stmt->bindValue(':sched_file', 'sched_xenobe.php');
+$stmt->bindValue(':sched_file', 'sched_kabal.php');
 $stmt->bindParam(':last_run', $now);
 $resxx = $stmt->execute();
-$variables['update_xenobe_results']['result'] = Tki\Db::LogDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_xenobe_results']['sched'] = $tkireg->sched_turns;
+$variables['update_kabal_results']['result'] = Tki\Db::LogDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
+$variables['update_kabal_results']['sched'] = $tkireg->sched_turns;
 $local_table_timer->stop();
-$variables['update_xenobe_results']['elapsed'] = $local_table_timer->elapsed();
+$variables['update_kabal_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for Ibank scheduler
 $sched_file = 'sched_ibank.php';
