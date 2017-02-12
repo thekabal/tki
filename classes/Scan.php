@@ -22,12 +22,12 @@ namespace Tki;
 
 class Scan
 {
-    public static function success(int $level_scan, int $level_cloak)
+    public static function success(int $level_scan, int $level_cloak): int
     {
         return (5 + $level_scan - $level_cloak) * 5;
     }
 
-    public static function error(int $level_scan, int $level_cloak, int $scan_error_factor)
+    public static function error(int $level_scan, int $level_cloak, int $scan_error_factor): float
     {
         $sc_error = (4 + $level_scan / 2 - $level_cloak / 2) * $scan_error_factor;
 

@@ -240,7 +240,7 @@ class Reg
         }
     }
 
-    public function __set(string $key, $value)
+    public function __set(string $key, $value): void
     {
         $this->vars[$key] = $value;
     }

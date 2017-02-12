@@ -97,7 +97,7 @@ class Team
     }
 
     // Rewritten display of teams list
-    public static function displayAllTeams(\PDO $pdo_db, $db, array $langvars, Reg $tkireg, $order, $type)
+    public static function displayAllTeams(\PDO $pdo_db, $db, array $langvars, Reg $tkireg, $order, $type): void
     {
         $row2 = array();
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
@@ -179,7 +179,7 @@ class Team
         echo "</table><br>";
     }
 
-    public static function displayInviteInfo(array $langvars, array $playerinfo, $invite_info)
+    public static function displayInviteInfo(array $langvars, array $playerinfo, $invite_info): void
     {
         if (!$playerinfo['team_invite'])
         {
@@ -195,7 +195,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, $db, array $langvars, $whichteam, $isowner, array $playerinfo, $invite_info, $team, Reg $tkireg)
+    public static function showInfo(\PDO $pdo_db, $db, array $langvars, $whichteam, $isowner, array $playerinfo, $invite_info, $team, Reg $tkireg): void
     {
         // Heading
         echo "<div align=center><h3><font color=white><strong>$team[team_name]</strong>";

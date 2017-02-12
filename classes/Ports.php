@@ -74,7 +74,7 @@ class Ports
         return (string) $dropdownvar;
     }
 
-    public static function buildOneCol($text = "&nbsp;", $align = "left")
+    public static function buildOneCol($text = "&nbsp;", $align = "left"): void
     {
         echo "
         <tr>
@@ -83,7 +83,7 @@ class Ports
         ";
     }
 
-    public static function buildTwoCol($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left")
+    public static function buildTwoCol($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left"): void
     {
         echo "
         <tr>
@@ -115,7 +115,7 @@ class Ports
         return $delta_cost;
     }
 
-    // Here is the trade fonction to strip out some "spaghetti code". The function saves about 60 lines of code, I hope it will be
+    // Here is the trade function to strip out some "spaghetti code". The function saves about 60 lines of code, I hope it will be
     // easier to modify/add something in this part.
     /*
      * @return mixed
