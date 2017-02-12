@@ -38,7 +38,7 @@ class PlanetReport
         }
     }
 
-    public static function planetReportMenu(array $playerinfo, array $langvars): void
+    public static function menu(array $playerinfo, array $langvars): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .

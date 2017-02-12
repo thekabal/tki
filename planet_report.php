@@ -56,13 +56,13 @@ elseif ($preptype == 0)                  // For typing in manually to get a repo
 {
     $title = $title . ": Menu";
     echo "<h1>" . $title . "</h1>\n";
-    Tki\PlanetReport::planetReportMenu($playerinfo, $langvars);
+    Tki\PlanetReport::menu($playerinfo, $langvars);
 }
 else                                  // Display the menu if no valid options are passed in
 {
     $title = $title . ": Status";
     echo "<h1>" . $title . "</h1>\n";
-    Tki\PlanetReport::planetReportMenu($playerinfo, $langvars);
+    Tki\PlanetReport::menu($playerinfo, $langvars);
 }
 
 echo "<br><br>";

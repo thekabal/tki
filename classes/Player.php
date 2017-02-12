@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Player
 {
-    public static function handleAuth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template)
+    public static function auth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template)
     {
         $request = Request::createFromGlobals();
         $flag = true;
@@ -97,7 +97,7 @@ class Player
         }
     }
 
-    public static function handleBan(\PDO $pdo_db, string $lang, $timestamp, Smarty $template, array $playerinfo, array $langvars, Reg $tkireg)
+    public static function ban(\PDO $pdo_db, string $lang, $timestamp, Smarty $template, array $playerinfo, array $langvars, Reg $tkireg)
     {
         // Check to see if the player is banned every 60 seconds (may need to ajust this).
         if ($timestamp['now'] >= ($timestamp['last'] + 60))

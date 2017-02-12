@@ -22,7 +22,7 @@ namespace Tki;
 
 class Team
 {
-    public static function sameTeam($attacker_team = null, $attackie_team = null) : bool
+    public static function isSameTeam($attacker_team = null, $attackie_team = null) : bool
     {
         if (($attacker_team != $attackie_team) || ($attacker_team == 0 || $attackie_team == 0))
         {

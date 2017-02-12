@@ -74,7 +74,7 @@ elseif ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_att_noturn'] . '<br><br>';
 }
-elseif (Tki\Team::sameTeam($playerinfo['team'], $targetinfo['team']))
+elseif (Tki\Team::isSameTeam($playerinfo['team'], $targetinfo['team']))
 {
     echo "<div style='color:#ff0;'>" . $langvars['l_team_noattack_members'] . "</div>\n";
 }

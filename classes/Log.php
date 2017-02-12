@@ -17,10 +17,6 @@ declare(strict_types = 1);
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: classes/Log.php
-//
-// FUTURE: These are horribly bad. They should be broken out of classes, and turned mostly into template
-// behaviors. But in the interest of saying goodbye to the includes directory, and raw functions, this
-// will at least allow us to auto-load and use classes instead. Plenty to do in the future, though!
 
 namespace Tki;
 
