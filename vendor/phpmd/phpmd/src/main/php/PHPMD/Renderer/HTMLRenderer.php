@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Renderer;
@@ -48,9 +48,9 @@ use PHPMD\Report;
  * This renderer output a simple html file with all found violations and suspect
  * software artifacts.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class HTMLRenderer extends AbstractRenderer
 {
@@ -80,7 +80,7 @@ class HTMLRenderer extends AbstractRenderer
      * This method will be called when the engine has finished the source analysis
      * phase.
      *
-     * @param \PHPMD\Report $report
+     * @param  \PHPMD\Report $report
      * @return void
      */
     public function renderReport(Report $report)
@@ -150,9 +150,9 @@ class HTMLRenderer extends AbstractRenderer
     /**
      * This method will render a html table with occurred processing errors.
      *
-     * @param \PHPMD\Report $report
+     * @param  \PHPMD\Report $report
      * @return void
-     * @since 1.2.1
+     * @since  1.2.1
      */
     private function glomProcessingErrors(Report $report)
     {

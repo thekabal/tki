@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD;
@@ -58,9 +58,9 @@ use PHPMD\Node\MethodNode;
 /**
  * Simple wrapper around the php depend engine.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Parser extends AbstractASTVisitor implements CodeAwareGenerator
 {
@@ -112,7 +112,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Parses the projects source and reports all detected errors and violations.
      *
-     * @param \PHPMD\Report $report
+     * @param  \PHPMD\Report $report
      * @return void
      */
     public function parse(Report $report)
@@ -130,7 +130,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Adds a new analysis rule-set to this adapter.
      *
-     * @param \PHPMD\RuleSet $ruleSet
+     * @param  \PHPMD\RuleSet $ruleSet
      * @return void
      */
     public function addRuleSet(RuleSet $ruleSet)
@@ -141,7 +141,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Sets the violation report used by the rule-set.
      *
-     * @param \PHPMD\Report $report
+     * @param  \PHPMD\Report $report
      * @return void
      */
     public function setReport(Report $report)
@@ -204,7 +204,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Visits a class node.
      *
-     * @param \PDepend\Source\AST\ASTClass $node
+     * @param  \PDepend\Source\AST\ASTClass $node
      * @return void
      */
     public function visitClass(ASTClass $node)
@@ -220,7 +220,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Visits a function node.
      *
-     * @param \PDepend\Source\AST\ASTFunction $node
+     * @param  \PDepend\Source\AST\ASTFunction $node
      * @return void
      */
     public function visitFunction(ASTFunction $node)
@@ -235,7 +235,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Visits an interface node.
      *
-     * @param \PDepend\Source\AST\ASTInterface $node
+     * @param  \PDepend\Source\AST\ASTInterface $node
      * @return void
      */
     public function visitInterface(ASTInterface $node)
@@ -251,7 +251,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Visits a method node.
      *
-     * @param \PDepend\Source\AST\ASTMethod $node
+     * @param  \PDepend\Source\AST\ASTMethod $node
      * @return void
      */
     public function visitMethod(ASTMethod $node)
@@ -266,7 +266,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Sets the context code nodes.
      *
-     * @param \PDepend\Source\AST\ASTArtifactList $artifacts
+     * @param  \PDepend\Source\AST\ASTArtifactList $artifacts
      * @return void
      */
     public function setArtifacts(ASTArtifactList $artifacts)
@@ -277,7 +277,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
     /**
      * Applies all rule-sets to the given <b>$node</b> instance.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     private function apply(AbstractNode $node)
@@ -293,7 +293,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
      * Collects the collected metrics for the given node and adds them to the
      * <b>$node</b>.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     private function collectMetrics(AbstractNode $node)

@@ -4,16 +4,18 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
+class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'a241f7e31cfa9fbd3d37a58e5c08c4ea' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/autoload.php',
+        'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
         '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
         'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'bf9f5270ae66ac6fa0290b4bf47867b7' => __DIR__ . '/..' . '/adodb/adodb-php/adodb.inc.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -31,6 +33,7 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Php55\\' => 23,
             'Symfony\\Polyfill\\Php54\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Yaml\\' => 23,
@@ -66,8 +69,8 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -76,7 +79,12 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
         'Tki\\' => 
         array (
             0 => __DIR__ . '/../..' . '/classes',
-            1 => __DIR__ . '/../..' . '/config',
+            1 => __DIR__ . '/../..' . '/tests',
+            2 => __DIR__ . '/../..' . '/config',
+        ),
+        'Symfony\\Polyfill\\Php55\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php55',
         ),
         'Symfony\\Polyfill\\Php54\\' => 
         array (
@@ -788,10 +796,10 @@ class ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInita544dbd9d1e6088f7541c342d08c3f73::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite36ead10c20441e98275f0cd8108b3d6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite36ead10c20441e98275f0cd8108b3d6::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInite36ead10c20441e98275f0cd8108b3d6::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInite36ead10c20441e98275f0cd8108b3d6::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -32,9 +32,9 @@ class DisallowMultipleAssignmentsSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */
@@ -133,6 +133,11 @@ class DisallowMultipleAssignmentsSniff implements Sniff
 
             if ($tokens[$i]['code'] === T_INLINE_ELSE) {
                 // We reached the end of the inline ELSE statement.
+                return;
+            }
+
+            if ($tokens[$i]['code'] === T_OPEN_TAG) {
+                // We reached the end of the code block.
                 return;
             }
 

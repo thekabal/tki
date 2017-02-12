@@ -34,10 +34,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @since      0.2.6
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @since     0.2.6
  */
 
 namespace PHPMD\Rule;
@@ -49,9 +49,9 @@ use PHPMD\Node\ASTNode;
 /**
  * Base class for rules that rely on local variables.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since     0.2.6
  */
 abstract class AbstractLocalVariable extends AbstractRule
@@ -81,7 +81,7 @@ abstract class AbstractLocalVariable extends AbstractRule
      * Tests if the given variable node represents a local variable or if it is
      * a static object property or something similar.
      *
-     * @param \PHPMD\Node\ASTNode $variable The variable to check.
+     * @param  \PHPMD\Node\ASTNode $variable The variable to check.
      * @return boolean
      */
     protected function isLocal(ASTNode $variable)
@@ -96,7 +96,7 @@ abstract class AbstractLocalVariable extends AbstractRule
      * Tests if the given variable represents one of the PHP super globals
      * that are available in scopes.
      *
-     * @param \PHPMD\AbstractNode $variable
+     * @param  \PHPMD\AbstractNode $variable
      * @return boolean
      */
     protected function isNotSuperGlobal(AbstractNode $variable)
@@ -108,7 +108,7 @@ abstract class AbstractLocalVariable extends AbstractRule
      * Tests if the given variable node is a regular variable an not property
      * or method postfix.
      *
-     * @param \PHPMD\Node\ASTNode $variable
+     * @param  \PHPMD\Node\ASTNode $variable
      * @return boolean
      */
     protected function isRegularVariable(ASTNode $variable)
@@ -132,7 +132,7 @@ abstract class AbstractLocalVariable extends AbstractRule
      * Removes all index expressions that are wrapped around the given node
      * instance.
      *
-     * @param \PHPMD\Node\ASTNode $node
+     * @param  \PHPMD\Node\ASTNode $node
      * @return \PHPMD\Node\ASTNode
      */
     protected function stripWrappedIndexExpression(ASTNode $node)
@@ -151,7 +151,7 @@ abstract class AbstractLocalVariable extends AbstractRule
     /**
      * Tests if the given variable node os part of an index expression.
      *
-     * @param \PHPMD\Node\ASTNode $node
+     * @param  \PHPMD\Node\ASTNode $node
      * @return boolean
      */
     protected function isWrappedByIndexExpression(ASTNode $node)
@@ -165,8 +165,8 @@ abstract class AbstractLocalVariable extends AbstractRule
      * PHP is case insensitive so we should compare function names case
      * insensitive.
      *
-     * @param \PHPMD\AbstractNode $node
-     * @param string $name
+     * @param  \PHPMD\AbstractNode $node
+     * @param  string              $name
      * @return boolean
      */
     protected function isFunctionNameEqual(AbstractNode $node, $name)
@@ -178,8 +178,8 @@ abstract class AbstractLocalVariable extends AbstractRule
      * AST puts namespace prefix to global functions called from a namespace.
      * This method checks if the last part of function fully qualified name is equal to $name
      *
-     * @param \PHPMD\AbstractNode $node
-     * @param string $name
+     * @param  \PHPMD\AbstractNode $node
+     * @param  string              $name
      * @return boolean
      */
     protected function isFunctionNameEndingWith(AbstractNode $node, $name)

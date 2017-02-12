@@ -232,8 +232,13 @@ class Fixer
             $filePath = $this->currentFile->getFilename();
         }
 
-        $cwd      = getcwd().DIRECTORY_SEPARATOR;
-        $filename = str_replace($cwd, '', $filePath);
+        $cwd = getcwd().DIRECTORY_SEPARATOR;
+        if (strpos($filePath, $cwd) === 0) {
+            $filename = substr($filePath, strlen($cwd));
+        } else {
+            $filename = $filePath;
+        }
+
         $contents = $this->getContents();
 
         $tempName  = tempnam(sys_get_temp_dir(), 'phpcs-fixer');
@@ -560,7 +565,10 @@ class Fixer
                 $indent .= "\tA: ";
             }
 
-            @ob_end_clean();
+            if (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+
             echo "$indent$sniff (line $line) replaced token $stackPtr ($type) \"$oldContent\" => \"$newContent\"".PHP_EOL;
             ob_start();
         }

@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\TextUI;
@@ -48,9 +48,9 @@ use PHPMD\Writer\StreamWriter;
 /**
  * This class provides a command line interface for PHPMD
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Command
 {
@@ -73,8 +73,8 @@ class Command
      * The use of flag <b>--ignore-violations-on-exit</b> will result to a
      * <b>EXIT_SUCCESS</b> even if any violation is found.
      *
-     * @param \PHPMD\TextUI\CommandLineOptions $opts
-     * @param \PHPMD\RuleSetFactory $ruleSetFactory
+     * @param  \PHPMD\TextUI\CommandLineOptions $opts
+     * @param  \PHPMD\RuleSetFactory            $ruleSetFactory
      * @return integer
      */
     public function run(CommandLineOptions $opts, RuleSetFactory $ruleSetFactory)

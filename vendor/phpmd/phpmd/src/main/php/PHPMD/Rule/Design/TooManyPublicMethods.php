@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule\Design;
@@ -49,9 +49,9 @@ use PHPMD\Rule\ClassAware;
 /**
  * This rule class will detect all classes with too much public methods.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class TooManyPublicMethods extends AbstractRule implements ClassAware
 {
@@ -66,7 +66,7 @@ class TooManyPublicMethods extends AbstractRule implements ClassAware
      * This method checks the number of public methods with in a given class and checks
      * this number against a configured threshold.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)
@@ -95,7 +95,7 @@ class TooManyPublicMethods extends AbstractRule implements ClassAware
     /**
      * Counts public methods within the given class/interface node.
      *
-     * @param \PHPMD\Node\AbstractTypeNode $node
+     * @param  \PHPMD\Node\AbstractTypeNode $node
      * @return integer
      */
     private function countMethods(AbstractTypeNode $node)

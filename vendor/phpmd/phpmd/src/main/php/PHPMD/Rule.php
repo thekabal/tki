@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD;
@@ -44,9 +44,9 @@ namespace PHPMD;
 /**
  * Base interface for a PHPMD rule.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since     1.1.0
  */
 interface Rule
@@ -66,7 +66,7 @@ interface Rule
     /**
      * Sets the name for this rule instance.
      *
-     * @param string $name
+     * @param  string $name
      * @return void
      */
     public function setName($name);
@@ -81,7 +81,7 @@ interface Rule
     /**
      * Sets the version since when this rule is available.
      *
-     * @param string $since
+     * @param  string $since
      * @return void
      */
     public function setSince($since);
@@ -96,7 +96,7 @@ interface Rule
     /**
      * Sets the violation message text for this rule.
      *
-     * @param string $message
+     * @param  string $message
      * @return void
      */
     public function setMessage($message);
@@ -111,7 +111,7 @@ interface Rule
     /**
      * Sets an url will external information for this rule.
      *
-     * @param string $externalInfoUrl
+     * @param  string $externalInfoUrl
      * @return void
      */
     public function setExternalInfoUrl($externalInfoUrl);
@@ -126,7 +126,7 @@ interface Rule
     /**
      * Sets the description text for this rule instance.
      *
-     * @param string $description
+     * @param  string $description
      * @return void
      */
     public function setDescription($description);
@@ -141,7 +141,7 @@ interface Rule
     /**
      * Adds a code example for this rule.
      *
-     * @param string $example
+     * @param  string $example
      * @return void
      */
     public function addExample($example);
@@ -156,7 +156,7 @@ interface Rule
     /**
      * Set the priority of this rule.
      *
-     * @param integer $priority
+     * @param  integer $priority
      * @return void
      */
     public function setPriority($priority);
@@ -171,7 +171,7 @@ interface Rule
     /**
      * Sets the name of the parent rule set instance.
      *
-     * @param string $ruleSetName
+     * @param  string $ruleSetName
      * @return void
      */
     public function setRuleSetName($ruleSetName);
@@ -186,7 +186,7 @@ interface Rule
     /**
      * Sets the violation report for this rule.
      *
-     * @param \PHPMD\Report $report
+     * @param  \PHPMD\Report $report
      * @return void
      */
     public function setReport(\PHPMD\Report $report);
@@ -194,8 +194,8 @@ interface Rule
     /**
      * Adds a configuration property to this rule instance.
      *
-     * @param string $name
-     * @param string $value
+     * @param  string $name
+     * @param  string $value
      * @return void
      */
     public function addProperty($name, $value);
@@ -204,7 +204,7 @@ interface Rule
      * Returns the value of a configured property as a boolean or throws an
      * exception when no property with <b>$name</b> exists.
      *
-     * @param string $name
+     * @param  string $name
      * @return boolean
      * @throws \OutOfBoundsException When no property for <b>$name</b> exists.
      */
@@ -214,7 +214,7 @@ interface Rule
      * Returns the value of a configured property as an integer or throws an
      * exception when no property with <b>$name</b> exists.
      *
-     * @param string $name
+     * @param  string $name
      * @return integer
      * @throws \OutOfBoundsException When no property for <b>$name</b> exists.
      */
@@ -224,7 +224,7 @@ interface Rule
      * This method should implement the violation analysis algorithm of concrete
      * rule implementations. All extending classes must implement this method.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node);

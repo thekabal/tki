@@ -34,10 +34,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @since      1.1.0
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @since     1.1.0
  */
 
 namespace PHPMD\Rule\Design;
@@ -50,10 +50,10 @@ use PHPMD\Rule\MethodAware;
 /**
  * This rule class detects the usage of PHP's goto statement.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @since      1.1.0
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @since     1.1.0
  */
 class GotoStatement extends AbstractRule implements MethodAware, FunctionAware
 {
@@ -61,7 +61,7 @@ class GotoStatement extends AbstractRule implements MethodAware, FunctionAware
      * This method should implement the violation analysis algorithm of concrete
      * rule implementations. All extending classes must implement this method.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)
