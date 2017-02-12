@@ -152,7 +152,7 @@ class Traderoute3
         return $retvalue;
     }
 
-    public static function traderouteCreate($db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, int $planet_id1=null, int $planet_id2=null, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
+    public static function traderouteCreate($db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, int $planet_id1=null, int $planet_id2=null, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -384,7 +384,7 @@ class Traderoute3
         \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteDelete(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $confirm, int $traderoute_id=null)
+    public static function traderouteDelete(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $confirm, int $traderoute_id=null): void
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
         \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
@@ -411,7 +411,7 @@ class Traderoute3
         }
     }
 
-    public static function traderouteSettings(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo)
+    public static function traderouteSettings(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -477,7 +477,7 @@ class Traderoute3
         \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteSetsettings($db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy)
+    public static function traderouteSetsettings($db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -493,7 +493,7 @@ class Traderoute3
         \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
     }
 
-    public static function traderouteResultsTableTop(\PDO $pdo_db, string $lang, Reg $tkireg)
+    public static function traderouteResultsTableTop(\PDO $pdo_db, string $lang, Reg $tkireg): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -505,13 +505,13 @@ class Traderoute3
         echo "    <td width='50%'><font size='2' color='white'><strong>";
     }
 
-    public static function traderouteResultsSource()
+    public static function traderouteResultsSource(): void
     {
         echo "</strong></font></td>\n";
         echo "    <td width='50%'><font size='2' color='white'><strong>";
     }
 
-    public static function traderouteResultsDestination(Reg $tkireg)
+    public static function traderouteResultsDestination(Reg $tkireg): void
     {
         echo "</strong></font></td>\n";
         echo "  </tr>\n";
@@ -519,13 +519,13 @@ class Traderoute3
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
-    public static function traderouteResultsCloseCell()
+    public static function traderouteResultsCloseCell(): void
     {
         echo "</font></td>\n";
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
-    public static function traderouteResultsShowCost(Reg $tkireg)
+    public static function traderouteResultsShowCost(Reg $tkireg): void
     {
         echo "</font></td>\n";
         echo "  </tr>\n";
@@ -533,13 +533,13 @@ class Traderoute3
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
-    public static function traderouteResultsCloseCost()
+    public static function traderouteResultsCloseCost(): void
     {
         echo "</font></td>\n";
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
-    public static function traderouteResultsCloseTable()
+    public static function traderouteResultsCloseTable(): void
     {
         echo "</font></td>\n";
         echo "  </tr>\n";
@@ -547,7 +547,7 @@ class Traderoute3
         // echo "<p><center><font size=3 color=white><strong>\n";
     }
 
-    public static function traderouteResultsDisplayTotals(\PDO $pdo_db, string $lang, int $total_profit)
+    public static function traderouteResultsDisplayTotals(\PDO $pdo_db, string $lang, int $total_profit): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -561,7 +561,7 @@ class Traderoute3
         }
     }
 
-    public static function traderouteResultsDisplaySummary(\PDO $pdo_db, string $lang, string $tdr_display_creds, $dist, array $playerinfo)
+    public static function traderouteResultsDisplaySummary(\PDO $pdo_db, string $lang, string $tdr_display_creds, $dist, array $playerinfo): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -572,7 +572,7 @@ class Traderoute3
         //echo "<font size='2'>\n";
     }
 
-    public static function traderouteResultsShowRepeat(int $engage)
+    public static function traderouteResultsShowRepeat(int $engage): void
     {
         echo "<form accept-charset='utf-8' action='traderoute.php?engage=" . $engage . "' method='post'>\n";
         echo "<br>Enter times to repeat <input type='text' name='tr_repeat' value='1' size='5'> <input type='submit' value='submit'>\n";

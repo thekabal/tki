@@ -26,7 +26,7 @@ namespace Tki;
 
 class Ibank
 {
-    public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, string $account, $amount, Smarty $template)
+    public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, string $account, $amount, Smarty $template): void
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -90,7 +90,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankLogin(array $langvars, array $playerinfo, string $account)
+    public static function ibankLogin(array $langvars, array $playerinfo, string $account): void
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_welcometoibank'] . "<br>---------------------------------</td></tr>" .
             "<tr valign=top>" .
@@ -103,7 +103,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw(array $langvars, string $account)
+    public static function ibankWithdraw(array $langvars, string $account): void
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_withdrawfunds'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
@@ -120,7 +120,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankTransfer(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg)
+    public static function ibankTransfer(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg): void
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@xenobe' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
         $stmt = $pdo_db->prepare($sql);
@@ -226,7 +226,7 @@ class Ibank
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
-    public static function ibankLoans(\PDO $pdo_db, array $langvars, Reg $tkireg, array $playerinfo, string $account)
+    public static function ibankLoans(\PDO $pdo_db, array $langvars, Reg $tkireg, array $playerinfo, string $account): void
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
@@ -303,7 +303,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, string $account, $amount, Reg $tkireg, Smarty $template)
+    public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, string $account, $amount, Reg $tkireg, Smarty $template): void
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
@@ -367,7 +367,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankConsolidate(array $langvars, Reg $tkireg, int $dplanet_id)
+    public static function ibankConsolidate(array $langvars, Reg $tkireg, int $dplanet_id): void
     {
         $percent = $tkireg->ibank_paymentfee * 100;
 
@@ -394,7 +394,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankError(\PDO $pdo_db, array $langvars, string $errmsg, string $backlink, string $lang, Reg $tkireg, Smarty $template)
+    public static function ibankError(\PDO $pdo_db, array $langvars, string $errmsg, string $backlink, string $lang, Reg $tkireg, Smarty $template): void
     {
         $title = $langvars['l_ibank_ibankerrreport'];
         echo "<tr><td colspan=2 align=center valign=top>" . $title . "<br>---------------------------------</td></tr>" .
@@ -414,7 +414,7 @@ class Ibank
         die();
     }
 
-    public static function ibankDeposit(\PDO $pdo_db, string $lang, string $account, array $playerinfo)
+    public static function ibankDeposit(\PDO $pdo_db, string $lang, string $account, array $playerinfo): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('ibank'));

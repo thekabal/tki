@@ -22,7 +22,7 @@ namespace Tki;
 
 class Mines
 {
-    public static function explode(\PDO $pdo_db, int $sector, $num_mines)
+    public static function explode(\PDO $pdo_db, int $sector, $num_mines): void
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type ='M' ORDER BY QUANTITY ASC";
         $stmt = $pdo_db->prepare($sql);

@@ -22,7 +22,7 @@ namespace Tki;
 
 class Planet
 {
-    public function getOwner(\PDO $pdo_db, int $planet_id, &$owner_info)
+    public function getOwner(\PDO $pdo_db, int $planet_id, &$owner_info): bool
     {
         $owner_info = null;
         if (($planet_id !== null) && is_numeric($planet_id) && $planet_id > 0)
@@ -45,7 +45,7 @@ class Planet
         return false;
     }
 
-    public static function planetBombing(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $ownerinfo, array $planetinfo, Smarty $template)
+    public static function planetBombing(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $ownerinfo, array $planetinfo, Smarty $template): void
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -131,7 +131,7 @@ class Planet
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }
 
-    public static function planetCombat(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $ownerinfo, $planetinfo)
+    public static function planetCombat(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $ownerinfo, $planetinfo): void
     {
         if ($playerinfo['turns'] < 1)
         {

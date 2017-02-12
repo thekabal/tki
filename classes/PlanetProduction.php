@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PlanetProduction
 {
-    public static function productionChange(\PDO $pdo_db, $db, array $langvars, array $prodpercentarray, Reg $tkireg)
+    public static function productionChange(\PDO $pdo_db, $db, array $langvars, array $prodpercentarray, Reg $tkireg): void
     {
         //  Declare default production values from the config.php file
         //

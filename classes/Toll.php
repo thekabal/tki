@@ -22,7 +22,7 @@ namespace Tki;
 
 class Toll
 {
-    public static function distribute(\PDO $pdo_db, int $sector, $toll, $total_fighters)
+    public static function distribute(\PDO $pdo_db, int $sector, $toll, $total_fighters): void
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type='F'";
         $stmt = $pdo_db->prepare($sql);

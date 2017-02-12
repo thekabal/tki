@@ -26,12 +26,12 @@ class Timer
     public $t_stop = 0.0;
     public $t_elapsed = 0.0;
 
-    public function start()
+    public function start(): void
     {
         $this->t_start = microtime(true);
     }
 
-    public function stop()
+    public function stop(): void
     {
         $this->t_stop = microtime(true);
     }

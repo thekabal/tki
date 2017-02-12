@@ -22,7 +22,7 @@ namespace Tki;
 
 class LogMove
 {
-    public static function writeLog(\PDO $pdo_db, int $ship_id, int $sector_id)
+    public static function writeLog(\PDO $pdo_db, int $ship_id, int $sector_id): void
     {
         $stmt = $pdo_db->prepare("INSERT INTO ::prefix::movement_log (ship_id, sector_id, time) VALUES (:ship_id, :sector_id, NOW())");
         $stmt->bindParam(':ship_id', $ship_id);
