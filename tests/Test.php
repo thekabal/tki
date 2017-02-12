@@ -16,13 +16,13 @@ declare(strict_types = 1);
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: tests/Test.php
+// File: Test.php
 
-namespace Tki\tests;
+namespace Tki;
 
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 
-class Test extends PHPUnit_Framework_TestCase
+class Test extends \PHPUnit\Framework\TestCase
 {
     public function testOnePlusOne()
     {
