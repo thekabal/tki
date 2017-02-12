@@ -41,7 +41,7 @@ class Ownership
         }
         else
         {
-            return (string) "Sector ownership didn't change";
+            return "Sector ownership didn't change";
         }
 
         $owner_num = 0;
