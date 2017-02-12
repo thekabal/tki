@@ -21,7 +21,7 @@
         "Symfony/var-dumper": "^3.2"
     },
     "require-dev": {
-            "squizlabs/php_codesniffer": "^3.0.0RC2",
+            "squizlabs/php_codesniffer": "^3.0.0RC3",
             "phpmd/phpmd" : "@stable",
             "sebastian/phpcpd": "^2.0.4",
             "phpunit/phpunit": "^6.0.6",
