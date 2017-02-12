@@ -447,7 +447,7 @@ else
                 $dst = $planet2['sector_id'];
             }
 
-            $dist = \Tki\Traderoute3::traderouteDistance($pdo_db, $traderoutes[$i]['source_type'], $traderoutes[$i]['dest_type'], $src, $dst, $traderoutes[$i]['circuit'], $playerinfo, $tkireg);
+            $dist = \Tki\TraderouteDistance::calc($pdo_db, $traderoutes[$i]['source_type'], $traderoutes[$i]['dest_type'], $src, $dst, $traderoutes[$i]['circuit'], $playerinfo, $tkireg);
 
             $langvars['l_tdr_escooped_temp'] = str_replace("[tdr_dist_triptime]", $dist['triptime'], $langvars['l_tdr_escooped']);
             $langvars['l_tdr_escooped2_temp'] = str_replace("[tdr_dist_scooped]", $dist['scooped'], $langvars['l_tdr_escooped2']);
