@@ -114,11 +114,11 @@ elseif ($command == 'withdraw2') // Withdraw operation
 }
 elseif ($command == 'deposit') // Deposit menu
 {
-    Tki\Ibank::ibankDeposit($pdo_db, $lang, $account, $playerinfo);
+    Tki\IbankDeposit::before($pdo_db, $lang, $account, $playerinfo);
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Tki\Ibank2::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\IbankDeposit::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
