@@ -32,6 +32,6 @@ class StatusTest extends \PHPUnit\Framework\TestCase
 
     public function testWarning()
     {
-        throw new PHPUnit_Framework_Warning;
+        throw new PHPUnit\Framework\Warning;
     }
 }

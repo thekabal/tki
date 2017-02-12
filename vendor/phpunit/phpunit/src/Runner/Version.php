@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-use SebastianBergmann\Version;
+namespace PHPUnit\Runner;
+
+use SebastianBergmann\Version as VersionId;
 
 /**
  * This class defines the current version of PHPUnit.
- *
- * @since Class available since Release 2.0.0
  */
-class PHPUnit_Runner_Version
+class Version
 {
     private static $pharVersion;
     private static $version;
@@ -32,7 +32,7 @@ class PHPUnit_Runner_Version
         }
 
         if (self::$version === null) {
-            $version       = new Version('5.7.13', dirname(dirname(__DIR__)));
+            $version       = new VersionId('6.0.6', dirname(dirname(__DIR__)));
             self::$version = $version->getVersion();
         }
 
@@ -41,8 +41,6 @@ class PHPUnit_Runner_Version
 
     /**
      * @return string
-     *
-     * @since Method available since Release 4.8.13
      */
     public static function series()
     {
@@ -65,8 +63,6 @@ class PHPUnit_Runner_Version
 
     /**
      * @return string
-     *
-     * @since Method available since Release 4.0.0
      */
     public static function getReleaseChannel()
     {
