@@ -22,7 +22,7 @@ namespace Tki;
 
 class Fighters
 {
-    public static function destroy(\PDO $pdo_db, int $sector, $num_fighters): void
+    public static function destroy(\PDO $pdo_db, int $sector, int $num_fighters): void
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type ='F' ORDER BY quantity ASC";
         $stmt = $pdo_db->prepare($sql);

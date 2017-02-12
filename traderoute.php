@@ -216,17 +216,17 @@ if (mb_strlen(trim($confirm)) === 0)
 if ($command == 'new')
 {
     // Displays new trade route form
-    \Tki\Traderoute2::traderouteNew($pdo_db, $db, $lang, $tkireg, null, $template, $num_traderoutes, $playerinfo);
+    \Tki\Traderoute2::traderouteNew($pdo_db, $db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, null);
 }
 elseif ($command == 'create')
 {
     // Enters new route in db
-    \Tki\Traderoute3::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing);
+    \Tki\Traderoute3::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $planet_id1, $planet_id2);
 }
 elseif ($command == 'edit')
 {
     // Displays new trade route form, edit
-    \Tki\Traderoute2::traderouteNew($pdo_db, $db, $lang, $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo);
+    \Tki\Traderoute2::traderouteNew($pdo_db, $db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, $traderoute_id);
 }
 elseif ($command == 'delete')
 {
