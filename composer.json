@@ -15,7 +15,10 @@
         "swiftmailer/swiftmailer": "^5.4.5",
         "adodb/adodb-php": "v5.20.9",
         "symfony/http-foundation": "^3.1",
-        "phpstan/phpstan": "^0.6"
+        "phpstan/phpstan": "^0.6",
+        "Symfony/http-kernel": "^3.2",
+        "Symfony/browser-kit": "^3.2",
+        "Symfony/var-dumper": "^3.2"
     },
     "require-dev": {
             "squizlabs/php_codesniffer": "^3.0.0RC2",
@@ -56,6 +59,7 @@
             "rm -rf vendor/smarty/smarty/documentation",
             "rm -rf vendor/swiftmailer/swiftmailer/notes",
             "rm -rf vendor/swiftmailer/swiftmailer/doc",
+            "rm -rf templates/_compile/*",
             "rm -rf vendor/swiftmailer/swiftmailer/tests"
         ]
     }
