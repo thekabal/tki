@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -50,7 +50,7 @@ use PHPMD\Rule\ClassAware;
  * This rule class will detect all classes with too much methods.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class TooManyMethods extends AbstractRule implements ClassAware
@@ -66,7 +66,7 @@ class TooManyMethods extends AbstractRule implements ClassAware
      * This method checks the number of methods with in a given class and checks
      * this number against a configured threshold.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)
@@ -95,7 +95,7 @@ class TooManyMethods extends AbstractRule implements ClassAware
     /**
      * Counts all methods within the given class/interface node.
      *
-     * @param \PHPMD\Node\AbstractTypeNode $node
+     * @param  \PHPMD\Node\AbstractTypeNode $node
      * @return integer
      */
     private function countMethods(AbstractTypeNode $node)

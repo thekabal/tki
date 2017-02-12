@@ -129,7 +129,7 @@ class Schema
         {
             $create_table_results = array();
             $i = 0;
-            define('PDO_SUCCESS', (string) '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
+            define('PDO_SUCCESS', '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
             $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
             foreach ($seq_files as $seq_filename)
@@ -172,7 +172,7 @@ class Schema
     {
         $create_table_results = array();
         $i = 0;
-        define('PDO_SUCCESS', (string) '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
+        define('PDO_SUCCESS', '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)

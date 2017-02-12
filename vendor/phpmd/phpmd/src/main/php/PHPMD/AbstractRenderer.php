@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PHPMD;
  * Abstract base class for PHPMD rendering engines.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 abstract class AbstractRenderer
@@ -70,7 +70,7 @@ abstract class AbstractRenderer
     /**
      * Returns the associated output writer instance.
      *
-     * @param \PHPMD\AbstractWriter $writer
+     * @param  \PHPMD\AbstractWriter $writer
      * @return void
      */
     public function setWriter(AbstractWriter $writer)
@@ -93,7 +93,7 @@ abstract class AbstractRenderer
      * This method will be called when the engine has finished the source analysis
      * phase.
      *
-     * @param \PHPMD\Report $report
+     * @param  \PHPMD\Report $report
      * @return void
      */
     abstract public function renderReport(Report $report);

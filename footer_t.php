@@ -17,7 +17,7 @@
 //
 // File: footer_t.php
 
-$online = (int) 0;
+$online = 0;
 
 if (Tki\Db::isActive($pdo_db))
 {
@@ -27,7 +27,7 @@ if (Tki\Db::isActive($pdo_db))
     $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $stamp); // Online is the (int) count of the numbers of players currently logged in via SQL select
 }
 
-$elapsed = (int) 999; // Default value for elapsed, overridden with an actual value if its available
+$elapsed = 999; // Default value for elapsed, overridden with an actual value if its available
 if ($tkireg !== null)
 {
     if (property_exists($tkireg, 'tkitimer'))
@@ -56,7 +56,7 @@ if ($last_run !== false)
 }
 else
 {
-    $seconds_left = (int) 0;
+    $seconds_left = 0;
     $display_update_ticker = false;
 }
 
@@ -120,6 +120,10 @@ $mem_peak_usage = floor(memory_get_peak_usage() / 1024);
 $public_pages = array('ranking.php', 'new.php', 'faq.php', 'settings.php', 'news.php', 'index.php');
 $slash_position = mb_strrpos($request->server->get('SCRIPT_NAME'), '/') + 1;
 $current_page = mb_substr($request->server->get('SCRIPT_NAME'), $slash_position);
+
+unset ($variables);
+$variables = array();
+
 if (in_array($current_page, $public_pages))
 {
     // If it is a non-login required page, such as ranking, new, faq, settings, news, and index use the public SF logo, which increases project stats.

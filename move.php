@@ -41,7 +41,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_move_turn'] . '<br><br>';
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -99,7 +99,7 @@ if ($flag == 1)
     }
     else
     {
-        Tki\Text::gotomain($pdo_db, $lang);
+        Tki\Text::gotoMain($pdo_db, $lang);
     }
 }
 else
@@ -107,7 +107,7 @@ else
     echo $langvars['l_move_failed'] . '<br><br>';
     $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
     Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
 }
 
 echo "</body></html>";

@@ -14,6 +14,7 @@ namespace Symfony\Component\DependencyInjection\Tests\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\AutowirePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Tests\Fixtures\includes\FooVariadic;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -33,6 +34,23 @@ class AutowirePassTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $container->getDefinition('bar')->getArguments());
         $this->assertEquals('foo', (string) $container->getDefinition('bar')->getArgument(0));
+    }
+
+    /**
+     * @requires PHP 5.6
+     */
+    public function testProcessVariadic()
+    {
+        $container = new ContainerBuilder();
+        $container->register('foo', Foo::class);
+        $definition = $container->register('fooVariadic', FooVariadic::class);
+        $definition->setAutowired(true);
+
+        $pass = new AutowirePass();
+        $pass->process($container);
+
+        $this->assertCount(1, $container->getDefinition('fooVariadic')->getArguments());
+        $this->assertEquals('foo', (string) $container->getDefinition('fooVariadic')->getArgument(0));
     }
 
     public function testProcessAutowireParent()
@@ -213,13 +231,13 @@ class AutowirePassTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $container->getDefinition('coop_tilleuls')->getArguments());
         $this->assertEquals('autowired.symfony\component\dependencyinjection\tests\compiler\dunglas', $container->getDefinition('coop_tilleuls')->getArgument(0));
 
-        $dunglasDefinition = $container->getDefinition('autowired.symfony\component\dependencyinjection\tests\compiler\dunglas');
+        $dunglasDefinition = $container->getDefinition('autowired.Symfony\Component\DependencyInjection\Tests\Compiler\Dunglas');
         $this->assertEquals(__NAMESPACE__.'\Dunglas', $dunglasDefinition->getClass());
         $this->assertFalse($dunglasDefinition->isPublic());
         $this->assertCount(1, $dunglasDefinition->getArguments());
         $this->assertEquals('autowired.symfony\component\dependencyinjection\tests\compiler\lille', $dunglasDefinition->getArgument(0));
 
-        $lilleDefinition = $container->getDefinition('autowired.symfony\component\dependencyinjection\tests\compiler\lille');
+        $lilleDefinition = $container->getDefinition('autowired.Symfony\Component\DependencyInjection\Tests\Compiler\Lille');
         $this->assertEquals(__NAMESPACE__.'\Lille', $lilleDefinition->getClass());
     }
 
@@ -475,6 +493,22 @@ class AutowirePassTest extends \PHPUnit_Framework_TestCase
         $pass->process($container);
 
         $this->assertTrue($container->hasDefinition('bar'));
+    }
+
+    public function testEmptyStringIsKept()
+    {
+        $container = new ContainerBuilder();
+
+        $container->register('a', __NAMESPACE__.'\A');
+        $container->register('lille', __NAMESPACE__.'\Lille');
+        $container->register('foo', __NAMESPACE__.'\MultipleArgumentsOptionalScalar')
+            ->setAutowired(true)
+            ->setArguments(array('', ''));
+
+        $pass = new AutowirePass();
+        $pass->process($container);
+
+        $this->assertEquals(array(new Reference('a'), '', new Reference('lille')), $container->getDefinition('foo')->getArguments());
     }
 }
 

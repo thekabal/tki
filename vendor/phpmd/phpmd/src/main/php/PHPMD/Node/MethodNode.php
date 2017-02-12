@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -50,7 +50,7 @@ use PHPMD\Rule;
  * Wrapper around a PHP_Depend method node.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class MethodNode extends AbstractCallableNode
@@ -117,7 +117,7 @@ class MethodNode extends AbstractCallableNode
      * Checks if this node has a suppressed annotation for the given rule
      * instance.
      *
-     * @param \PHPMD\Rule $rule
+     * @param  \PHPMD\Rule $rule
      * @return boolean
      */
     public function hasSuppressWarningsAnnotationFor(Rule $rule)
@@ -153,7 +153,7 @@ class MethodNode extends AbstractCallableNode
      * Otherwise this method will return <b>false</b>.
      *
      * @return boolean
-     * @since 1.2.1
+     * @since  1.2.1
      */
     public function isDeclaration()
     {

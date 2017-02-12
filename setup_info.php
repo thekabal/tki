@@ -46,7 +46,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 
 
 $variables = null;
 $variables['lang'] = $lang;
-$variables['link'] = 'https://kabal-invasion.com/forums/';
+$variables['link'] = 'https://github.com/thekabal/tki/';
 $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'tki';
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
@@ -103,7 +103,7 @@ $variables['dev_mode'] = file_exists('dev');
 $variables['php_module_pdo'] = extension_loaded('pdo_mysql');
 $variables['php_module_mysqli'] = extension_loaded('mysqli');
 $variables['adodb_path_test'] = file_exists(realpath("vendor/adodb/adodb-php/adodb.inc.php"));
-$variables['smarty_path_test'] = file_exists(realpath("vendor/smarty/smarty/distribution/libs/Smarty.class.php"));
+$variables['smarty_path_test'] = file_exists(realpath("vendor/smarty/smarty/libs/Smarty.class.php"));
 $variables['title'] = $langvars['l_setup_info_title'];
 
 // Test Smarty
@@ -132,8 +132,9 @@ if ($db_port !== null)
 }
 
 // Attempt to connect to the database via adodb
-$test_db = ADONewConnection('mysqli');
-$variables['adodb_conn_test'] = $test_db->Connect($db_host, $db_user, $db_pwd, $db_name);
+$test_db = new Tki\Db();
+$variables['adodb_conn_test'] = $test_db->initDb('adodb');
+
 if (!($variables['adodb_conn_test']))
 {
     $variables['adodb_conn_err'] = "Error message";

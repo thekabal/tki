@@ -42,9 +42,9 @@ class EndFileNewlineSniff implements Sniff
     /**
      * Processes this sniff, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in
-     *                                        the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in
+     *                                               the stack passed in $tokens.
      *
      * @return int
      */
@@ -54,7 +54,7 @@ class EndFileNewlineSniff implements Sniff
         $tokens   = $phpcsFile->getTokens();
         $stackPtr = ($phpcsFile->numTokens - 1);
 
-        if ($phpcsFile->tokenizerType !== 'PHP') {
+        if ($tokens[$stackPtr]['content'] === '') {
             $stackPtr--;
         }
 

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 2.3
  */
@@ -44,6 +44,8 @@
 namespace PDepend\Source\Language\PHP;
 
 use PDepend\Source\AST\ASTAllocationExpression;
+use PDepend\Source\AST\ASTExpression;
+use PDepend\Source\AST\ASTNode;
 use PDepend\Source\Tokenizer\Tokens;
 
 /**
@@ -59,12 +61,117 @@ use PDepend\Source\Tokenizer\Tokens;
  *     - interface
  *     - trait
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 2.3
  */
 abstract class PHPParserVersion70 extends PHPParserVersion56
 {
+    /**
+     * @param integer $tokenType
+     * @return boolean
+     */
+    protected function isConstantName($tokenType)
+    {
+        switch ($tokenType) {
+            case Tokens::T_CALLABLE:
+            case Tokens::T_TRAIT:
+            case Tokens::T_EXTENDS:
+            case Tokens::T_IMPLEMENTS:
+            case Tokens::T_STATIC:
+            case Tokens::T_ABSTRACT:
+            case Tokens::T_FINAL:
+            case Tokens::T_PUBLIC:
+            case Tokens::T_PROTECTED:
+            case Tokens::T_PRIVATE:
+            case Tokens::T_CONST:
+            case Tokens::T_ENDDECLARE:
+            case Tokens::T_ENDFOR:
+            case Tokens::T_ENDFOREACH:
+            case Tokens::T_ENDIF:
+            case Tokens::T_ENDWHILE:
+            case Tokens::T_LOGICAL_AND:
+            case Tokens::T_GLOBAL:
+            case Tokens::T_GOTO:
+            case Tokens::T_INSTANCEOF:
+            case Tokens::T_INSTEADOF:
+            case Tokens::T_INTERFACE:
+            case Tokens::T_NAMESPACE:
+            case Tokens::T_NEW:
+            case Tokens::T_LOGICAL_OR:
+            case Tokens::T_LOGICAL_XOR:
+            case Tokens::T_TRY:
+            case Tokens::T_USE:
+            case Tokens::T_VAR:
+            case Tokens::T_EXIT:
+            case Tokens::T_LIST:
+            case Tokens::T_CLONE:
+            case Tokens::T_INCLUDE:
+            case Tokens::T_INCLUDE_ONCE:
+            case Tokens::T_THROW:
+            case Tokens::T_ARRAY:
+            case Tokens::T_PRINT:
+            case Tokens::T_ECHO:
+            case Tokens::T_REQUIRE:
+            case Tokens::T_REQUIRE_ONCE:
+            case Tokens::T_RETURN:
+            case Tokens::T_ELSE:
+            case Tokens::T_ELSEIF:
+            case Tokens::T_DEFAULT:
+            case Tokens::T_BREAK:
+            case Tokens::T_CONTINUE:
+            case Tokens::T_SWITCH:
+            case Tokens::T_YIELD:
+            case Tokens::T_FUNCTION:
+            case Tokens::T_IF:
+            case Tokens::T_ENDSWITCH:
+            case Tokens::T_FINALLY:
+            case Tokens::T_FOR:
+            case Tokens::T_FOREACH:
+            case Tokens::T_DECLARE:
+            case Tokens::T_CASE:
+            case Tokens::T_DO:
+            case Tokens::T_WHILE:
+            case Tokens::T_AS:
+            case Tokens::T_CATCH:
+            //case Tokens::T_DIE:
+            case Tokens::T_SELF:
+            case Tokens::T_PARENT:
+                return true;
+        }
+        return parent::isConstantName($tokenType);
+    }
+
+    /**
+     * @param integer $tokenType
+     * @return bool
+     */
+    protected function isMethodName($tokenType)
+    {
+        switch ($tokenType) {
+            case Tokens::T_CLASS:
+                return true;
+        }
+        return $this->isConstantName($tokenType);
+    }
+
+    /**
+     * @return \PDepend\Source\AST\ASTNode
+     */
+    protected function parsePostfixIdentifier()
+    {
+        $tokenType = $this->tokenizer->peek();
+        switch (true) {
+            case ($this->isConstantName($tokenType)):
+                $node = $this->parseLiteral();
+                break;
+            default:
+                $node = parent::parsePostfixIdentifier();
+                break;
+        }
+        return $this->parseOptionalIndexExpression($node);
+    }
+
     /**
      * @param \PDepend\Source\AST\AbstractASTCallable $callable
      * @return \PDepend\Source\AST\AbstractASTCallable
@@ -191,50 +298,100 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
         return parent::parseAllocationExpressionTypeReference($allocation);
     }
 
+    /**
+     * Attempts to the next sequence of tokens as an anonymous class and adds it to the allocation expression
+     *
+     * @param \PDepend\Source\AST\ASTAllocationExpression $allocation
+     *
+     * @return null|\PDepend\Source\AST\ASTAnonymousClass
+     */
     protected function parseAnonymousClassDeclaration(ASTAllocationExpression $allocation)
     {
         $this->consumeComments();
-
-        switch ($this->tokenizer->peek()) {
-            case Tokens::T_CLASS:
-                $this->consumeToken(Tokens::T_CLASS);
-                $this->consumeComments();
-
-                $class = $this->builder->buildAnonymousClass();
-                $class->setName(
-                    sprintf(
-                        'class@anonymous%s0x%s',
-                        $this->compilationUnit->getFileName(),
-                        uniqid('')
-                    )
-                );
-                $class->setCompilationUnit($this->compilationUnit);
-                $class->setUserDefined();
-
-                $allocation->addChild($class);
-
-                if ($this->isNextTokenArguments()) {
-                    $allocation->addChild($this->parseArguments());
-                }
-
-                $this->consumeComments();
-                $tokenType = $this->tokenizer->peek();
-
-                if ($tokenType === Tokens::T_EXTENDS) {
-                    $class = $this->parseClassExtends($class);
-
-                    $this->consumeComments();
-                    $tokenType = $this->tokenizer->peek();
-                }
-
-                if ($tokenType === Tokens::T_IMPLEMENTS) {
-                    $this->consumeToken(Tokens::T_IMPLEMENTS);
-                    $this->parseInterfaceList($class);
-                }
-
-                return $class;
+        if (Tokens::T_CLASS !== $this->tokenizer->peek()) {
+            return null;
         }
-        return null;
+
+        $classOrInterface = $this->classOrInterface;
+
+        $this->tokenStack->push();
+
+        $this->consumeToken(Tokens::T_CLASS);
+        $this->consumeComments();
+
+        $class = $this->builder->buildAnonymousClass();
+        $class->setName(
+            sprintf(
+                'class@anonymous%s0x%s',
+                $this->compilationUnit->getFileName(),
+                uniqid('')
+            )
+        );
+        $class->setCompilationUnit($this->compilationUnit);
+        $class->setUserDefined();
+
+        if ($this->isNextTokenArguments()) {
+            $class->addChild($this->parseArguments());
+        }
+
+        $this->consumeComments();
+        $tokenType = $this->tokenizer->peek();
+
+        if ($tokenType === Tokens::T_EXTENDS) {
+            $class = $this->parseClassExtends($class);
+
+            $this->consumeComments();
+            $tokenType = $this->tokenizer->peek();
+        }
+
+        if ($tokenType === Tokens::T_IMPLEMENTS) {
+            $this->consumeToken(Tokens::T_IMPLEMENTS);
+            $this->parseInterfaceList($class);
+        }
+
+        $allocation->addChild(
+            $this->setNodePositionsAndReturn(
+                $this->parseTypeBody($class),
+                $tokens
+            )
+        );
+        $class->setTokens($tokens);
+
+        $this->classOrInterface = $classOrInterface;
+
+        return $allocation;
+    }
+
+    /**
+     * @param \PDepend\Source\AST\ASTNode $node
+     * @return \PDepend\Source\AST\ASTNode
+     */
+    protected function parseOptionalMemberPrimaryPrefix(ASTNode $node)
+    {
+        $this->consumeComments();
+        if (Tokens::T_DOUBLE_COLON === $this->tokenizer->peek()) {
+            return $this->parseStaticMemberPrimaryPrefix($node);
+        }
+        if ($this->tokenizer->peek() === Tokens::T_OBJECT_OPERATOR) {
+            return $this->parseMemberPrimaryPrefix($node);
+        }
+        return $node;
+    }
+
+    /**
+     * @param \PDepend\Source\AST\ASTExpression $expr
+     * @return \PDepend\Source\AST\ASTExpression
+     */
+    protected function parseParenthesisExpressionOrPrimaryPrefixForVersion(ASTExpression $expr)
+    {
+        $this->consumeComments();
+        if (Tokens::T_DOUBLE_COLON === $this->tokenizer->peek()) {
+            return $this->parseStaticMemberPrimaryPrefix($expr->getChild(0));
+        }
+        if ($this->tokenizer->peek() === Tokens::T_OBJECT_OPERATOR) {
+            return $this->parseMemberPrimaryPrefix($expr->getChild(0));
+        }
+        return $expr;
     }
 
     /**
@@ -263,10 +420,12 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
     protected function parseExpressionVersion70()
     {
         $this->consumeComments();
+        $nextTokenType = $this->tokenizer->peek();
 
-        switch ($this->tokenizer->peek()) {
+        switch ($nextTokenType) {
             case Tokens::T_SPACESHIP:
-                $token = $this->consumeToken(Tokens::T_SPACESHIP);
+            case Tokens::T_COALESCE:
+                $token = $this->consumeToken($nextTokenType);
 
                 $expr = $this->builder->buildAstExpression($token->image);
                 $expr->configureLinesAndColumns(
@@ -307,5 +466,75 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
         $parameter->addChild($this->parseVariableDeclarator());
 
         return $parameter;
+    }
+
+    /**
+     * @param array $fragments
+     * @return void
+     */
+    protected function parseUseDeclarationForVersion(array $fragments)
+    {
+        if (Tokens::T_CURLY_BRACE_OPEN === $this->tokenizer->peek()) {
+            return $this->parseUseDeclarationVersion70($fragments);
+        }
+        return parent::parseUseDeclarationForVersion($fragments);
+    }
+
+    /**
+     * @param array $fragments
+     * @return void
+     */
+    protected function parseUseDeclarationVersion70(array $fragments)
+    {
+        $namespacePrefixReplaced = $this->namespacePrefixReplaced;
+
+        $this->consumeToken(Tokens::T_CURLY_BRACE_OPEN);
+        $this->consumeComments();
+
+        do {
+            $nextToken = $this->tokenizer->peek();
+            switch ($nextToken) {
+                case Tokens::T_CONST:
+                case Tokens::T_FUNCTION:
+                    $this->consumeToken($nextToken);
+            }
+
+            $subFragments = $this->parseQualifiedNameRaw();
+            $this->consumeComments();
+
+            $image = $this->parseNamespaceImage($subFragments);
+
+            if (Tokens::T_COMMA != $this->tokenizer->peek()) {
+                break;
+            }
+
+            $this->consumeToken(Tokens::T_COMMA);
+            $this->consumeComments();
+
+            // Add mapping between image and qualified name to symbol table
+            $this->useSymbolTable->add($image, join('', array_merge($fragments, $subFragments)));
+        } while (true);
+
+        $this->useSymbolTable->add($image, join('', array_merge($fragments, $subFragments)));
+
+        $this->consumeToken(Tokens::T_CURLY_BRACE_CLOSE);
+        $this->consumeComments();
+
+        $this->namespacePrefixReplaced = $namespacePrefixReplaced;
+    }
+
+    /**
+     * @param array $previousElements
+     * @return string
+     */
+    protected function parseQualifiedNameElement(array $previousElements)
+    {
+        if (Tokens::T_CURLY_BRACE_OPEN !== $this->tokenizer->peek()) {
+            return parent::parseQualifiedNameElement($previousElements);
+        }
+        if (count($previousElements) >= 2 && '\\' === end($previousElements)) {
+            return null;
+        }
+        $this->throwUnexpectedTokenException($this->tokenizer->next());
     }
 }

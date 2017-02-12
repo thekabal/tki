@@ -188,9 +188,24 @@ class Runner
         echo PHP_EOL;
         Util\Timing::printRunTime();
 
-        // We can't tell exactly how many errors were fixed, but
-        // we know how many errors were found.
-        exit($numErrors);
+        if ($this->reporter->totalFixed === 0) {
+            // Nothing was fixed by PHPCBF.
+            if ($this->reporter->totalFixable === 0) {
+                // Nothing found that could be fixed.
+                exit(0);
+            } else {
+                // Something failed to fix.
+                exit(2);
+            }
+        }
+
+        if ($this->reporter->totalFixable === 0) {
+            // PHPCBF fixed all fixable errors.
+            exit(1);
+        }
+
+        // PHPCBF fixed some fixable errors, but others failed to fix.
+        exit(2);
 
     }//end runPHPCBF()
 
@@ -221,8 +236,12 @@ class Runner
      *
      * @return void
      */
-    private function init()
+    public function init()
     {
+        if (defined('PHP_CODESNIFFER_CBF') === false) {
+            define('PHP_CODESNIFFER_CBF', false);
+        }
+
         // Ensure this option is enabled or else line endings will not always
         // be detected properly for files created on a Mac with the /r line ending.
         ini_set('auto_detect_line_endings', true);
@@ -336,6 +355,10 @@ class Runner
             // Running normally.
             $numProcessed = 0;
             foreach ($todo as $path => $file) {
+                if ($file->ignored === true) {
+                    continue;
+                }
+
                 $currDir = dirname($path);
                 if ($lastDir !== $currDir) {
                     if (PHP_CODESNIFFER_VERBOSITY > 0) {
@@ -389,6 +412,7 @@ class Runner
                     $this->reporter->totalErrors   = 0;
                     $this->reporter->totalWarnings = 0;
                     $this->reporter->totalFixable  = 0;
+                    $this->reporter->totalFixed    = 0;
 
                     // Process the files.
                     $pathsProcessed = array();
@@ -396,6 +420,10 @@ class Runner
                     for ($i = $startAt; $i < $endAt; $i++) {
                         $path = $todo->key();
                         $file = $todo->current();
+
+                        if ($file->ignored === true) {
+                            continue;
+                        }
 
                         $currDir = dirname($path);
                         if ($lastDir !== $currDir) {
@@ -410,7 +438,7 @@ class Runner
 
                         $pathsProcessed[] = $path;
                         $todo->next();
-                    }
+                    }//end for
 
                     $debugOutput = ob_get_contents();
                     ob_end_clean();
@@ -513,7 +541,7 @@ class Runner
      *
      * @return void
      */
-    private function processFile($file)
+    public function processFile($file)
     {
         if (PHP_CODESNIFFER_VERBOSITY > 0) {
             $startTime = microtime(true);

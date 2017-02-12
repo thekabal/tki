@@ -118,9 +118,9 @@ class ScopeIndentSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile All the tokens found in the document.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile All the tokens found in the document.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return void
      */
@@ -220,9 +220,7 @@ class ScopeIndentSniff implements Sniff
                 && $tokens[$checkToken]['code'] === T_CLOSE_PARENTHESIS
                 && isset($tokens[$checkToken]['parenthesis_opener']) === true)
                 || ($tokens[$i]['code'] === T_CLOSE_PARENTHESIS
-                && isset($tokens[$i]['parenthesis_opener']) === true
-                && isset($tokens[$i]['parenthesis_owner']) === true
-                && $tokens[$tokens[$i]['parenthesis_owner']]['code'] === T_ARRAY)
+                && isset($tokens[$i]['parenthesis_opener']) === true)
             ) {
                 if ($checkToken !== null) {
                     $parenCloser = $checkToken;
@@ -280,7 +278,10 @@ class ScopeIndentSniff implements Sniff
 
                     $exact = false;
 
-                    if ($condition > 0 && $lastOpenTag > $condition) {
+                    $lastOpenTagConditions = array_keys($tokens[$lastOpenTag]['conditions']);
+                    $lastOpenTagCondition  = array_pop($lastOpenTagConditions);
+
+                    if ($condition > 0 && $lastOpenTagCondition === $condition) {
                         if ($this->debug === true) {
                             echo "\t* open tag is inside condition; using open tag *".PHP_EOL;
                         }
@@ -789,10 +790,26 @@ class ScopeIndentSniff implements Sniff
                 $checkIndent = (int) (ceil($checkIndent / $this->indent) * $this->indent);
             }
 
-            // Check the line indent.
+            // Special case for ELSE statements that are not on the same
+            // line as the previous IF statements closing brace. They still need
+            // to have the same indent or it will break code after the block.
+            if ($checkToken !== null && $tokens[$checkToken]['code'] === T_ELSE) {
+                $exact = true;
+            }
+
             if ($checkIndent === null) {
                 $checkIndent = $currentIndent;
             }
+
+            /*
+                The indent of the line is checked by the following IF block.
+
+                Up until now, we've just been figuring out what the indent
+                of this line should be.
+
+                After this IF block, we adjust the indent again for
+                the checking of future line.
+            */
 
             $adjusted = false;
             if ($checkToken !== null

@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PlanetReportCE
 {
-    public static function collectCredits(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, array $planetarray, Reg $tkireg)
+    public static function collectCredits(\PDO $pdo_db, $db, array $langvars, array $planetarray, Reg $tkireg): void
     {
         $request = Request::createFromGlobals();
 
@@ -36,7 +36,7 @@ class PlanetReportCE
 
         // Look up the info for the player that wants to collect the credits.
         $result1 = $db->SelectLimit("SELECT * FROM {$db->prefix}ships WHERE email = ?", 1, -1, array('email' => $_SESSION['username']));
-        \Tki\Db::LogDbErrors($pdo_db, $result1, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result1, __LINE__, __FILE__);
         $playerinfo = $result1->fields;
 
         // Set s_p_pair as an array.
@@ -47,7 +47,7 @@ class PlanetReportCE
         for ($i = 0; $i < $temp_count; $i++)
         {
             $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planetarray[$i]));
-            \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
             // Only add to array if the player owns the planet.
             if ($res->fields['owner'] == $playerinfo['ship_id'] && $res->fields['sector_id'] < $tkireg->max_sectors)
@@ -76,7 +76,7 @@ class PlanetReportCE
         for ($i = 0; $i < $temp_count2 && $CS == "GO"; $i++)
         {
             echo "<br>";
-            $CS = \Tki\Realspace\realSpaceMove($pdo_db, $langvars, $s_p_pair[$i][0], $tkireg);
+            $CS = \Tki\Realspace::realSpaceMove($pdo_db, $langvars, $s_p_pair[$i][0], $tkireg);
 
             if ($CS == "HOSTILE")
             {
@@ -104,15 +104,15 @@ class PlanetReportCE
         echo "<br><br>";
     }
 
-    public static function takeCredits(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, int $planet_id)
+    public static function takeCredits(\PDO $pdo_db, $db, array $langvars, int $planet_id): string
     {
         // Get basic Database information (ship and planet)
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $playerinfo = $res->fields;
 
         $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $planetinfo = $res->fields;
 
         // Set the name for unamed planets to be "unnamed"
@@ -136,15 +136,15 @@ class PlanetReportCE
 
                     // Update the planet record for credits
                     $res = $db->Execute("UPDATE {$db->prefix}planets SET credits = 0 WHERE planet_id = ?;", array($planetinfo['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
                     // update the player info with updated credits
                     $res = $db->Execute("UPDATE {$db->prefix}ships SET credits = ? WHERE email = ?;", array($NewShipCredits, $_SESSION['username']));
-                    \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
                     // update the player info with updated turns
                     $res = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1 WHERE email = ?;", array($_SESSION['username']));
-                    \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
                     $tempa1 = str_replace("[credits_taken]", number_format($CreditsTaken, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_pr_took_credits']);
                     $tempa2 = str_replace("[planet_name]", $planetinfo['name'], $tempa1);

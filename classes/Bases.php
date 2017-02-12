@@ -65,7 +65,7 @@ class Bases
             return (bool) false;
         }  // Build a base
 
-        \Tki\Realspace\realSpaceMove($pdo_db, $langvars, $sector_id, $tkireg);
+        \Tki\Realspace::realSpaceMove($pdo_db, $langvars, $sector_id, $tkireg);
         echo "<br>";
         echo str_replace("[here]", "<a href='planet.php?planet_id=$planet_id'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_planet']);
         echo "<br><br>";

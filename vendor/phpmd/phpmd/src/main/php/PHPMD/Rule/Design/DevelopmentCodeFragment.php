@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -51,11 +51,11 @@ use PHPMD\Rule\MethodAware;
  * This rule class detects possible development code fragments that were left
  * into the code.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @see https://github.com/phpmd/phpmd/issues/265
- * @since 2.3.0
+ * @author    Manuel Pichler <mapi@phpmd.org>
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @see       https://github.com/phpmd/phpmd/issues/265
+ * @since     2.3.0
  */
 class DevelopmentCodeFragment extends AbstractRule implements MethodAware, FunctionAware
 {
@@ -63,7 +63,7 @@ class DevelopmentCodeFragment extends AbstractRule implements MethodAware, Funct
      * This method checks if a given function or method contains an eval-expression
      * and emits a rule violation when it exists.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)

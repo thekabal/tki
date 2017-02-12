@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -52,7 +52,7 @@ use PHPMD\Rule\MethodAware;
  * names.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ShortVariable extends AbstractRule implements ClassAware, MethodAware, FunctionAware
@@ -70,7 +70,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      * and checks the variable name length against the configured minimum
      * length.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)
@@ -104,7 +104,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      * Checks if the variable name of the given node is greater/equal to the
      * configured threshold or if the given node is an allowed context.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     protected function checkNodeImage(AbstractNode $node)
@@ -118,7 +118,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
     /**
      * Template method that performs the real node image check.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     protected function checkMinimumLength(AbstractNode $node)
@@ -163,7 +163,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      * moment these contexts are the init section of a for-loop and short
      * variable names in catch-statements.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return boolean
      */
     private function isNameAllowedInContext(AbstractNode $node)
@@ -178,8 +178,8 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      * Checks if the given node is a direct or indirect child of a node with
      * the given type.
      *
-     * @param \PHPMD\AbstractNode $node
-     * @param string $type
+     * @param  \PHPMD\AbstractNode $node
+     * @param  string              $type
      * @return boolean
      */
     private function isChildOf(AbstractNode $node, $type)
@@ -207,7 +207,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
     /**
      * Flags the given node as already processed.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     protected function addProcessed(AbstractNode $node)
@@ -218,7 +218,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
     /**
      * Checks if the given node was already processed.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return boolean
      */
     protected function isNotProcessed(AbstractNode $node)

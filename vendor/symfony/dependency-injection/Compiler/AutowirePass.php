@@ -72,15 +72,8 @@ class AutowirePass implements CompilerPassInterface
             $metadata['__construct'] = self::getResourceMetadataForMethod($constructor);
         }
 
-        // todo - when #17608 is merged, could refactor to private function to remove duplication
-        // of determining valid "setter" methods
-        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
-            $name = $reflectionMethod->getName();
-            if ($reflectionMethod->isStatic() || 1 !== $reflectionMethod->getNumberOfParameters() || 0 !== strpos($name, 'set')) {
-                continue;
-            }
-
-            $metadata[$name] = self::getResourceMetadataForMethod($reflectionMethod);
+        foreach (self::getSetters($reflectionClass) as $reflectionMethod) {
+            $metadata[$reflectionMethod->name] = self::getResourceMetadataForMethod($reflectionMethod);
         }
 
         return new AutowireServiceResource($reflectionClass->name, $reflectionClass->getFileName(), $metadata);
@@ -121,8 +114,10 @@ class AutowirePass implements CompilerPassInterface
                         throw new RuntimeException(sprintf('Unable to autowire argument index %d ($%s) for the service "%s". If this is an object, give it a type-hint. Otherwise, specify this argument\'s value explicitly.', $index, $parameter->name, $id));
                     }
 
-                    // specifically pass the default value
-                    $arguments[$index] = $parameter->getDefaultValue();
+                    if (!array_key_exists($index, $arguments)) {
+                        // specifically pass the default value
+                        $arguments[$index] = $parameter->getDefaultValue();
+                    }
 
                     continue;
                 }
@@ -327,6 +322,20 @@ class AutowirePass implements CompilerPassInterface
         $this->ambiguousServiceTypes[$type][] = $id;
     }
 
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return \ReflectionMethod[]
+     */
+    private static function getSetters(\ReflectionClass $reflectionClass)
+    {
+        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
+            if (!$reflectionMethod->isStatic() && 1 === $reflectionMethod->getNumberOfParameters() && 0 === strpos($reflectionMethod->name, 'set')) {
+                yield $reflectionMethod;
+            }
+        }
+    }
+
     private static function getResourceMetadataForMethod(\ReflectionMethod $method)
     {
         $methodArgumentsMetadata = array();
@@ -338,10 +347,11 @@ class AutowirePass implements CompilerPassInterface
                 $class = false;
             }
 
+            $isVariadic = method_exists($parameter, 'isVariadic') && $parameter->isVariadic();
             $methodArgumentsMetadata[] = array(
                 'class' => $class,
                 'isOptional' => $parameter->isOptional(),
-                'defaultValue' => $parameter->isOptional() ? $parameter->getDefaultValue() : null,
+                'defaultValue' => ($parameter->isOptional() && !$isVariadic) ? $parameter->getDefaultValue() : null,
             );
         }
 

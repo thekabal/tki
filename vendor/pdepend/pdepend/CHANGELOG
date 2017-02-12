@@ -1,3 +1,102 @@
+pdepend-2.5.0 (2017/01/19)
+==========================
+
+This release closes a parsing bug in PDepend 2.4.1, starts with the 
+implementation of PHP 7.1 support and adds a new attribute for the 
+fully-qualified-classname to the summary report.
+
+- Fixed #282: Issue with grouped use statements when only a single 
+  level namespace prefix was used. Fixed in commit #3e523f5.
+- Implemented #294: Add support for PHP 7.1 optionals. Implemented in 
+  commit #c5c53eb.
+- Implemented #88: Fully qualified classname in summary report. 
+  Implemented in commit #13e9cbc.
+
+pdepend-2.4.1 (2017/01/11)
+==========================
+
+This release closes a bug within PDepend's parser when keywords are 
+used as method or constant names in PHP 7.0
+
+- Fixes an issue with methods or constants with keyword identifiers 
+  called/accessed in PHP 7. Fixed in commit #8f07ac7.
+
+pdepend-2.4.0 (2017/01/10)
+==========================
+
+This release implements language features like Anonymous Classes, 
+Group use Declarations, Uniform Variable Syntax or Loosening Reserved 
+Word Restrictions that were introduced with PHP 7.0, so that PDepend 
+2.4 is now PHP 7.0 compatible.
+
+- Fixed #281: PHP 7 - Anonymous Class - Internal parser state issues 
+  Fixed in commit #00a61c6.
+- Fixed #285: Parse the magic constant __TRAIT__ Fixed in commit 
+  #b76e2b0.
+- Fixed #210: Partial Class Namespace is Calculated Twice: in Global 
+  and it's Own Namespace Fixed in commit #e81411f.
+- Implemented #280: Refactor SymbolTable Implemented in commit 
+  #1265259.
+- Implemented #282: PHP 7 - Group use declarations Implemented in 
+  commit #fd4aaca.
+- Implemented #269: Unexpected token: :: (implicit object / method 
+  usage) Implemented in commit #e611915.
+- Implemented #204: Support for the ... operator in function calls 
+  Implemented in commit #078e532.
+- Implemented #290: Unexpected token: ARRAY (reserved keyword as a 
+  class constant) Implemented in commit #d4bf7bb.
+
+pdepend-2.3.2 (2016/11/23)
+==========================
+
+Bugfix release that closes a caching issue that was introduced in 
+2.3.1.
+
+- Fixed #276: Uncaught Error: Call to a member function type() on null 
+  in Fixed in commit #48d8081.
+- Allow list as method name under PHP 7 Fixed in commit #4968ed4.
+- Fixed #277: serialize(): "comment" is returned from __sleep multiple 
+  times in store in FileCacheDriver.php Fixed in commit #31cf053.
+
+pdepend-2.3.1 (2016/11/23)
+==========================
+
+
+
+- Fixed #250: Updating ASTAnonymousClass to implement ASTNode, 
+  retaining class behavior. Fixed in commit #2111906.
+
+pdepend-2.3.0 (2016/11/22)
+==========================
+
+This release closes multiple bugs/issue and has merged several 
+outstanding pull requests. Beside that it is now possible to pipe 
+source through STDIN into pdepend.
+
+- Fixed #263: Fix NPath calculations for the ternary operator. Fixed 
+  in commit #df0e9c5.
+- Fixed #260: Fix typos Fixed in commit #20b36c1.
+- Fixed #259: DOMDocument file handling. Fixed in commit #fa2afc6.
+- Fixed #247: Fix handling of use declarations with const and function 
+  keywords. Fixed in commit #dc9128b.
+- Fixed #240: Fix some typos from the website. Fixed in commit 
+  #332672a.
+- Fixed #249: Unexpected token: callable Fixed in commit #.
+- Support for PHP's ** pow expression implemented. Implemented in 
+  commit #bce6145.
+- Implemented #262: Support stdin implemented. Implemented in commit 
+  #3ef2328.
+- Implemented #231: Apply the filter on files as well. Implemented in 
+  commit #62d1406.
+
+pdepend-2.2.6 (2016/10/04)
+==========================
+
+Bugfix release.
+
+- Fixed #267: Fix UnexpectedTokenException on null coalesce operator 
+  Fixed in commit #8e80aaa.
+
 pdepend-2.2.4 (2016/03/10)
 ==========================
 

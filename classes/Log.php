@@ -51,7 +51,7 @@ class Log
             case LOG_ATTACK_EWDFAIL:
             case LOG_SHIP_SCAN:
             case LOG_SHIP_SCAN_FAIL:
-            case LOG_XENOBE_ATTACK:
+            case LOG_KABAL_ATTACK:
             case LOG_TEAM_NOT_LEAVE:
                 $retvalue['text'] = str_replace("[player]", "<font color=white><strong>$entry[data]</strong></font>", $texttemp);
                 $retvalue['title'] = $titletemp;
@@ -365,7 +365,7 @@ class Log
         return $retvalue;
     }
 
-    public static function getLogInfo(array $log_list, int $id = null, string &$title = null, string &$text = null)
+    public static function getLogInfo(array $log_list, int $id = null, string &$title = null, string &$text = null): void
     {
         $title = null;
         $text = null;

@@ -13,7 +13,7 @@ found in the `/vendor/bin` directory.
   PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations
   of a defined set of coding standards. We use it like this:
 
-  `php vendor/bin/phpcs --standard=vendor/bin/phpcs.xml . --ignore=templates,vendor,config,languages`
+  `php vendor/bin/phpcs --standard=vendor/bin/phpcs.xml . --ignore=templates,vendor`
 
 - [`phpmd`](https://phpmd.org/) is PHP Mess Detector. It takes a given PHP
   source code base and looks for several potential problems within that source.
@@ -21,9 +21,18 @@ found in the `/vendor/bin` directory.
 
   `php vendor/bin/phpmd . text vendor/bin/phpmd.xml --exclude vendor/,templates/`
 
+- [`phpstan`](https://github.com/phpstan/phpstan/) PHPStan focuses on finding
+  errors in your code without actually running it. It catches whole classes of
+  bugs even before you write tests for the code. Currently it errors on adodb,
+  in classes/Db, which is acceptable until we eliminate adodb. We use it like this:
+
+  `php vendor/bin/phpstan analyze -l 5 -c vendor/bin/phpstan.neon -vvv .`
+
 - [`php-cs-fixer`](http://cs.sensiolabs.org/) strives to automatically correct
   code for specific items in the PSR standard. We do not currently use it, but
   may in the future use it as a pre-commit hook.
 
 There are other command-line options for these tools (try them!), with varying
-levels of usefulness to our project.
+levels of usefulness to our project. We have bundled phpcbf - do NOT run phpcbf,
+as it will reformat the entire codebase. We also have included phpunit, which we
+intend to use heavily.

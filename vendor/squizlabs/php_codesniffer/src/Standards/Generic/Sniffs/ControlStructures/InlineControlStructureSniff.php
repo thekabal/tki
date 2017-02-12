@@ -58,9 +58,9 @@ class InlineControlStructureSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */
@@ -165,7 +165,7 @@ class InlineControlStructureSniff implements Sniff
             if (isset($tokens[$end]['scope_opener']) === true) {
                 $type = $tokens[$end]['code'];
                 $end  = $tokens[$end]['scope_closer'];
-                if ($type === T_DO || $type === T_IF || $type === T_ELSEIF) {
+                if ($type === T_DO || $type === T_IF || $type === T_ELSEIF || $type === T_TRY) {
                     $next = $phpcsFile->findNext(Tokens::$emptyTokens, ($end + 1), null, true);
                     if ($next === false) {
                         break;
@@ -185,6 +185,11 @@ class InlineControlStructureSniff implements Sniff
                     // Account for DO... WHILE conditions.
                     if ($type === T_DO && $nextType === T_WHILE) {
                         $end = $phpcsFile->findNext(T_SEMICOLON, ($next + 1));
+                    }
+
+                    // Account for TRY... CATCH statements.
+                    if ($type === T_TRY && $nextType === T_CATCH) {
+                        $end = $tokens[$next]['scope_closer'];
                     }
                 }//end if
 
@@ -210,18 +215,26 @@ class InlineControlStructureSniff implements Sniff
             $end = $lastNonEmpty;
         }
 
-        $next = $phpcsFile->findNext(T_WHITESPACE, ($closer + 1), ($end + 1), true);
+        $next = $phpcsFile->findNext(Tokens::$emptyTokens, ($end + 1), null, true);
 
-        // Account for a comment on the end of the line.
-        for ($endLine = $end; $endLine < $phpcsFile->numTokens; $endLine++) {
-            if (isset($tokens[($endLine + 1)]) === false
-                || $tokens[$endLine]['line'] !== $tokens[($endLine + 1)]['line']
-            ) {
-                break;
+        if ($next === false || $tokens[$next]['line'] !== $tokens[$end]['line']) {
+            // Looks for completely empty statements.
+            $next = $phpcsFile->findNext(T_WHITESPACE, ($closer + 1), ($end + 1), true);
+
+            // Account for a comment on the end of the line.
+            for ($endLine = $end; $endLine < $phpcsFile->numTokens; $endLine++) {
+                if (isset($tokens[($endLine + 1)]) === false
+                    || $tokens[$endLine]['line'] !== $tokens[($endLine + 1)]['line']
+                ) {
+                    break;
+                }
             }
-        }
 
-        if ($tokens[$endLine]['code'] !== T_COMMENT) {
+            if ($tokens[$endLine]['code'] !== T_COMMENT) {
+                $endLine = $end;
+            }
+        } else {
+            $next    = ($end + 1);
             $endLine = $end;
         }
 

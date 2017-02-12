@@ -22,9 +22,9 @@ namespace Tki;
 
 class Scheduler
 {
-    public static function isQueryOk(\PDO $pdo_db, $res)
+    public static function isQueryOk(\PDO $pdo_db, $res): void
     {
-        $test_result = Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        $test_result = Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if ($test_result)
         {
             echo ' ok.<br>';

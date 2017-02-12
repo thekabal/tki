@@ -75,12 +75,12 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         }
     }
 
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
 }
 else
 {
     echo "<br>" . $langvars['l_team_exploit'] . "<br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
 }
 
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

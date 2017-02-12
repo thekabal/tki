@@ -168,6 +168,6 @@ class Realspace
             }
         }
 
-        return (string) $retval;
+        return $retval;
     }
 }

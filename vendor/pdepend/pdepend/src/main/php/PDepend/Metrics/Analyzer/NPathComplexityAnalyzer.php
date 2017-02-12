@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -66,7 +66,7 @@ use PDepend\Util\MathUtil;
  * NPath complexity metric measures the acyclic execution paths through a method
  * or function. See Nejmeh, Communications of the ACM Feb 1988 pp 188-200.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class NPathComplexityAnalyzer extends AbstractCachingAnalyzer implements AnalyzerFilterAware, AnalyzerNodeAware
@@ -203,20 +203,24 @@ class NPathComplexityAnalyzer extends AbstractCachingAnalyzer implements Analyze
      */
     public function visitConditionalExpression($node, $data)
     {
+        // Calculate the complexity of the condition
+        $parent = $node->getParent()->getChild(0);
+        $npath = $this->sumComplexity($parent);
+        
         // New PHP 5.3 ifsetor-operator $x ?: $y
         if (count($node->getChildren()) === 1) {
-            $npath = '4';
-        } else {
-            $npath = '3';
+            $npath = MathUtil::mul($npath, '2');
         }
 
+        // The complexity of each child has no minimum
         foreach ($node->getChildren() as $child) {
-            if (($cn = $this->sumComplexity($child)) === '0') {
-                $cn = '1';
-            }
+            $cn = $this->sumComplexity($child);
             $npath = MathUtil::add($npath, $cn);
         }
 
+        // Add 2 for the branching per the NPath spec
+        $npath = MathUtil::add($npath, '2');
+        
         return MathUtil::mul($npath, $data);
     }
 

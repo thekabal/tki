@@ -32,9 +32,9 @@ class EmbeddedPhpSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */
@@ -57,9 +57,9 @@ class EmbeddedPhpSniff implements Sniff
     /**
      * Validates embedded PHP that exists on multiple lines.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */
@@ -290,9 +290,9 @@ class EmbeddedPhpSniff implements Sniff
     /**
      * Validates embedded PHP that exists on one line.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */
@@ -341,13 +341,18 @@ class EmbeddedPhpSniff implements Sniff
         }
 
         $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($closeTag - 1), $stackPtr, true);
-        if ($tokens[$prev]['code'] !== T_SEMICOLON) {
+        if ((isset($tokens[$prev]['scope_opener']) === false
+            || $tokens[$prev]['scope_opener'] !== $prev)
+            && (isset($tokens[$prev]['scope_closer']) === false
+            || $tokens[$prev]['scope_closer'] !== $prev)
+            && $tokens[$prev]['code'] !== T_SEMICOLON
+        ) {
             $error = 'Inline PHP statement must end with a semicolon';
             $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NoSemicolon');
             if ($fix === true) {
                 $phpcsFile->fixer->addContent($prev, ';');
             }
-        } else {
+        } else if ($tokens[$prev]['code'] === T_SEMICOLON) {
             $statementCount = 1;
             for ($i = ($stackPtr + 1); $i < $prev; $i++) {
                 if ($tokens[$i]['code'] === T_SEMICOLON) {

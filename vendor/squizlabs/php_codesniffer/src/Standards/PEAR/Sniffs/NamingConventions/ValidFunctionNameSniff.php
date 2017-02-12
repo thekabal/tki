@@ -52,7 +52,7 @@ class ValidFunctionNameSniff extends AbstractScopeSniff
      */
     public function __construct()
     {
-        parent::__construct(array(T_CLASS, T_INTERFACE, T_TRAIT), array(T_FUNCTION), true);
+        parent::__construct(array(T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT), array(T_FUNCTION), true);
 
     }//end __construct()
 
@@ -60,10 +60,10 @@ class ValidFunctionNameSniff extends AbstractScopeSniff
     /**
      * Processes the tokens within the scope.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-     * @param int                  $stackPtr  The position where this token was
-     *                                        found.
-     * @param int                  $currScope The position of the current scope.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
+     * @param int                         $stackPtr  The position where this token was
+     *                                               found.
+     * @param int                         $currScope The position of the current scope.
      *
      * @return void
      */
@@ -79,7 +79,7 @@ class ValidFunctionNameSniff extends AbstractScopeSniff
         $errorData = array($className.'::'.$methodName);
 
         // Is this a magic method. i.e., is prefixed with "__" ?
-        if (preg_match('|^__|', $methodName) !== 0) {
+        if (preg_match('|^__[^_]|', $methodName) !== 0) {
             $magicPart = strtolower(substr($methodName, 2));
             if (isset($this->magicMethods[$magicPart]) === false) {
                  $error = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
@@ -164,9 +164,9 @@ class ValidFunctionNameSniff extends AbstractScopeSniff
     /**
      * Processes the tokens outside the scope.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-     * @param int                  $stackPtr  The position where this token was
-     *                                        found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
+     * @param int                         $stackPtr  The position where this token was
+     *                                               found.
      *
      * @return void
      */
@@ -186,7 +186,7 @@ class ValidFunctionNameSniff extends AbstractScopeSniff
         $errorData = array($functionName);
 
         // Is this a magic function. i.e., it is prefixed with "__".
-        if (preg_match('|^__|', $functionName) !== 0) {
+        if (preg_match('|^__[^_]|', $functionName) !== 0) {
             $magicPart = strtolower(substr($functionName, 2));
             if (isset($this->magicFunctions[$magicPart]) === false) {
                  $error = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';

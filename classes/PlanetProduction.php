@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PlanetProduction
 {
-    public static function productionChange(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, array $prodpercentarray, Reg $tkireg)
+    public static function productionChange(\PDO $pdo_db, $db, array $langvars, array $prodpercentarray, Reg $tkireg): void
     {
         //  Declare default production values from the config.php file
         //
@@ -49,12 +49,12 @@ class PlanetProduction
         //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
         //  This would save us from having to run through the database a second time checking our work.
 
-        //  This should patch the game from being hacked with planet Hack.
+        //  This should patch the game to prevent being hacked with the planet hack.
 
         $request = Request::createFromGlobals();
 
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-        \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $ship_id = $result->fields['ship_id'];
 
         $planet_hack = false;
@@ -64,16 +64,16 @@ class PlanetProduction
         echo str_replace("[here]", "<a href='planet_report.php?preptype=2'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_prod']);
         echo "<br><br>";
 
-        while (list($commod_type, $valarray) = each($prodpercentarray))
+        foreach($prodpercentarray as $commod_type => $valarray)
         {
             if ($commod_type != "team_id" && $commod_type != "ship_id")
             {
-                while (list($planet_id, $prodpercent) = each($valarray))
+                foreach($valarray as $planet_id => $prodpercent)
                 {
                     if ($commod_type == "prod_ore" || $commod_type == "prod_organics" || $commod_type == "prod_goods" || $commod_type == "prod_energy" || $commod_type == "prod_fighters" || $commod_type == "prod_torp")
                     {
                         $res = $db->Execute("SELECT COUNT(*) AS owned_planet FROM {$db->prefix}planets WHERE planet_id = ? AND owner = ?;", array($planet_id, $ship_id));
-                        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
                         if ($res->fields['owned_planet'] == 0)
                         {
                             $ip = $request->query->get('REMOTE_ADDR');
@@ -84,24 +84,24 @@ class PlanetProduction
                         }
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET {$commod_type} = ? WHERE planet_id = ? AND owner = ?;", array($prodpercent, $planet_id, $ship_id));
-                        \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                         $resy = $db->Execute("UPDATE {$db->prefix}planets SET sells='N' WHERE planet_id = ? AND owner = ?;", array($planet_id, $ship_id));
-                        \Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
                         $resz = $db->Execute("UPDATE {$db->prefix}planets SET team=0 WHERE planet_id = ? AND owner = ?;", array($planet_id, $ship_id));
-                        \Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $resz, __LINE__, __FILE__);
                     }
                     elseif ($commod_type == "sells")
                     {
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET sells='Y' WHERE planet_id = ? AND owner = ?;", array($prodpercent, $ship_id));
-                        \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                     }
                     elseif ($commod_type == "team")
                     {
                         // Compare entered team_id and one in the db, if different then use one from db
                         $res = $db->Execute("SELECT {$db->prefix}ships.team as owner FROM {$db->prefix}ships, {$db->prefix}planets WHERE ( {$db->prefix}ships.ship_id = {$db->prefix}planets.owner ) AND ( {$db->prefix}planets.planet_id = ?);", array($prodpercent));
-                        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
                         if ($res)
                         {
                             $team_id = $res->fields['owner'];
@@ -112,7 +112,7 @@ class PlanetProduction
                         }
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = ? WHERE planet_id = ? AND owner = ?;", array($team_id, $prodpercent, $ship_id));
-                        \Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         if (array_key_exists("team_id", $prodpercentarray) === true && $prodpercentarray['team_id'] != $team_id)
                         {
                             // They are different so send admin a log
@@ -139,7 +139,7 @@ class PlanetProduction
         {
             $serial_data = serialize($prodpercentarray);
             \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT + 1000, "{$ship_id}|{$serial_data}");
-            printf("<font color=\"red\"><strong>Your Cheat has been logged to the admin (%08x) [%02X:%02X:%02X].</strong></font><br>\n", (int) $hack_id, (int) $hack_count[0], (int) $hack_count[1], (int) $hack_count[2]);
+            printf("<font color=\"red\"><strong>Your Cheat has been logged to the admin (%08x) [%02X:%02X:%02X].</strong></font><br>\n", $hack_id, $hack_count[0], $hack_count[1], $hack_count[2]);
         }
 
         echo "<br>";
@@ -147,7 +147,7 @@ class PlanetProduction
         echo $langvars['l_pr_checking_values'] . "<br><br>";
 
         $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ? ORDER BY sector_id;", array($ship_id));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $i = 0;
         $planet = array();
         $planets = array();
@@ -204,22 +204,22 @@ class PlanetProduction
                     echo $temp2 . "<br>";
 
                     $resa = $db->Execute("UPDATE {$db->prefix}planets SET prod_ore = ? WHERE planet_id = ?;", array($tkireg->default_prod_ore, $planet['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
 
                     $resb = $db->Execute("UPDATE {$db->prefix}planets SET prod_organics = ? WHERE planet_id = ?;", array($tkireg->default_prod_organics, $planet['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resb, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resb, __LINE__, __FILE__);
 
                     $resc = $db->Execute("UPDATE {$db->prefix}planets SET prod_goods = ? WHERE planet_id = ?;", array($tkireg->default_prod_goods, $planet['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resc, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
 
                     $resd = $db->Execute("UPDATE {$db->prefix}planets SET prod_energy = ? WHERE planet_id = ?;", array($tkireg->default_prod_energy, $planet['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resd, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resd, __LINE__, __FILE__);
 
                     $rese = $db->Execute("UPDATE {$db->prefix}planets SET prod_fighters = ? WHERE planet_id = ?;", array($tkireg->default_prod_fighters, $planet['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $rese, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $rese, __LINE__, __FILE__);
 
                     $resf = $db->Execute("UPDATE {$db->prefix}planets SET prod_torp = ? WHERE planet_id = ?;", array($tkireg->default_prod_torp, $planet['planet_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resf, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
                 }
             }
         }

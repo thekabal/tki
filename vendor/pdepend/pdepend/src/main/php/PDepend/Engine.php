@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
   */
 
@@ -69,7 +69,7 @@ use PDepend\Util\Configuration;
  * The PDepend is a php port/adaption of the Java class file analyzer
  * <a href="http://clarkware.com/software/JDepend.html">JDepend</a>.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Engine
@@ -229,10 +229,14 @@ class Engine
      */
     public function addFile($file)
     {
-        $fileName = realpath($file);
+        if ($file === '-' || $file === 'php://stdin') {
+            $fileName = 'php://stdin';
+        } else {
+            $fileName = realpath($file);
 
-        if (!is_file($fileName)) {
-            throw new \InvalidArgumentException(sprintf('The given file "%s" does not exist.', $file));
+            if (!is_file($fileName)) {
+                throw new \InvalidArgumentException(sprintf('The given file "%s" does not exist.', $file));
+            }
         }
 
         $this->files[] = $fileName;
@@ -629,7 +633,10 @@ class Engine
         }
 
         $fileIterator = new \AppendIterator();
-        $fileIterator->append(new \ArrayIterator($this->files));
+
+        foreach ($this->files as $file) {
+            $fileIterator->append(new Iterator(new \GlobIterator($file), $this->fileFilter));
+        }
 
         foreach ($this->directories as $directory) {
             $fileIterator->append(

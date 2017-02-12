@@ -24,7 +24,12 @@ class FunctionCallArgumentSpacingSniff implements Sniff
      */
     public function register()
     {
-        return array(T_STRING);
+        $tokens = Tokens::$functionNameTokens;
+
+        // For calling closures.
+        $tokens[] = T_VARIABLE;
+
+        return $tokens;
 
     }//end register()
 
@@ -32,9 +37,9 @@ class FunctionCallArgumentSpacingSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */
@@ -97,7 +102,8 @@ class FunctionCallArgumentSpacingSniff implements Sniff
 
             if ($tokens[$nextSeparator]['code'] === T_COMMA) {
                 if ($tokens[($nextSeparator - 1)]['code'] === T_WHITESPACE) {
-                    if (isset(Tokens::$heredocTokens[$tokens[($nextSeparator - 2)]['code']]) === false) {
+                    $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($nextSeparator - 2), null, true);
+                    if (isset(Tokens::$heredocTokens[$tokens[$prev]['code']]) === false) {
                         $error = 'Space found before comma in function call';
                         $fix   = $phpcsFile->addFixableError($error, $nextSeparator, 'SpaceBeforeComma');
                         if ($fix === true) {

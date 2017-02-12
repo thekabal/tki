@@ -69,11 +69,11 @@ class Db
             {
                 if ($db_type === 'postgres9')
                 {
-                    $db = ADONewConnection('postgres9');
+                    $db = \ADONewConnection('postgres9');
                 }
                 else
                 {
-                    $db = ADONewConnection('mysqli');
+                    $db = \ADONewConnection('mysqli');
                 }
 
                 $db_init_result = $db->Connect($db_host, $db_user, $db_pwd, $db_name);

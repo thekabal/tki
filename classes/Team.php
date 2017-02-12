@@ -93,11 +93,11 @@ class Team
         $num_res = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $returnvalue = (!($num_res['found'] > 0));
-        return (bool) $returnvalue;
+        return $returnvalue;
     }
 
     // Rewritten display of teams list
-    public static function displayAllTeams(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, Reg $tkireg, $order, $type)
+    public static function displayAllTeams(\PDO $pdo_db, $db, array $langvars, Reg $tkireg, $order, $type): void
     {
         $row2 = array();
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
@@ -141,7 +141,7 @@ class Team
         $sql_query .= ";";
 
         $res = $db->Execute($sql_query, array($order, $by));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $color = $tkireg->color_line1;
 
         while (!$res->EOF)
@@ -153,7 +153,7 @@ class Team
 
             // This fixes it so that it actually displays the coordinator, and not the first member of the team.
             $res2 = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['creator']));
-            \Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
             while (!$res2->EOF)
             {
                 $row2 = $res2->fields;
@@ -179,7 +179,7 @@ class Team
         echo "</table><br>";
     }
 
-    public static function displayInviteInfo(array $langvars, array $playerinfo, $invite_info)
+    public static function displayInviteInfo(array $langvars, array $playerinfo, $invite_info): void
     {
         if (!$playerinfo['team_invite'])
         {
@@ -195,7 +195,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, \ADODB_mysqli $db, array $langvars, $whichteam, $isowner, array $playerinfo, $invite_info, $team, Reg $tkireg)
+    public static function showInfo(\PDO $pdo_db, $db, array $langvars, $whichteam, $isowner, array $playerinfo, $invite_info, $team, Reg $tkireg): void
     {
         // Heading
         echo "<div align=center><h3><font color=white><strong>$team[team_name]</strong>";
@@ -213,7 +213,7 @@ class Team
             }
 
             echo $langvars['l_options'] . " <br><font size=2>";
-            if (is_team_owner($team, $playerinfo) === true)
+            if (self::isTeamOwner($team, $playerinfo) === true)
             {
                 echo "[<a href=teams.php?teamwhat=9&whichteam=$playerinfo[team]>" . $langvars['l_edit'] . "</a>] - ";
             }
@@ -228,7 +228,7 @@ class Team
         echo "<table border=2 cellspacing=2 cellpadding=2 bgcolor=\"#400040\" width=\"75%\" align=center><tr>";
         echo "<td><font color=white>" . $langvars['l_team_members'] . "</font></td></tr><tr bgcolor=$tkireg->color_line2>";
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE team = ?;", array($whichteam));
-        \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         while (!$result->EOF)
         {
             $member = $result->fields;
@@ -251,7 +251,7 @@ class Team
 
         // Displays for members name
         $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE team_invite = ?;", array($whichteam));
-        \Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         echo "<td bgcolor=$tkireg->color_line2><font color=white>" . $langvars['l_team_pending'] . " <strong>" . $team['team_name'] . "</strong></font></td>";
         echo "</tr><tr>";
         if ($res->RecordCount() > 0)

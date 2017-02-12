@@ -40,12 +40,7 @@ $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE owner = ?;"
 Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $num_traderoutes = $result->RecordCount();
 
-if ($traderoutes !== null)
-{
-    Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to insert a hardcoded TradeRoute.");
-    \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, "<div style='color:#fff; font-size: 12px;'>[<span style='color:#ff0;'>The Governor</span>] <span style='color:#f00;'>Detected Traderoute Hack!</span></div>\n", $template);
-}
-
+unset($traderoutes);
 $traderoutes = array();
 $i = 0;
 while (!$result->EOF)
@@ -113,26 +108,125 @@ if (mb_strlen(trim($tr_repeat)) === 0)
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $command = null;
-$command = filter_input(INPUT_POST, 'command', FILTER_SANITIZE_STRING);
+$command = filter_input(INPUT_GET, 'command', FILTER_SANITIZE_STRING);
 if (mb_strlen(trim($command)) === 0)
 {
     $command = false;
 }
 
+$engage = null;
+$engage = filter_input(INPUT_POST, 'engage', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($engage)) === 0)
+{
+    $engage = false;
+}
+
+$ptype1 = null;
+$ptype1 = filter_input(INPUT_POST, 'ptype1', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($ptype1)) === 0)
+{
+    $ptype1 = false;
+}
+
+$ptype2 = null;
+$ptype2 = filter_input(INPUT_POST, 'ptype2', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($ptype2)) === 0)
+{
+    $ptype2 = false;
+}
+
+$port_id1 = null;
+$port_id1 = filter_input(INPUT_POST, 'port_id1', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($port_id1)) === 0)
+{
+    $port_id1 = false;
+}
+
+$port_id2 = null;
+$port_id2 = filter_input(INPUT_POST, 'port_id2', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($port_id2)) === 0)
+{
+    $port_id2 = false;
+}
+
+$team_planet_id1 = null;
+$team_planet_id1 = filter_input(INPUT_POST, 'team_planet_id1', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($team_planet_id1)) === 0)
+{
+    $team_planet_id1 = false;
+}
+
+$team_planet_id2 = null;
+$team_planet_id2 = filter_input(INPUT_POST, 'team_planet_id2', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($team_planet_id2)) === 0)
+{
+    $team_planet_id2 = false;
+}
+
+$planet_id1 = null;
+$planet_id1 = filter_input(INPUT_POST, 'planet_id1', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($planet_id1)) === 0)
+{
+    $planet_id1 = false;
+}
+
+$planet_id2 = null;
+$planet_id2 = filter_input(INPUT_POST, 'planet_id2', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($planet_id2)) === 0)
+{
+    $planet_id2 = false;
+}
+
+$move_type = null;
+$move_type = filter_input(INPUT_POST, 'move_type', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($move_type)) === 0)
+{
+    $move_type = false;
+}
+
+$circuit_type = null;
+$circuit_type = filter_input(INPUT_POST, 'circuit_type', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($circuit_type)) === 0)
+{
+    $circuit_type = false;
+}
+
+$editing = null;
+$editing = filter_input(INPUT_POST, 'editing', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($editing)) === 0)
+{
+    $editing = false;
+}
+
+$traderoute_id = null;
+$traderoute_id = filter_input(INPUT_GET, 'traderoute_id', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($traderoute_id)) === 0)
+{
+    $traderoute_id = false;
+}
+
+$confirm = null;
+$confirm = filter_input(INPUT_GET, 'confirm', FILTER_SANITIZE_STRING);
+if (mb_strlen(trim($confirm)) === 0)
+{
+    $confirm = false;
+}
+
+
 if ($command == 'new')
 {
     // Displays new trade route form
-    \Tki\Traderoute2::traderouteNew($pdo_db, $db, $lang, $tkireg, null, $template, $num_traderoutes, $playerinfo);
+    \Tki\TraderouteBuild::new($pdo_db, $db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, null);
 }
 elseif ($command == 'create')
 {
     // Enters new route in db
-    \Tki\Traderoute3::traderouteCreate($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $planet_id1, $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing);
+    \Tki\TraderouteBuild::create($pdo_db, $db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $planet_id1, $planet_id2);
 }
 elseif ($command == 'edit')
 {
     // Displays new trade route form, edit
-    \Tki\Traderoute2::traderouteNew($pdo_db, $db, $lang, $tkireg, $traderoute_id, $template, $num_traderoutes, $playerinfo);
+    \Tki\TraderouteBuild::new($pdo_db, $db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, $traderoute_id);
 }
 elseif ($command == 'delete')
 {
@@ -147,7 +241,7 @@ elseif ($command == 'settings')
 elseif ($command == 'setsettings')
 {
     // Enters settings in db
-    \Tki\Traderoute3::traderouteSetsettings($db, $pdo_db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
+    \Tki\Traderoute3::traderouteSetsettings($pdo_db, $db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
 }
 elseif ($engage !== null)
 {
@@ -158,7 +252,7 @@ elseif ($engage !== null)
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
-        \Tki\Traderoute::traderouteEngage($db, $pdo_db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
+        \Tki\Traderoute::engage($pdo_db, $db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
         $i--;
     }
 }
@@ -400,7 +494,7 @@ else
 }
 
 echo "<div style='text-align:left;'>\n";
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 echo "</div>\n";
 
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

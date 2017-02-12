@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -45,7 +45,7 @@ namespace PHPMD;
  * This is the main facade of the PHP PMD application
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class PHPMD
@@ -80,7 +80,7 @@ class PHPMD
      * This property will be set to <b>true</b> when an error or a violation
      * was found in the processed source code.
      *
-     * @var boolean
+     * @var   boolean
      * @since 0.2.5
      */
     private $violations = false;
@@ -88,7 +88,7 @@ class PHPMD
     /**
      * Additional options for PHPMD or one of it's parser backends.
      *
-     * @var array
+     * @var   array
      * @since 1.2.0
      */
     private $options = array();
@@ -98,7 +98,7 @@ class PHPMD
      * contains violations.
      *
      * @return boolean
-     * @since 0.2.5
+     * @since  0.2.5
      */
     public function hasViolations()
     {
@@ -119,7 +119,7 @@ class PHPMD
      * Returns an array with valid php source file extensions.
      *
      * @return array(string)
-     * @since 0.2.0
+     * @since  0.2.0
      */
     public function getFileExtensions()
     {
@@ -142,7 +142,7 @@ class PHPMD
      * Returns an array with string patterns that mark a file path as invalid.
      *
      * @return array(string)
-     * @since 0.2.0
+     * @since  0.2.0
      */
     public function getIgnorePattern()
     {
@@ -178,7 +178,7 @@ class PHPMD
     /**
      * Sets additional options for PHPMD or one of it's parser backends.
      *
-     * @param array $options Additional backend or PHPMD options.
+     * @param  array $options Additional backend or PHPMD options.
      * @return void
      */
     public function setOptions(array $options)
@@ -191,10 +191,10 @@ class PHPMD
      * path. It will apply rules defined in the comma-separated <b>$ruleSets</b>
      * argument. The result will be passed to all given renderer instances.
      *
-     * @param string $inputPath
-     * @param string $ruleSets
-     * @param \PHPMD\AbstractRenderer[] $renderers
-     * @param \PHPMD\RuleSetFactory $ruleSetFactory
+     * @param  string                    $inputPath
+     * @param  string                    $ruleSets
+     * @param  \PHPMD\AbstractRenderer[] $renderers
+     * @param  \PHPMD\RuleSetFactory     $ruleSetFactory
      * @return void
      */
     public function processFiles(

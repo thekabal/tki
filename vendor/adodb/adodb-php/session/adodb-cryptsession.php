@@ -2,7 +2,7 @@
 
 
 /*
-@version   v5.20.7  20-Sep-2016
+@version   v5.20.9  21-Dec-2016
 @copyright (c) 2000-2013 John Lim (jlim#natsoft.com). All rights reserved.
 @copyright (c) 2014      Damien Regad, Mark Newnham and the ADOdb community
          Contributed by Ross Smith (adodb@netebb.com).
@@ -19,7 +19,7 @@ This file is provided for backwards compatibility purposes
 */
 
 if (!defined('ADODB_SESSION')) {
-	require_once dirname(__FILE__) . '/adodb-session.php';
+    include_once dirname(__FILE__) . '/adodb-session.php';
 }
 
 require_once  ADODB_SESSION . '/adodb-encrypt-md5.php';

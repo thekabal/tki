@@ -22,6 +22,6 @@ echo "Adding turns...";
 $resa = $db->Execute("UPDATE {$db->prefix}ships SET turns = LEAST (turns + ($tkireg->turns_per_tick * $multiplier), $tkireg->max_turns) WHERE turns < $tkireg->max_turns");
 //$resa = $db->Execute("UPDATE {$db->prefix}ships SET turns = LEAST (turns + (? * ?), ?) WHERE turns < ?", array($tkireg->turns_per_tick, $multiplier, $tkireg->max_turns, $tkireg->max_turns));
 $debug = Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
-isQueryOk($pdo_db, $debug);
+\Tki\Scheduler::isQueryOk($pdo_db, $debug);
 echo "<br>";
 $multiplier = 0;

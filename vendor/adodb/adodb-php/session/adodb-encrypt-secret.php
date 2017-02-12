@@ -1,7 +1,7 @@
 <?php
 
 /*
-@version   v5.20.7  20-Sep-2016
+@version   v5.20.9  21-Dec-2016
 @copyright (c) 2000-2013 John Lim (jlim#natsoft.com). All rights reserved.
 @copyright (c) 2014      Damien Regad, Mark Newnham and the ADOdb community
          Contributed by Ross Smith (adodb@netebb.com).
@@ -15,33 +15,34 @@
 @define('HORDE_BASE', dirname(dirname(dirname(__FILE__))) . '/horde');
 
 if (!is_dir(HORDE_BASE)) {
-	trigger_error(sprintf('Directory not found: \'%s\'', HORDE_BASE), E_USER_ERROR);
-	return 0;
+    trigger_error(sprintf('Directory not found: \'%s\'', HORDE_BASE), E_USER_ERROR);
+    return 0;
 }
 
-include_once HORDE_BASE . '/lib/Horde.php';
-include_once HORDE_BASE . '/lib/Secret.php';
+require_once HORDE_BASE . '/lib/Horde.php';
+require_once HORDE_BASE . '/lib/Secret.php';
 
 /**
-
 NOTE: On Windows 2000 SP4 with PHP 4.3.1, MCrypt 2.4.x, and Apache 1.3.28,
 the session didn't work properly.
 
 This may be resolved with 4.3.3.
-
  */
-class ADODB_Encrypt_Secret {
-	/**
-	 */
-	function write($data, $key) {
-		return Secret::write($key, $data);
-	}
+class ADODB_Encrypt_Secret
+{
+    /**
+     */
+    function write($data, $key) 
+    {
+        return Secret::write($key, $data);
+    }
 
-	/**
-	 */
-	function read($data, $key) {
-		return Secret::read($key, $data);
-	}
+    /**
+     */
+    function read($data, $key) 
+    {
+        return Secret::read($key, $data);
+    }
 
 }
 

@@ -22,7 +22,7 @@ namespace Tki;
 
 class SectorDefense
 {
-    public static function messageDefenseOwner(\PDO $pdo_db, int $sector, string $message)
+    public static function messageDefenseOwner(\PDO $pdo_db, int $sector, string $message): void
     {
         $sql = "SELECT ship_id FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
@@ -33,7 +33,7 @@ class SectorDefense
         {
             foreach ($defense_present as $tmp_defense)
             {
-                PlayerLog::WriteLog($pdo_db, $tmp_defense['ship_id'], LOG_RAW, $message);
+                PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LOG_RAW, $message);
             }
         }
     }

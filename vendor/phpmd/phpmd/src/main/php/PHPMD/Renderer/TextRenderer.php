@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -49,7 +49,7 @@ use PHPMD\Report;
  * software artifacts.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class TextRenderer extends AbstractRenderer
@@ -59,13 +59,12 @@ class TextRenderer extends AbstractRenderer
      * This method will be called when the engine has finished the source analysis
      * phase.
      *
-     * @param \PHPMD\Report $report
+     * @param  \PHPMD\Report $report
      * @return void
      */
     public function renderReport(Report $report)
     {
         $writer = $this->getWriter();
-        $writer->write(PHP_EOL);
 
         foreach ($report->getRuleViolations() as $violation) {
             $writer->write($violation->getFileName());

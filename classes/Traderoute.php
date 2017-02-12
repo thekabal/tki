@@ -22,7 +22,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function traderouteEngage(\ADODB_mysqli $db, \PDO $pdo_db, string $lang, int $j, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $dist, array $traderoutes, int $portfull, Smarty $template)
+    public static function engage(\PDO $pdo_db, $db, string $lang, int $j, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $dist, array $traderoutes, int $portfull, Smarty $template): void
     {
         $traderoute = array();
         $source = array();
@@ -47,12 +47,12 @@ class Traderoute
 
         if (!isset($traderoute))
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_engagenonexist'], $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_engagenonexist']);
         }
 
         if ($traderoute['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_notowntdr'], $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
         }
 
         // Source check
@@ -60,11 +60,11 @@ class Traderoute
         {
             // Retrieve port info here, we'll need it later anyway
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoute['source_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
             {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidspoint'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invalidspoint']);
             }
 
             $source = $result->fields;
@@ -72,16 +72,16 @@ class Traderoute
             if ($traderoute['source_id'] != $playerinfo['sector'])
             {
                 $langvars['l_tdr_inittdr'] = str_replace("[tdr_source_id]", $traderoute['source_id'], $langvars['l_tdr_inittdr']);
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_inittdr'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_inittdr']);
             }
         }
         elseif ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')  // Get data from planet table
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['source_id'], $playerinfo['ship_id'], $playerinfo['team']));
-            \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if (!$result || $result->EOF)
             {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invalidsrc']);
             }
 
             $source = $result->fields;
@@ -90,8 +90,8 @@ class Traderoute
             {
                 // Check for valid owned source planet
                 // $langvars['l_tdr_inittdrsector'] = str_replace("[tdr_source_sector_id]", $source['sector_id'], $langvars['l_tdr_inittdrsector']);
-                // \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_inittdrsector'], $template);
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, 'You must be in starting sector before you initiate a trade route!', $template);
+                // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_inittdrsector']);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, 'You must be in starting sector before you initiate a trade route!');
             }
 
             if ($traderoute['source_type'] == 'L')
@@ -100,8 +100,8 @@ class Traderoute
                 {
                     // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $source[name], $langvars['l_tdr_notyourplanet']);
                     // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $source[sector_id], $langvars['l_tdr_notyourplanet']);
-                    // \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_notyourplanet'], $template);
-                    \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
+                    // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notyourplanet']);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invalidsrc']);
                 }
             }
             elseif ($traderoute['source_type'] == 'C')   // Check to make sure player and planet are in the same team.
@@ -111,18 +111,18 @@ class Traderoute
                     // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $source[name], $langvars['l_tdr_notyourplanet']);
                     // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $source[sector_id], $langvars['l_tdr_notyourplanet']);
                     // $not_team_planet = "$source[name] in $source[sector_id] not a Copporate Planet";
-                    // \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $not_team_planet, $template);
-                    \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
+                    // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $not_team_planet);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invalidsrc']);
                 }
             }
 
             // Store starting port info, we'll need it later
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($source['sector_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
             {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidssector'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invalidssector']);
             }
 
             $sourceport = $result->fields;
@@ -132,11 +132,11 @@ class Traderoute
         if ($traderoute['dest_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoute['dest_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
             {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invaliddport'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invaliddport']);
             }
 
             $dest = $result->fields;
@@ -146,11 +146,11 @@ class Traderoute
             // Check for valid owned source planet
             // This now only returns planets that the player owns or planets that belong to the team and set as team planets..
             $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['dest_id'], $playerinfo['ship_id'], $playerinfo['team']));
-            \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
             {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invaliddplanet'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invaliddplanet']);
             }
 
             $dest = $result->fields;
@@ -161,7 +161,7 @@ class Traderoute
                 {
                     $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $dest['name'], $langvars['l_tdr_notyourplanet']);
                     $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $dest['sector_id'], $langvars['l_tdr_notyourplanet']);
-                    \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_notyourplanet'], $template);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notyourplanet']);
                 }
             }
             elseif ($traderoute['dest_type'] == 'C')   // Check to make sure player and planet are in the same team.
@@ -170,15 +170,15 @@ class Traderoute
                 {
                     $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $dest['name'], $langvars['l_tdr_notyourplanet']);
                     $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $dest['sector_id'], $langvars['l_tdr_notyourplanet']);
-                    \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_notyourplanet'], $template);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notyourplanet']);
                 }
             }
 
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($dest['sector_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if (!$result || $result->EOF)
             {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invaliddsector'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invaliddsector']);
             }
 
             $destport = $result->fields;
@@ -198,23 +198,23 @@ class Traderoute
         if ($traderoute['move_type'] == 'W')
         {
             $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($source['sector_id'], $dest['sector_id']));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if ($query->EOF)
             {
                 $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink1']);
                 $langvars['l_tdr_nowlink1'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink1']);
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_nowlink1'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink1']);
             }
 
             if ($traderoute['circuit'] == '2')
             {
                 $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($dest['sector_id'], $source['sector_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
                 if ($query->EOF)
                 {
                     $langvars['l_tdr_nowlink2'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink2']);
                     $langvars['l_tdr_nowlink2'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink2']);
-                    \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_nowlink2'], $template);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink2']);
                 }
 
                 $dist['triptime'] = 4;
@@ -238,14 +238,14 @@ class Traderoute
         {
             $langvars['l_tdr_moreturnsneeded'] = str_replace("[tdr_dist_triptime]", $dist['triptime'], $langvars['l_tdr_moreturnsneeded']);
             $langvars['l_tdr_moreturnsneeded'] = str_replace("[tdr_playerinfo_turns]", $playerinfo['turns'], $langvars['l_tdr_moreturnsneeded']);
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_moreturnsneeded'], $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_moreturnsneeded']);
         }
 
         // Sector defense check
         $hostile = 0;
 
         $result99 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($source['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $result99, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result99, __LINE__, __FILE__);
         if (!$result99->EOF)
         {
             $fighters_owner = $result99->fields;
@@ -262,7 +262,7 @@ class Traderoute
         }
 
         $result98 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($dest['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $result98, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $result98, __LINE__, __FILE__);
         if (!$result98->EOF)
         {
             $fighters_owner = $result98->fields;
@@ -281,13 +281,13 @@ class Traderoute
 
         if ($hostile > 0 && $playerinfo['hull'] > $tkireg->mine_hullsize)
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_hostdef'], $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_hostdef']);
         }
 
         // Special port nothing to do
         if ($traderoute['source_type'] == 'P' && $source['port_type'] == 'special' && $playerinfo['trade_colonists'] == 'N' && $playerinfo['trade_fighters'] == 'N' && $playerinfo['trade_torps'] == 'N')
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_globalsetbuynothing'], $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_globalsetbuynothing']);
         }
 
         // Check if zone allows trading  SRC
@@ -301,7 +301,7 @@ class Traderoute
 
             if ($zoneinfo['allow_trade'] == 'N')
             {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_nosrcporttrade'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nosrcporttrade']);
             }
             elseif ($zoneinfo['allow_trade'] == 'L')
             {
@@ -315,14 +315,14 @@ class Traderoute
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
-                        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_tradesrcportoutsider'], $template);
+                        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_tradesrcportoutsider']);
                     }
                 }
                 else
                 {
                     if ($playerinfo['team'] != $zoneinfo['owner'])
                     {
-                        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_tradesrcportoutsider'], $template);
+                        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_tradesrcportoutsider']);
                     }
                 }
             }
@@ -339,7 +339,7 @@ class Traderoute
 
             if ($zoneinfo['allow_trade'] == 'N')
             {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_nodestporttrade'], $template);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nodestporttrade']);
             }
             elseif ($zoneinfo['allow_trade'] == 'L')
             {
@@ -353,20 +353,20 @@ class Traderoute
 
                     if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
                     {
-                        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_tradedestportoutsider'], $template);
+                        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_tradedestportoutsider']);
                     }
                 }
                 else
                 {
                     if ($playerinfo['team'] != $zoneinfo['owner'])
                     {
-                        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_tradedestportoutsider'], $template);
+                        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_tradedestportoutsider']);
                     }
                 }
             }
         }
 
-        \Tki\Traderoute3::traderouteResultsTableTop($pdo_db, $lang, $tkireg);
+        \Tki\TraderouteResults::tableTop($pdo_db, $lang, $tkireg);
         // Determine if source is a planet or a port
         if ($traderoute['source_type'] == 'P')
         {
@@ -377,7 +377,7 @@ class Traderoute
             echo $langvars['l_tdr_planet'] . " " . $source['name'] . " in " . $sourceport['sector_id'];
         }
 
-        \Tki\Traderoute3::traderouteResultsSource();
+        \Tki\TraderouteResults::source();
 
         // Determine if destination is a planet or a port
         if ($traderoute['dest_type'] == 'P')
@@ -389,7 +389,7 @@ class Traderoute
             echo $langvars['l_tdr_planet'] . " " . $dest['name'] . " in " . $destport['sector_id'];
         }
 
-        \Tki\Traderoute3::traderouteResultsDestination($tkireg);
+        \Tki\TraderouteResults::destination($tkireg);
 
         $sourcecost = 0;
 
@@ -477,7 +477,7 @@ class Traderoute
                 if ($traderoute['circuit'] == '1')
                 {
                     $resb = $db->Execute("UPDATE {$db->prefix}ships SET ship_colonists = ship_colonists + ?, ship_fighters = ship_fighters + ?, torps = torps + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($colonists_buy, $fighters_buy, $torps_buy, $dist['scooped1'], $playerinfo['ship_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resb, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resb, __LINE__, __FILE__);
                 }
             }
             // Normal port section
@@ -633,7 +633,7 @@ class Traderoute
                     $playerinfo['ship_ore'] += $ore_buy;
                     $sourcecost -= $ore_buy * $tkireg->ore_price;
                     $resc = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore-?, port_energy=port_energy-?, port_goods=port_goods-?, port_organics=port_organics-? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $source['sector_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resc, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
                 }
 
                 if ($source['port_type'] == 'goods')
@@ -663,7 +663,7 @@ class Traderoute
                     $sourcecost -= $goods_buy * $tkireg->goods_price;
 
                     $resd = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore-?, port_energy=port_energy-?, port_goods=port_goods-?, port_organics=port_organics-? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $source['sector_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resd, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resd, __LINE__, __FILE__);
                 }
 
                 if ($source['port_type'] == 'organics')
@@ -693,7 +693,7 @@ class Traderoute
                     $playerinfo['ship_organics'] += $organics_buy;
                     $sourcecost -= $organics_buy * $tkireg->organics_price;
                     $rese = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore-?, port_energy=port_energy-?, port_goods=port_goods-?, port_organics=port_organics-? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $source['sector_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $rese, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $rese, __LINE__, __FILE__);
                 }
 
                 if ($source['port_type'] == 'energy')
@@ -723,7 +723,7 @@ class Traderoute
                     $playerinfo['ship_energy'] += $energy_buy;
                     $sourcecost -= $energy_buy * $tkireg->energy_price;
                     $resf = $db->Execute("UPDATE {$db->prefix}universe SET port_ore=port_ore-?, port_energy=port_energy-?, port_goods=port_goods-?, port_organics=port_organics-? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $source['sector_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resf, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
                 }
 
                 if ($dist['scooped1'] > 0)
@@ -743,7 +743,7 @@ class Traderoute
                 if ($traderoute['circuit'] == '1')
                 {
                     $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ?, ship_energy = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_energy'], $playerinfo['ship_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resf, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
                 }
             }
         }
@@ -824,12 +824,12 @@ class Traderoute
                     if ($traderoute['circuit'] == '1')
                     {
                         $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_id']));
-                        \Tki\Db::LogDbErrors($pdo_db, $resg, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $resg, __LINE__, __FILE__);
                     }
                 }
 
                 $resh = $db->Execute("UPDATE {$db->prefix}planets SET ore = ore - ?, goods = goods - ?, organics = organics - ? WHERE planet_id = ?;", array($ore_buy, $goods_buy, $organics_buy, $source['planet_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resh, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resh, __LINE__, __FILE__);
             }
             // Destination is a planet, so load colonists and weapons
             elseif (($traderoute['dest_type'] == 'L') || ($traderoute['dest_type'] == 'C'))
@@ -904,11 +904,11 @@ class Traderoute
                 if ($traderoute['circuit'] == '1')
                 {
                     $resi = $db->Execute("UPDATE {$db->prefix}ships SET torps = ?, ship_fighters = ?, ship_colonists = ? WHERE ship_id = ?;", array($playerinfo['torps'], $playerinfo['ship_fighters'], $playerinfo['ship_colonists'], $playerinfo['ship_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resi, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
                 }
 
                 $resj = $db->Execute("UPDATE {$db->prefix}planets SET colonists = colonists - ?, torps = torps - ?, fighters = fighters - ? WHERE planet_id = ?;", array($colonists_buy, $torps_buy, $fighters_buy, $source['planet_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resj, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resj, __LINE__, __FILE__);
             }
         }
 
@@ -917,7 +917,7 @@ class Traderoute
             echo $langvars['l_tdr_scooped'] . " " . number_format($dist['scooped1'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . "<br>";
         }
 
-        \Tki\Traderoute3::traderouteResultsCloseCell();
+        \Tki\TraderouteResults::closeCell();
 
         if ($traderoute['circuit'] == '2')
         {
@@ -1094,7 +1094,7 @@ class Traderoute
                     }
 
                     $resk = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resk, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resk, __LINE__, __FILE__);
                 }
 
                 if ($dest['port_type'] == 'goods')
@@ -1131,7 +1131,7 @@ class Traderoute
                     }
 
                     $resl = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resl, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resl, __LINE__, __FILE__);
                 }
 
                 if ($dest['port_type'] == 'organics')
@@ -1169,7 +1169,7 @@ class Traderoute
                     }
 
                     $resm = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resm, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resm, __LINE__, __FILE__);
                 }
 
                 if ($dest['port_type'] == 'energy')
@@ -1211,7 +1211,7 @@ class Traderoute
                     }
 
                     $resn = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resn, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resn, __LINE__, __FILE__);
                 }
 
                 if ($dist['scooped2'] > 0)
@@ -1225,7 +1225,7 @@ class Traderoute
                 }
 
                 $reso = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ?, ship_energy = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_energy'], $playerinfo['ship_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $reso, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $reso, __LINE__, __FILE__);
             }
             else // Dest is planet
             {
@@ -1340,24 +1340,24 @@ class Traderoute
                 }
 
                 $resp = $db->Execute("UPDATE {$db->prefix}planets SET colonists = colonists + ?, fighters = fighters + ?, torps = torps + ? WHERE planet_id = ?;", array($colonists_buy, $fighters_buy, $torps_buy, $traderoute['dest_id']));
-                \Tki\Db::LogDbErrors($pdo_db, $resp, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $resp, __LINE__, __FILE__);
 
                 if ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')
                 {
                     $resq = $db->Execute("UPDATE {$db->prefix}ships SET ship_colonists = ?, ship_fighters = ?, torps = ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($col_dump, $fight_dump, $torps_dump, $dist['scooped'], $playerinfo['ship_id']));
-                    \Tki\Db::LogDbErrors($pdo_db, $resq, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $resq, __LINE__, __FILE__);
                 }
                 else
                 {
                     if ($setcol == 1)
                     {
                         $resr = $db->Execute("UPDATE {$db->prefix}ships SET ship_colonists = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($col_dump, $fight_dump, $torps_dump, $dist['scooped'], $playerinfo['ship_id']));
-                        \Tki\Db::LogDbErrors($pdo_db, $resr, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $resr, __LINE__, __FILE__);
                     }
                     else
                     {
                         $ress = $db->Execute("UPDATE {$db->prefix}ships SET ship_colonists = ship_colonists - ?, ship_fighters = ship_fighters - ?, torps = torps - ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($col_dump, $fight_dump, $torps_dump, $dist['scooped'], $playerinfo['ship_id']));
-                        \Tki\Db::LogDbErrors($pdo_db, $ress, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $ress, __LINE__, __FILE__);
                     }
                 }
             }
@@ -1373,7 +1373,7 @@ class Traderoute
             $destcost = 0;
         }
 
-        \Tki\Traderoute3::traderouteResultsShowCost($tkireg);
+        \Tki\TraderouteResults::showCost($tkireg);
 
         if ($sourcecost > 0)
         {
@@ -1384,7 +1384,7 @@ class Traderoute
             echo $langvars['l_tdr_cost'] . " : " . number_format(abs($sourcecost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
 
-        \Tki\Traderoute3::traderouteResultsCloseCost();
+        \Tki\TraderouteResults::closeCost();
 
         if ($destcost > 0)
         {
@@ -1395,10 +1395,10 @@ class Traderoute
             echo $langvars['l_tdr_cost'] . " : " . number_format(abs($destcost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         }
 
-        \Tki\Traderoute3::traderouteResultsCloseTable();
+        \Tki\TraderouteResults::closeTable();
 
         $total_profit = $sourcecost + $destcost;
-        \Tki\Traderoute3::traderouteResultsDisplayTotals($pdo_db, $lang, $total_profit);
+        \Tki\TraderouteResults::displayTotals($pdo_db, $lang, $total_profit);
 
         if ($traderoute['circuit'] == '1')
         {
@@ -1410,12 +1410,12 @@ class Traderoute
         }
 
         $rest = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - ?, credits = credits + ?, turns_used = turns_used + ?, sector = ? WHERE ship_id = ?;", array($dist['triptime'], $total_profit, $dist['triptime'], $newsec, $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $rest, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $rest, __LINE__, __FILE__);
         $playerinfo['credits'] += $total_profit - $sourcecost;
         $playerinfo['turns'] -= $dist['triptime'];
 
         $tdr_display_creds = number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
-        \Tki\Traderoute3::traderouteResultsDisplaySummary($pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo);
+        \Tki\TraderouteResults::displaySummary($pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo);
         // echo $j . " -- ";
         if ($traderoute['circuit'] == 2)
         {
@@ -1427,13 +1427,13 @@ class Traderoute
             if ($j == 1)
             {
                 echo $langvars['l_tdr_engageagain'] . "\n";
-                \Tki\Traderoute3::traderouteResultsShowRepeat($engage);
+                \Tki\TraderouteResults::showRepeat($engage);
             }
         }
 
         if ($j == 1)
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
         }
     }
 }

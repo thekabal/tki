@@ -11,7 +11,7 @@ Default ruleset was changed from Symfony standard to more generic PSR2. You can 
 
 The term of risky fixers was introduced. Risky fixer is a fixer that may change the meaning of code (like `StrictComparisonFixer` fixer, which will change `==` into `===`). No rules that are followed by risky fixers are run by default. You need to explicitly permit risky fixers to run them.
 
-Default configuraton changes
+Default configuration changes
 ----------------------------
 By default, PSR2 rules are used instead of Symfony rules.
 Files that will be fixed are php/phpt/twig instead of php/twig/xml/yml.
@@ -20,21 +20,21 @@ Finally, the caching mechanism is enabled by default.
 CLI options
 -----------
 
-1.x           | 2.0           | Description                                     | Note
-------------- | ------------- | ----------------------------------------------- | ----
-              | --allow-risky | Are risky fixers allowed                        |
-              | --cache-file  | The path to the cache file                      | option was added
---config      |               | Config class codename                           | option was removed
---config-file | --config      | The path to a .php_cs file                      | option was renamed
---diff        | --diff        | Show diff                                       |
---dry-run     | --dry-run     | Run in dry-run mode                             |
---fixers      |               | Coding standard fixers                          | options was removed, see --rules
---format      | --format      | Choose format                                   |
---level       |               | Coding standard level                           | options was removed, see --rules
-              | --rules       | Rules to be used                                | option was added
-              | --using-cache | Does cache should be used                       | option was added
-              | --path-mode   | Should the finder from configuration be         | option was added
-              |               | overriden or intersected with `path` argument   |
+1.x             | 2.0             | Description                                                               | Note
+--------------- | --------------- | ------------------------------------------------------------------------- | ----
+                | --allow-risky   | Are risky fixers allowed                                                  |
+                | --cache-file    | The path to the cache file                                                | option was added
+--config        |                 | Config class codename                                                     | option was removed
+--config-file   | --config        | The path to a .php_cs file                                                | option was renamed
+--diff          | --diff          | Show diff                                                                 |
+--dry-run       | --dry-run       | Run in dry-run mode                                                       |
+--fixers        |                 | Coding standard fixers                                                    | option was removed, see --rules
+--format        | --format        | Choose format                                                             |
+--level         |                 | Coding standard level                                                     | option was removed, see --rules
+                | --path-mode     | Should the finder from config be<br/>overridden or intersected with `path` arg | option was added
+                | --rules         | Rules to be used                                                          | option was added
+                | --using-cache   | Does cache should be used                                                 | option was added
+
 
 CLI argument
 ------------
@@ -47,17 +47,17 @@ Only files pointed by both finder and CLI `path` argument will be fixed.
 Exit codes
 ----------
 
-Exit codes have been change and are build using the following bit flags:
+Exit codes for `fix` command have been changed and are build using the following bit flags:
 
-1.x bit | 2.0 bit | Description                             | Note
--------:| -------:| --------------------------------------- | ----
-0       | 0       | OK                                      |
-1       |         | No changes made                         | flag was removed
-        | 4       | Some files have invalid syntax          | flag was added, works only in dry-run mode
-        | 8       | Some files need fixing                  | flag was added, works only in dry-run mode
-16      | 16      | Configuration error of the application  |
-32      | 32      | Configuration error of a Fixer          |
-        | 64      | Exception within the application        | flag was added
+1.x bit | 2.0 bit | Description                                                 | Note
+-------:| -------:| ----------------------------------------------------------- | ----
+0       | 0       | OK                                                          |
+1       | 1       | General error (or PHP/HHVM minimal requirement not matched) | no longer used for other states, never combined with other flags
+        | 4       | Some files have invalid syntax                              | flag was added, works only in dry-run mode
+        | 8       | Some files need fixing                                      | flag was added, works only in dry-run mode
+16      | 16      | Configuration error of the application                      |
+32      | 32      | Configuration error of a Fixer                              |
+        | 64      | Exception within the application                            | flag was added
 
 Namespace
 ---------
@@ -71,29 +71,36 @@ Config and Finder classes
 -------------------------
 All off `Symfony\CS\Config\*` and `Symfony\CS\Finder\*` classes have been removed, instead use `PhpCsFixer\Config` and `PhpCsFixer\Finder`.
 
-For that reason you can not set config class by `--config` CLI argument, from now it is used to set configuration file. Thanks to this the `--config-file` CLI argument is no longer available.
+For that reason you can not set config class by `--config` CLI argument, from now it is used to set configuration file. Therefor the `--config-file` CLI argument is no longer available.
 
 Renamed rules
 -------------
 
 Old name | New name | Note
 -------- | -------- | ----
+align_double_arrow                             | binary_operator_spaces                            | use configuration ['align_double_arrow' => true]
+align_equals                                   | binary_operator_spaces                            | use configuration ['align_equals' => true]
 array_element_no_space_before_comma            | no_whitespace_before_comma_in_array
 array_element_white_space_after_comma          | whitespace_after_comma_in_array
 blankline_after_open_tag                       | blank_line_after_opening_tag
+concat_with_spaces                             | concat_space                                      | use configuration ['spacing' => 'one']
+concat_without_spaces                          | concat_space                                      | use configuration ['spacing' => 'none']
 double_arrow_multiline_whitespaces             | no_multiline_whitespace_around_double_arrow
 duplicate_semicolon                            | no_empty_statement                                | new one fixes more cases
 empty_return                                   | simplified_null_return
+echo_to_print                                  | no_mixed_echo_print                               | use configuration ['use' => 'print']
 eof_ending                                     | single_blank_line_at_eof
 extra_empty_lines                              | no_extra_consecutive_blank_lines
 function_call_space                            | no_spaces_after_function_name
-indentation                                    | no_tab_indentation
+general_phpdoc_annotation_rename               | phpdoc_no_alias_tag                               | use configuration ['property-read' => 'property', 'property-write' => 'property']
+indentation                                    | indentation_type
 join_function                                  | no_alias_functions                                | new one fixes more aliases
 line_after_namespace                           | blank_line_after_namespace
-linefeed                                       | unix_line_endings
+linefeed                                       | line_ending                                       | whitespaces type aware
 list_commas                                    | no_trailing_comma_in_list_call
 logical_not_operators_with_spaces              | not_operator_with_space
 logical_not_operators_with_successor_space     | not_operator_with_successor_space
+long_array_syntax                              | array_syntax                                      | use configuration ['syntax' => 'long']
 method_argument_default_value                  | no_unreachable_default_argument_value
 multiline_array_trailing_comma                 | trailing_comma_in_multiline_array
 multiline_spaces_before_semicolon              | no_multiline_whitespace_before_semicolons
@@ -108,10 +115,15 @@ parenthesis                                    | no_spaces_inside_parenthesis
 php4_constructor                               | no_php4_constructor
 php_closing_tag                                | no_closing_tag
 phpdoc_params                                  | phpdoc_align
+phpdoc_property                                | phpdoc_no_alias_tag                               | use configuration ['type' => 'var']
 phpdoc_short_description                       | phpdoc_summary
+phpdoc_type_to_var                             | phpdoc_no_alias_tag                               | use configuration ['type' => 'var']
+phpdoc_var_to_type                             | phpdoc_no_alias_tag                               | use configuration ['var' => 'type']
+print_to_echo                                  | no_mixed_echo_print                               | use configuration ['use' => 'echo']
 remove_leading_slash_use                       | no_leading_import_slash
-remove_lines_between_uses                      | no_extra_consecutive_blank_lines                  | use configuration option 'use'
+remove_lines_between_uses                      | no_extra_consecutive_blank_lines                  | use configuration ['use']
 return                                         | blank_line_before_return
+short_array_syntax                             | array_syntax                                      | use configuration ['syntax' => 'short']
 short_bool_cast                                | no_short_bool_cast
 short_echo_tag                                 | no_short_echo_tag
 short_tag                                      | full_opening_tag
@@ -123,11 +135,13 @@ standardize_not_equal                          | standardize_not_equals
 strict                                         | strict_comparison
 ternary_spaces                                 | ternary_operator_spaces
 trailing_spaces                                | no_trailing_whitespace
+unalign_double_arrow                           | binary_operator_spaces                            | use configuration ['align_double_arrow' => false]
+unalign_equals                                 | binary_operator_spaces                            | use configuration ['align_equals' => false]
 unary_operators_spaces                         | unary_operator_spaces
 unneeded_control_parentheses                   | no_unneeded_control_parentheses
 unused_use                                     | no_unused_imports
 visibility                                     | visibility_required
-whitespacy_lines                               | no_whitespace_in_blank_lines
+whitespacy_lines                               | no_whitespace_in_blank_line
 
 Changes to Fixers
 -----------------

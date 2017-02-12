@@ -74,7 +74,7 @@
     <tr><td>{$langvars['l_set_sched_ticks']}</td><td style="text-align:right;">{$variables['sched_ticks']} {$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_turns']}</td><td style="text-align:right;">{$variables['sched_turns']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_defense']}</td><td style="text-align:right;">{$variables['sched_turns']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
-    <tr><td>{$langvars['l_set_sched_xenobe']}</td><td style="text-align:right;">{$variables['sched_turns']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
+    <tr><td>{$langvars['l_set_sched_kabal']}</td><td style="text-align:right;">{$variables['sched_turns']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_ibank_interest']}</td><td style="text-align:right;">{$variables['sched_ibank']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_news']}</td><td style="text-align:right;">{$variables['sched_news']}&nbsp;{$langvars['l_set_minutes']}</td></tr>
     <tr><td>{$langvars['l_set_sched_planet_prod']}</td><td style="text-align:right;">{$variables['sched_planets']}&nbsp;{$langvars['l_set_minutes']}</td></tr>

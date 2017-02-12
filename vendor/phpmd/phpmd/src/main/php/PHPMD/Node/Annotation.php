@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -47,7 +47,7 @@ use PHPMD\Rule;
  * Simple code annotation class.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Annotation
@@ -86,7 +86,7 @@ class Annotation
     /**
      * Checks if this annotation suppresses the given rule.
      *
-     * @param \PHPMD\Rule $rule
+     * @param  \PHPMD\Rule $rule
      * @return boolean
      */
     public function suppresses(Rule $rule)
@@ -100,14 +100,14 @@ class Annotation
     /**
      * Checks if this annotation suppresses the given rule.
      *
-     * @param \PHPMD\Rule $rule
+     * @param  \PHPMD\Rule $rule
      * @return boolean
      */
     private function isSuppressed(Rule $rule)
     {
         if (in_array($this->value, array('PHPMD', 'PMD'))) {
             return true;
-        } elseif (strpos($this->value, 'PMD.' . $rule->getName()) !== false) {
+        } elseif (preg_match('/^(PH)?PMD\.' . $rule->getName() . '/', $this->value)) {
             return true;
         }
         return (stripos($rule->getName(), $this->value) !== false);

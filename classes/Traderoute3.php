@@ -22,7 +22,7 @@ namespace Tki;
 
 class Traderoute3
 {
-    public static function traderouteDistance(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, array $playerinfo, Reg $tkireg, $sells = 'N')
+    public static function traderouteDistance(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, array $playerinfo, Reg $tkireg, $sells = 'N'): array
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;
@@ -152,266 +152,34 @@ class Traderoute3
         return $retvalue;
     }
 
-    public static function traderouteCreate(\ADODB_mysqli $db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, int $planet_id1, int $planet_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing)
-    {
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
-
-        $src_id = null;
-        $dest_id = null;
-        $src_type = null;
-        $dest_type = null;
-
-        if ($num_traderoutes >= $tkireg->max_traderoutes_player && empty ($editing))
-        { // Dont let them exceed max traderoutes
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_maxtdr'], $template);
-        }
-
-        // Database sanity check for source
-        if ($ptype1 == 'port')
-        {
-            // Check for valid Source Port
-            if ($port_id1 >= $tkireg->max_sectors)
-            {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidspoint'], $template);
-            }
-
-            $query = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($port_id1));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            if (!$query || $query->EOF)
-            {
-                $langvars['l_tdr_errnotvalidport'] = str_replace("[tdr_port_id]", $port_id1, $langvars['l_tdr_errnotvalidport']);
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnotvalidport'], $template);
-            }
-
-            // OK we definitely have a port here
-            $source = $query->fields;
-            if ($source['port_type'] == 'none')
-            {
-                $langvars['l_tdr_errnoport'] = str_replace("[tdr_port_id]", $port_id1, $langvars['l_tdr_errnoport']);
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnoport'], $template);
-            }
-        }
-        else
-        {
-            $query = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id1));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            $source = $query->fields;
-            if (!$query || $query->EOF)
-            {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnosrc'], $template);
-            }
-
-            // Check for valid Source Planet
-            if ($source['sector_id'] >= $tkireg->max_sectors)
-            {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
-            }
-
-            if ($source['owner'] != $playerinfo['ship_id'])
-            {
-                if (($playerinfo['team'] == 0 || $playerinfo['team'] != $source['team']) && $source['sells'] == 'N')
-                {
-                    // $langvars['l_tdr_errnotownnotsell'] = str_replace("[tdr_source_name]", $source[name], $langvars['l_tdr_errnotownnotsell']);
-                    // $langvars['l_tdr_errnotownnotsell'] = str_replace("[tdr_source_sector_id]", $source[sector_id], $langvars['l_tdr_errnotownnotsell']);
-                    // \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnotownnotsell'], $template);
-
-                    // Check for valid Owned Source Planet
-                    \Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id1} as source.");
-                    \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invalidsrc'], $template);
-                }
-            }
-        }
-
-        // OK we have $source, *probably* now lets see if we have ever been there
-        // Attempting to fix the map the universe via traderoute bug
-
-        $pl1query = $db->Execute("SELECT * FROM {$db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($source['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $pl1query, __LINE__, __FILE__);
-        $num_res1 = $pl1query->numRows();
-        if ($num_res1 == 0)
-        {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, "You cannot create a traderoute from a sector you have not visited!", $template);
-        }
-
-        // Note: shouldnt we, more realistically, require a ship to be *IN* the source sector to create the traderoute?
-        // Database sanity check for dest
-        if ($ptype2 == 'port')
-        {
-            // Check for valid Dest Port
-            if ($port_id2 >= $tkireg->max_sectors)
-            {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invaliddport'], $template);
-            }
-
-            $query = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($port_id2));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            if (!$query || $query->EOF)
-            {
-                $langvars['l_tdr_errnotvaliddestport'] = str_replace("[tdr_port_id]", $port_id2, $langvars['l_tdr_errnotvaliddestport']);
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnotvaliddestport'], $template);
-            }
-
-            $destination = $query->fields;
-
-            if ($destination['port_type'] == 'none')
-            {
-                $langvars['l_tdr_errnoport2'] = str_replace("[tdr_port_id]", $port_id2, $langvars['l_tdr_errnoport2']);
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnoport2'], $template);
-            }
-        }
-        else
-        {
-            $query = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id2));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            $destination = $query->fields;
-            if (!$query || $query->EOF)
-            {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnodestplanet'], $template);
-            }
-
-            // Check for valid Dest Planet
-            if ($destination['sector_id'] >= $tkireg->max_sectors)
-            {
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invaliddplanet'], $template);
-            }
-
-            if ($destination['owner'] != $playerinfo['ship_id'] && $destination['sells'] == 'N')
-            {
-                // $langvars['l_tdr_errnotownnotsell2'] = str_replace("[tdr_dest_name]", $destination['name'], $langvars['l_tdr_errnotownnotsell2']);
-                // $langvars['l_tdr_errnotownnotsell2'] = str_replace("[tdr_dest_sector_id]", $destination['sector_id'], $langvars['l_tdr_errnotownnotsell2']);
-                // \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_errnotownnotsell2'], $template);
-
-                // Check for valid Owned Source Planet
-                \Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id2} as dest.");
-                \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_invaliddplanet'], $template);
-            }
-        }
-
-        // OK now we have $destination lets see if we've been there.
-        $pl2query = $db->Execute("SELECT * FROM {$db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($destination['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $pl2query, __LINE__, __FILE__);
-        $num_res2 = $pl2query->numRows();
-        if ($num_res2 == 0)
-        {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, "You cannot create a traderoute into a sector you have not visited!", $template);
-        }
-
-        // Check destination - we cannot trade INTO a special port
-        if (array_key_exists('port_type', $destination) === true && $destination['port_type'] == 'special')
-        {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, "You cannot create a traderoute into a special port!", $template);
-        }
-
-        // Check traderoute for src => dest
-        \Tki\Traderoute2::traderouteCheckCompatible($db, $pdo_db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
-
-        if ($ptype1 == 'port')
-        {
-            $src_id = $port_id1;
-        }
-        elseif ($ptype1 == 'planet')
-        {
-            $src_id = $planet_id1;
-        }
-        elseif ($ptype1 == 'team_planet')
-        {
-            $src_id = $team_planet_id1;
-        }
-
-        if ($ptype2 == 'port')
-        {
-            $dest_id = $port_id2;
-        }
-        elseif ($ptype2 == 'planet')
-        {
-            $dest_id = $planet_id2;
-        }
-        elseif ($ptype2 == 'team_planet')
-        {
-            $dest_id = $team_planet_id2;
-        }
-
-        if ($ptype1 == 'port')
-        {
-            $src_type = 'P';
-        }
-        elseif ($ptype1 == 'planet')
-        {
-            $src_type = 'L';
-        }
-        elseif ($ptype1 == 'team_planet')
-        {
-            $src_type = 'C';
-        }
-
-        if ($ptype2 == 'port')
-        {
-            $dest_type = 'P';
-        }
-        elseif ($ptype2 == 'planet')
-        {
-            $dest_type = 'L';
-        }
-        elseif ($ptype2 == 'team_planet')
-        {
-            $dest_type = 'C';
-        }
-
-        if ($move_type == 'realspace')
-        {
-            $mtype = 'R';
-        }
-        else
-        {
-            $mtype = 'W';
-        }
-
-        if (empty ($editing))
-        {
-            $query = $db->Execute("INSERT INTO {$db->prefix}traderoutes VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            echo "<p>" . $langvars['l_tdr_newtdrcreated'];
-        }
-        else
-        {
-            $query = $db->Execute("UPDATE {$db->prefix}traderoutes SET source_id = ?, dest_id = ?, source_type = ?, dest_type = ?, move_type = ?, owner = ?, circuit = ? WHERE traderoute_id = ?;", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type, $editing));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            echo "<p>" . $langvars['l_tdr_modified'];
-        }
-
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
-        echo " " . $langvars['l_tdr_returnmenu'];
-        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
-    }
-
-    public static function traderouteDelete(\PDO $pdo_db, \ADODB_mysqli $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $confirm, int $traderoute_id)
+    public static function traderouteDelete(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $confirm, int $traderoute_id=null): void
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
-        \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
         if (!$query || $query->EOF)
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_doesntexist'], $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_doesntexist']);
         }
 
         $delroute = $query->fields;
 
         if ($delroute['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $langvars['l_tdr_notowntdr'], $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
         }
 
         if (!empty ($confirm))
         {
             $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
-            \Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
             echo $langvars['l_tdr_deleted'] . " " . $langvars['l_tdr_returnmenu'];
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
         }
     }
 
-    public static function traderouteSettings(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo)
+    public static function traderouteSettings(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -474,10 +242,10 @@ class Traderoute3
 
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_returnmenu'];
-        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
+        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
     }
 
-    public static function traderouteSetsettings(\ADODB_mysqli $db, \PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy)
+    public static function traderouteSetsettings(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -486,100 +254,10 @@ class Traderoute3
         empty ($torps) ? $torps = 'N' : $torps = 'Y';
 
         $resa = $db->Execute("UPDATE {$db->prefix}ships SET trade_colonists = ?, trade_fighters = ?, trade_torps = ?, trade_energy = ? WHERE ship_id = ?;", array($colonists, $fighters, $torps, $energy, $playerinfo['ship_id']));
-        \Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
 
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_globalsetsaved'] . " " . $langvars['l_tdr_returnmenu'];
-        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, null, $template);
-    }
-
-    public static function traderouteResultsTableTop(\PDO $pdo_db, string $lang, Reg $tkireg)
-    {
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
-
-        echo "<table border='1' cellspacing='1' cellpadding='2' width='65%' align='center'>\n";
-        echo "  <tr bgcolor='" . $tkireg->color_line2 . "'>\n";
-        echo "    <td align='center' colspan='7'><strong><font color='white'>" . $langvars['l_tdr_res'] . "</font></strong></td>\n";
-        echo "  </tr>\n";
-        echo "  <tr align='center' bgcolor='" . $tkireg->color_line2 . "'>\n";
-        echo "    <td width='50%'><font size='2' color='white'><strong>";
-    }
-
-    public static function traderouteResultsSource()
-    {
-        echo "</strong></font></td>\n";
-        echo "    <td width='50%'><font size='2' color='white'><strong>";
-    }
-
-    public static function traderouteResultsDestination(Reg $tkireg)
-    {
-        echo "</strong></font></td>\n";
-        echo "  </tr>\n";
-        echo "  <tr bgcolor='" . $tkireg->color_line1 . "'>\n";
-        echo "    <td align='center'><font size='2' color='white'>";
-    }
-
-    public static function traderouteResultsCloseCell()
-    {
-        echo "</font></td>\n";
-        echo "    <td align='center'><font size='2' color='white'>";
-    }
-
-    public static function traderouteResultsShowCost(Reg $tkireg)
-    {
-        echo "</font></td>\n";
-        echo "  </tr>\n";
-        echo "  <tr bgcolor='" . $tkireg->color_line2 . "'>\n";
-        echo "    <td align='center'><font size='2' color='white'>";
-    }
-
-    public static function traderouteResultsCloseCost()
-    {
-        echo "</font></td>\n";
-        echo "    <td align='center'><font size='2' color='white'>";
-    }
-
-    public static function traderouteResultsCloseTable()
-    {
-        echo "</font></td>\n";
-        echo "  </tr>\n";
-        echo "</table>\n";
-        // echo "<p><center><font size=3 color=white><strong>\n";
-    }
-
-    /**
-     * @param double $total_profit
-     */
-    public static function traderouteResultsDisplayTotals(\PDO $pdo_db, string $lang, $total_profit)
-    {
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
-
-        if ($total_profit > 0)
-        {
-            echo "<p><center><font size=3 color=white><strong>" . $langvars['l_tdr_totalprofit'] . " : <font style='color:#0f0;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
-        }
-        else
-        {
-            echo "<p><center><font size=3 color=white><strong>" . $langvars['l_tdr_totalcost'] . " : <font style='color:#f00;'><strong>".number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
-        }
-    }
-
-    public static function traderouteResultsDisplaySummary(\PDO $pdo_db, string $lang, string $tdr_display_creds, $dist, array $playerinfo)
-    {
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
-
-        echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_turnsused'] . " : <font style='color:#f00;'>$dist[triptime]</font></strong></font><br>";
-        echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_turnsleft'] . " : <font style='color:#0f0;'>$playerinfo[turns]</font></strong></font><br>";
-
-        echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_credits'] . " : <font style='color:#0f0;'> $tdr_display_creds\n</font></strong></font><br> </strong></font></center>\n";
-        //echo "<font size='2'>\n";
-    }
-
-    public static function traderouteResultsShowRepeat(int $engage)
-    {
-        echo "<form accept-charset='utf-8' action='traderoute.php?engage=" . $engage . "' method='post'>\n";
-        echo "<br>Enter times to repeat <input type='text' name='tr_repeat' value='1' size='5'> <input type='submit' value='submit'>\n";
-        echo "</form>\n";
-        // echo "<p>";
+        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
     }
 }

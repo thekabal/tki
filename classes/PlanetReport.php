@@ -22,7 +22,23 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function planetReportMenu(array $playerinfo, array $langvars)
+    public static function baseBuildCheck($langvars, Reg $tkireg, $planet, int $i): string
+    {
+        if($planet[$i]['base'] == 'Y')
+        {
+            return $langvars['l_yes'];
+        }
+        elseif($planet[$i]['ore'] >= $tkireg->base_ore && $planet[$i]['organics'] >= $tkireg->base_organics && $planet[$i]['goods'] >= $tkireg->base_goods && $planet[$i]['credits'] >= $tkireg->base_credits)
+        {
+            return "<a href=planet-report-ce.php?buildp=" . $planet[$i]['planet_id'] . "&builds=" . $planet[$i]['sector_id'] . ">Build</a>";
+        }
+        else
+        {
+            return $langvars['l_no'];
+        }
+    }
+
+    public static function planetReportMenu(array $playerinfo, array $langvars): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -45,11 +61,11 @@ class PlanetReport
     {
         if ($planet[$i]['team'] <= 0)
         {
-            return (string) "<input type='checkbox' name='team[" . $i . "]' value='" . $planet[$i]['planet_id'] ."' />";
+            return "<input type='checkbox' name='team[" . $i . "]' value='" . $planet[$i]['planet_id'] ."' />";
         }
         elseif ($planet[$i]['team'] > 0)
         {
-            return (string) "<input type='checkbox' name='team[" . $i . "]' value='{" . $planet[$i]['planet_id'] . "' checked />";
+            return "<input type='checkbox' name='team[" . $i . "]' value='{" . $planet[$i]['planet_id'] . "' checked />";
         }
     }
 
@@ -57,15 +73,15 @@ class PlanetReport
     {
         if ($planet[$i]['sells'] != 'Y')
         {
-            return (string) "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' />";
+            return "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' />";
         }
         elseif ($planet[$i]['sells'] == 'Y')
         {
-            return (string) "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' checked />";
+            return "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' checked />";
         }
     }
 
-    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, $sort, Reg $tkireg)
+    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, $sort, Reg $tkireg): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -107,14 +123,14 @@ class PlanetReport
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $playerinfo['ship_id']);
         $stmt->execute();
-        $planet_owner_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $planet_owner_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $i = 0;
         $planet = array();
         if ($planet_owner_present !== null)
         {
             foreach ($planet_owner_present as $tmp_owner)
             {
-                $planet[$i] = $tmp_owner['link_dest'];
+                $planet[$i] = $tmp_owner;
                 $i++;
             }
         }
@@ -209,7 +225,8 @@ class PlanetReport
                 echo "<td align=center>" . "<input type=checkbox name=TPCreds[] value=\"" . $planet[$i]['planet_id'] . "\">" . "</td>";
                 echo "<td align=right>"  . number_format($planet[$i]['fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td align=right>"  . number_format($planet[$i]['torps'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=center>" . base_build_check($langvars, $planet, $i) . "</td>";
+                echo "<td align=center>" . self::baseBuildCheck($langvars, $tkireg, $planet, $i) . "</td>";
+
                 if ($playerinfo['team'] > 0)
                 {
                     echo "<td align=center>" . ($planet[$i]['team'] > 0 ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";

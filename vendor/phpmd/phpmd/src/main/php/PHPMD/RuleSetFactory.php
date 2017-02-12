@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -46,7 +46,7 @@ namespace PHPMD;
  * that PHPMD will use to analyze the source code.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class RuleSetFactory
@@ -54,7 +54,7 @@ class RuleSetFactory
     /**
      * Is the strict mode active?
      *
-     * @var boolean
+     * @var   boolean
      * @since 1.2.0
      */
     private $strict = false;
@@ -91,7 +91,7 @@ class RuleSetFactory
      * Activates the strict mode for all rule sets.
      *
      * @return void
-     * @since 1.2.0
+     * @since  1.2.0
      */
     public function setStrict()
     {
@@ -113,7 +113,7 @@ class RuleSetFactory
     /**
      * Creates an array of rule-set instances for the given argument.
      *
-     * @param string $ruleSetFileNames Comma-separated string of rule-set filenames or identifier.
+     * @param  string $ruleSetFileNames Comma-separated string of rule-set filenames or identifier.
      * @return \PHPMD\RuleSet[]
      */
     public function createRuleSets($ruleSetFileNames)
@@ -132,7 +132,7 @@ class RuleSetFactory
     /**
      * Creates a single rule-set instance for the given filename or identifier.
      *
-     * @param string $ruleSetOrFileName The rule-set filename or identifier.
+     * @param  string $ruleSetOrFileName The rule-set filename or identifier.
      * @return \PHPMD\RuleSet
      */
     public function createSingleRuleSet($ruleSetOrFileName)
@@ -158,7 +158,7 @@ class RuleSetFactory
      * This method creates the filename for a rule-set identifier or it returns
      * the input when it is already a filename.
      *
-     * @param string $ruleSetOrFileName The rule-set filename or identifier.
+     * @param  string $ruleSetOrFileName The rule-set filename or identifier.
      * @return string
      */
     private function createRuleSetFileName($ruleSetOrFileName)
@@ -220,7 +220,7 @@ class RuleSetFactory
     /**
      * This method parses the rule-set definition in the given file.
      *
-     * @param string $fileName
+     * @param  string $fileName
      * @return \PHPMD\RuleSet
      */
     private function parseRuleSetNode($fileName)
@@ -274,8 +274,8 @@ class RuleSetFactory
      * xml node this method delegates the parsing process to another method in
      * this class.
      *
-     * @param \PHPMD\RuleSet $ruleSet
-     * @param \SimpleXMLElement $node
+     * @param  \PHPMD\RuleSet    $ruleSet
+     * @param  \SimpleXMLElement $node
      * @return void
      */
     private function parseRuleNode(RuleSet $ruleSet, \SimpleXMLElement $node)
@@ -293,8 +293,8 @@ class RuleSetFactory
      * This method parses a complete rule set that was includes a reference in
      * the currently parsed ruleset.
      *
-     * @param \PHPMD\RuleSet $ruleSet
-     * @param \SimpleXMLElement $ruleSetNode
+     * @param  \PHPMD\RuleSet    $ruleSet
+     * @param  \SimpleXMLElement $ruleSetNode
      * @return void
      */
     private function parseRuleSetReferenceNode(RuleSet $ruleSet, \SimpleXMLElement $ruleSetNode)
@@ -310,9 +310,9 @@ class RuleSetFactory
     /**
      * Parses a rule-set xml file referenced by the given rule-set xml element.
      *
-     * @param \SimpleXMLElement $ruleSetNode
+     * @param  \SimpleXMLElement $ruleSetNode
      * @return \PHPMD\RuleSet
-     * @since 0.2.3
+     * @since  0.2.3
      */
     private function parseRuleSetReference(\SimpleXMLElement $ruleSetNode)
     {
@@ -326,10 +326,10 @@ class RuleSetFactory
      * Checks if the given rule is included/not excluded by the given rule-set
      * reference node.
      *
-     * @param \PHPMD\Rule $rule
-     * @param \SimpleXMLElement $ruleSetNode
+     * @param  \PHPMD\Rule       $rule
+     * @param  \SimpleXMLElement $ruleSetNode
      * @return boolean
-     * @since 0.2.3
+     * @since  0.2.3
      */
     private function isIncluded(Rule $rule, \SimpleXMLElement $ruleSetNode)
     {
@@ -345,8 +345,8 @@ class RuleSetFactory
      * This method will create a single rule instance and add it to the given
      * {@link \PHPMD\RuleSet} object.
      *
-     * @param \PHPMD\RuleSet $ruleSet
-     * @param \SimpleXMLElement $ruleNode
+     * @param  \PHPMD\RuleSet    $ruleSet
+     * @param  \SimpleXMLElement $ruleNode
      * @return void
      * @throws \PHPMD\RuleClassFileNotFoundException
      * @throws \PHPMD\RuleClassNotFoundException
@@ -423,8 +423,8 @@ class RuleSetFactory
      * This method parses a single rule that was included from a different
      * rule-set.
      *
-     * @param \PHPMD\RuleSet $ruleSet
-     * @param \SimpleXMLElement $ruleNode
+     * @param  \PHPMD\RuleSet    $ruleSet
+     * @param  \SimpleXMLElement $ruleNode
      * @return void
      */
     private function parseRuleReferenceNode(RuleSet $ruleSet, \SimpleXMLElement $ruleNode)
@@ -482,8 +482,8 @@ class RuleSetFactory
      *   ...
      * </code>
      *
-     * @param \PHPMD\Rule $rule
-     * @param \SimpleXMLElement $propertiesNode
+     * @param  \PHPMD\Rule       $rule
+     * @param  \SimpleXMLElement $propertiesNode
      * @return void
      */
     private function parsePropertiesNode(Rule $rule, \SimpleXMLElement $propertiesNode)
@@ -498,8 +498,8 @@ class RuleSetFactory
     /**
      * Adds an additional property to the given <b>$rule</b> instance.
      *
-     * @param \PHPMD\Rule $rule
-     * @param \SimpleXMLElement $node
+     * @param  \PHPMD\Rule       $rule
+     * @param  \SimpleXMLElement $node
      * @return void
      */
     private function addProperty(Rule $rule, \SimpleXMLElement $node)
@@ -517,9 +517,9 @@ class RuleSetFactory
      * and the second valid notation is a child element named <b>value</b> that
      * contains the value as character data.
      *
-     * @param \SimpleXMLElement $propertyNode
+     * @param  \SimpleXMLElement $propertyNode
      * @return string
-     * @since 0.2.5
+     * @since  0.2.5
      */
     private function getPropertyValue(\SimpleXMLElement $propertyNode)
     {
@@ -534,9 +534,9 @@ class RuleSetFactory
      *
      * http://pmd.sourceforge.net/pmd-5.0.4/howtomakearuleset.html#Excluding_files_from_a_ruleset
      *
-     * @param $fileName     The filename of a rule-set definition.
+     * @param string $fileName The filename of a rule-set definition.
      *
-     * @return array
+     * @return array|null
      * @throws \RuntimeException
      */
     public function getIgnorePattern($fileName)
@@ -564,5 +564,6 @@ class RuleSetFactory
 
             return $excludes;
         }
+        return null;
     }
 }

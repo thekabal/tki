@@ -38,9 +38,9 @@ class IncrementDecrementUsageSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return void
      */
@@ -60,9 +60,9 @@ class IncrementDecrementUsageSniff implements Sniff
     /**
      * Checks to ensure increment and decrement operators are not confusing.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return void
      */
@@ -72,7 +72,10 @@ class IncrementDecrementUsageSniff implements Sniff
 
         // Work out where the variable is so we know where to
         // start looking for other operators.
-        if ($tokens[($stackPtr - 1)]['code'] === T_VARIABLE) {
+        if ($tokens[($stackPtr - 1)]['code'] === T_VARIABLE
+            || ($tokens[($stackPtr - 1)]['code'] === T_STRING
+            && $tokens[($stackPtr - 2)]['code'] === T_OBJECT_OPERATOR)
+        ) {
             $start = ($stackPtr + 1);
         } else {
             $start = ($stackPtr + 2);
@@ -106,9 +109,9 @@ class IncrementDecrementUsageSniff implements Sniff
     /**
      * Checks to ensure increment and decrement operators are used.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return void
      */

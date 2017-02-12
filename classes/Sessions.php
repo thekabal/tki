@@ -134,7 +134,7 @@ class Sessions
         return $result;
     }
 
-    public function regen()
+    public function regen(): void
     {
         $old_id = session_id();
         session_regenerate_id();

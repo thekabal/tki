@@ -32,9 +32,9 @@ class EchoedStringsSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */
@@ -73,7 +73,11 @@ class EchoedStringsSniff implements Sniff
             if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
                 $phpcsFile->fixer->replaceToken($firstContent, '');
-                $phpcsFile->fixer->replaceToken(($end - 1), '');
+                if ($tokens[($firstContent - 1)]['code'] !== T_WHITESPACE) {
+                    $phpcsFile->fixer->addContent(($firstContent - 1), ' ');
+                }
+
+                $phpcsFile->fixer->replaceToken($prev, '');
                 $phpcsFile->fixer->endChangeset();
             }
         }

@@ -39,7 +39,7 @@ class Compress
         // Check to see if we have data, if not, then return empty string
         if ($output === null)
         {
-            return (string) '';
+            return '';
         }
 
         // Handle the supported compressions.
@@ -65,7 +65,7 @@ class Compress
         }
         else
         {
-            return (string) $output;
+            return $output;
         }
     }
 }

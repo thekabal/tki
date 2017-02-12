@@ -335,3 +335,38 @@ public function myFunction(string $name1, string ...$name2) {
  */
 function foo($bar) {
 }
+
+/**
+ * Processes the test.
+ *
+ * @param PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
+ *                                        token occurred.
+ * @param int                        $stackPtr The position in the tokens stack
+ *                                    where the listening token type
+ *                                           was found.
+ *
+ * @return void
+ * @see    register()
+ */
+function process(File $phpcsFile, $stackPtr)
+{
+
+}//end process()
+
+/**
+ * Processes the test.
+ *
+ * @param int $phpcsFile The PHP_CodeSniffer
+ *                   file where the
+ *                                        token occurred.
+ * @param int $stackPtr  The position in the tokens stack
+ *                                    where the listening token type
+ *                                           was found.
+ *
+ * @return void
+ * @see    register()
+ */
+function process(File $phpcsFile, $stackPtr)
+{
+
+}//end process()

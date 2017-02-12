@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 0.9.6
  */
@@ -46,7 +46,7 @@ namespace PDepend\Source\AST;
 /**
  * This is an abstract base implementation of the ast node interface.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @since 2.3
  */
@@ -134,6 +134,14 @@ interface ASTNode
     public function getParent();
 
     /**
+     * Sets the parent node of this node.
+     *
+     * @param \PDepend\Source\AST\ASTNode $node
+     * @return void
+     */
+    public function setParent(ASTNode $node);
+
+    /**
      * Traverses up the node tree and finds all parent nodes that are instances
      * of <b>$parentType</b>.
      *
@@ -158,4 +166,17 @@ interface ASTNode
      * @return void
      */
     public function setComment($comment);
+
+    /**
+     * For better performance we have moved the single setter methods for the
+     * node columns and lines into this configure method.
+     *
+     * @param integer $startLine
+     * @param integer $endLine
+     * @param integer $startColumn
+     * @param integer $endColumn
+     * @return void
+     * @since 0.9.10
+     */
+    public function configureLinesAndColumns($startLine, $endLine, $startColumn, $endColumn);
 }

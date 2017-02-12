@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -52,7 +52,7 @@ use PHPMD\Node\MethodNode;
  * method of the analyzed class.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class UnusedPrivateMethod extends AbstractRule implements ClassAware
@@ -61,7 +61,7 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
      * This method checks that all private class methods are at least accessed
      * by one method.
      *
-     * @param \PHPMD\AbstractNode $class
+     * @param  \PHPMD\AbstractNode $class
      * @return void
      */
     public function apply(AbstractNode $class)
@@ -75,7 +75,7 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
      * This method collects all methods in the given class that are declared
      * as private and are not used in the same class' context.
      *
-     * @param \PHPMD\Node\ClassNode $class
+     * @param  \PHPMD\Node\ClassNode $class
      * @return \PHPMD\AbstractNode[]
      */
     private function collectUnusedPrivateMethods(ClassNode $class)
@@ -87,7 +87,7 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
     /**
      * Collects all private methods declared in the given class node.
      *
-     * @param \PHPMD\Node\ClassNode $class
+     * @param  \PHPMD\Node\ClassNode $class
      * @return \PHPMD\AbstractNode[]
      */
     private function collectPrivateMethods(ClassNode $class)
@@ -105,8 +105,8 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
      * Returns <b>true</b> when the given method should be used for this rule's
      * analysis.
      *
-     * @param \PHPMD\Node\ClassNode $class
-     * @param \PHPMD\Node\MethodNode $method
+     * @param  \PHPMD\Node\ClassNode  $class
+     * @param  \PHPMD\Node\MethodNode $method
      * @return boolean
      */
     private function acceptMethod(ClassNode $class, MethodNode $method)
@@ -124,8 +124,8 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
     /**
      * This method removes all used methods from the given methods array.
      *
-     * @param \PHPMD\Node\ClassNode $class
-     * @param \PHPMD\Node\MethodNode[] $methods
+     * @param  \PHPMD\Node\ClassNode    $class
+     * @param  \PHPMD\Node\MethodNode[] $methods
      * @return \PHPMD\AbstractNode[]
      */
     private function removeUsedMethods(ClassNode $class, array $methods)
@@ -142,8 +142,8 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
      * This method checks that the given method postfix is accessed on an
      * instance or static reference to the given class.
      *
-     * @param \PHPMD\Node\ClassNode $class
-     * @param \PHPMD\Node\ASTNode $postfix
+     * @param  \PHPMD\Node\ClassNode $class
+     * @param  \PHPMD\Node\ASTNode   $postfix
      * @return boolean
      */
     private function isClassScope(ClassNode $class, ASTNode $postfix)

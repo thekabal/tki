@@ -57,3 +57,17 @@ var object =
      }
 
 }
+
+var a = Function('return 1+1');
+
+class test
+{
+    myFunction() {
+       return false;
+    }
+
+    myFunction2()
+    {
+       return false;
+    }
+}

@@ -119,7 +119,7 @@ This information will help us to help you much faster and will help improve our 
 {if ($variables['cookie_test'])}
 <font color="green">Passed - Cookies are set correctly</font>
 {else}
-<font color="red">Failed! - Cookies cannot be set. Please report this issue to <a href="https://kabal-invasion.com/forums/">The TKI Forums</a></font>
+<font color="red">Failed! - Cookies cannot be set. Please report this issue to <a href="https://github.com/thekabal/tki/">The TKI github page</a></font>
 {/if}
 </font></td>
     </tr>

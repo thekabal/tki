@@ -29,13 +29,13 @@ class ShorthandSizeSniff implements Sniff
      *
      * @var array
      */
-    public $excludeStyles = array(
-                             'background-position'      => 'background-position',
-                             'box-shadow'               => 'box-shadow',
-                             'transform-origin'         => 'transform-origin',
-                             '-webkit-transform-origin' => '-webkit-transform-origin',
-                             '-ms-transform-origin'     => '-ms-transform-origin',
-                            );
+    protected $excludeStyles = array(
+                                'background-position'      => 'background-position',
+                                'box-shadow'               => 'box-shadow',
+                                'transform-origin'         => 'transform-origin',
+                                '-webkit-transform-origin' => '-webkit-transform-origin',
+                                '-ms-transform-origin'     => '-ms-transform-origin',
+                               );
 
 
     /**
@@ -53,9 +53,9 @@ class ShorthandSizeSniff implements Sniff
     /**
      * Processes the tokens that this sniff is interested in.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
-     * @param int                  $stackPtr  The position in the stack where
-     *                                        the token was found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file where the token was found.
+     * @param int                         $stackPtr  The position in the stack where
+     *                                               the token was found.
      *
      * @return void
      */

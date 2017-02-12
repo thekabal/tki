@@ -2,7 +2,7 @@
 /**
  * Checks for unneeded whitespace.
  *
- * Checks that no whitespace proceeds the first content of the file, exists
+ * Checks that no whitespace preceeds the first content of the file, exists
  * after the last content of the file, resides after content on any line, or
  * are two empty lines in functions.
  *
@@ -62,9 +62,9 @@ class SuperfluousWhitespaceSniff implements Sniff
     /**
      * Processes this sniff, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */

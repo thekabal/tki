@@ -22,7 +22,7 @@ class Config
      *
      * @var string
      */
-    const VERSION = '3.0.0RC1';
+    const VERSION = '3.0.0RC3';
 
     /**
      * Package stability; either stable, beta or alpha.
@@ -670,7 +670,7 @@ class Config
                 || isset($this->cliArgs[($pos + 2)]) === false
             ) {
                 echo 'ERROR: Setting a config option requires a name and value'.PHP_EOL.PHP_EOL;
-                $this->printUsage();
+                $this->printShortUsage();
                 exit(0);
             }
 
@@ -694,7 +694,7 @@ class Config
         case 'config-delete':
             if (isset($this->cliArgs[($pos + 1)]) === false) {
                 echo 'ERROR: Deleting a config option requires the name of the option'.PHP_EOL.PHP_EOL;
-                $this->printUsage();
+                $this->printShortUsage();
                 exit(0);
             }
 
@@ -722,7 +722,7 @@ class Config
                 || isset($this->cliArgs[($pos + 2)]) === false
             ) {
                 echo 'ERROR: Setting a runtime config option requires a name and value'.PHP_EOL.PHP_EOL;
-                $this->printUsage();
+                $this->printShortUsage();
                 exit(0);
             }
 
@@ -738,7 +738,7 @@ class Config
                 foreach ($sniffs as $sniff) {
                     if (substr_count($sniff, '.') !== 2) {
                         echo 'ERROR: The specified sniff code "'.$sniff.'" is invalid'.PHP_EOL.PHP_EOL;
-                        $this->printUsage();
+                        $this->printShortUsage();
                         exit(3);
                     }
                 }
@@ -750,7 +750,7 @@ class Config
                 foreach ($sniffs as $sniff) {
                     if (substr_count($sniff, '.') !== 2) {
                         echo 'ERROR: The specified sniff code "'.$sniff.'" is invalid'.PHP_EOL.PHP_EOL;
-                        $this->printUsage();
+                        $this->printShortUsage();
                         exit(3);
                     }
                 }
@@ -773,7 +773,7 @@ class Config
                     $dir = dirname($this->cacheFile);
                     if (is_dir($dir) === false) {
                         echo 'ERROR: The specified cache file path "'.$this->cacheFile.'" points to a non-existent directory'.PHP_EOL.PHP_EOL;
-                        $this->printUsage();
+                        $this->printShortUsage();
                         exit(3);
                     }
 
@@ -781,7 +781,13 @@ class Config
                         // Passed cache file is a file in the current directory.
                         $this->cacheFile = getcwd().'/'.basename($this->cacheFile);
                     } else {
-                        $dir = Util\Common::realpath(getcwd().'/'.$dir);
+                        if ($dir{0} === '/') {
+                            // An absolute path.
+                            $dir = Util\Common::realpath($dir);
+                        } else {
+                            $dir = Util\Common::realpath(getcwd().'/'.$dir);
+                        }
+
                         if ($dir !== false) {
                             // Cache file path is relative.
                             $this->cacheFile = $dir.'/'.basename($this->cacheFile);
@@ -793,7 +799,7 @@ class Config
 
                 if (is_dir($this->cacheFile) === true) {
                     echo 'ERROR: The specified cache file path "'.$this->cacheFile.'" is a directory'.PHP_EOL.PHP_EOL;
-                    $this->printUsage();
+                    $this->printShortUsage();
                     exit(3);
                 }
             } else if (substr($arg, 0, 10) === 'bootstrap=') {
@@ -803,7 +809,7 @@ class Config
                     $path = Util\Common::realpath($file);
                     if ($path === false) {
                         echo 'ERROR: The specified bootstrap file "'.$file.'" does not exist'.PHP_EOL.PHP_EOL;
-                        $this->printUsage();
+                        $this->printShortUsage();
                         exit(3);
                     }
 
@@ -817,7 +823,7 @@ class Config
                 $path     = Util\Common::realpath($fileList);
                 if ($path === false) {
                     echo 'ERROR: The specified file list "'.$fileList.'" does not exist'.PHP_EOL.PHP_EOL;
-                    $this->printUsage();
+                    $this->printShortUsage();
                     exit(3);
                 }
 
@@ -851,7 +857,7 @@ class Config
                     $dir = dirname($this->reportFile);
                     if (is_dir($dir) === false) {
                         echo 'ERROR: The specified report file path "'.$this->reportFile.'" points to a non-existent directory'.PHP_EOL.PHP_EOL;
-                        $this->printUsage();
+                        $this->printShortUsage();
                         exit(3);
                     }
 
@@ -859,7 +865,13 @@ class Config
                         // Passed report file is a file in the current directory.
                         $this->reportFile = getcwd().'/'.basename($this->reportFile);
                     } else {
-                        $dir = Util\Common::realpath(getcwd().'/'.$dir);
+                        if ($dir{0} === '/') {
+                            // An absolute path.
+                            $dir = Util\Common::realpath($dir);
+                        } else {
+                            $dir = Util\Common::realpath(getcwd().'/'.$dir);
+                        }
+
                         if ($dir !== false) {
                             // Report file path is relative.
                             $this->reportFile = $dir.'/'.basename($this->reportFile);
@@ -871,7 +883,7 @@ class Config
 
                 if (is_dir($this->reportFile) === true) {
                     echo 'ERROR: The specified report file path "'.$this->reportFile.'" is a directory'.PHP_EOL.PHP_EOL;
-                    $this->printUsage();
+                    $this->printShortUsage();
                     exit(3);
                 }
             } else if (substr($arg, 0, 13) === 'report-width=') {
@@ -897,7 +909,7 @@ class Config
 
                 if (is_dir($this->basepath) === false) {
                     echo 'ERROR: The specified basepath "'.$this->basepath.'" points to a non-existent directory'.PHP_EOL.PHP_EOL;
-                    $this->printUsage();
+                    $this->printShortUsage();
                     exit(3);
                 }
             } else if ((substr($arg, 0, 7) === 'report=' || substr($arg, 0, 7) === 'report-')) {
@@ -920,7 +932,13 @@ class Config
                                 // Passed report file is a filename in the current directory.
                                 $output = getcwd().'/'.basename($output);
                             } else {
-                                $dir = Util\Common::realpath(getcwd().'/'.$dir);
+                                if ($dir{0} === '/') {
+                                    // An absolute path.
+                                    $dir = Util\Common::realpath($dir);
+                                } else {
+                                    $dir = Util\Common::realpath(getcwd().'/'.$dir);
+                                }
+
                                 if ($dir !== false) {
                                     // Report file path is relative.
                                     $output = $dir.'/'.basename($output);
@@ -1081,7 +1099,7 @@ class Config
             }
 
             echo "ERROR: option \"$arg\" not known".PHP_EOL.PHP_EOL;
-            $this->printUsage();
+            $this->printShortUsage();
             exit(3);
         }
 
@@ -1111,7 +1129,7 @@ class Config
             }
 
             echo 'ERROR: The file "'.$path.'" does not exist.'.PHP_EOL.PHP_EOL;
-            $this->printUsage();
+            $this->printShortUsage();
             exit(3);
         } else {
             $files       = $this->files;
@@ -1130,13 +1148,35 @@ class Config
      */
     public function printUsage()
     {
+        echo PHP_EOL;
+
         if (PHP_CODESNIFFER_CBF === true) {
             $this->printPHPCBFUsage();
         } else {
             $this->printPHPCSUsage();
         }
 
+        echo PHP_EOL;
+
     }//end printUsage()
+
+
+    /**
+     * Prints out the short usage information for this script.
+     *
+     * @return void
+     */
+    public function printShortUsage()
+    {
+        if (PHP_CODESNIFFER_CBF === true) {
+            echo 'Run "phpcbf --help" for usage information';
+        } else {
+            echo 'Run "phpcs --help" for usage information';
+        }
+
+        echo PHP_EOL.PHP_EOL;
+
+    }//end printShortUsage()
 
 
     /**
@@ -1325,13 +1365,22 @@ class Config
     public static function setConfigData($key, $value, $temp=false)
     {
         if ($temp === false) {
-            $configFile = dirname(__FILE__).'/../CodeSniffer.conf';
-            if (is_file($configFile) === false
-                && strpos('@data_dir@', '@data_dir') === false
-            ) {
-                // If data_dir was replaced, this is a PEAR install and we can
-                // use the PEAR data dir to store the conf file.
-                $configFile = '@data_dir@/PHP_CodeSniffer/CodeSniffer.conf';
+            $path = '';
+            if (is_callable('\Phar::running') === true) {
+                $path = \Phar::running(false);
+            }
+
+            if ($path !== '') {
+                $configFile = dirname($path).'/CodeSniffer.conf';
+            } else {
+                $configFile = dirname(__DIR__).'/CodeSniffer.conf';
+                if (is_file($configFile) === false
+                    && strpos('@data_dir@', '@data_dir') === false
+                ) {
+                    // If data_dir was replaced, this is a PEAR install and we can
+                    // use the PEAR data dir to store the conf file.
+                    $configFile = '@data_dir@/PHP_CodeSniffer/CodeSniffer.conf';
+                }
             }
 
             if (is_file($configFile) === true
@@ -1340,7 +1389,7 @@ class Config
                 $error = 'Config file '.$configFile.' is not writable';
                 throw new RuntimeException($error);
             }
-        }
+        }//end if
 
         $phpCodeSnifferConfig = self::getAllConfigData();
 
@@ -1381,9 +1430,20 @@ class Config
             return self::$configData;
         }
 
-        $configFile = dirname(__FILE__).'/../CodeSniffer.conf';
-        if (is_file($configFile) === false) {
-            $configFile = '@data_dir@/PHP_CodeSniffer/CodeSniffer.conf';
+        $path = '';
+        if (is_callable('\Phar::running') === true) {
+            $path = \Phar::running(false);
+        }
+
+        if ($path !== '') {
+            $configFile = dirname($path).'/CodeSniffer.conf';
+        } else {
+            $configFile = dirname(__DIR__).'/CodeSniffer.conf';
+            if (is_file($configFile) === false
+                && strpos('@data_dir@', '@data_dir') === false
+            ) {
+                $configFile = '@data_dir@/PHP_CodeSniffer/CodeSniffer.conf';
+            }
         }
 
         if (is_file($configFile) === false) {

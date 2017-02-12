@@ -57,7 +57,7 @@ echo "<h1>" . $title . "</h1>\n";
 if ($planet_id <= 0)
 {
     echo "Invalid Planet<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -79,14 +79,14 @@ $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($planetinfo === false)
 {
     echo "Invalid Planet<br><br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }
 
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_trade_turnneed'] . '<br><br>';
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -94,7 +94,7 @@ if ($playerinfo['turns'] < 1)
 if ($planetinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_planet2_sector'] . '<br><br>';
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -102,7 +102,7 @@ if ($planetinfo['sector_id'] != $playerinfo['sector'])
 if (empty ($planetinfo))
 {
     echo $langvars['l_planet_none'] . "<br>";
-    Tki\Text::gotomain($pdo_db, $lang);
+    Tki\Text::gotoMain($pdo_db, $lang);
     Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -173,5 +173,5 @@ if ($planetinfo['sells'] == 'Y')
 }
 
 Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

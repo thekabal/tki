@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -46,7 +46,7 @@ namespace PHPMD;
  * a PHPMD run.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Report
@@ -54,7 +54,7 @@ class Report
     /**
      * List of rule violations detected in the analyzed source code.
      *
-     * @var \PHPMD\RuleViolation[]
+     * @var array
      */
     private $ruleViolations = array();
 
@@ -75,7 +75,7 @@ class Report
     /**
      * Errors that occurred while parsing the source.
      *
-     * @var array
+     * @var   array
      * @since 1.2.1
      */
     private $errors = array();
@@ -83,7 +83,7 @@ class Report
     /**
      * Adds a rule violation to this report.
      *
-     * @param \PHPMD\RuleViolation $violation
+     * @param  \PHPMD\RuleViolation $violation
      * @return void
      */
     public function addRuleViolation(RuleViolation $violation)
@@ -105,7 +105,7 @@ class Report
      * Returns <b>true</b> when this report does not contain any errors.
      *
      * @return boolean
-     * @since 0.2.5
+     * @since  0.2.5
      */
     public function isEmpty()
     {
@@ -115,7 +115,7 @@ class Report
     /**
      * Returns an iterator with all occurred rule violations.
      *
-     * @return \Iterator
+     * @return \PHPMD\RuleViolation[]
      */
     public function getRuleViolations()
     {
@@ -138,9 +138,9 @@ class Report
     /**
      * Adds a processing error that occurred while parsing the source.
      *
-     * @param \PHPMD\ProcessingError $error
+     * @param  \PHPMD\ProcessingError $error
      * @return void
-     * @since 1.2.1
+     * @since  1.2.1
      */
     public function addError(ProcessingError $error)
     {
@@ -152,7 +152,7 @@ class Report
      * error. Otherwise this method will return <b>false</b>.
      *
      * @return boolean
-     * @since 1.2.1
+     * @since  1.2.1
      */
     public function hasErrors()
     {
@@ -164,7 +164,7 @@ class Report
      * added to this report.
      *
      * @return \Iterator
-     * @since 1.2.1
+     * @since  1.2.1
      */
     public function getErrors()
     {

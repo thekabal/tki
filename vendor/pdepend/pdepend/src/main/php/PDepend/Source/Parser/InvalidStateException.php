@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -46,7 +46,7 @@ namespace PDepend\Source\Parser;
  * This type of exception is thrown when the parser reaches an invalid state
  * and the parsed source does not fill the expected structure.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class InvalidStateException extends ParserException
@@ -55,8 +55,8 @@ class InvalidStateException extends ParserException
      * Constructs a new invalid state exception.
      *
      * @param integer $lineNumber Line number where the parser has stopped.
-     * @param string  $fileName   The source file where this exception occured.
-     * @param string  $reason     Short description what has happend.
+     * @param string  $fileName   The source file where this exception occurred.
+     * @param string  $reason     Short description what has happened.
      */
     public function __construct($lineNumber, $fileName, $reason)
     {

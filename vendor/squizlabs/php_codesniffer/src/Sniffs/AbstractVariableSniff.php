@@ -3,7 +3,7 @@
  * A class to find T_VARIABLE tokens.
  *
  * This class can distinguish between normal T_VARIABLE tokens, and those tokens
- * that represent class members. If a class member is encountered, then then
+ * that represent class members. If a class member is encountered, then the
  * processMemberVar method is called so the extending class can process it. If
  * the token is found to be a normal T_VARIABLE token, then processVariable is
  * called.
@@ -50,6 +50,7 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
     {
         $scopes = array(
                    T_CLASS,
+                   T_ANON_CLASS,
                    T_TRAIT,
                    T_INTERFACE,
                   );
@@ -69,10 +70,10 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
     /**
      * Processes the token in the specified PHP_CodeSniffer_File.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The PHP_CodeSniffer file where this
-     *                                        token was found.
-     * @param int                  $stackPtr  The position where the token was found.
-     * @param array                $currScope The current scope opener token.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where this
+     *                                               token was found.
+     * @param int                         $stackPtr  The position where the token was found.
+     * @param array                       $currScope The current scope opener token.
      *
      * @return void
      */
@@ -143,9 +144,9 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
     /**
      * Processes the token outside the scope in the file.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The PHP_CodeSniffer file where this
-     *                                        token was found.
-     * @param int                  $stackPtr  The position where the token was found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where this
+     *                                               token was found.
+     * @param int                         $stackPtr  The position where the token was found.
      *
      * @return void
      */
@@ -171,9 +172,9 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
     /**
      * Called to process class member vars.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The PHP_CodeSniffer file where this
-     *                                        token was found.
-     * @param int                  $stackPtr  The position where the token was found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where this
+     *                                               token was found.
+     * @param int                         $stackPtr  The position where the token was found.
      *
      * @return void
      */
@@ -183,9 +184,9 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
     /**
      * Called to process normal member vars.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The PHP_CodeSniffer file where this
-     *                                        token was found.
-     * @param int                  $stackPtr  The position where the token was found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where this
+     *                                               token was found.
+     * @param int                         $stackPtr  The position where the token was found.
      *
      * @return void
      */
@@ -198,10 +199,10 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
      * Note that there may be more than one variable in the string, which will
      * result only in one call for the string or one call per line for heredocs.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The PHP_CodeSniffer file where this
-     *                                        token was found.
-     * @param int                  $stackPtr  The position where the double quoted
-     *                                        string was found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where this
+     *                                               token was found.
+     * @param int                         $stackPtr  The position where the double quoted
+     *                                               string was found.
      *
      * @return void
      */

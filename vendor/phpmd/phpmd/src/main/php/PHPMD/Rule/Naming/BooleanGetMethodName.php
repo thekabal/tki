@@ -2,7 +2,7 @@
 /**
  * This file is part of PHP Mess Detector.
  *
- * Copyright (c) 2008-2012, Manuel Pichler <mapi@phpmd.org>.
+ * Copyright (c) 2008-2017, Manuel Pichler <mapi@phpmd.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,8 +35,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license    http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule\Naming;
@@ -51,8 +51,8 @@ use PHPMD\Rule\MethodAware;
  * with <b>get</b> or <b>_get</b> for a getter.
  *
  * @author    Manuel Pichler <mapi@phpmd.org>
- * @copyright 2008-2014 Manuel Pichler. All rights reserved.
- * @license    http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class BooleanGetMethodName extends AbstractRule implements MethodAware
 {
@@ -61,7 +61,7 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
      * and checks the variable name length against the configured minimum
      * length.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)
@@ -75,7 +75,7 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
      * Tests if the given method matches all criteria to be an invalid
      * boolean get method.
      *
-     * @param \PHPMD\Node\MethodNode $node
+     * @param  \PHPMD\Node\MethodNode $node
      * @return boolean
      */
     private function isBooleanGetMethod(MethodNode $node)
@@ -88,7 +88,7 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
     /**
      * Tests if the given method starts with <b>get</b> or <b>_get</b>.
      *
-     * @param \PHPMD\Node\MethodNode $node
+     * @param  \PHPMD\Node\MethodNode $node
      * @return boolean
      */
     private function isGetterMethodName(MethodNode $node)
@@ -99,7 +99,7 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
     /**
      * Tests if the given method is declared with return type boolean.
      *
-     * @param \PHPMD\Node\MethodNode $node
+     * @param  \PHPMD\Node\MethodNode $node
      * @return boolean
      */
     private function isReturnTypeBoolean(MethodNode $node)
@@ -112,7 +112,7 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
      * Tests if the property <b>$checkParameterizedMethods</b> is set to <b>true</b>
      * or has no parameters.
      *
-     * @param \PHPMD\Node\MethodNode $node
+     * @param  \PHPMD\Node\MethodNode $node
      * @return boolean
      */
     private function isParameterizedOrIgnored(MethodNode $node)

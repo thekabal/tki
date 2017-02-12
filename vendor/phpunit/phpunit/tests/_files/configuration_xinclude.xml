@@ -11,12 +11,13 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          forceCoversAnnotation="false"
-         printerClass="PHPUnit_TextUI_ResultPrinter"
          stopOnFailure="false"
          stopOnWarning="false"
          failOnWarning="false"
          failOnRisky="false"
-         testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
+         extensionsDirectory="/tmp"
+         printerClass="PHPUnit\TextUI\ResultPrinter"
+         testSuiteLoaderClass="PHPUnit\Runner\StandardTestSuiteLoader"
          beStrictAboutChangesToGlobalState="false"
          beStrictAboutOutputDuringTests="false"
          beStrictAboutResourceUsageDuringSmallTests="false"
@@ -62,6 +63,7 @@
     <const name="BAR" value="true"/>
     <var name="foo" value="false"/>
     <env name="foo" value="true"/>
+    <env name="bar" value="true" verbatim="true"/>
     <post name="foo" value="bar"/>
     <get name="foo" value="bar"/>
     <cookie name="foo" value="bar"/>

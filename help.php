@@ -184,5 +184,5 @@ echo "maximum allowed level for that specific zone. Attacking other players and 
 echo "be disallowed in some zones.";
 echo "<br><br>";
 
-Tki\Text::gotomain($pdo_db, $lang);
+Tki\Text::gotoMain($pdo_db, $lang);
 Tki\Footer::display($pdo_db, $lang, $tkireg, $template);

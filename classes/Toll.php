@@ -22,7 +22,7 @@ namespace Tki;
 
 class Toll
 {
-    public static function distribute(\PDO $pdo_db, int $sector, $toll, $total_fighters)
+    public static function distribute(\PDO $pdo_db, int $sector, $toll, $total_fighters): void
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type='F'";
         $stmt = $pdo_db->prepare($sql);
@@ -39,7 +39,7 @@ class Toll
                 $stmt->bindParam(':toll_amount', $toll_amount);
                 $stmt->bindParam(':ship_id', $tmp_defense['ship_id']);
                 $stmt->execute();
-                PlayerLog::WriteLog($pdo_db, $tmp_defense['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
+                PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
             }
         }
     }

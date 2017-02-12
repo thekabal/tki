@@ -31,9 +31,9 @@ class DisallowMultipleStatementsSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in
-     *                                        the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in
+     *                                               the stack passed in $tokens.
      *
      * @return void
      */
@@ -41,8 +41,11 @@ class DisallowMultipleStatementsSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $prev = $phpcsFile->findPrevious(array(T_SEMICOLON, T_OPEN_TAG), ($stackPtr - 1));
-        if ($prev === false || $tokens[$prev]['code'] === T_OPEN_TAG) {
+        $prev = $phpcsFile->findPrevious(array(T_SEMICOLON, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO), ($stackPtr - 1));
+        if ($prev === false
+            || $tokens[$prev]['code'] === T_OPEN_TAG
+            || $tokens[$prev]['code'] === T_OPEN_TAG_WITH_ECHO
+        ) {
             $phpcsFile->recordMetric($stackPtr, 'Multiple statements on same line', 'no');
             return;
         }

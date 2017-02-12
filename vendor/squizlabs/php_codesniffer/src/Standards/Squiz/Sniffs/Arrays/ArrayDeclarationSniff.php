@@ -35,9 +35,9 @@ class ArrayDeclarationSniff implements Sniff
     /**
      * Processes this sniff, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The current file being checked.
-     * @param int                  $stackPtr  The position of the current token in
-     *                                        the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The current file being checked.
+     * @param int                         $stackPtr  The position of the current token in
+     *                                               the stack passed in $tokens.
      *
      * @return void
      */
@@ -127,11 +127,11 @@ class ArrayDeclarationSniff implements Sniff
     /**
      * Processes a single-line array definition.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile  The current file being checked.
-     * @param int                  $stackPtr   The position of the current token
-     *                                         in the stack passed in $tokens.
-     * @param int                  $arrayStart The token that starts the array definition.
-     * @param int                  $arrayEnd   The token that ends the array definition.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile  The current file being checked.
+     * @param int                         $stackPtr   The position of the current token
+     *                                                in the stack passed in $tokens.
+     * @param int                         $arrayStart The token that starts the array definition.
+     * @param int                         $arrayEnd   The token that ends the array definition.
      *
      * @return void
      */
@@ -291,11 +291,11 @@ class ArrayDeclarationSniff implements Sniff
     /**
      * Processes a multi-line array definition.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile  The current file being checked.
-     * @param int                  $stackPtr   The position of the current token
-     *                                         in the stack passed in $tokens.
-     * @param int                  $arrayStart The token that starts the array definition.
-     * @param int                  $arrayEnd   The token that ends the array definition.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile  The current file being checked.
+     * @param int                         $stackPtr   The position of the current token
+     *                                                in the stack passed in $tokens.
+     * @param int                         $arrayStart The token that starts the array definition.
+     * @param int                         $arrayEnd   The token that ends the array definition.
      *
      * @return void
      */
@@ -332,7 +332,6 @@ class ArrayDeclarationSniff implements Sniff
             }
         }//end if
 
-        $nextToken  = $stackPtr;
         $keyUsed    = false;
         $singleUsed = false;
         $indices    = array();
@@ -355,14 +354,25 @@ class ArrayDeclarationSniff implements Sniff
                 continue;
             }
 
-            if ($tokens[$nextToken]['code'] === T_ARRAY) {
+            if ($tokens[$nextToken]['code'] === T_ARRAY
+                || $tokens[$nextToken]['code'] === T_OPEN_SHORT_ARRAY
+                || $tokens[$nextToken]['code'] === T_CLOSURE
+            ) {
                 // Let subsequent calls of this test handle nested arrays.
                 if ($tokens[$lastToken]['code'] !== T_DOUBLE_ARROW) {
                     $indices[] = array('value' => $nextToken);
                     $lastToken = $nextToken;
                 }
 
-                $nextToken = $tokens[$tokens[$nextToken]['parenthesis_opener']]['parenthesis_closer'];
+                if ($tokens[$nextToken]['code'] === T_ARRAY) {
+                    $nextToken = $tokens[$tokens[$nextToken]['parenthesis_opener']]['parenthesis_closer'];
+                } else if ($tokens[$nextToken]['code'] === T_OPEN_SHORT_ARRAY) {
+                    $nextToken = $tokens[$nextToken]['bracket_closer'];
+                } else {
+                    // T_CLOSURE.
+                    $nextToken = $tokens[$nextToken]['scope_closer'];
+                }
+
                 $nextToken = $phpcsFile->findNext(T_WHITESPACE, ($nextToken + 1), null, true);
                 if ($tokens[$nextToken]['code'] !== T_COMMA) {
                     $nextToken--;
@@ -371,42 +381,7 @@ class ArrayDeclarationSniff implements Sniff
                 }
 
                 continue;
-            }
-
-            if ($tokens[$nextToken]['code'] === T_OPEN_SHORT_ARRAY) {
-                // Let subsequent calls of this test handle nested arrays.
-                if ($tokens[$lastToken]['code'] !== T_DOUBLE_ARROW) {
-                    $indices[] = array('value' => $nextToken);
-                    $lastToken = $nextToken;
-                }
-
-                $nextToken = $tokens[$nextToken]['bracket_closer'];
-                $nextToken = $phpcsFile->findNext(T_WHITESPACE, ($nextToken + 1), null, true);
-                if ($tokens[$nextToken]['code'] !== T_COMMA) {
-                    $nextToken--;
-                } else {
-                    $lastToken = $nextToken;
-                }
-
-                continue;
-            }
-
-            if ($tokens[$nextToken]['code'] === T_CLOSURE) {
-                if ($tokens[$lastToken]['code'] !== T_DOUBLE_ARROW) {
-                    $indices[] = array('value' => $nextToken);
-                    $lastToken = $nextToken;
-                }
-
-                $nextToken = $tokens[$nextToken]['scope_closer'];
-                $nextToken = $phpcsFile->findNext(T_WHITESPACE, ($nextToken + 1), null, true);
-                if ($tokens[$nextToken]['code'] !== T_COMMA) {
-                    $nextToken--;
-                } else {
-                    $lastToken = $nextToken;
-                }
-
-                continue;
-            }
+            }//end if
 
             if ($tokens[$nextToken]['code'] !== T_DOUBLE_ARROW
                 && $tokens[$nextToken]['code'] !== T_COMMA

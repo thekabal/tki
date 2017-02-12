@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -48,7 +48,7 @@ use PDepend\Util\Cache\CacheDriver;
 /**
  * This class provides an interface to a single source file.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ASTCompilationUnit extends AbstractASTArtifact
@@ -128,7 +128,9 @@ class ASTCompilationUnit extends AbstractASTArtifact
      */
     public function __construct($fileName)
     {
-        if ($fileName !== null) {
+        if (strpos($fileName, 'php://') === 0) {
+            $this->fileName = $fileName;
+        } elseif ($fileName !== null) {
             $this->fileName = realpath($fileName);
         }
     }
@@ -350,7 +352,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
      */
     protected function readSource()
     {
-        if ($this->source === null && file_exists($this->fileName)) {
+        if ($this->source === null && (file_exists($this->fileName) || strpos($this->fileName, 'php://') === 0)) {
             $source = file_get_contents($this->fileName);
 
             $this->source = str_replace(array("\r\n", "\r"), "\n", $source);

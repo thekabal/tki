@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2015, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2008-2017 Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -59,7 +59,7 @@ use PDepend\Util\ImageConvert;
  *
  * http://www.springer.com/computer/programming/book/978-3-540-24429-5
  *
- * @copyright 2008-2015 Manuel Pichler. All rights reserved.
+ * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class Pyramid implements FileAwareGenerator
@@ -194,7 +194,7 @@ class Pyramid implements FileAwareGenerator
         $proportions = $this->computeProportions($metrics);
 
         $svg = new \DOMDocument('1.0', 'UTF-8');
-        $svg->load(dirname(__FILE__) . '/pyramid.svg');
+        $svg->loadXML(file_get_contents(dirname(__FILE__) . '/pyramid.svg'));
 
         $items = array_merge($metrics, $proportions);
         foreach ($items as $name => $value) {

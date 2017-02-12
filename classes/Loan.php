@@ -26,7 +26,7 @@ namespace Tki;
 
 class Loan
 {
-    public static function isPending(\PDO $pdo_db, int $ship_id, Reg $tkireg)
+    public static function isPending(\PDO $pdo_db, int $ship_id, Reg $tkireg): bool
     {
         $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);

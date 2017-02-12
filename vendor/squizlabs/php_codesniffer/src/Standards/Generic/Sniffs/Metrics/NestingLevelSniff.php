@@ -17,14 +17,14 @@ class NestingLevelSniff implements Sniff
 {
 
     /**
-     * A nesting level than this value will throw a warning.
+     * A nesting level higher than this value will throw a warning.
      *
      * @var integer
      */
     public $nestingLevel = 5;
 
     /**
-     * A nesting level than this value will throw an error.
+     * A nesting level higher than this value will throw an error.
      *
      * @var integer
      */
@@ -46,9 +46,9 @@ class NestingLevelSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return void
      */
