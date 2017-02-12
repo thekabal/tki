@@ -22,7 +22,7 @@ namespace Tki;
 
 class Traderoute2
 {
-    public static function traderouteNew(\PDO $pdo_db, \ADODB_mysqli $db, string $lang, Reg $tkireg, int $traderoute_id, Smarty $template, $num_traderoutes, array $playerinfo)
+    public static function traderouteNew(\PDO $pdo_db, \ADODB_mysqli $db, string $lang, Reg $tkireg, int $traderoute_id=null, Smarty $template, $num_traderoutes, array $playerinfo)
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
