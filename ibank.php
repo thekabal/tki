@@ -106,11 +106,11 @@ if ($command == 'login') // Main menu
 }
 elseif ($command == 'withdraw') // Withdraw menu
 {
-    Tki\Ibank::ibankWithdraw($langvars, $account);
+    Tki\IbankWithdraw::before($langvars, $account);
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Tki\Ibank2::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\IbankWithdraw::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
