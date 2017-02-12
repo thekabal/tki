@@ -16,23 +16,13 @@ declare(strict_types = 1);
 //  You should have received a copy of the GNU Affero General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// File: classes/Traderoute2.php
+// File: classes/TraderouteCheck.php
 
 namespace Tki;
 
-class Traderoute2
+class TraderouteCheck
 {
-    public static function traderouteDie(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, string $error_msg = null): void
-    {
-        echo "<p>" . $error_msg . "<p>";
-        echo "<div style='text-align:left;'>\n";
-        \Tki\Text::gotoMain($pdo_db, $lang);
-        echo "</div>\n";
-        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-        die();
-    }
-
-    public static function traderouteCheckCompatible(\PDO $pdo_db, $db, string $lang, $type1, $type2, $move, $circuit, $src, $dest, array $playerinfo, Reg $tkireg, Smarty $template): void
+    public static function isCompatible(\PDO $pdo_db, $db, string $lang, $type1, $type2, $move, $circuit, $src, $dest, array $playerinfo, Reg $tkireg, Smarty $template): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -40,7 +30,7 @@ class Traderoute2
         if ($circuit != "1" && $circuit != "2")
         {
             \Tki\AdminLog::writeLog($pdo_db, LOG_RAW, "{$playerinfo['ship_id']}|Tried to use an invalid circuit_type of '{$circuit}', This is normally a result from using an external page and should be banned.");
-            self::traderouteDie($pdo_db, $lang, $tkireg, $template, "Invalid Circuit type!<br>*** Possible Exploit has been reported to the admin. ***");
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, "Invalid Circuit type!<br>*** Possible Exploit has been reported to the admin. ***");
         }
 
         // Check warp links compatibility
@@ -52,7 +42,7 @@ class Traderoute2
             {
                 $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $src['sector_id'], $langvars['l_tdr_nowlink1']);
                 $langvars['l_tdr_nowlink1'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink1']);
-                self::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink1']);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink1']);
             }
 
             if ($circuit == '2')
@@ -63,7 +53,7 @@ class Traderoute2
                 {
                     $langvars['l_tdr_nowlink2'] = str_replace("[tdr_src_sector_id]", $src['sector_id'], $langvars['l_tdr_nowlink2']);
                     $langvars['l_tdr_nowlink2'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink2']);
-                    self::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink2']);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink2']);
                 }
             }
         }
@@ -75,24 +65,24 @@ class Traderoute2
             {
                 if (($type2 != 'planet') && ($type2 != 'team_planet'))
                 {
-                    self::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_sportissrc']);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_sportissrc']);
                 }
 
                 if ($dest['owner'] != $playerinfo['ship_id'] && ($dest['team'] == 0 || ($dest['team'] != $playerinfo['team'])))
                 {
-                    self::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notownplanet']);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notownplanet']);
                 }
             }
             else
             {
                 if ($type2 == 'planet')
                 {
-                    self::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_planetisdest']);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_planetisdest']);
                 }
 
                 if ($src['port_type'] == $dest['port_type'])
                 {
-                    self::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_samecom']);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_samecom']);
                 }
             }
         }
@@ -100,7 +90,7 @@ class Traderoute2
         {
             if (array_key_exists('port_type', $dest) === true && $dest['port_type'] == 'special')
             {
-                self::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_sportcom']);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_sportcom']);
             }
         }
     }

@@ -159,14 +159,14 @@ class Traderoute3
 
         if (!$query || $query->EOF)
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_doesntexist']);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_doesntexist']);
         }
 
         $delroute = $query->fields;
 
         if ($delroute['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
         }
 
         if (!empty ($confirm))
@@ -175,7 +175,7 @@ class Traderoute3
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
             echo $langvars['l_tdr_deleted'] . " " . $langvars['l_tdr_returnmenu'];
-            \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $template, null);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
         }
     }
 
@@ -242,7 +242,7 @@ class Traderoute3
 
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_returnmenu'];
-        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $template, null);
+        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
     }
 
     public static function traderouteSetsettings(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy): void
@@ -258,6 +258,6 @@ class Traderoute3
 
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_globalsetsaved'] . " " . $langvars['l_tdr_returnmenu'];
-        \Tki\Traderoute2::traderouteDie($pdo_db, $lang, $tkireg, $template, null);
+        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
     }
 }
