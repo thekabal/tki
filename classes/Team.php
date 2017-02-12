@@ -213,7 +213,7 @@ class Team
             }
 
             echo $langvars['l_options'] . " <br><font size=2>";
-            if (is_team_owner($team, $playerinfo) === true)
+            if (\Tki\Team::isTeamOwner($team, $playerinfo) === true)
             {
                 echo "[<a href=teams.php?teamwhat=9&whichteam=$playerinfo[team]>" . $langvars['l_edit'] . "</a>] - ";
             }
