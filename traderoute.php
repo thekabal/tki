@@ -236,12 +236,12 @@ elseif ($command == 'delete')
 elseif ($command == 'settings')
 {
     // Global traderoute settings form
-    \Tki\Traderoute3::traderouteSettings($pdo_db, $lang, $tkireg, $template, $playerinfo);
+    \Tki\TraderouteSettings::before($pdo_db, $lang, $tkireg, $template, $playerinfo);
 }
 elseif ($command == 'setsettings')
 {
     // Enters settings in db
-    \Tki\Traderoute3::traderouteSetsettings($pdo_db, $db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
+    \Tki\TraderouteSettings::after($pdo_db, $db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
 }
 elseif ($engage !== null)
 {
