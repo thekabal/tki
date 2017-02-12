@@ -23,9 +23,10 @@ found in the `/vendor/bin` directory.
 
 - [`phpstan`](https://github.com/phpstan/phpstan/) PHPStan focuses on finding
   errors in your code without actually running it. It catches whole classes of
-  bugs even before you write tests for the code. We use it like this:
+  bugs even before you write tests for the code. Currently it errors on adodb,
+  in classes/Db, which is acceptable until we eliminate adodb. We use it like this:
 
-  `php vendor/bin/phpstan analyze -l 0 -c vendor/bin/phpstan.neon -vvv .`
+  `php vendor/bin/phpstan analyze -l 5 -c vendor/bin/phpstan.neon -vvv .`
 
 - [`php-cs-fixer`](http://cs.sensiolabs.org/) strives to automatically correct
   code for specific items in the PSR standard. We do not currently use it, but
