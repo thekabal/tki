@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Node;
@@ -46,9 +46,9 @@ use PHPMD\Rule;
 /**
  * Wrapper around a PHP_Depend ast node.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ASTNode extends \PHPMD\AbstractNode
 {
@@ -63,7 +63,7 @@ class ASTNode extends \PHPMD\AbstractNode
      * Constructs a new ast node instance.
      *
      * @param \PDepend\Source\AST\ASTNode $node
-     * @param string $fileName
+     * @param string                      $fileName
      */
     public function __construct(\PDepend\Source\AST\ASTNode $node, $fileName)
     {
@@ -76,8 +76,8 @@ class ASTNode extends \PHPMD\AbstractNode
      * Checks if this node has a suppressed annotation for the given rule
      * instance.
      *
-     * @param \PHPMD\Rule $rule
-     * @return boolean
+     * @param                                         \PHPMD\Rule $rule
+     * @return                                        boolean
      * @SuppressWarnings("PMD.UnusedFormalParameter")
      */
     public function hasSuppressWarningsAnnotationFor(Rule $rule)

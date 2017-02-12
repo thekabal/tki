@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule;
@@ -49,9 +49,9 @@ use PHPMD\Node\ASTNode;
  * This rule collects all local variables within a given function or method
  * that are not used by any code in the analyzed source artifact.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware, MethodAware
 {
@@ -66,7 +66,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      * This method checks that all local variables within the given function or
      * method are used at least one time.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)
@@ -88,7 +88,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      * are also found in the formal parameters of the given method or/and
      * function node.
      *
-     * @param \PHPMD\Node\AbstractCallableNode $node
+     * @param  \PHPMD\Node\AbstractCallableNode $node
      * @return void
      */
     private function removeParameters(AbstractCallableNode $node)
@@ -109,8 +109,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      * method/function node and stores their image in the <b>$_images</b>
      * property.
      *
-     *
-     * @param \PHPMD\Node\AbstractCallableNode $node
+     * @param  \PHPMD\Node\AbstractCallableNode $node
      * @return void
      */
     private function collectVariables(AbstractCallableNode $node)
@@ -135,7 +134,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
     /**
      * Stores the given variable node in an internal list of found variables.
      *
-     * @param \PHPMD\Node\ASTNode $node
+     * @param  \PHPMD\Node\ASTNode $node
      * @return void
      */
     private function collectVariable(ASTNode $node)
@@ -149,7 +148,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
     /**
      * Stores the given literal node in an internal list of found variables.
      *
-     * @param \PHPMD\Node\ASTNode $node
+     * @param  \PHPMD\Node\ASTNode $node
      * @return void
      */
     private function collectLiteral(ASTNode $node)
@@ -164,7 +163,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
     /**
      * Template method that performs the real node image check.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     protected function doCheckNodeImage(AbstractNode $node)
@@ -183,7 +182,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      * moment these contexts are the init section of a for-loop and short
      * variable names in catch-statements.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return boolean
      */
     private function isNameAllowedInContext(AbstractNode $node)
@@ -196,7 +195,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      *
      * If it's not a foreach variable, it returns always false.
      *
-     * @param \PHPMD\Node\ASTNode $variable The variable to check.
+     * @param  \PHPMD\Node\ASTNode $variable The variable to check.
      * @return bool True if allowed, else false.
      */
     private function isUnusedForeachVariableAllowed(ASTNode $variable)
@@ -213,8 +212,8 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      * Checks if the given node is a direct or indirect child of a node with
      * the given type.
      *
-     * @param \PHPMD\AbstractNode $node
-     * @param string $type
+     * @param  \PHPMD\AbstractNode $node
+     * @param  string              $type
      * @return boolean
      */
     private function isChildOf(AbstractNode $node, $type)

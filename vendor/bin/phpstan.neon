@@ -1,0 +1,6 @@
+parameters:
+    excludes_analyse:
+        - %rootDir%/../../../../tki/templates/*
+        - %rootDir%/../../../../tki/vendor/*
+#    autoload_directories:
+#        - %rootDir%/../../../../tki/classes/*

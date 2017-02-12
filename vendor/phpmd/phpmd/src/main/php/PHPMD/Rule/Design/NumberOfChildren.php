@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule\Design;
@@ -48,9 +48,9 @@ use PHPMD\Rule\ClassAware;
 /**
  * This rule will detect class that have to much direct child classes.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class NumberOfChildren extends AbstractRule implements ClassAware
 {
@@ -58,7 +58,7 @@ class NumberOfChildren extends AbstractRule implements ClassAware
      * This method checks the number of classes derived from the given class
      * node.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)

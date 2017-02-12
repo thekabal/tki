@@ -20,9 +20,9 @@ class ValidFunctionNameSniff extends PEARValidFunctionNameSniff
     /**
      * Processes the tokens outside the scope.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-     * @param int                  $stackPtr  The position where this token was
-     *                                        found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
+     * @param int                         $stackPtr  The position where this token was
+     *                                               found.
      *
      * @return void
      */
@@ -36,7 +36,7 @@ class ValidFunctionNameSniff extends PEARValidFunctionNameSniff
         $errorData = array($functionName);
 
         // Does this function claim to be magical?
-        if (preg_match('|^__|', $functionName) !== 0) {
+        if (preg_match('|^__[^_]|', $functionName) !== 0) {
             $error = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
             $phpcsFile->addError($error, $stackPtr, 'DoubleUnderscore', $errorData);
             return;

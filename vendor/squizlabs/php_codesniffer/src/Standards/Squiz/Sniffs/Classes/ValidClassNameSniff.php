@@ -27,6 +27,7 @@ class ValidClassNameSniff implements Sniff
         return array(
                 T_CLASS,
                 T_INTERFACE,
+                T_TRAIT,
                );
 
     }//end register()
@@ -35,9 +36,9 @@ class ValidClassNameSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The current file being processed.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The current file being processed.
+     * @param int                         $stackPtr  The position of the current token in the
+     *                                               stack passed in $tokens.
      *
      * @return void
      */

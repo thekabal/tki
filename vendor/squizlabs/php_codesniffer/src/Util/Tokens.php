@@ -17,6 +17,7 @@ define('T_CLOSE_SQUARE_BRACKET', 'PHPCS_T_CLOSE_SQUARE_BRACKET');
 define('T_OPEN_PARENTHESIS', 'PHPCS_T_OPEN_PARENTHESIS');
 define('T_CLOSE_PARENTHESIS', 'PHPCS_T_CLOSE_PARENTHESIS');
 define('T_COLON', 'PHPCS_T_COLON');
+define('T_NULLABLE', 'PHPCS_T_NULLABLE');
 define('T_STRING_CONCAT', 'PHPCS_T_STRING_CONCAT');
 define('T_INLINE_THEN', 'PHPCS_T_INLINE_THEN');
 define('T_INLINE_ELSE', 'PHPCS_T_INLINE_ELSE');
@@ -70,44 +71,8 @@ define('T_EMBEDDED_PHP', 'PHPCS_T_EMBEDDED_PHP');
 define('T_RETURN_TYPE', 'PHPCS_T_RETURN_TYPE');
 define('T_OPEN_USE_GROUP', 'PHPCS_T_OPEN_USE_GROUP');
 define('T_CLOSE_USE_GROUP', 'PHPCS_T_CLOSE_USE_GROUP');
-
-// Some PHP 5.3 tokens, replicated for lower versions.
-if (defined('T_NAMESPACE') === false) {
-    define('T_NAMESPACE', 'PHPCS_T_NAMESPACE');
-}
-
-if (defined('T_NS_C') === false) {
-    define('T_NS_C', 'PHPCS_T_NS_C');
-}
-
-if (defined('T_NS_SEPARATOR') === false) {
-    define('T_NS_SEPARATOR', 'PHPCS_T_NS_SEPARATOR');
-}
-
-if (defined('T_GOTO') === false) {
-    define('T_GOTO', 'PHPCS_T_GOTO');
-}
-
-if (defined('T_DIR') === false) {
-    define('T_DIR', 'PHPCS_T_DIR');
-}
-
-// Some PHP 5.4 tokens, replicated for lower versions.
-if (defined('T_TRAIT') === false) {
-    define('T_TRAIT', 'PHPCS_T_TRAIT');
-}
-
-if (defined('T_TRAIT_C') === false) {
-    define('T_TRAIT_C', 'PHPCS_T_TRAIT_C');
-}
-
-if (defined('T_INSTEADOF') === false) {
-    define('T_INSTEADOF', 'PHPCS_T_INSTEADOF');
-}
-
-if (defined('T_CALLABLE') === false) {
-    define('T_CALLABLE', 'PHPCS_T_CALLABLE');
-}
+define('T_ZSR', 'PHPCS_T_ZSR');
+define('T_ZSR_EQUAL', 'PHPCS_T_ZSR_EQUAL');
 
 // Some PHP 5.5 tokens, replicated for lower versions.
 if (defined('T_FINALLY') === false) {

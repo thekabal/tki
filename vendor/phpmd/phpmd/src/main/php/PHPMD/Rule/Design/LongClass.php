@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule\Design;
@@ -48,9 +48,9 @@ use PHPMD\Rule\ClassAware;
 /**
  * This rule class will detect excessive long classes.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class LongClass extends AbstractRule implements ClassAware
 {
@@ -58,7 +58,7 @@ class LongClass extends AbstractRule implements ClassAware
      * This method checks the length of the given class node against a configured
      * threshold.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)

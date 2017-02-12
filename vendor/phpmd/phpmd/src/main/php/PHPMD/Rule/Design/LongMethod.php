@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule\Design;
@@ -50,9 +50,9 @@ use PHPMD\Rule\MethodAware;
  * This rule will detect to long methods, those methods are unreadable and in
  * many cases the result of copy and paste coding.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class LongMethod extends AbstractRule implements FunctionAware, MethodAware
 {
@@ -60,7 +60,7 @@ class LongMethod extends AbstractRule implements FunctionAware, MethodAware
      * This method checks the lines of code length for the given function or
      * methode node against a configured threshold.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)

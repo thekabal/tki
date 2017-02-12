@@ -32,9 +32,9 @@ class FunctionCommentSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return void
      */
@@ -98,10 +98,10 @@ class FunctionCommentSniff implements Sniff
     /**
      * Process the return comment of this function comment.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
-     * @param int                  $stackPtr     The position of the current token
-     *                                           in the stack passed in $tokens.
-     * @param int                  $commentStart The position in the stack where the comment started.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile    The file being scanned.
+     * @param int                         $stackPtr     The position of the current token
+     *                                                  in the stack passed in $tokens.
+     * @param int                         $commentStart The position in the stack where the comment started.
      *
      * @return void
      */
@@ -147,10 +147,10 @@ class FunctionCommentSniff implements Sniff
     /**
      * Process any throw tags that this function comment has.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
-     * @param int                  $stackPtr     The position of the current token
-     *                                           in the stack passed in $tokens.
-     * @param int                  $commentStart The position in the stack where the comment started.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile    The file being scanned.
+     * @param int                         $stackPtr     The position of the current token
+     *                                                  in the stack passed in $tokens.
+     * @param int                         $commentStart The position in the stack where the comment started.
      *
      * @return void
      */
@@ -187,10 +187,10 @@ class FunctionCommentSniff implements Sniff
     /**
      * Process the function parameter comments.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
-     * @param int                  $stackPtr     The position of the current token
-     *                                           in the stack passed in $tokens.
-     * @param int                  $commentStart The position in the stack where the comment started.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile    The file being scanned.
+     * @param int                         $stackPtr     The position of the current token
+     *                                                  in the stack passed in $tokens.
+     * @param int                         $commentStart The position in the stack where the comment started.
      *
      * @return void
      */
@@ -206,11 +206,14 @@ class FunctionCommentSniff implements Sniff
                 continue;
             }
 
-            $type      = '';
-            $typeSpace = 0;
-            $var       = '';
-            $varSpace  = 0;
-            $comment   = '';
+            $type          = '';
+            $typeSpace     = 0;
+            $var           = '';
+            $varSpace      = 0;
+            $comment       = '';
+            $commentEnd    = 0;
+            $commentTokens = array();
+
             if ($tokens[($tag + 2)]['code'] === T_DOC_COMMENT_STRING) {
                 $matches = array();
                 preg_match('/([^$&.]+)(?:((?:\.\.\.)?(?:\$|&)[^\s]+)(?:(\s+)(.*))?)?/', $tokens[($tag + 2)]['content'], $matches);
@@ -245,13 +248,15 @@ class FunctionCommentSniff implements Sniff
 
                         for ($i = ($tag + 3); $i < $end; $i++) {
                             if ($tokens[$i]['code'] === T_DOC_COMMENT_STRING) {
-                                $comment .= ' '.$tokens[$i]['content'];
+                                $comment        .= ' '.$tokens[$i]['content'];
+                                $commentEnd      = $i;
+                                $commentTokens[] = $i;
                             }
                         }
                     } else {
                         $error = 'Missing parameter comment';
                         $phpcsFile->addError($error, $tag, 'MissingParamComment');
-                    }
+                    }//end if
                 } else {
                     $error = 'Missing parameter name';
                     $phpcsFile->addError($error, $tag, 'MissingParamName');
@@ -262,19 +267,21 @@ class FunctionCommentSniff implements Sniff
             }//end if
 
             $params[] = array(
-                         'tag'        => $tag,
-                         'type'       => $type,
-                         'var'        => $var,
-                         'comment'    => $comment,
-                         'type_space' => $typeSpace,
-                         'var_space'  => $varSpace,
+                         'tag'            => $tag,
+                         'type'           => $type,
+                         'var'            => $var,
+                         'comment'        => $comment,
+                         'comment_end'    => $commentEnd,
+                         'comment_tokens' => $commentTokens,
+                         'type_space'     => $typeSpace,
+                         'var_space'      => $varSpace,
                         );
         }//end foreach
 
         $realParams  = $phpcsFile->getMethodParameters($stackPtr);
         $foundParams = array();
 
-        // We want to use ... for all variable length arguments, so added
+        // We want to use ... for all variable length arguments, so add
         // this prefix to the variable name so comparisons are easier.
         foreach ($realParams as $pos => $param) {
             if ($param['variable_length'] === true) {
@@ -300,14 +307,34 @@ class FunctionCommentSniff implements Sniff
 
                 $fix = $phpcsFile->addFixableError($error, $param['tag'], 'SpacingAfterParamType', $data);
                 if ($fix === true) {
+                    $commentToken = ($param['tag'] + 2);
+
                     $content  = $param['type'];
                     $content .= str_repeat(' ', $spaces);
                     $content .= $param['var'];
                     $content .= str_repeat(' ', $param['var_space']);
-                    $content .= $param['comment'];
-                    $phpcsFile->fixer->replaceToken(($param['tag'] + 2), $content);
-                }
-            }
+
+                    $wrapLength = ($tokens[$commentToken]['length'] - $param['type_space'] - $param['var_space'] - strlen($param['type']) - strlen($param['var']));
+
+                    $star        = $phpcsFile->findPrevious(T_DOC_COMMENT_STAR, $param['tag']);
+                    $spaceLength = (strlen($content) + $tokens[($commentToken - 1)]['length'] + $tokens[($commentToken - 2)]['length']);
+
+                    $padding  = str_repeat(' ', ($tokens[$star]['column'] - 1));
+                    $padding .= '* ';
+                    $padding .= str_repeat(' ', $spaceLength);
+
+                    $content .= wordwrap(
+                        $param['comment'],
+                        $wrapLength,
+                        $phpcsFile->eolChar.$padding
+                    );
+
+                    $phpcsFile->fixer->replaceToken($commentToken, $content);
+                    for ($i = ($commentToken + 1); $i <= $param['comment_end']; $i++) {
+                        $phpcsFile->fixer->replaceToken($i, '');
+                    }
+                }//end if
+            }//end if
 
             // Make sure the param name is correct.
             if (isset($realParams[$pos]) === true) {
@@ -339,7 +366,7 @@ class FunctionCommentSniff implements Sniff
                 continue;
             }
 
-            // Check number of spaces after the var name.
+            // Check number of spaces after the param name.
             $spaces = ($maxVar - strlen($param['var']) + 1);
             if ($param['var_space'] !== $spaces) {
                 $error = 'Expected %s spaces after parameter name; %s found';
@@ -350,14 +377,70 @@ class FunctionCommentSniff implements Sniff
 
                 $fix = $phpcsFile->addFixableError($error, $param['tag'], 'SpacingAfterParamName', $data);
                 if ($fix === true) {
+                    $commentToken = ($param['tag'] + 2);
+
                     $content  = $param['type'];
                     $content .= str_repeat(' ', $param['type_space']);
                     $content .= $param['var'];
                     $content .= str_repeat(' ', $spaces);
-                    $content .= $param['comment'];
-                    $phpcsFile->fixer->replaceToken(($param['tag'] + 2), $content);
-                }
-            }
+
+                    $wrapLength = ($tokens[$commentToken]['length'] - $param['type_space'] - $param['var_space'] - strlen($param['type']) - strlen($param['var']));
+
+                    $star        = $phpcsFile->findPrevious(T_DOC_COMMENT_STAR, $param['tag']);
+                    $spaceLength = (strlen($content) + $tokens[($commentToken - 1)]['length'] + $tokens[($commentToken - 2)]['length']);
+
+                    $padding  = str_repeat(' ', ($tokens[$star]['column'] - 1));
+                    $padding .= '* ';
+                    $padding .= str_repeat(' ', $spaceLength);
+
+                    $content .= wordwrap(
+                        $param['comment'],
+                        $wrapLength,
+                        $phpcsFile->eolChar.$padding
+                    );
+
+                    $phpcsFile->fixer->replaceToken($commentToken, $content);
+                    for ($i = ($commentToken + 1); $i <= $param['comment_end']; $i++) {
+                        $phpcsFile->fixer->replaceToken($i, '');
+                    }
+                }//end if
+            }//end if
+
+            // Check the alignment of multi-line param comments.
+            if ($param['tag'] !== $param['comment_end']) {
+                $wrapLength = ($tokens[($param['tag'] + 2)]['length'] - $param['type_space'] - $param['var_space'] - strlen($param['type']) - strlen($param['var']));
+
+                $startColumn = ($tokens[($param['tag'] + 2)]['column'] + $tokens[($param['tag'] + 2)]['length'] - $wrapLength);
+
+                $star     = $phpcsFile->findPrevious(T_DOC_COMMENT_STAR, $param['tag']);
+                $expected = ($startColumn - $tokens[$star]['column'] - 1);
+
+                foreach ($param['comment_tokens'] as $commentToken) {
+                    if ($tokens[$commentToken]['column'] === $startColumn) {
+                        continue;
+                    }
+
+                    $found = 0;
+                    if ($tokens[($commentToken - 1)]['code'] === T_DOC_COMMENT_WHITESPACE) {
+                        $found = $tokens[($commentToken - 1)]['length'];
+                    }
+
+                    $error = 'Parameter comment not aligned correctly; expected %s spaces but found %s';
+                    $data  = array(
+                              $expected,
+                              $found,
+                             );
+                    $fix   = $phpcsFile->addFixableError($error, $commentToken, 'ParamCommentAlignment', $data);
+                    if ($fix === true) {
+                        $padding = str_repeat(' ', $expected);
+                        if ($tokens[($commentToken - 1)]['code'] === T_DOC_COMMENT_WHITESPACE) {
+                            $phpcsFile->fixer->replaceToken(($commentToken - 1), $padding);
+                        } else {
+                            $phpcsFile->fixer->addContentBefore($commentToken, $padding);
+                        }
+                    }
+                }//end foreach
+            }//end if
         }//end foreach
 
         $realNames = array();

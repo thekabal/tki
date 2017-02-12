@@ -28,7 +28,7 @@ class CyclomaticComplexitySniff implements Sniff
     public $complexity = 10;
 
     /**
-     * A complexity higer than this value will throw an error.
+     * A complexity higher than this value will throw an error.
      *
      * @var integer
      */
@@ -50,9 +50,9 @@ class CyclomaticComplexitySniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return void
      */

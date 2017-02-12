@@ -23,12 +23,14 @@ class DeepCopy
 
     /**
      * Filters to apply.
+     *
      * @var array
      */
     private $filters = [];
 
     /**
      * Type Filters to apply.
+     *
      * @var array
      */
     private $typeFilters = [];
@@ -41,8 +43,8 @@ class DeepCopy
     private $useCloneMethod;
 
     /**
-     * @param bool $useCloneMethod   If set to true, when an object implements the __clone() function, it will be used
-     *                               instead of the regular deep cloning.
+     * @param bool $useCloneMethod If set to true, when an object implements the __clone() function, it will be used
+     *                             instead of the regular deep cloning.
      */
     public function __construct($useCloneMethod = false)
     {
@@ -53,7 +55,8 @@ class DeepCopy
 
     /**
      * Cloning uncloneable properties won't throw exception.
-     * @param $skipUncloneable
+     *
+     * @param  $skipUncloneable
      * @return $this
      */
     public function skipUncloneable($skipUncloneable = true)
@@ -64,7 +67,8 @@ class DeepCopy
 
     /**
      * Perform a deep copy of the object.
-     * @param mixed $object
+     *
+     * @param  mixed $object
      * @return mixed
      */
     public function copy($object)
@@ -116,7 +120,8 @@ class DeepCopy
 
     /**
      * Copy an array
-     * @param array $array
+     *
+     * @param  array $array
      * @return array
      */
     private function copyArray(array $array)
@@ -130,7 +135,8 @@ class DeepCopy
 
     /**
      * Copy an object
-     * @param object $object
+     *
+     * @param  object $object
      * @return object
      */
     private function copyObject($object)
@@ -149,10 +155,12 @@ class DeepCopy
         }
 
         if (false === $isCloneable) {
-            throw new CloneException(sprintf(
-                'Class "%s" is not cloneable.',
-                $reflectedObject->getName()
-            ));
+            throw new CloneException(
+                sprintf(
+                    'Class "%s" is not cloneable.',
+                    $reflectedObject->getName()
+                )
+            );
         }
 
         $newObject = clone $object;
@@ -180,9 +188,13 @@ class DeepCopy
 
         // Apply the filters
         foreach ($this->filters as $item) {
-            /** @var Matcher $matcher */
+            /**
+ * @var Matcher $matcher 
+*/
             $matcher = $item['matcher'];
-            /** @var Filter $filter */
+            /**
+ * @var Filter $filter 
+*/
             $filter = $item['filter'];
 
             if ($matcher->matches($object, $property->getName())) {
@@ -207,9 +219,10 @@ class DeepCopy
 
     /**
      * Returns first filter that matches variable, NULL if no such filter found.
-     * @param array $filterRecords Associative array with 2 members: 'filter' with value of type {@see TypeFilter} and
-     *                             'matcher' with value of type {@see TypeMatcher}
-     * @param mixed $var
+     *
+     * @param  array $filterRecords Associative array with 2 members: 'filter' with value of type {@see TypeFilter} and
+     *                              'matcher' with value of type {@see TypeMatcher}
+     * @param  mixed $var
      * @return TypeFilter|null
      */
     private function getFirstMatchedTypeFilter(array $filterRecords, $var)
@@ -229,8 +242,9 @@ class DeepCopy
 
     /**
      * Returns first element that matches predicate, NULL if no such element found.
-     * @param array    $elements
-     * @param callable $predicate Predicate arguments are: element.
+     *
+     * @param  array    $elements
+     * @param  callable $predicate Predicate arguments are: element.
      * @return mixed|null
      */
     private function first(array $elements, callable $predicate)

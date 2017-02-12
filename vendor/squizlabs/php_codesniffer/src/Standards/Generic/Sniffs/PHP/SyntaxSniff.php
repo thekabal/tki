@@ -40,9 +40,9 @@ class SyntaxSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in
-     *                                        the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in
+     *                                               the stack passed in $tokens.
      *
      * @return void
      */
@@ -61,11 +61,15 @@ class SyntaxSniff implements Sniff
         }
 
         $fileName = $phpcsFile->getFilename();
-        $cmd      = $this->phpPath." -l \"$fileName\" 2>&1";
-        $output   = shell_exec($cmd);
+        if (defined('HHVM_VERSION') === false) {
+            $cmd = $this->phpPath." -l -d error_prepend_string='' \"$fileName\" 2>&1";
+        } else {
+            $cmd = $this->phpPath." -l \"$fileName\" 2>&1";
+        }
 
+        $output  = shell_exec($cmd);
         $matches = array();
-        if (preg_match('/^.*error:(.*) in .* on line ([0-9]+)/', trim($output), $matches) === 1) {
+        if (preg_match('/^.*error:(.*) in .* on line ([0-9]+)/m', trim($output), $matches) === 1) {
             $error = trim($matches[1]);
             $line  = (int) $matches[2];
             $phpcsFile->addErrorOnLine("PHP syntax error: $error", $line, 'PHPSyntax');

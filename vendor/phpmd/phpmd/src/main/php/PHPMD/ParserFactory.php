@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD;
@@ -49,9 +49,9 @@ use PDepend\Input\ExtensionFilter;
 /**
  * Simple factory that is used to return a ready to use PDepend instance.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class ParserFactory
 {
@@ -67,7 +67,7 @@ class ParserFactory
     /**
      * Creates the used {@link \PHPMD\Parser} analyzer instance.
      *
-     * @param \PHPMD\PHPMD $phpmd
+     * @param  \PHPMD\PHPMD $phpmd
      * @return \PHPMD\Parser
      */
     public function create(PHPMD $phpmd)
@@ -99,8 +99,8 @@ class ParserFactory
     /**
      * Configures the given PDepend\Engine instance based on some user settings.
      *
-     * @param \PDepend\Engine $pdepend
-     * @param \PHPMD\PHPMD $phpmd
+     * @param  \PDepend\Engine $pdepend
+     * @param  \PHPMD\PHPMD    $phpmd
      * @return \PDepend\Engine
      */
     private function init(Engine $pdepend, PHPMD $phpmd)
@@ -116,8 +116,8 @@ class ParserFactory
     /**
      * Configures the input source.
      *
-     * @param \PDepend\Engine $pdepend
-     * @param \PHPMD\PHPMD $phpmd
+     * @param  \PDepend\Engine $pdepend
+     * @param  \PHPMD\PHPMD    $phpmd
      * @return void
      */
     private function initInput(Engine $pdepend, PHPMD $phpmd)
@@ -134,8 +134,8 @@ class ParserFactory
     /**
      * Initializes the ignored files and path's.
      *
-     * @param \PDepend\Engine $pdepend
-     * @param \PHPMD\PHPMD $phpmd
+     * @param  \PDepend\Engine $pdepend
+     * @param  \PHPMD\PHPMD    $phpmd
      * @return void
      */
     private function initIgnores(Engine $pdepend, PHPMD $phpmd)
@@ -150,8 +150,8 @@ class ParserFactory
     /**
      * Initializes the accepted php source file extensions.
      *
-     * @param \PDepend\Engine $pdepend
-     * @param \PHPMD\PHPMD $phpmd
+     * @param  \PDepend\Engine $pdepend
+     * @param  \PHPMD\PHPMD    $phpmd
      * @return void
      */
     private function initExtensions(Engine $pdepend, PHPMD $phpmd)
@@ -166,8 +166,8 @@ class ParserFactory
     /**
      * Initializes additional options for pdepend.
      *
-     * @param \PDepend\Engine $pdepend
-     * @param \PHPMD\PHPMD $phpmd
+     * @param  \PDepend\Engine $pdepend
+     * @param  \PHPMD\PHPMD    $phpmd
      * @return void
      */
     private function initOptions(Engine $pdepend, PHPMD $phpmd)

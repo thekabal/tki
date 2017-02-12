@@ -23,11 +23,11 @@ class ByteOrderMarkSniff implements Sniff
      *
      * @var array
      */
-    public $bomDefinitions = array(
-                              'UTF-8'       => 'efbbbf',
-                              'UTF-16 (BE)' => 'feff',
-                              'UTF-16 (LE)' => 'fffe',
-                             );
+    protected $bomDefinitions = array(
+                                 'UTF-8'       => 'efbbbf',
+                                 'UTF-16 (BE)' => 'feff',
+                                 'UTF-16 (LE)' => 'fffe',
+                                );
 
 
     /**
@@ -45,9 +45,9 @@ class ByteOrderMarkSniff implements Sniff
     /**
      * Processes this sniff, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in
-     *                                        the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in
+     *                                               the stack passed in $tokens.
      *
      * @return void
      */

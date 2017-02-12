@@ -42,9 +42,9 @@ class SemicolonSpacingSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return void
      */
@@ -74,9 +74,14 @@ class SemicolonSpacingSniff implements Sniff
         $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Incorrect', $data);
         if ($fix === true) {
             $phpcsFile->fixer->beginChangeset();
-            for ($i = ($stackPtr - 1); $i > $nonSpace; $i--) {
+            $i = ($stackPtr - 1);
+            while (($tokens[$i]['code'] === T_WHITESPACE) && ($i > $nonSpace)) {
                 $phpcsFile->fixer->replaceToken($i, '');
+                $i--;
             }
+
+            $phpcsFile->fixer->addContent($nonSpace, ';');
+            $phpcsFile->fixer->replaceToken($stackPtr, '');
 
             $phpcsFile->fixer->endChangeset();
         }

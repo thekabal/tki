@@ -84,9 +84,9 @@ class FileCommentSniff implements Sniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token
-     *                                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      *
      * @return int
      */
@@ -199,10 +199,10 @@ class FileCommentSniff implements Sniff
     /**
      * Processes each required or optional tag.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
-     * @param int                  $stackPtr     The position of the current token
-     *                                           in the stack passed in $tokens.
-     * @param int                  $commentStart Position in the stack where the comment started.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile    The file being scanned.
+     * @param int                         $stackPtr     The position of the current token
+     *                                                  in the stack passed in $tokens.
+     * @param int                         $commentStart Position in the stack where the comment started.
      *
      * @return void
      */
@@ -298,8 +298,8 @@ class FileCommentSniff implements Sniff
     /**
      * Process the category tag.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param array                $tags      The tokens for these tags.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param array                       $tags      The tokens for these tags.
      *
      * @return void
      */
@@ -340,8 +340,8 @@ class FileCommentSniff implements Sniff
     /**
      * Process the package tag.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param array                $tags      The tokens for these tags.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param array                       $tags      The tokens for these tags.
      *
      * @return void
      */
@@ -393,8 +393,8 @@ class FileCommentSniff implements Sniff
     /**
      * Process the subpackage tag.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param array                $tags      The tokens for these tags.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param array                       $tags      The tokens for these tags.
      *
      * @return void
      */
@@ -437,8 +437,8 @@ class FileCommentSniff implements Sniff
     /**
      * Process the author tag(s) that this header comment has.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param array                $tags      The tokens for these tags.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param array                       $tags      The tokens for these tags.
      *
      * @return void
      */
@@ -467,8 +467,8 @@ class FileCommentSniff implements Sniff
     /**
      * Process the copyright tags.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param array                $tags      The tokens for these tags.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param array                       $tags      The tokens for these tags.
      *
      * @return void
      */
@@ -485,13 +485,13 @@ class FileCommentSniff implements Sniff
             $matches = array();
             if (preg_match('/^([0-9]{4})((.{1})([0-9]{4}))? (.+)$/', $content, $matches) !== 0) {
                 // Check earliest-latest year order.
-                if ($matches[3] !== '') {
+                if ($matches[3] !== '' && $matches[3] !== null) {
                     if ($matches[3] !== '-') {
                         $error = 'A hyphen must be used between the earliest and latest year';
                         $phpcsFile->addError($error, $tag, 'CopyrightHyphen');
                     }
 
-                    if ($matches[4] !== '' && $matches[4] < $matches[1]) {
+                    if ($matches[4] !== '' && $matches[4] !== null && $matches[4] < $matches[1]) {
                         $error = "Invalid year span \"$matches[1]$matches[3]$matches[4]\" found; consider \"$matches[4]-$matches[1]\" instead";
                         $phpcsFile->addWarning($error, $tag, 'InvalidCopyright');
                     }
@@ -508,8 +508,8 @@ class FileCommentSniff implements Sniff
     /**
      * Process the license tag.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param array                $tags      The tokens for these tags.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param array                       $tags      The tokens for these tags.
      *
      * @return void
      */
@@ -537,8 +537,8 @@ class FileCommentSniff implements Sniff
     /**
      * Process the version tag.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param array                $tags      The tokens for these tags.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param array                       $tags      The tokens for these tags.
      *
      * @return void
      */

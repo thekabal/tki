@@ -86,7 +86,7 @@ abstract class AbstractScopeSniff implements Sniff
         $invalidScopeTokens = array_intersect($scopeTokens, $tokens);
         if (empty($invalidScopeTokens) === false) {
             $invalid = implode(', ', $invalidScopeTokens);
-            $error   = "Scope tokens [$invalid] cant be in the tokens array";
+            $error   = "Scope tokens [$invalid] can't be in the tokens array";
             throw new RuntimeException($error);
         }
 
@@ -117,9 +117,9 @@ abstract class AbstractScopeSniff implements Sniff
     /**
      * Processes the tokens that this test is listening for.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file where this token was found.
-     * @param int                  $stackPtr  The position in the stack where this
-     *                                        token was found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file where this token was found.
+     * @param int                         $stackPtr  The position in the stack where this
+     *                                               token was found.
      *
      * @return void
      * @see    processTokenWithinScope()
@@ -147,12 +147,12 @@ abstract class AbstractScopeSniff implements Sniff
      * Processes a token that is found within the scope that this test is
      * listening to.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file where this token was found.
-     * @param int                  $stackPtr  The position in the stack where this
-     *                                        token was found.
-     * @param int                  $currScope The position in the tokens array that
-     *                                        opened the scope that this test is
-     *                                        listening for.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file where this token was found.
+     * @param int                         $stackPtr  The position in the stack where this
+     *                                               token was found.
+     * @param int                         $currScope The position in the tokens array that
+     *                                               opened the scope that this test is
+     *                                               listening for.
      *
      * @return void
      */
@@ -160,12 +160,12 @@ abstract class AbstractScopeSniff implements Sniff
 
 
     /**
-     * Processes a token that is found within the scope that this test is
+     * Processes a token that is found outside the scope that this test is
      * listening to.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file where this token was found.
-     * @param int                  $stackPtr  The position in the stack where this
-     *                                        token was found.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file where this token was found.
+     * @param int                         $stackPtr  The position in the stack where this
+     *                                               token was found.
      *
      * @return void
      */

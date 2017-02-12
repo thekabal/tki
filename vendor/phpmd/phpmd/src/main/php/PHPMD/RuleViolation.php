@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD;
@@ -49,9 +49,9 @@ use PHPMD\Node\MethodNode;
  * This class is used as container for a single rule violation related to a source
  * node.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class RuleViolation
 {
@@ -109,10 +109,10 @@ class RuleViolation
     /**
      * Constructs a new rule violation instance.
      *
-     * @param \PHPMD\Rule $rule
+     * @param \PHPMD\Rule         $rule
      * @param \PHPMD\AbstractNode $node
-     * @param string $violationMessage
-     * @param mixed $metric
+     * @param string              $violationMessage
+     * @param mixed               $metric
      */
     public function __construct(Rule $rule, AbstractNode $node, $violationMessage, $metric = null)
     {

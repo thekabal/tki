@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule;
@@ -50,9 +50,9 @@ use PHPMD\Node\ClassNode;
  * This rule collects all private fields in a class that aren't used in any
  * method of the analyzed class.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class UnusedPrivateField extends AbstractRule implements ClassAware
 {
@@ -68,7 +68,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * This method checks that all private class properties are at least accessed
      * by one method.
      *
-     * @param \PHPMD\AbstractNode $node
+     * @param  \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)
@@ -82,7 +82,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * This method collects all private fields that aren't used by any class
      * method.
      *
-     * @param \PHPMD\Node\ClassNode $class
+     * @param  \PHPMD\Node\ClassNode $class
      * @return \PHPMD\AbstractNode[]
      */
     private function collectUnusedPrivateFields(ClassNode $class)
@@ -99,7 +99,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * This method collects all private fields in the given class and stores
      * them in the <b>$_fields</b> property.
      *
-     * @param \PHPMD\Node\ClassNode $class
+     * @param  \PHPMD\Node\ClassNode $class
      * @return void
      */
     private function collectPrivateFields(ClassNode $class)
@@ -115,7 +115,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * This method extracts all variable declarators from the given field
      * declaration and stores them in the <b>$_fields</b> property.
      *
-     * @param \PHPMD\Node\ASTNode $declaration
+     * @param  \PHPMD\Node\ASTNode $declaration
      * @return void
      */
     private function collectPrivateField(ASTNode $declaration)
@@ -131,7 +131,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * removes all fields from the <b>$_fields</b> property that are accessed by
      * one of the postfix nodes.
      *
-     * @param \PHPMD\Node\ClassNode $class
+     * @param  \PHPMD\Node\ClassNode $class
      * @return void
      */
     private function removeUsedFields(ClassNode $class)
@@ -147,7 +147,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * This method removes the field from the <b>$_fields</b> property that is
      * accessed through the given property postfix node.
      *
-     * @param \PHPMD\Node\ASTNode $postfix
+     * @param  \PHPMD\Node\ASTNode $postfix
      * @return void
      */
     private function removeUsedField(ASTNode $postfix)
@@ -168,9 +168,9 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
     /**
      * Checks if the given node is a valid property node.
      *
-     * @param \PHPMD\Node\ASTNode $node
+     * @param  \PHPMD\Node\ASTNode $node
      * @return boolean
-     * @since 0.2.6
+     * @since  0.2.6
      */
     protected function isValidPropertyNode(ASTNode $node = null)
     {
@@ -195,8 +195,8 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * This method checks that the given property postfix is accessed on an
      * instance or static reference to the given class.
      *
-     * @param \PHPMD\Node\ClassNode $class
-     * @param \PHPMD\Node\ASTNode $postfix
+     * @param  \PHPMD\Node\ClassNode $class
+     * @param  \PHPMD\Node\ASTNode   $postfix
      * @return boolean
      */
     protected function isInScopeOfClass(ClassNode $class, ASTNode $postfix)
