@@ -8,6 +8,10 @@
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\TestResult;
+use PHPUnit\Framework\TestCase;
+
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'BeforeAndAfterTest.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'BeforeClassAndAfterClassTest.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'TestWithTest.php';
@@ -23,22 +27,18 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPAR
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'OverrideTestCase.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'RequirementsClassBeforeClassHookTest.php';
 
-/**
- * @since      Class available since Release 2.0.0
- * @covers     PHPUnit_Framework_TestSuite
- */
-class Framework_SuiteTest extends PHPUnit_Framework_TestCase
+class Framework_SuiteTest extends TestCase
 {
     protected $result;
 
     protected function setUp()
     {
-        $this->result = new PHPUnit_Framework_TestResult;
+        $this->result = new TestResult;
     }
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite;
+        $suite = new TestSuite;
 
         $suite->addTest(new self('testAddTestSuite'));
         $suite->addTest(new self('testInheritedTests'));
@@ -64,7 +64,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testAddTestSuite()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'OneTestCase'
         );
 
@@ -75,7 +75,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testInheritedTests()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'InheritedTestCase'
         );
 
@@ -87,7 +87,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testNoTestCases()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'NoTestCases'
         );
 
@@ -99,12 +99,11 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->result);
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Exception
-     */
     public function testNoTestCaseClass()
     {
-        $suite = new PHPUnit_Framework_TestSuite('NoTestCaseClass');
+        $this->expectException(PHPUnit\Framework\Exception::class);
+
+        new TestSuite('NoTestCaseClass');
     }
 
     public function testNotExistingTestCase()
@@ -120,7 +119,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testNotPublicTestCase()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'NotPublicTestCase'
         );
 
@@ -129,7 +128,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testNotVoidTestCase()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'NotVoidTestCase'
         );
 
@@ -138,7 +137,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testOneTestCase()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'OneTestCase'
         );
 
@@ -152,7 +151,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testShadowedTests()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'OverrideTestCase'
         );
 
@@ -163,7 +162,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testBeforeClassAndAfterClassAnnotations()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'BeforeClassAndAfterClassTest'
         );
 
@@ -176,7 +175,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testBeforeClassWithDataProviders()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'BeforeClassWithOnlyDataProviderTest'
         );
 
@@ -189,7 +188,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testBeforeAnnotation()
     {
-        $test = new PHPUnit_Framework_TestSuite(
+        $test = new TestSuite(
             'BeforeAndAfterTest'
         );
 
@@ -202,7 +201,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testTestWithAnnotation()
     {
-        $test = new PHPUnit_Framework_TestSuite(
+        $test = new TestSuite(
             'TestWithTest'
         );
 
@@ -214,7 +213,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testSkippedTestDataProvider()
     {
-        $suite = new PHPUnit_Framework_TestSuite('DataProviderSkippedTest');
+        $suite = new TestSuite('DataProviderSkippedTest');
 
         $suite->run($this->result);
 
@@ -224,7 +223,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testTestDataProviderDependency()
     {
-        $suite = new PHPUnit_Framework_TestSuite('DataProviderDependencyTest');
+        $suite = new PHPUnit\Framework\TestSuite(DataProviderDependencyTest::class);
 
         $suite->run($this->result);
 
@@ -237,7 +236,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testIncompleteTestDataProvider()
     {
-        $suite = new PHPUnit_Framework_TestSuite('DataProviderIncompleteTest');
+        $suite = new TestSuite('DataProviderIncompleteTest');
 
         $suite->run($this->result);
 
@@ -247,7 +246,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testRequirementsBeforeClassHook()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'RequirementsClassBeforeClassHookTest'
         );
 
@@ -259,7 +258,7 @@ class Framework_SuiteTest extends PHPUnit_Framework_TestCase
 
     public function testDontSkipInheritedClass()
     {
-        $suite = new PHPUnit_Framework_TestSuite(
+        $suite = new TestSuite(
             'DontSkipInheritedClass'
         );
 

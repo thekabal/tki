@@ -9,5 +9,4 @@ return array(
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'PHPMD\\' => array($vendorDir . '/phpmd/phpmd/src/main/php'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
-    'Adodb' => array($vendorDir . '/adodb/adodb-php/adodb.inc.php'),
 );

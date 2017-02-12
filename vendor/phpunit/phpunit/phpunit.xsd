@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:annotation>
-    <xs:documentation source="https://phpunit.de/manual/5.7/en/appendixes.configuration.html">
-      This Schema file defines the rules by which the XML configuration file of PHPUnit 5.7 may be structured.
+    <xs:documentation source="https://phpunit.de/manual/6.0/en/appendixes.configuration.html">
+      This Schema file defines the rules by which the XML configuration file of PHPUnit 6.0 may be structured.
     </xs:documentation>
     <xs:appinfo source="http://www.phpunit.de/manual/current/en/appendixes.configuration.html"/>
   </xs:annotation>
@@ -127,7 +127,6 @@
     <xs:attribute name="target" type="xs:anyURI"/>
     <xs:attribute name="lowUpperBound" type="xs:nonNegativeInteger" default="35"/>
     <xs:attribute name="highLowerBound" type="xs:nonNegativeInteger" default="70"/>
-    <xs:attribute name="logIncompleteSkipped" type="xs:boolean" default="false"/>
     <xs:attribute name="showUncoveredFiles" type="xs:boolean" default="false"/>
     <xs:attribute name="threshold" type="xs:nonNegativeInteger" default="30"/>
   </xs:complexType>
@@ -176,6 +175,7 @@
   <xs:complexType name="namedValueType">
     <xs:attribute name="name" use="required" type="xs:string"/>
     <xs:attribute name="value" use="required" type="xs:anySimpleType"/>
+    <xs:attribute name="verbatim" use="optional" type="xs:boolean"/>
   </xs:complexType>
   <xs:complexType name="phpUnitType">
     <xs:annotation>
@@ -185,7 +185,7 @@
     <xs:attributeGroup ref="configAttributeGroup"/>
   </xs:complexType>
   <xs:attributeGroup name="configAttributeGroup">
-    <xs:attribute name="backupGlobals" type="xs:boolean" default="true"/>
+    <xs:attribute name="backupGlobals" type="xs:boolean" default="false"/>
     <xs:attribute name="backupStaticAttributes" type="xs:boolean" default="false"/>
     <xs:attribute name="bootstrap" type="xs:anyURI"/>
     <xs:attribute name="cacheTokens" type="xs:boolean"/>
@@ -209,10 +209,9 @@
     <xs:attribute name="beStrictAboutChangesToGlobalState" type="xs:boolean" default="false"/>
     <xs:attribute name="beStrictAboutOutputDuringTests" type="xs:boolean" default="false"/>
     <xs:attribute name="beStrictAboutResourceUsageDuringSmallTests" type="xs:boolean" default="false"/>
-    <xs:attribute name="beStrictAboutTestsThatDoNotTestAnything" type="xs:boolean" default="false"/>
+    <xs:attribute name="beStrictAboutTestsThatDoNotTestAnything" type="xs:boolean" default="true"/>
     <xs:attribute name="beStrictAboutTodoAnnotatedTests" type="xs:boolean" default="false"/>
     <xs:attribute name="beStrictAboutCoversAnnotation" type="xs:boolean" default="false"/>
-    <xs:attribute name="checkForUnintentionallyCoveredCode" type="xs:boolean" default="false"/>
     <xs:attribute name="enforceTimeLimit" type="xs:boolean" default="false"/>
     <xs:attribute name="timeoutForSmallTests" type="xs:integer" default="1"/>
     <xs:attribute name="timeoutForMediumTests" type="xs:integer" default="10"/>

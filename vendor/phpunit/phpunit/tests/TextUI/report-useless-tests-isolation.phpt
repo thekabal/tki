@@ -1,15 +1,14 @@
 --TEST--
-phpunit --report-useless-tests --process-isolation IncompleteTest ../_files/IncompleteTest.php
+phpunit --process-isolation IncompleteTest ../_files/IncompleteTest.php
 --FILE--
 <?php
 $_SERVER['argv'][1] = '--no-configuration';
-$_SERVER['argv'][2] = '--report-useless-tests';
-$_SERVER['argv'][3] = '--process-isolation';
-$_SERVER['argv'][4] = 'NothingTest';
-$_SERVER['argv'][5] = __DIR__ . '/../_files/NothingTest.php';
+$_SERVER['argv'][2] = '--process-isolation';
+$_SERVER['argv'][3] = 'NothingTest';
+$_SERVER['argv'][4] = __DIR__ . '/../_files/NothingTest.php';
 
 require __DIR__ . '/../bootstrap.php';
-PHPUnit_TextUI_Command::main();
+PHPUnit\TextUI\Command::main();
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
 
