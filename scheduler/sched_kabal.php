@@ -46,7 +46,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
     $kabalisdead = 0;
     $playerinfo = $res->fields;
     // Regenerate / Buy stats
-    Tki\Kabal::kabalRegen($pdo_db, $playerinfo, $kabal_unemployment, $tkireg);
+    Tki\Kabal::regen($pdo_db, $playerinfo, $kabal_unemployment, $tkireg);
 
     // Run through orders
     $furcount++;
@@ -100,7 +100,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\Kabal::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -158,7 +158,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\Kabal::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -166,7 +166,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             }
 
             // NOW TRADE BEFORE WE DO ANY AGGRESSION CHECKS
-            Tki\Kabal::kabalTrade($pdo_db, $playerinfo, $tkireg);
+            Tki\Kabal::trade($pdo_db, $playerinfo, $tkireg);
             // FIND A TARGET
             // IN MY SECTOR, NOT MYSELF
             $reso2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
@@ -225,7 +225,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             if ($hunt == 0)
             {
                 $furcount3h++;
-                Tki\Kabal::kabalHunter($pdo_db, $db, $playerinfo, $kabalisdead, $langvars, $tkireg);
+                Tki\Kabal::goHunt($pdo_db, $db, $playerinfo, $kabalisdead, $langvars, $tkireg);
                 if ($kabalisdead > 0)
                 {
                     $res->MoveNext();
@@ -235,7 +235,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+                Tki\Kabal::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
                 if ($kabalisdead > 0)
                 {
                     $res->MoveNext();

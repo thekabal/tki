@@ -24,9 +24,9 @@ namespace Tki;
 
 class Kabal
 {
-    public static function kabalTrade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
+    public static function trade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
     {
-        // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional kabal. :)
+        // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want working kabal. :)
         $tkireg->ore_price = 11;
         $tkireg->organics_price = 5;
         $tkireg->goods_price = 15;
@@ -286,7 +286,7 @@ class Kabal
         }
     }
 
-    public static function kabalMove(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
+    public static function move(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -422,7 +422,7 @@ class Kabal
         }
     }
 
-    public static function kabalHunter(\PDO $pdo_db, $db, array $playerinfo, $kabalisdead, array $langvars, Reg $tkireg): void
+    public static function goHunt(\PDO $pdo_db, $db, array $playerinfo, $kabalisdead, array $langvars, Reg $tkireg): void
     {
         $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");
@@ -551,7 +551,7 @@ class Kabal
         }
     }
 
-    public static function kabalRegen(\PDO $pdo_db, array $playerinfo, $kabal_unemployment, Reg $tkireg): void
+    public static function regen(\PDO $pdo_db, array $playerinfo, $kabal_unemployment, Reg $tkireg): void
     {
         $gena = null;
         $gene = null;
