@@ -132,8 +132,9 @@ if ($db_port !== null)
 }
 
 // Attempt to connect to the database via adodb
-$test_db = \ADONewConnection('mysqli');
-$variables['adodb_conn_test'] = $test_db->Connect($db_host, $db_user, $db_pwd, $db_name);
+$test_db = new Tki\Db();
+$variables['adodb_conn_test'] = $test_db->initDb('adodb');
+
 if (!($variables['adodb_conn_test']))
 {
     $variables['adodb_conn_err'] = "Error message";
