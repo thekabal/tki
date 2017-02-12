@@ -225,7 +225,7 @@ class Ibank2
         }
     }
 
-    public static function ibankTransfer3($db, \PDO $pdo_db, string $lang, array $langvars, array $playerinfo, string $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, Smarty $template): void
+    public static function ibankTransfer3(\PDO $pdo_db, $db, string $lang, array $langvars, array $playerinfo, string $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, Smarty $template): void
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 
