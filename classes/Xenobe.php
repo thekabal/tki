@@ -24,7 +24,7 @@ namespace Tki;
 
 class Xenobe
 {
-    public static function xenobeTrade(\PDO $pdo_db, array $playerinfo, Reg $tkireg)
+    public static function xenobeTrade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
     {
         // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
         $tkireg->ore_price = 11;
@@ -286,7 +286,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeToPlanet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars)
+    public static function xenobeToPlanet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars): void
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id"; // Get target planet information
         $stmt = $pdo_db->prepare($sql);
@@ -604,7 +604,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeToShip(\PDO $pdo_db, $db, int $ship_id, Reg $tkireg, array $playerinfo, array $langvars)
+    public static function xenobeToShip(\PDO $pdo_db, $db, int $ship_id, Reg $tkireg, array $playerinfo, array $langvars): void
     {
         $armor_lost = null;
         $fighters_lost = null;
@@ -1079,7 +1079,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeToSecDef(\PDO $pdo_db, $db, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg)
+    public static function xenobeToSecDef(\PDO $pdo_db, $db, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg): void
     {
         // Check for sector defenses
         if ($targetlink > 0)
@@ -1305,7 +1305,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeMove(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg)
+    public static function xenobeMove(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -1441,7 +1441,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeHunter(\PDO $pdo_db, $db, array $playerinfo, $xenobeisdead, array $langvars, Reg $tkireg)
+    public static function xenobeHunter(\PDO $pdo_db, $db, array $playerinfo, $xenobeisdead, array $langvars, Reg $tkireg): void
     {
         $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@xenobe' AND ship_id > 1");
@@ -1570,7 +1570,7 @@ class Xenobe
         }
     }
 
-    public static function xenobeRegen(\PDO $pdo_db, array $playerinfo, $xen_unemployment, Reg $tkireg)
+    public static function xenobeRegen(\PDO $pdo_db, array $playerinfo, $xen_unemployment, Reg $tkireg): void
     {
         $gena = null;
         $gene = null;
