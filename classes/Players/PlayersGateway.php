@@ -48,7 +48,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email = :email";
         $stmt = $this->pdo_db->prepare($sql);
-        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
         $stmt->execute();
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 

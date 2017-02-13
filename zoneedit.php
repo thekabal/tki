@@ -121,7 +121,7 @@ if ($curzone['team_zone'] == 'N')
 {
     $sql = "SELECT ship_id FROM ::prefix::ships WHERE email=:email LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':email', $_SESSION['username']);
+    $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
     $stmt->execute();
     $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
