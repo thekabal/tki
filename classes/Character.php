@@ -103,7 +103,7 @@ class Character
         // Lookup players score.
         $sql = "SELECT score FROM ::prefix::ships WHERE email =:email";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':email', $a_username);
+        $stmt->bindParam(':email', $a_username, \PDO::PARAM_STR);
         $stmt->execute();
         Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $res = $stmt->fetch();

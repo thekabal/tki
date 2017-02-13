@@ -26,7 +26,7 @@ class Realspace
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':email', $_SESSION['username']);
+        $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
         $stmt->execute();
         $playerinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 

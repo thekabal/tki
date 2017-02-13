@@ -39,7 +39,7 @@ class Ship
                                "dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', " .
                                "dev_lssd='N' WHERE email=:email";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':email', $_SESSION['username']);
+                $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
                 $stmt->execute();
                 Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
