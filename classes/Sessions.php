@@ -75,8 +75,8 @@ class Sessions
     {
         $qry = "SELECT sessdata FROM ::prefix::sessions where sesskey=:sesskey and expiry>=:expiry";
         $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':sesskey', $sesskey);
-        $stmt->bindParam(':expiry', $this->currenttime);
+        $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
+        $stmt->bindParam(':expiry', $this->currenttime, \PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
         return (string) $result['sessdata']; // PHP7 change requires return to be string: https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
@@ -95,9 +95,9 @@ class Sessions
                 // Try to insert the record. This will fail if the record already exists, which will trigger catch below..
                 $qry = "INSERT into ::prefix::sessions (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
                 $stmt = $this->pdo_db->prepare($qry);
-                $stmt->bindParam(':sesskey', $sesskey);
+                $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
                 $stmt->bindParam(':sessdata', $sessdata);
-                $stmt->bindParam(':expiry', $this->expiry);
+                $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
                 $result = $stmt->execute();
             }
             catch (\PDOException $e)
@@ -105,9 +105,9 @@ class Sessions
                 // Insert didn't work, use update instead
                 $qry = "UPDATE ::prefix::sessions SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey";
                 $stmt = $this->pdo_db->prepare($qry);
-                $stmt->bindParam(':sesskey', $sesskey);
+                $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
                 $stmt->bindParam(':sessdata', $sessdata);
-                $stmt->bindParam(':expiry', $this->expiry);
+                $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
                 $result = $stmt->execute();
             }
 
@@ -120,7 +120,7 @@ class Sessions
     {
         $qry = "DELETE from ::prefix::sessions where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':sesskey', $sesskey);
+        $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
         $result = $stmt->execute();
         return $result;
     }
@@ -129,7 +129,7 @@ class Sessions
     {
         $qry = "DELETE from ::prefix::sessions where expiry>:expiry";
         $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':expiry', $this->expiry);
+        $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
         $result = $stmt->execute();
         return $result;
     }
@@ -141,8 +141,8 @@ class Sessions
         $new_id = session_id();
         $qry = "UPDATE ::prefix::sessions SET sesskey=:newkey where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':newkey', $new_id);
-        $stmt->bindParam(':sesskey', $old_id);
+        $stmt->bindParam(':newkey', $new_id, \PDO::PARAM_STR);
+        $stmt->bindParam(':sesskey', $old_id, \PDO::PARAM_STR);
         $stmt->execute();
     }
 }
