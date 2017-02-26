@@ -59,7 +59,7 @@
             "rm -rf vendor/smarty/smarty/documentation",
             "rm -rf vendor/swiftmailer/swiftmailer/notes",
             "rm -rf vendor/swiftmailer/swiftmailer/doc",
-            "rm -rf vendor/swiftmailer/swiftmailer/tests",
+            "rm -rf vendor/swiftmailer/swiftmailer/tests"
         ]
     }
 }
