@@ -5,9 +5,12 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\DI;
 
 use Nette;
+use Nette\PhpGenerator\PhpLiteral;
 use Nette\Utils\Reflection;
 
 
@@ -15,15 +18,14 @@ use Nette\Utils\Reflection;
  * The DI helpers.
  * @internal
  */
-class Helpers
+final class Helpers
 {
 	use Nette\StaticClass;
 
 	/**
 	 * Expands %placeholders%.
 	 * @param  mixed
-	 * @param  array
-	 * @param  bool|array
+	 * @param  bool|array $recursive
 	 * @return mixed
 	 * @throws Nette\InvalidArgumentException
 	 */
@@ -44,13 +46,14 @@ class Helpers
 		}
 
 		$parts = preg_split('#%([\w.-]*)%#i', $var, -1, PREG_SPLIT_DELIM_CAPTURE);
-		$res = '';
+		$res = [];
+		$php = FALSE;
 		foreach ($parts as $n => $part) {
 			if ($n % 2 === 0) {
-				$res .= $part;
+				$res[] = $part;
 
 			} elseif ($part === '') {
-				$res .= '%';
+				$res[] = '%';
 
 			} elseif (isset($recursive[$part])) {
 				throw new Nette\InvalidArgumentException(sprintf('Circular reference detected for variables: %s.', implode(', ', array_keys($recursive))));
@@ -67,21 +70,27 @@ class Helpers
 				if (strlen($part) + 2 === strlen($var)) {
 					return $val;
 				}
-				if (!is_scalar($val)) {
+				if ($val instanceof PhpLiteral) {
+					$php = TRUE;
+				} elseif (!is_scalar($val)) {
 					throw new Nette\InvalidArgumentException("Unable to concatenate non-scalar parameter '$part' into '$var'.");
 				}
-				$res .= $val;
+				$res[] = $val;
 			}
 		}
-		return $res;
+		if ($php) {
+			$res = array_filter($res, function ($val) { return $val !== ''; });
+			$res = array_map(function ($val) { return $val instanceof PhpLiteral ? "($val)" : var_export((string) $val, TRUE); }, $res);
+			return new PhpLiteral(implode(' . ', $res));
+		}
+		return implode('', $res);
 	}
 
 
 	/**
 	 * Generates list of arguments using autowiring.
-	 * @return array
 	 */
-	public static function autowireArguments(\ReflectionFunctionAbstract $method, array $arguments, $container)
+	public static function autowireArguments(\ReflectionFunctionAbstract $method, array $arguments, $container): array
 	{
 		$optCount = 0;
 		$num = -1;
@@ -146,9 +155,8 @@ class Helpers
 
 	/**
 	 * Removes ... and process constants recursively.
-	 * @return array
 	 */
-	public static function filterArguments(array $args)
+	public static function filterArguments(array $args): array
 	{
 		foreach ($args as $k => $v) {
 			if ($v === '...') {
@@ -169,10 +177,9 @@ class Helpers
 	/**
 	 * Replaces @extension with real extension name in service definition.
 	 * @param  mixed
-	 * @param  string
 	 * @return mixed
 	 */
-	public static function prefixServiceName($config, $namespace)
+	public static function prefixServiceName($config, string $namespace)
 	{
 		if (is_string($config)) {
 			if (strncmp($config, '@extension.', 10) === 0) {
@@ -203,7 +210,7 @@ class Helpers
 		}
 		$name = preg_quote($name, '#');
 		if ($ref->getDocComment() && preg_match("#[\\s*]@$name(?:\\s++([^@]\\S*)?|$)#", trim($ref->getDocComment(), '/*'), $m)) {
-			return isset($m[1]) ? $m[1] : '';
+			return $m[1] ?? '';
 		}
 	}
 

@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette;
 
 use Nette;
@@ -18,9 +20,6 @@ use Tracy;
 class Configurator
 {
 	use SmartObject;
-
-	const AUTO = TRUE,
-		NONE = FALSE;
 
 	const COOKIE_SECRET = 'nette-debug';
 
@@ -57,10 +56,13 @@ class Configurator
 	protected $parameters;
 
 	/** @var array */
+	protected $dynamicParameters = [];
+
+	/** @var array */
 	protected $services = [];
 
-	/** @var array [file|array, section] */
-	protected $files = [];
+	/** @var array of string|array */
+	protected $configs = [];
 
 
 	public function __construct()
@@ -87,10 +89,7 @@ class Configurator
 	}
 
 
-	/**
-	 * @return bool
-	 */
-	public function isDebugMode()
+	public function isDebugMode(): bool
 	{
 		return $this->parameters['debugMode'];
 	}
@@ -100,7 +99,7 @@ class Configurator
 	 * Sets path to temporary directory.
 	 * @return static
 	 */
-	public function setTempDirectory($path)
+	public function setTempDirectory(string $path)
 	{
 		$this->parameters['tempDir'] = $path;
 		return $this;
@@ -111,7 +110,7 @@ class Configurator
 	 * Sets the default timezone.
 	 * @return static
 	 */
-	public function setTimeZone($timezone)
+	public function setTimeZone(string $timezone)
 	{
 		date_default_timezone_set($timezone);
 		@ini_set('date.timezone', $timezone); // @ - function may be disabled
@@ -131,6 +130,17 @@ class Configurator
 
 
 	/**
+	 * Adds new dynamic parameters.
+	 * @return static
+	 */
+	public function addDynamicParameters(array $params)
+	{
+		$this->dynamicParameters = $params + $this->dynamicParameters;
+		return $this;
+	}
+
+
+	/**
 	 * Add instances of services.
 	 * @return static
 	 */
@@ -141,10 +151,7 @@ class Configurator
 	}
 
 
-	/**
-	 * @return array
-	 */
-	protected function getDefaultParameters()
+	protected function getDefaultParameters(): array
 	{
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 		$last = end($trace);
@@ -159,21 +166,7 @@ class Configurator
 	}
 
 
-	/**
-	 * @param  string  error log directory
-	 * @param  string  administrator email
-	 * @return void
-	 */
-	public function enableTracy($logDirectory = NULL, $email = NULL)
-	{
-		$this->enableDebugger($logDirectory, $email);
-	}
-
-
-	/**
-	 * Alias for enableTracy()
-	 */
-	public function enableDebugger($logDirectory = NULL, $email = NULL)
+	public function enableTracy(string $logDirectory = NULL, string $email = NULL): void
 	{
 		Tracy\Debugger::$strictMode = TRUE;
 		Tracy\Debugger::enable(!$this->parameters['debugMode'], $logDirectory, $email);
@@ -182,61 +175,61 @@ class Configurator
 
 
 	/**
-	 * @return Nette\Loaders\RobotLoader
+	 * Alias for enableTracy()
+	 */
+	public function enableDebugger(string $logDirectory = NULL, string $email = NULL): void
+	{
+		$this->enableTracy($logDirectory, $email);
+	}
+
+
+	/**
 	 * @throws Nette\NotSupportedException if RobotLoader is not available
 	 */
-	public function createRobotLoader()
+	public function createRobotLoader(): Nette\Loaders\RobotLoader
 	{
 		if (!class_exists(Nette\Loaders\RobotLoader::class)) {
 			throw new Nette\NotSupportedException('RobotLoader not found, do you have `nette/robot-loader` package installed?');
 		}
 
 		$loader = new Nette\Loaders\RobotLoader;
-		$loader->setCacheStorage(new Nette\Caching\Storages\FileStorage($this->getCacheDirectory()));
-		$loader->autoRebuild = $this->parameters['debugMode'];
+		$loader->setTempDirectory($this->getCacheDirectory() . '/Nette.RobotLoader');
+		$loader->setAutoRefresh($this->parameters['debugMode']);
 		return $loader;
 	}
 
 
 	/**
 	 * Adds configuration file.
+	 * @param  string|array
 	 * @return static
 	 */
-	public function addConfig($file)
+	public function addConfig($config)
 	{
-		$section = func_num_args() > 1 ? func_get_arg(1) : NULL;
-		if ($section !== NULL) {
-			trigger_error('Sections in config file are deprecated.', E_USER_DEPRECATED);
-		}
-		$this->files[] = [$file, $section === self::AUTO ? ($this->parameters['debugMode'] ? 'development' : 'production') : $section];
+		$this->configs[] = $config;
 		return $this;
 	}
 
 
 	/**
 	 * Returns system DI container.
-	 * @return DI\Container
 	 */
-	public function createContainer()
+	public function createContainer(): DI\Container
 	{
 		$class = $this->loadContainer();
-		$container = new $class();
+		$container = new $class($this->dynamicParameters);
 		foreach ($this->services as $name => $service) {
 			$container->addService($name, $service);
 		}
 		$container->initialize();
-		if (class_exists(Nette\Environment::class)) {
-			Nette\Environment::setContext($container); // back compatibility
-		}
 		return $container;
 	}
 
 
 	/**
 	 * Loads system DI container class and returns its name.
-	 * @return string
 	 */
-	public function loadContainer()
+	public function loadContainer(): string
 	{
 		$loader = new DI\ContainerLoader(
 			$this->getCacheDirectory() . '/Nette.Configurator',
@@ -244,35 +237,34 @@ class Configurator
 		);
 		$class = $loader->load(
 			[$this, 'generateContainer'],
-			[$this->parameters, $this->files, PHP_VERSION_ID - PHP_RELEASE_VERSION]
+			[$this->parameters, array_keys($this->dynamicParameters), $this->configs, PHP_VERSION_ID - PHP_RELEASE_VERSION]
 		);
 		return $class;
 	}
 
 
 	/**
-	 * @return string
 	 * @internal
 	 */
-	public function generateContainer(DI\Compiler $compiler)
+	public function generateContainer(DI\Compiler $compiler): void
 	{
-		$loader = $this->createLoader();
 		$compiler->addConfig(['parameters' => $this->parameters]);
-		$fileInfo = [];
-		foreach ($this->files as $info) {
-			if (is_scalar($info[0])) {
-				$fileInfo[] = "// source: $info[0] $info[1]";
-				$info[0] = $loader->load($info[0], $info[1]);
+		$compiler->setDynamicParameterNames(array_keys($this->dynamicParameters));
+
+		$loader = $this->createLoader();
+		foreach ($this->configs as $config) {
+			if (is_string($config)) {
+				$compiler->loadConfig($config, $loader);
+			} else {
+				$compiler->addConfig($config);
 			}
-			$compiler->addConfig($this->fixCompatibility($info[0]));
 		}
-		$compiler->addDependencies($loader->getDependencies());
 
 		$builder = $compiler->getContainerBuilder();
 		$builder->addExcludedClasses($this->autowireExcludedClasses);
 
 		foreach ($this->defaultExtensions as $name => $extension) {
-			list($class, $args) = is_string($extension) ? [$extension, []] : $extension;
+			[$class, $args] = is_string($extension) ? [$extension, []] : $extension;
 			if (class_exists($class)) {
 				$args = DI\Helpers::expand($args, $this->parameters, TRUE);
 				$compiler->addExtension($name, (new \ReflectionClass($class))->newInstanceArgs($args));
@@ -280,22 +272,16 @@ class Configurator
 		}
 
 		$this->onCompile($this, $compiler);
-
-		$classes = $compiler->compile();
-		return implode("\n", $fileInfo) . "\n\n" . $classes;
 	}
 
 
-	/**
-	 * @return DI\Config\Loader
-	 */
-	protected function createLoader()
+	protected function createLoader(): DI\Config\Loader
 	{
 		return new DI\Config\Loader;
 	}
 
 
-	protected function getCacheDirectory()
+	protected function getCacheDirectory(): string
 	{
 		if (empty($this->parameters['tempDir'])) {
 			throw new Nette\InvalidStateException('Set path to temporary directory using setTempDirectory().');
@@ -308,56 +294,17 @@ class Configurator
 	}
 
 
-	/**
-	 * Back compatibility with < v2.3
-	 * @return array
-	 */
-	protected function fixCompatibility($config)
-	{
-		if (isset($config['nette']['security']['frames'])) {
-			$config['nette']['http']['frames'] = $config['nette']['security']['frames'];
-			unset($config['nette']['security']['frames']);
-		}
-		foreach (['application', 'cache', 'database', 'di' => 'container', 'forms', 'http',
-			'latte', 'mail' => 'mailer', 'routing', 'security', 'session', 'tracy' => 'debugger'] as $new => $old) {
-			if (isset($config['nette'][$old])) {
-				$new = is_int($new) ? $old : $new;
-				if (isset($config[$new])) {
-					throw new Nette\DeprecatedException("You can use (deprecated) section 'nette.$old' or new section '$new', but not both of them.");
-				} else {
-					trigger_error("Configuration section 'nette.$old' is deprecated, use section '$new' (without 'nette')", E_USER_DEPRECATED);
-				}
-				$config[$new] = $config['nette'][$old];
-				unset($config['nette'][$old]);
-			}
-		}
-		if (isset($config['nette']['xhtml'])) {
-			trigger_error("Configuration option 'nette.xhtml' is deprecated, use section 'latte.xhtml' instead.", E_USER_DEPRECATED);
-			$config['latte']['xhtml'] = $config['nette']['xhtml'];
-			unset($config['nette']['xhtml']);
-		}
-
-		if (empty($config['nette'])) {
-			unset($config['nette']);
-		}
-		return $config;
-	}
-
-
 	/********************* tools ****************d*g**/
 
 
 	/**
-	 * Detects debug mode by IP address.
-	 * @param  string|array  IP addresses or computer names whitelist detection
-	 * @return bool
+	 * Detects debug mode by IP addresses or computer names whitelist detection.
+	 * @param  string|array
 	 */
-	public static function detectDebugMode($list = NULL)
+	public static function detectDebugMode($list = NULL): bool
 	{
-		$addr = isset($_SERVER['REMOTE_ADDR'])
-			? $_SERVER['REMOTE_ADDR']
-			: php_uname('n');
-		$secret = isset($_COOKIE[self::COOKIE_SECRET]) && is_string($_COOKIE[self::COOKIE_SECRET])
+		$addr = $_SERVER['REMOTE_ADDR'] ?? php_uname('n');
+		$secret = is_string($_COOKIE[self::COOKIE_SECRET] ?? NULL)
 			? $_COOKIE[self::COOKIE_SECRET]
 			: NULL;
 		$list = is_string($list)

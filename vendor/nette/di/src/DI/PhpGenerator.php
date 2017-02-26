@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\DI;
 
 use Nette;
@@ -43,7 +45,7 @@ class PhpGenerator
 	 * Generates PHP classes. First class is the container.
 	 * @return Nette\PhpGenerator\ClassType[]
 	 */
-	public function generate($className)
+	public function generate(string $className): array
 	{
 		$this->builder->complete();
 
@@ -52,7 +54,10 @@ class PhpGenerator
 		$containerClass = $this->generatedClasses[] = new Nette\PhpGenerator\ClassType($this->className);
 		$containerClass->setExtends(Container::class);
 		$containerClass->addMethod('__construct')
-			->addBody('parent::__construct(?);', [$this->builder->parameters]);
+			->addBody('$this->parameters = $params;')
+			->addBody('$this->parameters += ?;', [$this->builder->parameters])
+			->addParameter('params', [])
+				->setTypeHint('array');
 
 		$definitions = $this->builder->getDefinitions();
 		ksort($definitions);
@@ -76,8 +81,7 @@ class PhpGenerator
 					throw new ServiceCreationException('Name contains invalid characters.');
 				}
 				$containerClass->addMethod($methodName)
-					->addComment(PHP_VERSION_ID < 70000 ? '@return ' . ($def->getImplement() ?: $def->getClass()) : '')
-					->setReturnType(PHP_VERSION_ID >= 70000 ? ($def->getImplement() ?: $def->getClass()) : NULL)
+					->setReturnType($def->getImplement() ?: $def->getClass())
 					->setBody($name === ContainerBuilder::THIS_CONTAINER ? 'return $this;' : $this->generateService($name))
 					->setParameters($def->getImplement() ? [] : $this->convertParameters($def->parameters));
 			} catch (\Exception $e) {
@@ -95,9 +99,8 @@ class PhpGenerator
 
 	/**
 	 * Generates body of service method.
-	 * @return string
 	 */
-	private function generateService($name)
+	private function generateService(string $name): string
 	{
 		$def = $this->builder->getDefinition($name);
 
@@ -150,13 +153,7 @@ class PhpGenerator
 		$factoryClass->addMethod($def->getImplementMode())
 			->setParameters($this->convertParameters($def->parameters))
 			->setBody(str_replace('$this', '$this->container', $code))
-			->setReturnType(PHP_VERSION_ID >= 70000 ? $def->getClass() : NULL);
-
-		if (PHP_VERSION_ID < 70000) {
-			$this->generatedClasses[] = $factoryClass;
-			$factoryClass->setName(str_replace(['\\', '.'], '_', "{$this->className}_{$def->getImplement()}Impl_{$name}"));
-			return "return new {$factoryClass->getName()}(\$this);";
-		}
+			->setReturnType($def->getClass());
 
 		return 'return new class ($this) ' . $factoryClass . ';';
 	}
@@ -164,9 +161,8 @@ class PhpGenerator
 
 	/**
 	 * Formats PHP code for class instantiating, function calling or property setting in PHP.
-	 * @return string
 	 */
-	private function formatStatement(Statement $statement)
+	private function formatStatement(Statement $statement): string
 	{
 		$entity = $statement->getEntity();
 		$arguments = $statement->arguments;
@@ -218,10 +214,9 @@ class PhpGenerator
 
 	/**
 	 * Formats PHP statement.
-	 * @return string
 	 * @internal
 	 */
-	public function formatPhp($statement, $args)
+	public function formatPhp(string $statement, array $args): string
 	{
 		array_walk_recursive($args, function (&$val) {
 			if ($val instanceof Statement) {
@@ -249,7 +244,7 @@ class PhpGenerator
 	 * Converts parameters from ServiceDefinition to PhpGenerator.
 	 * @return Nette\PhpGenerator\Parameter[]
 	 */
-	private function convertParameters(array $parameters)
+	private function convertParameters(array $parameters): array
 	{
 		$res = [];
 		foreach ($parameters as $k => $v) {

@@ -7,6 +7,6 @@ use PHPStan\Broker\Broker;
 interface BrokerAwareClassReflectionExtension
 {
 
-    public function setBroker(Broker $broker);
+	public function setBroker(Broker $broker);
 
 }

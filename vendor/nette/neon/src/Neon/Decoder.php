@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\Neon;
 
 
@@ -12,11 +14,8 @@ namespace Nette\Neon;
  * Parser for Nette Object Notation.
  * @internal
  */
-class Decoder
+final class Decoder
 {
-	/** @deprecated */
-	public static $patterns = self::PATTERNS;
-
 	const PATTERNS = [
 		'
 			\'\'\'\n (?:(?: [^\n] | \n(?![\t\ ]*+\'\'\') )*+ \n)?[\t\ ]*+\'\'\' |
@@ -55,7 +54,7 @@ class Decoder
 	];
 
 	const ESCAPE_SEQUENCES = [
-		't' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\x0C", 'b' => "\x08", '"' => '"', '\\' => '\\', '/' => '/', '_' => "\xc2\xa0",
+		't' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\x0C", 'b' => "\x08", '"' => '"', '\\' => '\\', '/' => '/', '_' => "\u{A0}",
 	];
 
 	const BRACKETS = [
@@ -77,15 +76,14 @@ class Decoder
 
 	/**
 	 * Decodes a NEON string.
-	 * @param  string
 	 * @return mixed
 	 */
-	public function decode($input)
+	public function decode(string $input)
 	{
 		if (!is_string($input)) {
 			throw new \InvalidArgumentException(sprintf('Argument must be a string, %s given.', gettype($input)));
 
-		} elseif (substr($input, 0, 3) === "\xEF\xBB\xBF") { // BOM
+		} elseif (substr($input, 0, 3) === "\u{FEFF}") { // BOM
 			$input = substr($input, 3);
 		}
 		$this->input = "\n" . str_replace("\r", '', $input); // \n forces indent detection
@@ -115,10 +113,9 @@ class Decoder
 
 	/**
 	 * @param  string  indentation (for block-parser)
-	 * @param  mixed
-	 * @return array
+	 * @return array|\stdClass
 	 */
-	private function parse($indent, $result = NULL, $key = NULL, $hasKey = FALSE)
+	private function parse($indent, $result = NULL, $key = NULL, bool $hasKey = FALSE)
 	{
 		$inlineParser = $indent === FALSE;
 		$value = NULL;
@@ -171,7 +168,7 @@ class Decoder
 				$key = NULL;
 				$hasKey = TRUE;
 
-			} elseif (($tmp = self::BRACKETS) && isset($tmp[$t])) { // Opening bracket [ ( {
+			} elseif (isset(self::BRACKETS[$t])) { // Opening bracket [ ( {
 				if ($hasValue) {
 					if ($t !== '(') {
 						$this->error();
@@ -348,7 +345,7 @@ class Decoder
 	}
 
 
-	private function error($message = "Unexpected '%s'")
+	private function error(string $message = "Unexpected '%s'")
 	{
 		$last = isset($this->tokens[$this->pos]) ? $this->tokens[$this->pos] : NULL;
 		$offset = $last ? $last[1] : strlen($this->input);

@@ -5,16 +5,16 @@ namespace PHPStan\Type;
 trait ClassTypeHelperTrait
 {
 
-    private static function exists(string $className): bool
-    {
-        try {
-            return class_exists($className) || interface_exists($className) || trait_exists($className);
-        } catch (\Throwable $t) {
-            throw new \PHPStan\Broker\ClassAutoloadingException(
-                $className,
-                $t
-            );
-        }
-    }
+	private static function exists(string $className): bool
+	{
+		try {
+			return class_exists($className) || interface_exists($className) || trait_exists($className);
+		} catch (\Throwable $t) {
+			throw new \PHPStan\Broker\ClassAutoloadingException(
+				$className,
+				$t
+			);
+		}
+	}
 
 }

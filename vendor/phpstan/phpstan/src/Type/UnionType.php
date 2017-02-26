@@ -5,9 +5,9 @@ namespace PHPStan\Type;
 interface UnionType extends StaticResolvableType
 {
 
-    /**
-     * @return \PHPStan\Type\Type[]
-     */
-    public function getTypes(): array;
+	/**
+	 * @return \PHPStan\Type\Type[]
+	 */
+	public function getTypes(): array;
 
 }

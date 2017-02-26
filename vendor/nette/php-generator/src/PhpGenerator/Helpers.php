@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\PhpGenerator;
 
 use Nette;
@@ -13,7 +15,7 @@ use Nette;
 /**
  * PHP code generator utils.
  */
-class Helpers
+final class Helpers
 {
 	use Nette\StaticClass;
 
@@ -24,15 +26,14 @@ class Helpers
 
 	/**
 	 * Returns a PHP representation of a variable.
-	 * @return string
 	 */
-	public static function dump($var)
+	public static function dump($var): string
 	{
 		return self::_dump($var);
 	}
 
 
-	private static function _dump(&$var, $level = 0)
+	private static function _dump(&$var, int $level = 0)
 	{
 		if ($var instanceof PhpLiteral) {
 			return (string) $var;
@@ -104,7 +105,7 @@ class Helpers
 
 		} elseif (is_object($var)) {
 			$class = get_class($var);
-			if (PHP_VERSION_ID >= 70000 && (new \ReflectionObject($var))->isAnonymous()) {
+			if ((new \ReflectionObject($var))->isAnonymous()) {
 				throw new Nette\InvalidArgumentException('Cannot dump anonymous class.');
 
 			} elseif (in_array($class, ['DateTime', 'DateTimeImmutable'], TRUE)) {
@@ -149,9 +150,8 @@ class Helpers
 
 	/**
 	 * Generates PHP statement.
-	 * @return string
 	 */
-	public static function format($statement, ...$args)
+	public static function format(string $statement, ...$args): string
 	{
 		return self::formatArgs($statement, $args);
 	}
@@ -159,9 +159,8 @@ class Helpers
 
 	/**
 	 * Generates PHP statement.
-	 * @return string
 	 */
-	public static function formatArgs($statement, array $args)
+	public static function formatArgs(string $statement, array $args): string
 	{
 		$a = strpos($statement, '?');
 		while ($a !== FALSE) {
@@ -190,15 +189,17 @@ class Helpers
 			}
 			$a = strpos($statement, '?', $a);
 		}
+		if ($args) {
+			throw new Nette\InvalidArgumentException('Insufficient number of placeholders.');
+		}
 		return $statement;
 	}
 
 
 	/**
 	 * Returns a PHP representation of a object member.
-	 * @return string
 	 */
-	public static function formatMember($name)
+	public static function formatMember($name): string
 	{
 		return $name instanceof PhpLiteral || !self::isIdentifier($name)
 			? '{' . self::_dump($name) . '}'
@@ -206,10 +207,7 @@ class Helpers
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public static function formatDocComment($content)
+	public static function formatDocComment(string $content): string
 	{
 		if (($s = trim($content)) === '') {
 			return '';
@@ -221,46 +219,41 @@ class Helpers
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public static function unformatDocComment($comment)
+	public static function unformatDocComment(string $comment): string
 	{
 		return preg_replace('#^\s*\* ?#m', '', trim(trim(trim($comment), '/*')));
 	}
 
 
-	/**
-	 * @return bool
-	 */
-	public static function isIdentifier($value)
+	public static function isIdentifier($value): bool
 	{
 		return is_string($value) && preg_match('#^' . self::PHP_IDENT . '\z#', $value);
 	}
 
 
-	/** @internal */
-	public static function createObject($class, array $props)
+	public static function isNamespace($value): bool
 	{
-		return unserialize('O' . substr(serialize((string) $class), 1, -1) . substr(serialize($props), 1));
+		return is_string($value) && preg_match('#^' . Helpers::PHP_IDENT . '(\\\\' . Helpers::PHP_IDENT . ')*\z#', $value);
 	}
 
 
 	/**
-	 * @param  string
-	 * @return string
+	 * @return object
+	 * @internal
 	 */
-	public static function extractNamespace($name)
+	public static function createObject(string $class, array $props)
+	{
+		return unserialize('O' . substr(serialize($class), 1, -1) . substr(serialize($props), 1));
+	}
+
+
+	public static function extractNamespace(string $name): string
 	{
 		return ($pos = strrpos($name, '\\')) ? substr($name, 0, $pos) : '';
 	}
 
 
-	/**
-	 * @param  string
-	 * @return string
-	 */
-	public static function extractShortName($name)
+	public static function extractShortName(string $name): string
 	{
 		return ($pos = strrpos($name, '\\')) === FALSE ? $name : substr($name, $pos + 1);
 	}
