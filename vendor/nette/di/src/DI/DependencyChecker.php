@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\DI;
 
 use Nette;
@@ -39,9 +41,8 @@ class DependencyChecker
 
 	/**
 	 * Exports dependencies.
-	 * @return array
 	 */
-	public function export()
+	public function export(): array
 	{
 		$files = $phpFiles = $classes = $functions = [];
 		foreach ($this->dependencies as $dep) {
@@ -78,9 +79,8 @@ class DependencyChecker
 
 	/**
 	 * Are dependencies expired?
-	 * @return bool
 	 */
-	public static function isExpired($version, $files, $phpFiles, $classes, $functions, $hash)
+	public static function isExpired(int $version, array $files, array $phpFiles, array $classes, array $functions, string $hash): bool
 	{
 		$current = @array_map('filemtime', array_combine($tmp = array_keys($files), $tmp)); // @ - files may not exist
 		$currentClass = @array_map('filemtime', array_combine($tmp = array_keys($phpFiles), $tmp)); // @ - files may not exist
@@ -90,7 +90,7 @@ class DependencyChecker
 	}
 
 
-	private static function calculateHash($classes, $functions)
+	private static function calculateHash(array $classes, array $functions)
 	{
 		$hash = [];
 		foreach ($classes as $name) {
@@ -112,7 +112,7 @@ class DependencyChecker
 						$method->getName(),
 						$method->getDocComment(),
 						self::hashParameters($method),
-						PHP_VERSION_ID >= 70000 && $method->hasReturnType()
+						$method->hasReturnType()
 							? [(string) $method->getReturnType(), $method->getReturnType()->allowsNull()]
 							: NULL
 					];
@@ -136,7 +136,7 @@ class DependencyChecker
 				$class ? Reflection::getUseStatements($method->getDeclaringClass()) : NULL,
 				$method->getDocComment(),
 				self::hashParameters($method),
-				PHP_VERSION_ID >= 70000 && $method->hasReturnType()
+				$method->hasReturnType()
 					? [(string) $method->getReturnType(), $method->getReturnType()->allowsNull()]
 					: NULL
 			];
@@ -146,16 +146,14 @@ class DependencyChecker
 	}
 
 
-	private static function hashParameters(\ReflectionFunctionAbstract $method)
+	private static function hashParameters(\ReflectionFunctionAbstract $method): array
 	{
 		$res = [];
-		if (PHP_VERSION_ID < 70000 && $method->getNumberOfParameters() && $method->getFileName()) {
-			$res[] = file($method->getFileName())[$method->getStartLine() - 1];
-		}
 		foreach ($method->getParameters() as $param) {
 			$res[] = [
 				$param->getName(),
-				PHP_VERSION_ID >= 70000 ? [Reflection::getParameterType($param), $param->allowsNull()] : NULL,
+				Reflection::getParameterType($param),
+				$param->allowsNull(),
 				$param->isVariadic(),
 				$param->isDefaultValueAvailable()
 					? [Reflection::getParameterDefaultValue($param)]

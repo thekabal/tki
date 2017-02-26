@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\Utils;
 
 use Nette;
@@ -13,7 +15,7 @@ use Nette;
 /**
  * PHP reflection helpers.
  */
-class Reflection
+final class Reflection
 {
 	use Nette\StaticClass;
 
@@ -23,11 +25,7 @@ class Reflection
 	];
 
 
-	/**
-	 * @param  string
-	 * @return bool
-	 */
-	public static function isBuiltinType($type)
+	public static function isBuiltinType(string $type): bool
 	{
 		return isset(self::$builtinTypes[strtolower($type)]);
 	}
@@ -38,7 +36,7 @@ class Reflection
 	 */
 	public static function getReturnType(\ReflectionFunctionAbstract $func)
 	{
-		if (PHP_VERSION_ID >= 70000 && $func->hasReturnType()) {
+		if ($func->hasReturnType()) {
 			$type = (string) $func->getReturnType();
 			return strtolower($type) === 'self' ? $func->getDeclaringClass()->getName() : $type;
 		}
@@ -50,20 +48,9 @@ class Reflection
 	 */
 	public static function getParameterType(\ReflectionParameter $param)
 	{
-		if (PHP_VERSION_ID >= 70000) {
-			$type = $param->hasType() ? (string) $param->getType() : NULL;
+		if ($param->hasType()) {
+			$type = (string) $param->getType();
 			return strtolower($type) === 'self' ? $param->getDeclaringClass()->getName() : $type;
-		} elseif ($param->isArray() || $param->isCallable()) {
-			return $param->isArray() ? 'array' : 'callable';
-		} else {
-			try {
-				return ($ref = $param->getClass()) ? $ref->getName() : NULL;
-			} catch (\ReflectionException $e) {
-				if (preg_match('#Class (.+) does not exist#', $e->getMessage(), $m)) {
-					return $m[1];
-				}
-				throw $e;
-			}
 		}
 	}
 
@@ -95,9 +82,8 @@ class Reflection
 
 	/**
 	 * Returns declaring class or trait.
-	 * @return \ReflectionClass
 	 */
-	public static function getPropertyDeclaringClass(\ReflectionProperty $prop)
+	public static function getPropertyDeclaringClass(\ReflectionProperty $prop): \ReflectionClass
 	{
 		foreach ($prop->getDeclaringClass()->getTraits() as $trait) {
 			if ($trait->hasProperty($prop->getName())) {
@@ -110,9 +96,8 @@ class Reflection
 
 	/**
 	 * Are documentation comments available?
-	 * @return bool
 	 */
-	public static function areCommentsAvailable()
+	public static function areCommentsAvailable(): bool
 	{
 		static $res;
 		return $res === NULL
@@ -121,10 +106,7 @@ class Reflection
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public static function toString(\Reflector $ref)
+	public static function toString(\Reflector $ref): string
 	{
 		if ($ref instanceof \ReflectionClass) {
 			return $ref->getName();
@@ -144,11 +126,9 @@ class Reflection
 
 	/**
 	 * Expands class name into full name.
-	 * @param  string
-	 * @return string  full name
 	 * @throws Nette\InvalidArgumentException
 	 */
-	public static function expandClassName($name, \ReflectionClass $rc)
+	public static function expandClassName(string $name, \ReflectionClass $rc): string
 	{
 		$lower = strtolower($name);
 		if (empty($name)) {
@@ -182,7 +162,7 @@ class Reflection
 	/**
 	 * @return array of [alias => class]
 	 */
-	public static function getUseStatements(\ReflectionClass $class)
+	public static function getUseStatements(\ReflectionClass $class): array
 	{
 		static $cache = [];
 		if (!isset($cache[$name = $class->getName()])) {
@@ -198,11 +178,9 @@ class Reflection
 
 
 	/**
-	 * Parses PHP code.
-	 * @param  string
-	 * @return array of [class => [alias => class, ...]]
+	 * Parses PHP code to [class => [alias => class, ...]]
 	 */
-	private static function parseUseStatements($code, $forClass = NULL)
+	private static function parseUseStatements(string $code, string $forClass = NULL): array
 	{
 		$tokens = token_get_all($code);
 		$namespace = $class = $classLevel = $level = NULL;

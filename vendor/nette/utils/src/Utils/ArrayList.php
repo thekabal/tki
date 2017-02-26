@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\Utils;
 
 use Nette;
@@ -22,9 +24,8 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 
 	/**
 	 * Returns an iterator over all items.
-	 * @return \ArrayIterator
 	 */
-	public function getIterator()
+	public function getIterator(): \ArrayIterator
 	{
 		return new \ArrayIterator($this->list);
 	}
@@ -32,9 +33,8 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 
 	/**
 	 * Returns items count.
-	 * @return int
 	 */
-	public function count()
+	public function count(): int
 	{
 		return count($this->list);
 	}
@@ -43,7 +43,6 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 	/**
 	 * Replaces or appends a item.
 	 * @param  int|NULL
-	 * @param  mixed
 	 * @return void
 	 * @throws Nette\OutOfRangeException
 	 */
@@ -79,9 +78,8 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 	/**
 	 * Determines whether a item exists.
 	 * @param  int
-	 * @return bool
 	 */
-	public function offsetExists($index)
+	public function offsetExists($index): bool
 	{
 		return $index >= 0 && $index < count($this->list);
 	}
@@ -104,7 +102,6 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 
 	/**
 	 * Prepends a item.
-	 * @param  mixed
 	 * @return void
 	 */
 	public function prepend($value)

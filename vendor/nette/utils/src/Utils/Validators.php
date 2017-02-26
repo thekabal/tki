@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\Utils;
 
 use Nette;
@@ -68,13 +70,10 @@ class Validators
 
 
 	/**
-	 * Throws exception if a variable is of unexpected type.
-	 * @param  mixed
-	 * @param  string  expected types separated by pipe
-	 * @param  string  label
+	 * Throws exception if a variable is of unexpected type (separated by pipe).
 	 * @return void
 	 */
-	public static function assert($value, $expected, $label = 'variable')
+	public static function assert($value, string $expected, string $label = 'variable')
 	{
 		if (!static::is($value, $expected)) {
 			$expected = str_replace(['|', ':'], [' or ', ' in range '], $expected);
@@ -93,16 +92,11 @@ class Validators
 
 
 	/**
-	 * Throws exception if an array field is missing or of unexpected type.
-	 * @param  array
-	 * @param  string  item
-	 * @param  string  expected types separated by pipe
-	 * @param  string
+	 * Throws exception if an array field is missing or of unexpected type (separated by pipe).
 	 * @return void
 	 */
-	public static function assertField($arr, $field, $expected = NULL, $label = "item '%' in array")
+	public static function assertField(array $arr, $field, string $expected = NULL, string $label = "item '%' in array")
 	{
-		self::assert($arr, 'array', 'first argument');
 		if (!array_key_exists($field, $arr)) {
 			throw new AssertionException('Missing ' . str_replace('%', $field, $label) . '.');
 
@@ -113,12 +107,9 @@ class Validators
 
 
 	/**
-	 * Finds whether a variable is of expected type.
-	 * @param  mixed
-	 * @param  string  expected types separated by pipe with optional ranges
-	 * @return bool
+	 * Finds whether a variable is of expected type (separated by pipe).
 	 */
-	public static function is($value, $expected)
+	public static function is($value, string $expected): bool
 	{
 		foreach (explode('|', $expected) as $item) {
 			if (substr($item, -2) === '[]') {
@@ -130,11 +121,11 @@ class Validators
 
 			list($type) = $item = explode(':', $item, 2);
 			if (isset(static::$validators[$type])) {
-				if (!call_user_func(static::$validators[$type], $value)) {
+				if (!static::$validators[$type]($value)) {
 					continue;
 				}
 			} elseif ($type === 'pattern') {
-				if (preg_match('|^' . (isset($item[1]) ? $item[1] : '') . '\z|', $value)) {
+				if (preg_match('|^' . ($item[1] ?? '') . '\z|', $value)) {
 					return TRUE;
 				}
 				continue;
@@ -145,7 +136,7 @@ class Validators
 			if (isset($item[1])) {
 				$length = $value;
 				if (isset(static::$counters[$type])) {
-					$length = call_user_func(static::$counters[$type], $value);
+					$length = static::$counters[$type]($value);
 				}
 				$range = explode('..', $item[1]);
 				if (!isset($range[1])) {
@@ -162,12 +153,10 @@ class Validators
 
 
 	/**
-	 * Finds whether all values are of expected type.
-	 * @param  array|\Traversable
-	 * @param  string  expected types separated by pipe with optional ranges
-	 * @return bool
+	 * Finds whether all values are of expected type (separated by pipe).
+	 * @param  iterable
 	 */
-	public static function everyIs($values, $expected)
+	public static function everyIs($values, string $expected): bool
 	{
 		if (!self::isIterable($values)) {
 			return FALSE;
@@ -183,9 +172,8 @@ class Validators
 
 	/**
 	 * Finds whether a value is an integer or a float.
-	 * @return bool
 	 */
-	public static function isNumber($value)
+	public static function isNumber($value): bool
 	{
 		return is_int($value) || is_float($value);
 	}
@@ -193,9 +181,8 @@ class Validators
 
 	/**
 	 * Finds whether a value is an integer.
-	 * @return bool
 	 */
-	public static function isNumericInt($value)
+	public static function isNumericInt($value): bool
 	{
 		return is_int($value) || is_string($value) && preg_match('#^-?[0-9]+\z#', $value);
 	}
@@ -203,9 +190,8 @@ class Validators
 
 	/**
 	 * Finds whether a string is a floating point number in decimal base.
-	 * @return bool
 	 */
-	public static function isNumeric($value)
+	public static function isNumeric($value): bool
 	{
 		return is_float($value) || is_int($value) || is_string($value) && preg_match('#^-?[0-9]*[.]?[0-9]+\z#', $value);
 	}
@@ -213,9 +199,8 @@ class Validators
 
 	/**
 	 * Finds whether a value is a syntactically correct callback.
-	 * @return bool
 	 */
-	public static function isCallable($value)
+	public static function isCallable($value): bool
 	{
 		return $value && is_callable($value, TRUE);
 	}
@@ -223,10 +208,8 @@ class Validators
 
 	/**
 	 * Finds whether a value is an UTF-8 encoded string.
-	 * @param  string
-	 * @return bool
 	 */
-	public static function isUnicode($value)
+	public static function isUnicode($value): bool
 	{
 		return is_string($value) && preg_match('##u', $value);
 	}
@@ -234,9 +217,8 @@ class Validators
 
 	/**
 	 * Finds whether a value is "falsy".
-	 * @return bool
 	 */
-	public static function isNone($value)
+	public static function isNone($value): bool
 	{
 		return $value == NULL; // intentionally ==
 	}
@@ -244,22 +226,17 @@ class Validators
 
 	/**
 	 * Finds whether a variable is a zero-based integer indexed array.
-	 * @param  array
-	 * @return bool
 	 */
-	public static function isList($value)
+	public static function isList($value): bool
 	{
 		return Arrays::isList($value);
 	}
 
 
 	/**
-	 * Is a value in specified range?
-	 * @param  mixed
-	 * @param  array  min and max value pair
-	 * @return bool
+	 * Is a value in specified min and max value pair?
 	 */
-	public static function isInRange($value, $range)
+	public static function isInRange($value, array $range): bool
 	{
 		return (!isset($range[0]) || $range[0] === '' || $value >= $range[0])
 			&& (!isset($range[1]) || $range[1] === '' || $value <= $range[1]);
@@ -268,10 +245,8 @@ class Validators
 
 	/**
 	 * Finds whether a string is a valid email address.
-	 * @param  string
-	 * @return bool
 	 */
-	public static function isEmail($value)
+	public static function isEmail(string $value): bool
 	{
 		$atom = "[-a-z0-9!#$%&'*+/=?^_`{|}~]"; // RFC 5322 unquoted characters in local-part
 		$alpha = "a-z\x80-\xFF"; // superset of IDN
@@ -286,10 +261,8 @@ class Validators
 
 	/**
 	 * Finds whether a string is a valid http(s) URL.
-	 * @param  string
-	 * @return bool
 	 */
-	public static function isUrl($value)
+	public static function isUrl(string $value): bool
 	{
 		$alpha = "a-z\x80-\xFF";
 		return (bool) preg_match("(^
@@ -307,10 +280,8 @@ class Validators
 
 	/**
 	 * Finds whether a string is a valid URI according to RFC 1738.
-	 * @param  string
-	 * @return bool
 	 */
-	public static function isUri($value)
+	public static function isUri(string $value): bool
 	{
 		return (bool) preg_match('#^[a-z\d+\.-]+:\S+\z#i', $value);
 	}
@@ -318,10 +289,8 @@ class Validators
 
 	/**
 	 * Checks whether the input is a class, interface or trait.
-	 * @param  string
-	 * @return bool
 	 */
-	public static function isType($type)
+	public static function isType(string $type): bool
 	{
 		return class_exists($type) || interface_exists($type) || trait_exists($type);
 	}
@@ -329,9 +298,8 @@ class Validators
 
 	/**
 	 * Checks whether the input is a valid PHP identifier.
-	 * @return bool
 	 */
-	public static function isPhpIdentifier($value)
+	public static function isPhpIdentifier(string $value): bool
 	{
 		return is_string($value) && preg_match('#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\z#', $value);
 	}
@@ -339,9 +307,8 @@ class Validators
 
 	/**
 	 * Returns true if value is iterable (array or instance of Traversable).
-	 * @return bool
 	 */
-	private static function isIterable($value)
+	private static function isIterable($value): bool
 	{
 		return is_array($value) || $value instanceof \Traversable;
 	}

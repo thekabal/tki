@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\DI;
 
 use Nette;
@@ -24,7 +26,7 @@ class ContainerLoader
 	private $tempDirectory;
 
 
-	public function __construct($tempDirectory, $autoRebuild = FALSE)
+	public function __construct(string $tempDirectory, bool $autoRebuild = FALSE)
 	{
 		$this->tempDirectory = $tempDirectory;
 		$this->autoRebuild = $autoRebuild;
@@ -34,14 +36,9 @@ class ContainerLoader
 	/**
 	 * @param  callable  function (Nette\DI\Compiler $compiler): string|NULL
 	 * @param  mixed
-	 * @return string
 	 */
-	public function load($generator, $key = NULL)
+	public function load(callable $generator, $key = NULL): string
 	{
-		if (!is_callable($generator)) { // back compatiblity
-			trigger_error(__METHOD__ . ': order of arguments has been swapped.', E_USER_DEPRECATED);
-			list($generator, $key) = [$key, $generator];
-		}
 		$class = $this->getClassName($key);
 		if (!class_exists($class, FALSE)) {
 			$this->loadFile($class, $generator);
@@ -50,10 +47,7 @@ class ContainerLoader
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public function getClassName($key)
+	public function getClassName($key): string
 	{
 		return 'Container_' . substr(md5(serialize($key)), 0, 10);
 	}
@@ -62,7 +56,7 @@ class ContainerLoader
 	/**
 	 * @return void
 	 */
-	private function loadFile($class, $generator)
+	private function loadFile(string $class, callable $generator)
 	{
 		$file = "$this->tempDirectory/$class.php";
 		if (!$this->isExpired($file) && (@include $file) !== FALSE) { // @ file may not exist
@@ -98,10 +92,10 @@ class ContainerLoader
 	}
 
 
-	private function isExpired($file)
+	private function isExpired(string $file): bool
 	{
 		if ($this->autoRebuild) {
-			$meta = @unserialize(file_get_contents("$file.meta")); // @ - file may not exist
+			$meta = @unserialize((string) file_get_contents("$file.meta")); // @ - file may not exist
 			return empty($meta[0]) || DependencyChecker::isExpired(...$meta);
 		}
 		return FALSE;
@@ -111,11 +105,11 @@ class ContainerLoader
 	/**
 	 * @return array of (code, file[])
 	 */
-	protected function generate($class, $generator)
+	protected function generate(string $class, callable $generator): array
 	{
 		$compiler = new Compiler;
 		$compiler->setClassName($class);
-		$code = call_user_func_array($generator, [&$compiler]) ?: $compiler->compile();
+		$code = $generator(...[&$compiler]) ?: $compiler->compile();
 		return [
 			"<?php\n$code",
 			serialize($compiler->exportDependencies())

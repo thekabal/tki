@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\DI\Extensions;
 
 use Nette;
@@ -15,7 +17,7 @@ use Nette\Utils\Reflection;
 /**
  * Calls inject methods and fills @inject properties.
  */
-class InjectExtension extends DI\CompilerExtension
+final class InjectExtension extends DI\CompilerExtension
 {
 	const TAG_INJECT = 'inject';
 
@@ -37,7 +39,7 @@ class InjectExtension extends DI\CompilerExtension
 
 		foreach (self::getInjectProperties($class) as $property => $type) {
 			$builder = $this->getContainerBuilder();
-			$inject = new DI\Statement('$' . $property, ['@\\' . ltrim($type, '\\')]);
+			$inject = new DI\Statement('$' . $property, ['@\\' . ltrim((string) $type, '\\')]);
 			foreach ($setups as $key => $setup) {
 				if ($setup->getEntity() === $inject->getEntity()) {
 					$inject = $setup;
@@ -66,10 +68,9 @@ class InjectExtension extends DI\CompilerExtension
 
 	/**
 	 * Generates list of inject methods.
-	 * @return array
 	 * @internal
 	 */
-	public static function getInjectMethods($class)
+	public static function getInjectMethods($class): array
 	{
 		$res = [];
 		foreach (get_class_methods($class) as $name) {
@@ -88,10 +89,9 @@ class InjectExtension extends DI\CompilerExtension
 
 	/**
 	 * Generates list of properties with annotation @inject.
-	 * @return array
 	 * @internal
 	 */
-	public static function getInjectProperties($class)
+	public static function getInjectProperties($class): array
 	{
 		$res = [];
 		foreach (get_class_vars($class) as $name => $foo) {

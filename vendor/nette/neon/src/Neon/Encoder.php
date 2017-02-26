@@ -5,24 +5,23 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\Neon;
 
 
 /**
  * Simple generator for Nette Object Notation.
  */
-class Encoder
+final class Encoder
 {
 	const BLOCK = 1;
 
 
 	/**
 	 * Returns the NEON representation of a value.
-	 * @param  mixed
-	 * @param  int
-	 * @return string
 	 */
-	public function encode($var, $options = NULL)
+	public function encode($var, int $flags = 0): string
 	{
 		if ($var instanceof \DateTimeInterface) {
 			return $var->format('Y-m-d H:i:s O');
@@ -46,7 +45,7 @@ class Encoder
 		if (is_array($var)) {
 			$isList = !$var || array_keys($var) === range(0, count($var) - 1);
 			$s = '';
-			if ($options & self::BLOCK) {
+			if ($flags & self::BLOCK) {
 				if (count($var) === 0) {
 					return '[]';
 				}

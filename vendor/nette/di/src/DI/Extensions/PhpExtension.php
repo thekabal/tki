@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\DI\Extensions;
 
 use Nette;
@@ -13,7 +15,7 @@ use Nette;
 /**
  * PHP directives definition.
  */
-class PhpExtension extends Nette\DI\CompilerExtension
+final class PhpExtension extends Nette\DI\CompilerExtension
 {
 
 	public function afterCompile(Nette\PhpGenerator\ClassType $class)
@@ -39,7 +41,7 @@ class PhpExtension extends Nette\DI\CompilerExtension
 				$initialize->addBody('date_default_timezone_set(?);', [$value]);
 
 			} elseif (function_exists('ini_set')) {
-				$initialize->addBody('ini_set(?, ?);', [$name, $value]);
+				$initialize->addBody('ini_set(?, ?);', [$name, $value === FALSE ? '0' : (string) $value]);
 
 			} elseif (ini_get($name) != $value) { // intentionally ==
 				throw new Nette\NotSupportedException('Required function ini_set() is disabled.');

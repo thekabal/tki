@@ -408,20 +408,12 @@ class TestRunner extends BaseTestRunner
                 [SebastianBergmann\Comparator\Comparator::class]
             );
 
-            $codeCoverage->setAddUncoveredFilesFromWhitelist(
-                $arguments['addUncoveredFilesFromWhitelist']
-            );
-
             $codeCoverage->setCheckForUnintentionallyCoveredCode(
                 $arguments['strictCoverage']
             );
 
             $codeCoverage->setCheckForMissingCoversAnnotation(
                 $arguments['strictCoverage']
-            );
-
-            $codeCoverage->setProcessUncoveredFilesFromWhitelist(
-                $arguments['processUncoveredFilesFromWhitelist']
             );
 
             if (isset($arguments['forceCoversAnnotation'])) {
@@ -440,6 +432,14 @@ class TestRunner extends BaseTestRunner
 
             if (isset($arguments['configuration'])) {
                 $filterConfiguration = $arguments['configuration']->getFilterConfiguration();
+
+                $codeCoverage->setAddUncoveredFilesFromWhitelist(
+                    $filterConfiguration['whitelist']['addUncoveredFilesFromWhitelist']
+                );
+
+                $codeCoverage->setProcessUncoveredFilesFromWhitelist(
+                    $filterConfiguration['whitelist']['processUncoveredFilesFromWhitelist']
+                );
 
                 foreach ($filterConfiguration['whitelist']['include']['directory'] as $dir) {
                     $this->codeCoverageFilter->addDirectoryToWhitelist(
@@ -470,15 +470,15 @@ class TestRunner extends BaseTestRunner
                 $this->writeMessage('Error', 'No whitelist configured, no code coverage will be generated');
 
                 $codeCoverageReports = 0;
+
+                unset($codeCoverage);
             }
         }
 
-        if ($codeCoverageReports > 0) {
+        if (isset($codeCoverage)) {
             $result->setCodeCoverage($codeCoverage);
-        }
 
-        if ($codeCoverageReports > 1) {
-            if (isset($arguments['cacheTokens'])) {
+            if ($codeCoverageReports > 1 && isset($arguments['cacheTokens'])) {
                 $codeCoverage->setCacheTokens($arguments['cacheTokens']);
             }
         }

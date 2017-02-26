@@ -14,11 +14,11 @@
 		}
 	],
 	"require": {
-		"php": ">=5.6.0",
-		"nette/utils": "~2.4"
+		"php": ">=7.0",
+		"nette/utils": "^2.4 || ~3.0.0"
 	},
 	"require-dev": {
-		"nette/tester": "~2.0",
+		"nette/tester": "^2.0",
 		"tracy/tracy": "^2.3"
 	},
 	"conflict": {
@@ -30,7 +30,7 @@
 	"minimum-stability": "dev",
 	"extra": {
 		"branch-alias": {
-			"dev-master": "2.4-dev"
+			"dev-master": "3.0-dev"
 		}
 	}
 }

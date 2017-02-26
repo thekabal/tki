@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\Caching\Storages;
 
 use Nette;
@@ -25,16 +27,13 @@ class SQLiteJournal implements IJournal
 	private $pdo;
 
 
-	/**
-	 * @param  string
-	 */
-	public function __construct($path)
+	public function __construct(string $path)
 	{
 		$this->path = $path;
 	}
 
 
-	private function open()
+	private function open(): void
 	{
 		if (!extension_loaded('pdo_sqlite')) {
 			throw new Nette\NotSupportedException('SQLiteJournal requires PHP extension pdo_sqlite which is not loaded.');
@@ -67,11 +66,8 @@ class SQLiteJournal implements IJournal
 
 	/**
 	 * Writes entry information into the journal.
-	 * @param  string
-	 * @param  array
-	 * @return void
 	 */
-	public function write($key, array $dependencies)
+	public function write(string $key, array $dependencies): void
 	{
 		if (!$this->pdo) {
 			$this->open();
@@ -81,7 +77,7 @@ class SQLiteJournal implements IJournal
 		if (!empty($dependencies[Cache::TAGS])) {
 			$this->pdo->prepare('DELETE FROM tags WHERE key = ?')->execute([$key]);
 
-			foreach ((array) $dependencies[Cache::TAGS] as $tag) {
+			foreach ($dependencies[Cache::TAGS] as $tag) {
 				$arr[] = $key;
 				$arr[] = $tag;
 			}
@@ -100,10 +96,9 @@ class SQLiteJournal implements IJournal
 
 	/**
 	 * Cleans entries from journal.
-	 * @param  array
 	 * @return array|NULL  removed items or NULL when performing a full cleanup
 	 */
-	public function clean(array $conditions)
+	public function clean(array $conditions): ?array
 	{
 		if (!$this->pdo) {
 			$this->open();
@@ -121,7 +116,7 @@ class SQLiteJournal implements IJournal
 
 		$unions = $args = [];
 		if (!empty($conditions[Cache::TAGS])) {
-			$tags = (array) $conditions[Cache::TAGS];
+			$tags = $conditions[Cache::TAGS];
 			$unions[] = 'SELECT DISTINCT key FROM tags WHERE tag IN (?' . str_repeat(', ?', count($tags) - 1) . ')';
 			$args = $tags;
 		}

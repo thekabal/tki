@@ -5,6 +5,8 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
+declare(strict_types=1);
+
 namespace Nette\Caching\Storages;
 
 use Nette;
@@ -52,10 +54,9 @@ class SQLiteStorage implements Nette\Caching\IStorage, Nette\Caching\IBulkReader
 
 	/**
 	 * Read from cache.
-	 * @param  string
 	 * @return mixed
 	 */
-	public function read($key)
+	public function read(string $key)
 	{
 		$stmt = $this->pdo->prepare('SELECT data, slide FROM cache WHERE key=? AND (expire IS NULL OR expire >= ?)');
 		$stmt->execute([$key, time()]);
@@ -70,10 +71,9 @@ class SQLiteStorage implements Nette\Caching\IStorage, Nette\Caching\IBulkReader
 
 	/**
 	 * Reads from cache in bulk.
-	 * @param  string
 	 * @return array key => value pairs, missing items are omitted
 	 */
-	public function bulkRead(array $keys)
+	public function bulkRead(array $keys): array
 	{
 		$stmt = $this->pdo->prepare('SELECT key, data, slide FROM cache WHERE key IN (?' . str_repeat(',?', count($keys) - 1) . ') AND (expire IS NULL OR expire >= ?)');
 		$stmt->execute(array_merge($keys, [time()]));
@@ -95,21 +95,16 @@ class SQLiteStorage implements Nette\Caching\IStorage, Nette\Caching\IBulkReader
 
 	/**
 	 * Prevents item reading and writing. Lock is released by write() or remove().
-	 * @param  string
-	 * @return void
 	 */
-	public function lock($key)
+	public function lock(string $key): void
 	{
 	}
 
 
 	/**
 	 * Writes item into the cache.
-	 * @param  string
-	 * @param  mixed
-	 * @return void
 	 */
-	public function write($key, $data, array $dependencies)
+	public function write(string $key, $data, array $dependencies): void
 	{
 		$expire = isset($dependencies[Cache::EXPIRATION]) ? $dependencies[Cache::EXPIRATION] + time() : NULL;
 		$slide = isset($dependencies[Cache::SLIDING]) ? $dependencies[Cache::EXPIRATION] : NULL;
@@ -119,7 +114,7 @@ class SQLiteStorage implements Nette\Caching\IStorage, Nette\Caching\IBulkReader
 			->execute([$key, serialize($data), $expire, $slide]);
 
 		if (!empty($dependencies[Cache::TAGS])) {
-			foreach ((array) $dependencies[Cache::TAGS] as $tag) {
+			foreach ($dependencies[Cache::TAGS] as $tag) {
 				$arr[] = $key;
 				$arr[] = $tag;
 			}
@@ -132,10 +127,8 @@ class SQLiteStorage implements Nette\Caching\IStorage, Nette\Caching\IBulkReader
 
 	/**
 	 * Removes item from the cache.
-	 * @param  string
-	 * @return void
 	 */
-	public function remove($key)
+	public function remove(string $key): void
 	{
 		$this->pdo->prepare('DELETE FROM cache WHERE key=?')
 			->execute([$key]);
@@ -144,10 +137,8 @@ class SQLiteStorage implements Nette\Caching\IStorage, Nette\Caching\IBulkReader
 
 	/**
 	 * Removes items from the cache by conditions & garbage collector.
-	 * @param  array  conditions
-	 * @return void
 	 */
-	public function clean(array $conditions)
+	public function clean(array $conditions): void
 	{
 		if (!empty($conditions[Cache::ALL])) {
 			$this->pdo->prepare('DELETE FROM cache')->execute();
@@ -157,7 +148,7 @@ class SQLiteStorage implements Nette\Caching\IStorage, Nette\Caching\IBulkReader
 			$args = [time()];
 
 			if (!empty($conditions[Cache::TAGS])) {
-				$tags = (array) $conditions[Cache::TAGS];
+				$tags = $conditions[Cache::TAGS];
 				$sql .= ' OR key IN (SELECT key FROM tags WHERE tag IN (?' . str_repeat(',?', count($tags) - 1) . '))';
 				$args = array_merge($args, $tags);
 			}
