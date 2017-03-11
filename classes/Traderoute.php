@@ -197,7 +197,7 @@ class Traderoute
         // Warp or real space and generate distance
         if ($traderoute['move_type'] == 'W')
         {
-            $dist = \Tki\TraderouteDistance::warpCalc($pdo_db, $db, $lang, $tkireg, $template, $traderoute, $source, $dest);
+            $dist = \Tki\TraderouteDistance::warpCalc($pdo_db, $db, $lang, $langvars, $tkireg, $template, $traderoute, $source, $dest);
         }
         else
         {
