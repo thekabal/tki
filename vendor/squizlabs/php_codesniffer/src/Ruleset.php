@@ -212,7 +212,7 @@ class Ruleset
      */
     public function explain()
     {
-        $sniffs = array_keys($this->sniffs);
+        $sniffs = array_keys($this->sniffCodes);
         sort($sniffs);
 
         ob_start();
@@ -233,9 +233,7 @@ class Ruleset
             if ($i === $sniffCount) {
                 $currentStandard = null;
             } else {
-                $parts = explode('\\', $sniff);
-
-                $currentStandard = $parts[2];
+                $currentStandard = substr($sniff, 0, strpos($sniff, '.'));
                 if ($lastStandard === null) {
                     $lastStandard = $currentStandard;
                 }
@@ -245,12 +243,17 @@ class Ruleset
                 $sniffList = ob_get_contents();
                 ob_end_clean();
 
-                echo PHP_EOL.$lastStandard.' ('.$lastCount.' sniffs)'.PHP_EOL;
+                echo PHP_EOL.$lastStandard.' ('.$lastCount.' sniff';
+                if ($lastCount > 1) {
+                    echo 's';
+                }
+
+                echo ')'.PHP_EOL;
                 echo str_repeat('-', (strlen($lastStandard.$lastCount) + 10));
                 echo PHP_EOL;
                 echo $sniffList;
 
-                $lastStandard = $parts[2];
+                $lastStandard = $currentStandard;
                 $lastCount    = 0;
 
                 if ($currentStandard === null) {
@@ -258,9 +261,9 @@ class Ruleset
                 }
 
                 ob_start();
-            }
+            }//end if
 
-            echo '  '.$parts[2].'.'.$parts[4].'.'.substr($parts[5], 0, -5).PHP_EOL;
+            echo '  '.$sniff.PHP_EOL;
             $lastCount++;
         }//end foreach
 
@@ -369,6 +372,16 @@ class Ruleset
 
             if (isset($rule->exclude) === true) {
                 foreach ($rule->exclude as $exclude) {
+                    if (isset($exclude['name']) === false) {
+                        if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                            echo str_repeat("\t", $depth);
+                            echo "\t\t* ignoring empty exclude rule *".PHP_EOL;
+                            echo "\t\t\t=> ".$exclude->asXML().PHP_EOL;
+                        }
+
+                        continue;
+                    }
+
                     if ($this->shouldProcessElement($exclude) === false) {
                         continue;
                     }

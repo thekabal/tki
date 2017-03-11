@@ -25,18 +25,24 @@ Download the `php-cs-fixer.phar`_ file and store it somewhere on your computer.
 Globally (manual)
 ~~~~~~~~~~~~~~~~~
 
-You can run these commands to easily access ``php-cs-fixer`` from anywhere on
+You can run these commands to easily access latest ``php-cs-fixer`` from anywhere on
 your system:
 
 .. code-block:: bash
 
-    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.1.0/php-cs-fixer.phar -O php-cs-fixer
+    $ wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer
+
+or with specified version:
+
+.. code-block:: bash
+
+    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.1.1/php-cs-fixer.phar -O php-cs-fixer
 
 or with curl:
 
 .. code-block:: bash
 
-    $ curl -L https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.1.0/php-cs-fixer.phar -o php-cs-fixer
+    $ curl -L http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -o php-cs-fixer
 
 then:
 
@@ -145,7 +151,7 @@ project:
 
     $ php php-cs-fixer.phar fix /path/to/project --rules=@PSR2
 
-By default, all PSR rules are run.
+By default the PSR1 and PSR2 rules are used.
 
 The ``--rules`` option lets you choose the exact rules to
 apply (the rule names must be separated by a comma):
@@ -166,6 +172,12 @@ When using combinations of exact and blacklist rules, applying exact rules along
 .. code-block:: bash
 
     $ php php-cs-fixer.phar fix /path/to/project --rules=@Symfony,-@PSR1,-blank_line_before_return,strict_comparison
+
+Complete configuration for rules can be supplied using a ``json`` formatted string.
+
+.. code-block:: bash
+
+    $ php php-cs-fixer.phar fix /path/to/project --rules='{"concat_space": {"spacing": "none"}}'
 
 A combination of ``--dry-run`` and ``--diff`` will
 display a summary of proposed fixes, leaving your files unchanged.
@@ -414,8 +426,9 @@ Choose from the list of available rules:
    | *Rule is: configurable.*
 
 * **no_unreachable_default_argument_value**
-   | In method arguments there must not be arguments with default values
+   | In function arguments there must not be arguments with default values
    | before non-default ones.
+   | *Rule is: risky.*
 
 * **no_unused_imports** [@Symfony]
    | Unused use statements must be removed.
@@ -781,7 +794,8 @@ Then, add the following command to your CI:
 
 .. code-block:: bash
 
-    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection `git diff --name-only --diff-filter=ACMRTUXB $COMMIT_RANGE`
+    $ IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${COMMIT_RANGE}")); unset IFS
+    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection "${COMMIT_SCA_FILES[@]}"
 
 Where ``$COMMIT_RANGE`` is your range of commits, eg ``$TRAVIS_COMMIT_RANGE`` or ``HEAD~..HEAD``.
 
@@ -831,7 +845,7 @@ scanned by the tool when run in the directory of your project. It is useful for
 projects that follow a well-known directory structures (like for Symfony
 projects for instance).
 
-.. _php-cs-fixer.phar: https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.1.0/php-cs-fixer.phar
+.. _php-cs-fixer.phar: http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
 .. _Atom:              https://github.com/Glavin001/atom-beautify
 .. _NetBeans:          http://plugins.netbeans.org/plugin/49042/php-cs-fixer
 .. _PhpStorm:          http://tzfrs.de/2015/01/automatically-format-code-to-match-psr-standards-with-phpstorm

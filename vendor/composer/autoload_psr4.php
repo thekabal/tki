@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Tki\\' => array($baseDir . '/classes', $baseDir . '/tests', $baseDir . '/config'),
+    'Symfony\\Polyfill\\Xml\\' => array($vendorDir . '/symfony/polyfill-xml'),
     'Symfony\\Polyfill\\Php55\\' => array($vendorDir . '/symfony/polyfill-php55'),
     'Symfony\\Polyfill\\Php54\\' => array($vendorDir . '/symfony/polyfill-php54'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
@@ -27,8 +28,6 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'PhpCsFixer\\' => array($vendorDir . '/friendsofphp/php-cs-fixer/src'),
-    'PHP_CodeSniffer\\Tests\\' => array($vendorDir . '/squizlabs/php_codesniffer/tests'),
-    'PHP_CodeSniffer\\' => array($vendorDir . '/squizlabs/php_codesniffer/src'),
     'PHPStan\\' => array($vendorDir . '/phpstan/phpstan/src'),
     'PDepend\\' => array($vendorDir . '/pdepend/pdepend/src/main/php/PDepend'),
 );
