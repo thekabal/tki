@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Caching;
 
 use Nette;
@@ -39,8 +37,9 @@ class OutputHelper
 
 	/**
 	 * Stops and saves the cache.
+	 * @return void
 	 */
-	public function end(array $dependencies = NULL): void
+	public function end(array $dependencies = NULL)
 	{
 		if ($this->cache === NULL) {
 			throw new Nette\InvalidStateException('Output cache has already been saved.');

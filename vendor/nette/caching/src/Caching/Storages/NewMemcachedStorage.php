@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Caching\Storages;
 
 use Nette;
@@ -21,8 +19,7 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 	use Nette\SmartObject;
 
 	/** @internal cache structure */
-	private const
-		META_CALLBACKS = 'callbacks',
+	const META_CALLBACKS = 'callbacks',
 		META_DATA = 'data',
 		META_DELTA = 'delta';
 
@@ -38,14 +35,15 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Checks if Memcached extension is available.
+	 * @return bool
 	 */
-	public static function isAvailable(): bool
+	public static function isAvailable()
 	{
 		return extension_loaded('memcached');
 	}
 
 
-	public function __construct(string $host = 'localhost', int $port = 11211, string $prefix = '', IJournal $journal = NULL)
+	public function __construct($host = 'localhost', $port = 11211, $prefix = '', IJournal $journal = NULL)
 	{
 		if (!static::isAvailable()) {
 			throw new Nette\NotSupportedException("PHP extension 'memcached' is not loaded.");
@@ -60,7 +58,7 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 	}
 
 
-	public function addServer(string $host = 'localhost', int $port = 11211): void
+	public function addServer($host = 'localhost', $port = 11211)
 	{
 		if ($this->memcached->addServer($host, $port, 1) === FALSE) {
 			$error = error_get_last();
@@ -69,7 +67,10 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 	}
 
 
-	public function getConnection(): \Memcached
+	/**
+	 * @return \Memcached
+	 */
+	public function getConnection()
 	{
 		return $this->memcached;
 	}
@@ -77,9 +78,10 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Read from cache.
+	 * @param  string
 	 * @return mixed
 	 */
-	public function read(string $key)
+	public function read($key)
 	{
 		$key = urlencode($this->prefix . $key);
 		$meta = $this->memcached->get($key);
@@ -110,9 +112,10 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Reads from cache in bulk.
+	 * @param  string
 	 * @return array key => value pairs, missing items are omitted
 	 */
-	public function bulkRead(array $keys): array
+	public function bulkRead(array $keys)
 	{
 		$prefixedKeys = array_map(function ($key) {
 			return urlencode($this->prefix . $key);
@@ -142,16 +145,21 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Prevents item reading and writing. Lock is released by write() or remove().
+	 * @param  string
+	 * @return void
 	 */
-	public function lock(string $key): void
+	public function lock($key)
 	{
 	}
 
 
 	/**
 	 * Writes item into the cache.
+	 * @param  string
+	 * @param  mixed
+	 * @return void
 	 */
-	public function write(string $key, $data, array $dp): void
+	public function write($key, $data, array $dp)
 	{
 		if (isset($dp[Cache::ITEMS])) {
 			throw new Nette\NotSupportedException('Dependent items are not supported by MemcachedStorage.');
@@ -187,8 +195,10 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Removes item from the cache.
+	 * @param  string
+	 * @return void
 	 */
-	public function remove(string $key): void
+	public function remove($key)
 	{
 		$this->memcached->delete(urlencode($this->prefix . $key), 0);
 	}
@@ -196,8 +206,10 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Removes items from the cache by conditions & garbage collector.
+	 * @param  array  conditions
+	 * @return void
 	 */
-	public function clean(array $conditions): void
+	public function clean(array $conditions)
 	{
 		if (!empty($conditions[Cache::ALL])) {
 			$this->memcached->flush();

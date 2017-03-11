@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI;
 
 use Nette;
@@ -18,14 +16,15 @@ use Nette\Utils\Reflection;
  * The DI helpers.
  * @internal
  */
-final class Helpers
+class Helpers
 {
 	use Nette\StaticClass;
 
 	/**
 	 * Expands %placeholders%.
 	 * @param  mixed
-	 * @param  bool|array $recursive
+	 * @param  array
+	 * @param  bool|array
 	 * @return mixed
 	 * @throws Nette\InvalidArgumentException
 	 */
@@ -89,8 +88,9 @@ final class Helpers
 
 	/**
 	 * Generates list of arguments using autowiring.
+	 * @return array
 	 */
-	public static function autowireArguments(\ReflectionFunctionAbstract $method, array $arguments, $container): array
+	public static function autowireArguments(\ReflectionFunctionAbstract $method, array $arguments, $container)
 	{
 		$optCount = 0;
 		$num = -1;
@@ -155,8 +155,9 @@ final class Helpers
 
 	/**
 	 * Removes ... and process constants recursively.
+	 * @return array
 	 */
-	public static function filterArguments(array $args): array
+	public static function filterArguments(array $args)
 	{
 		foreach ($args as $k => $v) {
 			if ($v === '...') {
@@ -177,9 +178,10 @@ final class Helpers
 	/**
 	 * Replaces @extension with real extension name in service definition.
 	 * @param  mixed
+	 * @param  string
 	 * @return mixed
 	 */
-	public static function prefixServiceName($config, string $namespace)
+	public static function prefixServiceName($config, $namespace)
 	{
 		if (is_string($config)) {
 			if (strncmp($config, '@extension.', 10) === 0) {
@@ -210,7 +212,7 @@ final class Helpers
 		}
 		$name = preg_quote($name, '#');
 		if ($ref->getDocComment() && preg_match("#[\\s*]@$name(?:\\s++([^@]\\S*)?|$)#", trim($ref->getDocComment(), '/*'), $m)) {
-			return $m[1] ?? '';
+			return isset($m[1]) ? $m[1] : '';
 		}
 	}
 

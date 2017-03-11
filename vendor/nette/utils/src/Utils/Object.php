@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette;
 
 use Nette;
@@ -49,7 +47,6 @@ use Nette;
  * </code>
  *
  * @property-read Nette\Reflection\ClassType|\ReflectionClass $reflection
- * @deprecated use trait Nette\SmartObject
  */
 abstract class Object
 {

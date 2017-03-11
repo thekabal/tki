@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI;
 
 use Nette;
@@ -66,7 +64,10 @@ class Compiler
 	}
 
 
-	public function getExtensions(string $type = NULL): array
+	/**
+	 * @return array
+	 */
+	public function getExtensions($type = NULL)
 	{
 		return $type
 			? array_filter($this->extensions, function ($item) use ($type) { return $item instanceof $type; })
@@ -74,7 +75,10 @@ class Compiler
 	}
 
 
-	public function getContainerBuilder(): ContainerBuilder
+	/**
+	 * @return ContainerBuilder
+	 */
+	public function getContainerBuilder()
 	{
 		return $this->builder;
 	}
@@ -83,7 +87,7 @@ class Compiler
 	/**
 	 * @return static
 	 */
-	public function setClassName(string $className)
+	public function setClassName($className)
 	{
 		$this->className = $className;
 		return $this;
@@ -105,9 +109,9 @@ class Compiler
 	 * Adds new configuration from file.
 	 * @return static
 	 */
-	public function loadConfig(string $file, Config\Loader $loader = NULL)
+	public function loadConfig($file)
 	{
-		$loader = $loader ?: new Config\Loader;
+		$loader = new Config\Loader;
 		$this->addConfig($loader->load($file));
 		$this->dependencies->add($loader->getDependencies());
 		return $this;
@@ -116,8 +120,9 @@ class Compiler
 
 	/**
 	 * Returns configuration.
+	 * @return array
 	 */
-	public function getConfig(): array
+	public function getConfig()
 	{
 		return $this->config;
 	}
@@ -148,20 +153,28 @@ class Compiler
 
 	/**
 	 * Exports dependencies.
+	 * @return array
 	 */
-	public function exportDependencies(): array
+	public function exportDependencies()
 	{
 		return $this->dependencies->export();
 	}
 
 
-	public function compile(): string
+	/**
+	 * @return string
+	 */
+	public function compile()
 	{
+		if (func_num_args()) {
+			trigger_error(__METHOD__ . ' arguments are deprecated, use Compiler::addConfig() and Compiler::setClassName().', E_USER_DEPRECATED);
+			$this->config = func_get_arg(0) ?: $this->config;
+			$this->className = @func_get_arg(1) ?: $this->className;
+		}
 		$this->processParameters();
 		$this->processExtensions();
 		$this->processServices();
 		$classes = $this->generateCode();
-		array_unshift($classes, 'declare(strict_types=1);');
 		return implode("\n\n\n", $classes);
 	}
 
@@ -172,7 +185,7 @@ class Compiler
 		$params = isset($this->config['parameters']) ? $this->config['parameters'] : [];
 		foreach ($this->dynamicParams as $key) {
 			$params[$key] = array_key_exists($key, $params)
-				? ContainerBuilder::literal('$this->parameters[?] ? ?', [$key, ContainerBuilder::literal('??'), $params[$key]])
+				? ContainerBuilder::literal('isset($this->parameters[?]) ? $this->parameters[?] : ?', [$key, ContainerBuilder::literal('?'), $key, $params[$key]])
 				: ContainerBuilder::literal('$this->parameters[?]', [$key]);
 		}
 		$this->builder->parameters = Helpers::expand($params, $params, TRUE);
@@ -186,7 +199,7 @@ class Compiler
 			+ array_intersect_key($this->config, self::$reserved);
 
 		foreach ($first = $this->getExtensions(Extensions\ExtensionsExtension::class) as $name => $extension) {
-			$extension->setConfig($this->config[$name] ?? []);
+			$extension->setConfig(isset($this->config[$name]) ? $this->config[$name] : []);
 			$extension->loadConfiguration();
 		}
 
@@ -226,8 +239,13 @@ class Compiler
 
 
 	/** @internal */
-	public function generateCode(): array
+	public function generateCode()
 	{
+		if (func_num_args()) {
+			trigger_error(__METHOD__ . ' arguments are deprecated, use Compiler::setClassName().', E_USER_DEPRECATED);
+			$this->className = func_get_arg(0) ?: $this->className;
+		}
+
 		$this->builder->prepareClassList();
 
 		foreach ($this->extensions as $extension) {
@@ -254,8 +272,22 @@ class Compiler
 	 * Adds service definitions from configuration.
 	 * @return void
 	 */
-	public static function loadDefinitions(ContainerBuilder $builder, array $services, string $namespace = NULL)
+	public static function loadDefinitions(ContainerBuilder $builder, array $services, $namespace = NULL)
 	{
+		$depths = [];
+		foreach ($services as $name => $def) {
+			$path = [];
+			while (Config\Helpers::isInheriting($def)) {
+				$path[] = $def;
+				$def = isset($services[$def[Config\Helpers::EXTENDS_KEY]]) ? $services[$def[Config\Helpers::EXTENDS_KEY]] : [];
+				if (in_array($def, $path, TRUE)) {
+					throw new ServiceCreationException("Circular reference detected for service '$name'.");
+				}
+			}
+			$depths[$name] = count($path);
+		}
+		array_multisort($depths, $services);
+
 		foreach ($services as $name => $def) {
 			if ((string) (int) $name === (string) $name) {
 				$postfix = $def instanceof Statement && is_string($def->getEntity()) ? '.' . $def->getEntity() : (is_scalar($def) ? ".$def" : '');
@@ -284,12 +316,21 @@ class Compiler
 			if (is_array($def) && !empty($def['alteration']) && !$builder->hasDefinition($name)) {
 				throw new ServiceCreationException("Service '$name': missing original definition for alteration.");
 			}
-			if (Config\Helpers::takeParent($def)) {
+
+			if (($parent = Config\Helpers::takeParent($def)) && $parent !== $name) {
+				if ($parent !== Config\Helpers::OVERWRITE) {
+					trigger_error("Section inheritance $name < $parent is deprecated.", E_USER_DEPRECATED);
+				}
 				$builder->removeDefinition($name);
+				$definition = $builder->addDefinition(
+					$name,
+					$parent === Config\Helpers::OVERWRITE ? NULL : clone $builder->getDefinition($parent)
+				);
+			} elseif ($builder->hasDefinition($name)) {
+				$definition = $builder->getDefinition($name);
+			} else {
+				$definition = $builder->addDefinition($name);
 			}
-			$definition = $builder->hasDefinition($name)
-				? $builder->getDefinition($name)
-				: $builder->addDefinition($name);
 
 			try {
 				static::loadDefinition($definition, $def);
@@ -317,6 +358,12 @@ class Compiler
 
 		} elseif (!is_array($config) || isset($config[0], $config[1])) {
 			$config = ['class' => NULL, 'factory' => $config];
+		}
+
+		if (array_key_exists('create', $config)) {
+			trigger_error("Key 'create' is deprecated, use 'factory' or 'class' in configuration.", E_USER_DEPRECATED);
+			$config['factory'] = $config['create'];
+			unset($config['create']);
 		}
 
 		$known = ['class', 'factory', 'arguments', 'setup', 'autowired', 'dynamic', 'inject', 'parameters', 'implement', 'run', 'tags', 'alteration'];
@@ -397,6 +444,11 @@ class Compiler
 			$definition->addTag(Extensions\InjectExtension::TAG_INJECT, $config['inject']);
 		}
 
+		if (isset($config['run'])) {
+			trigger_error("Option 'run' is deprecated, use 'run' as tag.", E_USER_DEPRECATED);
+			$config['tags']['run'] = (bool) $config['run'];
+		}
+
 		if (isset($config['tags'])) {
 			Validators::assertField($config, 'tags', 'array');
 			if (Config\Helpers::takeParent($config['tags'])) {
@@ -410,6 +462,27 @@ class Compiler
 				}
 			}
 		}
+	}
+
+
+	/** @deprecated */
+	public static function filterArguments(array $args)
+	{
+		return Helpers::filterArguments($args);
+	}
+
+
+	/** @deprecated */
+	public static function parseServices(ContainerBuilder $builder, array $config, $namespace = NULL)
+	{
+		self::loadDefinitions($builder, isset($config['services']) ? $config['services'] : [], $namespace);
+	}
+
+
+	/** @deprecated */
+	public static function parseService(ServiceDefinition $definition, $config)
+	{
+		self::loadDefinition($definition, $config);
 	}
 
 }

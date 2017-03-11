@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI\Extensions;
 
 use Nette;
@@ -15,7 +13,7 @@ use Nette;
 /**
  * DI extension.
  */
-final class DIExtension extends Nette\DI\CompilerExtension
+class DIExtension extends Nette\DI\CompilerExtension
 {
 	public $defaults = [
 		'debugger' => TRUE,
@@ -31,7 +29,7 @@ final class DIExtension extends Nette\DI\CompilerExtension
 	private $time;
 
 
-	public function __construct(bool $debugMode = FALSE)
+	public function __construct($debugMode = FALSE)
 	{
 		$this->debugMode = $debugMode;
 		$this->time = microtime(TRUE);

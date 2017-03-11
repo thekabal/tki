@@ -5,15 +5,13 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Neon;
 
 
 /**
  * Simple parser & generator for Nette Object Notation.
  */
-final class Neon
+class Neon
 {
 	const BLOCK = Encoder::BLOCK;
 	const CHAIN = '!!chain';
@@ -21,19 +19,23 @@ final class Neon
 
 	/**
 	 * Returns the NEON representation of a value.
+	 * @param  mixed
+	 * @param  int
+	 * @return string
 	 */
-	public static function encode($var, int $flags = 0): string
+	public static function encode($var, $options = NULL)
 	{
 		$encoder = new Encoder;
-		return $encoder->encode($var, $flags);
+		return $encoder->encode($var, $options);
 	}
 
 
 	/**
 	 * Decodes a NEON string.
+	 * @param  string
 	 * @return mixed
 	 */
-	public static function decode(string $input)
+	public static function decode($input)
 	{
 		$decoder = new Decoder;
 		return $decoder->decode($input);

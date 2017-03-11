@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Utils;
 
 use Nette;
@@ -15,7 +13,7 @@ use Nette;
 /**
  * PHP reflection helpers.
  */
-final class Reflection
+class Reflection
 {
 	use Nette\StaticClass;
 
@@ -25,7 +23,11 @@ final class Reflection
 	];
 
 
-	public static function isBuiltinType(string $type): bool
+	/**
+	 * @param  string
+	 * @return bool
+	 */
+	public static function isBuiltinType($type)
 	{
 		return isset(self::$builtinTypes[strtolower($type)]);
 	}
@@ -36,7 +38,7 @@ final class Reflection
 	 */
 	public static function getReturnType(\ReflectionFunctionAbstract $func)
 	{
-		if ($func->hasReturnType()) {
+		if (PHP_VERSION_ID >= 70000 && $func->hasReturnType()) {
 			$type = (string) $func->getReturnType();
 			return strtolower($type) === 'self' ? $func->getDeclaringClass()->getName() : $type;
 		}
@@ -48,9 +50,20 @@ final class Reflection
 	 */
 	public static function getParameterType(\ReflectionParameter $param)
 	{
-		if ($param->hasType()) {
-			$type = (string) $param->getType();
+		if (PHP_VERSION_ID >= 70000) {
+			$type = $param->hasType() ? (string) $param->getType() : NULL;
 			return strtolower($type) === 'self' ? $param->getDeclaringClass()->getName() : $type;
+		} elseif ($param->isArray() || $param->isCallable()) {
+			return $param->isArray() ? 'array' : 'callable';
+		} else {
+			try {
+				return ($ref = $param->getClass()) ? $ref->getName() : NULL;
+			} catch (\ReflectionException $e) {
+				if (preg_match('#Class (.+) does not exist#', $e->getMessage(), $m)) {
+					return $m[1];
+				}
+				throw $e;
+			}
 		}
 	}
 
@@ -82,8 +95,9 @@ final class Reflection
 
 	/**
 	 * Returns declaring class or trait.
+	 * @return \ReflectionClass
 	 */
-	public static function getPropertyDeclaringClass(\ReflectionProperty $prop): \ReflectionClass
+	public static function getPropertyDeclaringClass(\ReflectionProperty $prop)
 	{
 		foreach ($prop->getDeclaringClass()->getTraits() as $trait) {
 			if ($trait->hasProperty($prop->getName())) {
@@ -96,8 +110,9 @@ final class Reflection
 
 	/**
 	 * Are documentation comments available?
+	 * @return bool
 	 */
-	public static function areCommentsAvailable(): bool
+	public static function areCommentsAvailable()
 	{
 		static $res;
 		return $res === NULL
@@ -106,7 +121,10 @@ final class Reflection
 	}
 
 
-	public static function toString(\Reflector $ref): string
+	/**
+	 * @return string
+	 */
+	public static function toString(\Reflector $ref)
 	{
 		if ($ref instanceof \ReflectionClass) {
 			return $ref->getName();
@@ -126,9 +144,11 @@ final class Reflection
 
 	/**
 	 * Expands class name into full name.
+	 * @param  string
+	 * @return string  full name
 	 * @throws Nette\InvalidArgumentException
 	 */
-	public static function expandClassName(string $name, \ReflectionClass $rc): string
+	public static function expandClassName($name, \ReflectionClass $rc)
 	{
 		$lower = strtolower($name);
 		if (empty($name)) {
@@ -162,7 +182,7 @@ final class Reflection
 	/**
 	 * @return array of [alias => class]
 	 */
-	public static function getUseStatements(\ReflectionClass $class): array
+	public static function getUseStatements(\ReflectionClass $class)
 	{
 		static $cache = [];
 		if (!isset($cache[$name = $class->getName()])) {
@@ -178,9 +198,11 @@ final class Reflection
 
 
 	/**
-	 * Parses PHP code to [class => [alias => class, ...]]
+	 * Parses PHP code.
+	 * @param  string
+	 * @return array of [class => [alias => class, ...]]
 	 */
-	private static function parseUseStatements(string $code, string $forClass = NULL): array
+	private static function parseUseStatements($code, $forClass = NULL)
 	{
 		$tokens = token_get_all($code);
 		$namespace = $class = $classLevel = $level = NULL;

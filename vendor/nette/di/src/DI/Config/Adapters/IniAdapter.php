@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI\Config\Adapters;
 
 use Nette;
@@ -16,12 +14,12 @@ use Nette\DI\Config\Helpers;
 /**
  * Reading and generating INI files.
  */
-final class IniAdapter implements Nette\DI\Config\IAdapter
+class IniAdapter implements Nette\DI\Config\IAdapter
 {
 	use Nette\SmartObject;
 
 	/** @internal */
-	const
+	const INHERITING_SEPARATOR = '<', // child < parent
 		KEY_SEPARATOR = '.', // key nesting key1.key2.key3
 		ESCAPED_KEY_SEPARATOR = '..',
 		RAW_SECTION = '!';
@@ -30,9 +28,10 @@ final class IniAdapter implements Nette\DI\Config\IAdapter
 	/**
 	 * Reads configuration from INI file.
 	 * @param  string  file name
+	 * @return array
 	 * @throws Nette\InvalidStateException
 	 */
-	public function load(string $file): array
+	public function load($file)
 	{
 		$ini = @parse_ini_file($file, TRUE); // @ escalated to exception
 		if ($ini === FALSE) {
@@ -44,9 +43,10 @@ final class IniAdapter implements Nette\DI\Config\IAdapter
 
 
 	/**
+	 * @return array
 	 * @throws Nette\InvalidStateException
 	 */
-	public function process(array $arr): array
+	public function process(array $arr)
 	{
 		$data = [];
 		foreach ($arr as $secName => $secData) {
@@ -69,6 +69,12 @@ final class IniAdapter implements Nette\DI\Config\IAdapter
 						$cursor = $val;
 					}
 					$secData = $tmp;
+				}
+
+				$parts = explode(self::INHERITING_SEPARATOR, $secName);
+				if (count($parts) > 1) {
+					$secName = trim($parts[0]);
+					$secData[Helpers::EXTENDS_KEY] = trim($parts[1]);
 				}
 			}
 
@@ -94,8 +100,9 @@ final class IniAdapter implements Nette\DI\Config\IAdapter
 
 	/**
 	 * Generates configuration in INI format.
+	 * @return string
 	 */
-	public function dump(array $data): string
+	public function dump(array $data)
 	{
 		$output = [];
 		foreach ($data as $name => $secData) {
@@ -104,7 +111,11 @@ final class IniAdapter implements Nette\DI\Config\IAdapter
 				self::build($data, $output, '');
 				break;
 			}
-			$output[] = "[$name]";
+			if ($parent = Helpers::takeParent($secData)) {
+				$output[] = "[$name " . self::INHERITING_SEPARATOR . " $parent]";
+			} else {
+				$output[] = "[$name]";
+			}
 			self::build($secData, $output, '');
 			$output[] = '';
 		}

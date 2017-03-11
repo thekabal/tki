@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Caching;
 
 use Nette;
@@ -51,8 +49,9 @@ class Cache
 
 	/**
 	 * Returns cache storage.
+	 * @return IStorage
 	 */
-	public function getStorage(): IStorage
+	public function getStorage()
 	{
 		return $this->storage;
 	}
@@ -60,8 +59,9 @@ class Cache
 
 	/**
 	 * Returns cache namespace.
+	 * @return string
 	 */
-	public function getNamespace(): string
+	public function getNamespace()
 	{
 		return (string) substr($this->namespace, 0, -1);
 	}
@@ -69,9 +69,10 @@ class Cache
 
 	/**
 	 * Returns new nested cache object.
+	 * @param  string
 	 * @return static
 	 */
-	public function derive(string $namespace)
+	public function derive($namespace)
 	{
 		$derived = new static($this->storage, $this->namespace . $namespace);
 		return $derived;
@@ -81,14 +82,15 @@ class Cache
 	/**
 	 * Reads the specified item from the cache or generate it.
 	 * @param  mixed
+	 * @param  callable
 	 * @return mixed
 	 */
-	public function load($key, callable $fallback = NULL)
+	public function load($key, $fallback = NULL)
 	{
 		$data = $this->storage->read($this->generateKey($key));
 		if ($data === NULL && $fallback) {
 			return $this->save($key, function (&$dependencies) use ($fallback) {
-				return $fallback(...[&$dependencies]);
+				return call_user_func_array($fallback, [&$dependencies]);
 			});
 		}
 		return $data;
@@ -97,8 +99,11 @@ class Cache
 
 	/**
 	 * Reads multiple items from the cache.
+	 * @param  array
+	 * @param  callable
+	 * @return array
 	 */
-	public function bulkLoad(array $keys, callable $fallback = NULL): array
+	public function bulkLoad(array $keys, $fallback = NULL)
 	{
 		if (count($keys) === 0) {
 			return [];
@@ -115,7 +120,7 @@ class Cache
 				foreach ($result as $key => $value) {
 					if ($value === NULL) {
 						$result[$key] = $this->save($key, function (&$dependencies) use ($key, $fallback) {
-							return $fallback(...[$key, &$dependencies]);
+							return call_user_func_array($fallback, [$key, &$dependencies]);
 						});
 					}
 				}
@@ -131,7 +136,7 @@ class Cache
 				$result[$key] = $cacheData[$storageKey];
 			} elseif ($fallback) {
 				$result[$key] = $this->save($key, function (&$dependencies) use ($key, $fallback) {
-					return $fallback(...[$key, &$dependencies]);
+					return call_user_func_array($fallback, [$key, &$dependencies]);
 				});
 			} else {
 				$result[$key] = NULL;
@@ -161,11 +166,17 @@ class Cache
 	{
 		$key = $this->generateKey($key);
 
-		if ($data instanceof \Closure) {
+		if ($data instanceof Nette\Callback || $data instanceof \Closure) {
+			if ($data instanceof Nette\Callback) {
+				trigger_error('Nette\Callback is deprecated, use closure or Nette\Utils\Callback::toClosure().', E_USER_DEPRECATED);
+			}
 			$this->storage->lock($key);
 			try {
-				$data = $data(...[&$dependencies]);
+				$data = call_user_func_array($data, [&$dependencies]);
 			} catch (\Throwable $e) {
+				$this->storage->remove($key);
+				throw $e;
+			} catch (\Exception $e) {
 				$this->storage->remove($key);
 				throw $e;
 			}
@@ -185,7 +196,7 @@ class Cache
 	}
 
 
-	private function completeDependencies(?array $dp): array
+	private function completeDependencies($dp)
 	{
 		// convert expire into relative amount of seconds
 		if (isset($dp[self::EXPIRATION])) {
@@ -228,8 +239,9 @@ class Cache
 	/**
 	 * Removes item from the cache.
 	 * @param  mixed
+	 * @return void
 	 */
-	public function remove($key): void
+	public function remove($key)
 	{
 		$this->save($key, NULL);
 	}
@@ -241,8 +253,9 @@ class Cache
 	 * - Cache::PRIORITY => (int) priority
 	 * - Cache::TAGS => (array) tags
 	 * - Cache::ALL => TRUE
+	 * @return void
 	 */
-	public function clean(array $conditions = NULL): void
+	public function clean(array $conditions = NULL)
 	{
 		$conditions = (array) $conditions;
 		if (isset($conditions[self::TAGS])) {
@@ -272,8 +285,9 @@ class Cache
 	/**
 	 * Caches results of function/method calls.
 	 * @param  mixed
+	 * @return \Closure
 	 */
-	public function wrap($function, array $dependencies = NULL): \Closure
+	public function wrap($function, array $dependencies = NULL)
 	{
 		return function () use ($function, $dependencies) {
 			$key = [$function, func_get_args()];
@@ -292,22 +306,24 @@ class Cache
 	/**
 	 * Starts the output cache.
 	 * @param  mixed
+	 * @return OutputHelper|NULL
 	 */
-	public function start($key): ?OutputHelper
+	public function start($key)
 	{
 		$data = $this->load($key);
 		if ($data === NULL) {
 			return new OutputHelper($this, $key);
 		}
 		echo $data;
-		return NULL;
 	}
 
 
 	/**
 	 * Generates internal cache key.
+	 * @param  mixed
+	 * @return string
 	 */
-	protected function generateKey($key): string
+	protected function generateKey($key)
 	{
 		return $this->namespace . md5(is_scalar($key) ? (string) $key : serialize($key));
 	}
@@ -318,11 +334,13 @@ class Cache
 
 	/**
 	 * Checks CALLBACKS dependencies.
+	 * @param  array
+	 * @return bool
 	 */
-	public static function checkCallbacks(array $callbacks): bool
+	public static function checkCallbacks($callbacks)
 	{
 		foreach ($callbacks as $callback) {
-			if (!array_shift($callback)(...$callback)) {
+			if (!call_user_func_array(array_shift($callback), $callback)) {
 				return FALSE;
 			}
 		}
@@ -332,8 +350,11 @@ class Cache
 
 	/**
 	 * Checks CONSTS dependency.
+	 * @param  string
+	 * @param  mixed
+	 * @return bool
 	 */
-	private static function checkConst(string $const, $value): bool
+	private static function checkConst($const, $value)
 	{
 		return defined($const) && constant($const) === $value;
 	}
@@ -341,8 +362,11 @@ class Cache
 
 	/**
 	 * Checks FILES dependency.
+	 * @param  string
+	 * @param  int|NULL
+	 * @return bool
 	 */
-	private static function checkFile(string $file, ?int $time): bool
+	private static function checkFile($file, $time)
 	{
 		return @filemtime($file) == $time; // @ - stat may fail
 	}

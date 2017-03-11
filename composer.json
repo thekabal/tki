@@ -24,7 +24,9 @@
             "squizlabs/php_codesniffer": "^3.0.0RC2",
             "phpmd/phpmd" : "@stable",
             "sebastian/phpcpd": "^2.0.4",
-            "friendsofphp/php-cs-fixer": "^2.0"
+            "friendsofphp/php-cs-fixer": "^2.0",
+            "nette/nette": "^2.4.0",
+            "phpunit/phpunit": "^6.0.8"
     },
     "autoload": {
         "psr-4": { "Tki\\": ["classes/", "tests/", "config/"]}

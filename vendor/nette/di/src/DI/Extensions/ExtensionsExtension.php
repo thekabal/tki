@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI\Extensions;
 
 use Nette;
@@ -15,7 +13,7 @@ use Nette;
 /**
  * Enables registration of other extensions in $config file
  */
-final class ExtensionsExtension extends Nette\DI\CompilerExtension
+class ExtensionsExtension extends Nette\DI\CompilerExtension
 {
 
 	public function loadConfiguration()
