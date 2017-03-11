@@ -152,8 +152,9 @@ class TraderouteDistance
         return $retvalue;
     }
 
-    public static function warpCalc(\PDO $pdo_db, $db, $lang, $tkireg, $template, Array $traderoute, Array $source, Array $dest): Array
+    public static function warpCalc(\PDO $pdo_db, $db, string $lang, array $langvars, reg $tkireg, smarty $template, array $traderoute, array $source, array $dest): array
     {
+        $dist = array();
         $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($source['sector_id'], $dest['sector_id']));
         \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
         if ($query->EOF)
