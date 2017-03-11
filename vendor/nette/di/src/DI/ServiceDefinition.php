@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI;
 
 use Nette;
@@ -19,7 +17,7 @@ use Nette;
  * @property Statement|NULL $factory
  * @property Statement[] $setup
  */
-final class ServiceDefinition
+class ServiceDefinition
 {
 	const
 		IMPLEMENT_MODE_CREATE = 'create',
@@ -63,7 +61,7 @@ final class ServiceDefinition
 	 */
 	public function setClass($class, array $args = [])
 	{
-		($this->notifier)();
+		call_user_func($this->notifier);
 		$this->class = $class ? ltrim($class, '\\') : NULL;
 		if ($args) {
 			$this->setFactory($class, $args);
@@ -86,7 +84,7 @@ final class ServiceDefinition
 	 */
 	public function setFactory($factory, array $args = [])
 	{
-		($this->notifier)();
+		call_user_func($this->notifier);
 		$this->factory = $factory instanceof Statement ? $factory : new Statement($factory, $args);
 		return $this;
 	}
@@ -142,7 +140,7 @@ final class ServiceDefinition
 	/**
 	 * @return Statement[]
 	 */
-	public function getSetup(): array
+	public function getSetup()
 	{
 		return $this->setup;
 	}
@@ -168,7 +166,10 @@ final class ServiceDefinition
 	}
 
 
-	public function getParameters(): array
+	/**
+	 * @return array
+	 */
+	public function getParameters()
 	{
 		return $this->parameters;
 	}
@@ -184,7 +185,10 @@ final class ServiceDefinition
 	}
 
 
-	public function getTags(): array
+	/**
+	 * @return array
+	 */
+	public function getTags()
 	{
 		return $this->tags;
 	}
@@ -193,7 +197,7 @@ final class ServiceDefinition
 	/**
 	 * @return static
 	 */
-	public function addTag(string $tag, $attr = TRUE)
+	public function addTag($tag, $attr = TRUE)
 	{
 		$this->tags[$tag] = $attr;
 		return $this;
@@ -203,9 +207,9 @@ final class ServiceDefinition
 	/**
 	 * @return mixed
 	 */
-	public function getTag(string $tag)
+	public function getTag($tag)
 	{
-		return $this->tags[$tag] ?? NULL;
+		return isset($this->tags[$tag]) ? $this->tags[$tag] : NULL;
 	}
 
 
@@ -215,7 +219,7 @@ final class ServiceDefinition
 	 */
 	public function setAutowired($state = TRUE)
 	{
-		($this->notifier)();
+		call_user_func($this->notifier);
 		$this->autowired = is_string($state) || is_array($state) ? (array) $state : (bool) $state;
 		return $this;
 	}
@@ -240,27 +244,32 @@ final class ServiceDefinition
 
 
 	/**
+	 * @param  bool
 	 * @return static
 	 */
-	public function setDynamic(bool $state = TRUE)
+	public function setDynamic($state = TRUE)
 	{
-		$this->dynamic = $state;
+		$this->dynamic = (bool) $state;
 		return $this;
 	}
 
 
-	public function isDynamic(): bool
+	/**
+	 * @return bool
+	 */
+	public function isDynamic()
 	{
 		return $this->dynamic;
 	}
 
 
 	/**
+	 * @param  string
 	 * @return static
 	 */
-	public function setImplement(string $interface)
+	public function setImplement($interface)
 	{
-		($this->notifier)();
+		call_user_func($this->notifier);
 		$this->implement = ltrim($interface, '\\');
 		return $this;
 	}
@@ -276,9 +285,10 @@ final class ServiceDefinition
 
 
 	/**
+	 * @param  string
 	 * @return static
 	 */
-	public function setImplementMode(string $mode)
+	public function setImplementMode($mode)
 	{
 		if (!in_array($mode, [self::IMPLEMENT_MODE_CREATE, self::IMPLEMENT_MODE_GET], TRUE)) {
 			throw new Nette\InvalidArgumentException('Argument must be get|create.');
@@ -298,10 +308,34 @@ final class ServiceDefinition
 
 
 	/** @deprecated */
-	public function setInject(bool $state = TRUE)
+	public function setImplementType($type)
 	{
-		trigger_error(__METHOD__ . "() is deprecated, use addTag('inject')", E_USER_DEPRECATED);
+		trigger_error(__METHOD__ . '() is deprecated, use setImplementMode()', E_USER_DEPRECATED);
+		return $this->setImplementMode($type);
+	}
+
+
+	/** @deprecated */
+	public function getImplementType()
+	{
+		trigger_error(__METHOD__ . '() is deprecated, use getImplementMode()', E_USER_DEPRECATED);
+		return $this->implementMode;
+	}
+
+
+	/** @return static */
+	public function setInject($state = TRUE)
+	{
+		//trigger_error(__METHOD__ . '() is deprecated.', E_USER_DEPRECATED);
 		return $this->addTag(Extensions\InjectExtension::TAG_INJECT, $state);
+	}
+
+
+	/** @return bool|NULL */
+	public function getInject()
+	{
+		//trigger_error(__METHOD__ . '() is deprecated.', E_USER_DEPRECATED);
+		return $this->getTag(Extensions\InjectExtension::TAG_INJECT);
 	}
 
 

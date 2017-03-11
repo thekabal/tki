@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Utils;
 
 use Nette;
@@ -28,14 +26,11 @@ class Finder implements \IteratorAggregate, \Countable
 {
 	use Nette\SmartObject;
 
-	/** @var callable  extension methods */
-	private static $extMethods = [];
-
 	/** @var array */
 	private $paths = [];
 
 	/** @var array of filters */
-	private $groups = [];
+	private $groups;
 
 	/** @var array filter for recursive traversing */
 	private $exclude = [];
@@ -53,7 +48,7 @@ class Finder implements \IteratorAggregate, \Countable
 	/**
 	 * Begins search for files matching mask and all directories.
 	 * @param  mixed
-	 * @return static
+	 * @return self
 	 */
 	public static function find(...$masks)
 	{
@@ -65,7 +60,7 @@ class Finder implements \IteratorAggregate, \Countable
 	/**
 	 * Begins search for files matching mask.
 	 * @param  mixed
-	 * @return static
+	 * @return self
 	 */
 	public static function findFiles(...$masks)
 	{
@@ -76,7 +71,7 @@ class Finder implements \IteratorAggregate, \Countable
 	/**
 	 * Begins search for directories matching mask.
 	 * @param  mixed
-	 * @return static
+	 * @return self
 	 */
 	public static function findDirectories(...$masks)
 	{
@@ -86,11 +81,13 @@ class Finder implements \IteratorAggregate, \Countable
 
 	/**
 	 * Creates filtering group by mask & type selector.
-	 * @return static
+	 * @param  array
+	 * @param  string
+	 * @return self
 	 */
-	private function select(array $masks, string $type)
+	private function select($masks, $type)
 	{
-		$this->cursor = &$this->groups[];
+		$this->cursor = & $this->groups[];
 		$pattern = self::buildPattern($masks);
 		if ($type || $pattern) {
 			$this->filter(function (RecursiveDirectoryIterator $file) use ($type, $pattern) {
@@ -106,7 +103,7 @@ class Finder implements \IteratorAggregate, \Countable
 	/**
 	 * Searchs in the given folder(s).
 	 * @param  string|array
-	 * @return static
+	 * @return self
 	 */
 	public function in(...$paths)
 	{
@@ -118,7 +115,7 @@ class Finder implements \IteratorAggregate, \Countable
 	/**
 	 * Searchs recursively from the given folder(s).
 	 * @param  string|array
-	 * @return static
+	 * @return self
 	 */
 	public function from(...$paths)
 	{
@@ -126,14 +123,14 @@ class Finder implements \IteratorAggregate, \Countable
 			throw new Nette\InvalidStateException('Directory to search has already been specified.');
 		}
 		$this->paths = is_array($paths[0]) ? $paths[0] : $paths;
-		$this->cursor = &$this->exclude;
+		$this->cursor = & $this->exclude;
 		return $this;
 	}
 
 
 	/**
 	 * Shows folder content prior to the folder.
-	 * @return static
+	 * @return self
 	 */
 	public function childFirst()
 	{
@@ -144,9 +141,10 @@ class Finder implements \IteratorAggregate, \Countable
 
 	/**
 	 * Converts Finder pattern to regular expression.
-	 * @return string|NULL
+	 * @param  array
+	 * @return string
 	 */
-	private static function buildPattern(array $masks)
+	private static function buildPattern($masks)
 	{
 		$pattern = [];
 		foreach ($masks as $mask) {
@@ -174,8 +172,9 @@ class Finder implements \IteratorAggregate, \Countable
 
 	/**
 	 * Get the number of found files and/or directories.
+	 * @return int
 	 */
-	public function count(): int
+	public function count()
 	{
 		return iterator_count($this->getIterator());
 	}
@@ -183,20 +182,21 @@ class Finder implements \IteratorAggregate, \Countable
 
 	/**
 	 * Returns iterator.
+	 * @return \Iterator
 	 */
-	public function getIterator(): \Iterator
+	public function getIterator()
 	{
 		if (!$this->paths) {
 			throw new Nette\InvalidStateException('Call in() or from() to specify directory to search.');
 
 		} elseif (count($this->paths) === 1) {
-			return $this->buildIterator((string) $this->paths[0]);
+			return $this->buildIterator($this->paths[0]);
 
 		} else {
 			$iterator = new \AppendIterator();
 			$iterator->append($workaround = new \ArrayIterator(['workaround PHP bugs #49104, #63077']));
 			foreach ($this->paths as $path) {
-				$iterator->append($this->buildIterator((string) $path));
+				$iterator->append($this->buildIterator($path));
 			}
 			unset($workaround[0]);
 			return $iterator;
@@ -206,8 +206,10 @@ class Finder implements \IteratorAggregate, \Countable
 
 	/**
 	 * Returns per-path iterator.
+	 * @param  string
+	 * @return \Iterator
 	 */
-	private function buildIterator(string $path): \Iterator
+	private function buildIterator($path)
 	{
 		$iterator = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::FOLLOW_SYMLINKS);
 
@@ -215,7 +217,7 @@ class Finder implements \IteratorAggregate, \Countable
 			$iterator = new \RecursiveCallbackFilterIterator($iterator, function ($foo, $bar, RecursiveDirectoryIterator $file) {
 				if (!$file->isDot() && !$file->isFile()) {
 					foreach ($this->exclude as $filter) {
-						if (!$filter($file)) {
+						if (!call_user_func($filter, $file)) {
 							return FALSE;
 						}
 					}
@@ -236,7 +238,7 @@ class Finder implements \IteratorAggregate, \Countable
 
 			foreach ($this->groups as $filters) {
 				foreach ($filters as $filter) {
-					if (!$filter($file)) {
+					if (!call_user_func($filter, $file)) {
 						continue 2;
 					}
 				}
@@ -256,7 +258,7 @@ class Finder implements \IteratorAggregate, \Countable
 	 * Restricts the search using mask.
 	 * Excludes directories from recursive traversing.
 	 * @param  mixed
-	 * @return static
+	 * @return self
 	 */
 	public function exclude(...$masks)
 	{
@@ -273,9 +275,9 @@ class Finder implements \IteratorAggregate, \Countable
 	/**
 	 * Restricts the search using callback.
 	 * @param  callable  function (RecursiveDirectoryIterator $file)
-	 * @return static
+	 * @return self
 	 */
-	public function filter(callable $callback)
+	public function filter($callback)
 	{
 		$this->cursor[] = $callback;
 		return $this;
@@ -284,9 +286,10 @@ class Finder implements \IteratorAggregate, \Countable
 
 	/**
 	 * Limits recursion level.
-	 * @return static
+	 * @param  int
+	 * @return self
 	 */
-	public function limitDepth(int $depth)
+	public function limitDepth($depth)
 	{
 		$this->maxDepth = $depth;
 		return $this;
@@ -296,9 +299,10 @@ class Finder implements \IteratorAggregate, \Countable
 	/**
 	 * Restricts the search by size.
 	 * @param  string  "[operator] [size] [unit]" example: >=10kB
-	 * @return static
+	 * @param  int
+	 * @return self
 	 */
-	public function size(string $operator, int $size = NULL)
+	public function size($operator, $size = NULL)
 	{
 		if (func_num_args() === 1) { // in $operator is predicate
 			if (!preg_match('#^(?:([=<>!]=?|<>)\s*)?((?:\d*\.)?\d+)\s*(K|M|G|)B?\z#i', $operator, $matches)) {
@@ -319,9 +323,9 @@ class Finder implements \IteratorAggregate, \Countable
 	 * Restricts the search by modified time.
 	 * @param  string  "[operator] [date]" example: >1978-01-23
 	 * @param  mixed
-	 * @return static
+	 * @return self
 	 */
-	public function date(string $operator, $date = NULL)
+	public function date($operator, $date = NULL)
 	{
 		if (func_num_args() === 1) { // in $operator is predicate
 			if (!preg_match('#^(?:([=<>!]=?|<>)\s*)?(.+)\z#i', $operator, $matches)) {
@@ -341,8 +345,9 @@ class Finder implements \IteratorAggregate, \Countable
 	 * Compares two values.
 	 * @param  mixed
 	 * @param  mixed
+	 * @return bool
 	 */
-	public static function compare($l, $operator, $r): bool
+	public static function compare($l, $operator, $r)
 	{
 		switch ($operator) {
 			case '>':
@@ -369,17 +374,18 @@ class Finder implements \IteratorAggregate, \Countable
 	/********************* extension methods ****************d*g**/
 
 
-	public function __call(string $name, array $args)
+	public function __call($name, $args)
 	{
-		return isset(self::$extMethods[$name])
-			? (self::$extMethods[$name])($this, ...$args)
-			: parent::__call($name, $args);
+		if ($callback = Nette\Utils\ObjectMixin::getExtensionMethod(__CLASS__, $name)) {
+			return $callback($this, ...$args);
+		}
+		Nette\Utils\ObjectMixin::strictCall(__CLASS__, $name);
 	}
 
 
-	public static function extensionMethod(string $name, callable $callback)
+	public static function extensionMethod($name, $callback)
 	{
-		self::$extMethods[$name] = $callback;
+		Nette\Utils\ObjectMixin::setExtensionMethod(__CLASS__, $name, $callback);
 	}
 
 }

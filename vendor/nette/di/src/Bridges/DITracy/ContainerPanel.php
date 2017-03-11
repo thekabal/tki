@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Bridges\DITracy;
 
 use Nette;
@@ -40,8 +38,9 @@ class ContainerPanel implements Tracy\IBarPanel
 
 	/**
 	 * Renders tab.
+	 * @return string
 	 */
-	public function getTab(): string
+	public function getTab()
 	{
 		ob_start(function () {});
 		$elapsedTime = $this->elapsedTime;
@@ -52,8 +51,9 @@ class ContainerPanel implements Tracy\IBarPanel
 
 	/**
 	 * Renders panel.
+	 * @return string
 	 */
-	public function getPanel(): string
+	public function getPanel()
 	{
 		$container = $this->container;
 		$registry = $this->getContainerProperty('registry');
@@ -76,7 +76,7 @@ class ContainerPanel implements Tracy\IBarPanel
 	}
 
 
-	private function getContainerProperty(string $name)
+	private function getContainerProperty($name)
 	{
 		$prop = (new \ReflectionClass(Nette\DI\Container::class))->getProperty($name);
 		$prop->setAccessible(TRUE);

@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Utils;
 
 use Nette;
@@ -39,7 +37,7 @@ class Paginator
 	private $itemsPerPage = 1;
 
 	/** @var int */
-	private $page = 1;
+	private $page;
 
 	/** @var int|NULL */
 	private $itemCount;
@@ -47,19 +45,21 @@ class Paginator
 
 	/**
 	 * Sets current page number.
+	 * @param  int
 	 * @return static
 	 */
-	public function setPage(int $page)
+	public function setPage($page)
 	{
-		$this->page = $page;
+		$this->page = (int) $page;
 		return $this;
 	}
 
 
 	/**
 	 * Returns current page number.
+	 * @return int
 	 */
-	public function getPage(): int
+	public function getPage()
 	{
 		return $this->base + $this->getPageIndex();
 	}
@@ -67,8 +67,9 @@ class Paginator
 
 	/**
 	 * Returns first page number.
+	 * @return int
 	 */
-	public function getFirstPage(): int
+	public function getFirstPage()
 	{
 		return $this->base;
 	}
@@ -86,19 +87,21 @@ class Paginator
 
 	/**
 	 * Sets first page (base) number.
+	 * @param  int
 	 * @return static
 	 */
-	public function setBase(int $base)
+	public function setBase($base)
 	{
-		$this->base = $base;
+		$this->base = (int) $base;
 		return $this;
 	}
 
 
 	/**
 	 * Returns first page (base) number.
+	 * @return int
 	 */
-	public function getBase(): int
+	public function getBase()
 	{
 		return $this->base;
 	}
@@ -106,8 +109,9 @@ class Paginator
 
 	/**
 	 * Returns zero-based page number.
+	 * @return int
 	 */
-	protected function getPageIndex(): int
+	protected function getPageIndex()
 	{
 		$index = max(0, $this->page - $this->base);
 		return $this->itemCount === NULL ? $index : min($index, max(0, $this->getPageCount() - 1));
@@ -116,8 +120,9 @@ class Paginator
 
 	/**
 	 * Is the current page the first one?
+	 * @return bool
 	 */
-	public function isFirst(): bool
+	public function isFirst()
 	{
 		return $this->getPageIndex() === 0;
 	}
@@ -125,8 +130,9 @@ class Paginator
 
 	/**
 	 * Is the current page the last one?
+	 * @return bool
 	 */
-	public function isLast(): bool
+	public function isLast()
 	{
 		return $this->itemCount === NULL ? FALSE : $this->getPageIndex() >= $this->getPageCount() - 1;
 	}
@@ -144,19 +150,21 @@ class Paginator
 
 	/**
 	 * Sets the number of items to display on a single page.
+	 * @param  int
 	 * @return static
 	 */
-	public function setItemsPerPage(int $itemsPerPage)
+	public function setItemsPerPage($itemsPerPage)
 	{
-		$this->itemsPerPage = max(1, $itemsPerPage);
+		$this->itemsPerPage = max(1, (int) $itemsPerPage);
 		return $this;
 	}
 
 
 	/**
 	 * Returns the number of items to display on a single page.
+	 * @return int
 	 */
-	public function getItemsPerPage(): int
+	public function getItemsPerPage()
 	{
 		return $this->itemsPerPage;
 	}
@@ -164,11 +172,12 @@ class Paginator
 
 	/**
 	 * Sets the total number of items.
+	 * @param  int (or NULL as infinity)
 	 * @return static
 	 */
-	public function setItemCount(int $itemCount = NULL)
+	public function setItemCount($itemCount)
 	{
-		$this->itemCount = $itemCount === NULL ? NULL : max(0, $itemCount);
+		$this->itemCount = ($itemCount === FALSE || $itemCount === NULL) ? NULL : max(0, (int) $itemCount);
 		return $this;
 	}
 
@@ -185,8 +194,9 @@ class Paginator
 
 	/**
 	 * Returns the absolute index of the first item on current page.
+	 * @return int
 	 */
-	public function getOffset(): int
+	public function getOffset()
 	{
 		return $this->getPageIndex() * $this->itemsPerPage;
 	}

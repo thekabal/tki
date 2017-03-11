@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette;
 
 
@@ -29,9 +27,9 @@ trait StaticClass
 	 * Call to undefined static method.
 	 * @throws MemberAccessException
 	 */
-	public static function __callStatic(string $name, array $args)
+	public static function __callStatic($name, $args)
 	{
-		Utils\ObjectHelpers::strictStaticCall(get_called_class(), $name);
+		Utils\ObjectMixin::strictStaticCall(get_called_class(), $name);
 	}
 
 }

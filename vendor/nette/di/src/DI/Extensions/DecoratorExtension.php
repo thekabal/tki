@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI\Extensions;
 
 use Nette;
@@ -15,7 +13,7 @@ use Nette;
 /**
  * Decorators for services.
  */
-final class DecoratorExtension extends Nette\DI\CompilerExtension
+class DecoratorExtension extends Nette\DI\CompilerExtension
 {
 	public $defaults = [
 		'setup' => [],

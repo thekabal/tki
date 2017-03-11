@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI\Config;
 
 use Nette;
@@ -15,7 +13,7 @@ use Nette;
 /**
  * Configuration helpers.
  */
-final class Helpers
+class Helpers
 {
 	use Nette\StaticClass;
 
@@ -69,9 +67,21 @@ final class Helpers
 	}
 
 
-	public static function isOverwriting(&$data): bool
+	/**
+	 * @return bool
+	 */
+	public static function isOverwriting(&$data)
 	{
-		return is_array($data) && ($data[self::EXTENDS_KEY] ?? NULL) === self::OVERWRITE;
+		return is_array($data) && isset($data[self::EXTENDS_KEY]) && $data[self::EXTENDS_KEY] === self::OVERWRITE;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public static function isInheriting(&$data)
+	{
+		return is_array($data) && isset($data[self::EXTENDS_KEY]) && $data[self::EXTENDS_KEY] !== self::OVERWRITE;
 	}
 
 }

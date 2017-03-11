@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Iterators;
 
 use Nette;
@@ -30,7 +28,7 @@ class Mapper extends \IteratorIterator
 
 	public function current()
 	{
-		return ($this->callback)(parent::current(), parent::key());
+		return call_user_func($this->callback, parent::current(), parent::key());
 	}
 
 }

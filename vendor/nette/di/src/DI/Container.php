@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI;
 
 use Nette;
@@ -43,7 +41,10 @@ class Container
 	}
 
 
-	public function getParameters(): array
+	/**
+	 * @return array
+	 */
+	public function getParameters()
 	{
 		return $this->parameters;
 	}
@@ -51,15 +52,17 @@ class Container
 
 	/**
 	 * Adds the service to the container.
-	 * @param  object $service
+	 * @param  string
+	 * @param  object
 	 * @return static
 	 */
-	public function addService(string $name, $service)
+	public function addService($name, $service)
 	{
-		if (!$name) {
+		if (!is_string($name) || !$name) {
 			throw new Nette\InvalidArgumentException(sprintf('Service name must be a non-empty string, %s given.', gettype($name)));
+
 		}
-		$name = $this->meta[self::ALIASES][$name] ?? $name;
+		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
 		if (isset($this->registry[$name])) {
 			throw new Nette\InvalidStateException("Service '$name' already exists.");
 
@@ -77,21 +80,23 @@ class Container
 
 	/**
 	 * Removes the service from the container.
+	 * @param  string
 	 * @return void
 	 */
-	public function removeService(string $name)
+	public function removeService($name)
 	{
-		$name = $this->meta[self::ALIASES][$name] ?? $name;
+		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
 		unset($this->registry[$name]);
 	}
 
 
 	/**
 	 * Gets the service object by name.
+	 * @param  string
 	 * @return object
 	 * @throws MissingServiceException
 	 */
-	public function getService(string $name)
+	public function getService($name)
 	{
 		if (!isset($this->registry[$name])) {
 			if (isset($this->meta[self::ALIASES][$name])) {
@@ -105,9 +110,11 @@ class Container
 
 	/**
 	 * Gets the service type by name.
+	 * @param  string
+	 * @return string
 	 * @throws MissingServiceException
 	 */
-	public function getServiceType(string $name): string
+	public function getServiceType($name)
 	{
 		if (isset($this->meta[self::ALIASES][$name])) {
 			return $this->getServiceType($this->meta[self::ALIASES][$name]);
@@ -124,10 +131,11 @@ class Container
 	/**
 	 * Does the service exist?
 	 * @param  string service name
+	 * @return bool
 	 */
-	public function hasService(string $name): bool
+	public function hasService($name)
 	{
-		$name = $this->meta[self::ALIASES][$name] ?? $name;
+		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
 		return isset($this->registry[$name])
 			|| (method_exists($this, $method = self::getMethodName($name))
 				&& (new \ReflectionMethod($this, $method))->getName() === $method);
@@ -137,13 +145,14 @@ class Container
 	/**
 	 * Is the service created?
 	 * @param  string service name
+	 * @return bool
 	 */
-	public function isCreated(string $name): bool
+	public function isCreated($name)
 	{
 		if (!$this->hasService($name)) {
 			throw new MissingServiceException("Service '$name' not found.");
 		}
-		$name = $this->meta[self::ALIASES][$name] ?? $name;
+		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
 		return isset($this->registry[$name]);
 	}
 
@@ -154,9 +163,9 @@ class Container
 	 * @return object
 	 * @throws MissingServiceException
 	 */
-	public function createService(string $name, array $args = [])
+	public function createService($name, array $args = [])
 	{
-		$name = $this->meta[self::ALIASES][$name] ?? $name;
+		$name = isset($this->meta[self::ALIASES][$name]) ? $this->meta[self::ALIASES][$name] : $name;
 		$method = self::getMethodName($name);
 		if (isset($this->creating[$name])) {
 			throw new Nette\InvalidStateException(sprintf('Circular reference detected for services: %s.', implode(', ', array_keys($this->creating))));
@@ -188,7 +197,7 @@ class Container
 	 * @return object  service or NULL
 	 * @throws MissingServiceException
 	 */
-	public function getByType(string $class, bool $throw = TRUE)
+	public function getByType($class, $throw = TRUE)
 	{
 		$class = ltrim($class, '\\');
 		if (!empty($this->meta[self::TYPES][$class][TRUE])) {
@@ -205,9 +214,10 @@ class Container
 
 	/**
 	 * Gets the service names of the specified type.
+	 * @param  string
 	 * @return string[]
 	 */
-	public function findByType(string $class): array
+	public function findByType($class)
 	{
 		$class = ltrim($class, '\\');
 		return empty($this->meta[self::TYPES][$class])
@@ -218,11 +228,12 @@ class Container
 
 	/**
 	 * Gets the service names of the specified tag.
+	 * @param  string
 	 * @return array of [service name => tag attributes]
 	 */
-	public function findByTag(string $tag): array
+	public function findByTag($tag)
 	{
-		return $this->meta[self::TAGS][$tag] ?? [];
+		return isset($this->meta[self::TAGS][$tag]) ? $this->meta[self::TAGS][$tag] : [];
 	}
 
 
@@ -231,11 +242,12 @@ class Container
 
 	/**
 	 * Creates new instance using autowiring.
-	 * @param  array $args   arguments
+	 * @param  string  class
+	 * @param  array   arguments
 	 * @return object
 	 * @throws Nette\InvalidArgumentException
 	 */
-	public function createInstance(string $class, array $args = [])
+	public function createInstance($class, array $args = [])
 	{
 		$rc = new \ReflectionClass($class);
 		if (!$rc->isInstantiable()) {
@@ -272,10 +284,58 @@ class Container
 	}
 
 
-	public static function getMethodName(string $name): string
+	/********************* shortcuts ****************d*g**/
+
+
+	/**
+	 * Expands %placeholders%.
+	 * @param  mixed
+	 * @return mixed
+	 * @deprecated
+	 */
+	public function expand($s)
+	{
+		return Helpers::expand($s, $this->parameters);
+	}
+
+
+	/** @deprecated */
+	public function &__get($name)
+	{
+		trigger_error(__METHOD__ . ' is deprecated; use getService().', E_USER_DEPRECATED);
+		$tmp = $this->getService($name);
+		return $tmp;
+	}
+
+
+	/** @deprecated */
+	public function __set($name, $service)
+	{
+		trigger_error(__METHOD__ . ' is deprecated; use addService().', E_USER_DEPRECATED);
+		$this->addService($name, $service);
+	}
+
+
+	/** @deprecated */
+	public function __isset($name)
+	{
+		trigger_error(__METHOD__ . ' is deprecated; use hasService().', E_USER_DEPRECATED);
+		return $this->hasService($name);
+	}
+
+
+	/** @deprecated */
+	public function __unset($name)
+	{
+		trigger_error(__METHOD__ . ' is deprecated; use removeService().', E_USER_DEPRECATED);
+		$this->removeService($name);
+	}
+
+
+	public static function getMethodName($name)
 	{
 		$uname = ucfirst($name);
-		return 'createService' . ($name === $uname ? '__' : '') . str_replace('.', '__', $uname);
+		return 'createService' . ((string) $name === $uname ? '__' : '') . str_replace('.', '__', $uname);
 	}
 
 }

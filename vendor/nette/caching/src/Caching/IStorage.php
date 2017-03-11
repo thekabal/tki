@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Caching;
 
 
@@ -18,28 +16,38 @@ interface IStorage
 
 	/**
 	 * Read from cache.
+	 * @param  string
 	 * @return mixed
 	 */
-	function read(string $key);
+	function read($key);
 
 	/**
 	 * Prevents item reading and writing. Lock is released by write() or remove().
+	 * @param  string
+	 * @return void
 	 */
-	function lock(string $key): void;
+	function lock($key);
 
 	/**
 	 * Writes item into the cache.
+	 * @param  string
+	 * @param  mixed
+	 * @return void
 	 */
-	function write(string $key, $data, array $dependencies): void;
+	function write($key, $data, array $dependencies);
 
 	/**
 	 * Removes item from the cache.
+	 * @param  string
+	 * @return void
 	 */
-	function remove(string $key): void;
+	function remove($key);
 
 	/**
 	 * Removes items from the cache by conditions.
+	 * @param  array  conditions
+	 * @return void
 	 */
-	function clean(array $conditions): void;
+	function clean(array $conditions);
 
 }

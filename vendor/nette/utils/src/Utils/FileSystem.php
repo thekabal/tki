@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\Utils;
 
 use Nette;
@@ -15,7 +13,7 @@ use Nette;
 /**
  * File system tool.
  */
-final class FileSystem
+class FileSystem
 {
 	use Nette\StaticClass;
 
@@ -24,7 +22,7 @@ final class FileSystem
 	 * @return void
 	 * @throws Nette\IOException
 	 */
-	public static function createDir(string $dir, int $mode = 0777)
+	public static function createDir($dir, $mode = 0777)
 	{
 		if (!is_dir($dir) && !@mkdir($dir, $mode, TRUE) && !is_dir($dir)) { // @ - dir may already exist
 			throw new Nette\IOException("Unable to create directory '$dir'. " . error_get_last()['message']);
@@ -37,7 +35,7 @@ final class FileSystem
 	 * @return void
 	 * @throws Nette\IOException
 	 */
-	public static function copy(string $source, string $dest, bool $overwrite = TRUE)
+	public static function copy($source, $dest, $overwrite = TRUE)
 	{
 		if (stream_is_local($source) && !file_exists($source)) {
 			throw new Nette\IOException("File or directory '$source' not found.");
@@ -72,7 +70,7 @@ final class FileSystem
 	 * @return void
 	 * @throws Nette\IOException
 	 */
-	public static function delete(string $path)
+	public static function delete($path)
 	{
 		if (is_file($path) || is_link($path)) {
 			$func = DIRECTORY_SEPARATOR === '\\' && is_dir($path) ? 'rmdir' : 'unlink';
@@ -97,7 +95,7 @@ final class FileSystem
 	 * @throws Nette\IOException
 	 * @throws Nette\InvalidStateException if the target file or directory already exist
 	 */
-	public static function rename(string $name, string $newName, bool $overwrite = TRUE)
+	public static function rename($name, $newName, $overwrite = TRUE)
 	{
 		if (!$overwrite && file_exists($newName)) {
 			throw new Nette\InvalidStateException("File or directory '$newName' already exists.");
@@ -117,9 +115,10 @@ final class FileSystem
 
 	/**
 	 * Reads file content.
+	 * @return string
 	 * @throws Nette\IOException
 	 */
-	public static function read(string $file): string
+	public static function read($file)
 	{
 		$content = @file_get_contents($file); // @ is escalated to exception
 		if ($content === FALSE) {
@@ -134,7 +133,7 @@ final class FileSystem
 	 * @return void
 	 * @throws Nette\IOException
 	 */
-	public static function write(string $file, string $content, int $mode = 0666)
+	public static function write($file, $content, $mode = 0666)
 	{
 		static::createDir(dirname($file));
 		if (@file_put_contents($file, $content) === FALSE) { // @ is escalated to exception
@@ -148,8 +147,9 @@ final class FileSystem
 
 	/**
 	 * Is path absolute?
+	 * @return bool
 	 */
-	public static function isAbsolute(string $path): bool
+	public static function isAbsolute($path)
 	{
 		return (bool) preg_match('#([a-z]:)?[/\\\\]|[a-z][a-z0-9+.-]*://#Ai', $path);
 	}

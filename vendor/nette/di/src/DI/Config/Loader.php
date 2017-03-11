@@ -5,8 +5,6 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-declare(strict_types=1);
-
 namespace Nette\DI\Config;
 
 use Nette;
@@ -35,8 +33,10 @@ class Loader
 	/**
 	 * Reads configuration from file.
 	 * @param  string  file name
+	 * @param  string  optional section to load
+	 * @return array
 	 */
-	public function load(string $file): array
+	public function load($file, $section = NULL)
 	{
 		if (!is_file($file) || !is_readable($file)) {
 			throw new Nette\FileNotFoundException("File '$file' is missing or is not readable.");
@@ -44,6 +44,14 @@ class Loader
 		$this->dependencies[] = $file;
 		$data = $this->getAdapter($file)->load($file);
 
+		if ($section) {
+			if (isset($data[self::INCLUDES_KEY])) {
+				throw new Nette\InvalidStateException("Section 'includes' must be placed under some top section in file '$file'.");
+			}
+			$data = $this->getSection($data, $section, $file);
+		}
+
+		// include child files
 		$merged = [];
 		if (isset($data[self::INCLUDES_KEY])) {
 			Validators::assert($data[self::INCLUDES_KEY], 'list', "section 'includes' in file '$file'");
@@ -62,9 +70,11 @@ class Loader
 
 	/**
 	 * Save configuration to file.
+	 * @param  array
+	 * @param  string  file
 	 * @return void
 	 */
-	public function save(array $data, string $file)
+	public function save($data, $file)
 	{
 		if (file_put_contents($file, $this->getAdapter($file)->dump($data)) === FALSE) {
 			throw new Nette\IOException("Cannot write file '$file'.");
@@ -74,8 +84,9 @@ class Loader
 
 	/**
 	 * Returns configuration files.
+	 * @return array
 	 */
-	public function getDependencies(): array
+	public function getDependencies()
 	{
 		return array_unique($this->dependencies);
 	}
@@ -87,7 +98,7 @@ class Loader
 	 * @param  string|IAdapter
 	 * @return static
 	 */
-	public function addAdapter(string $extension, $adapter)
+	public function addAdapter($extension, $adapter)
 	{
 		$this->adapters[strtolower($extension)] = $adapter;
 		return $this;
@@ -95,13 +106,24 @@ class Loader
 
 
 	/** @return IAdapter */
-	private function getAdapter(string $file)
+	private function getAdapter($file)
 	{
 		$extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 		if (!isset($this->adapters[$extension])) {
 			throw new Nette\InvalidArgumentException("Unknown file extension '$file'.");
 		}
 		return is_object($this->adapters[$extension]) ? $this->adapters[$extension] : new $this->adapters[$extension];
+	}
+
+
+	private function getSection(array $data, $key, $file)
+	{
+		Validators::assertField($data, $key, 'array|null', "section '%' in file '$file'");
+		$item = $data[$key];
+		if ($parent = Helpers::takeParent($item)) {
+			$item = Helpers::merge($item, $this->getSection($data, $parent, $file));
+		}
+		return $item;
 	}
 
 }

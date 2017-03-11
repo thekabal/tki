@@ -33,7 +33,7 @@ $loader = new Nette\Loaders\RobotLoader;
 // Add directories for RobotLoader to index
 $loader->addDirectory('app');
 $loader->addDirectory('libs');
-// And set caching to the 'temp' directory
+// And set caching to the 'temp' directory on the disc
 $loader->setTempDirectory('temp');
 $loader->register(); // Run the RobotLoader
 ```
@@ -42,10 +42,10 @@ And that's all. From now on, you don't need to use `require`. Great, isn't it?
 
 When RobotLoader encounters duplicate class name during indexing, it throws an exception and informs you about it.
 
-The `$loader->setAutoRefresh(TRUE or FALSE)` determines whether RobotLoader should reindex the scripts if asked for nonexistent class.
-This feature should be disabled on production server.
+The variable `$loader->autoBuild` determines whether RobotLoader should reindex the scripts if asked for nonexistent class.
+This feature is disabled by default on production server.
 
-If you want RobotLoader to skip some directory, use `$loader->excludeDirectory('temp')` or create a file there called `netterobots.txt`:
+If you want RobotLoader to skip some directory, create a file there called `netterobots.txt`:
 
 ```
 Disallow: /Zend
