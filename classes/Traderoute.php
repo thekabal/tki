@@ -197,36 +197,7 @@ class Traderoute
         // Warp or real space and generate distance
         if ($traderoute['move_type'] == 'W')
         {
-            $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($source['sector_id'], $dest['sector_id']));
-            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            if ($query->EOF)
-            {
-                $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink1']);
-                $langvars['l_tdr_nowlink1'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink1']);
-                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink1']);
-            }
-
-            if ($traderoute['circuit'] == '2')
-            {
-                $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($dest['sector_id'], $source['sector_id']));
-                \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
-                if ($query->EOF)
-                {
-                    $langvars['l_tdr_nowlink2'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink2']);
-                    $langvars['l_tdr_nowlink2'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink2']);
-                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink2']);
-                }
-
-                $dist['triptime'] = 4;
-            }
-            else
-            {
-                $dist['triptime'] = 2;
-            }
-
-            $dist['scooped'] = 0;
-            $dist['scooped1'] = 0;
-            $dist['scooped2'] = 0;
+            $dist = \Tki\TraderouteDistance::warpCalc($pdo_db, $db, $lang, $tkireg, $template, $traderoute, $source, $dest);
         }
         else
         {
