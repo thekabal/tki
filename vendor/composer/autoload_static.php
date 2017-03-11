@@ -9,14 +9,14 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        'a241f7e31cfa9fbd3d37a58e5c08c4ea' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/autoload.php',
         'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
         '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
         'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
+        'a7bea2b758e2dc42e25f476fd498182e' => __DIR__ . '/..' . '/symfony/polyfill-xml/bootstrap.php',
         'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
         'bf9f5270ae66ac6fa0290b4bf47867b7' => __DIR__ . '/..' . '/adodb/adodb-php/adodb.inc.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -26,6 +26,7 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Xml\\' => 21,
             'Symfony\\Polyfill\\Php55\\' => 23,
             'Symfony\\Polyfill\\Php54\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
@@ -49,8 +50,6 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
             'Psr\\Log\\' => 8,
             'PhpParser\\' => 10,
             'PhpCsFixer\\' => 11,
-            'PHP_CodeSniffer\\Tests\\' => 22,
-            'PHP_CodeSniffer\\' => 16,
             'PHPStan\\' => 8,
             'PDepend\\' => 8,
         ),
@@ -62,6 +61,10 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
             0 => __DIR__ . '/../..' . '/classes',
             1 => __DIR__ . '/../..' . '/tests',
             2 => __DIR__ . '/../..' . '/config',
+        ),
+        'Symfony\\Polyfill\\Xml\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-xml',
         ),
         'Symfony\\Polyfill\\Php55\\' => 
         array (
@@ -142,14 +145,6 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
         'PhpCsFixer\\' => 
         array (
             0 => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/src',
-        ),
-        'PHP_CodeSniffer\\Tests\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/squizlabs/php_codesniffer/tests',
-        ),
-        'PHP_CodeSniffer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/squizlabs/php_codesniffer/src',
         ),
         'PHPStan\\' => 
         array (
