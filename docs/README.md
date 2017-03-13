@@ -26,6 +26,7 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 ## Requirements:
 
 ### Server (generally, the most recent/current version of each is our recommendation, but these should suffice):
+- A Linux server. Our primary development platform is Fedora, but most Linux distributions should work, and potentially even OpenBSD.
 - A webserver capable of supporting htaccess, and TLS.
 - `apache v2.4+` (we have not determined a required minimum).
 - `php v7.1.0+` (needed for void return types).
