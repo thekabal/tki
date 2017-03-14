@@ -25,7 +25,7 @@
 namespace Tki;
 
 use PDO;
-use \Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 class Db
 {
@@ -93,7 +93,7 @@ class Db
                     $db->SetFetchMode(ADODB_FETCH_ASSOC);
                 }
             }
-            catch (\Exception $e)
+            catch (\Throwable $e)
             {
                 // We need to display the error message onto the screen.
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
