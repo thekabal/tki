@@ -35,7 +35,7 @@ $variables['color_line2'] = $tkireg->color_line2;
 
 // Load required language variables for the ranking page.
 $langvars = Tki\Translate::load($pdo_db, $lang,
-            array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams'));
+array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams'));
 
 // Get requested ranking order.
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -175,7 +175,7 @@ $template->addVariables('variables', $variables);
 
 // Load required language variables for the ranking page.
 $langvars = Tki\Translate::load($pdo_db, $lang,
-            array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams', 'news'));
+array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams', 'news'));
 
 // Modify the requires language variables here.
 $langvars['l_ranks_title'] = str_replace('[max_ranks]', $tkireg->max_ranks, $langvars['l_ranks_title']);
