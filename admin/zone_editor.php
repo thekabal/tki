@@ -92,7 +92,7 @@ else
         $_zone_attack = empty($zone_attack) ? "N" : "Y";
         $_zone_warpedit = empty($zone_warpedit) ? "N" : "Y";
         $_zone_planet = empty($zone_planet) ? "N" : "Y";
-        $resx = $db->Execute("UPDATE {$db->prefix}zones SET zone_name = ?, allow_beacon = ? , allow_attack= ?  , allow_warpedit = ? , allow_planet = ?, max_hull = ? WHERE zone_id = ?;", array($zone_name, $_zone_beacon , $_zone_attack, $_zone_warpedit, $_zone_planet, $zone_hull, $_POST['zone']));
+        $resx = $db->Execute("UPDATE {$db->prefix}zones SET zone_name = ?, allow_beacon = ? , allow_attack= ?  , allow_warpedit = ? , allow_planet = ?, max_hull = ? WHERE zone_id = ?;", array($zone_name, $_zone_beacon, $_zone_attack, $_zone_warpedit, $_zone_planet, $zone_hull, $_POST['zone']));
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $button_main = false;
     }
