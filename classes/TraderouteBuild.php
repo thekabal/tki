@@ -410,7 +410,7 @@ class TraderouteBuild
         $src_type = null;
         $dest_type = null;
 
-        if ($num_traderoutes >= $tkireg->max_traderoutes_player && empty ($editing))
+        if ($num_traderoutes >= $tkireg->max_traderoutes_player && empty($editing))
         { // Dont let them exceed max traderoutes
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_maxtdr']);
         }
@@ -615,7 +615,7 @@ class TraderouteBuild
             $mtype = 'W';
         }
 
-        if (empty ($editing))
+        if (empty($editing))
         {
             $query = $db->Execute("INSERT INTO {$db->prefix}traderoutes VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);

@@ -86,7 +86,7 @@ else
 echo "</table>\n";
 echo "<div style=\"height:16px;\"></div>\n";
 
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     echo str_replace('[here]', "<a href='index.php" . $link . "'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mlogin']);
 }

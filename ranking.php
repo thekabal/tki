@@ -159,7 +159,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
     $template->addVariables('players', $player_list);
 }
 
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     $variables['loggedin'] = (bool) true;
     $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');

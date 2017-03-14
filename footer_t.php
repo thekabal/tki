@@ -121,7 +121,7 @@ $public_pages = array('ranking.php', 'new.php', 'faq.php', 'settings.php', 'news
 $slash_position = mb_strrpos($request->server->get('SCRIPT_NAME'), '/') + 1;
 $current_page = mb_substr($request->server->get('SCRIPT_NAME'), $slash_position);
 
-unset ($variables);
+unset($variables);
 $variables = array();
 
 if (in_array($current_page, $public_pages))

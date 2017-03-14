@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-unset ($variables);
+unset($variables);
 $variables = array();
 
 // Database driven language entries

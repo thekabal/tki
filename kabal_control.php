@@ -144,7 +144,7 @@ else
         {
             echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #0f0 \">kabal Editor</span><br>";
             echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";
-            if (empty ($user))
+            if (empty($user))
             {
                 echo "<select size=20 name=user>";
                 $res = $db->Execute("SELECT email, character_name, ship_destroyed, active, sector FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email = kabal_id ORDER BY sector;");

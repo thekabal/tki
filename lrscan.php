@@ -365,7 +365,7 @@ else
     while (!$query->EOF)
     {
         $planet = $query->fields;
-        if (empty ($planet['name']))
+        if (empty($planet['name']))
         {
             echo $langvars['l_unnamed'];
         }

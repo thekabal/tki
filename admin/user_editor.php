@@ -24,7 +24,7 @@ if (!array_key_exists('operation', $_POST))
     $_POST['operation'] = null;
 }
 
-if (empty ($_POST['user']))
+if (empty($_POST['user']))
 {
     $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships ORDER BY character_name");
     Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);

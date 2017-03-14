@@ -65,7 +65,7 @@ else
 }
 
 echo "<br>\n";
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
 }

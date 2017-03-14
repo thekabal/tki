@@ -31,7 +31,7 @@ $variables['link'] = $link;
 $variables['body_class'] = 'faq';
 $variables['title'] = $langvars['l_faq_title'];
 
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
 }

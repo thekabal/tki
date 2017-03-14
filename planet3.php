@@ -99,7 +99,7 @@ if ($planetinfo['sector_id'] != $playerinfo['sector'])
     die();
 }
 
-if (empty ($planetinfo))
+if (empty($planetinfo))
 {
     echo $langvars['l_planet_none'] . "<br>";
     Tki\Text::gotoMain($pdo_db, $lang);
