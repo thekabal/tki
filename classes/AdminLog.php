@@ -25,7 +25,7 @@ use PDO;
 
 class AdminLog
 {
-    public static function writeLog(\PDO $pdo_db, int $log_type, string $data = null): bool
+    public static function writeLog(\PDO $pdo_db, int $log_type, ?string $data = null): bool
     {
         $result = false;
         $query = "INSERT INTO ::prefix::logs VALUES (NULL, 0, :logtype, NOW(), :data)";

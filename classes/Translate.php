@@ -25,7 +25,7 @@ class Translate
 {
     protected static $langvars = array();
 
-    public static function load(\PDO $pdo_db, string $language = null, array $categories = null) : array
+    public static function load(\PDO $pdo_db, ?string $language = null, ?array $categories = null) : array
     {
         // Check if all supplied args are valid, if not return an empty array.
         if (($pdo_db === null) || ($language === null) || !is_array($categories))

@@ -21,7 +21,7 @@ namespace Tki;
 
 class TraderouteDie
 {
-    public static function die(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, string $error_msg = null): void
+    public static function die(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, ?string $error_msg = null): void
     {
         echo "<p>" . $error_msg . "<p>";
         echo "<div style='text-align:left;'>\n";

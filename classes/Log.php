@@ -360,7 +360,7 @@ class Log
         return $retvalue;
     }
 
-    public static function getLogInfo(array $log_list, int $id = null, string &$title = null, string &$text = null): void
+    public static function getLogInfo(array $log_list, ?int $id = null, ?string &$title = null, ?string &$text = null): void
     {
         $title = null;
         $text = null;
