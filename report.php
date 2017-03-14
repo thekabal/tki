@@ -27,7 +27,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'device'
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
