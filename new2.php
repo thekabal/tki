@@ -141,7 +141,7 @@ if ($flag == 0)
     $hashed_pass = password_hash($filtered_post_password, PASSWORD_DEFAULT); // PASSWORD_DEFAULT is the strongest algorithm available to PHP at the current time - today, it is BCRYPT.
 
     $result2 = $db->Execute("INSERT INTO {$db->prefix}ships (ship_name, ship_destroyed, character_name, password, email, armor_pts, credits, ship_energy, ship_fighters, turns, on_planet, dev_warpedit, dev_genesis, dev_beacon, dev_emerwarp, dev_escapepod, dev_fuelscoop, dev_minedeflector, last_login, ip_address, trade_colonists, trade_fighters, trade_torps, trade_energy, cleared_defenses, lang, dev_lssd)
-                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, $tkireg->start_armor, $tkireg->start_credits, $tkireg->start_energy, $tkireg->start_fighters, $mturns, 'N', $tkireg->start_editors, $tkireg->start_genesis, $tkireg->start_beacon, $tkireg->start_emerwarp, $tkireg->start_escape_pod, $tkireg->start_scoop, $tkireg->start_minedeflectors, $stamp, $request->server->get('REMOTE_ADDR'), 'Y', 'N', 'N', 'Y', NULL, $lang, $tkireg->start_lssd));
+                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, $tkireg->start_armor, $tkireg->start_credits, $tkireg->start_energy, $tkireg->start_fighters, $mturns, 'N', $tkireg->start_editors, $tkireg->start_genesis, $tkireg->start_beacon, $tkireg->start_emerwarp, $tkireg->start_escape_pod, $tkireg->start_scoop, $tkireg->start_minedeflectors, $stamp, $request->server->get('REMOTE_ADDR'), 'Y', 'N', 'N', 'Y', null, $lang, $tkireg->start_lssd));
     Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
     if (!$result2)
