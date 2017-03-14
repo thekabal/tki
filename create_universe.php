@@ -44,7 +44,7 @@ if ($swordfish === null || $swordfish === false) // If no swordfish password has
     $step = "1";
 }
 
-if (($swordfish !== false) && (\Tki\SecureConfig::ADMIN_PASS != $swordfish)) // If a swordfish password is not null and it does not match (bad pass), redirect to step 1 (default or 0.php)
+if (($swordfish !== false) && ($swordfish != \Tki\SecureConfig::ADMIN_PASS)) // If a swordfish password is not null and it does not match (bad pass), redirect to step 1 (default or 0.php)
 {
     $variables['goodpass'] = false;
     include_once 'create_universe/0.php';
