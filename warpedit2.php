@@ -182,7 +182,7 @@ if ($linkinfo)
 
         if ($oneway !== null)
         {
-            echo $langvars['l_warp_coneway'] . " " . $target_sector . " " . "<br><br>";
+            echo $langvars['l_warp_coneway'] . " " . $target_sector . " <br><br>";
         }
         else
         {
