@@ -345,7 +345,7 @@ else
         }
         else
         {
-            if (empty ($planet1))
+            if (empty($planet1))
             {
                 echo "&nbsp;" . $langvars['l_tdr_na'] . "</font></td>";
             }

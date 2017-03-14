@@ -161,7 +161,7 @@ class PlanetProduction
 
             foreach ($planets as $planet)
             {
-                if (empty ($planet['name']))
+                if (empty($planet['name']))
                 {
                     $planet['name'] = $langvars['l_unnamed'];
                 }

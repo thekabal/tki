@@ -207,7 +207,7 @@ class PlanetReport
                     $total_selling++;
                 }
 
-                if (empty ($planet[$i]['name']))
+                if (empty($planet[$i]['name']))
                 {
                     $planet[$i]['name'] = $langvars['l_unnamed'];
                 }

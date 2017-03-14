@@ -92,7 +92,7 @@ $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 $variables['template'] = $tkireg->default_template;
 
 
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     $variables['loggedin'] = (bool) true;
     $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');

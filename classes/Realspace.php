@@ -81,7 +81,7 @@ class Realspace
         }
 
         // Make sure energyscooped is not null
-        if (!isset ($energyscooped))
+        if (!isset($energyscooped))
         {
             $energyscooped = 0;
         }

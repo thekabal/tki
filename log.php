@@ -108,7 +108,7 @@ else
     echo "<td colspan=2><table border=1 width=100%><tr><td  bgcolor=#63639C>";
 }
 
-if (empty ($startdate))
+if (empty($startdate))
 {
     $startdate = date("Y-m-d");
 }

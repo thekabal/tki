@@ -35,7 +35,7 @@ if (empty($command))
         $res->MoveNext();
     }
 
-    if (empty ($bans))
+    if (empty($bans))
     {
         echo "<strong>" . $langvars['l_admin_no_bans'] . "</strong>";
     }
@@ -331,7 +331,7 @@ elseif ($command == 'unbanip')
     }
 
     echo "<p><strong>" . $langvars['l_admin_affected_players'] . " :</strong><p>";
-    if (empty ($players))
+    if (empty($players))
     {
         echo " - " . $langvars['l_none'] . "<br>";
     }

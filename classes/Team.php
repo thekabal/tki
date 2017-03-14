@@ -65,7 +65,7 @@ class Team
         $desc = trim($desc);
         $creator = (int) $creator;
 
-        if ($name === null || empty ($name) || $desc === null || empty ($desc) || $creator === null || empty ($creator))
+        if ($name === null || empty($name) || $desc === null || empty($desc) || $creator === null || empty($creator))
         {
             return (bool) false;
         }

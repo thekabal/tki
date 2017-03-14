@@ -111,7 +111,7 @@ class PlanetReportCE
         $planetinfo = $res->fields;
 
         // Set the name for unamed planets to be "unnamed"
-        if (empty ($planetinfo['name']))
+        if (empty($planetinfo['name']))
         {
             $planetinfo['name'] = $langvars['l_unnamed'];
         }

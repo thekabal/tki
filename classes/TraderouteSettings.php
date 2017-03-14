@@ -91,9 +91,9 @@ class TraderouteSettings
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
-        empty ($colonists) ? $colonists = 'N' : $colonists = 'Y';
-        empty ($fighters) ? $fighters = 'N' : $fighters = 'Y';
-        empty ($torps) ? $torps = 'N' : $torps = 'Y';
+        empty($colonists) ? $colonists = 'N' : $colonists = 'Y';
+        empty($fighters) ? $fighters = 'N' : $fighters = 'Y';
+        empty($torps) ? $torps = 'N' : $torps = 'Y';
 
         $resa = $db->Execute("UPDATE {$db->prefix}ships SET trade_colonists = ?, trade_fighters = ?, trade_torps = ?, trade_energy = ? WHERE ship_id = ?;", array($colonists, $fighters, $torps, $energy, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
