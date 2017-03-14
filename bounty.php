@@ -267,7 +267,7 @@ switch ($response) {
             }
         }
 
-        $insert = $db->Execute("INSERT INTO {$db->prefix}bounty (bounty_on,placed_by,amount) values (?,?,?);", array($bounty_on, $playerinfo['ship_id'] ,$amount));
+        $insert = $db->Execute("INSERT INTO {$db->prefix}bounty (bounty_on, placed_by, amount) values (?, ?, ?);", array($bounty_on, $playerinfo['ship_id'], $amount));
         Tki\Db::LogDbErrors($pdo_db, $insert, __LINE__, __FILE__);
         $stamp = date("Y-m-d H:i:s");
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, credits = credits - ? WHERE ship_id = ?;", array($stamp, $amount, $playerinfo['ship_id']));
