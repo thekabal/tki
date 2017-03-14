@@ -83,7 +83,7 @@ else
 $flag = 0;
 $sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email || character_name=:character_name || ship_name=:shipname";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $username, \PDO::PARAM_STR);
+$stmt->bindParam(':email', $username, PDO::PARAM_STR);
 $stmt->bindParam(':character_name', $character);
 $stmt->bindParam(':ship_name', $shipname);
 $stmt->execute();

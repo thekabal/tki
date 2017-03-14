@@ -239,7 +239,7 @@ $stmt->bindParam(':ship_destroyed', $admin_ship_destr);
 $stmt->bindParam(':character_name', $tkireg->admin_name);
 $stmt->bindParam(':password', $admin_hashed_password);
 $stmt->bindParam(':recovery_time', $admin_recovery_time);
-$stmt->bindParam(':email', $tkireg->admin_mail, \PDO::PARAM_STR);
+$stmt->bindParam(':email', $tkireg->admin_mail, PDO::PARAM_STR);
 $stmt->bindParam(':turns', $tkireg->start_turns);
 $stmt->bindParam(':armor_pts', $tkireg->start_armor);
 $stmt->bindParam(':credits', $tkireg->start_credits);

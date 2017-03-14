@@ -28,7 +28,7 @@ $body_class = 'ibank';
 Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
 
 $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE email=:email");
-$stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $result = $stmt->execute();
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);

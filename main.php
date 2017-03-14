@@ -35,7 +35,7 @@ $stmt = $pdo_db->prepare($sql);
 $sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 if ($sql_test === true)
 {
-    $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
     $stmt->execute();
     $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -61,7 +61,7 @@ if ($playerinfo['cleared_defenses'] > ' ')
 // Pull sector info from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector'], \PDO::PARAM_INT);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -85,7 +85,7 @@ if ($playerinfo['on_planet'] == "Y")
 $i = 0;
 $sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start ORDER BY link_dest ASC";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':link_start', $playerinfo['sector'], \PDO::PARAM_INT);
+$stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($link_present !== null)
@@ -101,7 +101,7 @@ $num_links = $i;
 $i = 0;
 $sql = "SELECT * FROM ::prefix::planets WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector'], \PDO::PARAM_INT);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $planet_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($planet_present !== null)
@@ -117,7 +117,7 @@ $num_planets = $i;
 $i = 0;
 $sql = "SELECT * FROM ::prefix::sector_defense, ::prefix::ships WHERE ::prefix::sector_defense.sector_id=:sector_id AND ::prefix::ships.ship_id = ::prefix::sector_defense.ship_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector'], \PDO::PARAM_INT);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($defense_present !== null)
@@ -133,7 +133,7 @@ $num_defenses = $i;
 // Grab zoneinfo from database
 $sql = "SELECT zone_id,zone_name FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $sectorinfo['zone_id'], \PDO::PARAM_INT);
+$stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -161,7 +161,7 @@ $sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
 if ($sql_test === true)
 {
-    $stmt->bindParam(':recp_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+    $stmt->bindParam(':recp_id', $playerinfo['ship_id'], PDO::PARAM_INT);
     $result = $stmt->execute();
     if ($result)
     {
@@ -506,7 +506,7 @@ if ($num_planets > 0)
             // Get planet owner from database
             $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $planets[$i]['owner'], \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $planets[$i]['owner'], PDO::PARAM_INT);
             $stmt->execute();
             $planet_owner = $stmt->fetch(PDO::FETCH_ASSOC);
 

@@ -45,7 +45,7 @@ if (array_key_exists('newlang', $_POST) === true)
                 $sql = "UPDATE ::prefix::ships SET lang=:lang WHERE email=:email LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':lang', $lang);
-                $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
+                $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
                 $stmt->execute();
                 $lang_changed = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -90,7 +90,7 @@ else
 
     $sql = "SELECT ship_id, password FROM ::prefix::ships WHERE email=:email LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
     $stmt->execute();
     $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
