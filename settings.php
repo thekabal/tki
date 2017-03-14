@@ -23,7 +23,7 @@ require_once './common.php';
 $link = null;
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'settings', 'footer','global_includes', 'global_funcs'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common', 'regional', 'settings', 'footer', 'global_includes', 'global_funcs'));
 
 $variables = null;
 $variables['lang'] = $lang;
