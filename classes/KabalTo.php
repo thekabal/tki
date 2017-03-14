@@ -754,7 +754,7 @@ class KabalTo
                 $free_ore = round($playerinfo['ship_ore'] / 2);
                 $free_organics = round($playerinfo['ship_organics'] / 2);
                 $free_goods = round($playerinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $tkireg ) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $tkireg) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what target can carry
                     $salv_goods = $free_goods;
