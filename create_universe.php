@@ -1,4 +1,5 @@
 <?php
+// declare(strict_types = 1); // Triggers errors in swordfish and steps if enabled.
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -34,6 +35,7 @@ if (mb_strlen(trim($swordfish)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $step = null;
 $step = (int) filter_input(INPUT_POST, 'step', FILTER_SANITIZE_NUMBER_INT);
+
 if (mb_strlen(trim($step)) === 0)
 {
     $step = false;
