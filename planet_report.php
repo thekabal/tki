@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -30,6 +30,12 @@ $preptype = null;
 if (array_key_exists('preptype', $_GET))
 {
     $preptype = $_GET['preptype'];
+}
+
+$sort = null;
+if (array_key_exists('sort', $_GET))
+{
+    $preptype = $_GET['sort'];
 }
 
 // Get playerinfo from database
