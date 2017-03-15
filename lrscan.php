@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -133,7 +133,17 @@ if ($sector == "*")
         Tki\Db::LogDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
 
         $defM = $resultSDa->fields;
+        if ($defM['mines'] === null)
+        {
+            $defM['mines'] = 0;
+        }
+
         $defF = $resultSDb->fields;
+        if ($defF['fighters'] === null)
+        {
+            $defF['fighters'] = 0;
+        }
+
         $port_type = $sectorinfo['port_type'];
         $has_planet = $result3->RecordCount();
         $has_mines = number_format($defM['mines'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
