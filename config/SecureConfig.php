@@ -31,31 +31,31 @@ class SecureConfig
     // If you do not know the port, set this to '' for default.
     //  MySQL default is 3306, PgSQL default is 5432
 
-    public const DB_PORT = null;
+    const DB_PORT = null;
 
     // Hostname of the database server.
-    public const DB_HOST = '127.0.0.1';
+    const DB_HOST = '127.0.0.1';
 
     // Username connect to the database.
-    public const DB_USER = 'tki';
+    const DB_USER = 'tki';
 
     // Password to connect to the database.
-    public const DB_PASS = 'tki';
+    const DB_PASS = 'tki';
 
     // Name of the SQL database.
-    public const DB_NAME = 'tki';
+    const DB_NAME = 'tki';
 
     // Type of the SQL database.
     // "mysqli" -  required for transaction support.
     // "postgres9" - Version 9+.
     // Only mysqli works as of this release.
-    public const DB_TYPE = 'mysqli';
+    const DB_TYPE = 'mysqli';
 
      // Table prefix for the database.
      // If you want to run more than one game of TKI on the same database, or if the current table names
      // conflict with tables you already have in your db, you will need to change this.
-    public const DB_TABLE_PREFIX = 'tki_';
+    const DB_TABLE_PREFIX = 'tki_';
 
     //Define the admin password, used for accessing "create_universe", "scheduler", and the admin control panel.
-    public const ADMIN_PASS = 'secret';
+    const ADMIN_PASS = 'secret';
 }
