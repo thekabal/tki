@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -38,18 +38,26 @@ if (!$tkireg->allow_navcomp)
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $state = null;
-$state = (int) filter_input(INPUT_POST, 'state', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($state)) === 0)
+$state = (string) filter_input(INPUT_POST, 'state', FILTER_SANITIZE_NUMBER_INT);
+if (($state === null) || (mb_strlen(trim($state)) === 0))
 {
     $state = false;
+}
+else
+{
+    $state = (int) $state;
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $stop_sector = null;
-$stop_sector = (int) filter_input(INPUT_POST, 'stop_sector', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($stop_sector)) === 0)
+$stop_sector = (string) filter_input(INPUT_POST, 'stop_sector', FILTER_SANITIZE_NUMBER_INT);
+if (($stop_sector === null) || (mb_strlen(trim($stop_sector)) === 0))
 {
     $stop_sector = false;
+}
+else
+{
+    $state = (int) $state;
 }
 
 // Get playerinfo from database
