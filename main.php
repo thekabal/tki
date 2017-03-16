@@ -171,7 +171,7 @@ if ($sql_test === true)
 
 if ($num_messages > 0)
 {
-    $alert_message = "{$langvars['l_youhave']} {$result->RecordCount()} {$langvars['l_messages_wait']}";
+    $alert_message = "{$langvars['l_youhave']} {$num_messages} {$langvars['l_messages_wait']}";
     echo "<script>\n";
     echo "  alert('{$alert_message}');\n";
     echo "</script>\n";
