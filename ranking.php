@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -41,7 +41,7 @@ array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $sort = null;
 $sort = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($sort)) === 0)
+if (($sort === null) || (mb_strlen(trim($sort)) === 0))
 {
     $sort = false;
 }
