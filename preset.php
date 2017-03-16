@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -39,12 +39,12 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Pull the presets for the player from the db.
+$preset_list = array();
 $sql = "SELECT * FROM ::prefix::presets WHERE ship_id=:ship_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
 $stmt->execute();
-$presetinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$preset_list = array();
+$preset_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Filter the array of presets from the form submission
 if (array_key_exists('preset', $_POST))
@@ -75,7 +75,7 @@ if ($change !== 1)
     echo "<form accept-charset='utf-8' action='preset.php' method='post'>";
     for ($x = 0; $x < $tkireg->max_presets; $x++)
     {
-        echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $presetinfo[$x]['preset'] . "'></div>";
+        echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $preset_list[$x]['preset'] . "'></div>";
     }
 
     echo "<input type='hidden' name='change' value='1'>";
@@ -89,10 +89,11 @@ else
     {
         if ($key < $tkireg->max_presets)
         {
+            $new_id = $key + 1;
             $sql = "UPDATE ::prefix::presets SET preset=:preset WHERE preset_id=:preset_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':preset', $preset_list[key]);
-            $stmt->bindParam(':preset_id', $presetinfo[key]['preset_id']);
+            $stmt->bindParam(':preset', $value);
+            $stmt->bindParam(':preset_id', $new_id);
             $stmt->execute();
 
             $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);
