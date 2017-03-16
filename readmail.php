@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -39,6 +39,9 @@ if (!array_key_exists('action', $_GET))
 {
     $_GET['action'] = null;
 }
+
+// Returns null if it doesn't have it set, bool false if its set but fails to validate and the actual value if it all passes.
+$ID = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 255)));
 
 if ($_GET['action'] == "delete")
 {
@@ -105,7 +108,6 @@ else
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($msg['sender_id']));
         Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $sender = $result->fields;
-        // $isAdmin = isAdmin($sender);
         ?>
             <tr>
               <td width="100%" align="center" bgcolor="black" height="4"></td>
@@ -119,10 +121,6 @@ else
                       <td width="55%" style="text-align:left;"><font color="yellow" size="2">
         <?php
         echo "<span style='vertical-align:middle;'>{$sender['character_name']}</span>";
-        if ($isAdmin === true)
-        {
-            echo "&nbsp;<img style='width:64px; height:16px; border:none; padding:0px; vertical-align:text-bottom;' src='<?php echo $template->getVariables('template_dir'); ?>/images/validated_administrator2.gif' alt='Validated as Admin' />";
-        }
         ?>
         </font></td>
                       <td width="21%" align="center"><font color="white" size="2"><?php echo $msg['sent']; ?></font></td>
