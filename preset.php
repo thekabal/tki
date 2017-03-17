@@ -46,6 +46,9 @@ $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
 $stmt->execute();
 $preset_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Filter the array of presets from the form submission - first pass
+filter_var_array($_POST['preset'], FILTER_VALIDATE_INT);
+
 // Filter the array of presets from the form submission
 if (array_key_exists('preset', $_POST))
 {
