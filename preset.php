@@ -61,6 +61,7 @@ if (array_key_exists('preset', $_POST))
         $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
     }
 }
+filter_var_array($preset_list, FILTER_VALIDATE_INT);
 
 $change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
 foreach ($preset_list as $index => $preset)
