@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -66,7 +66,7 @@ if (mb_strlen(trim($filtered_post_password)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $newlang = null;
 $newlang = filter_input(INPUT_POST, 'newlang', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($newlang)) === 0)
+if (($newlang === null) || (mb_strlen(trim($newlang)) === 0))
 {
     $newlang = false;
 }
@@ -81,7 +81,7 @@ else
 }
 
 $flag = 0;
-$sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email || character_name=:character_name || ship_name=:shipname";
+$sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email || character_name=:character_name || ship_name=:ship_name";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $username, PDO::PARAM_STR);
 $stmt->bindParam(':character_name', $character);
@@ -153,6 +153,7 @@ if ($flag == 0)
         $result2 = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($username));
         Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $shipid = $result2->fields;
+        $shipid['ship_id'] = (int) $shipid['ship_id'];
 
         // To do: build a bit better "new player" message
         $langvars['l_new_message'] = str_replace('[pass]', $filtered_post_password, $langvars['l_new_message']);
@@ -170,7 +171,7 @@ if ($flag == 0)
 
         mail("$username", $langvars['l_new_topic'], $langvars['l_new_message'] . "\r\n\r\n" . $link_to_game, 'From: ' . $tkireg->admin_mail . "\r\nReply-To: " . $tkireg->admin_mail . "\r\nX-Mailer: PHP/" . phpversion());
 
-        Tki\LogMove::writeLog($pdo_db, $shipid['ship_id'], 0); // A new player is placed into sector 0. Make sure his movement log shows it, so they see it on the galaxy map.
+        Tki\LogMove::writeLog($pdo_db, $shipid['ship_id'], 1); // A new player is placed into sector 1. Make sure his movement log shows it, so they see it on the galaxy map.
         $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES (NULL, ?, ?, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array($character . "\'s Territory", $shipid['ship_id']));
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
