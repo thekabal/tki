@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -67,7 +67,7 @@ if (array_key_exists('teamname', $_POST) === true)
 $teamdesc = null;
 if (array_key_exists('teamdesc', $_POST) === true)
 {
-    $teamname = $_POST['teamdesc'];
+    $teamdesc = $_POST['teamdesc'];
 }
 
 $confirmed = null;
@@ -98,6 +98,7 @@ $result = $db->Execute("SELECT {$db->prefix}ships.*, {$db->prefix}teams.team_nam
             WHERE {$db->prefix}ships.email = ?;", array($_SESSION['username']));
 Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $playerinfo = $result->fields;
+$playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
 
 // We do not want to query the database, if it is not necessary.
 if ($playerinfo['team_invite'] != 0)
