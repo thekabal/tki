@@ -133,13 +133,13 @@ if ($sector == "*")
         Tki\Db::LogDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
 
         $defM = $resultSDa->fields;
-        if ($defM['mines'] === null)
+        if ($defM === null)
         {
             $defM['mines'] = 0;
         }
 
         $defF = $resultSDb->fields;
-        if ($defF['fighters'] === null)
+        if ($defF === null)
         {
             $defF['fighters'] = 0;
         }
@@ -404,7 +404,17 @@ else
     $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F';", array($sector));
     Tki\Db::LogDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
     $defM = $resultSDa->fields;
+
+    if ($defM['mines'] === null)
+    {
+        $defM['mines'] = 0;
+    }
+
     $defF = $resultSDb->fields;
+    if ($defF['fighters'] === null)
+    {
+        $defF['fighters'] = 0;
+    }
 
     echo "</td></tr>";
     echo "<tr bgcolor=\"$tkireg->color_line1\"><td><strong>" . $langvars['l_mines'] . "</strong></td></tr>";
