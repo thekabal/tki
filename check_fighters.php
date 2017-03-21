@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -23,7 +23,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('check_fighters', 'common'
 // Get sectorinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $sector);
+$stmt->bindParam(':sector_id', $sector, PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -38,7 +38,7 @@ $owner = true;
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $response = null;
 $response = filter_input(INPUT_POST, 'response', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($response)) === 0)
+if (($response === null) || (mb_strlen(trim($response)) === 0))
 {
     $response = false;
 }
