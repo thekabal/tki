@@ -133,13 +133,13 @@ if ($sector == "*")
         Tki\Db::LogDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
 
         $defM = $resultSDa->fields;
-        if ($defM === null)
+        if ($defM['mines'] === null)
         {
             $defM['mines'] = 0;
         }
 
         $defF = $resultSDb->fields;
-        if ($defF === null)
+        if ($defF['fighters'] === null)
         {
             $defF['fighters'] = 0;
         }
