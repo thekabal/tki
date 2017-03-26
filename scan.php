@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -36,7 +36,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $filtered_ship_id = null;
-$filtered_ship_id = filter_input(INPUT_POST, 'ship_id', FILTER_SANITIZE_EMAIL);
+$filtered_ship_id = filter_input(INPUT_GET, 'ship_id', FILTER_SANITIZE_EMAIL);
 if (($filtered_ship_id === null) || (mb_strlen(trim($filtered_ship_id)) === 0))
 {
     $filtered_ship_id = false;
@@ -45,6 +45,9 @@ if (($filtered_ship_id === null) || (mb_strlen(trim($filtered_ship_id)) === 0))
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($filtered_ship_id));
 Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 $targetinfo = $result2->fields;
+
+$targetinfo['ship_id'] = (int) $targetinfo['ship_id'];
+$targetinfo['cloak'] = (int) $targetinfo['cloak'];
 
 $playerscore = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 $targetscore = Tki\Score::updateScore($pdo_db, $targetinfo['ship_id'], $tkireg, $playerinfo);
@@ -133,7 +136,7 @@ else
 
             // Player will get a Federation Bounty on themselves if they attack a player who's score is less than bounty_ratio of
             // themselves. If the target has a Federation Bounty, they can attack without attracting a bounty on themselves.
-            if ($btyamount == 0 && ((($targetscore / $playerscore) < $bounty_ratio) || $targetinfo['turns_used'] < $bounty_minturns))
+            if ($btyamount == 0 && ((($targetscore / $playerscore) < $tkireg->bounty_ratio) || $targetinfo['turns_used'] < $tkireg->bounty_minturns))
             {
                 echo $langvars['l_by_fedbounty'] . "<br><br>";
             }
@@ -142,7 +145,7 @@ else
                 echo $langvars['l_by_nofedbounty'] . "<br><br>";
             }
 
-            $sc_error = Tki\Scan::error($playerinfo['sensors'], $targetinfo['cloak'], $scan_error_factor);
+            $sc_error = Tki\Scan::error($playerinfo['sensors'], $targetinfo['cloak'], $tkireg->scan_error_factor);
             echo $langvars['l_scan_ron'] . " " . $targetinfo['ship_name'] . ", " . $langvars['l_scan_capt'] . " " . $targetinfo['character_name'] . "<br><br>";
             echo "<strong>" . $langvars['l_ship_levels'] . ":</strong><br><br>";
             echo "<table  width=\"\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
