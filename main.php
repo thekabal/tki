@@ -590,23 +590,33 @@ echo "</div>\n";
 echo "<div style='text-align:center; border:transparent 1px solid;'>\n";
 echo "<div style='text-align:center; font-size:12px; color:#fff; font-weight:bold;'>{$langvars['l_ships_in_sec']} {$sectorinfo['sector_id']}</div>\n";
 
-if ($playerinfo['sector'] != 0)
+if ($playerinfo['sector'] !== 1)
 {
     $sql  = null;
     $sql .= "SELECT ::prefix::ships.*, ::prefix::teams.team_name, ::prefix::teams.id ";
     $sql .= "FROM ::prefix::ships LEFT OUTER JOIN ::prefix::teams ON ::prefix::ships.team = ::prefix::teams.id ";
-    $sql .= "WHERE ::prefix::ships.ship_id <> ? AND ::prefix::ships.sector = ? AND ::prefix::ships.on_planet='N' ";
-    $sql .= "ORDER BY ?";
-    $result4 = $db->Execute($sql, array($playerinfo['ship_id'], $playerinfo['sector'], $db->random));
+    $sql .= "WHERE ::prefix::ships.ship_id <> :ship_id AND ::prefix::ships.sector = :sector AND ::prefix::ships.on_planet='N' ";
+    $sql .= "ORDER BY :rand";
+
+    $stmt = $pdo_db->prepare($sql);
+    $sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+    if ($sql_test === true)
+    {
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':sector', $playerinfo['sector'], PDO::PARAM_INT);
+        $stmt->bindParam(':rand', $db->random, PDO::PARAM_STR);
+        $stmt->execute();
+        $result4 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     Tki\Db::LogDbErrors($pdo_db, $result4, __LINE__, __FILE__);
 
     if ($result4 !== false)
     {
         $ships_detected = 0;
         $ship_detected = null;
-        while (!$result4->EOF)
+        foreach ($result4 as $row)
         {
-            $row = $result4->fields;
             $success = Tki\Scan::success($playerinfo['sensors'], $row['cloak']);
             if ($success < 5)
             {
@@ -647,10 +657,8 @@ if ($playerinfo['sector'] != 0)
 
                 $row['shiplevel'] = $shiplevel;
                 $ship_detected[] = $row;
-                $ships_detected ++;
+                $ships_detected++;
             }
-
-            $result4->MoveNext();
         }
 
         if ($ships_detected <= 0)
