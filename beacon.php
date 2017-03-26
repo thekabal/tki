@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -49,7 +49,7 @@ $allowed_rsw = "N";
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $beacon_text = null;
 $beacon_text = filter_input(INPUT_POST, 'beacon_text', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($beacon_text)) === 0)
+if ($beacon_text === 0)
 {
     $beacon_text = false;
 }
@@ -59,7 +59,7 @@ if ($playerinfo['dev_beacon'] > 0)
     // Get playerinfo from database
     $sql = "SELECT allow_beacon FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
+    $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
     $stmt->execute();
     $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
