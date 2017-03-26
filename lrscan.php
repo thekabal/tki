@@ -293,7 +293,7 @@ else
     echo "</td></tr>";
     echo "<tr bgcolor=\"$tkireg->color_line2\"><td><strong>" . $langvars['l_ships'] . "</strong></td></tr>";
     echo "<tr><td>";
-    if ($sector != 0)
+    if ($sector != 1)
     {
         // Get ships located in the scanned sector
         $result4 = $db->Execute("SELECT ship_id, ship_name, character_name, cloak FROM {$db->prefix}ships WHERE sector = ? AND on_planet = 'N';", array($sector));
