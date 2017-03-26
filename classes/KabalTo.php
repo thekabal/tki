@@ -374,7 +374,7 @@ class KabalTo
         if ($targetinfo['dev_emerwarp'] > 0)
         {
             \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "Kabal $playerinfo[character_name]");
-            $dest_sector = random_int(0, (int) $tkireg->max_sectors);
+            $dest_sector = random_int(1, (int) $tkireg->max_sectors);
             $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $targetinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $result_warp, __LINE__, __FILE__);
 
@@ -649,7 +649,7 @@ class KabalTo
             // Target had no escape pod
             {
                 $rating = round($targetinfo['rating'] / 2);
-                $resc = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 0, ship_ore = 0, ship_organics = 0, ship_energy = 1000, ship_colonists = 0, ship_goods = 0, ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, ship_destroyed = 'N', rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
+                $resc = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 1, ship_ore = 0, ship_organics = 0, ship_energy = 1000, ship_colonists = 0, ship_goods = 0, ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, ship_destroyed = 'N', rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Kabal $playerinfo[character_name]|Y");
             }
