@@ -48,8 +48,8 @@ class Ibank
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_loantoobig'], "ibank.php?command=loans", $lang, $tkireg, $template);
         }
 
-        $amount2 = (int) $amount * $tkireg->ibank_loanfactor;
-        $amount3 = (int) $amount + $amount2;
+        $amount2 = $amount * $tkireg->ibank_loanfactor;
+        $amount3 = $amount + $amount2;
 
         $hours = $tkireg->ibank_lrate / 60;
         $mins = $tkireg->ibank_lrate % 60;
