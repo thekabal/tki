@@ -36,7 +36,8 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($playerinfo['dev_emerwarp'] > 0)
 {
-    $dest_sector = random_int(0, (int) $max_sectors - 1);
+    // Start at sector 1, as we no longer use sector 0.
+    $dest_sector = random_int(1, (int) $max_sectors - 1);
 
     $sql = "UPDATE ::prefix::ships SET sector=:sector, dev_emerwarp=dev_emerwarp-1 WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
