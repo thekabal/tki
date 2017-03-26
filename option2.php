@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -107,7 +107,7 @@ else
             $sql = "UPDATE ::prefix::ships SET password=:pass WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':pass', $new_hashed_pass);
-            $stmt->bindParam(':email', $playerinfo['ship_id']);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
             $stmt->execute();
             $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
