@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -29,7 +29,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('ship', 'planet', 'main', 
 echo "<h1>" . $title . "</h1>\n";
 
 // PHP7 Null coalescing operator - if it is set, great, if not, set to null
-$ship_id = $ship_id ?? null;
+$ship_id = $_GET['ship_id'] ?? null;
 
 // Get playerinfo from database
 $sql = "SELECT team, ship_name, character_name, sector FROM ::prefix::ships WHERE email=:email LIMIT 1";
