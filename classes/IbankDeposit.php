@@ -21,7 +21,7 @@ namespace Tki;
 
 class IbankDeposit
 {
-    public static function before(\PDO $pdo_db, string $lang, string $account, array $playerinfo): void
+    public static function before(\PDO $pdo_db, string $lang, array $account, array $playerinfo): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('ibank'));
@@ -60,11 +60,11 @@ class IbankDeposit
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, $amount, string $account, Reg $tkireg, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, $amount, array $account, Reg $tkireg, Smarty $template): void
     {
         $max_credits_allowed = 18446744073709000000;
 
-        $amount = preg_replace("/[^0-9]/", '', $amount);
+        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
 
         if (($amount * 1) != $amount)
         {
