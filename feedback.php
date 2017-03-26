@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -39,7 +39,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $content = null;
 $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING); // URL doesn't allow spaces, string does.
-if (mb_strlen(trim($content)) === 0)
+if (($content === null) || (mb_strlen(trim($content)) === 0))
 {
     $content = false;
 }
