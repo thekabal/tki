@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -63,7 +63,7 @@ if (mb_strlen(trim($command)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $amount = null;
 $amount = (int) filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($amount)) === 0)
+if ($amount === 0)
 {
     $amount = false;
 }
@@ -71,7 +71,7 @@ if (mb_strlen(trim($amount)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $dplanet_id = null;
 $dplanet_id = (int) filter_input(INPUT_POST, 'dplanet_id', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($dplanet_id)) === 0)
+if ($dplanet_id === 0)
 {
     $dplanet_id = 0;
 }
@@ -79,7 +79,8 @@ if (mb_strlen(trim($dplanet_id)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $minimum = null;
 $minimum = (int) filter_input(INPUT_POST, 'minimum', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($minimum)) === 0)
+
+if ($minimum === 0)
 {
     $minimum = 0;
 }
@@ -91,7 +92,7 @@ else
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $maximum = null;
 $maximum = (int) filter_input(INPUT_POST, 'maximum', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($maximum)) === 0)
+if ($maximum === 0)
 {
     $maximum = 0;
 }

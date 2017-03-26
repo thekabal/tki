@@ -21,7 +21,7 @@ namespace Tki;
 
 class IbankWithdraw
 {
-    public static function before(array $langvars, string $account): void
+    public static function before(array $langvars, array $account): void
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_withdrawfunds'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
@@ -38,9 +38,9 @@ class IbankWithdraw
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, $amount, string $account, Reg $tkireg, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, $amount, array $account, Reg $tkireg, Smarty $template): void
     {
-        $amount = preg_replace("/[^0-9]/", '', $amount);
+        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
             \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidwithdrawinput'], "ibank.php?command=withdraw", $lang, $tkireg, $template);

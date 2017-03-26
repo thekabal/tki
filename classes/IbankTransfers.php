@@ -127,7 +127,7 @@ class IbankTransfers
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
-    public static function ibankTransfer2(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, string $account, int $ship_id, int $splanet_id, int $dplanet_id, Smarty $template): void
+    public static function ibankTransfer2(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $account, int $ship_id, int $splanet_id, int $dplanet_id, Smarty $template): void
     {
         if ($ship_id !== null) // Ship transfer
         {
@@ -287,7 +287,7 @@ class IbankTransfers
         }
     }
 
-    public static function ibankTransfer3(\PDO $pdo_db, $db, string $lang, array $langvars, array $playerinfo, string $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, Smarty $template): void
+    public static function ibankTransfer3(\PDO $pdo_db, $db, string $lang, array $langvars, array $playerinfo, array $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, Smarty $template): void
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 

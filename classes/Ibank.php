@@ -21,9 +21,10 @@ namespace Tki;
 
 class Ibank
 {
-    public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, string $account, $amount, Smarty $template): void
+    public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $account, $amount, Smarty $template): void
     {
-        $amount = preg_replace("/[^0-9]/", '', $amount);
+        $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
+        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $template);
@@ -47,8 +48,8 @@ class Ibank
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_loantoobig'], "ibank.php?command=loans", $lang, $tkireg, $template);
         }
 
-        $amount2 = $amount * $tkireg->ibank_loanfactor;
-        $amount3 = $amount + $amount2;
+        $amount2 = (int) $amount * $tkireg->ibank_loanfactor;
+        $amount3 = (int) $amount + $amount2;
 
         $hours = $tkireg->ibank_lrate / 60;
         $mins = $tkireg->ibank_lrate % 60;
@@ -85,7 +86,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankLogin(array $langvars, array $playerinfo, string $account): void
+    public static function ibankLogin(array $langvars, array $playerinfo, array $account): void
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_welcometoibank'] . "<br>---------------------------------</td></tr>" .
             "<tr valign=top>" .
@@ -98,8 +99,9 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankLoans(\PDO $pdo_db, array $langvars, Reg $tkireg, array $playerinfo, string $account): void
+    public static function ibankLoans(\PDO $pdo_db, array $langvars, Reg $tkireg, array $playerinfo, array $account): void
     {
+        $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_currentloan'] . " :</td><td align=right>" . number_format($account['loan'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
@@ -175,9 +177,9 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, string $account, $amount, Reg $tkireg, Smarty $template): void
+    public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, array $account, $amount, Reg $tkireg, Smarty $template): void
     {
-        $amount = preg_replace("/[^0-9]/", '', $amount);
+        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $template);
