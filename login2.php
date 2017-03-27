@@ -147,7 +147,7 @@ if ($playerfound)
                     // Check if $newbie_nice is set, if so, verify ship limits
                     if ($tkireg->newbie_nice)
                     {
-                        $newbie_info = $db->Execute("SELECT hull, engines, power, computer, sensors, armor, shields, beams, torp_launchers, cloak FROM {$db->prefix}ships WHERE ship_id = ? AND hull <= ? AND engines <= ? AND power <= ? AND computer <= ? AND sensors <= ? AND armor <= ? AND shields <= ? AND beams <= ? AND torp_launchers <= ? AND cloak <= ?;", array($playerinfo['ship_id'], $newbie_hull, $newbie_engines, $newbie_power, $newbie_computer, $newbie_sensors, $newbie_armor, $newbie_shields, $newbie_beams, $newbie_torp_launchers, $newbie_cloak));
+                        $newbie_info = $db->Execute("SELECT hull, engines, power, computer, sensors, armor, shields, beams, torp_launchers, cloak FROM {$db->prefix}ships WHERE ship_id = ? AND hull <= ? AND engines <= ? AND power <= ? AND computer <= ? AND sensors <= ? AND armor <= ? AND shields <= ? AND beams <= ? AND torp_launchers <= ? AND cloak <= ?;", array($playerinfo['ship_id'], $tkireg->newbie_hull, $tkireg->newbie_engines, $tkireg->newbie_power, $tkireg->newbie_computer, $tkireg->newbie_sensors, $tkireg->newbie_armor, $tkireg->newbie_shields, $tkireg->newbie_beams, $tkireg->newbie_torp_launchers, $tkireg->newbie_cloak));
                         Tki\Db::LogDbErrors($pdo_db, $newbie_info, __LINE__, __FILE__);
                         $num_rows = $newbie_info->RecordCount();
 
