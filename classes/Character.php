@@ -64,7 +64,7 @@ class Character
 
         $sql = "DELETE FROM ::prefix::sector_defense WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
 
         $sql = "SELECT zone_id FROM ::prefix::zones WHERE team_zone='N' AND owner=:owner";
@@ -80,7 +80,7 @@ class Character
 
         $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id);
         $stmt->execute();
         $name = $stmt->fetch(\PDO::FETCH_ASSOC);
 
