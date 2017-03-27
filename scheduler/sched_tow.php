@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -16,9 +16,14 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: sched_tow.php
+//
+// FUTURE: Clean up SQL, PDO, better debug/output handling, switch to a FetchAll for a single SQL instead of a loop?
 
-echo "<strong>ZONES</strong><br><br>";
-echo "Towing bigger players out of restricted zones...";
+// Database driven language entries
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+echo "<strong>" . $langvars['l_sched_tow_title'] . "</strong><br><br>";
+echo $langvars['l_sched_tow_note'];
 $num_to_tow = 0;
 do
 {
@@ -27,13 +32,19 @@ do
     if ($res)
     {
         $num_to_tow = $res->RecordCount();
-        echo "<br>$num_to_tow players to tow:<br>";
+        $langvars['l_sched_tow_number'] = str_replace("[number]", $num_to_tow, $langvars['l_sched_tow_number']);
+        echo "<br>" . $langvars['l_sched_tow_number'] . ":<br>";
         while (!$res->EOF)
         {
             $row = $res->fields;
-            echo "...towing $row[character_name] out of $row[sector] ...";
+            $langvars['l_sched_tow_who'] = str_replace("[character]", $row['character_name'], $langvars['l_sched_tow_who']);
+            $langvars['l_sched_tow_who'] = str_replace("[sector]", $row['sector'], $langvars['l_sched_tow_who']);
+            echo $langvars['l_sched_tow_who'];
+
             $newsector = random_int(0, (int) $max_sectors - 1);
-            echo " to sector $newsector.<br>";
+            $langvars['l_sched_tow_where'] = str_replace("[sector]", $newsector, $langvars['l_sched_tow_where']);
+            echo $langvars['l_sched_tow_where'] . ".<br>";
+
             $query = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, cleared_defenses=' ' WHERE ship_id=?", array($newsector, $row['ship_id']));
             Tki\Db::LogDbErrors($pdo_db, $query, __LINE__, __FILE__);
             Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LOG_TOW, "$row[sector]|$newsector|$row[max_hull]");
@@ -43,7 +54,7 @@ do
     }
     else
     {
-        echo "<br>No players to tow.<br>";
+        echo $langvars['l_sched_tow_none']. ".<br>";
     }
 } while ($num_to_tow);
 

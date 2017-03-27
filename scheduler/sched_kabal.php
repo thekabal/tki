@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,13 +17,13 @@
 //
 // File: sched_kabal.php
 //
-// FUTURE: SQL bind varibles
-
-// Kabal turn updates
-echo "<br><strong>Kabal TURNS</strong><br><br>";
+// FUTURE: SQL bind varibles, PDO, debugging, functional(!)
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('sched_kabal', 'common', 'global_includes', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+// Kabal turn updates
+echo "<br><strong>" . $langvars['l_sched_kabal_title'] . "</strong><br><br>";
 
 // Make Kabal selection
 $furcount = 0;
@@ -296,12 +296,30 @@ while (($res instanceof ADORecordSet) && ($res != false))
 $res->_close();
 */
 $furnonmove = $furcount - ($furcount0 + $furcount1 + $furcount2 + $furcount3);
-echo "Counted $furcount Kabal players that are ACTIVE with working ships.<br>";
-echo "$furnonmove Kabal players did not do anything this round. <br>";
-echo "$furcount0 Kabal players had SENTINEL orders of which $furcount0a launched attacks. <br>";
-echo "$furcount1 Kabal players had ROAM orders of which $furcount1a launched attacks. <br>";
-echo "$furcount2 Kabal players had ROAM AND TRADE orders of which $furcount2a launched attacks. <br>";
-echo "$furcount3 Kabal players had ROAM AND HUNT orders of which $furcount3a launched attacks and $furcount3h went hunting. <br>";
-echo "Kabal TURNS COMPLETE. <br>";
+
+$langvars['l_sched_kabal_count'] = str_replace("[count]", $furcount, $langvars['l_sched_kabal_count']);
+echo $langvars['l_sched_kabal_count'] . ".<br>";
+
+$langvars['l_sched_kabal_inactive'] = str_replace("[count]", $furnonmove, $langvars['l_sched_kabal_inactive']);
+echo $langvars['l_sched_kabal_inactive'] . ".<br>";
+
+$langvars['l_sched_kabal_sentinel'] = str_replace("[count]", $furcount0, $langvars['l_sched_kabal_sentinel']);
+$langvars['l_sched_kabal_sentinel'] = str_replace("[count2]", $furcount0a, $langvars['l_sched_kabal_sentinel']);
+echo $langvars['l_sched_kabal_sentinel'] . ".<br>";
+
+$langvars['l_sched_kabal_roam'] = str_replace("[count]", $furcount1, $langvars['l_sched_kabal_roam']);
+$langvars['l_sched_kabal_roam'] = str_replace("[count2]", $furcount1a, $langvars['l_sched_kabal_roam']);
+echo $langvars['l_sched_kabal_roam'] . ".<br>";
+
+$langvars['l_sched_kabal_roam_trade'] = str_replace("[count]", $furcount2, $langvars['l_sched_kabal_roam_trade']);
+$langvars['l_sched_kabal_roam_trade'] = str_replace("[count2]", $furcount2a, $langvars['l_sched_kabal_roam_trade']);
+echo $langvars['l_sched_kabal_roam_trade'] . ".<br>";
+
+$langvars['l_sched_kabal_roam_hunt'] = str_replace("[count]", $furcount3, $langvars['l_sched_kabal_roam_hunt']);
+$langvars['l_sched_kabal_roam_hunt'] = str_replace("[count2]", $furcount3a, $langvars['l_sched_kabal_roam_hunt']);
+$langvars['l_sched_kabal_roam_hunt'] = str_replace("[count3]", $furcount3h, $langvars['l_sched_kabal_roam_hunt']);
+echo $langvars['l_sched_kabal_roam_hunt'] . ".<br>";
+
+echo $langvars['l_sched_kabal_done'] . ".<br>";
+
 echo "<br>";
-// END OF Kabal TURNS

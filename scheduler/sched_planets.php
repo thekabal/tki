@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -16,8 +16,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: sched_planets.php
+//
+// FUTURE: PDO, better debugging, better output formatting
 
-echo "<strong>PLANETS</strong><p>";
+// Database driven language entries
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+echo "<strong>" . $langvars['l_sched_planets_title'] . "</strong><p>";
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner > 0");
 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
@@ -84,4 +89,4 @@ if ($tkireg->sched_planet_valid_credits)
     Tki\Db::LogDbErrors($pdo_db, $ret, __LINE__, __FILE__);
 }
 
-echo "Planets updated.<br><br>";
+echo $langvars['l_sched_planets_updated'] . ".<br><br>";
