@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,7 +17,10 @@
 //
 // File: sched_degrade.php
 
-echo "<strong>Degrading Sector Fighters with no friendly base</strong><br><br>";
+// FUTURE: Better debugging and output for all paths
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+echo "<strong>" . $langvars['l_degrade_title'] . "</strong><br><br>";
 $res = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE defense_type = 'F'");
 Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
@@ -43,7 +46,9 @@ while (!$res->EOF)
         Tki\Db::LogDbErrors($pdo_db, $res4, __LINE__, __FILE__);
         $planet_energy = $res4->fields;
         $energy_available = $planet_energy['energy_available'];
-        echo "available $energy_available, required $energy_required.";
+        $langvars['l_degrade_note'] = str_replace("[energy_avail]", $energy_available, $langvars['l_degrade_note']);
+        $langvars['l_degrade_note'] = str_replace("[energy_required]", $energy_required, $langvars['l_degrade_note']);
+        echo $langvars['l_degrade_note'];
         if ($energy_available > $energy_required)
         {
             while (!$res2->EOF)

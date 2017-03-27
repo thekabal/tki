@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,8 +17,12 @@
 //
 // File: sched_apocalypse.php
 
-echo "<strong>PLANETARY APOCALYPSE</strong><br><br>";
-echo "The four horsemen of the apocalypse set forth...<br>";
+// FUTURE: Rewrite to use PDO, better handling ("break?!") of logic, substantial output management
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+echo "<strong>" . $langvars['l_apoc_title'] . "</strong><br><br>";
+echo $langvars['l_apoc_begins'] . "..<br>";
+
 $doomsday = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE colonists > ?;", array($tkireg->doomsday_value));
 Tki\Db::LogDbErrors($pdo_db, $doomsday, __LINE__, __FILE__);
 $chance = 9;
@@ -47,7 +51,7 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
 
     if ($affliction == 1) // Space Plague
     {
-        echo "The horsmen release the Space Plague!<br>.";
+        echo $langvars['l_apoc_plague'] . "<br>.";
         $resx = $db->Execute("UPDATE {$db->prefix}planets SET colonists = ROUND (colonists - colonists * ?) WHERE planet_id = ?;", array($space_plague_kills, $targetinfo['planet_id']));
         Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $logpercent = round($space_plague_kills * 100);
@@ -55,7 +59,7 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
     }
     else
     {
-        echo "The horsemen release a Plasma Storm!<br>.";
+        echo $langvars['l_apoc_plasma'] . "<br>.";
         $resy = $db->Execute("UPDATE {$db->prefix}planets SET energy = 0 WHERE planet_id = ?;", array($targetinfo['planet_id']));
         Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
         Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['owner'], LOG_PLASMA_STORM, "$targetinfo[name]|$targetinfo[sector_id]");

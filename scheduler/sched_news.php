@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,13 +17,10 @@
 //
 // File: sched_news.php
 
-// FUTURE: Recode file so that news are generated in the server default language, and remove hard-coded (language) news text from the database
+// FUTURE: PDO, better output feedback, better debugging
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
 
-// Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
-
-echo "<strong>Posting News</strong><br>\n";
-
+echo "<strong>" . $langvars['l_sched_news_title'] . "</strong><br>\n";
 $sql = $db->Execute("SELECT IF(COUNT(*)>0, SUM(colonists), 0) AS total_colonists, COUNT(owner) AS total_planets,  owner, character_name FROM {$db->prefix}planets, {$db->prefix}ships WHERE owner != '0' AND owner=ship_id GROUP BY owner ORDER BY owner ASC;");
 Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
@@ -33,8 +30,11 @@ while (!$sql->EOF)
 
     // Get the owner name.
     $name = $row['character_name'];
-
-    echo "&nbsp;&bull;&nbsp;Processing Planet(s) owned by {$name}({$row['owner']}) - Planets: ". number_format($row['total_planets']) .", Colonists: ". number_format($row['total_colonists']) ."<br>\n";
+    $langvars['l_sched_news_processing'] = str_replace("[name]", $name, $langvars['l_sched_news_processing']);
+    $langvars['l_sched_news_processing'] = str_replace("[owner]", $row['owner'], $langvars['l_sched_news_processing']);
+    $langvars['l_sched_news_processing'] = str_replace("[planet_row]", number_format($row['total_planets']), $langvars['l_sched_news_processing']);
+    $langvars['l_sched_news_processing'] = str_replace("[colonists_row]", number_format($row['total_colonists']), $langvars['l_sched_news_processing']);
+    echo "&nbsp;&nbsp;" . $langvars['l_sched_news_processing'] . "<br>\n";
 
     // Generation of planet amount
     if ($row['total_planets'] >= 1000)
@@ -156,7 +156,7 @@ while (!$sql->EOF)
             $news = $db->Execute("INSERT INTO {$db->prefix}news (headline, newstext, user_id, date, news_type) VALUES (?, ?, ?, NOW(), 'planet5');", array($headline, $langvars['l_news_p_text52'], $row['owner']));
             Tki\Db::LogDbErrors($pdo_db, $news, __LINE__, __FILE__);
         }
-    } // end generation of planet amount
+    } // End generation of planet amount
 
     // Generation of colonist amount
     if ($row['total_colonists'] >= 1000000000)
@@ -220,9 +220,9 @@ while (!$sql->EOF)
         }
     }
 
-    // end generation of colonist amount
+    // End generation of colonist amount
     $sql->MoveNext();
 } // while
 
-echo "--- <strong>End of News</strong> ---<br><br>\n";
+echo "<strong>" . $langvars['l_sched_news'] . "</strong><br><br>";
 $multiplier = 0; // No need to run this again
