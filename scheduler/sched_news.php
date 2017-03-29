@@ -224,5 +224,5 @@ while (!$sql->EOF)
     $sql->MoveNext();
 } // while
 
-echo "<strong>" . $langvars['l_sched_news'] . "</strong><br><br>";
+echo "<strong>" . $langvars['l_sched_news_end'] . "</strong><br><br>";
 $multiplier = 0; // No need to run this again
