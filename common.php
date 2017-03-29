@@ -21,23 +21,23 @@ require_once './global_constants.php';             // Defines used in many place
 mb_http_output('UTF-8');                           // Our output should be served in UTF-8 no matter what.
 mb_internal_encoding('UTF-8');                     // We are explicitly UTF-8, with Unicode language variables.
 ini_set('include_path', '.');                      // Set include path to avoid issues on a few platforms
-ini_set('session.use_strict_mode', '1');             // Ensure that PHP will not accept uninitialized session ID
-ini_set('session.use_only_cookies', '1');            // Ensure that sessions will only be stored in a cookie
-ini_set('session.cookie_httponly', '1');             // Ensure that javascript cannot tamper with session cookies
-ini_set('session.use_trans_sid', '0');               // Prevent session ID from being put in URLs
-ini_set('session.cookie_secure', on);              // Cookies should only be sent over secure connections (SSL)
+ini_set('session.use_strict_mode', '1');           // Ensure that PHP will not accept uninitialized session ID
+ini_set('session.use_only_cookies', '1');          // Ensure that sessions will only be stored in a cookie
+ini_set('session.cookie_httponly', '1');           // Ensure that javascript cannot tamper with session cookies
+ini_set('session.use_trans_sid', '0');             // Prevent session ID from being put in URLs
+ini_set('session.cookie_secure', 'on');            // Cookies should only be sent over secure connections (SSL)
 ini_set('url_rewriter.tags', '');                  // Do not pass Session id on the url for improved security on login
 ini_set('default_charset', 'utf-8');               // Set PHP's default character set to utf-8
 
 if (file_exists('dev'))                            // Create/touch a file named dev to activate development mode
 {
-    ini_set('error_reporting', '-1');                // During development, output all errors, even notices
-    ini_set('display_errors', '1');                  // During development, display all errors
+    ini_set('error_reporting', '-1');              // During development, output all errors, even notices
+    ini_set('display_errors', '1');                // During development, display all errors
 }
 else
 {
-    ini_set('error_reporting', '0');                 // Do not report errors
-    ini_set('display_errors', '0');                  // Do not display errors
+    ini_set('error_reporting', '0');               // Do not report errors
+    ini_set('display_errors', '0');                // Do not display errors
 }
 
 session_name('tki_session');                       // Change the default to defend better against session hijacking
