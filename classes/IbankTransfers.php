@@ -402,7 +402,7 @@ class IbankTransfers
             $db->Execute($sql, array($transfer, $target['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "INSERT INTO {$db->prefix}ibank_transfers VALUES (NULL, ?, ?, NOW(), ?)";
+            $sql = "INSERT INTO {$db->prefix}ibank_transfers VALUES (null, ?, ?, NOW(), ?)";
             $db->Execute($sql, array($playerinfo['ship_id'], $target['ship_id'], $transfer));
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
