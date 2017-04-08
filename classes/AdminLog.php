@@ -28,7 +28,7 @@ class AdminLog
     public static function writeLog(\PDO $pdo_db, int $log_type, ?string $data = null): bool
     {
         $result = false;
-        $query = "INSERT INTO ::prefix::logs VALUES (NULL, 0, :logtype, NOW(), :data)";
+        $query = "INSERT INTO ::prefix::logs VALUES (null, 0, :logtype, NOW(), :data)";
         $prep = $pdo_db->prepare($query);
         if ($prep !== false) // If the database is not live, this will return false
         {                      // so we should not attempt to write (or it will fail silently)
