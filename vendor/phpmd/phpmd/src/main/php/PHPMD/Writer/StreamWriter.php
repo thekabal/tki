@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Writer;
@@ -46,9 +46,9 @@ use PHPMD\AbstractWriter;
 /**
  * This writer uses PHP's stream api as its output target.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class StreamWriter extends AbstractWriter
 {
@@ -96,7 +96,7 @@ class StreamWriter extends AbstractWriter
     /**
      * Writes the given <b>$data</b> fragment to the wrapper output stream.
      *
-     * @param  string $data
+     * @param string $data
      * @return void
      */
     public function write($data)

@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule\Design;
@@ -49,9 +49,9 @@ use PHPMD\Rule\MethodAware;
 /**
  * This rule class detects the usage of PHP's eval-expression.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class EvalExpression extends AbstractRule implements MethodAware, FunctionAware
 {
@@ -59,7 +59,7 @@ class EvalExpression extends AbstractRule implements MethodAware, FunctionAware
      * This method checks if a given function or method contains an eval-expression
      * and emits a rule violation when it exists.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)

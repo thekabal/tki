@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD;
@@ -47,9 +47,9 @@ use PHPMD\Node\ASTNode;
  * This is an abstract base class for PHPMD code nodes, it is just a wrapper
  * around PDepend's object model.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 abstract class AbstractNode
 {
@@ -80,8 +80,8 @@ abstract class AbstractNode
      * The magic call method is used to pipe requests from rules direct
      * to the underlying PDepend ast node.
      *
-     * @param  string $name
-     * @param  array  $args
+     * @param string $name
+     * @param array $args
      * @return mixed
      * @throws \BadMethodCallException When the underlying PDepend node
      *         does not contain a method named <b>$name</b>.
@@ -129,7 +129,7 @@ abstract class AbstractNode
      * Returns the first child of the given type or <b>null</b> when this node
      * has no child of the given type.
      *
-     * @param  string $type The searched child type.
+     * @param string $type The searched child type.
      * @return \PHPMD\AbstractNode
      */
     public function getFirstChildOfType($type)
@@ -145,7 +145,7 @@ abstract class AbstractNode
      * Searches recursive for all children of this node that are of the given
      * type.
      *
-     * @param  string $type The searched child type.
+     * @param string $type The searched child type.
      * @return \PHPMD\AbstractNode[]
      */
     public function findChildrenOfType($type)
@@ -162,7 +162,7 @@ abstract class AbstractNode
     /**
      * Tests if this node represents the the given type.
      *
-     * @param  string $type The expected node type.
+     * @param string $type The expected node type.
      * @return boolean
      */
     public function isInstanceOf($type)
@@ -262,7 +262,7 @@ abstract class AbstractNode
     /**
      * This method will set the metrics for this node.
      *
-     * @param  array(string=>mixed) $metrics The collected node metrics.
+     * @param array(string=>mixed) $metrics The collected node metrics.
      * @return void
      */
     public function setMetrics(array $metrics)
@@ -276,7 +276,7 @@ abstract class AbstractNode
      * Checks if this node has a suppressed annotation for the given rule
      * instance.
      *
-     * @param  \PHPMD\Rule $rule
+     * @param \PHPMD\Rule $rule
      * @return boolean
      */
     abstract public function hasSuppressWarningsAnnotationFor(Rule $rule);

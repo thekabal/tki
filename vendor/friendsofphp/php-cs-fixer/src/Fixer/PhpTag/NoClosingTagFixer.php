@@ -28,34 +28,6 @@ final class NoClosingTagFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function fix(\SplFileInfo $file, Tokens $tokens)
-    {
-        if (!$tokens->isMonolithicPhp()) {
-            return;
-        }
-
-        $closeTags = $tokens->findGivenKind(T_CLOSE_TAG);
-
-        if (empty($closeTags)) {
-            return;
-        }
-
-        list($index, $token) = each($closeTags);
-
-        $tokens->removeLeadingWhitespace($index);
-        $token->clear();
-
-        $prevIndex = $tokens->getPrevMeaningfulToken($index);
-        $prevToken = $tokens[$prevIndex];
-
-        if (!$prevToken->equalsAny(array(';', '}'))) {
-            $tokens->insertAt($prevIndex + 1, new Token(';'));
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDefinition()
     {
         return new FixerDefinition(
@@ -70,5 +42,31 @@ final class NoClosingTagFixer extends AbstractFixer
     public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(T_CLOSE_TAG);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    {
+        if (count($tokens) < 2 || !$tokens->isMonolithicPhp()) {
+            return;
+        }
+
+        $closeTags = $tokens->findGivenKind(T_CLOSE_TAG);
+
+        if (empty($closeTags)) {
+            return;
+        }
+
+        $index = key($closeTags);
+
+        $tokens->removeLeadingWhitespace($index);
+        $closeTags[$index]->clear();
+
+        $prevIndex = $tokens->getPrevMeaningfulToken($index);
+        if (!$tokens[$prevIndex]->equalsAny(array(';', '}', array(T_OPEN_TAG)))) {
+            $tokens->insertAt($prevIndex + 1, new Token(';'));
+        }
     }
 }

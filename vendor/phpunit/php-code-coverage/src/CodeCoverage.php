@@ -130,6 +130,11 @@ class CodeCoverage
     private $shouldCheckForDeadAndUnused = true;
 
     /**
+     * @var Directory
+     */
+    private $report;
+
+    /**
      * Constructor.
      *
      * @param Driver $driver
@@ -160,9 +165,13 @@ class CodeCoverage
      */
     public function getReport()
     {
-        $builder = new Builder;
+        if ($this->report === null) {
+            $builder = new Builder;
 
-        return $builder->build($this);
+            $this->report = $builder->build($this);
+        }
+
+        return $this->report;
     }
 
     /**
@@ -174,6 +183,7 @@ class CodeCoverage
         $this->currentId     = null;
         $this->data          = [];
         $this->tests         = [];
+        $this->report        = null;
     }
 
     /**
@@ -210,7 +220,8 @@ class CodeCoverage
      */
     public function setData(array $data)
     {
-        $this->data = $data;
+        $this->data   = $data;
+        $this->report = null;
     }
 
     /**
@@ -375,6 +386,8 @@ class CodeCoverage
                 }
             }
         }
+
+        $this->report = null;
     }
 
     /**
@@ -410,7 +423,8 @@ class CodeCoverage
             }
         }
 
-        $this->tests = array_merge($this->tests, $that->getTests());
+        $this->tests  = array_merge($this->tests, $that->getTests());
+        $this->report = null;
     }
 
     /**
@@ -804,7 +818,7 @@ class CodeCoverage
 
                             // A DOC_COMMENT token or a COMMENT token starting with "/*"
                             // does not contain the final \n character in its text
-                            if (isset($lines[$i-1]) && 0 === strpos($_token, '/*') && '*/' === substr(trim($lines[$i-1]), -2)) {
+                            if (isset($lines[$i - 1]) && 0 === strpos($_token, '/*') && '*/' === substr(trim($lines[$i - 1]), -2)) {
                                 $this->ignoredLines[$filename][] = $i;
                             }
                         }

@@ -34,10 +34,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @since     1.1.0
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @since      1.1.0
  */
 
 namespace PHPMD\Rule\Controversial;
@@ -50,10 +50,10 @@ use PHPMD\Rule\MethodAware;
 /**
  * This rule class detects variables not named in camelCase.
  *
- * @author    Francis Besset <francis.besset@gmail.com>
+ * @author     Francis Besset <francis.besset@gmail.com>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @since     1.1.0
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @since      1.1.0
  */
 class CamelCaseVariableName extends AbstractRule implements MethodAware, FunctionAware
 {
@@ -78,7 +78,7 @@ class CamelCaseVariableName extends AbstractRule implements MethodAware, Functio
      * This method checks if a variable is not named in camelCase
      * and emits a rule violation.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)

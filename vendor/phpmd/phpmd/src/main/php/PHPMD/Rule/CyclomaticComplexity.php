@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule;
@@ -48,9 +48,9 @@ use PHPMD\AbstractRule;
  * This rule checks a given method or function against the configured cyclomatic
  * complexity threshold.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class CyclomaticComplexity extends AbstractRule implements FunctionAware, MethodAware
 {
@@ -58,7 +58,7 @@ class CyclomaticComplexity extends AbstractRule implements FunctionAware, Method
      * This method checks the cyclomatic complexity for the given node against
      * a configured threshold.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)

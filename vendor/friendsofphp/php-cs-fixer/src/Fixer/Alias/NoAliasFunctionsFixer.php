@@ -48,7 +48,58 @@ final class NoAliasFunctionsFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function fix(\SplFileInfo $file, Tokens $tokens)
+    public function getDefinition()
+    {
+        return new FixerDefinition(
+            'Master functions shall be used instead of aliases.',
+            array(
+                new CodeSample(
+'<?php
+$a = chop($b);
+close($b);
+$a = doubleval($b);
+$a = fputs($b, $c);
+ini_alter($b, $c);
+$a = is_double($b);
+$a = is_integer($b);
+$a = is_long($b);
+$a = is_real($b);
+$a = is_writeable($b);
+$a = join($glue, $pieces);
+$a = key_exists($key, $array);
+magic_quotes_runtime($new_setting);
+$a = pos($array);
+$a = show_source($filename, true);
+$a = sizeof($b);
+$a = strchr($haystack, $needle);
+'
+                ),
+            ),
+            null,
+            'Risky when any of the alias functions are overridden.'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCandidate(Tokens $tokens)
+    {
+        return $tokens->isTokenKindFound(T_STRING);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRisky()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         /** @var $token \PhpCsFixer\Tokenizer\Token */
         foreach ($tokens->findGivenKind(T_STRING) as $index => $token) {
@@ -82,58 +133,5 @@ final class NoAliasFunctionsFixer extends AbstractFixer
 
             $token->setContent(self::$aliases[$tokenContent]);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition()
-    {
-        return new FixerDefinition(
-            'Master functions shall be used instead of aliases.',
-            array(
-                new CodeSample(
-'<?php
-$a = chop($b);
-close($b);
-$a = doubleval($b);
-$a = fputs($b, $c);
-ini_alter($b, $c);
-$a = is_double($b);
-$a = is_integer($b);
-$a = is_long($b);
-$a = is_real($b);
-$a = is_writeable($b);
-$a = join($glue, $pieces);
-$a = key_exists($key, $array);
-magic_quotes_runtime($new_setting);
-$a = pos($array);
-$a = show_source($filename, true);
-$a = sizeof($b);
-$a = strchr($haystack, $needle);
-'
-                ),
-            ),
-            null,
-            null,
-            null,
-            'Risky when any of the alias functions are overridden.'
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isTokenKindFound(T_STRING);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRisky()
-    {
-        return true;
     }
 }

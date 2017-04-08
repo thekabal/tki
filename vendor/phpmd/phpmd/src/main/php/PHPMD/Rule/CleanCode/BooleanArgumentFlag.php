@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule\CleanCode;
@@ -54,14 +54,14 @@ use PHPMD\Rule\MethodAware;
  *
  * @author    Benjamin Eberlei <benjamin@qafoo.com>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class BooleanArgumentFlag extends AbstractRule implements MethodAware, FunctionAware
 {
     /**
      * This method checks if a method/function has boolean flag arguments and warns about them.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)

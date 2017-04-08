@@ -50,18 +50,6 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
     /**
      * {@inheritdoc}
      */
-    public function fix(\SplFileInfo $file, Tokens $tokens)
-    {
-        foreach ($tokens as $index => $token) {
-            if ($token->isGivenKind(T_DOC_COMMENT)) {
-                $tokens[$index]->setContent($this->fixDocBlock($token->getContent()));
-            }
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDefinition()
     {
         return new FixerDefinition(
@@ -99,6 +87,18 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
     public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(T_DOC_COMMENT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    {
+        foreach ($tokens as $index => $token) {
+            if ($token->isGivenKind(T_DOC_COMMENT)) {
+                $tokens[$index]->setContent($this->fixDocBlock($token->getContent()));
+            }
+        }
     }
 
     /**
@@ -224,6 +224,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
             if (!empty($matches['tag2'])) {
                 $matches['tag'] = $matches['tag2'];
                 $matches['hint'] = $matches['hint2'];
+                $matches['var'] = '';
             }
 
             return $matches;

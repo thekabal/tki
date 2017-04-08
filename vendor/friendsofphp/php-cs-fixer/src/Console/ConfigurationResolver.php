@@ -113,6 +113,8 @@ final class ConfigurationResolver
         'rules' => null,
         'diff' => null,
         'verbosity' => null,
+        'stop-on-violation' => null,
+        'show-progress' => null,
     );
 
     private $cacheFile;
@@ -361,17 +363,31 @@ final class ConfigurationResolver
     }
 
     /**
-     * Returns progress flag.
+     * @throws InvalidConfigurationException
      *
      * @return bool
      */
     public function getProgress()
     {
         if (null === $this->progress) {
-            $this->progress =
-                OutputInterface::VERBOSITY_VERBOSE <= $this->options['verbosity']
-                && 'txt' === $this->getFormat()
-                && !$this->getConfig()->getHideProgress();
+            if (OutputInterface::VERBOSITY_VERBOSE <= $this->options['verbosity'] && 'txt' === $this->getFormat()) {
+                $progressType = $this->options['show-progress'];
+                $progressTypes = array('none', 'run-in', 'estimating');
+
+                if (null === $progressType) {
+                    $progressType = $this->getConfig()->getHideProgress() ? 'none' : 'run-in';
+                } elseif (!in_array($progressType, $progressTypes, true)) {
+                    throw new InvalidConfigurationException(sprintf(
+                        'The progress type "%s" is not defined, supported are "%s".',
+                        $progressType,
+                        implode('", "', $progressTypes)
+                    ));
+                }
+
+                $this->progress = $progressType;
+            } else {
+                $this->progress = 'none';
+            }
         }
 
         return $this->progress;
@@ -471,6 +487,11 @@ final class ConfigurationResolver
         return $this->isDryRun;
     }
 
+    public function shouldStopOnViolation()
+    {
+        return $this->options['stop-on-violation'];
+    }
+
     /**
      * Compute file candidates for config file.
      *
@@ -536,8 +557,8 @@ final class ConfigurationResolver
     {
         if (null === $this->format) {
             $this->format = null === $this->options['format']
-                ? $format = $this->getConfig()->getFormat()
-                : $format = $this->options['format'];
+                ? $this->getConfig()->getFormat()
+                : $this->options['format'];
         }
 
         return $this->format;

@@ -13,7 +13,9 @@
 namespace PhpCsFixer\Fixer\ControlStructure;
 
 use PhpCsFixer\AbstractFixer;
-use PhpCsFixer\Fixer\ConfigurableFixerInterface;
+use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
+use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -23,26 +25,8 @@ use PhpCsFixer\Tokenizer\Tokens;
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  * @author Gregor Harlan <gharlan@web.de>
  */
-final class NoUnneededControlParenthesesFixer extends AbstractFixer implements ConfigurableFixerInterface
+final class NoUnneededControlParenthesesFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
 {
-    /**
-     * @var string[]
-     */
-    private static $defaultConfiguration = array(
-        'break',
-        'clone',
-        'continue',
-        'echo_print',
-        'return',
-        'switch_case',
-        'yield',
-    );
-
-    /**
-     * @var string[] List of statements to fix
-     */
-    private $controlStatements;
-
     private static $loops = array(
         'break' => array('lookupTokens' => T_BREAK, 'neededSuccessors' => array(';')),
         'clone' => array('lookupTokens' => T_CLONE, 'neededSuccessors' => array(';', ':', ',', ')'), 'forbiddenContents' => array('?', ':')),
@@ -71,20 +55,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
     }
 
     /**
-     * @param array $controlStatements
-     */
-    public function configure(array $controlStatements = null)
-    {
-        if (null === $controlStatements) {
-            $this->controlStatements = self::$defaultConfiguration;
-
-            return;
-        }
-
-        $this->controlStatements = $controlStatements;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function isCandidate(Tokens $tokens)
@@ -102,10 +72,57 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
     /**
      * {@inheritdoc}
      */
-    public function fix(\SplFileInfo $file, Tokens $tokens)
+    public function getDefinition()
+    {
+        return new FixerDefinition(
+            'Removes unneeded parentheses around control statements.',
+            array(
+                new CodeSample(
+                    '<?php
+while ($x) { while ($y) { break (2); } }
+clone($a);
+while ($y) { continue (2); }
+echo("foo");
+print("foo");
+return (1 + 2);
+switch ($a) { case($x); }
+yield(2);
+'
+                ),
+                new CodeSample(
+                    '<?php
+while ($x) { while ($y) { break (2); } }
+clone($a);
+while ($y) { continue (2); }
+echo("foo");
+print("foo");
+return (1 + 2);
+switch ($a) { case($x); }
+yield(2);
+',
+                    array('statements' => array('break', 'continue'))
+                ),
+            )
+        );
+    }
+
+    /**
+     * Should be run before no_trailing_whitespace.
+     *
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        return 30;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         // Checks if specific statements are set and uses them in this case.
-        $loops = array_intersect_key(self::$loops, array_flip($this->controlStatements));
+        $loops = array_intersect_key(self::$loops, array_flip($this->configuration['statements']));
 
         foreach ($tokens as $index => $token) {
             if (!$token->equals('(')) {
@@ -151,50 +168,23 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    protected function createConfigurationDefinition()
     {
-        return new FixerDefinition(
-            'Removes unneeded parentheses around control statements.',
-            array(
-                new CodeSample(
-                    '<?php
-while ($x) { while ($y) { break (2); } }
-clone($a);
-while ($y) { continue (2); }
-echo("foo");
-print("foo");
-return (1 + 2);
-switch ($a) { case($x); }
-yield(2);
-'
-                ),
-                new CodeSample(
-                    '<?php
-while ($x) { while ($y) { break (2); } }
-clone($a);
-while ($y) { continue (2); }
-echo("foo");
-print("foo");
-return (1 + 2);
-switch ($a) { case($x); }
-yield(2);
-',
-                    array('break', 'continue')
-                ),
-            ),
-            null,
-            'List of strings which control structures should be modified.',
-            self::$defaultConfiguration
-        );
-    }
+        $statements = new FixerOptionBuilder('statements', 'List of control statements to fix.');
+        $statements = $statements
+            ->setAllowedTypes(array('array'))
+            ->setDefault(array(
+                'break',
+                'clone',
+                'continue',
+                'echo_print',
+                'return',
+                'switch_case',
+                'yield',
+            ))
+            ->getOption()
+        ;
 
-    /**
-     * Should be run before no_trailing_whitespace.
-     *
-     * {@inheritdoc}
-     */
-    public function getPriority()
-    {
-        return 30;
+        return new FixerConfigurationResolverRootless('statements', array($statements));
     }
 }
