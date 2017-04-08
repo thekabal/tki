@@ -229,12 +229,13 @@ class ClassType
 	 * @param  string|string[]
 	 * @return static
 	 */
-	public function setExtends($types)
+	public function setExtends($names)
 	{
-		if (!is_string($types) && !(is_array($types) && Nette\Utils\Arrays::every($types, 'is_string'))) {
+		if (!is_string($names) && !is_array($names)) {
 			throw new Nette\InvalidArgumentException('Argument must be string or string[].');
 		}
-		$this->extends = $types;
+		$this->validate((array) $names);
+		$this->extends = $names;
 		return $this;
 	}
 
@@ -252,10 +253,11 @@ class ClassType
 	 * @param  string
 	 * @return static
 	 */
-	public function addExtend($type)
+	public function addExtend($name)
 	{
+		$this->validate([$name]);
 		$this->extends = (array) $this->extends;
-		$this->extends[] = (string) $type;
+		$this->extends[] = $name;
 		return $this;
 	}
 
@@ -264,9 +266,10 @@ class ClassType
 	 * @param  string[]
 	 * @return static
 	 */
-	public function setImplements(array $types)
+	public function setImplements(array $names)
 	{
-		$this->implements = $types;
+		$this->validate($names);
+		$this->implements = $names;
 		return $this;
 	}
 
@@ -284,9 +287,10 @@ class ClassType
 	 * @param  string
 	 * @return static
 	 */
-	public function addImplement($type)
+	public function addImplement($name)
 	{
-		$this->implements[] = (string) $type;
+		$this->validate([$name]);
+		$this->implements[] = $name;
 		return $this;
 	}
 
@@ -295,9 +299,10 @@ class ClassType
 	 * @param  string[]
 	 * @return static
 	 */
-	public function setTraits(array $traits)
+	public function setTraits(array $names)
 	{
-		$this->traits = array_fill_keys($traits, []);
+		$this->validate($names);
+		$this->traits = array_fill_keys($names, []);
 		return $this;
 	}
 
@@ -315,9 +320,10 @@ class ClassType
 	 * @param  string
 	 * @return static
 	 */
-	public function addTrait($trait, array $resolutions = [])
+	public function addTrait($name, array $resolutions = [])
 	{
-		$this->traits[$trait] = $resolutions;
+		$this->validate([$name]);
+		$this->traits[$name] = $resolutions;
 		return $this;
 	}
 
@@ -490,6 +496,16 @@ class ClassType
 			$method->setVisibility('public');
 		}
 		return $this->methods[$name] = $method;
+	}
+
+
+	private function validate(array $names)
+	{
+		foreach ($names as $name) {
+			if (!Helpers::isNamespaceIdentifier($name, TRUE)) {
+				throw new Nette\InvalidArgumentException("Value '$name' is not valid class name.");
+			}
+		}
 	}
 
 }

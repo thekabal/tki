@@ -13,6 +13,9 @@
 namespace PhpCsFixer\Fixer\FunctionNotation;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\CT;
@@ -24,8 +27,20 @@ use PhpCsFixer\Tokenizer\TokensAnalyzer;
  *
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
-final class FunctionDeclarationFixer extends AbstractFixer
+final class FunctionDeclarationFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
 {
+    /**
+     * @internal
+     */
+    const SPACING_NONE = 'none';
+
+    /**
+     * @internal
+     */
+    const SPACING_ONE = 'one';
+
+    private $supportedSpacings = array(self::SPACING_NONE, self::SPACING_ONE);
+
     private $singleLineWhitespaceOptions = " \t";
 
     /**
@@ -39,7 +54,46 @@ final class FunctionDeclarationFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function fix(\SplFileInfo $file, Tokens $tokens)
+    public function getDefinition()
+    {
+        return new FixerDefinition(
+            'Spaces should be properly placed in a function declaration.',
+            array(
+                new CodeSample(
+'<?php
+
+function  foo  ($bar, $baz)
+{
+    return false;
+}
+'
+                ),
+                new CodeSample(
+'<?php
+
+class Foo
+{
+    public static function  bar ($baz)
+    {
+        return false;
+    }
+}
+'
+                ),
+                new CodeSample(
+'<?php
+$f = function () {};
+',
+                    array('closure_function_spacing' => self::SPACING_NONE)
+                ),
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
 
@@ -95,13 +149,21 @@ final class FunctionDeclarationFixer extends AbstractFixer
 
             // remove whitespace before (
             // eg: `function foo () {}` => `function foo() {}`
-            if (!$isLambda && $tokens[$startParenthesisIndex - 1]->isWhitespace()) {
+            if (!$isLambda && $tokens[$startParenthesisIndex - 1]->isWhitespace() && !$tokens[$tokens->getPrevNonWhitespace($startParenthesisIndex - 1)]->isComment()) {
                 $tokens[$startParenthesisIndex - 1]->clear();
             }
 
-            // fix whitespace after T_FUNCTION
-            // eg: `function     foo() {}` => `function foo() {}`
-            $tokens->ensureWhitespaceAtIndex($index + 1, 0, ' ');
+            if ($isLambda && self::SPACING_NONE === $this->configuration['closure_function_spacing']) {
+                // optionally remove whitespace after T_FUNCTION of a closure
+                // eg: `function () {}` => `function() {}`
+                if ($tokens[$index + 1]->isWhitespace()) {
+                    $tokens[$index + 1]->clear();
+                }
+            } else {
+                // otherwise, enforce whitespace after T_FUNCTION
+                // eg: `function     foo() {}` => `function foo() {}`
+                $tokens->ensureWhitespaceAtIndex($index + 1, 0, ' ');
+            }
 
             if ($isLambda) {
                 $prev = $tokens->getPrevMeaningfulToken($index);
@@ -117,34 +179,16 @@ final class FunctionDeclarationFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    protected function createConfigurationDefinition()
     {
-        return new FixerDefinition(
-            'Spaces should be properly placed in a function declaration.',
-            array(
-                new CodeSample(
-'<?php
+        $spacing = new FixerOptionBuilder('closure_function_spacing', 'Spacing to use before open parenthesis for closures.');
+        $spacing = $spacing
+            ->setDefault(self::SPACING_ONE)
+            ->setAllowedValues($this->supportedSpacings)
+            ->getOption()
+        ;
 
-function  foo  ($bar, $baz)
-{
-    return false;
-}
-'
-                ),
-                new CodeSample(
-'<?php
-
-class Foo
-{
-    public static function  bar ($baz)
-    {
-        return false;
-    }
-}
-'
-                ),
-            )
-        );
+        return new FixerConfigurationResolver(array($spacing));
     }
 
     private function fixParenthesisInnerEdge(Tokens $tokens, $start, $end)

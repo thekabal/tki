@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\Rule\Naming;
@@ -51,9 +51,9 @@ use PHPMD\Rule\MethodAware;
  * This rule class will detect variables, parameters and properties with really
  * long names.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class LongVariable extends AbstractRule implements ClassAware, MethodAware, FunctionAware
 {
@@ -70,7 +70,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      * and checks the variable name length against the configured maximum
      * length.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     public function apply(AbstractNode $node)
@@ -108,7 +108,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      * Checks if the variable name of the given node is smaller/equal to the
      * configured threshold.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     protected function checkNodeImage(AbstractNode $node)
@@ -122,7 +122,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
     /**
      * Template method that performs the real node image check.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     protected function checkMaximumLength(AbstractNode $node)
@@ -141,7 +141,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      * Checks if a short name is acceptable in the current context. For the
      * moment the only context is a static member.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return boolean
      */
     private function isNameAllowedInContext(AbstractNode $node)
@@ -153,8 +153,8 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      * Checks if the given node is a direct or indirect child of a node with
      * the given type.
      *
-     * @param  \PHPMD\AbstractNode $node
-     * @param  string              $type
+     * @param \PHPMD\AbstractNode $node
+     * @param string $type
      * @return boolean
      */
     private function isChildOf(AbstractNode $node, $type)
@@ -182,7 +182,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
     /**
      * Flags the given node as already processed.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     protected function addProcessed(AbstractNode $node)
@@ -193,7 +193,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
     /**
      * Checks if the given node was already processed.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return boolean
      */
     protected function isNotProcessed(AbstractNode $node)

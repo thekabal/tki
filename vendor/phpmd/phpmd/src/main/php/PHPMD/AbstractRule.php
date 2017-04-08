@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD;
@@ -44,9 +44,9 @@ namespace PHPMD;
 /**
  * This is the abstract base class for pmd rules.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  *
  * @SuppressWarnings(PHPMD)
  */
@@ -311,7 +311,7 @@ abstract class AbstractRule implements Rule
     /**
      * Sets the violation report for this rule.
      *
-     * @param  \PHPMD\Report $report
+     * @param \PHPMD\Report $report
      * @return void
      */
     public function setReport(Report $report)
@@ -322,8 +322,8 @@ abstract class AbstractRule implements Rule
     /**
      * Adds a configuration property to this rule instance.
      *
-     * @param  string $name
-     * @param  string $value
+     * @param string $name
+     * @param string $value
      * @return void
      */
     public function addProperty($name, $value)
@@ -335,7 +335,7 @@ abstract class AbstractRule implements Rule
      * Returns the value of a configured property as a boolean or throws an
      * exception when no property with <b>$name</b> exists.
      *
-     * @param  string $name
+     * @param string $name
      * @return boolean
      * @throws \OutOfBoundsException When no property for <b>$name</b> exists.
      */
@@ -351,7 +351,7 @@ abstract class AbstractRule implements Rule
      * Returns the value of a configured property as an integer or throws an
      * exception when no property with <b>$name</b> exists.
      *
-     * @param  string $name
+     * @param string $name
      * @return integer
      * @throws \OutOfBoundsException When no property for <b>$name</b> exists.
      */
@@ -368,7 +368,7 @@ abstract class AbstractRule implements Rule
      * Returns the raw string value of a configured property or throws an
      * exception when no property with <b>$name</b> exists.
      *
-     * @param  string $name
+     * @param string $name
      * @return string
      * @throws \OutOfBoundsException When no property for <b>$name</b> exists.
      */
@@ -385,9 +385,9 @@ abstract class AbstractRule implements Rule
      * This method adds a violation to all reports for this violation type and
      * for the given <b>$node</b> instance.
      *
-     * @param  \PHPMD\AbstractNode $node
-     * @param  array               $args
-     * @param  mixed               $metric
+     * @param \PHPMD\AbstractNode $node
+     * @param array $args
+     * @param mixed $metric
      * @return void
      */
     protected function addViolation(
@@ -412,7 +412,7 @@ abstract class AbstractRule implements Rule
      * This method should implement the violation analysis algorithm of concrete
      * rule implementations. All extending classes must implement this method.
      *
-     * @param  \PHPMD\AbstractNode $node
+     * @param \PHPMD\AbstractNode $node
      * @return void
      */
     abstract public function apply(AbstractNode $node);

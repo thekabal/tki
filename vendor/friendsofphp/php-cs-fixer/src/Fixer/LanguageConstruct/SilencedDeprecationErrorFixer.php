@@ -26,7 +26,36 @@ final class SilencedDeprecationErrorFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function fix(\SplFileInfo $file, Tokens $tokens)
+    public function getDefinition()
+    {
+        return new FixerDefinition(
+            'Ensures deprecation notices are silenced.',
+            array(new CodeSample("<?php\ntrigger_error('Warning.', E_USER_DEPRECATED);")),
+            null,
+            'Silencing of deprecation errors might cause changes to code behaviour.'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCandidate(Tokens $tokens)
+    {
+        return $tokens->isTokenKindFound(T_STRING);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRisky()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
             $token = $tokens[$index];
@@ -50,36 +79,5 @@ final class SilencedDeprecationErrorFixer extends AbstractFixer
                 $tokens->insertAt($start, new Token('@'));
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition()
-    {
-        return new FixerDefinition(
-            'Ensures deprecation notices are silenced.',
-            array(new CodeSample("<?php\ntrigger_error('Warning.', E_USER_DEPRECATED);")),
-            null,
-            null,
-            null,
-            'Silencing of deprecation errors might cause changes to code behaviour.'
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isTokenKindFound(T_STRING);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRisky()
-    {
-        return true;
     }
 }

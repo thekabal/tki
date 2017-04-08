@@ -34,9 +34,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
 namespace PHPMD\TextUI;
@@ -50,9 +50,9 @@ use PHPMD\Rule;
  * This is a helper class that collects the specified cli arguments and puts them
  * into accessible properties.
  *
- * @author    Manuel Pichler <mapi@phpmd.org>
+ * @author Manuel Pichler <mapi@phpmd.org>
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class CommandLineOptions
 {
@@ -134,7 +134,7 @@ class CommandLineOptions
     /**
      * Should PHPMD run in strict mode?
      *
-     * @var   boolean
+     * @var boolean
      * @since 1.2.0
      */
     protected $strict = false;
@@ -156,8 +156,8 @@ class CommandLineOptions
     /**
      * Constructs a new command line options instance.
      *
-     * @param  array $args
-     * @param  array $availableRuleSets
+     * @param array $args
+     * @param array $availableRuleSets
      * @throws \InvalidArgumentException
      */
     public function __construct(array $args, array $availableRuleSets = array())
@@ -170,48 +170,48 @@ class CommandLineOptions
         $arguments = array();
         while (($arg = array_shift($args)) !== null) {
             switch ($arg) {
-            case '--minimumpriority':
-                $this->minimumPriority = (int) array_shift($args);
-                break;
-            case '--reportfile':
-                $this->reportFile = array_shift($args);
-                break;
-            case '--inputfile':
-                array_unshift($arguments, $this->readInputFile(array_shift($args)));
-                break;
-            case '--coverage':
-                $this->coverageReport = array_shift($args);
-                break;
-            case '--extensions':
-                $this->logDeprecated('extensions', 'suffixes');
-                /* Deprecated: We use the suffixes option now */
-            case '--suffixes':
-                $this->extensions = array_shift($args);
-                break;
-            case '--ignore':
-                $this->logDeprecated('ignore', 'exclude');
-                /* Deprecated: We use the exclude option now */
-            case '--exclude':
-                $this->ignore = array_shift($args);
-                break;
-            case '--version':
-                $this->version = true;
-                return;
-            case '--strict':
-                $this->strict = true;
-                break;
-            case '--ignore-violations-on-exit':
-                $this->ignoreViolationsOnExit = true;
-                break;
-            case '--reportfile-html':
-            case '--reportfile-text':
-            case '--reportfile-xml':
-                preg_match('(^\-\-reportfile\-(xml|html|text)$)', $arg, $match);
-                $this->reportFiles[$match[1]] = array_shift($args);
-                break;
-            default:
-                $arguments[] = $arg;
-                break;
+                case '--minimumpriority':
+                    $this->minimumPriority = (int) array_shift($args);
+                    break;
+                case '--reportfile':
+                    $this->reportFile = array_shift($args);
+                    break;
+                case '--inputfile':
+                    array_unshift($arguments, $this->readInputFile(array_shift($args)));
+                    break;
+                case '--coverage':
+                    $this->coverageReport = array_shift($args);
+                    break;
+                case '--extensions':
+                    $this->logDeprecated('extensions', 'suffixes');
+                    /* Deprecated: We use the suffixes option now */
+                case '--suffixes':
+                    $this->extensions = array_shift($args);
+                    break;
+                case '--ignore':
+                    $this->logDeprecated('ignore', 'exclude');
+                    /* Deprecated: We use the exclude option now */
+                case '--exclude':
+                    $this->ignore = array_shift($args);
+                    break;
+                case '--version':
+                    $this->version = true;
+                    return;
+                case '--strict':
+                    $this->strict = true;
+                    break;
+                case '--ignore-violations-on-exit':
+                    $this->ignoreViolationsOnExit = true;
+                    break;
+                case '--reportfile-html':
+                case '--reportfile-text':
+                case '--reportfile-xml':
+                    preg_match('(^\-\-reportfile\-(xml|html|text)$)', $arg, $match);
+                    $this->reportFiles[$match[1]] = array_shift($args);
+                    break;
+                default:
+                    $arguments[] = $arg;
+                    break;
             }
         }
 
@@ -333,7 +333,7 @@ class CommandLineOptions
      * Was the <b>--strict</b> option passed to PHPMD's command line interface?
      *
      * @return boolean
-     * @since  1.2.0
+     * @since 1.2.0
      */
     public function hasStrict()
     {
@@ -361,7 +361,7 @@ class CommandLineOptions
      *   <li>text</li>
      * </ul>
      *
-     * @param  string $reportFormat
+     * @param string $reportFormat
      * @return \PHPMD\AbstractRenderer
      * @throws \InvalidArgumentException When the specified renderer does not exist.
      */
@@ -370,14 +370,14 @@ class CommandLineOptions
         $reportFormat = $reportFormat ?: $this->reportFormat;
 
         switch ($reportFormat) {
-        case 'xml':
-            return $this->createXmlRenderer();
-        case 'html':
-            return $this->createHtmlRenderer();
-        case 'text':
-            return $this->createTextRenderer();
-        default:
-            return $this->createCustomRenderer();
+            case 'xml':
+                return $this->createXmlRenderer();
+            case 'html':
+                return $this->createHtmlRenderer();
+            case 'text':
+                return $this->createTextRenderer();
+            default:
+                return $this->createCustomRenderer();
         }
     }
 
@@ -476,8 +476,8 @@ class CommandLineOptions
     /**
      * Logs a deprecated option to the current user interface.
      *
-     * @param  string $deprecatedName
-     * @param  string $newName
+     * @param string $deprecatedName
+     * @param string $newName
      * @return void
      */
     protected function logDeprecated($deprecatedName, $newName)
@@ -497,10 +497,10 @@ class CommandLineOptions
      * the given <b>$inputFile</b> not exists, this method will throw an
      * exception.
      *
-     * @param  string $inputFile Specified input file name.
+     * @param string $inputFile Specified input file name.
      * @return string
      * @throws \InvalidArgumentException If the specified input file does not exist.
-     * @since  1.1.0
+     * @since 1.1.0
      */
     protected function readInputFile($inputFile)
     {

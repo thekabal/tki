@@ -10,7 +10,9 @@ PHP\_CodeSniffer is a set of two PHP scripts; the main `phpcs` script that token
 Requirements
 ------------
 
-PHP\_CodeSniffer requires PHP version 5.4.0 or greater, although individual sniffs may have additional requirements such as external applications and scripts. See the [Configuration Options manual page](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options) for a list of these requirements.
+PHP\_CodeSniffer requires PHP version 5.1.2 or greater, although individual sniffs may have additional requirements such as external applications and scripts. See the [Configuration Options manual page](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options) for a list of these requirements.
+
+The SVN pre-commit hook requires PHP version 5.2.4 or greater due to its use of the vertical whitespace character.
 
 Installation
 ------------
@@ -38,7 +40,7 @@ Or alternatively, include a dependency for `squizlabs/php_codesniffer` in your `
 ```json
 {
     "require-dev": {
-        "squizlabs/php_codesniffer": "3.*"
+        "squizlabs/php_codesniffer": "2.*"
     }
 }
 ```
@@ -52,18 +54,20 @@ You can also download the PHP\_CodeSniffer source and run the `phpcs` and `phpcb
 
     git clone https://github.com/squizlabs/PHP_CodeSniffer.git
     cd PHP_CodeSniffer
-    php bin/phpcs -h
-    php bin/phpcbf -h
+    php scripts/phpcs -h
+    php scripts/phpcbf -h
 
 Documentation
 -------------
 
 The documentation for PHP\_CodeSniffer is available on the [Github wiki](https://github.com/squizlabs/PHP_CodeSniffer/wiki).
 
+Information about upcoming features and releases is available on the [Squiz Labs blog](http://www.squizlabs.com/php-codesniffer).
+
 Issues
 ------
 
-Bug reports and feature requests can be submitted on the [Github Issue Tracker](https://github.com/squizlabs/PHP_CodeSniffer/issues).
+Bug reports and feature requests can be submitted on the [Github Issue Tracker](https://github.com/squizlabs/PHP_CodeSniffer/issues) or the [PEAR bug tracker](http://pear.php.net/package/PHP_CodeSniffer/bugs).
 
 Contributing
 -------------

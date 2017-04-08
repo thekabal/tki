@@ -15,17 +15,14 @@
         "swiftmailer/swiftmailer": "^5.4.6",
         "adodb/adodb-php": "v5.20.9",
         "symfony/http-foundation": "^3.2.0",
-        "phpstan/phpstan": "^0.6",
-        "Symfony/http-kernel": "^3.2",
-        "Symfony/browser-kit": "^3.2",
-        "Symfony/var-dumper": "^3.2"
+        "phpstan/phpstan": "^0.6"
     },
     "require-dev": {
-            "squizlabs/php_codesniffer": "^3.0.0RC2",
-            "phpmd/phpmd" : "@stable",
+            "phpmd/phpmd" : "^2.6.0",
             "sebastian/phpcpd": "^2.0.4",
-            "friendsofphp/php-cs-fixer": "^2.0",
+            "friendsofphp/php-cs-fixer": "^2.1.1",
             "nette/nette": "^2.4.0",
+            "squizlabs/PHP_CodeSniffer": "^2.8.1",
             "phpunit/phpunit": "^6.0.8"
     },
     "autoload": {

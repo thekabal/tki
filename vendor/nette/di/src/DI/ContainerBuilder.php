@@ -209,10 +209,11 @@ class ContainerBuilder
 	/**
 	 * Resolves service name by type.
 	 * @param  string  class or interface
+	 * @param  bool    throw exception if service doesn't exist?
 	 * @return string|NULL  service name or NULL
 	 * @throws ServiceCreationException
 	 */
-	public function getByType($class)
+	public function getByType($class, $throw = FALSE)
 	{
 		$class = ltrim($class, '\\');
 
@@ -225,6 +226,9 @@ class ContainerBuilder
 		$classes = $this->getClassList();
 		if (empty($classes[$class][TRUE])) {
 			self::checkCase($class);
+			if ($throw) {
+				throw new MissingServiceException("Service of type '$class' not found.");
+			}
 			return;
 
 		} elseif (count($classes[$class][TRUE]) === 1) {
@@ -247,12 +251,7 @@ class ContainerBuilder
 	 */
 	public function getDefinitionByType($class)
 	{
-		$definitionName = $this->getByType($class);
-		if (!$definitionName) {
-			throw new MissingServiceException("Service of type '$class' not found.");
-		}
-
-		return $this->getDefinition($definitionName);
+		return $this->getDefinition($this->getByType($class, TRUE));
 	}
 
 
@@ -607,7 +606,7 @@ class ContainerBuilder
 			foreach ($this->definitions[$service]->parameters as $k => $v) {
 				$params[] = preg_replace('#\w+\z#', '\$$0', (is_int($k) ? $v : $k)) . (is_int($k) ? '' : ' = ' . PhpHelpers::dump($v));
 			}
-			$rm = new \ReflectionFunction(create_function(implode(', ', $params), ''));
+			$rm = new \ReflectionFunction(eval('return function(' . implode(', ', $params) . ') {};'));
 			$arguments = Helpers::autowireArguments($rm, $arguments, $this);
 			$entity = '@' . $service;
 

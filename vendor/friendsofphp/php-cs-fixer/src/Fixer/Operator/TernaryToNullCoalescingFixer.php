@@ -27,21 +27,10 @@ final class TernaryToNullCoalescingFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function fix(\SplFileInfo $file, Tokens $tokens)
-    {
-        $issetIndexes = array_keys($tokens->findGivenKind(T_ISSET));
-        while ($issetIndex = array_pop($issetIndexes)) {
-            $this->fixIsset($tokens, $issetIndex);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Use `null` coalescing operator `??` where possible.',
+            'Use `null` coalescing operator `??` where possible. Requires PHP >= 7.0.',
             array(
                 new VersionSpecificCodeSample(
                     "<?php\n\$sample = isset(\$a) ? \$a : \$b;",
@@ -57,6 +46,17 @@ final class TernaryToNullCoalescingFixer extends AbstractFixer
     public function isCandidate(Tokens $tokens)
     {
         return PHP_VERSION_ID >= 70000 && $tokens->isTokenKindFound(T_ISSET);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    {
+        $issetIndexes = array_keys($tokens->findGivenKind(T_ISSET));
+        while ($issetIndex = array_pop($issetIndexes)) {
+            $this->fixIsset($tokens, $issetIndex);
+        }
     }
 
     /**

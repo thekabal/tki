@@ -15,6 +15,7 @@ namespace PhpCsFixer\Fixer\FunctionNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -28,10 +29,39 @@ final class NoSpacesAfterFunctionNameFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function fix(\SplFileInfo $file, Tokens $tokens)
+    public function getDefinition()
+    {
+        return new FixerDefinition(
+            'When making a method or function call, there MUST NOT be a space between the method or function name and the opening parenthesis.',
+            array(new CodeSample("<?php\nrequire ('sample.php');\necho (test (3));\nexit  (1);\n\$func ();"))
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        // must run before FunctionToConstantFixer
+        return 2;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCandidate(Tokens $tokens)
+    {
+        return $tokens->isAnyTokenKindsFound(array_merge($this->getFunctionyTokenKinds(), array(T_STRING)));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         $functionyTokens = $this->getFunctionyTokenKinds();
         $languageConstructionTokens = $this->getLanguageConstructionTokenKinds();
+        $braceTypes = $this->getBraceAfterVariableKinds();
 
         foreach ($tokens as $index => $token) {
             // looking for start brace
@@ -39,12 +69,8 @@ final class NoSpacesAfterFunctionNameFixer extends AbstractFixer
                 continue;
             }
 
-            // last non-whitespace token
+            // last non-whitespace token, can never be `null` always at least PHP open tag before it
             $lastTokenIndex = $tokens->getPrevNonWhitespace($index);
-
-            if (null === $lastTokenIndex) {
-                continue;
-            }
 
             // check for ternary operator
             $endParenthesisIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $index);
@@ -65,27 +91,18 @@ final class NoSpacesAfterFunctionNameFixer extends AbstractFixer
                 if (!$tokens[$possibleDefinitionIndex]->isGivenKind(T_FUNCTION)) {
                     $this->fixFunctionCall($tokens, $index);
                 }
+            } elseif ($tokens[$lastTokenIndex]->equalsAny($braceTypes)) {
+                $block = Tokens::detectBlockType($tokens[$lastTokenIndex]);
+                if (
+                    Tokens::BLOCK_TYPE_ARRAY_INDEX_CURLY_BRACE === $block['type']
+                    || Tokens::BLOCK_TYPE_DYNAMIC_VAR_BRACE === $block['type']
+                    || Tokens::BLOCK_TYPE_INDEX_SQUARE_BRACE === $block['type']
+                    || Tokens::BLOCK_TYPE_PARENTHESIS_BRACE === $block['type']
+                ) {
+                    $this->fixFunctionCall($tokens, $index);
+                }
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefinition()
-    {
-        return new FixerDefinition(
-            'When making a method or function call, there MUST NOT be a space between the method or function name and the opening parenthesis.',
-            array(new CodeSample("<?php\nrequire ('sample.php');\necho (test (3));\nexit  (1);"))
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isAnyTokenKindsFound(array_merge($this->getFunctionyTokenKinds(), array(T_STRING)));
     }
 
     /**
@@ -100,6 +117,21 @@ final class NoSpacesAfterFunctionNameFixer extends AbstractFixer
         if ($tokens[$index - 1]->isWhitespace()) {
             $tokens[$index - 1]->clear();
         }
+    }
+
+    /**
+     * @return array<string|array>
+     */
+    private function getBraceAfterVariableKinds()
+    {
+        static $tokens = array(
+            ')',
+            ']',
+            array(CT::T_DYNAMIC_VAR_BRACE_CLOSE),
+            array(CT::T_ARRAY_INDEX_CURLY_BRACE_CLOSE),
+        );
+
+        return $tokens;
     }
 
     /**
@@ -123,6 +155,7 @@ final class NoSpacesAfterFunctionNameFixer extends AbstractFixer
             T_REQUIRE,
             T_REQUIRE_ONCE,
             T_UNSET,
+            T_VARIABLE,
         );
 
         return $tokens;

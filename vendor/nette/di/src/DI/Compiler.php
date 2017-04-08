@@ -185,7 +185,7 @@ class Compiler
 		$params = isset($this->config['parameters']) ? $this->config['parameters'] : [];
 		foreach ($this->dynamicParams as $key) {
 			$params[$key] = array_key_exists($key, $params)
-				? ContainerBuilder::literal('isset($this->parameters[?]) ? $this->parameters[?] : ?', [$key, ContainerBuilder::literal('?'), $key, $params[$key]])
+				? ContainerBuilder::literal('isset($this->parameters[?]) \? $this->parameters[?] : ?', [$key, $key, $params[$key]])
 				: ContainerBuilder::literal('$this->parameters[?]', [$key]);
 		}
 		$this->builder->parameters = Helpers::expand($params, $params, TRUE);
@@ -284,14 +284,16 @@ class Compiler
 					throw new ServiceCreationException("Circular reference detected for service '$name'.");
 				}
 			}
-			$depths[$name] = count($path);
+			$depths[$name] = count($path) + preg_match('#^@[\w\\\\]+\z#', $name);
 		}
 		array_multisort($depths, $services);
 
 		foreach ($services as $name => $def) {
-			if ((string) (int) $name === (string) $name) {
+			if (is_int($name)) {
 				$postfix = $def instanceof Statement && is_string($def->getEntity()) ? '.' . $def->getEntity() : (is_scalar($def) ? ".$def" : '');
 				$name = (count($builder->getDefinitions()) + 1) . preg_replace('#\W+#', '_', $postfix);
+			} elseif (preg_match('#^@[\w\\\\]+\z#', $name)) {
+				$name = $builder->getByType(substr($name, 1), TRUE);
 			} elseif ($namespace) {
 				$name = $namespace . '.' . $name;
 			}
