@@ -76,7 +76,7 @@ if (!$result->EOF)
         echo "<br>\n";
         echo "<div style='font-size:14px; font-weight:bold; color:#f00;'>";
         echo $langvars['l_mail_note_1'] . "<br><br>";
-//        $langvars['l_mail_note_2'] = htmlentities($langvars['l_mail_note_2'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        // $langvars['l_mail_note_2'] = htmlentities($langvars['l_mail_note_2'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
         echo mb_strtoupper($langvars['l_mail_note_2']);
         echo "</div>\n";
     }
