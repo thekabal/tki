@@ -87,7 +87,7 @@ class TraderouteSettings
         \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
     }
 
-    public static function after(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $colonists, $fighters, $torps, $energy): void
+    public static function after(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $colonists, int $fighters, int $torps, int $energy): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
@@ -95,7 +95,14 @@ class TraderouteSettings
         empty($fighters) ? $fighters = 'N' : $fighters = 'Y';
         empty($torps) ? $torps = 'N' : $torps = 'Y';
 
-        $resa = $db->Execute("UPDATE {$db->prefix}ships SET trade_colonists = ?, trade_fighters = ?, trade_torps = ?, trade_energy = ? WHERE ship_id = ?;", array($colonists, $fighters, $torps, $energy, $playerinfo['ship_id']));
+        $sql = "UPDATE ::prefix::ships SET trade_colonists = :colonists, trade_fighters = :fighters, trade_torps = :torps, trade_energy = :energy WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':colonists', $colonists, \PDO::PARAM_INT);
+        $stmt->bindParam(':fighters', $fighters, \PDO::PARAM_INT);
+        $stmt->bindParam(':torps', $torps, \PDO::PARAM_INT);
+        $stmt->bindParam(':energy', $energy, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $resa = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
 
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
