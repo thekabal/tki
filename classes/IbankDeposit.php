@@ -108,12 +108,16 @@ class IbankDeposit
 
         $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->execute(array($amount, $playerinfo['ship_id']));
+        $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->execute(array($amount, $playerinfo['ship_id']));
+        $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
