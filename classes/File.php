@@ -61,7 +61,7 @@ class File
                 {
                     $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_INT);
                 }
-                elseif (is_null($type_n_value['value'])) // Not currently used - but this should handle it correctly if we add it
+                elseif ($type_n_value['value'] === null) // Not currently used - but this should handle it correctly if we add it
                 {
                     $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_NULL);
                 }
