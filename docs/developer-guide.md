@@ -24,4 +24,5 @@ auto-loaded where possible, files are being converted to use templates for outpu
 - Anywhere you are unconditionally including a class file, use require_once(). Anywhere you are conditionally 
   including a class file, use include_once().
 - All PDO calls with bindParam/bindValue must use PDO datatype constants (Like PDO::PARAM_INT/PDO::PARAM_STR)
+- All PDO calls must use named parameter binding, not question mark parameter markers
 - Never use global variables.

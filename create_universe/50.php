@@ -97,8 +97,10 @@ for ($t = 0; $t < $z; $t++)
 
 // Write the number of sectors chosen during CU to the database
 $local_table_timer->start(); // Start benchmarking
-$stmt = $pdo_db->prepare("UPDATE ::prefix::gameconfig SET value = ? WHERE name='max_sectors'");
-$result = $stmt->execute(array($variables['max_sectors']));
+$sql = "UPDATE ::prefix::gameconfig SET value = :sectors WHERE name='max_sectors'");
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sectors', $variables['max_sectors'], \PDO::PARAM_INT);
+$result = $stmt->execute();
 $local_table_timer->stop();
 $variables['update_config_results']['result'] = Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $variables['update_config_results']['time'] = $local_table_timer->elapsed();
