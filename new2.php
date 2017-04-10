@@ -84,8 +84,8 @@ $flag = 0;
 $sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email || character_name=:character_name || ship_name=:ship_name";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $username, PDO::PARAM_STR);
-$stmt->bindParam(':character_name', $character);
-$stmt->bindParam(':ship_name', $shipname);
+$stmt->bindParam(':character_name', $character, PDO::PARAM_STR);
+$stmt->bindParam(':ship_name', $shipname, PDO::PARAM_STR);
 $stmt->execute();
 $character_exists = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -184,9 +184,9 @@ if ($flag == 0)
             $sql = "INSERT INTO ::prefix::presets (ship_id, preset, type) " .
                    "VALUES (:ship_id, :preset, :type)";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $shipid['ship_id']);
-            $stmt->bindValue(':preset', 1);
-            $stmt->bindValue(':type', 'R');
+            $stmt->bindParam(':ship_id', $shipid['ship_id'], PDO::PARAM_INT);
+            $stmt->bindValue(':preset', 1, \PDO::PARAM_INT);
+            $stmt->bindValue(':type', 'R', \PDO::PARAM_STR);
             $resxx = $stmt->execute();
         }
 

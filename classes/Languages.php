@@ -26,9 +26,9 @@ class Languages
         // Get a list of supported languages
         $sql = "SELECT section, name, value FROM ::prefix::languages WHERE category = :category AND (name = :name1 OR name = :name2) ORDER BY section, name;";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindValue(':category', 'regional');
-        $stmt->bindValue(':name1', 'local_lang_name');
-        $stmt->bindValue(':name2', 'local_lang_flag');
+        $stmt->bindValue(':category', 'regional', \PDO::PARAM_STR);
+        $stmt->bindValue(':name1', 'local_lang_name', \PDO::PARAM_INT);
+        $stmt->bindValue(':name2', 'local_lang_flag', \PDO::PARAM_INT);
         $stmt->execute();
         $lang_rs = $stmt->fetchAll();
         $list_of_langs = array();

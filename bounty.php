@@ -112,7 +112,7 @@ switch ($response) {
             {
                 $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $bounty_details[$j]['placed_by']);
+                $stmt->bindParam(':ship_id', $bounty_details[$j]['placed_by'], PDO::PARAM_INT);
                 $stmt->execute();
                 $details = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -338,7 +338,7 @@ switch ($response) {
             {
                 $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $bounties[$i]['bounty_on']);
+                $stmt->bindParam(':ship_id', $bounties[$i]['bounty_on'], PDO::PARAM_INT);
                 $stmt->execute();
                 $details = $stmt->fetch(PDO::FETCH_ASSOC);
                 echo "<tr bgcolor=\"$color\">";

@@ -33,7 +33,7 @@ class TraderouteDistance
         {
             $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $start);
+            $stmt->bindParam(':sector_id', $start, \PDO::PARAM_INT);
             $stmt->execute();
             $start = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
@@ -42,7 +42,7 @@ class TraderouteDistance
         {
             $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':dest', $dest);
+            $stmt->bindParam(':dest', $dest, \PDO::PARAM_INT);
             $stmt->execute();
             $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
         }

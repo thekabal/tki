@@ -25,7 +25,7 @@ class Mines
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type ='M' ORDER BY QUANTITY ASC";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sector);
+        $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
         $defense_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($defense_present !== null)
@@ -39,8 +39,8 @@ class Mines
                     {
                         $sql = "UPDATE ::prefix::sector_defense SET quantity = quantity - :num_mines WHERE defense_id=:defense_id";
                         $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':num_mines', $num_mines);
-                        $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
+                        $stmt->bindParam(':num_mines', $num_mines, \PDO::PARAM_INT);
+                        $stmt->bindParam(':defense_id', $tmp_defense['defense_id'], \PDO::PARAM_INT);
                         $stmt->execute();
                         $num_mines = 0;
                     }
@@ -48,7 +48,7 @@ class Mines
                     {
                         $sql = "DELETE FROM ::prefix::sector_defense WHERE defense_id=:defense_id";
                         $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
+                        $stmt->bindParam(':defense_id', $tmp_defense['defense_id'], \PDO::PARAM_INT);
                         $stmt->execute();
                         $num_mines -= $tmp_defense['quantity'];
                     }

@@ -25,7 +25,7 @@ class Toll
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type='F'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sector);
+        $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
         $defense_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($defense_present !== null)
@@ -35,8 +35,8 @@ class Toll
                 $toll_amount = round(($tmp_defense['quantity'] / $total_fighters) * $toll);
                 $sql = "UPDATE ::prefix::ships SET credits=credits + :toll_amount WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':toll_amount', $toll_amount);
-                $stmt->bindParam(':ship_id', $tmp_defense['ship_id']);
+                $stmt->bindParam(':toll_amount', $toll_amount, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $tmp_defense['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
             }

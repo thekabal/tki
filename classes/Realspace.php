@@ -31,13 +31,13 @@ class Realspace
 
         $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:playersector";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':playersector', $playerinfo['sector']);
+        $stmt->bindParam(':playersector', $playerinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         $start = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:destination";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':destination', $destination);
+        $stmt->bindParam(':destination', $destination, \PDO::PARAM_INT);
         $stmt->execute();
         $finish = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -107,7 +107,7 @@ class Realspace
 
             $sql = "UPDATE ::prefix::ships SET cleared_defenses = ' ' WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
             $retval = "BREAK-TURNS";
@@ -119,15 +119,15 @@ class Realspace
 
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND ship_id <> :ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $destination);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':sector_id', $destination, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
             {
                 $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $defenses_present['ship_id']);
+                $stmt->bindParam(':ship_id', $defenses_present['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 $nsfighters = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -150,12 +150,12 @@ class Realspace
                        "ship_energy = ship_energy + :ship_energy, turns = turns - :turns, " .
                        "turns_used = turns_used + :turns_used WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':last_login', $stamp);
-                $stmt->bindParam(':sector', $destination);
-                $stmt->bindParam(':ship_energy', $energyscooped);
-                $stmt->bindParam(':turns', $triptime);
-                $stmt->bindParam(':turns_used', $triptime);
-                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->bindParam(':last_login', $stamp, \PDO::PARAM_STR);
+                $stmt->bindParam(':sector', $destination, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_energy', $energyscooped, \PDO::PARAM_INT);
+                $stmt->bindParam(':turns', $triptime, \PDO::PARAM_INT);
+                $stmt->bindParam(':turns_used', $triptime, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
 
                 $langvars['l_rs_ready_result'] = null;

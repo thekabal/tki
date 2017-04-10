@@ -46,7 +46,7 @@ else
     {
         $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':email', $_POST['zone']);
+        $stmt->bindParam(':zone_id', $_POST['zone'], \PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

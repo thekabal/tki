@@ -46,14 +46,14 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $i = 0;
 $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($defense_present !== null)
@@ -150,7 +150,7 @@ else
 
             $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $defense_owner);
+            $stmt->bindParam(':ship_id', $defense_owner, PDO::PARAM_INT);
             $stmt->execute();
             $fighters_owner = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -169,7 +169,7 @@ else
 
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $zone_owner);
+        $stmt->bindParam(':ship_id', $zone_owner, PDO::PARAM_INT);
         $stmt->execute();
         $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 

@@ -170,7 +170,7 @@ $local_table_timer->start(); // Start benchmarking
 $sql = "UPDATE ::prefix::universe SET zone_id='2' WHERE sector_id<=:fedsecs";
 
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':fedsecs', $variables['fedsecs']);
+$stmt->bindParam(':fedsecs', $variables['fedsecs'], \PDO::PARAM_INT);
 $update = $stmt->execute();
 
 $variables['create_fed_sectors_results']['result'] = Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
@@ -203,7 +203,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['spp']);
+$stmt->bindParam(':limit', $variables['spp'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -272,7 +272,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['oep']);
+$stmt->bindParam(':limit', $variables['oep'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -340,7 +340,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['ogp']);
+$stmt->bindParam(':limit', $variables['ogp'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -408,7 +408,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['gop']);
+$stmt->bindParam(':limit', $variables['gop'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -477,7 +477,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['enp']);
+$stmt->bindParam(':limit', $variables['enp'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);

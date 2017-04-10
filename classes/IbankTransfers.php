@@ -25,14 +25,14 @@ class IbankTransfers
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@kabal' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
+        $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT name, planet_id, sector_id FROM ::prefix::planets WHERE owner=:owner ORDER BY sector_id ASC";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $playerinfo['ship_id']);
+        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -137,8 +137,8 @@ class IbankTransfers
             }
 
             $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
-            $stmt->bindParam(':ship_id', $ship_id);
-            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
+            $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$target)
@@ -165,9 +165,9 @@ class IbankTransfers
                 $curtime -= $tkireg->ibank_trate * 60;
 
                 $stmt = $pdo_db->prepare("SELECT UNIX_TIMESTAMP(time) as time FROM ::prefix::ibank_transfers WHERE UNIX_TIMESTAMP(time) > :curtime AND source_id = :source_id AND dest_id = :dest_id");
-                $stmt->bindParam(':curtime', $curtime);
-                $stmt->bindParam(':source_id', $playerinfo['ship_id']);
-                $stmt->bindParam(':dest_id', $target['ship_id']);
+                $stmt->bindParam(':curtime', $curtime, \PDO::PARAM_INT);
+                $stmt->bindParam(':source_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $stmt->bindParam(':dest_id', $target['ship_id'], \PDO::PARAM_INT);
                 $time = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                 if ($time !== null)
@@ -222,7 +222,7 @@ class IbankTransfers
 
             $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':planet_id', $splanet_id);
+            $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
             $stmt->execute();
             $source = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -238,7 +238,7 @@ class IbankTransfers
 
             $sql = "SELECT name, credits, owner, sector_id, base FROM ::prefix::planets WHERE planet_id=:planet_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':planet_id', $dplanet_id);
+            $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
             $stmt->execute();
             $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -305,8 +305,8 @@ class IbankTransfers
 
             // Need to check again to prevent cheating by manual posts
             $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
-            $stmt->bindParam(':ship_id', $ship_id);
-            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
+            $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($target === null)
@@ -335,9 +335,9 @@ class IbankTransfers
                 $sql = "SELECT UNIX_TIMESTAMP(time) as time FROM ::prefix::ibank_transfers WHERE " .
                        "UNIX_TIMESTAMP(time) > :curtime AND source_id = :source_id AND dest_id = :dest_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':curtime', $curtime);
-                $stmt->bindParam(':source_id', $playerinfo['ship_id']);
-                $stmt->bindParam(':dest_id', $target['ship_id']);
+                $stmt->bindParam(':curtime', $curtime, \PDO::PARAM_INT);
+                $stmt->bindParam(':source_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $stmt->bindParam(':dest_id', $target['ship_id'], \PDO::PARAM_INT);
                 $time = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                 if ($time !== null)

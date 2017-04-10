@@ -71,7 +71,7 @@ class CalcLevels
 
         $sql = "SELECT beams FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $beam_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($beam_defender_here !== null)
@@ -100,7 +100,7 @@ class CalcLevels
 
         $sql = "SELECT shields FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $shield_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($shield_defender_here !== null)
@@ -129,7 +129,7 @@ class CalcLevels
 
         $sql = "SELECT torp_launchers FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $torp_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($torp_defender_here !== null)

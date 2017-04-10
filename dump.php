@@ -36,7 +36,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -58,7 +58,7 @@ elseif ($sectorinfo['port_type'] == "special")
 {
     $sql = "UPDATE ::prefix::ships SET ship_colonists=0, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
     $stmt->execute();
     echo $langvars['l_dump_dumped'] . "<br><br>";
 }

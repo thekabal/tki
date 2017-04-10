@@ -77,7 +77,7 @@ if ($target_sector === null)
 
 $sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -98,7 +98,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $target_sector);
+$stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -113,7 +113,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :sector_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $target_sector);
+$stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();
 $tmpinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -126,7 +126,7 @@ if (!$tmpinfo)
 
 $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':link_start', $playerinfo['sector']);
+$stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -150,14 +150,14 @@ if ($linkinfo !== false)
     {
         $sql = "DELETE FROM ::prefix::links WHERE link_start=:link_start AND link_dest=:link_dest";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':link_start', $playerinfo['sector']);
-        $stmt->bindParam(':link_dest', $target_sector);
+        $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
+        $stmt->bindParam(':link_dest', $target_sector, PDO::PARAM_INT);
         $stmt->execute();
         $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $sql = "UPDATE ::prefix::ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':link_start', $playerinfo['ship_id']);
+        $stmt->bindParam(':link_start', $playerinfo['ship_id'], PDO::PARAM_INT);
         $stmt->execute();
         $update_ships = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -169,8 +169,8 @@ if ($linkinfo !== false)
         {
             $sql = "DELETE ::prefix::links link_start = :link_start AND link_dest = :link_dest";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':link_start', $target_sector);
-            $stmt->bindParam(':link_start', $playerinfo['sector']);
+            $stmt->bindParam(':link_start', $target_sector, PDO::PARAM_INT);
+            $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
             $stmt->execute();
             $update_ships = $stmt->fetch(PDO::FETCH_ASSOC);
             echo $langvars['l_warp_removedtwo'] . " " . $target_sector . ".<br><br>";

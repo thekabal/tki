@@ -45,7 +45,7 @@ foreach ($lang_dir as $file_info) // Get a list of the files in the languages di
 
         if ($result !== false)
         {
-            $result->bindParam(':section', $lang_file);
+            $result->bindParam(':section', $lang_file, \PDO::PARAM_STR);
             $final_result = $result->execute();
             Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $row = $result->fetch();

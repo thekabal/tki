@@ -40,7 +40,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT team, ship_name, character_name, sector FROM ::prefix::ships WHERE ship_id=:ship_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ship_id', $ship_id);
+$stmt->bindParam(':ship_id', $ship_id, PDO::PARAM_INT);
 $stmt->execute();
 $othership = $stmt->fetch(PDO::FETCH_ASSOC);
 

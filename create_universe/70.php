@@ -289,8 +289,8 @@ for ($i = 1; $i <= $loops; $i++)
 $local_table_timer->start(); // Start benchmarking
 $sql = "DELETE FROM ::prefix::links WHERE link_start = :linkstart OR link_dest = :linkdest";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':linkstart', $tkireg->max_sectors);
-$stmt->bindParam(':linkdest', $tkireg->max_sectors);
+$stmt->bindParam(':linkstart', $tkireg->max_sectors, \PDO::PARAM_INT);
+$stmt->bindParam(':linkdest', $tkireg->max_sectors, \PDO::PARAM_INT);
 $resx = $stmt->execute();
 
 $variables['remove_links_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);

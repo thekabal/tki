@@ -52,7 +52,7 @@ class IbankConsolidate
     {
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $dplanet_id);
+        $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
         $stmt->execute();
         $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -75,9 +75,9 @@ class IbankConsolidate
         {
             $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :planet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
-            $stmt->bindParam(':dplanet_id', $dplanet_id);
-            $stmt->bindParam(':minimum', $minimum);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':dplanet_id', $dplanet_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':minimum', $minimum, \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             $amount = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -87,9 +87,9 @@ class IbankConsolidate
         {
             $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :dplanet_id AND credxits <= :maximum";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
-            $stmt->bindParam(':dplanet_id', $dplanet_id);
-            $stmt->bindParam(':maximum', $maximum);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':dplanet_id', $dplanet_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':maximum', $maximum, \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
@@ -133,7 +133,7 @@ class IbankConsolidate
     {
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $dplanet_id);
+        $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
         $stmt->execute();
         $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -156,9 +156,9 @@ class IbankConsolidate
         {
             $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :planet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
-            $stmt->bindParam(':dplanet_id', $dplanet_id);
-            $stmt->bindParam(':minimum', $minimum);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':dplanet_id', $dplanet_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':minimum', $minimum, \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             $amount = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -168,9 +168,9 @@ class IbankConsolidate
         {
             $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :planet_id AND credits <= :maximum";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
-            $stmt->bindParam(':dplanet_id', $dplanet_id);
-            $stmt->bindParam(':maximum', $maximum);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':dplanet_id', $dplanet_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':maximum', $maximum, \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             $amount = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -200,9 +200,9 @@ class IbankConsolidate
         {
             $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :dplanet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
-            $stmt->bindParam(':dplanet_id', $dplanet_id);
-            $stmt->bindParam(':minimum', $minimum);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':dplanet_id', $dplanet_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':minimum', $minimum, \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
@@ -211,24 +211,24 @@ class IbankConsolidate
         {
             $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :dplanet_id AND credxits <= :maximum";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner_id', $playerinfo['ship_id']);
-            $stmt->bindParam(':dplanet_id', $dplanet_id);
-            $stmt->bindParam(':maximum', $maximum);
+            $stmt->bindParam(':owner_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':dplanet_id', $dplanet_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':maximum', $maximum, \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
         $sql = "UPDATE ::prefix::planets SET credits = :credits WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':credits', $cplanet);
-        $stmt->bindParam(':planet_id', $dplanet_id);
+        $stmt->bindParam(':credits', $cplanet, \PDO::PARAM_INT);
+        $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE ::prefix::ships SET turns = turns - :turns WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':turns', $tcost);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->bindParam(':turns', $tcost, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }

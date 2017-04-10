@@ -95,7 +95,7 @@ class Sessions
                 $qry = "INSERT into ::prefix::sessions (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
                 $stmt = $this->pdo_db->prepare($qry);
                 $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
-                $stmt->bindParam(':sessdata', $sessdata);
+                $stmt->bindParam(':sessdata', $sessdata, \PDO::PARAM_STR);
                 $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
                 $result = $stmt->execute();
             }
@@ -105,7 +105,7 @@ class Sessions
                 $qry = "UPDATE ::prefix::sessions SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey";
                 $stmt = $this->pdo_db->prepare($qry);
                 $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
-                $stmt->bindParam(':sessdata', $sessdata);
+                $stmt->bindParam(':sessdata', $sessdata, \PDO::PARAM_STR);
                 $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
                 $result = $stmt->execute();
             }

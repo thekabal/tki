@@ -59,8 +59,8 @@ class Translate
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
                 // It is possible to use a single prepare, and multiple executes, but it makes the logic of this section much less clear.
-                $result->bindParam(':category', $category, PDO::PARAM_STR);
-                $result->bindParam(':language', $language, PDO::PARAM_STR);
+                $result->bindParam(':category', $category, \PDO::PARAM_STR);
+                $result->bindParam(':language', $language, \PDO::PARAM_STR);
                 $result->execute();
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 

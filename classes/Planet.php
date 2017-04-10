@@ -30,7 +30,7 @@ class Planet
             $sql .= "LEFT JOIN ::prefix::ships ON ::prefix::ships.ship_id = ::prefix::planets.owner ";
             $sql .= "WHERE ::prefix::planets.planet_id = :planet_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':planet_id', $planet_id);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
             $result = $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
@@ -116,16 +116,16 @@ class Planet
         \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
 
         $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1, ship_fighters = ship_fighters - :ship_fighters WHERE ship_id=:ship_id");
-        $stmt->bindParam(':ship_fighters', $attackerfighters);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->bindParam(':ship_fighters', $attackerfighters, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
         $stmt = $pdo_db->prepare("UPDATE ::prefix::planets SET energy = energy - :energy, fighters = fighters - :fighters, torps = torps - :torps WHERE planet_id=:planet_id");
-        $stmt->bindParam(':energy', $beamsused);
-        $stmt->bindParam(':fighters', $planetfighterslost);
-        $stmt->bindParam(':torps', $planettorps);
-        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->bindParam(':energy', $beamsused, \PDO::PARAM_INT);
+        $stmt->bindParam(':fighters', $planetfighterslost, \PDO::PARAM_INT);
+        $stmt->bindParam(':torps', $planettorps, \PDO::PARAM_INT);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }

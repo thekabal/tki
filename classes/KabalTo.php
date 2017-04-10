@@ -25,13 +25,13 @@ class KabalTo
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id"; // Get target planet information
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planet_id);
+        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
         $stmt->execute();
         $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $planetinfo['owner']);
+        $stmt->bindParam(':ship_id', $planetinfo['owner'], \PDO::PARAM_INT);
         $stmt->execute();
         $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -825,7 +825,7 @@ class KabalTo
 
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
@@ -842,7 +842,7 @@ class KabalTo
             $total_sector_mines = 0;
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)

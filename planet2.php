@@ -169,7 +169,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 // Get the Planet Info
 $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id AND planet_id > 0 LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':planet_id', $planet_id);
+$stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
 $stmt->execute();
 $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -625,28 +625,28 @@ else
 
                 $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:ship_ore, ship_organics=ship_organics+:ship_organics, ship_goods=ship_goods+:ship_goods, ship_energy=ship_energy+:ship_energy, ship_colonists=ship_colonists+:ship_colonists, torps=torps+:torps, ship_fighters=ship_fighters+:ship_fighters, credits=credits+:credits, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_ore', $transfer_ore);
-                $stmt->bindParam(':ship_organics', $transfer_organics);
-                $stmt->bindParam(':ship_goods', $transfer_goods);
-                $stmt->bindParam(':ship_energy', $transfer_energy);
-                $stmt->bindParam(':ship_colonists', $transfer_colonists);
-                $stmt->bindParam(':torps', $transfer_torps);
-                $stmt->bindParam(':ship_fighters', $transfer_fighters);
-                $stmt->bindParam(':credits', $transfer_credits);
-                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->bindParam(':ship_ore', $transfer_ore, PDO::PARAM_INT);
+                $stmt->bindParam(':ship_organics', $transfer_organics, PDO::PARAM_INT);
+                $stmt->bindParam(':ship_goods', $transfer_goods, PDO::PARAM_INT);
+                $stmt->bindParam(':ship_energy', $transfer_energy, PDO::PARAM_INT);
+                $stmt->bindParam(':ship_colonists', $transfer_colonists, PDO::PARAM_INT);
+                $stmt->bindParam(':torps', $transfer_torps, PDO::PARAM_INT);
+                $stmt->bindParam(':ship_fighters', $transfer_fighters, PDO::PARAM_INT);
+                $stmt->bindParam(':credits', $transfer_credits, PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
                 $stmt->execute();
 
                 $sql = "UPDATE ::prefix::planets SET ore=ore-:ore, organics=organics-:organics, goods=goods-:goods, energy=energy-:energy, colonists=colonists-:colonists, torps=torps-:torps, fighters=fighters-:fighters, credits=credits-:credits WHERE planet_id=:planet_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ore', $transfer_ore);
-                $stmt->bindParam(':organics', $transfer_organics);
-                $stmt->bindParam(':goods', $transfer_goods);
-                $stmt->bindParam(':energy', $transfer_energy);
-                $stmt->bindParam(':colonists', $transfer_colonists);
-                $stmt->bindParam(':torps', $transfer_torps);
-                $stmt->bindParam(':fighters', $transfer_fighters);
-                $stmt->bindParam(':credits', $transfer_credits);
-                $stmt->bindParam(':planet_id', $planet_id);
+                $stmt->bindParam(':ore', $transfer_ore, PDO::PARAM_INT);
+                $stmt->bindParam(':organics', $transfer_organics, PDO::PARAM_INT);
+                $stmt->bindParam(':goods', $transfer_goods, PDO::PARAM_INT);
+                $stmt->bindParam(':energy', $transfer_energy, PDO::PARAM_INT);
+                $stmt->bindParam(':colonists', $transfer_colonists, PDO::PARAM_INT);
+                $stmt->bindParam(':torps', $transfer_torps, PDO::PARAM_INT);
+                $stmt->bindParam(':fighters', $transfer_fighters, PDO::PARAM_INT);
+                $stmt->bindParam(':credits', $transfer_credits, PDO::PARAM_INT);
+                $stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
                 $stmt->execute();
 
                 echo $langvars['l_planet2_compl'] . "<br><a href=planet.php?planet_id=$planet_id>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "<br><br>";

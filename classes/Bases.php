@@ -40,7 +40,7 @@ class Bases
 
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planet_id);
+        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
         $stmt->execute();
         $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -73,28 +73,28 @@ class Bases
         {
             // Create The Base
             $stmt = $pdo_db->prepare("UPDATE ::prefix::planets SET base='Y', ore = :planetore - :baseore, organics = :planetorg - :baseorg, goods = :planetgoods - :basegoods, credits = :planetcredits - :basecredits WHERE planet_id = :planet_id");
-            $stmt->bindParam(':planetore', $planetinfo['ore']);
-            $stmt->bindParam(':baseore', $tkireg->base_ore);
-            $stmt->bindParam(':planetorg', $planetinfo['organics']);
-            $stmt->bindParam(':baseorg', $tkireg->base_organics);
-            $stmt->bindParam(':planetgoods', $planetinfo['goods']);
-            $stmt->bindParam(':basegoods', $tkireg->base_goods);
-            $stmt->bindParam(':planetcredits', $planetinfo['credits']);
-            $stmt->bindParam(':basecredits', $tkireg->base_credits);
-            $stmt->bindParam(':planet_id', $planet_id);
+            $stmt->bindParam(':planetore', $planetinfo['ore'], \PDO::PARAM_INT);
+            $stmt->bindParam(':baseore', $tkireg->base_ore, \PDO::PARAM_INT);
+            $stmt->bindParam(':planetorg', $planetinfo['organics'], \PDO::PARAM_INT);
+            $stmt->bindParam(':baseorg', $tkireg->base_organics, \PDO::PARAM_INT);
+            $stmt->bindParam(':planetgoods', $planetinfo['goods'], \PDO::PARAM_INT);
+            $stmt->bindParam(':basegoods', $tkireg->base_goods, \PDO::PARAM_INT);
+            $stmt->bindParam(':planetcredits', $planetinfo['credits'], \PDO::PARAM_INT);
+            $stmt->bindParam(':basecredits', $tkireg->base_credits, \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
             $result = $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             // Update User Turns
             $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id");
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             // Refresh Planet Info
             $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':planet_id', $planet_id);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
             $stmt->execute();
             $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 

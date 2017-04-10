@@ -21,7 +21,7 @@ namespace Tki;
 
 class PlayerLog
 {
-    public static function writeLog(\PDO $pdo_db, int $ship_id, $log_type, $data = null): void
+    public static function writeLog(\PDO $pdo_db, int $ship_id, int $log_type, $data = null): void
     {
         $data = addslashes($data);
         $stamp = date('Y-m-d H:i:s'); // Now (as seen by PHP)
@@ -32,10 +32,10 @@ class PlayerLog
             $sql = "INSERT INTO ::prefix::logs (ship_id, type, time, data) " .
                    "VALUES (:ship_id, :type, :time, :data)";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $ship_id);
-            $stmt->bindParam(':type', $log_type);
-            $stmt->bindParam(':time', $stamp);
-            $stmt->bindParam(':data', $data);
+            $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':type', $log_type, \PDO::PARAM_INT);
+            $stmt->bindParam(':time', $stamp, \PDO::PARAM_STR);
+            $stmt->bindParam(':data', $data, \PDO::PARAM_STR);
             $stmt->execute();
             Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }

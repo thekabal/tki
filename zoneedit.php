@@ -102,7 +102,7 @@ if (mb_strlen(trim($trades)) === 0)
 
 $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $zone);
+$stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
 $stmt->execute();
 $curzone = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -129,7 +129,7 @@ else
 {
     $sql = "SELECT creator, id FROM ::prefix::teams WHERE creator=:creator LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':creator', $curzone['owner']);
+    $stmt->bindParam(':creator', $curzone['owner'], PDO::PARAM_INT);
     $stmt->execute();
     $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -149,14 +149,14 @@ if ($command == 'change')
 
     $sql = "UPDATE ::prefix::zones SET zone_name=:zone_name, allow_beacon=:allow_beacon, allow_attack=:allow_attack, allow_warpedit=:allow_warpedit, allow_planet=:allow_planet, allow_trade=:allow_trade, allow_defenses=:allow_defenses WHERE zone_id=:zone_id";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':zone_name', $name);
-    $stmt->bindParam(':allow_beacon', $beacons);
-    $stmt->bindParam(':allow_attack', $attacks);
-    $stmt->bindParam(':allow_warpedit', $warpedits);
-    $stmt->bindParam(':allow_planet', $planets);
-    $stmt->bindParam(':allow_trade', $trades);
-    $stmt->bindParam(':allow_defenses', $defenses);
-    $stmt->bindParam(':zone_id', $zone);
+    $stmt->bindParam(':zone_name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':allow_beacon', $beacons, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_attack', $attacks, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_warpedit', $warpedits, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_planet', $planets, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_trade', $trades, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_defenses', $defenses, \PDO::PARAM_STR);
+    $stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
     $stmt->execute();
 
     echo $langvars['l_ze_saved'] . "<p>";

@@ -53,11 +53,34 @@ class File
                     $tkireg->$config_key = $type_n_value['value'];
                 }
 
-                $stmt->bindParam(':config_key', $config_key);
-                $stmt->bindParam(':config_category', $config_category);
-                $stmt->bindParam(':config_value', $type_n_value['value']);
-                $stmt->bindParam(':section', $section);
-                $stmt->bindParam(':type', $type_n_value['type']);
+                $stmt->bindParam(':config_key', $config_key, \PDO::PARAM_STR);
+                $stmt->bindParam(':config_category', $config_category, \PDO::PARAM_STR);
+                $stmt->bindParam(':section', $section, \PDO::PARAM_STR);
+                $stmt->bindParam(':type', $type_n_value['type'], \PDO::PARAM_STR);
+                if (is_int($type_n_value['value']))
+                {
+                    $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_INT);
+                }
+                elseif (is_null($type_n_value['value'])) // Not currently used - but this should handle it correctly if we add it
+                {
+                    $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_NULL);
+                }
+                elseif (is_bool($type_n_value['value'])) // Boolean true/false are stored temporarily as 1 for true and 0 for false
+                {
+                    if ($type_n_value['value'])
+                    {
+                        $stmt->bindValue(':config_value', '1', \PDO::PARAM_INT);
+                    }
+                    else
+                    {
+                        $stmt->bindValue(':config_value', '0', \PDO::PARAM_INT);
+                    }
+                }
+                else
+                {
+                    $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_STR);
+                }
+
                 $result = $stmt->execute();
                 $status_array[$j] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             }

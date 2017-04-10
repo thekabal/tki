@@ -25,7 +25,7 @@ class Loan
     {
         $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $account = $stmt->fetch(\PDO::FETCH_ASSOC);
