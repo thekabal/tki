@@ -71,7 +71,7 @@ class Ship
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $ship_id);
+        $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $planets_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -81,8 +81,8 @@ class Ship
             {
                 $sql = "SELECT * FROM ::prefix::ships WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':planet_id', $tmp_planet['planet_id']);
-                $stmt->bindParam(':ship_id', $ship_id);
+                $stmt->bindParam(':planet_id', $tmp_planet['planet_id'], \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
                 $stmt->execute();
                 $ships_on_planet = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -92,7 +92,7 @@ class Ship
                     {
                         $sql = "UPDATE ::prefix::ships SET on_planet='N', planet_id = '0' WHERE ship_id = :ship_id";
                         $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':ship_id', $tmp_ship['ship_id']);
+                        $stmt->bindParam(':ship_id', $tmp_ship['ship_id'], \PDO::PARAM_INT);
                         $stmt->execute();
                         PlayerLog::writeLog($pdo_db, $tmp_ship['ship_id'], LOG_PLANET_EJECT, $tmp_ship['sector'] .'|'. $tmp_ship['character_name']);
                     }

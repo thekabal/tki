@@ -42,7 +42,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 $preset_list = array();
 $sql = "SELECT * FROM ::prefix::presets WHERE ship_id=:ship_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
 $stmt->execute();
 $preset_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -100,8 +100,8 @@ else
             $new_id = $key + 1;
             $sql = "UPDATE ::prefix::presets SET preset=:preset WHERE preset_id=:preset_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':preset', $value);
-            $stmt->bindParam(':preset_id', $new_id);
+            $stmt->bindParam(':preset', $value, PDO::PARAM_INT);
+            $stmt->bindParam(':preset_id', $new_id, PDO::PARAM_INT);
             $stmt->execute();
 
             $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);

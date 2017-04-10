@@ -52,7 +52,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -66,7 +66,7 @@ if ($playerinfo['turns'] < 1)
 
 $sql = "SELECT * FROM ::prefix::sector_defense WHERE defense_id=:defense_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':defense_id', $defense_id);
+$stmt->bindParam(':defense_id', $defense_id, PDO::PARAM_INT);
 $stmt->execute();
 $defenseinfo = $stmt->fetchAll(PDO::FETCH_ASSOC); // Put the defense information into the array "defenseinfo"
 

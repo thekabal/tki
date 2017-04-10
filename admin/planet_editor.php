@@ -46,7 +46,7 @@ else
         // Get planet info from database
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planet);
+        $stmt->bindParam(':planet_id', $planet, \PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

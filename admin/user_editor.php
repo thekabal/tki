@@ -43,7 +43,7 @@ else
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $_POST['user']);
+        $stmt->bindParam(':ship_id', $_POST['user'], \PDO::PARAM_INT);
         $stmt->execute();
         $userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 

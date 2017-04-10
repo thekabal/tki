@@ -40,7 +40,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $zone);
+$stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -81,7 +81,7 @@ else
         {
             $sql = "SELECT ship_id, character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $zoneinfo['owner']);
+            $stmt->bindParam(':ship_id', $zoneinfo['owner'], PDO::PARAM_INT);
             $stmt->execute();
             $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
             $ownername = $ownerinfo['character_name'];
@@ -90,7 +90,7 @@ else
         {
             $sql = "SELECT team_name, creator, id FROM ::prefix::teams WHERE id=:id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':id', $zoneinfo['owner']);
+            $stmt->bindParam(':id', $zoneinfo['owner'], PDO::PARAM_INT);
             $stmt->execute();
             $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
             $ownername = $ownerinfo['team_name'];

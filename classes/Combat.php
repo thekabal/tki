@@ -25,7 +25,7 @@ class Combat
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $targetinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -476,10 +476,10 @@ class Combat
 
                 $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':salv_ore', $salv_ore);
-                $stmt->bindParam(':salv_organics', $salv_organics);
-                $stmt->bindParam(':salv_goods', $salv_goods);
-                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->bindParam(':salv_ore', $salv_ore, \PDO::PARAM_INT);
+                $stmt->bindParam(':salv_organics', $salv_organics, \PDO::PARAM_INT);
+                $stmt->bindParam(':salv_goods', $salv_goods, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
             }
 

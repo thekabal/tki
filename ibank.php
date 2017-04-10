@@ -34,7 +34,7 @@ Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id");
-$stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
 $result = $stmt->execute();
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);

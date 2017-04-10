@@ -78,7 +78,7 @@ if ($target_sector === null)
 
 $sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM  FROM ::prefix::zones, ::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id ";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $playerinfo['sector']);
+$stmt->bindParam(':email', $playerinfo['sector'], PDO::PARAM_STR);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -100,7 +100,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $target_sector);
+$stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -113,7 +113,7 @@ if (!$sectorinfo)
 
 $sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones, ::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $target_sector);
+$stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($zoneinfo['allow_warpedit'] == 'N' && !$oneway)
@@ -127,7 +127,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && !$oneway)
 
 $sql = "SELECT COUNT(*) as count FROM ::prefix::links WHERE link_start=:link_start";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':link_start', $playerinfo['sector']);
+$stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $tmp_link_info = $stmt->fetch(PDO::FETCH_ASSOC);
 $numlink_start = $tmp_link_info['count'];
@@ -143,7 +143,7 @@ if ($numlink_start >= $max_links)
 
 $sql = "SELECT * FROM ::prefix::links WHERE link_start=:sector LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $playerinfo['sector']);
+$stmt->bindParam(':email', $playerinfo['sector'], PDO::PARAM_STR);
 $stmt->execute();
 $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -171,13 +171,13 @@ if ($linkinfo)
     {
         $sql = "INSERT INTO ::prefix::links SET link_start=:link_start, link_dest=:link_dest";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':link_start', $playerinfo['sector']);
-        $stmt->bindParam(':link_dest', $target_sector);
+        $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
+        $stmt->bindParam(':link_dest', $target_sector, PDO::PARAM_INT);
         $stmt->execute();
 
         $sql = "UPDATE ::prefix::ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $playerinfo['sector']);
+        $stmt->bindParam(':ship_id', $playerinfo['sector'], PDO::PARAM_INT);
         $stmt->execute();
 
         if ($oneway !== null)
@@ -188,7 +188,7 @@ if ($linkinfo)
         {
             $sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':link_start', $target_sector);
+            $stmt->bindParam(':link_start', $target_sector, PDO::PARAM_INT);
             $stmt->execute();
             $linkinfo2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -208,8 +208,8 @@ if ($linkinfo)
             {
                 $sql = "INSERT INTO ::prefix::links SET link_start=:link_start, link_dest=:link_dest";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':link_start', $target_sector);
-                $stmt->bindParam(':link_dest', $playerinfo['sector']);
+                $stmt->bindParam(':link_start', $target_sector, PDO::PARAM_INT);
+                $stmt->bindParam(':link_dest', $playerinfo['sector'], PDO::PARAM_INT);
                 $stmt->execute();
             }
 

@@ -74,13 +74,13 @@ if ($planet_id <= 0)
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':planet_id', $planet_id);
+$stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
 $stmt->execute();
 $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -127,7 +127,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $planetinfo['owner']);
+        $stmt->bindParam(':ship_id', $planetinfo['owner'], PDO::PARAM_INT);
         $stmt->execute();
         $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -445,7 +445,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     // Refresh Planet Info
                     $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
                     $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':planet_id', $planet_id);
+                    $stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
                     $stmt->execute();
                     $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -901,7 +901,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             {
                 $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $planetinfo['owner']);
+                $stmt->bindParam(':ship_id', $planetinfo['owner'], PDO::PARAM_INT);
                 $stmt->execute();
                 $planetowner = $stmt->fetch(PDO::FETCH_ASSOC);
             }

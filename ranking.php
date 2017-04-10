@@ -83,8 +83,8 @@ $sql = "SELECT {$db->prefix}ships.ship_id, {$db->prefix}ships.email, {$db->prefi
 "AND turns_used > 0 ORDER BY :order_by LIMIT :limit";
 
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':order_by', $by);
-$stmt->bindParam(':limit', $tkireg->max_ranks);
+$stmt->bindParam(':order_by', $by, PDO::PARAM_STR);
+$stmt->bindParam(':limit', $tkireg->max_ranks, PDO::PARAM_INT);
 $stmt->execute();
 $rankings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $variables['num_players'] = (int) count($rankings);

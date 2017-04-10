@@ -65,7 +65,7 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS) // Check if called by admin scr
         // Get playerinfo from database
         $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $player);
+        $stmt->bindParam(':ship_id', $player, PDO::PARAM_INT);
         $stmt->execute();
         $tmp_playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
         $playerinfo['character_name'] = $tmp_playerinfo['character_name'];
@@ -115,8 +115,8 @@ if (empty($startdate))
 
 $sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-$stmt->bindParam(':start_date', $startdate);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+$stmt->bindParam(':start_date', $startdate, PDO::PARAM_STR);
 $stmt->execute();
 $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -192,8 +192,8 @@ if ($mode != 'compat')
     unset($logs);
     $sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-    $stmt->bindParam(':start_date', $yesterday);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':start_date', $yesterday, PDO::PARAM_STR);
     $stmt->execute();
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -236,8 +236,8 @@ if ($mode != 'compat')
     unset($logs);
     $sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
-    $stmt->bindParam(':start_date', $tomorrow);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':start_date', $tomorrow, PDO::PARAM_STR);
     $stmt->execute();
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

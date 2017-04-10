@@ -38,7 +38,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 // Get sectorinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -61,7 +61,7 @@ if ($playerinfo['dev_warpedit'] < 1)
 // Get playerinfo from database
 $sql = "SELECT allow_warpedit FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+$stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -78,14 +78,14 @@ if ($zoneinfo['allow_warpedit'] == 'L')
     // Get playerinfo from database
     $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+    $stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
     $stmt->execute();
     $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Get playerinfo from database
     $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector_id', $zoneowner_info['owner']);
+    $stmt->bindParam(':sector_id', $zoneowner_info['owner'], PDO::PARAM_INT);
     $stmt->execute();
     $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -103,7 +103,7 @@ if ($zoneinfo['allow_warpedit'] == 'L')
 
 $sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start ORDER BY link_dest ASC";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':link_start', $playerinfo['sector']);
+$stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if (!$link_present)

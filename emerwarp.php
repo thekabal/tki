@@ -41,8 +41,8 @@ if ($playerinfo['dev_emerwarp'] > 0)
 
     $sql = "UPDATE ::prefix::ships SET sector=:sector, dev_emerwarp=dev_emerwarp-1 WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector', $dest_sector);
-    $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+    $stmt->bindParam(':sector', $dest_sector, PDO::PARAM_INT);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
     $stmt->execute();
     Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $dest_sector);
     $langvars['l_ewd_used'] = str_replace("[sector]", $dest_sector, $langvars['l_ewd_used']);

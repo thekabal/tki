@@ -65,9 +65,9 @@ class Player
                         $remote_ip = $request->server->get('REMOTE_ADDR');
                         $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
                         $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':last_login', $stamp);
-                        $stmt->bindParam(':ip_address', $remote_ip);
-                        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                        $stmt->bindParam(':last_login', $stamp, \PDO::PARAM_STR);
+                        $stmt->bindParam(':ip_address', $remote_ip, \PDO::PARAM_STR);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                         $stmt->execute();
                         Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 

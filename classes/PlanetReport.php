@@ -120,7 +120,7 @@ class PlanetReport
         }
 
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $playerinfo['ship_id']);
+        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $planet_owner_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $i = 0;

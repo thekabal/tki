@@ -69,20 +69,20 @@ class Score
         $sql = "SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_cols + $calc_planet_defense + $calc_planet_credits, 0) AS planet_score " .
                                      "FROM ::prefix::planets WHERE owner=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $planet_score = $stmt->fetch(\PDO::FETCH_COLUMN);
 
         $sql = "SELECT IF(COUNT(*)>0, $calc_levels + $calc_equip + $calc_dev + ::prefix::ships.credits, 0) AS ship_score " .
                "FROM ::prefix::ships LEFT JOIN ::prefix::planets ON ::prefix::planets.owner=ship_id WHERE ship_id = :ship_id AND ship_destroyed='N'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $ship_score = $stmt->fetch(\PDO::FETCH_COLUMN);
 
         $sql = "SELECT (balance-loan) AS bank_score FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $bank_score = $stmt->fetch(\PDO::FETCH_COLUMN);
 
@@ -95,7 +95,7 @@ class Score
         $score = (int) round(sqrt($score));
         $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET score = :score WHERE ship_id=:ship_id");
         $stmt->bindParam(':score', $score, \PDO::PARAM_INT);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 

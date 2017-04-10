@@ -40,7 +40,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 // Get sectorinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -59,7 +59,7 @@ if ($playerinfo['dev_beacon'] > 0)
     // Get playerinfo from database
     $sql = "SELECT allow_beacon FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+    $stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
     $stmt->execute();
     $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -71,13 +71,13 @@ if ($playerinfo['dev_beacon'] > 0)
     {
         $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
+        $stmt->bindParam(':sector_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
         $stmt->execute();
         $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $zoneowner_info['owner']);
+        $stmt->bindParam(':sector_id', $zoneowner_info['owner'], PDO::PARAM_INT);
         $stmt->execute();
         $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -131,13 +131,13 @@ if ($playerinfo['dev_beacon'] > 0)
 
             $sql = "UPDATE ::prefix::universe SET beacon=:beacon WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':beacon', $beacon_text);
-            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->bindParam(':beacon', $beacon_text, PDO::PARAM_STR);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id'], PDO::PARAM_INT);
             $stmt->execute();
 
             $sql = "UPDATE ::prefix::ships SET dev_beacon=dev_beacon-1 WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_STR);
             $stmt->execute();
         }
     }

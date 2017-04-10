@@ -71,7 +71,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':planet_id', $planet_id);
+$stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
 $stmt->execute();
 $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 

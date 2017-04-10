@@ -25,7 +25,7 @@ class SectorDefense
     {
         $sql = "SELECT ship_id FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sector);
+        $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
         $defense_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($defense_present !== null)

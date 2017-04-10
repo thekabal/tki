@@ -25,32 +25,32 @@ class Character
     {
         $sql = "UPDATE ::prefix::ships SET ship_destroyed='Y', on_planet='N', sector=1, cleared_defenses=' ' WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
 
         $sql = "DELETE FROM ::prefix::bounty WHERE placed_by = :placed_by";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':placed_by', $ship_id);
+        $stmt->bindParam(':placed_by', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
 
         if ($remove_planets === true && $ship_id > 0)
         {
             $sql = "DELETE FROM ::prefix::planets WHERE owner=:owner";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner', $ship_id);
+            $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
             $stmt->execute();
         }
         else
         {
             $sql = "UPDATE ::prefix::planets SET owner=0, team=0, fighters=0, base='N' WHERE owner=:owner";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner', $ship_id);
+            $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
             $stmt->execute();
         }
 
         $sql = "SELECT DISTINCT sector_id FROM ::prefix::planets WHERE owner=:owner AND base='Y'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $ship_id);
+        $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $sectors_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -64,23 +64,23 @@ class Character
 
         $sql = "DELETE FROM ::prefix::sector_defense WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
 
         $sql = "SELECT zone_id FROM ::prefix::zones WHERE team_zone='N' AND owner=:owner";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $ship_id);
+        $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $zone = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "UPDATE ::prefix::universe SET zone_id=1 WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':zone_id', $zone['zone_id']);
+        $stmt->bindParam(':zone_id', $zone['zone_id'], \PDO::PARAM_INT);
         $stmt->execute();
 
         $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $name = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -89,9 +89,9 @@ class Character
 
         $sql = "INSERT INTO ::prefix::news (headline, newstext, user_id, date, news_type) VALUES (:headline,:newstext,:user_id,NOW(), 'killed')";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':headline', $headline);
-        $stmt->bindParam(':newstext', $newstext);
-        $stmt->bindParam(':user_id', $ship_id);
+        $stmt->bindParam(':headline', $headline, \PDO::PARAM_STR);
+        $stmt->bindParam(':newstext', $newstext, \PDO::PARAM_STR);
+        $stmt->bindParam(':user_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
     }
 

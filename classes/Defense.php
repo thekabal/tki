@@ -25,7 +25,7 @@ class Defense
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE ship_id=:ship_d";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -38,8 +38,8 @@ class Defense
 
                 $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND ship_id<>:ship_d ORDER BY quantity DESC";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':sector_id', $tmp_defense['sector_id']);
-                $stmt->bindParam(':ship_id', $ship_id);
+                $stmt->bindParam(':sector_id', $tmp_defense['sector_id'], \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
                 $stmt->execute();
                 $other_secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -52,14 +52,14 @@ class Defense
                         {
                             $sql = "DELETE FROM ::prefix::sector_defense WHERE defense_id = :defense_id";
                             $stmt = $pdo_db->prepare($sql);
-                            $stmt->bindParam(':defense_id', $tmp_other_defense['sector_id']);
+                            $stmt->bindParam(':defense_id', $tmp_other_defense['sector_id'], \PDO::PARAM_INT);
                             $stmt->execute();
                             $qty -= $tmp_other_defense['quantity'];
 
                             $sql = "UPDATE ::prefix::sector_defense SET quantity = :quantity_id WHERE defense_id = :defense_id";
                             $stmt = $pdo_db->prepare($sql);
-                            $stmt->bindParam(':quantity_id', $qty);
-                            $stmt->bindParam(':defense_id', $tmp_defense['sector_id']);
+                            $stmt->bindParam(':quantity_id', $qty, \PDO::PARAM_INT);
+                            $stmt->bindParam(':defense_id', $tmp_defense['sector_id'], \PDO::PARAM_INT);
                             $stmt->execute();
 
                             PlayerLog::writeLog($pdo_db, $tmp_other_defense['ship_id'], LOG_DEFS_DESTROYED, $tmp_other_defense['quantity'] .'|'. $targetdeftype .'|'. $tmp_defense['sector_id']);
@@ -69,13 +69,13 @@ class Defense
                         {
                             $sql = "DELETE FROM ::prefix::sector_defense WHERE defense_id = :defense_id";
                             $stmt = $pdo_db->prepare($sql);
-                            $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
+                            $stmt->bindParam(':defense_id', $tmp_defense['defense_id'], \PDO::PARAM_INT);
                             $stmt->execute();
 
                             $sql = "UPDATE ::prefix::sector_defense SET quantity = quantity - :quantity_id WHERE defense_id = :defense_id";
                             $stmt = $pdo_db->prepare($sql);
-                            $stmt->bindParam(':quantity_id', $qty);
-                            $stmt->bindParam(':defense_id', $tmp_other_defense['defense_id']);
+                            $stmt->bindParam(':quantity_id', $qty, \PDO::PARAM_INT);
+                            $stmt->bindParam(':defense_id', $tmp_other_defense['defense_id'], \PDO::PARAM_INT);
                             $stmt->execute();
 
                             PlayerLog::writeLog($pdo_db, $tmp_other_defense['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $targetdeftype .'|'. $tmp_defense['sector_id']);

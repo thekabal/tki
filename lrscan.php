@@ -120,7 +120,7 @@ if ($sector == "*")
         // Get sectorinfo from database
         $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $row['link_dest']);
+        $stmt->bindParam(':sector_id', $row['link_dest'], PDO::PARAM_INT);
         $stmt->execute();
         $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -219,7 +219,7 @@ else
     // Get playerinfo from database
     $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector_id', $sector);
+    $stmt->bindParam(':sector_id', $sector, PDO::PARAM_INT);
     $stmt->execute();
     $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
