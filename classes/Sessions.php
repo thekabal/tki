@@ -57,7 +57,14 @@ class Sessions
 
     public function __destruct()
     {
-        session_write_close();
+        if (session_write_close())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public function open() : bool
@@ -112,6 +119,10 @@ class Sessions
 
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, $err_mode);
             return $result;
+        }
+        else // If you run create universe on an existing universe, at step 30, you would get an error - this prevents it by returning false to note that we didn't successfully write the session.
+        {
+            return false; // The error was Session callback expects true/false return value in Unknown on line 0, and is triggered because the DB tables have been dropped in step 30 prior to the call.
         }
     }
 
