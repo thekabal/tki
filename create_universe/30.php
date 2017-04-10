@@ -39,11 +39,14 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
+$variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+// Close the session prior to dropping the databases. This prevents/fixes #56 - session_write_close(): Failed to write session data using user defined save handler
+session_write_close();
 $variables['drop_tables_results']    = Tki\Schema::dropTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all tables in the database
 $variables['drop_tables_count']      = count($variables['drop_tables_results']) - 1;
 $variables['drop_seq_results']       = Tki\Schema::dropSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all sequences in the database
 $variables['drop_seq_count']         = count($variables['drop_seq_results']) - 1;
-$variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
 // Check for failures in drop tables
 $destroy_array_size = count($variables['drop_tables_results']);
