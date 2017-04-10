@@ -23,4 +23,5 @@ auto-loaded where possible, files are being converted to use templates for outpu
   order ($pdo_db, $db, $langvars, $config, others).
 - Anywhere you are unconditionally including a class file, use require_once(). Anywhere you are conditionally 
   including a class file, use include_once().
+- All PDO calls with bindParam/bindValue must use PDO datatype constants (Like PDO::PARAM_INT/PDO::PARAM_STR)
 - Never use global variables.
