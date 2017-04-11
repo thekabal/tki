@@ -112,7 +112,6 @@ else
             $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Now check to see if we have a valid update and have ONLY 1 changed record.
-            // if ((is_bool($rs) && $rs === false) || $db->Affected_Rows() != 1)
             if ($playerinfo === null)
             {
                 // Either we got an error in the SQL Query or <> 1 records was changed.
