@@ -161,13 +161,31 @@ if ($planetinfo['sells'] == 'Y')
         echo $langvars['l_totalcost'] . ": $total_cost<br>" . $langvars['l_traded_ore'] . ": $trade_ore<br>" . $langvars['l_traded_organics'] . ": $trade_organics<br>" . $langvars['l_traded_goods'] . ": $trade_goods<br>" . $langvars['l_traded_energy'] . ": $trade_energy<br><br>";
 
         // Update ship cargo, credits and turns
-        $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, " .
-                                     "ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;",
-        array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1, credits = credits - :total_cost, ";
+        $sql = $sql . "ship_ore = ship_ore + :trade_ore, ship_organics = ship_organics + :trade_organics, ship_goods = ship_goods + :trade_goods, ";
+        $sql = $sql . "ship_energy = ship_energy + :trade_energy WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':total_cost', $total_cost, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_ore', $trade_ore, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_organics', $trade_organics, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_goods', $trade_goods, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_energy', $trade_energy, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+        $update = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 
-        $trade_result2 = $db->Execute("UPDATE {$db->prefix}planets SET ore = ore - ?, organics = organics - ?, goods = goods - ?, energy = energy - ?, credits = credits + ? WHERE planet_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $total_cost, $planet_id));
-        Tki\Db::LogDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::planets SET ore = ore - :trade_ore, organics = organics - :trade_organics, goods = goods - :trade_goods, ";
+        $sql = $sql . "energy = energy - :trade_energy, credits = credits + :total_cost WHERE planet_id = :planet_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':total_cost', $total_cost, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_ore', $trade_ore, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_organics', $trade_organics, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_goods', $trade_goods, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_energy', $trade_energy, \PDO::PARAM_INT);
+        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+        $update = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
+
         echo $langvars['l_trade_complete'] . "<br><br>";
     }
 }
