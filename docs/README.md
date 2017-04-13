@@ -38,8 +38,7 @@ The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/proje
 
 ### Server (generally, the most recent/current version of each is our recommendation, but these should suffice):
 - A Linux server. Our primary development platform is Fedora, but most Linux distributions should work, and potentially even OpenBSD.
-- A webserver capable of supporting htaccess, and TLS.
-- `apache v2.4+` (we have not determined a required minimum).
+- A webserver capable of supporting htaccess, and TLS such as `apache v2.4+` (we have not determined a required minimum).
 - `php v7.1.0+` (needed for void return types).
 - `mariadb v5.5+ or v10.0+` (needed for utf8mb4 schemas).
 - `mbstring` PHP extension.
@@ -51,7 +50,7 @@ The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/proje
 - IE `v11`.
 
 ### Notes:
-- TKI will likely run on `lighttpd` and `nginix`, but has not been tested on either. 
+- TKI will likely run on `lighttpd` and `nginix`, however htaccess will not work out of the box - potentially causing security risks. It has not been tested on either. 
 - **IIS is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc).
 - We make use of [Smarty templates](http://www.smarty.net/), [HTML Purifier](http://htmlpurifier.org/), [Swiftmailer](http://swiftmailer.org/), and [Adodb](http://adodb.org/dokuwiki/doku.php) (although we are working to replace adodb with PDO).
@@ -60,10 +59,13 @@ The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/proje
 Please see the `/docs/install.md` file.
 
 ## Upgrades:
-As is typical with releases, we highly recommend a fresh install. Upgrades are not supported at this time.
+As is typical with our releases, we highly recommend a fresh install. Upgrades are not supported at this time.
 
 ## Code quality:
 The project began in the early PHP4 era, and as a result, is less than ideal. Substantial progress has been made towards modernization, and we are continuing that process. As a general guideline, we follow PSR-1,2,4, and the upcoming 12, with the major exceptions that we use BSD/Allman brace/brackets and do not yet follow line length limits. **Feedback and PR's are welcome and appreciated**.
+
+## Critical needs:
+The two areas we need the most focus in would be the documentation, and testing. Both can be done with little or no knowledge of PHP, and would help us dramatically.
 
 ## Security issue reporting:
 Please report all security issues to thekabal@gmail.com.
