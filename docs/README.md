@@ -31,6 +31,9 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
     
 ## License: [Affero GPL v 3](https://www.gnu.org/licenses/agpl-3.0.en.html)
 
+## Credits:
+The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/projects/blacknova/), please visit their sourceforge page for more information about their project. We proudly stand on the shoulders of giants, with BNT originally having hundreds of developers, players, and admins. We honor and appreciate their 15+ year contribution that makes our project possible.
+
 ## Requirements:
 
 ### Server (generally, the most recent/current version of each is our recommendation, but these should suffice):
@@ -52,9 +55,6 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 - **IIS is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc).
 - We make use of [Smarty templates](http://www.smarty.net/), [HTML Purifier](http://htmlpurifier.org/), [Swiftmailer](http://swiftmailer.org/), and [Adodb](http://adodb.org/dokuwiki/doku.php) (although we are working to replace adodb with PDO).
-
-## Credits:
-The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/projects/blacknova/), please visit their sourceforge page for more information about their project.
 
 ## Installation:
 Please see the `/docs/install.md` file.
