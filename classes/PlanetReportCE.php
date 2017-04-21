@@ -32,12 +32,12 @@ class PlanetReportCE
         // Look up the info for the player that wants to collect the credits.
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         if ($sql_test === true)
         {
-            $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
+            $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
             $stmt->execute();
-            $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $playerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         // Set s_p_pair as an array.
@@ -110,23 +110,23 @@ class PlanetReportCE
         // Get playerinfo from database
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         if ($sql_test === true)
         {
-            $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
+            $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
             $stmt->execute();
-            $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $playerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         // Get planetinfo from database
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         if ($sql_test === true)
         {
-            $stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_STR);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_STR);
             $stmt->execute();
-            $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         // Set the name for unamed planets to be "unnamed"
@@ -153,7 +153,7 @@ class PlanetReportCE
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
                     $update = $stmt->execute();
-                    Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 
                     // Update the player info with updated credits
                     $sql = "UPDATE ::prefix::ships SET credits = :newshipcredits WHERE email = :username";
@@ -161,14 +161,14 @@ class PlanetReportCE
                     $stmt->bindParam(':newshipcredits', $NewShipCredits, \PDO::PARAM_INT);
                     $stmt->bindParam(':username', $_SESSION['username'], \PDO::PARAM_INT);
                     $update = $stmt->execute();
-                    Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 
                     // Update the player info with updated turns
                     $sql = "UPDATE ::prefix::ships SET turns = turns - 1 WHERE email = :username";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':username', $_SESSION['username'], \PDO::PARAM_INT);
                     $update = $stmt->execute();
-                    Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                    \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 
                     $tempa1 = str_replace("[credits_taken]", number_format($CreditsTaken, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_pr_took_credits']);
                     $tempa2 = str_replace("[planet_name]", $planetinfo['name'], $tempa1);
