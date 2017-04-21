@@ -57,14 +57,7 @@ class Sessions
 
     public function __destruct()
     {
-        if (session_write_close())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (bool) session_write_close();
     }
 
     public function open() : bool
