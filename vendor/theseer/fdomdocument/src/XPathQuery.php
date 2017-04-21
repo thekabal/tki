@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2010-2013 Arne Blankerts <arne@blankerts.de>
+ * Copyright (c) 2010-2017 Arne Blankerts <arne@blankerts.de>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -191,7 +191,7 @@ namespace TheSeer\fDOM {
          */
         private function buildQuery(fDOMXPath $xp, array $values = NULL) {
             $backup = $this->values;
-            if (count($values) > 0) {
+            if (is_array($values) && count($values) > 0) {
                 foreach($values as $k => $v) {
                     $this->bind($k, $v);
                 }
