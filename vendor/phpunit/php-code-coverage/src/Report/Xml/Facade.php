@@ -148,7 +148,7 @@ class Facade
         }
 
         foreach ($file->getCoverageData() as $line => $tests) {
-            if (!is_array($tests) || count($tests) == 0) {
+            if (!is_array($tests) || count($tests) === 0) {
                 continue;
             }
 
@@ -160,6 +160,10 @@ class Facade
 
             $coverage->finalize();
         }
+
+        $fileReport->getSource()->setSourceCode(
+            file_get_contents($file->getPath())
+        );
 
         $this->saveDocument($fileReport->asDom(), $file->getId());
     }
