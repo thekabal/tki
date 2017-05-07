@@ -23,7 +23,8 @@
             "friendsofphp/php-cs-fixer": "^2.1.1",
             "nette/nette": "^2.4.0",
             "squizlabs/PHP_CodeSniffer": "3.0.0RC4",
-            "phpunit/phpunit": "^6.0.8"
+            "phpunit/phpunit": "^6.0.8",
+        "povils/phpmnd": "^1.0"
     },
     "autoload": {
         "psr-4": { "Tki\\": ["classes/", "tests/", "config/"]}

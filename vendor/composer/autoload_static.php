@@ -59,6 +59,7 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Povils\\PHPMND\\' => 14,
             'PhpParser\\' => 10,
             'PhpCsFixer\\' => 11,
             'PHPStan\\' => 8,
@@ -157,6 +158,10 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Povils\\PHPMND\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/povils/phpmnd/src',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -197,6 +202,17 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
             'PHPMD\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpmd/phpmd/src/main/php',
+            ),
+        ),
+        'J' => 
+        array (
+            'JakubOnderka\\PhpConsoleHighlighter' => 
+            array (
+                0 => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src',
+            ),
+            'JakubOnderka\\PhpConsoleColor' => 
+            array (
+                0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
             ),
         ),
         'H' => 
