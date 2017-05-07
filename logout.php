@@ -75,4 +75,5 @@ $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('logout.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

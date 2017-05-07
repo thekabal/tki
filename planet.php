@@ -68,7 +68,9 @@ if ($planet_id <= 0)
 {
     echo 'Invalid Planet<br><br>';
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -103,7 +105,9 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
         echo $langvars['l_planet_none'] . " <p>";
         Tki\Text::gotoMain($pdo_db, $lang);
-        Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+        $footer = new Tki\Footer;
+        $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
 
@@ -119,7 +123,9 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         echo $langvars['l_planet_capture2'] . ".<br><br>";
         echo "<br>";
         Tki\Text::gotoMain($pdo_db, $lang);
-        Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+        $footer = new Tki\Footer;
+        $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
 
@@ -418,7 +424,9 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to create a base without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
 
@@ -546,7 +554,9 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to start an attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
 
@@ -593,7 +603,9 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to Attack without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
 
@@ -646,7 +658,9 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to Scan without clicking on the Planet.");
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
 
@@ -656,7 +670,9 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             {
                 echo $langvars['l_plant_scn_turn'] . "<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
 
@@ -679,7 +695,9 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 echo $langvars['l_planet_noscan'] . "<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
                 Tki\PlayerLog::WriteLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_SCAN_FAIL, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
-                Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
             else
@@ -942,4 +960,6 @@ if ($tkireg->allow_ibank)
 echo "<a href =\"bounty.php\">" . $langvars['l_by_placebounty'] . "</a><p>";
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

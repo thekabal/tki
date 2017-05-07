@@ -186,4 +186,5 @@ $template->addVariables('langvars', $langvars);
 // Now we tell Smarty to output the page
 $template->display('ranking.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

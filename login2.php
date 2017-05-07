@@ -83,7 +83,9 @@ if ($tkireg->game_closed)
     Tki\Header::display($pdo_db, $lang, $template, $title);
     echo "<div style='text-align:center; color:#ff0; font-size:20px;'><br>" . $langvars['l_login_closed_message'] . "</div><br>\n";
     echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -213,4 +215,5 @@ else
     echo "<strong>" . $langvars['l_login_noone'] . "</strong><br>";
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

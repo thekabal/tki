@@ -28,7 +28,9 @@ class Game
             $title = $langvars['l_login_closed_message'];
             Header::display($pdo_db, $lang, $template, $title);
             echo $langvars['l_login_closed_message'];
-            Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new \Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
         else

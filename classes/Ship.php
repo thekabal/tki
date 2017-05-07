@@ -56,7 +56,9 @@ class Ship
                 $title = $langvars['l_error'];
                 Header::display($pdo_db, $lang, $template, $title);
                 echo $error_status;
-                Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new \Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
         }

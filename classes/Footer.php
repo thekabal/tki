@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Footer
 {
-    public static function display(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template): void
+    public function display(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template): void
     {
         $request = Request::createFromGlobals();
 

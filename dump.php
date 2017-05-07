@@ -46,7 +46,9 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_dump_turn']  . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -68,4 +70,6 @@ else
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

@@ -31,7 +31,9 @@ if (!isset($defense_id))
 {
     echo $langvars['l_md_invalid'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -60,7 +62,9 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_md_noturn'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -81,7 +85,9 @@ if ($defenseinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_md_nothere'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -118,7 +124,9 @@ switch ($response)
         {
             echo $langvars['l_md_yours'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
@@ -166,7 +174,9 @@ switch ($response)
         {
              echo $langvars['l_md_notyours'] . "<br><br>";
              Tki\Text::gotoMain($pdo_db, $lang);
-             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+             $footer = new Tki\Footer;
+             $footer->display($pdo_db, $lang, $tkireg, $template);
              die();
         }
 
@@ -228,7 +238,9 @@ switch ($response)
         {
             echo $langvars['l_md_notyours'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
@@ -298,4 +310,6 @@ switch ($response)
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

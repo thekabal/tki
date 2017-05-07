@@ -32,7 +32,9 @@ if (!$tkireg->allow_navcomp)
 {
     echo $langvars['l_nav_nocomp'] . '<br><br>';
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -195,4 +197,6 @@ elseif ($state == 1)
 $db->SetFetchMode(ADODB_FETCH_ASSOC);
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

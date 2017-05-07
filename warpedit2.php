@@ -55,7 +55,9 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_warp_turn'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -63,7 +65,9 @@ if ($playerinfo['dev_warpedit'] < 1)
 {
     echo $langvars['l_warp_none'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -86,7 +90,9 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -121,7 +127,9 @@ if ($zoneinfo['allow_warpedit'] == 'N' && !$oneway)
     $langvars['l_warp_twoerror'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_twoerror']);
     echo $langvars['l_warp_twoerror'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -137,7 +145,9 @@ if ($numlink_start >= $max_links)
     $langvars['l_warp_sectex'] = str_replace("[link_max]", $max_links, $langvars['l_warp_sectex']);
     echo $langvars['l_warp_sectex'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -219,4 +229,6 @@ if ($linkinfo)
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

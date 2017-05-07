@@ -133,4 +133,6 @@ else
     // Admin log this attempt to use an invalid code
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

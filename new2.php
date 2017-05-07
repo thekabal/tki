@@ -208,4 +208,5 @@ else
     echo $langvars['l_new_err'];
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);
