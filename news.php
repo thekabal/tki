@@ -25,7 +25,9 @@ $link = null;
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'global_includes',
                                 'global_funcs', 'combat', 'footer', 'news'));
 $title = $langvars['l_news_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Default to today's date in case it isn't supplied
 $startdate = date('Y/m/d');

@@ -39,7 +39,8 @@ $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 // Temporarily set the template to the default template until we have a user option
 $variables['template'] = $tkireg->default_template;
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);

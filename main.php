@@ -24,7 +24,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common', 'main', 'modify_defenses', 'admin', 'footer', 'global_includes', 'regional'));
 $title = $langvars['l_main_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 $stylefontsize = "12pt";
 $picsperrow = 7;

@@ -23,7 +23,9 @@ require_once './common.php';
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'options', 'pwreset'));
 $title = $langvars['l_pwr_title'];
 $body_class = 'options';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<h1>" . $title . "</h1>\n";
 

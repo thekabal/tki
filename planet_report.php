@@ -24,7 +24,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'planet', 'port', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report', 'regional'));
 $title = $langvars['l_pr_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 $preptype = null;
 if (array_key_exists('preptype', $_GET))

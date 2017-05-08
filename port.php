@@ -25,7 +25,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'bounty', 'regional'));
 $title = $langvars['l_title_port'];
 $body_class = 'port';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<body class=" . $body_class . "><br>";
 

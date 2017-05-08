@@ -26,7 +26,10 @@ $body_class = 'options';
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('options', 'common', 'global_includes', 'global_funcs', 'footer'));
 $title = $langvars['l_opt_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
+
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 

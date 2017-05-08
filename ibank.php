@@ -25,7 +25,9 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('ibank', 'common', 'global
 
 $title = $langvars['l_ibank_title'];
 $body_class = 'ibank';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE email=:email");
 $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);

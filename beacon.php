@@ -24,7 +24,9 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('beacon', 'common',
                                 'global_includes', 'global_funcs', 'combat',
                                 'footer', 'news'));
 $title = $langvars['l_beacon_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 

@@ -27,7 +27,8 @@ $include_ckeditor = true;
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mailto', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
 $title = $langvars['l_sendm_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class, $include_ckeditor);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class, $include_ckeditor);
 
 // Filter to the FILTER_SANITIZE_STRING ruleset, because we need to allow spaces for names & subject (FILTER_SANITIZE_URL doesn't allow spaces)
 // $name, $to, and $subject are all sent both via post and get, so we have to do a filter input for each

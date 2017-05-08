@@ -24,7 +24,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('navcomp', 'common', 'global_includes', 'global_funcs', 'footer'));
 $title = $langvars['l_nav_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 

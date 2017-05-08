@@ -65,7 +65,9 @@ $index_page = true; // Ensure that we do not set sessions
 require_once './common.php';
 
 $title = $langvars['l_sys_update'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'scheduler'));

@@ -20,7 +20,9 @@
 require_once './common.php';
 
 $title = $langvars['l_new_title2'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'combat', 'footer', 'news'));

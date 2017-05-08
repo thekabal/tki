@@ -106,7 +106,9 @@ $variables['update_config_results']['result'] = Tki\Db::logDbErrors($pdo_db, $re
 $variables['update_config_results']['time'] = $local_table_timer->elapsed();
 
 $lang = $tkireg->default_lang;
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/50.tpl');

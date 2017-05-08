@@ -58,7 +58,9 @@ if (array_key_exists('newlang', $_POST) === true)
 }
 
 $title = $langvars['l_opt2_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('option2', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));

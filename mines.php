@@ -25,7 +25,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mines', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 
 $title = $langvars['l_mines_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$hader->display($pdo_db, $lang, $template, $title);
 
 $op = null;
 if (array_key_exists('op', $_GET) === true)

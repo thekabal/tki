@@ -302,7 +302,8 @@ $variables['admin_zone_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx
 $local_table_timer->stop();
 $variables['admin_zone_results']['elapsed'] = $local_table_timer->elapsed();
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/80.tpl');

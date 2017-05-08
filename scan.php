@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_scan_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('scan', 'common', 'bounty', 'report', 'main', 'global_includes', 'global_funcs', 'footer', 'news', 'planet', 'regional'));

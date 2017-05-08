@@ -25,7 +25,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'main', 'attack', 'zoneinfo', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'modify_defenses'));
 $title = $langvars['l_zi_title'];
 $body_class = 'zoneinfo';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<h1>" . $title . "</h1>\n";
 echo "<body class=" . $body_class . ">";

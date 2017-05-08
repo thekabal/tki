@@ -308,7 +308,8 @@ for ($t = 0; $t < $z; $t++)
     }
 }
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/70.tpl');

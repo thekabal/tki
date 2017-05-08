@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_help'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 echo "<h1>" . $title . "</h1>\n";
 
 echo "Greetings and welcome to The Kabal Invasion!";

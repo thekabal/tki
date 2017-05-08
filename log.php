@@ -36,7 +36,9 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('log', 'common', 'global_i
 
 $title = $langvars['l_log_titlet'];
 $body_class = 'log';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";

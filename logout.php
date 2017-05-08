@@ -69,7 +69,8 @@ $variables['lang'] = $lang;
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
 $variables['title'] = $langvars['l_logout_title'];
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);

@@ -29,7 +29,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('genesis', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 $title = $langvars['l_gns_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";

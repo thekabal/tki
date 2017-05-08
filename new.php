@@ -32,7 +32,8 @@ $variables['body_class'] = 'index';
 $variables['title'] = $langvars['l_new_title'];
 $variables['template'] = $tkireg->default_template; // Temporarily set the template to the default template until we have a user option
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('new.tpl');

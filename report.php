@@ -118,7 +118,9 @@ $variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link"
 $variables['title'] = $langvars['l_report_title'];
 
 $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'footer', 'regional', 'news'));
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);

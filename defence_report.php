@@ -24,7 +24,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('defense_report', 'planet_report', 'main', 'device', 'port', 'modify_defenses', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 $title = $langvars['l_sdf_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 

@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_move_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 $sector = (int) filter_input(INPUT_GET, 'sector', FILTER_SANITIZE_NUMBER_INT);
 

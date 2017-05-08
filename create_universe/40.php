@@ -65,7 +65,9 @@ for ($i = 0; $i < $create_array_size; $i++)
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/40.tpl');

@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_title_port'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
