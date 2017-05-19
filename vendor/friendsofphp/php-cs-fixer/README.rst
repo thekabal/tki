@@ -12,7 +12,7 @@ projects. This tool does not only detect them, but also fixes them for you.
 Requirements
 ------------
 
-PHP needs to be a minimum version of PHP 5.3.6.
+PHP needs to be a minimum version of PHP 5.6.0.
 
 Installation
 ------------
@@ -36,7 +36,7 @@ or with specified version:
 
 .. code-block:: bash
 
-    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.2.1/php-cs-fixer.phar -O php-cs-fixer
+    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.3.1/php-cs-fixer.phar -O php-cs-fixer
 
 or with curl:
 
@@ -181,7 +181,7 @@ Complete configuration for rules can be supplied using a ``json`` formatted stri
 A combination of ``--dry-run`` and ``--diff`` will
 display a summary of proposed fixes, leaving your files unchanged.
 
-The ``--allow-risky`` option allows you to set whether risky rules may run. Default value is taken from config file.
+The ``--allow-risky`` option (pass ``yes`` or ``no``) allows you to set whether risky rules may run. Default value is taken from config file.
 Risky rule is a rule, which could change code behaviour. By default no risky rules are run.
 
 The ``--stop-on-violation`` flag stops execution upon first file that needs to be fixed.
@@ -209,8 +209,7 @@ Choose from the list of available rules:
 
 * **array_syntax**
 
-  PHP arrays should be declared using the configured syntax (requires PHP
-  >= 5.4 for short syntax).
+  PHP arrays should be declared using the configured syntax.
 
   Configuration options:
 
@@ -250,10 +249,10 @@ Choose from the list of available rules:
 
   - ``allow_single_line_closure`` (``bool``): whether single line lambda notation
     should be allowed; defaults to ``false``
-  - ``position_after_functions_and_oop_constructs`` (``'same'``): whether the
-    opening brace should be placed on "next" or "same" line after classy
-    constructs (non-anonymous classes, interfaces, traits, methods and
-    non-lambda functions); defaults to ``'next'``
+  - ``position_after_functions_and_oop_constructs`` (``'next'``, ``'same'``): whether
+    the opening brace should be placed on "next" or "same" line after
+    classy constructs (non-anonymous classes, interfaces, traits, methods
+    and non-lambda functions); defaults to ``'next'``
 
 * **cast_spaces** [@Symfony]
 
@@ -275,7 +274,7 @@ Choose from the list of available rules:
 
 * **class_keyword_remove**
 
-  Converts ``::class`` keywords to FQCN strings. Requires PHP >= 5.5.
+  Converts ``::class`` keywords to FQCN strings.
 
 * **combine_consecutive_unsets**
 
@@ -300,7 +299,7 @@ Choose from the list of available rules:
   - ``space`` (``'none'``, ``'single'``): spacing to apply around the equal sign;
     defaults to ``'none'``
 
-* **declare_strict_types**
+* **declare_strict_types** [@PHP70Migration:risky]
 
   Force strict types declaration in all files. Requires PHP >= 7.0.
 
@@ -506,6 +505,16 @@ Choose from the list of available rules:
 * **linebreak_after_opening_tag**
 
   Ensure there is no code on the same line as the PHP open tag.
+
+* **list_syntax**
+
+  List (``array`` destructuring) assignment should be declared using the
+  configured syntax. Requires PHP >= 7.1.
+
+  Configuration options:
+
+  - ``syntax`` (``'long'``, ``'short'``): whether to use the ``long`` or ``short``
+    ``list`` syntax; defaults to ``'long'``
 
 * **lowercase_cast** [@Symfony]
 
@@ -820,6 +829,11 @@ Choose from the list of available rules:
     ``['assertAttributeEquals', 'assertAttributeNotEquals', 'assertEquals',
     'assertNotEquals']``
 
+* **php_unit_test_class_requires_covers**
+
+  Adds a default ``@coversNothing`` annotation to PHPUnit test classes that
+  have no ``@covers*`` annotation.
+
 * **phpdoc_add_missing_param_annotation**
 
   Phpdoc should contain @param for all params.
@@ -929,7 +943,7 @@ Choose from the list of available rules:
 
 * **pow_to_exponentiation** [@PHP56Migration, @PHP70Migration, @PHP71Migration]
 
-  Converts ``pow()`` to the ``**`` operator. Requires PHP >= 5.6.
+  Converts ``pow()`` to the ``**`` operator.
 
   *Risky rule: risky when the function ``pow()`` is overridden.*
 
@@ -1180,7 +1194,7 @@ experimental.
         ->setLineEnding("\r\n")
     ;
 
-By using ``--using-cache`` option with yes or no you can set if the caching
+By using ``--using-cache`` option with ``yes`` or ``no`` you can set if the caching
 mechanism should be used.
 
 Caching

@@ -3,6 +3,43 @@ CHANGELOG for PHP CS Fixer
 
 This file contains changelogs for stable releases only.
 
+Changelog for v2.3.1
+--------------------
+
+Port of v2.2.3.
+
+* bug #2724 Revert #2554 Add short diff. output format (keradus)
+
+Changelog for v2.3.0
+--------------------
+
+* feature #2450 Add ListSyntaxFixer (SpacePossum)
+* feature #2708 Add PhpUnitTestClassRequiresCoversFixer (keradus)
+* minor #2568 Require PHP 5.6+ (keradus)
+* minor #2672 Bump symfony/* deps (keradus)
+
+Changelog for v2.2.3
+--------------------
+
+* bug #2724 Revert #2554 Add short diff. output format (keradus)
+
+Changelog for v2.2.2
+--------------------
+
+Warning, this release breaks BC due to introduction of:
+* minor #2554 Add short diff. output format (SpacePossum, keradus)
+That PR was reverted in v2.2.3, which should be used instead of v2.2.2.
+
+* bug #2545 RuleSet - change resolvement (SpacePossum)
+* bug #2686 Commands readme and describe - fix rare casing when not displaying some possible options of configuration (keradus)
+* bug #2711 FixCommand - fix diff optional value handling (keradus)
+* minor #2688 AppVeyor - Remove github oauth (keradus)
+* minor #2703 Clean ups - No mixed annotations (SpacePossum)
+* minor #2704 Create PHP70Migration:risky ruleset (keradus)
+* minor #2707 Deprecate other than "yes" or "no" for input options (SpacePossum)
+* minor #2709 code grooming (keradus)
+* minor #2710 Travis - run more rules on TASK_SCA (keradus)
+
 Changelog for v2.2.1
 --------------------
 

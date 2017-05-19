@@ -14,6 +14,9 @@ namespace Symfony\Component\Config\Loader;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Exception\FileLoaderLoadException;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
+use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
+use Symfony\Component\Config\Resource\FileExistenceResource;
+use Symfony\Component\Config\Resource\GlobResource;
 
 /**
  * FileLoader is the abstract class used by all built-in loaders that are file based.
@@ -76,8 +79,62 @@ abstract class FileLoader extends Loader
      *
      * @throws FileLoaderLoadException
      * @throws FileLoaderImportCircularReferenceException
+     * @throws FileLocatorFileNotFoundException
      */
     public function import($resource, $type = null, $ignoreErrors = false, $sourceResource = null)
+    {
+        $ret = array();
+        $ct = 0;
+        if (!is_string($resource) || false === strpbrk($resource, '*?{[')) {
+            $ret[] = $this->doImport($resource, $type, $ignoreErrors, $sourceResource);
+        } else {
+            foreach ($this->glob($resource, false, $_, $ignoreErrors) as $path => $info) {
+                ++$ct;
+                $ret[] = $this->doImport($path, $type, $ignoreErrors, $sourceResource);
+            }
+        }
+
+        return $ct > 1 ? $ret : (isset($ret[0]) ? $ret[0] : null);
+    }
+
+    /**
+     * @internal
+     */
+    protected function glob($pattern, $recursive, &$resource = null, $ignoreErrors = false)
+    {
+        if (strlen($pattern) === $i = strcspn($pattern, '*?{[')) {
+            $prefix = $pattern;
+            $pattern = '';
+        } elseif (0 === $i) {
+            $prefix = '.';
+            $pattern = '/'.$pattern;
+        } else {
+            $prefix = dirname(substr($pattern, 0, 1 + $i));
+            $pattern = substr($pattern, strlen($prefix));
+        }
+
+        try {
+            $prefix = $this->locator->locate($prefix, $this->currentDir, true);
+        } catch (FileLocatorFileNotFoundException $e) {
+            if (!$ignoreErrors) {
+                throw $e;
+            }
+
+            $resource = array();
+            foreach ($e->getPaths() as $path) {
+                $resource[] = new FileExistenceResource($path);
+            }
+
+            return;
+        }
+        $resource = new GlobResource($prefix, $pattern, $recursive);
+
+        foreach ($resource as $path => $info) {
+            yield $path => $info;
+        }
+    }
+
+    private function doImport($resource, $type = null, $ignoreErrors = false, $sourceResource = null)
     {
         try {
             $loader = $this->resolve($resource, $type);
@@ -115,7 +172,7 @@ abstract class FileLoader extends Loader
                     throw $e;
                 }
 
-                throw new FileLoaderLoadException($resource, $sourceResource, null, $e);
+                throw new FileLoaderLoadException($resource, $sourceResource, null, $e, $type);
             }
         }
     }

@@ -53,13 +53,7 @@ As you can see there are two types of macros:
 - **macro** in braces, for example `{foreach …}`
 - **n:macro**, for example `n:if="…"`
 
-How to render template? Just install Latte (it requires PHP 5.3.1 or later) by [downloading the latest package](https://github.com/nette/latte/releases) or using Composer:
-
-```
-php composer.phar require latte/latte
-```
-
-and run this code:
+How to render template? Just install Latte (see below) and run this code:
 
 ```php
 $latte = new Latte\Engine;
@@ -67,6 +61,18 @@ $latte->setTempDirectory('/path/to/tempdir');
 $parameters['items'] = array('one', 'two', 'three');
 $latte->render('template.latte', $parameters);
 ```
+
+
+Installation
+============
+
+The best way how to install Latte is to [download a latest package](https://github.com/nette/latte/releases) or use a Composer:
+
+```bash
+composer require latte/latte
+```
+
+The Latte requires PHP version 5.4.4 or newer (is compatible with PHP 7.0 and 7.1).
 
 
 Macros
@@ -282,6 +288,18 @@ If `$movie` variable stores `'Amarcord & 8 1/2'` string it generates the followi
 
 Thanks to Context-Aware Escaping the template is simple and your application perfectly secured against Cross Site Scripting. You can use PHP variables natively inside the JavaScript!
 
+
+JavaScript
+----------
+
+Strings in JavaScript are escaped including quotes. If you want to put variable into another string, simply concatenate them:
+
+```html
+<script>
+	alert('Hello ' + {$name} + '!');  # good
+	alert('Hello {$name} !');  # bad
+</script>
+```
 
 
 A pretty output

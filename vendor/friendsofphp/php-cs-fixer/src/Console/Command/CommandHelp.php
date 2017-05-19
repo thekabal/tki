@@ -82,7 +82,7 @@ Complete configuration for rules can be supplied using a ``json`` formatted stri
 A combination of <comment>--dry-run</comment> and <comment>--diff</comment> will
 display a summary of proposed fixes, leaving your files unchanged.
 
-The <comment>--allow-risky</comment> option allows you to set whether risky rules may run. Default value is taken from config file.
+The <comment>--allow-risky</comment> option (pass ``yes`` or ``no``) allows you to set whether risky rules may run. Default value is taken from config file.
 Risky rule is a rule, which could change code behaviour. By default no risky rules are run.
 
 The <comment>--stop-on-violation</comment> flag stops execution upon first file that needs to be fixed.
@@ -180,7 +180,7 @@ experimental.
 
     ?>
 
-By using ``--using-cache`` option with yes or no you can set if the caching
+By using ``--using-cache`` option with ``yes`` or ``no`` you can set if the caching
 mechanism should be used.
 
 Caching
@@ -265,10 +265,10 @@ EOF
             // - remove whitespace at array opening
             // - remove trailing array comma and whitespace at array closing
             // - remove numeric array indexes
-            static $replaces = array(
-                array('#\r|\n#', '#\s{1,}#', '#array\s*\((.*)\)#s', '#\[\s+#', '#,\s*\]#', '#\d+\s*=>\s*#'),
-                array('', ' ', '[$1]', '[', ']', ''),
-            );
+            static $replaces = [
+                ['#\r|\n#', '#\s{1,}#', '#array\s*\((.*)\)#s', '#\[\s+#', '#,\s*\]#', '#\d+\s*=>\s*#'],
+                ['', ' ', '[$1]', '[', ']', ''],
+            ];
 
             $str = preg_replace(
                 $replaces[0],
@@ -295,7 +295,7 @@ EOF
 
         if (null !== $allowed) {
             $allowed = array_filter($allowed, function ($value) {
-                return !is_callable($value);
+                return !($value instanceof \Closure);
             });
 
             usort($allowed, function ($valueA, $valueB) {
@@ -327,13 +327,13 @@ EOF
             }
         );
 
-        $ruleSets = array();
+        $ruleSets = [];
         foreach (RuleSet::create()->getSetDefinitionNames() as $setName) {
-            $ruleSets[$setName] = new RuleSet(array($setName => true));
+            $ruleSets[$setName] = new RuleSet([$setName => true]);
         }
 
         $getSetsWithRule = function ($rule) use ($ruleSets) {
-            $sets = array();
+            $sets = [];
 
             foreach ($ruleSets as $setName => $ruleSet) {
                 if ($ruleSet->hasRule($rule)) {
@@ -433,7 +433,7 @@ EOF
      */
     private static function wordwrap($string, $width)
     {
-        $result = array();
+        $result = [];
         $currentLine = 0;
         $lineLength = 0;
         foreach (explode(' ', $string) as $word) {

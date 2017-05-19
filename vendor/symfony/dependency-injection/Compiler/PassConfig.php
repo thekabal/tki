@@ -39,19 +39,32 @@ class PassConfig
     {
         $this->mergePass = new MergeExtensionConfigurationPass();
 
+        $this->beforeOptimizationPasses = array(
+            100 => array(
+                $resolveClassPass = new ResolveClassPass(),
+                new ResolveInstanceofConditionalsPass(),
+            ),
+        );
+
         $this->optimizationPasses = array(array(
             new ExtensionCompilerPass(),
             new ResolveDefinitionTemplatesPass(),
+            new ServiceLocatorTagPass(),
             new DecoratorServicePass(),
             new ResolveParameterPlaceHoldersPass(),
-            new FactoryReturnTypePass(),
+            new ResolveFactoryClassPass(),
+            new FactoryReturnTypePass($resolveClassPass),
             new CheckDefinitionValidityPass(),
+            new RegisterServiceSubscribersPass(),
+            new ResolveNamedArgumentsPass(),
+            $autowirePass = new AutowirePass(false),
+            new ResolveServiceSubscribersPass(),
             new ResolveReferencesToAliasesPass(),
             new ResolveInvalidReferencesPass(),
-            new AutowirePass(),
             new AnalyzeServiceReferencesPass(true),
             new CheckCircularReferencesPass(),
             new CheckReferenceValidityPass(),
+            new CheckArgumentsValidityPass(),
         ));
 
         $this->removingPasses = array(array(
@@ -64,6 +77,7 @@ class PassConfig
                 new AnalyzeServiceReferencesPass(),
                 new RemoveUnusedDefinitionsPass(),
             )),
+            new AutowireExceptionPass($autowirePass),
             new CheckExceptionOnInvalidReferenceBehaviorPass(),
         ));
     }
