@@ -54,7 +54,10 @@ class Ship
                 $error_status .= str_replace('[logout]', "<a href='logout.php'>" .
                                  $langvars['l_logout'] . '</a>', $langvars['l_die_please']);
                 $title = $langvars['l_error'];
-                Header::display($pdo_db, $lang, $template, $title);
+
+                $header = new \Tki\Header;
+                $header->display($pdo_db, $lang, $template, $title);
+
                 echo $error_status;
 
                 $footer = new \Tki\Footer;

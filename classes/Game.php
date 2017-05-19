@@ -26,7 +26,10 @@ class Game
         if ($tkireg->game_closed)
         {
             $title = $langvars['l_login_closed_message'];
-            Header::display($pdo_db, $lang, $template, $title);
+
+            $header = new \Tki\Header;
+            $header->display($pdo_db, $lang, $template, $title);
+
             echo $langvars['l_login_closed_message'];
 
             $footer = new \Tki\Footer;
