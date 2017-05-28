@@ -36,7 +36,7 @@ or with specified version:
 
 .. code-block:: bash
 
-    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.3.1/php-cs-fixer.phar -O php-cs-fixer
+    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.3.2/php-cs-fixer.phar -O php-cs-fixer
 
 or with curl:
 
@@ -196,7 +196,7 @@ If the option is not provided, it defaults to ``run-in`` unless a config file th
 
 .. code-block:: bash
 
-    $ php php-cs-fixer.phar fix --verbose --show-progress=evaluating
+    $ php php-cs-fixer.phar fix --verbose --show-progress=estimating
 
 The command can also read from standard input, in which case it won't
 automatically fix anything:
@@ -453,8 +453,8 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``annotations`` (``array``): list of annotations to remove, e.g.
-    ``["@author"]``; defaults to ``[]``
+  - ``annotations`` (``array``): list of annotations to remove, e.g. ``["author"]``;
+    defaults to ``[]``
 
 * **hash_to_slash_comment** [@Symfony]
 
@@ -513,8 +513,8 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``syntax`` (``'long'``, ``'short'``): whether to use the ``long`` or ``short``
-    ``list`` syntax; defaults to ``'long'``
+  - ``syntax`` (``'long'``, ``'short'``): whether to use the ``long`` or ``short`` ``list``
+    syntax; defaults to ``'long'``
 
 * **lowercase_cast** [@Symfony]
 
@@ -1126,8 +1126,8 @@ fixed but without actually modifying them:
     $ php php-cs-fixer.phar fix /path/to/code --dry-run
 
 Instead of using command line options to customize the rule, you can save the
-project configuration in a ``.php_cs.dist`` file in the root directory
-of your project. The file must return an instance of ``PhpCsFixer\ConfigInterface``,
+project configuration in a ``.php_cs.dist`` file in the root directory of your project.
+The file must return an instance of `PhpCsFixer\\ConfigInterface <https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/v2.3.2/src/ConfigInterface.php>`_
 which lets you configure the rules, the files and directories that
 need to be analyzed. You may also create ``.php_cs`` file, which is
 the local configuration that will be used instead of the project configuration. It
@@ -1148,11 +1148,11 @@ The example below will add two rules to the default list of PSR2 set rules:
     ;
 
     return PhpCsFixer\Config::create()
-        ->setRules(array(
+        ->setRules([
             '@PSR2' => true,
             'strict_param' => true,
-            'array_syntax' => array('syntax' => 'short'),
-        ))
+            'array_syntax' => ['syntax' => 'short'],
+        ])
         ->setFinder($finder)
     ;
 
@@ -1174,16 +1174,15 @@ The following example shows how to use all ``Symfony`` rules but the ``full_open
     ;
 
     return PhpCsFixer\Config::create()
-        ->setRules(array(
+        ->setRules([
             '@Symfony' => true,
             'full_opening_tag' => false,
-        ))
+        ])
         ->setFinder($finder)
     ;
 
 You may want to use non-linux whitespaces in your project. Then you need to
-configure them in your config file. Please be aware that this feature is
-experimental.
+configure them in your config file.
 
 .. code-block:: php
 
@@ -1240,7 +1239,7 @@ Then, add the following command to your CI:
 .. code-block:: bash
 
     $ IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${COMMIT_RANGE}")); unset IFS
-    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no --path-mode=intersection "${COMMIT_SCA_FILES[@]}"
+    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no --path-mode=intersection -- "${COMMIT_SCA_FILES[@]}"
 
 Where ``$COMMIT_RANGE`` is your range of commits, eg ``$TRAVIS_COMMIT_RANGE`` or ``HEAD~..HEAD``.
 
@@ -1293,7 +1292,7 @@ projects for instance).
 .. _php-cs-fixer.phar: http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
 .. _Atom:              https://github.com/Glavin001/atom-beautify
 .. _NetBeans:          http://plugins.netbeans.org/plugin/49042/php-cs-fixer
-.. _PhpStorm:          http://tzfrs.de/2015/01/automatically-format-code-to-match-psr-standards-with-phpstorm
+.. _PhpStorm:          https://medium.com/@valeryan/how-to-configure-phpstorm-to-use-php-cs-fixer-1844991e521f
 .. _Sublime Text:      https://github.com/benmatselby/sublime-phpcs
 .. _Vim:               https://github.com/stephpy/vim-php-cs-fixer
 .. _contribute:        https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/CONTRIBUTING.md

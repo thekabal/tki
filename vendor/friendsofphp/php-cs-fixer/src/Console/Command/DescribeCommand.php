@@ -156,10 +156,10 @@ final class DescribeCommand extends Command
             foreach ($configurationDefinition->getOptions() as $option) {
                 $line = '* <info>'.$option->getName().'</info>';
 
-                $allowed = CommandHelp::getDisplayableAllowedValues($option);
+                $allowed = HelpCommand::getDisplayableAllowedValues($option);
                 if (null !== $allowed) {
                     foreach ($allowed as &$value) {
-                        $value = CommandHelp::toString($value);
+                        $value = HelpCommand::toString($value);
                     }
                 } else {
                     $allowed = $option->getAllowedTypes();
@@ -169,11 +169,12 @@ final class DescribeCommand extends Command
                     $line .= ' (<comment>'.implode('</comment>, <comment>', $allowed).'</comment>)';
                 }
 
-                $line .= ': '.lcfirst(preg_replace('/\.$/', '', $option->getDescription())).'; ';
+                $description = preg_replace('/(`.+?`)/', '<info>$1</info>', $option->getDescription());
+                $line .= ': '.lcfirst(preg_replace('/\.$/', '', $description)).'; ';
                 if ($option->hasDefault()) {
                     $line .= sprintf(
                         'defaults to <comment>%s</comment>',
-                        CommandHelp::toString($option->getDefault())
+                        HelpCommand::toString($option->getDefault())
                     );
                 } else {
                     $line .= 'required';
@@ -191,7 +192,7 @@ final class DescribeCommand extends Command
             }
 
             if ($definition->getDefaultConfiguration()) {
-                $output->writeln(sprintf('Default configuration: <comment>%s</comment>.', CommandHelp::toString($definition->getDefaultConfiguration())));
+                $output->writeln(sprintf('Default configuration: <comment>%s</comment>.', HelpCommand::toString($definition->getDefaultConfiguration())));
             }
 
             $output->writeln('');
@@ -224,7 +225,13 @@ final class DescribeCommand extends Command
                 $old = $codeSample->getCode();
                 $tokens = Tokens::fromCode($old);
                 if ($fixer instanceof ConfigurableFixerInterface) {
-                    $fixer->configure($codeSample->getConfiguration());
+                    $configuration = $codeSample->getConfiguration();
+
+                    if (null === $configuration) {
+                        $configuration = [];
+                    }
+
+                    $fixer->configure($configuration);
                 }
 
                 $file = $codeSample instanceof FileSpecificCodeSampleInterface
@@ -237,7 +244,7 @@ final class DescribeCommand extends Command
                 if (null === $codeSample->getConfiguration()) {
                     $output->writeln(sprintf(' * Example #%d.', $index + 1));
                 } else {
-                    $output->writeln(sprintf(' * Example #%d. Fixing with configuration: <comment>%s</comment>.', $index + 1, CommandHelp::toString($codeSample->getConfiguration())));
+                    $output->writeln(sprintf(' * Example #%d. Fixing with configuration: <comment>%s</comment>.', $index + 1, HelpCommand::toString($codeSample->getConfiguration())));
                 }
                 $output->writeln($diffFormatter->format($diff, '   %s'));
                 $output->writeln('');
@@ -274,7 +281,7 @@ final class DescribeCommand extends Command
                 $rule,
                 $fixers[$rule]->isRisky() ? ' <error>risky</error>' : '',
                 $definition->getSummary(),
-                true !== $config ? sprintf("   <comment>| Configuration: %s</comment>\n", CommandHelp::toString($config)) : ''
+                true !== $config ? sprintf("   <comment>| Configuration: %s</comment>\n", HelpCommand::toString($config)) : ''
             );
         }
 

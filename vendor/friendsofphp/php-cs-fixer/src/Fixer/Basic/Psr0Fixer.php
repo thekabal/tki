@@ -41,13 +41,6 @@ final class Psr0Fixer extends AbstractPsrAutoloadingFixer implements Configurati
 namespace PhpCsFixer\FIXER\Basic;
 class InvalidName {}
 ',
-                    new \SplFileInfo(__FILE__)
-                ),
-                new FileSpecificCodeSample(
-                    '<?php
-namespace PhpCsFixer\FIXER\Basic;
-class InvalidName {}
-',
                     new \SplFileInfo(__FILE__),
                     ['dir' => realpath(__DIR__.'/../..')]
                 ),
@@ -155,12 +148,10 @@ class InvalidName {}
      */
     protected function createConfigurationDefinition()
     {
-        $dir = new FixerOptionBuilder('dir', 'The directory where the project code is placed.');
-        $dir = $dir
-            ->setAllowedTypes(['string'])
-            ->getOption()
-        ;
-
-        return new FixerConfigurationResolver([$dir]);
+        return new FixerConfigurationResolver([
+            (new FixerOptionBuilder('dir', 'The directory where the project code is placed.'))
+                ->setAllowedTypes(['string'])
+                ->getOption(),
+        ]);
     }
 }

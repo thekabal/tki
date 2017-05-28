@@ -14,6 +14,7 @@ namespace PhpCsFixer\Fixer\Import;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
@@ -31,8 +32,9 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  * @author SpacePossum
  * @author Darius Matulionis <darius@matulionis.lt>
+ * @author Adriano Pilger <adriano.pilger@gmail.com>
  */
-final class OrderedImportsFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
+final class OrderedImportsFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface, WhitespacesAwareFixerInterface
 {
     const IMPORT_TYPE_CLASS = 'class';
 
@@ -199,44 +201,38 @@ use function CCC\AA;
     {
         $supportedSortTypes = $this->supportedSortTypes;
 
-        $sortAlgorithm = new FixerOptionBuilder('sortAlgorithm', 'whether the statements should be sorted alphabetically or by length');
-        $sortAlgorithm
-            ->setAllowedValues($this->supportedSortAlgorithms)
-            ->setDefault(self::SORT_ALPHA)
-        ;
-
-        $importsOrder = new FixerOptionBuilder('importsOrder', 'Defines the order of import types.');
-        $importsOrder
-            ->setAllowedTypes(['array', 'null'])
-            ->setAllowedValues([function ($value) use ($supportedSortTypes) {
-                if (null !== $value) {
-                    $missing = array_diff($supportedSortTypes, $value);
-                    if (count($missing)) {
-                        throw new InvalidOptionsException(sprintf(
-                            'Missing sort %s "%s".',
-                            1 === count($missing) ? 'type' : 'types',
-                            implode('", "', $missing)
-                        ));
-                    }
-
-                    $unknown = array_diff($value, $supportedSortTypes);
-                    if (count($unknown)) {
-                        throw new InvalidOptionsException(sprintf(
-                            'Unknown sort %s "%s".',
-                            1 === count($unknown) ? 'type' : 'types',
-                            implode('", "', $unknown)
-                        ));
-                    }
-                }
-
-                return true;
-            }])
-            ->setDefault(null)
-        ;
-
         return new FixerConfigurationResolver([
-            $sortAlgorithm->getOption(),
-            $importsOrder->getOption(),
+            (new FixerOptionBuilder('sortAlgorithm', 'whether the statements should be sorted alphabetically or by length'))
+                ->setAllowedValues($this->supportedSortAlgorithms)
+                ->setDefault(self::SORT_ALPHA)
+                ->getOption(),
+            (new FixerOptionBuilder('importsOrder', 'Defines the order of import types.'))
+                ->setAllowedTypes(['array', 'null'])
+                ->setAllowedValues([function ($value) use ($supportedSortTypes) {
+                    if (null !== $value) {
+                        $missing = array_diff($supportedSortTypes, $value);
+                        if (count($missing)) {
+                            throw new InvalidOptionsException(sprintf(
+                                'Missing sort %s "%s".',
+                                1 === count($missing) ? 'type' : 'types',
+                                implode('", "', $missing)
+                            ));
+                        }
+
+                        $unknown = array_diff($value, $supportedSortTypes);
+                        if (count($unknown)) {
+                            throw new InvalidOptionsException(sprintf(
+                                'Unknown sort %s "%s".',
+                                1 === count($unknown) ? 'type' : 'types',
+                                implode('", "', $unknown)
+                            ));
+                        }
+                    }
+
+                    return true;
+                }])
+                ->setDefault(null)
+                ->getOption(),
         ]);
     }
 
@@ -299,8 +295,6 @@ use function CCC\AA;
     }
 
     /**
-     * Prepare namespace for sorting.
-     *
      * @param string $namespace
      *
      * @return string
@@ -314,6 +308,7 @@ use function CCC\AA;
     {
         $indexes = [];
         $originalIndexes = [];
+        $lineEnding = $this->whitespacesConfig->getLineEnding();
 
         for ($i = count($uses) - 1; $i >= 0; --$i) {
             $index = $uses[$i];
@@ -355,6 +350,10 @@ use function CCC\AA;
 
                         // fetch all parts, split up in an array of strings, move comments to the end
                         $parts = [];
+                        $firstIndent = '';
+                        $separator = ', ';
+                        $lastIndent = '';
+
                         for ($k1 = $k + 1; $k1 < $namespaceTokensCount; ++$k1) {
                             $comment = '';
                             $namespacePart = '';
@@ -369,6 +368,17 @@ use function CCC\AA;
                                     continue;
                                 }
 
+                                // if there is any line ending inside the group import, it should be indented properly
+                                if (
+                                    '' === $firstIndent &&
+                                    $namespaceTokens[$k2]->isWhitespace() &&
+                                    false !== strpos($namespaceTokens[$k2]->getContent(), $lineEnding)
+                                ) {
+                                    $lastIndent = $lineEnding;
+                                    $firstIndent = $lineEnding.$this->whitespacesConfig->getIndent();
+                                    $separator = ','.$firstIndent;
+                                }
+
                                 $namespacePart .= $namespaceTokens[$k2]->getContent();
                             }
 
@@ -378,7 +388,7 @@ use function CCC\AA;
                                 $namespacePart .= ' '.$comment;
                             }
 
-                            $parts[] = $namespacePart.', ';
+                            $parts[] = $namespacePart;
 
                             $k1 = $k2;
                         }
@@ -390,7 +400,7 @@ use function CCC\AA;
                         if ($sortedParts === $parts) {
                             $namespace = Tokens::fromArray($namespaceTokens)->generateCode();
                         } else {
-                            $namespace .= substr(implode('', $parts), 0, -2).'}';
+                            $namespace .= $firstIndent.implode($separator, $parts).$lastIndent.'}';
                         }
                     } else {
                         $namespace = Tokens::fromArray($namespaceTokens)->generateCode();
@@ -469,15 +479,12 @@ use function CCC\AA;
      */
     private function sortByAlgorithm($indexes)
     {
-        switch ($this->configuration['sortAlgorithm']) {
-            case self::SORT_ALPHA:
-                uasort($indexes, [$this, 'sortAlphabetically']);
-                break;
-            case self::SORT_LENGTH:
-                uasort($indexes, [$this, 'sortByLength']);
-                break;
-            default:
-                throw new \LogicException(sprintf('Sort algorithm "%s" is not supported.', $this->configuration['sortAlgorithm']));
+        if (self::SORT_ALPHA === $this->configuration['sortAlgorithm']) {
+            uasort($indexes, [$this, 'sortAlphabetically']);
+        } elseif (self::SORT_LENGTH === $this->configuration['sortAlgorithm']) {
+            uasort($indexes, [$this, 'sortByLength']);
+        } else {
+            throw new \LogicException(sprintf('Sort algorithm "%s" is not supported.', $this->configuration['sortAlgorithm']));
         }
 
         return $indexes;
