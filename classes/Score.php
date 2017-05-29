@@ -67,15 +67,16 @@ class Score
         $calc_planet_credits    = "SUM(::prefix::planets.credits)";
 
         $sql = "SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_cols + $calc_planet_defense + $calc_planet_credits, 0) AS planet_score " .
-                                     "FROM ::prefix::planets WHERE owner=:ship_id";
+                                     "FROM ::prefix::planets WHERE owner=:ship_id GROUP BY planet_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $planet_score = $stmt->fetch(\PDO::FETCH_COLUMN);
 
         $sql = "SELECT IF(COUNT(*)>0, $calc_levels + $calc_equip + $calc_dev + ::prefix::ships.credits, 0) AS ship_score " .
-               "FROM ::prefix::ships LEFT JOIN ::prefix::planets ON ::prefix::planets.owner=ship_id WHERE ship_id = :ship_id AND ship_destroyed='N'";
+               "FROM ::prefix::ships LEFT JOIN ::prefix::planets ON ::prefix::planets.owner=ship_id WHERE ship_id = :ship_id AND ship_destroyed='N' GROUP BY ship_id";
         $stmt = $pdo_db->prepare($sql);
+
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $ship_score = $stmt->fetch(\PDO::FETCH_COLUMN);
