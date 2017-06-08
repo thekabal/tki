@@ -20,7 +20,6 @@ CHANGELOG
  * added support for omitting the factory class name in a service definition if the definition class is set
  * deprecated case insensitivity of service identifiers
  * added "iterator" argument type for lazy iteration over a set of values and services
- * added "closure-proxy" argument type for turning services' methods into lazy callables
  * added file-wide configurable defaults for service attributes "public", "tags",
    "autowire" and "autoconfigure"
  * made the "class" attribute optional, using the "id" as fallback
@@ -28,6 +27,7 @@ CHANGELOG
    will not be supported anymore in 4.0
  * deprecated the `DefinitionDecorator` class in favor of `ChildDefinition`
  * allow config files to be loaded using a glob pattern
+ * [BC BREAK] the `NullDumper` class is now final
 
 3.2.0
 -----
@@ -37,6 +37,7 @@ CHANGELOG
  * deprecated the ability to set or unset a private service with the `Container::set()` method
  * deprecated the ability to check for the existence of a private service with the `Container::has()` method
  * deprecated the ability to request a private service with the `Container::get()` method
+ * deprecated support for generating a dumped `Container` without populating the method map
 
 3.0.0
 -----

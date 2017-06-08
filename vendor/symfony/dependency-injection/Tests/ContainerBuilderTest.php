@@ -20,7 +20,6 @@ use Symfony\Component\Config\Resource\ComposerResource;
 use Symfony\Component\Config\Resource\ResourceInterface;
 use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\DependencyInjection\Alias;
-use Symfony\Component\DependencyInjection\Argument\ClosureProxyArgument;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
@@ -449,12 +448,17 @@ class ContainerBuilderTest extends TestCase
         $builder->register('bar', 'stdClass');
         $builder
             ->register('lazy_context', 'LazyContext')
-            ->setArguments(array(new IteratorArgument(array('k1' => new Reference('bar'), new Reference('invalid', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)))))
+            ->setArguments(array(
+                new IteratorArgument(array('k1' => new Reference('bar'), new Reference('invalid', ContainerInterface::IGNORE_ON_INVALID_REFERENCE))),
+                new IteratorArgument(array()),
+            ))
         ;
 
         $lazyContext = $builder->get('lazy_context');
         $this->assertInstanceOf(RewindableGenerator::class, $lazyContext->lazyValues);
+        $this->assertInstanceOf(RewindableGenerator::class, $lazyContext->lazyEmptyValues);
         $this->assertCount(1, $lazyContext->lazyValues);
+        $this->assertCount(0, $lazyContext->lazyEmptyValues);
 
         $i = 0;
         foreach ($lazyContext->lazyValues as $k => $v) {
@@ -465,6 +469,13 @@ class ContainerBuilderTest extends TestCase
 
         // The second argument should have been ignored.
         $this->assertEquals(1, $i);
+
+        $i = 0;
+        foreach ($lazyContext->lazyEmptyValues as $k => $v) {
+            ++$i;
+        }
+
+        $this->assertEquals(0, $i);
     }
 
     /**
@@ -996,63 +1007,6 @@ class ContainerBuilderTest extends TestCase
         $this->assertEquals(A::class, (string) $container->getDefinition('b')->getArgument(0));
     }
 
-    public function testClosureProxy()
-    {
-        $container = new ContainerBuilder();
-
-        $container->register('foo', 'stdClass')
-            ->setProperty('foo', new ClosureProxyArgument('bar', 'c'))
-        ;
-        $container->register('bar', A::class);
-
-        $foo = $container->get('foo');
-
-        $this->assertInstanceOf('Closure', $foo->foo);
-        $this->assertSame(123, call_user_func($foo->foo));
-    }
-
-    public function testClosureProxyContainer()
-    {
-        $container = new ContainerBuilder();
-
-        $container->register('foo', 'stdClass')
-            ->setProperty('foo', new ClosureProxyArgument('service_container', 'get'))
-        ;
-
-        $foo = $container->get('foo');
-
-        $this->assertInstanceOf('Closure', $foo->foo);
-        $this->assertSame($foo, call_user_func($foo->foo, 'foo'));
-    }
-
-    public function testClosureProxyOnInvalidNull()
-    {
-        $container = new ContainerBuilder();
-
-        $container->register('foo', 'stdClass')
-            ->setProperty('foo', new ClosureProxyArgument('bar', 'c', ContainerInterface::NULL_ON_INVALID_REFERENCE))
-        ;
-
-        $foo = $container->get('foo');
-
-        $this->assertNull($foo->foo);
-    }
-
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @expectedExceptionMessage You have requested a non-existent service "bar".
-     */
-    public function testClosureProxyOnInvalidException()
-    {
-        $container = new ContainerBuilder();
-
-        $container->register('foo', 'stdClass')
-            ->setProperty('foo', new ClosureProxyArgument('bar', 'c'))
-        ;
-
-        $container->get('foo');
-    }
-
     public function testClassFromId()
     {
         $container = new ContainerBuilder();
@@ -1136,10 +1090,6 @@ class FooClass
 
 class A
 {
-    public function c()
-    {
-        return 123;
-    }
 }
 
 class B

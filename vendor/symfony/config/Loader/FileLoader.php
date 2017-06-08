@@ -83,18 +83,22 @@ abstract class FileLoader extends Loader
      */
     public function import($resource, $type = null, $ignoreErrors = false, $sourceResource = null)
     {
-        $ret = array();
-        $ct = 0;
-        if (!is_string($resource) || false === strpbrk($resource, '*?{[')) {
-            $ret[] = $this->doImport($resource, $type, $ignoreErrors, $sourceResource);
-        } else {
-            foreach ($this->glob($resource, false, $_, $ignoreErrors) as $path => $info) {
-                ++$ct;
-                $ret[] = $this->doImport($path, $type, $ignoreErrors, $sourceResource);
+        if (is_string($resource) && strlen($resource) !== $i = strcspn($resource, '*?{[')) {
+            $ret = array();
+            $isSubpath = 0 !== $i && false !== strpos(substr($resource, 0, $i), '/');
+            foreach ($this->glob($resource, false, $_, $ignoreErrors || !$isSubpath) as $path => $info) {
+                if (null !== $res = $this->doImport($path, $type, $ignoreErrors, $sourceResource)) {
+                    $ret[] = $res;
+                }
+                $isSubpath = true;
+            }
+
+            if ($isSubpath) {
+                return isset($ret[1]) ? $ret : (isset($ret[0]) ? $ret[0] : null);
             }
         }
 
-        return $ct > 1 ? $ret : (isset($ret[0]) ? $ret[0] : null);
+        return $this->doImport($resource, $type, $ignoreErrors, $sourceResource);
     }
 
     /**
@@ -105,7 +109,7 @@ abstract class FileLoader extends Loader
         if (strlen($pattern) === $i = strcspn($pattern, '*?{[')) {
             $prefix = $pattern;
             $pattern = '';
-        } elseif (0 === $i) {
+        } elseif (0 === $i || false === strpos(substr($pattern, 0, $i), '/')) {
             $prefix = '.';
             $pattern = '/'.$pattern;
         } else {

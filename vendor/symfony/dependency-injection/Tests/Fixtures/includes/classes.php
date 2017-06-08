@@ -88,7 +88,7 @@ class DummyProxyDumper implements ProxyDumper
         return false;
     }
 
-    public function getProxyFactoryCode(Definition $definition, $id)
+    public function getProxyFactoryCode(Definition $definition, $id, $methodName = null)
     {
         return '';
     }
@@ -102,9 +102,11 @@ class DummyProxyDumper implements ProxyDumper
 class LazyContext
 {
     public $lazyValues;
+    public $lazyEmptyValues;
 
-    public function __construct($lazyValues)
+    public function __construct($lazyValues, $lazyEmptyValues)
     {
         $this->lazyValues = $lazyValues;
+        $this->lazyEmptyValues = $lazyEmptyValues;
     }
 }

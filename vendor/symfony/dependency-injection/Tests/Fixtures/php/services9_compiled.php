@@ -32,7 +32,6 @@ class ProjectServiceContainer extends Container
         $this->methodMap = array(
             'bar' => 'getBarService',
             'baz' => 'getBazService',
-            'closure_proxy' => 'getClosureProxyService',
             'configured_service' => 'getConfiguredServiceService',
             'configured_service_simple' => 'getConfiguredServiceSimpleService',
             'decorator_service' => 'getDecoratorServiceService',
@@ -117,21 +116,6 @@ class ProjectServiceContainer extends Container
         $instance->setFoo(${($_ = isset($this->services['foo_with_inline']) ? $this->services['foo_with_inline'] : $this->get('foo_with_inline')) && false ?: '_'});
 
         return $instance;
-    }
-
-    /**
-     * Gets the 'closure_proxy' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return \BarClass A BarClass instance
-     */
-    protected function getClosureProxyService()
-    {
-        return $this->services['closure_proxy'] = new \BarClass(/** @closure-proxy BarClass::getBaz */ function () {
-            return ${($_ = isset($this->services['closure_proxy']) ? $this->services['closure_proxy'] : $this->get('closure_proxy')) && false ?: '_'}->getBaz();
-        });
     }
 
     /**
@@ -326,7 +310,9 @@ class ProjectServiceContainer extends Container
         return $this->services['lazy_context'] = new \LazyContext(new RewindableGenerator(function () {
             yield 'k1' => ${($_ = isset($this->services['foo.baz']) ? $this->services['foo.baz'] : $this->get('foo.baz')) && false ?: '_'};
             yield 'k2' => $this;
-        }, 2));
+        }, 2), new RewindableGenerator(function () {
+            return new \EmptyIterator();
+        }, 0));
     }
 
     /**
@@ -341,7 +327,9 @@ class ProjectServiceContainer extends Container
     {
         return $this->services['lazy_context_ignore_invalid_ref'] = new \LazyContext(new RewindableGenerator(function () {
             yield 0 => ${($_ = isset($this->services['foo.baz']) ? $this->services['foo.baz'] : $this->get('foo.baz')) && false ?: '_'};
-        }, 1));
+        }, 1), new RewindableGenerator(function () {
+            return new \EmptyIterator();
+        }, 0));
     }
 
     /**

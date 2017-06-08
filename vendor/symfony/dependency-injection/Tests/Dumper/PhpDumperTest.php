@@ -19,6 +19,7 @@ use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\Reference;
@@ -335,7 +336,7 @@ class PhpDumperTest extends TestCase
 
     /**
      * @expectedException \Symfony\Component\DependencyInjection\Exception\EnvParameterException
-     * @expectedExceptionMessage Incompatible use of dynamic environment variables "FOO" found in parameters.
+     * @expectedExceptionMessage Environment variables "FOO" are never used. Please, check your container's configuration.
      */
     public function testUnusedEnvParameter()
     {
@@ -436,7 +437,10 @@ class PhpDumperTest extends TestCase
         $container->register('lazy_referenced', 'stdClass');
         $container
             ->register('lazy_context', 'LazyContext')
-            ->setArguments(array(new IteratorArgument(array('k1' => new Reference('lazy_referenced'), 'k2' => new Reference('service_container')))))
+            ->setArguments(array(
+                new IteratorArgument(array('k1' => new Reference('lazy_referenced'), 'k2' => new Reference('service_container'))),
+                new IteratorArgument(array()),
+            ))
         ;
         $container->compile();
 
@@ -447,6 +451,9 @@ class PhpDumperTest extends TestCase
         $lazyContext = $container->get('lazy_context');
 
         $this->assertInstanceOf(RewindableGenerator::class, $lazyContext->lazyValues);
+        $this->assertInstanceOf(RewindableGenerator::class, $lazyContext->lazyEmptyValues);
+        $this->assertCount(2, $lazyContext->lazyValues);
+        $this->assertCount(0, $lazyContext->lazyEmptyValues);
 
         $i = -1;
         foreach ($lazyContext->lazyValues as $k => $v) {
@@ -461,46 +468,8 @@ class PhpDumperTest extends TestCase
                     break;
             }
         }
-    }
 
-    public function testClosureProxy()
-    {
-        $container = include self::$fixturesPath.'/containers/container31.php';
-        $container->compile();
-        $dumper = new PhpDumper($container);
-
-        $this->assertStringEqualsFile(self::$fixturesPath.'/php/services31.php', $dumper->dump());
-        $res = $container->getResources();
-        $this->assertSame('reflection.Symfony\Component\DependencyInjection\Tests\Fixtures\Container31\Foo', (string) array_pop($res));
-    }
-
-    /**
-     * @requires PHP 7.1
-     */
-    public function testClosureProxyWithVoidReturnType()
-    {
-        $container = include self::$fixturesPath.'/containers/container_dump_proxy_with_void_return_type.php';
-
-        $container->compile();
-        $dumper = new PhpDumper($container);
-
-        $this->assertStringEqualsFile(self::$fixturesPath.'/php/services_dump_proxy_with_void_return_type.php', $dumper->dump());
-        $res = $container->getResources();
-        $this->assertSame('reflection.Symfony\Component\DependencyInjection\Tests\Fixtures\ContainerVoid\Foo', (string) array_pop($res));
-    }
-
-    /**
-     * @requires PHP 7.1
-     */
-    public function testClosureProxyPhp71()
-    {
-        $container = include self::$fixturesPath.'/containers/container32.php';
-        $container->compile();
-        $dumper = new PhpDumper($container);
-
-        $this->assertStringEqualsFile(self::$fixturesPath.'/php/services32.php', $dumper->dump());
-        $res = $container->getResources();
-        $this->assertSame('reflection.Symfony\Component\DependencyInjection\Tests\Fixtures\Container32\Foo', (string) array_pop($res));
+        $this->assertEmpty(iterator_to_array($lazyContext->lazyEmptyValues));
     }
 
     public function testNormalizedId()
@@ -596,5 +565,23 @@ class PhpDumperTest extends TestCase
         $dumper = new PhpDumper($container);
 
         $this->assertStringEqualsFile(self::$fixturesPath.'/php/services_subscriber.php', $dumper->dump());
+    }
+
+    public function testPrivateWithIgnoreOnInvalidReference()
+    {
+        require_once self::$fixturesPath.'/includes/classes.php';
+
+        $container = new ContainerBuilder();
+        $container->register('not_invalid', 'BazClass')
+            ->setPublic(false);
+        $container->register('bar', 'BarClass')
+            ->addMethodCall('setBaz', array(new Reference('not_invalid', SymfonyContainerInterface::IGNORE_ON_INVALID_REFERENCE)));
+        $container->compile();
+
+        $dumper = new PhpDumper($container);
+        eval('?>'.$dumper->dump(array('class' => 'Symfony_DI_PhpDumper_Test_Private_With_Ignore_On_Invalid_Reference')));
+
+        $container = new \Symfony_DI_PhpDumper_Test_Private_With_Ignore_On_Invalid_Reference();
+        $this->assertInstanceOf('BazClass', $container->get('bar')->getBaz());
     }
 }
