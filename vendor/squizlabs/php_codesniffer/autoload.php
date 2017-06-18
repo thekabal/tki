@@ -41,6 +41,15 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
          */
         private static $loadedFiles = array();
 
+        /**
+         * A list of additional directories to search during autoloading.
+         *
+         * This is typically a list of coding standard directories.
+         *
+         * @var string[]
+         */
+        private static $searchPaths = array();
+
 
         /**
          * Loads a class.
@@ -98,6 +107,23 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
                 $path = self::$composerAutoloader->findFile($class);
             }
 
+            // See if the class is inside one of our alternate search paths.
+            if ($path === false) {
+                foreach (self::$searchPaths as $searchPath => $nsPrefix) {
+                    $className = $class;
+                    if ($nsPrefix !== '' && substr($class, 0, strlen($nsPrefix)) === $nsPrefix) {
+                        $className = substr($class, (strlen($nsPrefix) + 1));
+                    }
+
+                    $path = $searchPath.$ds.str_replace('\\', $ds, $className).'.php';
+                    if (is_file($path) === true) {
+                        break;
+                    }
+
+                    $path = false;
+                }
+            }
+
             if ($path !== false && is_file($path) === true) {
                 self::loadFile($path);
                 return true;
@@ -135,7 +161,7 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
             include $path;
 
             $className  = null;
-            $newClasses = array_diff(get_declared_classes(), $classes);
+            $newClasses = array_reverse(array_diff(get_declared_classes(), $classes));
             foreach ($newClasses as $name) {
                 if (isset(self::$loadedFiles[$name]) === false) {
                     $className = $name;
@@ -144,7 +170,7 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
             }
 
             if ($className === null) {
-                $newClasses = array_reverse(array_diff(get_declared_traits(), $classes));
+                $newClasses = array_reverse(array_diff(get_declared_interfaces(), $interfaces));
                 foreach ($newClasses as $name) {
                     if (isset(self::$loadedFiles[$name]) === false) {
                         $className = $name;
@@ -154,7 +180,7 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
             }
 
             if ($className === null) {
-                $newClasses = array_reverse(array_diff(get_declared_interfaces(), $classes));
+                $newClasses = array_reverse(array_diff(get_declared_traits(), $traits));
                 foreach ($newClasses as $name) {
                     if (isset(self::$loadedFiles[$name]) === false) {
                         $className = $name;
@@ -168,6 +194,21 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
             return self::$loadedClasses[$path];
 
         }//end loadFile()
+
+
+        /**
+         * Adds a directory to search during autoloading.
+         *
+         * @param string $path     The path to the directory to search.
+         * @param string $nsPrefix The namespace prefix used by files under this path.
+         *
+         * @return void
+         */
+        public static function addSearchPath($path, $nsPrefix='')
+        {
+            self::$searchPaths[$path] = rtrim(trim((string) $nsPrefix), '\\');
+
+        }//end addSearchPath()
 
 
         /**

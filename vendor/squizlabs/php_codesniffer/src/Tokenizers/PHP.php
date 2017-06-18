@@ -856,6 +856,7 @@ class PHP extends Tokenizer
                 $newToken            = array();
                 $newToken['content'] = '?';
 
+                $prevNonEmpty = null;
                 for ($i = ($stackPtr - 1); $i >= 0; $i--) {
                     if (is_array($tokens[$i]) === true) {
                         $tokenType = $tokens[$i][0];
@@ -863,18 +864,31 @@ class PHP extends Tokenizer
                         $tokenType = $tokens[$i];
                     }
 
+                    if ($prevNonEmpty === null
+                        && isset(Util\Tokens::$emptyTokens[$tokenType]) === false
+                    ) {
+                        // Found the previous non-empty token.
+                        if ($tokenType === ':' || $tokenType === ',') {
+                            $newToken['code'] = T_NULLABLE;
+                            $newToken['type'] = 'T_NULLABLE';
+                            break;
+                        }
+
+                        $prevNonEmpty = $tokenType;
+                    }
+
                     if ($tokenType === T_FUNCTION) {
                         $newToken['code'] = T_NULLABLE;
                         $newToken['type'] = 'T_NULLABLE';
                         break;
-                    } else if (in_array($tokenType, array(T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, '{', ';')) === true) {
+                    } else if (in_array($tokenType, array(T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, '=', '{', ';')) === true) {
                         $newToken['code'] = T_INLINE_THEN;
                         $newToken['type'] = 'T_INLINE_THEN';
 
                         $insideInlineIf[] = $stackPtr;
                         break;
                     }
-                }
+                }//end for
 
                 $finalTokens[$newStackPtr] = $newToken;
                 $newStackPtr++;
@@ -1384,11 +1398,13 @@ class PHP extends Tokenizer
                 // it is the start of an array being defined using the short syntax.
                 $isShortArray = false;
                 $allowed      = array(
-                                 T_CLOSE_SQUARE_BRACKET => T_CLOSE_SQUARE_BRACKET,
-                                 T_CLOSE_PARENTHESIS    => T_CLOSE_PARENTHESIS,
-                                 T_VARIABLE             => T_VARIABLE,
-                                 T_OBJECT_OPERATOR      => T_OBJECT_OPERATOR,
-                                 T_STRING               => T_STRING,
+                                 T_CLOSE_SQUARE_BRACKET     => T_CLOSE_SQUARE_BRACKET,
+                                 T_CLOSE_CURLY_BRACKET      => T_CLOSE_CURLY_BRACKET,
+                                 T_CLOSE_PARENTHESIS        => T_CLOSE_PARENTHESIS,
+                                 T_VARIABLE                 => T_VARIABLE,
+                                 T_OBJECT_OPERATOR          => T_OBJECT_OPERATOR,
+                                 T_STRING                   => T_STRING,
+                                 T_CONSTANT_ENCAPSED_STRING => T_CONSTANT_ENCAPSED_STRING,
                                 );
 
                 for ($x = ($i - 1); $x > 0; $x--) {
@@ -1400,13 +1416,6 @@ class PHP extends Tokenizer
                         break;
                     }
 
-                    if (isset($this->tokens[$x]['bracket_opener']) === true
-                        && $x > $this->tokens[$x]['bracket_opener']
-                    ) {
-                        $x = $this->tokens[$x]['bracket_opener'];
-                        continue;
-                    }
-
                     if (isset(Util\Tokens::$emptyTokens[$this->tokens[$x]['code']]) === false) {
                         if (isset($allowed[$this->tokens[$x]['code']]) === false) {
                             $isShortArray = true;
@@ -1414,7 +1423,7 @@ class PHP extends Tokenizer
 
                         break;
                     }
-                }//end for
+                }
 
                 if ($isShortArray === true) {
                     $this->tokens[$i]['code'] = T_OPEN_SHORT_ARRAY;

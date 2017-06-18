@@ -17,6 +17,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\DummyFile;
 use PHP_CodeSniffer\Util\Cache;
 use PHP_CodeSniffer\Util\Common;
+use PHP_CodeSniffer\Util\Standards;
 use PHP_CodeSniffer\Exceptions\RuntimeException;
 
 class Runner
@@ -76,7 +77,7 @@ class Runner
                 $ruleset->explain();
             }
 
-            exit(0);
+            return 0;
         }
 
         // Generate documentation for each of the supplied standards.
@@ -90,16 +91,16 @@ class Runner
                 $generator->generate();
             }
 
-            exit(0);
+            return 0;
         }
 
         // Other report formats don't really make sense in interactive mode
         // so we hard-code the full report here and when outputting.
         // We also ensure parallel processing is off because we need to do one file at a time.
         if ($this->config->interactive === true) {
-            $this->config->reports     = array('full' => null);
-            $this->config->parallel    = 1;
-            $this->config->showProcess = false;
+            $this->config->reports      = array('full' => null);
+            $this->config->parallel     = 1;
+            $this->config->showProgress = false;
         }
 
         // Disable caching if we are processing STDIN as we can't be 100%
@@ -127,13 +128,13 @@ class Runner
 
         if ($numErrors === 0) {
             // No errors found.
-            exit(0);
+            return 0;
         } else if ($this->reporter->totalFixable === 0) {
             // Errors found, but none of them can be fixed by PHPCBF.
-            exit(1);
+            return 1;
         } else {
             // Errors found, and some can be fixed by PHPCBF.
-            exit(2);
+            return 2;
         }
 
     }//end runPHPCS()
@@ -192,20 +193,20 @@ class Runner
             // Nothing was fixed by PHPCBF.
             if ($this->reporter->totalFixable === 0) {
                 // Nothing found that could be fixed.
-                exit(0);
+                return 0;
             } else {
                 // Something failed to fix.
-                exit(2);
+                return 2;
             }
         }
 
         if ($this->reporter->totalFixable === 0) {
             // PHPCBF fixed all fixable errors.
-            exit(1);
+            return 1;
         }
 
         // PHPCBF fixed some fixable errors, but others failed to fix.
-        exit(2);
+        return 2;
 
     }//end runPHPCBF()
 
@@ -267,9 +268,21 @@ class Runner
         // of PHP_CodeSniffer-specific token type constants.
         $tokens = new Util\Tokens();
 
+        // Allow autoloading of custom files inside installed standards.
+        $installedStandards = Standards::getInstalledStandardDetails();
+        foreach ($installedStandards as $name => $details) {
+            Autoload::addSearchPath($details['path'], $details['namespace']);
+        }
+
         // The ruleset contains all the information about how the files
         // should be checked and/or fixed.
-        $this->ruleset = new Ruleset($this->config);
+        try {
+            $this->ruleset = new Ruleset($this->config);
+        } catch (RuntimeException $e) {
+            echo 'ERROR: '.$e->getMessage().PHP_EOL.PHP_EOL;
+            $this->config->printShortUsage();
+            exit(3);
+        }
 
     }//end init()
 
@@ -301,8 +314,6 @@ class Runner
             $todo  = new FileList($this->config, $this->ruleset);
             $dummy = new DummyFile($fileContents, $this->ruleset, $this->config);
             $todo->addFile($dummy->path, $dummy);
-
-            $numFiles = 1;
         } else {
             if (empty($this->config->files) === true) {
                 echo 'ERROR: You must supply at least one file or directory to process.'.PHP_EOL.PHP_EOL;
@@ -314,10 +325,10 @@ class Runner
                 echo 'Creating file list... ';
             }
 
-            $todo     = new FileList($this->config, $this->ruleset);
-            $numFiles = count($todo);
+            $todo = new FileList($this->config, $this->ruleset);
 
             if (PHP_CODESNIFFER_VERBOSITY > 0) {
+                $numFiles = count($todo);
                 echo "DONE ($numFiles files in queue)".PHP_EOL;
             }
 
@@ -349,7 +360,8 @@ class Runner
             $this->config->parallel = 1;
         }
 
-        $lastDir = '';
+        $lastDir  = '';
+        $numFiles = count($todo);
 
         if ($this->config->parallel === 1) {
             // Running normally.
@@ -376,7 +388,6 @@ class Runner
         } else {
             // Batching and forking.
             $childProcs  = array();
-            $numFiles    = count($todo);
             $numPerBatch = ceil($numFiles / $this->config->parallel);
 
             for ($batch = 0; $batch < $this->config->parallel; $batch++) {
@@ -580,9 +591,6 @@ class Runner
 
         $this->reporter->cacheFileReport($file, $this->config);
 
-        // Clean up the file to save (a lot of) memory.
-        $file->cleanUp();
-
         if ($this->config->interactive === true) {
             /*
                 Running interactively.
@@ -621,6 +629,9 @@ class Runner
                 }
             }//end while
         }//end if
+
+        // Clean up the file to save (a lot of) memory.
+        $file->cleanUp();
 
     }//end processFile()
 

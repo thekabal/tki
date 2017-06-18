@@ -70,6 +70,7 @@ class OperatorSpacingSniff implements Sniff
         $tokens = $phpcsFile->getTokens();
 
         // Skip default values in function declarations.
+        // Skip declare statements.
         if ($tokens[$stackPtr]['code'] === T_EQUAL
             || $tokens[$stackPtr]['code'] === T_MINUS
         ) {
@@ -80,6 +81,7 @@ class OperatorSpacingSniff implements Sniff
                     $function = $tokens[$bracket]['parenthesis_owner'];
                     if ($tokens[$function]['code'] === T_FUNCTION
                         || $tokens[$function]['code'] === T_CLOSURE
+                        || $tokens[$function]['code'] === T_DECLARE
                     ) {
                         return;
                     }
@@ -94,15 +96,6 @@ class OperatorSpacingSniff implements Sniff
             ) {
                 return;
             }
-        }
-
-        // Skip short ternary such as: "$foo = $bar ?: true;".
-        if (($tokens[$stackPtr]['code'] === T_INLINE_THEN
-            && $tokens[($stackPtr + 1)]['code'] === T_INLINE_ELSE)
-            || ($tokens[($stackPtr - 1)]['code'] === T_INLINE_THEN
-            && $tokens[$stackPtr]['code'] === T_INLINE_ELSE)
-        ) {
-                return;
         }
 
         if ($tokens[$stackPtr]['code'] === T_BITWISE_AND) {
@@ -224,7 +217,10 @@ class OperatorSpacingSniff implements Sniff
 
         $operator = $tokens[$stackPtr]['content'];
 
-        if ($tokens[($stackPtr - 1)]['code'] !== T_WHITESPACE) {
+        if ($tokens[($stackPtr - 1)]['code'] !== T_WHITESPACE
+            && (($tokens[($stackPtr - 1)]['code'] === T_INLINE_THEN
+            && $tokens[($stackPtr )]['code'] === T_INLINE_ELSE) === false)
+        ) {
             $error = "Expected 1 space before \"$operator\"; 0 found";
             $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceBefore');
             if ($fix === true) {
@@ -272,6 +268,13 @@ class OperatorSpacingSniff implements Sniff
         }
 
         if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
+            // Skip short ternary such as: "$foo = $bar ?: true;".
+            if (($tokens[$stackPtr]['code'] === T_INLINE_THEN
+                && $tokens[($stackPtr + 1)]['code'] === T_INLINE_ELSE)
+            ) {
+                return;
+            }
+
             $error = "Expected 1 space after \"$operator\"; 0 found";
             $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceAfter');
             if ($fix === true) {

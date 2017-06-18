@@ -73,3 +73,18 @@ switch ($blah) {
     <?php endif; ?>
     </div>
 </body>
+
+<?php
+    if ($foo) {
+        ?>
+        <?php         } ?>
+
+<?php
+    if ($foo) {
+        ?>
+    <?php         } ?>
+
+<?php
+    if ($foo) {
+        ?>
+    <?php } ?>

@@ -109,6 +109,10 @@ if (defined('T_COALESCE_EQUAL') === false) {
     define('T_COALESCE_EQUAL', 'PHPCS_T_COALESCE_EQUAL');
 }
 
+if (defined('T_YIELD_FROM') === false) {
+    define('T_YIELD_FROM', 'PHPCS_T_YIELD_FROM');
+}
+
 // Tokens used for parsing doc blocks.
 define('T_DOC_COMMENT_STAR', 'PHPCS_T_DOC_COMMENT_STAR');
 define('T_DOC_COMMENT_WHITESPACE', 'PHPCS_T_DOC_COMMENT_WHITESPACE');
@@ -207,20 +211,21 @@ final class Tokens
      * @var array<int, int>
      */
     public static $assignmentTokens = array(
-                                       T_EQUAL        => T_EQUAL,
-                                       T_AND_EQUAL    => T_AND_EQUAL,
-                                       T_OR_EQUAL     => T_OR_EQUAL,
-                                       T_CONCAT_EQUAL => T_CONCAT_EQUAL,
-                                       T_DIV_EQUAL    => T_DIV_EQUAL,
-                                       T_MINUS_EQUAL  => T_MINUS_EQUAL,
-                                       T_POW_EQUAL    => T_POW_EQUAL,
-                                       T_MOD_EQUAL    => T_MOD_EQUAL,
-                                       T_MUL_EQUAL    => T_MUL_EQUAL,
-                                       T_PLUS_EQUAL   => T_PLUS_EQUAL,
-                                       T_XOR_EQUAL    => T_XOR_EQUAL,
-                                       T_DOUBLE_ARROW => T_DOUBLE_ARROW,
-                                       T_SL_EQUAL     => T_SL_EQUAL,
-                                       T_SR_EQUAL     => T_SR_EQUAL,
+                                       T_EQUAL          => T_EQUAL,
+                                       T_AND_EQUAL      => T_AND_EQUAL,
+                                       T_OR_EQUAL       => T_OR_EQUAL,
+                                       T_CONCAT_EQUAL   => T_CONCAT_EQUAL,
+                                       T_DIV_EQUAL      => T_DIV_EQUAL,
+                                       T_MINUS_EQUAL    => T_MINUS_EQUAL,
+                                       T_POW_EQUAL      => T_POW_EQUAL,
+                                       T_MOD_EQUAL      => T_MOD_EQUAL,
+                                       T_MUL_EQUAL      => T_MUL_EQUAL,
+                                       T_PLUS_EQUAL     => T_PLUS_EQUAL,
+                                       T_XOR_EQUAL      => T_XOR_EQUAL,
+                                       T_DOUBLE_ARROW   => T_DOUBLE_ARROW,
+                                       T_SL_EQUAL       => T_SL_EQUAL,
+                                       T_SR_EQUAL       => T_SR_EQUAL,
+                                       T_COALESCE_EQUAL => T_COALESCE_EQUAL,
                                       );
 
     /**
@@ -251,6 +256,8 @@ final class Tokens
                                        T_GREATER_THAN        => T_GREATER_THAN,
                                        T_IS_SMALLER_OR_EQUAL => T_IS_SMALLER_OR_EQUAL,
                                        T_IS_GREATER_OR_EQUAL => T_IS_GREATER_OR_EQUAL,
+                                       T_SPACESHIP           => T_SPACESHIP,
+                                       T_COALESCE            => T_COALESCE,
                                       );
 
     /**
@@ -264,6 +271,7 @@ final class Tokens
                                        T_MULTIPLY => T_MULTIPLY,
                                        T_DIVIDE   => T_DIVIDE,
                                        T_MODULUS  => T_MODULUS,
+                                       T_POW      => T_POW,
                                       );
 
     /**
@@ -364,20 +372,19 @@ final class Tokens
      * @var array<int, int>
      */
     public static $operators = array(
-                                T_MINUS          => T_MINUS,
-                                T_PLUS           => T_PLUS,
-                                T_MULTIPLY       => T_MULTIPLY,
-                                T_DIVIDE         => T_DIVIDE,
-                                T_MODULUS        => T_MODULUS,
-                                T_POW            => T_POW,
-                                T_SPACESHIP      => T_SPACESHIP,
-                                T_COALESCE       => T_COALESCE,
-                                T_COALESCE_EQUAL => T_COALESCE_EQUAL,
-                                T_BITWISE_AND    => T_BITWISE_AND,
-                                T_BITWISE_OR     => T_BITWISE_OR,
-                                T_BITWISE_XOR    => T_BITWISE_XOR,
-                                T_SL             => T_SL,
-                                T_SR             => T_SR,
+                                T_MINUS       => T_MINUS,
+                                T_PLUS        => T_PLUS,
+                                T_MULTIPLY    => T_MULTIPLY,
+                                T_DIVIDE      => T_DIVIDE,
+                                T_MODULUS     => T_MODULUS,
+                                T_POW         => T_POW,
+                                T_SPACESHIP   => T_SPACESHIP,
+                                T_COALESCE    => T_COALESCE,
+                                T_BITWISE_AND => T_BITWISE_AND,
+                                T_BITWISE_OR  => T_BITWISE_OR,
+                                T_BITWISE_XOR => T_BITWISE_XOR,
+                                T_SL          => T_SL,
+                                T_SR          => T_SR,
                                );
 
     /**
@@ -451,6 +458,19 @@ final class Tokens
                                   );
 
     /**
+     * Tokens that represent text strings.
+     *
+     * @var array<int, int>
+     */
+    public static $textStringTokens = array(
+                                       T_CONSTANT_ENCAPSED_STRING => T_CONSTANT_ENCAPSED_STRING,
+                                       T_DOUBLE_QUOTED_STRING     => T_DOUBLE_QUOTED_STRING,
+                                       T_INLINE_HTML              => T_INLINE_HTML,
+                                       T_HEREDOC                  => T_HEREDOC,
+                                       T_NOWDOC                   => T_NOWDOC,
+                                      );
+
+    /**
      * Tokens that represent brackets and parenthesis.
      *
      * @var array<int, int>
@@ -493,7 +513,7 @@ final class Tokens
     /**
      * Tokens that represent the names of called functions.
      *
-     * Mostly, these are just strings. But PHP tokeizes some language
+     * Mostly, these are just strings. But PHP tokenizes some language
      * constructs and functions using their own tokens.
      *
      * @var array<int, int>

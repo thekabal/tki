@@ -9,7 +9,7 @@
 
 namespace PHP_CodeSniffer\Tokenizers;
 
-use PHP_CodeSniffer\RuntimeException;
+use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Util;
 
 abstract class Tokenizer
@@ -159,6 +159,8 @@ abstract class Tokenizer
             $checkEncoding = true;
         }
 
+        $checkAnnotations = $this->config->annotations;
+
         $this->tokensWithTabs = array(
                                  T_WHITESPACE               => true,
                                  T_COMMENT                  => true,
@@ -216,9 +218,10 @@ abstract class Tokenizer
                 $this->tokens[$i]['length'] += $eolLen;
             }
 
-            if ($this->tokens[$i]['code'] === T_COMMENT
+            if ($checkAnnotations === true
+                && ($this->tokens[$i]['code'] === T_COMMENT
                 || $this->tokens[$i]['code'] === T_DOC_COMMENT_TAG
-                || ($inTests === true && $this->tokens[$i]['code'] === T_INLINE_HTML)
+                || ($inTests === true && $this->tokens[$i]['code'] === T_INLINE_HTML))
             ) {
                 if (strpos($this->tokens[$i]['content'], '@codingStandards') !== false) {
                     if ($ignoring === false
@@ -281,7 +284,7 @@ abstract class Tokenizer
             $numTabs = strlen($token['content']);
 
             $newContent   = '';
-            $firstTabSize = ($tabWidth - ($currColumn % $tabWidth) + 1);
+            $firstTabSize = ($tabWidth - (($currColumn - 1) % $tabWidth));
             $length       = ($firstTabSize + ($tabWidth * ($numTabs - 1)));
             $currColumn  += $length;
             $newContent   = $prefix.str_repeat($padding, ($length - 1));
@@ -902,7 +905,7 @@ abstract class Tokenizer
                         // current scope opener, so it must be a string offset.
                         if (PHP_CODESNIFFER_VERBOSITY > 1) {
                             echo str_repeat("\t", $depth);
-                            echo '* ignoring curly brace *'.PHP_EOL;
+                            echo '* ignoring curly brace inside condition *'.PHP_EOL;
                         }
 
                         $ignore++;
@@ -913,19 +916,25 @@ abstract class Tokenizer
                             if (isset(Util\Tokens::$emptyTokens[$this->tokens[$x]['code']]) === true) {
                                 continue;
                             } else {
-                                // If the first non-whitespace/comment token is a
-                                // variable or object operator then this is an opener
-                                // for a string offset and not a scope.
-                                if ($this->tokens[$x]['code'] === T_VARIABLE
-                                    || $this->tokens[$x]['code'] === T_OBJECT_OPERATOR
-                                ) {
+                                // If the first non-whitespace/comment token looks like this
+                                // brace is a string offset, or this brace is mid-way through
+                                // a new statement, it isn't a scope opener.
+                                $disallowed  = Util\Tokens::$assignmentTokens;
+                                $disallowed += array(
+                                                T_VARIABLE         => true,
+                                                T_OBJECT_OPERATOR  => true,
+                                                T_COMMA            => true,
+                                                T_OPEN_PARENTHESIS => true,
+                                               );
+
+                                if (isset($disallowed[$this->tokens[$x]['code']]) === true) {
                                     if (PHP_CODESNIFFER_VERBOSITY > 1) {
                                         echo str_repeat("\t", $depth);
                                         echo '* ignoring curly brace *'.PHP_EOL;
                                     }
 
                                     $ignore++;
-                                }//end if
+                                }
 
                                 break;
                             }//end if

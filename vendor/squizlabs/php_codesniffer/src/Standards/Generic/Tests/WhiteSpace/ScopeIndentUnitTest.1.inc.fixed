@@ -242,14 +242,14 @@ without indenting.
 
 if ($condition) {
     echo 'This is a long
-    string that spans nultiple lines
+    string that spans multiple lines
     with indenting.
     ';
 }
 
 if ($condition) {
     echo 'This is a long
-          string that spans nultiple lines
+          string that spans multiple lines
           with indenting.';
 }
 
@@ -1167,6 +1167,20 @@ $foo = foo(
         }
     }
 );
+
+function test()
+{
+    $array = [];
+    foreach ($array as $data) {
+        [
+            'key1' => $var1,
+            'key2' => $var2,
+        ] = $data;
+        foreach ($var1 as $method) {
+            echo $method . $var2;
+        }
+    }
+}
 
 function foo()
 {

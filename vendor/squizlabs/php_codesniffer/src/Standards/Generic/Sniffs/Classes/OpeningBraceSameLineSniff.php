@@ -43,9 +43,9 @@ class OpeningBraceSameLineSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens           = $phpcsFile->getTokens();
-        $scope_identifier = $phpcsFile->findNext(T_STRING, ($stackPtr + 1));
-        $errorData        = array(strtolower($tokens[$stackPtr]['content']).' '.$tokens[$scope_identifier]['content']);
+        $tokens          = $phpcsFile->getTokens();
+        $scopeIdentifier = $phpcsFile->findNext(T_STRING, ($stackPtr + 1));
+        $errorData       = array(strtolower($tokens[$stackPtr]['content']).' '.$tokens[$scopeIdentifier]['content']);
 
         if (isset($tokens[$stackPtr]['scope_opener']) === false) {
             $error = 'Possible parse error: %s missing opening or closing brace';
@@ -56,7 +56,7 @@ class OpeningBraceSameLineSniff implements Sniff
         $openingBrace = $tokens[$stackPtr]['scope_opener'];
 
         // Is the brace on the same line as the class/interface/trait declaration ?
-        $lastClassLineToken = $phpcsFile->findPrevious(T_STRING, ($openingBrace - 1), $stackPtr);
+        $lastClassLineToken = $phpcsFile->findPrevious(T_WHITESPACE, ($openingBrace - 1), $stackPtr, true);
         $lastClassLine      = $tokens[$lastClassLineToken]['line'];
         $braceLine          = $tokens[$openingBrace]['line'];
         $lineDifference     = ($braceLine - $lastClassLine);
