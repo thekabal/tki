@@ -12,9 +12,9 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
         'e7a6fd2e7a869bb207158e9416bdd9b0' => __DIR__ . '/..' . '/nette/application/src/compatibility.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
-        'a7bea2b758e2dc42e25f476fd498182e' => __DIR__ . '/..' . '/symfony/polyfill-xml/bootstrap.php',
-        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '5c07e51810209209735cf7390eb0937b' => __DIR__ . '/..' . '/nette/deprecated/src/loader.php',
+        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
         'bf9f5270ae66ac6fa0290b4bf47867b7' => __DIR__ . '/..' . '/adodb/adodb-php/adodb.inc.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
@@ -36,7 +36,7 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
         ),
         'S' => 
         array (
-            'Symfony\\Polyfill\\Xml\\' => 21,
+            'Symfony\\Polyfill\\Php72\\' => 23,
             'Symfony\\Polyfill\\Php70\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Stopwatch\\' => 28,
@@ -90,9 +90,9 @@ class ComposerStaticInite36ead10c20441e98275f0cd8108b3d6
             1 => __DIR__ . '/../..' . '/tests',
             2 => __DIR__ . '/../..' . '/config',
         ),
-        'Symfony\\Polyfill\\Xml\\' => 
+        'Symfony\\Polyfill\\Php72\\' => 
         array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-xml',
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
         ),
         'Symfony\\Polyfill\\Php70\\' => 
         array (
