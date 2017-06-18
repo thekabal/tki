@@ -17,7 +17,8 @@
 // File: create_universe/10.php
 
 // Determine current step, next step, and number of steps
-$create_universe_info = Tki\BigBang::findStep(__FILE__);
+$step_finder = new Tki\BigBang;
+$create_universe_info = $step_finder->findStep(__FILE__);
 
 // Pull in the set config variables so we can get the correct sector max
 $ini_keys = parse_ini_file("config/classic_config.ini", true);
