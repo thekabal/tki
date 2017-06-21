@@ -233,12 +233,12 @@ $admin_ip = '1.1.1.1';
 $admin_recovery_time = null;
 $admin_sector = 1;
 $admin_last_login = date("Y-m-d H:i:s");
-$admin_hashed_password = password_hash(\Tki\SecureConfig::ADMIN_PASS, PASSWORD_DEFAULT);
+$admin_hashed_pw = password_hash(\Tki\SecureConfig::ADMIN_PASS, PASSWORD_DEFAULT);
 
 $stmt->bindParam(':ship_name', $tkireg->admin_ship_name, \PDO::PARAM_STR);
 $stmt->bindParam(':ship_destroyed', $admin_ship_destr, \PDO::PARAM_STR);
 $stmt->bindParam(':character_name', $tkireg->admin_name, \PDO::PARAM_STR);
-$stmt->bindParam(':password', $admin_hashed_password, \PDO::PARAM_STR);
+$stmt->bindParam(':password', $admin_hashed_pw, \PDO::PARAM_STR);
 $stmt->bindParam(':recovery_time', $admin_recovery_time, \PDO::PARAM_NULL);
 $stmt->bindParam(':email', $tkireg->admin_mail, PDO::PARAM_STR);
 $stmt->bindParam(':turns', $tkireg->start_turns, \PDO::PARAM_INT);
