@@ -63,7 +63,7 @@ class TkiPDO extends \PDO
 
     protected function tablePrefix(string $statement): string
     {
-        $statement_with_prefix = str_replace('::prefix::', $this->table_prefix, $statement);
-        return (string) $statement_with_prefix;
+        $stmt_with_prefix = str_replace('::prefix::', $this->table_prefix, $statement);
+        return (string) $stmt_with_prefix;
     }
 }
