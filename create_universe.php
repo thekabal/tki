@@ -55,7 +55,6 @@ else // If swordfish is set and matches (good pass)
     $variables['goodpass'] = true;
     if ($step !== null && $step !== 1) // We've got a good pass, and its not step 1
     {
-
         // Determine current step, next step, and number of steps
         $step_finder = new Tki\BigBang;
         $create_universe_info = $step_finder->findStep('');
