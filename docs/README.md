@@ -2,15 +2,15 @@
 
 The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 
-[![Dependency Status](https://www.versioneye.com/user/projects/57796f3468ee07003cb5d764/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57796f3468ee07003cb5d764)
-![PHP7 ready](https://img.shields.io/badge/PHP7-ready-green.svg)
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/124/badge)](https://bestpractices.coreinfrastructure.org/projects/124)
-[![GitHub stars](https://img.shields.io/github/stars/thekabal/tki.svg)](https://github.com/thekabal/tki/stargazers)
+[![PHP7 ready](https://img.shields.io/badge/PHP7-ready-green.svg)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
-[![GitHub issues](https://img.shields.io/github/issues/thekabal/tki.svg)](https://github.com/thekabal/tki/issues)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3c726484ea8845da8b11399d26792dcb)](https://www.codacy.com/app/thekabal/tki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekabal/tki&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thekabal/tki/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/thekabal/tki/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1efef371-bff2-4809-a330-5470a0e7b9fa/mini.png)](https://insight.sensiolabs.com/projects/1efef371-bff2-4809-a330-5470a0e7b9fa)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3c726484ea8845da8b11399d26792dcb)](https://www.codacy.com/app/thekabal/tki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekabal/tki&amp;utm_campaign=Badge_Grade)
+[![Dependency Status](https://www.versioneye.com/user/projects/57796f3468ee07003cb5d764/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57796f3468ee07003cb5d764)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/124/badge)](https://bestpractices.coreinfrastructure.org/projects/124)
+[![GitHub stars](https://img.shields.io/github/stars/thekabal/tki.svg)](https://github.com/thekabal/tki/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/thekabal/tki.svg)](https://github.com/thekabal/tki/issues)
 
 ## What is it?
     A web based space exploration (4x) game based on the old BBS door games that went
