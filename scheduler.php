@@ -164,7 +164,8 @@ else
     if (abs($schedDiff) > ($tkireg->sched_ticks * 60))
     {
         // Hmmm, seems that we have missed at least 1 update, so log it to the admin.
-        Tki\AdminLog::writeLog($pdo_db, 2468, "Detected Scheduler Issue|{$lastRun}|". time() . "|" . (time() - ($tkireg->sched_ticks * 60)) . "|{$schedDiff}|" . serialize($lastrunList));
+        $admin_log = new Tki\AdminLog;
+        $admin_log->writeLog($pdo_db, 2468, "Detected Scheduler Issue|{$lastRun}|". time() . "|" . (time() - ($tkireg->sched_ticks * 60)) . "|{$schedDiff}|" . serialize($lastrunList));
     }
 
     $runtime = time() - $starttime;

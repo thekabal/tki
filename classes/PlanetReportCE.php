@@ -61,7 +61,8 @@ class PlanetReportCE
                 $ip = $request->query->get('REMOTE_ADDR');
                 $planet_id = $res->fields['planet_id'];
                 $sector_id = $res->fields['sector_id'];
-                \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
+                $admin_log = new AdminLog;
+                $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
                 break;
             }
         }

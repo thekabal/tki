@@ -51,6 +51,7 @@ class PlanetProduction
         //  This should patch the game to prevent being hacked with the planet hack.
 
         $request = Request::createFromGlobals();
+        $admin_log = new AdminLog;
 
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
@@ -79,7 +80,7 @@ class PlanetProduction
                             $planet_hack = true;
                             $hack_id = 0x18582;
                             $hack_count[0]++;
-                            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
+                            $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
                         }
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET {$commod_type} = ? WHERE planet_id = ? AND owner = ?;", array($prodpercent, $planet_id, $ship_id));
@@ -119,7 +120,7 @@ class PlanetProduction
                             $planet_hack = true;
                             $hack_id = 0x18531;
                             $hack_count[1]++;
-                            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$prodpercent}|{$ship_id}|{$prodpercentarray['team_id']} not {$team_id}");
+                            $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$prodpercent}|{$ship_id}|{$prodpercentarray['team_id']} not {$team_id}");
                         }
                     }
                     else
@@ -128,7 +129,7 @@ class PlanetProduction
                         $planet_hack = true;
                         $hack_id = 0x18598;
                         $hack_count[2]++;
-                        \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
+                        $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
                     }
                 }
             }
@@ -137,7 +138,7 @@ class PlanetProduction
         if ($planet_hack)
         {
             $serial_data = serialize($prodpercentarray);
-            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT + 1000, "{$ship_id}|{$serial_data}");
+            $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT + 1000, "{$ship_id}|{$serial_data}");
             printf("<font color=\"red\"><strong>Your Cheat has been logged to the admin (%08x) [%02X:%02X:%02X].</strong></font><br>\n", $hack_id, $hack_count[0], $hack_count[1], $hack_count[2]);
         }
 
