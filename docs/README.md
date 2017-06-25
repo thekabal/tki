@@ -10,6 +10,7 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 [![GitHub issues](https://img.shields.io/github/issues/thekabal/tki.svg)](https://github.com/thekabal/tki/issues)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thekabal/tki/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/thekabal/tki/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1efef371-bff2-4809-a330-5470a0e7b9fa/mini.png)](https://insight.sensiolabs.com/projects/1efef371-bff2-4809-a330-5470a0e7b9fa)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3c726484ea8845da8b11399d26792dcb)](https://www.codacy.com/app/thekabal/tki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekabal/tki&amp;utm_campaign=Badge_Grade)
 
 ## What is it?
     A web based space exploration (4x) game based on the old BBS door games that went
