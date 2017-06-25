@@ -95,9 +95,7 @@ class Character
         $stmt->execute();
     }
 
-    // Choosing to use a method instead of a property.
-    // If we went with a method, and it needed to be changed, we would have to change lots of property->method calls.
-    public static function getInsignia(\PDO $pdo_db, string $a_username, array $langvars) : string
+    public function getInsignia(\PDO $pdo_db, string $a_username, array $langvars) : string
     {
         // Lookup players score.
         $sql = "SELECT score FROM ::prefix::ships WHERE email =:email";

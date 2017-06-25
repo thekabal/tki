@@ -125,7 +125,8 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         }
 
         // Set the characters Insignia.
-        $row['insignia'] = Tki\Character::getInsignia($pdo_db, $row['email'], $langvars);
+        $insignia = new Tki\Character;
+        $row['insignia'] = $insignia->getInsignia($pdo_db, $row['email'], $langvars);
 
         // This is just to show that we can set the type of player.
         // like: banned, admin, player, npc etc.
