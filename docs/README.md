@@ -2,7 +2,7 @@
 
 The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 
-[![PHP7 ready](https://img.shields.io/badge/PHP7-ready-green.svg)
+![PHP7 ready](https://img.shields.io/badge/PHP7-ready-green.svg)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3c726484ea8845da8b11399d26792dcb)](https://www.codacy.com/app/thekabal/tki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekabal/tki&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thekabal/tki/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/thekabal/tki/?branch=master)
