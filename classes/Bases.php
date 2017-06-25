@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Bases
 {
-    public static function buildBase(\PDO $pdo_db, array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
+    public function buildBase(\PDO $pdo_db, array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
     {
         $request = Request::createFromGlobals();
 
