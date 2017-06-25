@@ -36,6 +36,7 @@ class KabalTo
         $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
+        $character_object = new Character;
 
         // Planet beams
         $targetbeams = \Tki\CalcLevels::beams($ownerinfo['beams'] + $base_factor, $tkireg);
@@ -261,7 +262,7 @@ class KabalTo
         if (!$attackerarmor > 0) // Check if attackers ship destroyed
         {
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
-            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
@@ -343,6 +344,7 @@ class KabalTo
     {
         $armor_lost = null;
         $fighters_lost = null;
+        $character_object = new Character;
 
         // Lookup target details
         $resultt = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
@@ -657,7 +659,7 @@ class KabalTo
             // Target had no pod
             {
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Kabal $playerinfo[character_name]|N");
-                \Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
             }
 
             if ($attackerarmor > 0)
@@ -746,7 +748,7 @@ class KabalTo
         if (!$attackerarmor > 0)
         {
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "$targetinfo[character_name] destroyed your ship!");
-            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
             if ($targetarmor > 0)
             {
                 // Target still alive to salvage attacker
@@ -816,6 +818,8 @@ class KabalTo
 
     public static function secDef(\PDO $pdo_db, $db, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg): void
     {
+        $character_object = new Character;
+
         // Check for sector defenses
         if ($targetlink > 0)
         {
@@ -980,7 +984,7 @@ class KabalTo
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                    \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                    $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     return;
                 }
 
@@ -1020,7 +1024,7 @@ class KabalTo
 
                             // Actually kill the Kabal now
                             \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
                             // Lets get rid of the mines now and return
                             \Tki\Mines::explode($pdo_db, $targetlink, $roll);

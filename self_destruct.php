@@ -62,7 +62,8 @@ elseif ($sure == 2)
     echo $langvars['l_die_vapor'] . "<br><br>";
     $langvars['l_die_please'] = str_replace("[logout]", "<a href='logout.php'>" . $langvars['l_logout'] . "</a>", $langvars['l_die_please']);
     echo $langvars['l_die_please'] . "<br>";
-    Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, true);
+    $character_object = new Tki\Character;
+    $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, true);
     Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
 
     $admin_log = new Tki\AdminLog;
