@@ -15,7 +15,8 @@
         "swiftmailer/swiftmailer": "^6.0.0",
         "adodb/adodb-php": "v5.20.9",
         "symfony/http-foundation": "^3.2.0",
-        "phpstan/phpstan": "^0.6"
+        "phpstan/phpstan": "^0.6",
+        "phpmetrics/phpmetrics": "^2.2"
     },
     "require-dev": {
             "phpmd/phpmd" : "^2.6.0",
