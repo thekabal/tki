@@ -19,14 +19,10 @@
 
 namespace Tki;
 
-use Symfony\Component\HttpFoundation\Request;
-
 class PlanetReportCE
 {
     public static function collectCredits(\PDO $pdo_db, $db, array $langvars, array $planetarray, Reg $tkireg): void
     {
-        $request = Request::createFromGlobals();
-
         $CS = "GO"; // Current State
 
         // Look up the info for the player that wants to collect the credits.

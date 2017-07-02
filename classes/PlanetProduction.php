@@ -19,8 +19,6 @@
 
 namespace Tki;
 
-use Symfony\Component\HttpFoundation\Request;
-
 class PlanetProduction
 {
     public static function productionChange(\PDO $pdo_db, $db, array $langvars, array $prodpercentarray, Reg $tkireg): void
@@ -48,7 +46,6 @@ class PlanetProduction
         //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
         //  This would save us from having to run through the database a second time checking our work.
 
-        $request = Request::createFromGlobals();
         $admin_log = new AdminLog;
 
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));

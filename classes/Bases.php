@@ -19,14 +19,10 @@
 
 namespace Tki;
 
-use Symfony\Component\HttpFoundation\Request;
-
 class Bases
 {
     public function buildBase(\PDO $pdo_db, array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
     {
-        $request = Request::createFromGlobals();
-
         echo "<br>";
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_status']);
         echo "<br><br>";
