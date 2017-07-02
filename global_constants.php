@@ -79,6 +79,3 @@ const ID_WATCH = 0x00;                  // Player flagged as being watched.
 const ID_LOCKED = 0x01;                 // Player flagged as being Locked.
 const IP_BAN = 0x04;                    // Player flagged as banned by IP Address.
 const MULTI_BAN = 0x05;                 // Player flagged as banned by either IP or ShipID.
-
-// Adodb specific defines
-const ADODB_PERF_NO_RUN_SQL = 1;        // Do not allow SQL to be run from the performance monitor page
