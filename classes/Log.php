@@ -327,13 +327,6 @@ class Log
                 $retvalue['title'] = "<font color=red>" . $retvalue['title'] . "</font>";
                 break;
 
-            case LOG_MULTI_BROWSER:
-                // Multi Browser Logs.
-                list ($ship_ip, $ship_id, $info) = explode("|", $entry['data']);
-                $retvalue['text'] = "Account: <span style='color:#ff0;'>{$ship_id}</span> with IP: '<span style='color:#ff0;'>{$ship_ip}</span>' <span style='color:#fff;'>{$info}</span>";
-                $retvalue['title'] = "Possible Multi Browser Attempt.";
-                break;
-
             case LOG_ATTACK_DEBUG:
                 // Attack debug logs
                 if (count(explode("|", $entry['data'])) == 7)

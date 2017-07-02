@@ -73,7 +73,6 @@ const LOG_BOUNTY_FEDBOUNTY = 52;        // Sent when the federation places a bou
 const LOG_PLANET_BOMBED = 53;           // Sent after bombing a planet
 const LOG_ADMIN_ILLEGVALUE = 54;        // Sent to admin on planet destruction instead of capture
 const LOG_ATTACK_DEBUG = 56;            // Log attack debug information
-const LOG_MULTI_BROWSER = 57;           // Sent when we have detected a multi-browser hack attempt
 
 // Ban system defines
 const ID_WATCH = 0x00;                  // Player flagged as being watched.
