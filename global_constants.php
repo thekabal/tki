@@ -77,4 +77,3 @@ const LOG_ATTACK_DEBUG = 56;            // Log attack debug information
 // Ban system defines
 const ID_LOCKED = 0x01;                 // Player flagged as being Locked.
 const IP_BAN = 0x04;                    // Player flagged as banned by IP Address.
-const MULTI_BAN = 0x05;                 // Player flagged as banned by either IP or ShipID.
