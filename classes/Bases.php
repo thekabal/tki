@@ -54,17 +54,13 @@ class Bases
             return (bool) false;
         }
 
-        if (!is_numeric($planet_id) || !is_numeric($sector_id))
+        if (!is_numeric($planet_id) || !is_numeric($sector_id)) // Old admin planet cheat - simply prevent it.
         {
-            $ip = $request->query->get('REMOTE_ADDR');
-            $hack_id = 0x1337;
-            $admin_log = new AdminLog;
-            $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
-
             return (bool) false;
-        }  // Build a base
+        }
 
+        // Build a base
         \Tki\Realspace::realSpaceMove($pdo_db, $langvars, $sector_id, $tkireg);
         echo "<br>";
         echo str_replace("[here]", "<a href='planet.php?planet_id=$planet_id'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_planet']);

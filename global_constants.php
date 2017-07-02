@@ -72,7 +72,6 @@ const LOG_PLASMA_STORM = 51;            // Sent when a plasma storm attacks a pl
 const LOG_BOUNTY_FEDBOUNTY = 52;        // Sent when the federation places a bounty on a player
 const LOG_PLANET_BOMBED = 53;           // Sent after bombing a planet
 const LOG_ADMIN_ILLEGVALUE = 54;        // Sent to admin on planet destruction instead of capture
-const LOG_ADMIN_PLANETCHEAT = 55;       // Sent to admin due to planet hack (hack_id, ip, planet_id, ship_id)
 const LOG_ATTACK_DEBUG = 56;            // Log attack debug information
 const LOG_MULTI_BROWSER = 57;           // Sent when we have detected a multi-browser hack attempt
 

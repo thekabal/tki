@@ -74,14 +74,6 @@ class PlanetProduction
                     {
                         $res = $db->Execute("SELECT COUNT(*) AS owned_planet FROM {$db->prefix}planets WHERE planet_id = ? AND owner = ?;", array($planet_id, $ship_id));
                         \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                        if ($res->fields['owned_planet'] == 0)
-                        {
-                            $ip = $request->query->get('REMOTE_ADDR');
-                            $planet_hack = true;
-                            $hack_id = 0x18582;
-                            $hack_count[0]++;
-                            $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
-                        }
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET {$commod_type} = ? WHERE planet_id = ? AND owner = ?;", array($prodpercent, $planet_id, $ship_id));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
@@ -113,33 +105,9 @@ class PlanetProduction
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = ? WHERE planet_id = ? AND owner = ?;", array($team_id, $prodpercent, $ship_id));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        if (array_key_exists("team_id", $prodpercentarray) === true && $prodpercentarray['team_id'] != $team_id)
-                        {
-                            // They are different so send admin a log
-                            $ip = $request->query->get('REMOTE_ADDR');
-                            $planet_hack = true;
-                            $hack_id = 0x18531;
-                            $hack_count[1]++;
-                            $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$prodpercent}|{$ship_id}|{$prodpercentarray['team_id']} not {$team_id}");
-                        }
-                    }
-                    else
-                    {
-                        $ip = $request->query->get('REMOTE_ADDR');
-                        $planet_hack = true;
-                        $hack_id = 0x18598;
-                        $hack_count[2]++;
-                        $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
                     }
                 }
             }
-        }
-
-        if ($planet_hack)
-        {
-            $serial_data = serialize($prodpercentarray);
-            $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT + 1000, "{$ship_id}|{$serial_data}");
-            printf("<font color=\"red\"><strong>Your Cheat has been logged to the admin (%08x) [%02X:%02X:%02X].</strong></font><br>\n", $hack_id, $hack_count[0], $hack_count[1], $hack_count[2]);
         }
 
         echo "<br>";

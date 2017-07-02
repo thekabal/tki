@@ -55,16 +55,6 @@ class PlanetReportCE
             {
                 $s_p_pair[$i] = array($res->fields['sector_id'], $planetarray[$i]);
             }
-            else
-            {
-                $hack_id = 20100401;
-                $ip = $request->query->get('REMOTE_ADDR');
-                $planet_id = $res->fields['planet_id'];
-                $sector_id = $res->fields['sector_id'];
-                $admin_log = new AdminLog;
-                $admin_log->writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$sector_id}|{$playerinfo['ship_id']}");
-                break;
-            }
         }
 
         // Sort the array so that it is in order of sectors, lowest number first, not closest
