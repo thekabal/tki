@@ -3,7 +3,7 @@
 _**This file is a brief introduction for aspiring developers to help you find your place in the code.**_
 
 TKI forked from a codebase started in pre-PHP4 days (over a decade of development now!), and many things are a work in 
-progress. We actively work to improve the code, and that process takes time. We are now (in 2013) getting to a 
+progress. We actively work to improve the code, and that process takes time. We are now (in 2017) getting to a 
 relatively good position for most of the major initiatives. Global variables have been eliminated, classes are being 
 auto-loaded where possible, files are being converted to use templates for output.. the list goes on.
 
