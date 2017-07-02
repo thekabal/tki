@@ -180,11 +180,7 @@ if ($playerfound)
         else
         {
             echo "<div style='font-size:18px; color:#FF0000;'>\n";
-            if (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] == ID_LOCKED)
-            {
-                echo "Your account has been Locked";
-            }
-            else
+            if (array_key_exists('ban_type', $ban_result))
             {
                 echo "Your account has been Banned";
             }

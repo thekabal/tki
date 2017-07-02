@@ -73,7 +73,3 @@ const LOG_BOUNTY_FEDBOUNTY = 52;        // Sent when the federation places a bou
 const LOG_PLANET_BOMBED = 53;           // Sent after bombing a planet
 const LOG_ADMIN_ILLEGVALUE = 54;        // Sent to admin on planet destruction instead of capture
 const LOG_ATTACK_DEBUG = 56;            // Log attack debug information
-
-// Ban system defines
-const ID_LOCKED = 0x01;                 // Player flagged as being Locked.
-const IP_BAN = 0x04;                    // Player flagged as banned by IP Address.

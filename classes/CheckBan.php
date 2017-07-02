@@ -32,9 +32,8 @@ class CheckBan
         $request = Request::createFromGlobals();
 
         // Check for IP Ban
-        $sql = "SELECT * FROM ::prefix::bans WHERE (ban_type = :ban_type AND ban_mask = :ban_mask1) OR (ban_mask = :ban_mask2)";
+        $sql = "SELECT * FROM ::prefix::bans WHERE ban_mask = :ban_mask1 OR ban_mask = :ban_mask2";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindValue(':ban_type', IP_BAN, \PDO::PARAM_INT);
         $stmt->bindParam(':ban_mask1', $playerinfo['ip_address'], \PDO::PARAM_STR);
         $stmt->bindParam(':ban_mask2', $playerinfo['ip_address'], \PDO::PARAM_STR);
         $stmt->execute();
