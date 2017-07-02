@@ -48,18 +48,12 @@ class PlanetProduction
         //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
         //  This would save us from having to run through the database a second time checking our work.
 
-        //  This should patch the game to prevent being hacked with the planet hack.
-
         $request = Request::createFromGlobals();
         $admin_log = new AdminLog;
 
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $ship_id = $result->fields['ship_id'];
-
-        $planet_hack = false;
-        $hack_id = 0x0000;
-        $hack_count = array(0, 0, 0);
 
         echo str_replace("[here]", "<a href='planet_report.php?preptype=2'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_prod']);
         echo "<br><br>";

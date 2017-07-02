@@ -142,7 +142,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         // Check for banned players.
         $ban_result = Tki\CheckBan::isBanned($pdo_db, $row);
 
-        if ($ban_result === false || (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
+        if ($ban_result === false)
         {
             $row['banned'] = (bool) false;
             $row['ban_info'] = null;
