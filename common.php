@@ -73,7 +73,15 @@ if ($pdo_db !== null)
 }
 
 $langvars = null;                                  // Language variables in every page, set them to a null value first
-$template = new \Tki\Smarty();
+try
+{
+    $template = new \Tki\Smarty();
+}
+catch (Exception $e)
+{
+    die($e);
+}
+
 $template->setTheme($tkireg->default_template);
 
 if ($pdo_db !== null && Tki\Db::isActive($pdo_db))

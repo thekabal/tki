@@ -26,7 +26,7 @@ class Login
         // Database driven language entries
         $langvars = Translate::load($pdo_db, $lang, array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
 
-        // Check if game is closed - Ignore the false return if it is open
+        // Check if game is closed
         Game::isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars);
 
         // Handle authentication check - Will die if fails, or return correct playerinfo
