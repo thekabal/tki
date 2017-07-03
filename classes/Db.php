@@ -98,7 +98,7 @@ class Db
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
                             ' Database.<br> Database Error: '. $db->ErrorNo() .
                             ': '. $db->ErrorMsg() .'<br>\n';
-                die($err_msg);
+                throw new \Exception($err_msg);
             }
 
             $db->prefix = $db_prefix;
@@ -130,7 +130,7 @@ class Db
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
                             ' Database.<br> Database Error: '.
                             $e->getMessage() . "<br>\n";
-                die($err_msg);
+                throw new \Exception($err_msg);
             }
 
             // Disable emulated prepares so that we get true prepared statements
