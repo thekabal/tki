@@ -649,7 +649,14 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         }
         elseif ($command == "bomb" && $tkireg->allow_sofa)
         {
-            Planet::bombing($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
+            try
+            {
+                Planet::bombing($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
+            }
+            catch (Exception $e)
+            {
+                die($e);
+            }
         }
         elseif ($command == "scan")
         {

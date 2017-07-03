@@ -53,7 +53,7 @@ class Planet
 
             $footer = new \Tki\Footer;
             $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
+            throw new \Exception();
         }
 
         echo $langvars['l_bombsaway'] . "<br><br>\n";
