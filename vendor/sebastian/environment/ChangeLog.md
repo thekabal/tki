@@ -2,6 +2,12 @@
 
 All notable changes in `sebastianbergmann/environment` are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [3.1.0] - 2017-07-01
+
+### Added
+
+* Implemented [#21](https://github.com/sebastianbergmann/environment/issues/21): Equivalent of `PHP_OS_FAMILY` (for PHP < 7.2) 
+
 ## [3.0.4] - 2017-06-20
 
 ### Fixed
@@ -36,6 +42,7 @@ All notable changes in `sebastianbergmann/environment` are documented in this fi
 
 * This component is no longer supported on PHP 5.6
 
+[3.1.0]: https://github.com/sebastianbergmann/phpunit/compare/3.0...3.1.0
 [3.0.4]: https://github.com/sebastianbergmann/phpunit/compare/3.0.3...3.0.4
 [3.0.3]: https://github.com/sebastianbergmann/phpunit/compare/3.0.2...3.0.3
 [3.0.2]: https://github.com/sebastianbergmann/phpunit/compare/3.0.1...3.0.2
