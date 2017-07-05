@@ -215,7 +215,6 @@ if (mb_strlen(trim($confirm)) === 0)
     $confirm = false;
 }
 
-
 if ($command == 'new')
 {
     // Displays new trade route form

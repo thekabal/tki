@@ -548,7 +548,7 @@ class Kabal
         }
     }
 
-    public static function regen(\PDO $pdo_db, array $playerinfo, $kabal_unemployment, Reg $tkireg): void
+    public static function regen(\PDO $pdo_db, array $playerinfo, int $kabal_unemployment, Reg $tkireg): void
     {
         $gena = null;
         $gene = null;

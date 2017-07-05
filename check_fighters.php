@@ -103,7 +103,7 @@ if ($num_defenses > 0 && $total_sector_fighters > 0 && !$owner)
             case "pay":
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                $fighterstoll = $total_sector_fighters * $fighter_price * 0.6;
+                $fighterstoll = (int) round($total_sector_fighters * $fighter_price * 0.6);
                 if ($playerinfo['credits'] < $fighterstoll)
                 {
                     echo $langvars['l_chf_notenoughcreditstoll'] . "<br>";
@@ -160,7 +160,7 @@ if ($num_defenses > 0 && $total_sector_fighters > 0 && !$owner)
                 $interface_string = $calledfrom . '?sector=' . $sector . '&destination=' . $destination . '&engage=' . $engage;
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ? WHERE ship_id = ?;", array($interface_string, $playerinfo['ship_id']));
                 Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                $fighterstoll = $total_sector_fighters * $fighter_price * 0.6;
+                $fighterstoll = (int) round($total_sector_fighters * $fighter_price * 0.6);
                 echo "<h1>" . $title . "</h1>\n";
                 echo "<form accept-charset='utf-8' action='{$calledfrom}' method='post'>";
                 $langvars['l_chf_therearetotalfightersindest'] = str_replace("[chf_total_sector_fighters]", $total_sector_fighters, $langvars['l_chf_therearetotalfightersindest']);

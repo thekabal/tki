@@ -21,7 +21,7 @@ namespace Tki;
 
 class TraderouteBuild
 {
-    public static function new(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
+    public static function new(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
@@ -402,7 +402,7 @@ class TraderouteBuild
         die();
     }
 
-    public static function create(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
+    public static function create(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
         $admin_log = new AdminLog;
