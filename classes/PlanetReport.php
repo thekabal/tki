@@ -21,7 +21,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function baseBuildCheck($langvars, Reg $tkireg, $planet, int $i): string
+    public static function baseBuildCheck(array $langvars, Reg $tkireg, array $planet, int $i): string
     {
         if($planet[$i]['base'] == 'Y')
         {
@@ -56,31 +56,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function teamPlanetCheckboxes(int $planet, $i) : string
-    {
-        if ($planet[$i]['team'] <= 0)
-        {
-            return "<input type='checkbox' name='team[" . $i . "]' value='" . $planet[$i]['planet_id'] ."' />";
-        }
-        elseif ($planet[$i]['team'] > 0)
-        {
-            return "<input type='checkbox' name='team[" . $i . "]' value='{" . $planet[$i]['planet_id'] . "' checked />";
-        }
-    }
-
-    public static function sellingCheckboxes(int $planet, $i) : string
-    {
-        if ($planet[$i]['sells'] != 'Y')
-        {
-            return "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' />";
-        }
-        elseif ($planet[$i]['sells'] == 'Y')
-        {
-            return "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' checked />";
-        }
-    }
-
-    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, $sort, Reg $tkireg): void
+    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, array $sort, Reg $tkireg): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
