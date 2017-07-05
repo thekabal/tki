@@ -23,30 +23,23 @@ class Ports
 {
     public static function getType(string $ptype, array $langvars) : string
     {
-        $ret = '';
         switch ($ptype)
         {
             case 'ore':
-                $ret = $langvars['l_ore'];
-                break;
+                return $langvars['l_ore'];
             case 'none':
-                $ret = $langvars['l_none'];
-                break;
+                return $langvars['l_none'];
             case 'energy':
-                $ret = $langvars['l_energy'];
-                break;
+                return $langvars['l_energy'];
             case 'organics':
-                $ret = $langvars['l_organics'];
-                break;
+                return $langvars['l_organics'];
             case 'goods':
-                $ret = $langvars['l_goods'];
-                break;
+                return $langvars['l_goods'];
             case 'special':
-                $ret = $langvars['l_special'];
-                break;
+                return $langvars['l_special'];
+            default:
+                return 'unknown';
         }
-
-        return (string) $ret;
     }
 
     public static function dropdown($element_name, $current_value, $onchange, $temp_devices) : string
