@@ -37,7 +37,7 @@ while (!$res->EOF)
         $resa = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defense_id = ? AND quantity > 0;", array($defense_degrade_rate, $row['defense_id']));
         Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
         $degrade_rate = $defense_degrade_rate * 100;
-        Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LogEnums::DEFENSE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
+        Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], \Tki\LogEnums::DEFENSE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
     }
     else
     {
@@ -64,7 +64,7 @@ while (!$res->EOF)
             $resc = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defense_id = ?;", array($defense_degrade_rate, $row['defense_id']));
             Tki\Db::LogDbErrors($pdo_db, $resc, __LINE__, __FILE__);
             $degrade_rate = $defense_degrade_rate * 100;
-            Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], LogEnums::DEFENSE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
+            Tki\PlayerLog::WriteLog($pdo_db, $row['ship_id'], \Tki\LogEnums::DEFENSE_DEGRADE, $row['sector_id'] ."|". $degrade_rate);
         }
     }
 

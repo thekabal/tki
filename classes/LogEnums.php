@@ -77,4 +77,5 @@ class LogEnums
     const PLANET_BOMBED = 53;           // Sent after bombing a planet
     const ADMIN_ILLEGVALUE = 54;        // Sent to admin on planet destruction instead of capture
     const ATTACK_DEBUG = 56;            // Log attack debug information
+    const ATTACK_WIN = 57;              // Missing log constant - who knew?!
 }
