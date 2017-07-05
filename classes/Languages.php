@@ -50,6 +50,8 @@ class Languages
                     case 'local_lang_name':
                         $list_of_langs[$langinfo['section']] = array_merge($list_of_langs[$langinfo['section']], array('lang_name' => $langinfo['value']));
                         break;
+                    default: // Future: Handle this better
+                        die('unknown switch/case');
                 }
             }
 
