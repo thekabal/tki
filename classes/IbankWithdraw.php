@@ -38,7 +38,7 @@ class IbankWithdraw
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, $amount, array $account, Reg $tkireg, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $amount, array $account, Reg $tkireg, Smarty $template): void
     {
         $amount = (int) preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)

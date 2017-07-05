@@ -419,7 +419,7 @@ class Kabal
         }
     }
 
-    public static function goHunt(\PDO $pdo_db, $db, array $playerinfo, $kabalisdead, array $langvars, Reg $tkireg): void
+    public static function goHunt(\PDO $pdo_db, $db, array $playerinfo, int $kabalisdead, array $langvars, Reg $tkireg): void
     {
         $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");

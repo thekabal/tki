@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ibank
 {
-    public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $account, $amount, Smarty $template): void
+    public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $account, int $amount, Smarty $template): void
     {
         $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
         $amount = (int) preg_replace("/[^0-9]/", '', $amount);
@@ -177,7 +177,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, array $account, $amount, Reg $tkireg, Smarty $template): void
+    public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, array $account, int $amount, Reg $tkireg, Smarty $template): void
     {
         $amount = (int) preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)

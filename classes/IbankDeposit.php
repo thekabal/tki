@@ -60,7 +60,7 @@ class IbankDeposit
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, $amount, array $account, Reg $tkireg, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $amount, array $account, Reg $tkireg, Smarty $template): void
     {
         $max_credits_allowed = 18446744073709000000;
 
