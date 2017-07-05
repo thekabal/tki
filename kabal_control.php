@@ -317,6 +317,7 @@ else
                             case LOG_ATTACK_WIN:
                                 $logtype = "We were attacked and won against ";
                                 break;
+                            default: // Defensive programming - FUTURE: Find a routine for this.
                         }
 
                         $logdatetime = mb_substr($logrow['time'], 4, 2) . "/" . mb_substr($logrow['time'], 6, 2) . "/" . mb_substr($logrow['time'], 0, 4) . " " . mb_substr($logrow['time'], 8, 2) . ":" . mb_substr($logrow['time'], 10, 2) . ":" . mb_substr($logrow['time'], 12, 2);
