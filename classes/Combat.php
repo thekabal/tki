@@ -501,12 +501,12 @@ class Combat
                 $update = $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|Y");
                 \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
             else
             {
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|N");
                 $character_object = new Character;
                 $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
                 \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
@@ -519,7 +519,7 @@ class Combat
             $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $target_energy = $targetinfo['ship_energy'];
-            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
 
             $sql = "UPDATE ::prefix::ships SET ship_energy = :target_energy, ship_fighters = ship_fighters - :target_fighters_lost, ";
             $sql .= "armor_pts = armor_pts - :target_armor_lost, torps = torps - :target_torp_num WHERE ship_id = :ship_id";

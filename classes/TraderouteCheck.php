@@ -29,7 +29,7 @@ class TraderouteCheck
         // Check circuit compatibility (we only use types 1 and 2 so block anything else)
         if ($circuit != "1" && $circuit != "2")
         {
-            $admin_log->writeLog($pdo_db, LOG_RAW, "{$playerinfo['ship_id']}|Tried to use an invalid circuit_type of '{$circuit}', This is normally a result from using an external page and should be banned.");
+            $admin_log->writeLog($pdo_db, LogEnums::RAW, "{$playerinfo['ship_id']}|Tried to use an invalid circuit_type of '{$circuit}', This is normally a result from using an external page and should be banned.");
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, "Invalid Circuit type!<br>*** Possible Exploit has been reported to the admin. ***");
         }
 

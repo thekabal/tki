@@ -32,7 +32,7 @@ class SectorDefense
         {
             foreach ($defense_present as $tmp_defense)
             {
-                PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LOG_RAW, $message);
+                PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LogEnums::RAW, $message);
             }
         }
     }

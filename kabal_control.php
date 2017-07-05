@@ -308,13 +308,13 @@ else
                         $logtype = null;
                         switch ($logrow['type'])
                         {
-                            case LOG_kabal_ATTACK:
+                            case \Tki\LogEnums::KABAL_ATTACK:
                                 $logtype = "Launching an attack on ";
                                 break;
-                            case LOG_ATTACK_LOSE:
+                            case \Tki\LogEnums::ATTACK_LOSE:
                                 $logtype = "We were attacked and lost against ";
                                 break;
-                            case LOG_ATTACK_WIN:
+                            case \Tki\LogEnums::ATTACK_WIN:
                                 $logtype = "We were attacked and won against ";
                                 break;
                             default: // Defensive programming - FUTURE: Find a routine for this.

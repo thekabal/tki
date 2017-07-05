@@ -115,10 +115,10 @@ if (empty($startdate))
     $startdate = date("Y-m-d");
 }
 
-$sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
+$sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE :start_date ORDER BY time DESC, type DESC";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-$stmt->bindParam(':start_date', $startdate, PDO::PARAM_STR);
+$stmt->bindValue(':start_date', $startdate . '%');
 $stmt->execute();
 $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

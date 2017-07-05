@@ -17,7 +17,6 @@
 //
 // File: common.php
 require_once './vendor/autoload.php';              // Load the auto-loader
-require_once './global_constants.php';             // Defines used in many places
 mb_http_output('UTF-8');                           // Our output should be served in UTF-8 no matter what.
 mb_internal_encoding('UTF-8');                     // We are explicitly UTF-8, with Unicode language variables.
 ini_set('include_path', '.');                      // Set include path to avoid issues on a few platforms

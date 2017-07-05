@@ -177,7 +177,7 @@ class Db
                 if ($db_log)
                 {
                     $admin_log = new \Tki\AdminLog;
-                    $admin_log->writeLog($pdo_db, LOG_RAW, $text_error);
+                    $admin_log->writeLog($pdo_db, LogEnums::RAW, $text_error);
                 }
             }
 

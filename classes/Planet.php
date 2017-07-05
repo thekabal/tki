@@ -115,7 +115,7 @@ class Planet
         }
 
         echo "<br><br>\n";
-        \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
+        \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
 
         $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1, ship_fighters = ship_fighters - :ship_fighters WHERE ship_id=:ship_id");
         $stmt->bindParam(':ship_fighters', $attackerfighters, \PDO::PARAM_INT);

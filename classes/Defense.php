@@ -62,8 +62,8 @@ class Defense
                             $stmt->bindParam(':defense_id', $tmp_defense['sector_id'], \PDO::PARAM_INT);
                             $stmt->execute();
 
-                            PlayerLog::writeLog($pdo_db, $tmp_other_defense['ship_id'], LOG_DEFS_DESTROYED, $tmp_other_defense['quantity'] .'|'. $targetdeftype .'|'. $tmp_defense['sector_id']);
-                            PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LOG_DEFS_DESTROYED, $tmp_other_defense['quantity'] .'|'. $deftype .'|'. $tmp_defense['sector_id']);
+                            PlayerLog::writeLog($pdo_db, $tmp_other_defense['ship_id'], LogEnums::DEFS_DESTROYED, $tmp_other_defense['quantity'] .'|'. $targetdeftype .'|'. $tmp_defense['sector_id']);
+                            PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LogEnums::DEFS_DESTROYED, $tmp_other_defense['quantity'] .'|'. $deftype .'|'. $tmp_defense['sector_id']);
                         }
                         else
                         {
@@ -78,8 +78,8 @@ class Defense
                             $stmt->bindParam(':defense_id', $tmp_other_defense['defense_id'], \PDO::PARAM_INT);
                             $stmt->execute();
 
-                            PlayerLog::writeLog($pdo_db, $tmp_other_defense['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $targetdeftype .'|'. $tmp_defense['sector_id']);
-                            PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LOG_DEFS_DESTROYED, $qty .'|'. $deftype .'|'. $tmp_defense['sector_id']);
+                            PlayerLog::writeLog($pdo_db, $tmp_other_defense['ship_id'], LogEnums::DEFS_DESTROYED, $qty .'|'. $targetdeftype .'|'. $tmp_defense['sector_id']);
+                            PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LogEnums::DEFS_DESTROYED, $qty .'|'. $deftype .'|'. $tmp_defense['sector_id']);
                             $qty = 0;
                         }
                     }
