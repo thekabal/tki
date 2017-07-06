@@ -45,7 +45,6 @@ class File
         {
             foreach ($config_line as $config_key => $type_n_value)
             {
-                $j++;
                 if (mb_strpos($ini_file, '_config') !== false)
                 {
                     // Import all the variables into the registry
@@ -82,7 +81,7 @@ class File
                 }
 
                 $result = $stmt->execute();
-                $status_array[$j] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+                $status_array[$j++] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             }
         }
 
