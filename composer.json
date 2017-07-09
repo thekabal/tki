@@ -14,10 +14,7 @@
         "ezyang/htmlpurifier": "^4.8.0",
         "swiftmailer/swiftmailer": "^6.0.0",
         "adodb/adodb-php": "v5.20.9",
-        "symfony/http-foundation": "^3.3.2",
-        "phpstan/phpstan": "^0.6",
-        "phpmetrics/phpmetrics": "^2.2",
-        "edsonmedina/php_testability": "dev-master"
+        "symfony/http-foundation": "^3.3.2"
     },
     "require-dev": {
         "phpmd/phpmd" : "^2.6.0",
@@ -26,7 +23,10 @@
         "nette/nette": "^2.4.0",
         "squizlabs/PHP_CodeSniffer": "3.0.1",
         "phpunit/phpunit": "^6.0.8",
-        "povils/phpmnd": "^1.0"
+        "povils/phpmnd": "^1.0",
+        "edsonmedina/php_testability": "dev-master",
+        "phpstan/phpstan": "^0.6",
+        "phpmetrics/phpmetrics": "^2.2"
     },
     "autoload": {
         "psr-4": { "Tki\\": ["classes/", "tests/", "config/"]}
