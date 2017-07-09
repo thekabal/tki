@@ -14,7 +14,9 @@
         "ezyang/htmlpurifier": "^4.8.0",
         "swiftmailer/swiftmailer": "^6.0.0",
         "adodb/adodb-php": "v5.20.9",
-        "symfony/http-foundation": "^3.3.2"
+        "symfony/http-foundation": "^3.3.2",
+        "ext-PDO": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "phpmd/phpmd" : "^2.6.0",
