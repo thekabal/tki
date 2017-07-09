@@ -16,7 +16,8 @@
         "adodb/adodb-php": "v5.20.9",
         "symfony/http-foundation": "^3.3.2",
         "phpstan/phpstan": "^0.6",
-        "phpmetrics/phpmetrics": "^2.2"
+        "phpmetrics/phpmetrics": "^2.2",
+        "edsonmedina/php_testability": "dev-master"
     },
     "require-dev": {
         "phpmd/phpmd" : "^2.6.0",
