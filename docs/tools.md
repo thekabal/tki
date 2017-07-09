@@ -30,7 +30,7 @@ found in the `/vendor/bin` directory.
 
 - [`tki-code-check.sh`] is a short bash script which is located in vendor/bin.
   It runs phpmd, phpcs, and phpstan with our project coding standards defined.
-  *We now test all code against these three tools.*
+  **We now test all code against these three tools.**
 
 - [`php-cs-fixer`](http://cs.sensiolabs.org/) strives to automatically correct
   code for specific items in the PSR standard. We do not currently use it, but
