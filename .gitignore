@@ -1,4 +1,10 @@
-vendor/
+vendor/*
+!vendor/bin
+vendor/bin/*
+!vendor/bin/phpstan.neon
+!vendor/bin/phpmd.xml
+!vendor/bin/phpcs.xml
+
 templates/_compile
 vendor/smarty/smarty/.svn/
 
