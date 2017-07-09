@@ -1,3 +1,4 @@
+vendor/
 templates/_compile
 vendor/smarty/smarty/.svn/
 
