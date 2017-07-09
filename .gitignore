@@ -4,6 +4,7 @@ vendor/bin/*
 !vendor/bin/phpstan.neon
 !vendor/bin/phpmd.xml
 !vendor/bin/phpcs.xml
+!vendor/bin/tki-code-check.sh
 
 templates/_compile
 vendor/smarty/smarty/.svn/
