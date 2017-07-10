@@ -133,14 +133,23 @@ else
                 }
                 else
                 {
-                    $resy = $db->Execute("UPDATE {$db->prefix}scheduler SET ticks_left = ?, spawn = spawn - ? WHERE sched_id = ?", array($ticks_left, $multiplier, $event['sched_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::scheduler SET ticks_left=:ticks_left, spawn=spawn-:multiplier WHERE sched_id=:sched_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ticks_left', $ticks_left, \PDO::PARAM_INT);
+                    $stmt->bindParam(':multiplier', $multiplier, \PDO::PARAM_INT);
+                    $stmt->bindParam(':sched_id', $event['sched_id'], \PDO::PARAM_INT);
+                    $result = $stmt->execute();
+                    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
             }
             else
             {
-                $resz = $db->Execute("UPDATE {$db->prefix}scheduler SET ticks_left = ? WHERE sched_id = ?", array($ticks_left, $event['sched_id']));
-                Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::scheduler SET ticks_left=:ticks_left WHERE sched_id=:sched_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ticks_left', $ticks_left, \PDO::PARAM_INT);
+                $stmt->bindParam(':sched_id', $event['sched_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
 
             $sched_var_id = $event['sched_id'];
@@ -171,8 +180,11 @@ else
     $runtime = time() - $starttime;
     echo "<p>The scheduler took $runtime seconds to execute.<p>";
 
-    $res = $db->Execute("UPDATE {$db->prefix}scheduler SET last_run = ". time());
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::scheduler SET last_run=:time";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':time', time(), \PDO::PARAM_INT);
+    $result = $stmt->execute();
+    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 echo "<br>";

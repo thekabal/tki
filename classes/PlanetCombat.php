@@ -47,9 +47,6 @@ class PlanetCombat
         $attackertorps      = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
         $attackerarmor      = $playerinfo['armor_pts'];
 
-        // Now modify player beams, shields and torpedos on available materiel
-        $tkireg->start_energy = $playerinfo['ship_energy'];
-
         // Beams
         if ($attackerbeams > $playerinfo['ship_energy'])
         {
@@ -403,7 +400,7 @@ class PlanetCombat
             if ($playerinfo['dev_escapepod'] == "Y")
             {
                 echo "<center><font color='white'>" . $langvars['l_cmb_escapepod'] . "</font></center><br><br>";
-                $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=1,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy = ?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id = ?;", array($tkireg->start_energy, $playerinfo['ship_id']));
+                $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=1,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy = ?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id = ?;", array(100, $playerinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 \Tki\Bounty::collect($pdo_db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
@@ -442,9 +439,9 @@ class PlanetCombat
             $langvars['l_cmb_youlostarmorpoints'] = str_replace("[cmb_attackerarmor]", $attackerarmor, $langvars['l_cmb_youlostarmorpoints']);
             echo $langvars['l_cmb_youlostarmorpoints'] . "<br>";
             $energy = $playerinfo['ship_energy'];
-            $energy_lost = $tkireg->start_energy - $playerinfo['ship_energy'];
+            $energy_lost = 100 - $playerinfo['ship_energy'];
             $langvars['l_cmb_energyused'] = str_replace("[cmb_energy_lost]", $energy_lost, $langvars['l_cmb_energyused']);
-            $langvars['l_cmb_energyused'] = str_replace("[cmb_playerinfo_ship_energy]", $tkireg->start_energy, $langvars['l_cmb_energyused']);
+            $langvars['l_cmb_energyused'] = str_replace("[cmb_playerinfo_ship_energy]", 100, $langvars['l_cmb_energyused']);
             echo $langvars['l_cmb_energyused'] . "<br></center>";
             $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ?, rating = rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);

@@ -491,16 +491,14 @@ class Combat
 
                 $sql = "UPDATE ::prefix::ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0, torp_launchers = 0, ";
                 $sql .= "torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 1, ship_organics = 0, ship_ore = 0, ";
-                $sql .= "ship_goods = 0, ship_energy = :start_energy, ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, ";
+                $sql .= "ship_goods = 0, ship_energy = 100, ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, ";
                 $sql .= "dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', ";
                 $sql .= "rating = :rating, dev_lssd='N' WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':start_energy', $tkireg->start_energy, \PDO::PARAM_INT);
                 $stmt->bindParam(':rating', $rating, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
                 $update = $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
-
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|Y");
                 \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }

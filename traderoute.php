@@ -94,8 +94,17 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
         $freeholds = 0;
     }
 
-    $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=?, ship_organics=?, ship_goods=?, ship_energy=?, ship_colonists=? WHERE ship_id=?;", array($playerinfo['ship_ore'], $playerinfo['ship_organics'], $playerinfo['ship_goods'], $playerinfo['ship_energy'], $playerinfo['ship_colonists'], $playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods, ship_energy=:ship_energy, ship_colonists=:ship_colonists WHERE ship_id=:ship_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':ship_ore', $playerinfo['ship_ore'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_organics', $playerinfo['ship_organics'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_goods', $playerinfo['ship_goods'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_energy', $playerinfo['ship_energy'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_colonists', $playerinfo['ship_colonists'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+    $result = $stmt->execute();
+
+    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 // Default to 1 run if we don't get a valid repeat value.

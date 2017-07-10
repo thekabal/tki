@@ -67,7 +67,7 @@ while (!$res->EOF)
     $res->MoveNext();
 }
 
-$info['G-TURNS-START'] = $tkireg->start_turns;
+$info['G-TURNS-START'] = 1200;
 $info['G-TURNS-MAX'] = $tkireg->max_turns;
 
 $info['G-SCHED-TICKS'] = $tkireg->sched_ticks;

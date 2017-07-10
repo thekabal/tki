@@ -621,8 +621,9 @@ else
                         "ship_energy = ?, ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, " .
                         "dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', rating = ?, cleared_defenses = ' ', " .
                         "dev_lssd = 'N' WHERE ship_id = ?;",
-                        array($tkireg->start_energy, $rating, $targetinfo['ship_id'])
+                        array(100, $rating, $targetinfo['ship_id'])
                     );
+
                     Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                     Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|Y");
                     Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
@@ -793,7 +794,7 @@ else
                         "ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', " .
                         "dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', rating = ?, dev_lssd = 'N' " .
                         "WHERE ship_id = ?",
-                        array($tkireg->start_energy, $rating, $playerinfo['ship_id'])
+                        array(100, $rating, $playerinfo['ship_id'])
                     );
                     Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                     Tki\Bounty::collect($pdo_db, $langvars, $targetinfo['ship_id'], $playerinfo['ship_id']);

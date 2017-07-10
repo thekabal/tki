@@ -79,7 +79,11 @@ if ($playerinfo['on_planet'] == "Y")
     }
     else
     {
-        $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+        $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         echo "<br>" . $langvars['l_nonexistant_pl'] . "<br><br>";
     }
 }
@@ -179,8 +183,11 @@ if ($num_messages > 0)
     echo "  alert('{$alert_message}');\n";
     echo "</script>\n";
 
-    $res = $db->Execute("UPDATE {$db->prefix}messages SET notified='Y' WHERE recp_id = ?;", array($playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::messages SET notified='Y' WHERE recp_id=:ship_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':sectors', $playerinfo['ship_id'], \PDO::PARAM_INT);
+    $result = $stmt->execute();
+    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 $ply_turns     = number_format($playerinfo['turns'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);

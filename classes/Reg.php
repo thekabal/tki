@@ -158,19 +158,6 @@ namespace Tki;
      * @property mixed sched_ticks
      * @property mixed sched_turns
      * @property mixed space_plague_kills
-     * @property mixed start_armor
-     * @property mixed start_beacon
-     * @property mixed start_credits
-     * @property mixed start_editors
-     * @property mixed start_emerwarp
-     * @property mixed start_energy
-     * @property mixed start_escape_pod
-     * @property mixed start_fighters
-     * @property mixed start_genesis
-     * @property mixed start_lssd
-     * @property mixed start_minedeflectors
-     * @property mixed start_scoop
-     * @property mixed start_turns
      * @property mixed starvation_death_rate
      * @property mixed team_planet_transfers
      * @property mixed tkitimer
@@ -183,7 +170,6 @@ namespace Tki;
      * @property mixed upgrade_factor
      * @property mixed kabal_aggression
      * @property mixed kabal_planets
-     * @property mixed kabal_start_credits
      * @property mixed kabal_unemployment
      *
      */

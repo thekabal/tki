@@ -122,8 +122,13 @@ if ($playerfound)
                 // Player's ship has not been destroyed
                 Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::LOGIN, $request->server->get('REMOTE_ADDR'));
                 $stamp = date("Y-m-d H:i:s");
-                $sql = "UPDATE {$db->prefix}ships SET last_login = ?, ip_address = ? WHERE ship_id = ?;";
-                $update = $db->Execute($sql, array($stamp, $request->server->get('REMOTE_ADDR'), $playerinfo['ship_id']));
+
+                $sql = "UPDATE ::prefix::ships SET last_login=:time, ip_address=:ip_address WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':time', $stamp, \PDO::PARAM_STR);
+                $stmt->bindParam(':ip_address', $request->server->get('REMOTE_ADDR'), \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
                 Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 $_SESSION['logged_in'] = true;
@@ -140,8 +145,22 @@ if ($playerfound)
                 // Player's ship has been destroyed
                 if ($playerinfo['dev_escapepod'] == "Y")
                 {
-                    $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, computer=0, sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=1, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, on_planet='N', dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', dev_lssd='N' WHERE ship_id = ?", array($playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::ships SET hull=0,".
+                           "engines=0, power=0, computer=0, sensors=0," .
+                           "beams=0, torp_launchers=0, torps=0, armor=0," .
+                           "armor_pts=100, cloak=0, shields=0, sector=1," .
+                           "ship_ore=0, ship_organics=0, ship_energy=1000," .
+                           "ship_colonists=0, ship_goods=0," .
+                           "ship_fighters=100, ship_damage=0, credits=1000," .
+                           "on_planet='N', dev_warpedit=0, dev_genesis=0," .
+                           "dev_beacon=0, dev_emerwarp=0, dev_escapepod='N'," .
+                           "dev_fuelscoop='N', dev_minedeflector=0," .
+                           "ship_destroyed='N', dev_lssd='N' " .
+                           "WHERE ship_id = :ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                    $result = $stmt->execute();
+                    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                     $langvars['l_login_died'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_login_died']);
                     echo $langvars['l_login_died'];
                 }
@@ -159,8 +178,23 @@ if ($playerfound)
                         if ($num_rows)
                         {
                             echo "<br><br>" . $langvars['l_login_newbie'] . "<br><br>";
-                            $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, computer=0, sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=1, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, credits=1000, on_planet='N', dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', dev_lssd='N' WHERE ship_id = ?", array($playerinfo['ship_id']));
-                            Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+                            $sql = "UPDATE ::prefix::ships SET hull=0,".
+                                   "engines=0, power=0, computer=0, sensors=0," .
+                                   "beams=0, torp_launchers=0, torps=0, armor=0," .
+                                   "armor_pts=100, cloak=0, shields=0, sector=1," .
+                                   "ship_ore=0, ship_organics=0, ship_energy=1000," .
+                                   "ship_colonists=0, ship_goods=0," .
+                                   "ship_fighters=100, ship_damage=0, credits=1000," .
+                                   "on_planet='N', dev_warpedit=0, dev_genesis=0," .
+                                   "dev_beacon=0, dev_emerwarp=0, dev_escapepod='N'," .
+                                   "dev_fuelscoop='N', dev_minedeflector=0," .
+                                   "ship_destroyed='N', dev_lssd='N' " .
+                                   "WHERE ship_id = :ship_id";
+                            $stmt = $pdo_db->prepare($sql);
+                            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                            $result = $stmt->execute();
+                            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                             $langvars['l_login_newlife'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_login_newlife']);
                             echo $langvars['l_login_newlife'];
