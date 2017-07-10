@@ -394,17 +394,27 @@ class IbankTransfers
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
 
-            $sql = "UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?";
-            $db->Execute($sql, array($amount, $playerinfo['ship_id']));
-            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::ibank_accounts SET balance=balance-:amount WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "UPDATE {$db->prefix}ibank_accounts SET balance = balance + ? WHERE ship_id = ?";
-            $db->Execute($sql, array($transfer, $target['ship_id']));
-            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::ibank_accounts SET balance=balance+:amount WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', target['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "INSERT INTO {$db->prefix}ibank_transfers VALUES (null, ?, ?, NOW(), ?)";
-            $db->Execute($sql, array($playerinfo['ship_id'], $target['ship_id'], $transfer));
-            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $sql = "INSERT ::prefix::ibank_transfers VALUES (null, :ship_id, :target_id, NOW(), :transfer)";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':target_id', $target['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':transfer', $transfer, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
         else
         {
@@ -474,13 +484,19 @@ class IbankTransfers
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
 
-            $sql = "UPDATE {$db->prefix}planets SET credits=credits - ? WHERE planet_id = ?";
-            $db->Execute($sql, array($amount, $splanet_id));
-            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::planets SET credits=credits-:amount  WHERE planet_id=:planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id = ?";
-            $db->Execute($sql, array($transfer, $dplanet_id));
-            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::planets SET credits=credits+:amount  WHERE planet_id=:planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
     }
 }
