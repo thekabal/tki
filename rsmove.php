@@ -54,8 +54,11 @@ if ($destination === false || $engage === false)
     // Invalid destination
 
     echo $langvars['l_rs_invalid'] . ".<br><br>";
-    $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET cleared_defenses=' ' WHERE ship_id=:ship_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+    $result = $stmt->execute();
+    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 else
 {
@@ -166,8 +169,12 @@ else
                 $langvars['l_rs_movetime'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_movetime']);
                 echo $langvars['l_rs_movetime'] . "<br><br>";
                 echo $langvars['l_rs_noturns'] . "<br><br>";
-                $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+                $sql = "UPDATE ::prefix::ships SET cleared_defenses=' ' WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {

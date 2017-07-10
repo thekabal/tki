@@ -262,8 +262,13 @@ else
         {
             if ($fighter_id != 0)
             {
-                $update = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity + ? ,fm_setting = ? WHERE defense_id = ?;", array($numfighters, $mode, $fighter_id));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::sector_defense SET quantity=quantity+:numfits, fm_setting=:mode WHERE defense_id=:fighter_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':numfits', $numfighters, \PDO::PARAM_INT);
+                $stmt->bindParam(':mode', $mode, \PDO::PARAM_INT);
+                $stmt->bindParam(':fighter_id', $fighter_id, \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {
@@ -277,8 +282,13 @@ else
         {
             if ($mine_id != 0)
             {
-                $update = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity + ?, fm_setting = ? WHERE defense_id = ?;", array($nummines, $mode, $mine_id));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::sector_defense SET quantity=quantity+:nummines fm_setting=:mode WHERE defense_id=:defense_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':nummines', $nummines, \PDO::PARAM_INT);
+                $stmt->bindParam(':mode', $mode, \PDO::PARAM_INT);
+                $stmt->bindParam(':defense_id', $mine_id, \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {
@@ -287,8 +297,15 @@ else
             }
         }
 
-        $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, ship_fighters = ship_fighters - ?, torps = torps - ? WHERE ship_id = ?;", array($stamp, $numfighters, $nummines, $playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, " .
+               "turns_used=turns_used+1, ship_fighters=ship_fighters-:numfighters, torps=torps-:nummines WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':stamp', $stamp, \PDO::PARAM_STR);
+        $stmt->bindParam(':numfighters', $numfighters, \PDO::PARAM_INT);
+        $stmt->bindParam(':nummines', $nummines, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
 
