@@ -53,12 +53,13 @@ class Translate
             // Populate the $langvars array
             foreach ($categories as $category)
             {
-                // Select from the database and return the value of the language variables requested, but do not use caching
-                $query = "SELECT name, value FROM ::prefix::languages WHERE category = :category AND section = :language;";
+                // Select from the DB and return the value of the language variables requested, but do not use caching
+                $query = "SELECT name, value FROM ::prefix::languages WHERE " .
+                         "category = :category AND section = :language;";
                 $result = $pdo_db->prepare($query);
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
-                // It is possible to use a single prepare, and multiple executes, but it makes the logic of this section much less clear.
+                // We could use a single prepare, and multiple executes, but it makes this section much less clear.
                 $result->bindParam(':category', $category, \PDO::PARAM_STR);
                 $result->bindParam(':language', $language, \PDO::PARAM_STR);
                 $result->execute();

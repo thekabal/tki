@@ -872,7 +872,8 @@ else
 
                     echo $langvars['l_att_salv'] . "<br>";
                     $update6 = $db->Execute(
-                        "UPDATE {$db->prefix}ships SET credits = credits + ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, " .
+                        "UPDATE {$db->prefix}ships SET credits = credits + ?," .
+                        "ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, " .
                         "ship_goods = ship_goods + ? WHERE ship_id = ?;",
                         array($ship_salvage, $salv_ore, $salv_organics, $salv_goods, $targetinfo['ship_id'])
                     );
@@ -881,8 +882,9 @@ else
                     $fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
                     $energy = $targetinfo['ship_energy'];
                     $update6b = $db->Execute(
-                        "UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, torps = torps - ? " .
-                        "WHERE ship_id = ?;",
+                        "UPDATE {$db->prefix}ships SET ship_energy = ?, " .
+                        "ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, " .
+                        "torps = torps - ? WHERE ship_id = ?;",
                         array($energy, $fighters_lost, $armor_lost, $targettorpnum, $targetinfo['ship_id'])
                     );
                     Tki\Db::LogDbErrors($pdo_db, $update6b, __LINE__, __FILE__);
@@ -891,7 +893,8 @@ else
 
             echo "  </div>\n";
             echo "  <div style='height:1px;'></div>\n";
-            echo "  <div style='text-align:right; font-size:10px; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'></div>\n";
+            echo "  <div style='text-align:right; font-size:10px; padding:4px; " .
+                 "background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'></div>\n";
             echo "</div>\n";
         }
     }

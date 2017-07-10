@@ -105,7 +105,8 @@ class TraderouteSettings
         $resa = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
 
-        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
+        $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" .
+                                        $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_globalsetsaved'] . " " . $langvars['l_tdr_returnmenu'];
         \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
     }
