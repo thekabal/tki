@@ -97,8 +97,11 @@ else
 //mail ($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'], "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
 
 /// Reset recovery_time to zero
-//$recovery_update_result = $db->Execute ("UPDATE {$db->prefix}ships SET recovery_time = null WHERE email = ?;", array($playerinfo['email']));
-//echo (Tki\Db::logDbErrors ($pdo_db, $pdo_db, $recovery_update_result, __LINE__, __FILE__));
+// $sql = "UPDATE ::prefix::ships SET recovery_time=NULL  WHERE ship_id=:ship_id";
+// $stmt = $pdo_db->prepare($sql);
+// $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+// $result = $stmt->execute();
+// Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
 /// Log user in (like login does)
 

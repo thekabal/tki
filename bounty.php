@@ -192,8 +192,14 @@ switch ($response) {
         Tki\Db::LogDbErrors($pdo_db, $del, __LINE__, __FILE__);
         $stamp = date("Y-m-d H:i:s");
         $refund = $bty['amount'];
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns-1, turns_used = turns_used + 1, credits = credits + ? WHERE ship_id = ?;", array($stamp, $refund, $playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+        $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, turns_used=turns_used+1, credits=credits+:refund WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':stamp', $stamp, \PDO::PARAM_INT);
+        $stmt->bindParam(':refund', $refund, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         echo $langvars['l_by_canceled'] . "<br>";
         Tki\Text::gotoMain($pdo_db, $lang);
         die();
@@ -292,8 +298,14 @@ switch ($response) {
         $insert = $db->Execute("INSERT INTO {$db->prefix}bounty (bounty_on, placed_by, amount) values (?, ?, ?);", array($bounty_on, $playerinfo['ship_id'], $amount));
         Tki\Db::LogDbErrors($pdo_db, $insert, __LINE__, __FILE__);
         $stamp = date("Y-m-d H:i:s");
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, credits = credits - ? WHERE ship_id = ?;", array($stamp, $amount, $playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+        $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, turns_used=turns_used+1, credits=credits-:amount WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':stamp', $stamp, \PDO::PARAM_INT);
+        $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         echo $langvars['l_by_placed'] . "<br>";
         Tki\Text::gotoMain($pdo_db, $lang);
         die();
