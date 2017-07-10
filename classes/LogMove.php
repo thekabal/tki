@@ -23,7 +23,8 @@ class LogMove
 {
     public static function writeLog(\PDO $pdo_db, int $ship_id, int $sector_id): void
     {
-        $stmt = $pdo_db->prepare("INSERT INTO ::prefix::movement_log (ship_id, sector_id, time) VALUES (:ship_id, :sector_id, NOW())");
+        $stmt = $pdo_db->prepare("INSERT INTO ::prefix::movement_log " .
+                                 "(ship_id, sector_id, time) VALUES (:ship_id, :sector_id, NOW())");
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->bindParam(':sector_id', $sector_id, \PDO::PARAM_INT);
         $result = $stmt->execute();

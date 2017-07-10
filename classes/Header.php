@@ -24,7 +24,14 @@ namespace Tki;
 
 class Header
 {
-    public function display(\PDO $pdo_db, string $lang, Smarty $template, ?string $title = null, string $body_class = 'tki', ?bool $include_ckeditor = null): void
+    public function display(
+        \PDO $pdo_db,
+        string $lang,
+        Smarty $template,
+        ?string $title = null,
+        string $body_class = 'tki',
+        ?bool $include_ckeditor = null
+    ): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common'));
 

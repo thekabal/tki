@@ -24,7 +24,8 @@ class Languages
     public static function listAvailable(\PDO $pdo_db, string $lang) : array
     {
         // Get a list of supported languages
-        $sql = "SELECT section, name, value FROM ::prefix::languages WHERE category = :category AND (name = :name1 OR name = :name2) ORDER BY section, name;";
+        $sql = "SELECT section, name, value FROM ::prefix::languages WHERE " .
+               "category = :category AND (name = :name1 OR name = :name2) ORDER BY section, name;";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindValue(':category', 'regional', \PDO::PARAM_STR);
         $stmt->bindValue(':name1', 'local_lang_name', \PDO::PARAM_INT);
@@ -44,11 +45,15 @@ class Languages
                 switch ($langinfo['name'])
                 {
                     case 'local_lang_flag':
-                        $list_of_langs[$langinfo['section']] = array_merge($list_of_langs[$langinfo['section']], array('flag' => $langinfo['value']));
+                        $list_of_langs[$langinfo['section']] = array_merge(
+                            $list_of_langs[$langinfo['section']],
+                        array('flag' => $langinfo['value']));
                         break;
 
                     case 'local_lang_name':
-                        $list_of_langs[$langinfo['section']] = array_merge($list_of_langs[$langinfo['section']], array('lang_name' => $langinfo['value']));
+                        $list_of_langs[$langinfo['section']] = array_merge(
+                            $list_of_langs[$langinfo['section']],
+                        array('lang_name' => $langinfo['value']));
                         break;
                     default: // Future: Handle this better
                         die('unknown switch/case');

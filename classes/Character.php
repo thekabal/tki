@@ -23,7 +23,8 @@ class Character
 {
     public function kill(\PDO $pdo_db, int $ship_id, array $langvars, Reg $tkireg, bool $remove_planets = false): void
     {
-        $sql = "UPDATE ::prefix::ships SET ship_destroyed='Y', on_planet='N', sector=1, cleared_defenses=' ' WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET ship_destroyed='Y', " .
+               "on_planet='N', sector=1, cleared_defenses=' ' WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -87,7 +88,8 @@ class Character
         $headline = $name['character_name'] .' '. $langvars['l_killheadline'];
         $newstext = str_replace('[name]', $name['character_name'], $langvars['l_news_killed']);
 
-        $sql = "INSERT INTO ::prefix::news (headline, newstext, user_id, date, news_type) VALUES (:headline,:newstext,:user_id,NOW(), 'killed')";
+        $sql = "INSERT INTO ::prefix::news (headline, newstext, user_id, date, news_type) " .
+               "VALUES (:headline,:newstext,:user_id,NOW(), 'killed')";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':headline', $headline, \PDO::PARAM_STR);
         $stmt->bindParam(':newstext', $newstext, \PDO::PARAM_STR);
@@ -113,7 +115,9 @@ class Character
             if (!$value)
             {
                 // Pow returned false so we need to return an error.
-                $player_insignia = "<span style='color:#f00;'>ERR</span> [<span style='color:#09f; font-size:12px; cursor:help;' title='Error looking up insignia, please report this error.'>?</span>]";
+                $player_insignia = "<span style='color:#f00;'>ERR</span> " .
+                "[<span style='color:#09f; font-size:12px; cursor:help;' " .
+                "title='Error looking up insignia, please report this error.'>?</span>]";
                 break;
             }
 

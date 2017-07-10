@@ -37,7 +37,9 @@ class File
         $final_result = null;
         $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
 
-        $insert_sql = 'INSERT into ::prefix::' . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
+        $insert_sql = "INSERT into ::prefix::" . $ini_table .
+                      " (name, category, value, section, type) VALUES " .
+                      "(:config_key, :config_category, :config_value, :section, :type)";
         $stmt = $pdo_db->prepare($insert_sql);
         Db::logDbErrors($pdo_db, $insert_sql, __LINE__, __FILE__);
 
@@ -60,12 +62,14 @@ class File
                 {
                     $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_INT);
                 }
-                elseif ($type_n_value['value'] === null) // Not currently used - but this should handle it correctly if we add it
+                elseif ($type_n_value['value'] === null)
                 {
+                    // Not currently used - but this should handle it correctly if we add it
                     $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_NULL);
                 }
-                elseif (is_bool($type_n_value['value'])) // Boolean true/false are stored temporarily as 1 for true and 0 for false
+                elseif (is_bool($type_n_value['value']))
                 {
+                    // Boolean true/false are stored temporarily as 1 for true and 0 for false
                     if ($type_n_value['value'])
                     {
                         $stmt->bindValue(':config_value', '1', \PDO::PARAM_INT);
@@ -87,7 +91,8 @@ class File
 
         for ($k = 1; $k < $j; $k++)
         {
-            // Status array will continue the results of individual executes. It should be === true unless something went horribly wrong.
+            // Status array will continue the results of individual executes.
+            // It should be === true unless something went horribly wrong.
             if ($status_array[$k] !== true)
             {
                 $final_result = false;
@@ -188,7 +193,9 @@ class File
 
                 if ($container !== null)
                 {
-                    $out[$container][$name] = array('value' => $value, 'type' => gettype($value), 'comment' => $comment);
+                    $out[$container][$name] = array('value' => $value,
+                                                    'type' => gettype($value),
+                                                    'comment' => $comment);
                 }
             }
         }

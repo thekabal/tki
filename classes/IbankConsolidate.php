@@ -195,12 +195,15 @@ class IbankConsolidate
              "<td align=right>" . number_format($cplanet, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br><br>" .
              number_format($tcost, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>" .
              "<tr valign=bottom>" .
-             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout ']. "</a></td>" .
+             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] .
+             "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout ']. "</a></td>" .
              "</tr>";
 
         if ($minimum != 0)
         {
-            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :dplanet_id AND credits >= :minimum";
+            $sql = "UPDATE ::prefix::planets SET credits = 0 " .
+                   "WHERE owner = :owner_id AND credits <> 0 " .
+                   "AND planet_id <> :dplanet_id AND credits >= :minimum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->bindParam(':dplanet_id', $dplanet_id, \PDO::PARAM_INT);
@@ -211,7 +214,9 @@ class IbankConsolidate
 
         if ($maximum != 0)
         {
-            $sql = "UPDATE ::prefix::planets SET credits = 0 WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :dplanet_id AND credxits <= :maximum";
+            $sql = "UPDATE ::prefix::planets SET credits = 0 " .
+                   "WHERE owner = :owner_id AND credits <> 0 AND " .
+                   "planet_id <> :dplanet_id AND credxits <= :maximum";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':owner_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->bindParam(':dplanet_id', $dplanet_id, \PDO::PARAM_INT);

@@ -53,7 +53,8 @@ class Bounty
 
     public static function collect(\PDO $pdo_db, array $langvars, int $attacker, int $bounty_on): void
     {
-        $sql = "SELECT * FROM ::prefix::bounty,::prefix::ships WHERE bounty_on=:bounty_on AND bounty_on=ship_id AND planced_by <> 0";
+        $sql = "SELECT * FROM ::prefix::bounty,::prefix::ships WHERE " .
+               "bounty_on=:bounty_on AND bounty_on=ship_id AND planced_by <> 0";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
         $stmt->execute();

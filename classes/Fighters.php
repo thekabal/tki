@@ -23,7 +23,8 @@ class Fighters
 {
     public static function destroy(\PDO $pdo_db, int $sector, int $num_fighters): void
     {
-        $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type ='F' ORDER BY quantity ASC";
+        $sql = "SELECT * FROM ::prefix::sector_defense WHERE " .
+               "sector_id=:sector_id AND defense_type ='F' ORDER BY quantity ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
@@ -35,7 +36,8 @@ class Fighters
             {
                 if ($tmp_defense['quantity'] > $num_fighters)
                 {
-                    $sql = "UPDATE ::prefix::sector_defense SET quantity = :quantity - ? WHERE defense_id = :defense_id";
+                    $sql = "UPDATE ::prefix::sector_defense SET quantity = :quantity - ? " .
+                           "WHERE defense_id = :defense_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':quantity', $tmp_defense['quantity'], \PDO::PARAM_INT);
                     $stmt->bindParam(':defense_id', $tmp_defense['defense_id'], \PDO::PARAM_INT);

@@ -117,12 +117,14 @@ class Db
                         $db_port = '5432';
                     }
 
-                    $pdo_db = new \Tki\TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
+                    $pdo_db = new \Tki\TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;",
+                                              $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
                 else
                 {
                     // Include the charset when connecting
-                    $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
+                    $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4",
+                                              $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
             }
             catch (\PDOException $e)

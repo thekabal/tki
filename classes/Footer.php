@@ -40,8 +40,12 @@ class Footer
         {
             $stamp = date("Y-m-d H:i:s", time()); // Now (as seen by PHP)
             $since_stamp = date("Y-m-d H:i:s", time() - 5 * 60); // Five minutes ago
-            $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
-            $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $stamp); // Online is the (int) count of the numbers of players currently logged in via SQL select
+
+            // Build a player gateway object to handle the SQL calls
+            $players_gateway = new Players\PlayersGateway($pdo_db);
+
+            // Online is the (int) count of the numbers of players currently logged in via SQL select
+            $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $stamp);
         }
 
         $elapsed = 999; // Default value for elapsed, overridden with an actual value if its available
@@ -64,8 +68,12 @@ class Footer
         }
 
         // Update counter
-        $scheduler_gateway = new Scheduler\SchedulerGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
-        $last_run = $scheduler_gateway->selectSchedulerLastRun(); // Last run is the (int) count of the numbers of players currently logged in via SQL select or false if DB is not active
+        // Build a scheduler gateway object to handle the SQL calls
+        $scheduler_gateway = new Scheduler\SchedulerGateway($pdo_db);
+
+        // Last run is the (int) count of the numbers of players currently
+        // logged in via SQL select or false if DB is not active
+        $last_run = $scheduler_gateway->selectSchedulerLastRun();
         if ($last_run !== false)
         {
             $seconds_left = ($tkireg->sched_ticks * 60) - (time() - $last_run);
@@ -79,7 +87,8 @@ class Footer
 
         // End update counter
 
-        if ($tkireg->footer_show_debug === true) // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
+        // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
+        if ($tkireg->footer_show_debug === true)
         {
             $sf_logo_type = '14';
             $sf_logo_width = "150";
@@ -95,13 +104,19 @@ class Footer
         if ($news_ticker_active === true)
         {
             // Database driven language entries
-            $langvars_temp = Translate::load($pdo_db, $lang, array('news', 'common', 'footer', 'global_includes', 'logout'));
+            $langvars_temp = Translate::load($pdo_db, $lang, array('news',
+                                                                   'common',
+                                                                   'footer',
+                                                                   'global_includes',
+                                                                   'logout'));
 
-            // Use array merge so that we do not clobber the langvars array, and only add to it the items needed for footer
+            // Use array merge so that we do not clobber the langvars array,
+            // and only add to it the items needed for footer
             $langvars = array_merge($langvars, $langvars_temp);
 
             // Use array unique so that we don't end up with duplicate lang array entries
-            // This is resulting in an array with blank values for specific keys, so array_unique isn't entirely what we want
+            // This is resulting in an array with blank values for specific keys,
+            // so array_unique isn't entirely what we want
             // $langvars = array_unique ($langvars);
 
             // SQL call that selects all of the news items between the start date beginning of day, and the end of day.
@@ -111,13 +126,19 @@ class Footer
             $news_ticker = array();
             if (count($row) == 0)
             {
-                array_push($news_ticker, array('url' => null, 'text' => $langvars['l_news_none'], 'type' => null, 'delay' => 5));
+                array_push($news_ticker, array('url' => null,
+                                               'text' => $langvars['l_news_none'],
+                                               'type' => null,
+                                               'delay' => 5));
             }
             else
             {
                 foreach ($row as $item)
                 {
-                    array_push($news_ticker, array('url' => "news.php", 'text' => $item['headline'], 'type' => $item['news_type'], 'delay' => 5));
+                    array_push($news_ticker, array('url' => "news.php",
+                                                   'text' => $item['headline'],
+                                                   'type' => $item['news_type'],
+                                                   'delay' => 5));
                 }
 
                 array_push($news_ticker, array('url' => null, 'text' => "End of News", 'type' => null, 'delay' => 5));
@@ -128,7 +149,9 @@ class Footer
         }
         else
         {
-            $sf_logo_type++; // Make the SF logo darker for all pages except login. No need to change the sizes as 12 is the same size as 11 and 15 is the same size as 14.
+            // Make the SF logo darker for all pages except login. No need to
+            // change the sizes as 12 is the same size as 11 and 15 is the same size as 14.
+            $sf_logo_type++;
         }
 
         $sf_logo_link = null;
@@ -139,7 +162,8 @@ class Footer
         $current_page = mb_substr($request->server->get('SCRIPT_NAME'), $slash_position);
         if (in_array($current_page, $public_pages))
         {
-            // If it is a non-login required page, such as ranking, new, faq, settings, news, and index use the public SF logo, which increases project stats.
+            // If it is a non-login required page, such as ranking, new, faq,
+            // settings, news, and index use the public SF logo, which increases project stats.
             $variables['suppress_logo'] = false;
         }
         else
@@ -149,7 +173,9 @@ class Footer
         }
 
         // Set array with all used variables in page
-        $variables['update_ticker'] = array("display" => $show_update_ticker, "seconds_left" => $seconds_left, "sched_ticks" => $tkireg->sched_ticks);
+        $variables['update_ticker'] = array("display" => $show_update_ticker,
+                                            "seconds_left" => $seconds_left,
+                                            "sched_ticks" => $tkireg->sched_ticks);
         $variables['players_online'] = $online;
         $variables['sf_logo_type'] = $sf_logo_type;
         $variables['sf_logo_height'] = $sf_logo_height;
