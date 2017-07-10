@@ -79,7 +79,9 @@ class Sessions
         $stmt->bindParam(':expiry', $this->currenttime, \PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return (string) $result['sessdata']; // PHP7 change requires return to be string: https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
+        // PHP7 change requires return to be string:
+        // https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
+        return (string) $result['sessdata'];
     }
 
     public function write(string $sesskey, string $sessdata)
@@ -87,13 +89,16 @@ class Sessions
         if (Db::isActive($this->pdo_db))
         {
             $err_mode = $this->pdo_db->getAttribute(\PDO::ATTR_ERRMODE);
-            // Set the error mode to be exceptions, so that we can catch them -- This breaks everything in game except for sessions
+            // Set the error mode to be exceptions,
+            // so that we can catch them -- This breaks everything in game except for sessions
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
             try
             {
-                // Try to insert the record. This will fail if the record already exists, which will trigger catch below..
-                $qry = "INSERT into ::prefix::sessions (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
+                // Try to insert the record. This will fail if the record already exists,
+                // which will trigger catch below..
+                $qry = "INSERT into ::prefix::sessions (" .
+                       "sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
                 $stmt = $this->pdo_db->prepare($qry);
                 $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
                 $stmt->bindParam(':sessdata', $sessdata, \PDO::PARAM_STR);
@@ -103,7 +108,8 @@ class Sessions
             catch (\PDOException $e)
             {
                 // Insert didn't work, use update instead
-                $qry = "UPDATE ::prefix::sessions SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey";
+                $qry = "UPDATE ::prefix::sessions SET sessdata=:sessdata, expiry=:expiry " .
+                       "where sesskey=:sesskey";
                 $stmt = $this->pdo_db->prepare($qry);
                 $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
                 $stmt->bindParam(':sessdata', $sessdata, \PDO::PARAM_STR);
@@ -114,9 +120,15 @@ class Sessions
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, $err_mode);
             return $result;
         }
-        else // If you run create universe on an existing universe, at step 30, you would get an error - this prevents it by returning false to note that we didn't successfully write the session.
+        else
         {
-            return false; // The error was Session callback expects true/false return value in Unknown on line 0, and is triggered because the DB tables have been dropped in step 30 prior to the call.
+            // If you run create universe on an existing universe, at step 30,
+            // you would get an error - this prevents it by returning false to
+            // note that we didn't successfully write the session.
+            return false;
+            // The error was Session callback expects true/false return
+            // value in Unknown on line 0, and is triggered because
+            // the DB tables have been dropped in step 30 prior to the call.
         }
     }
 

@@ -521,11 +521,17 @@ class PlanetCombat
             $energy = $planetinfo['energy'];
             \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
             \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-            $update7b = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($energy, $fighters_lost, $planettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
+            $update7b = $db->Execute(
+                "UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, " .
+                "torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, " .
+                "credits = credits + ? WHERE planet_id = ?;",
+            array($energy, $fighters_lost, $planettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id'])
+            );
             \Tki\Db::logDbErrors($pdo_db, $update7b, __LINE__, __FILE__);
         }
 
-        $update = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?", array($playerinfo['ship_id']));
+        $update = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, " .
+                               "turns_used = turns_used + 1 WHERE ship_id = ?", array($playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
     }
 }

@@ -74,7 +74,8 @@ class Realspace
 
         $free_power = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg) - $playerinfo['ship_energy'];
 
-        // Amount of energy that can be stored is less than the amount scooped. Amount scooped is set to what can be stored.
+        // Amount of energy that can be stored is less than the amount scooped.
+        // Amount scooped is set to what can be stored.
         if ($free_power < $energyscooped)
         {
             $energyscooped = $free_power;

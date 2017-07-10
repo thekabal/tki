@@ -75,7 +75,12 @@ class Ports
         ";
     }
 
-    public static function buildTwoCol($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left"): void
+    public static function buildTwoCol(
+        $text_col1 = "&nbsp;",
+        $text_col2 = "&nbsp;",
+        $align_col1 = "left",
+        $align_col2 = "left"
+    ): void
     {
         echo "
         <tr>
@@ -107,12 +112,23 @@ class Ports
         return $delta_cost;
     }
 
-    // Here is the trade function to strip out some "spaghetti code". The function saves about 60 lines of code, I hope it will be
+    // Here is the trade function to strip out some "spaghetti code".
+    // The function saves about 60 lines of code, I hope it will be
     // easier to modify/add something in this part.
     /*
      * @return mixed
      */
-    public static function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, array $price_array, array $sectorinfo)
+    public static function trade(
+        $price,
+        $delta,
+        $max,
+        $limit,
+        $factor,
+        $port_type,
+        $origin,
+        array $price_array,
+        array $sectorinfo
+    )
     {
         if ($sectorinfo['port_type'] == $port_type)
         {

@@ -21,7 +21,17 @@ namespace Tki;
 
 class TraderouteDelete
 {
-    public static function prime(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, $confirm, ?int $traderoute_id = null): void
+    public static function prime(
+        \PDO $pdo_db,
+        $db,
+        string $lang,
+        array $langvars,
+        Reg $tkireg,
+        Smarty $template,
+        array $playerinfo,
+        $confirm,
+        ?int $traderoute_id = null
+    ): void
     {
         $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
         \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
@@ -40,7 +50,8 @@ class TraderouteDelete
 
         if (!empty($confirm))
         {
-            $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
+            $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes " .
+                                  "WHERE traderoute_id = ?;", array($traderoute_id));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
             echo $langvars['l_tdr_deleted'] . " " . $langvars['l_tdr_returnmenu'];

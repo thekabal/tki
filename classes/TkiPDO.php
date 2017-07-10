@@ -25,7 +25,13 @@ class TkiPDO extends \PDO
 {
     protected $table_prefix;
 
-    public function __construct(string $dsn, ?string $user = null, ?string $password = null, ?string $prefix = null, array $driver_options = array())
+    public function __construct(
+        string $dsn,
+        ?string $user = null,
+        ?string $password = null,
+        ?string $prefix = null,
+        array $driver_options = array()
+    )
     {
         $this->table_prefix = $prefix;
         parent::__construct($dsn, $user, $password, $driver_options);
