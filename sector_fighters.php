@@ -183,19 +183,18 @@ if ($playerarmor < 1)
                "beams=0, torp_launchers=0, torps=0, armor=0," .
                "armor_pts=100, cloak=0, shields=0, sector=1," .
                "ship_ore=0, ship_organics=0, ship_energy=1000," .
-               "ship_colonists=0, ship_goods=0," .
+               "ship_colonists=0, ship_goods=0, rating=:rating" .
                "ship_fighters=100, ship_damage=0, credits=1000," .
-               "on_planet='N', dev_warpedit=0, dev_genesis=0," .
+               "on_planet='N', cleared_defenses=' ', dev_warpedit=0, dev_genesis=0," .
                "dev_beacon=0, dev_emerwarp=0, dev_escapepod='N'," .
                "dev_fuelscoop='N', dev_minedeflector=0," .
                "ship_destroyed='N', dev_lssd='N' " .
                "WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':rating', $rating, \PDO::PARAM_INT);
         $result = $stmt->execute();
         Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-
-//        $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, rating = ?, cleared_defenses=' ', WHERE ship_id = ?;", array(100, $rating, $playerinfo['ship_id']));
 
         Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
         $ok = 0;
