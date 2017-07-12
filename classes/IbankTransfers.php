@@ -399,14 +399,14 @@ class IbankTransfers
             $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $sql = "UPDATE ::prefix::ibank_accounts SET balance=balance+:amount WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', target['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $sql = "INSERT ::prefix::ibank_transfers VALUES (null, :ship_id, :target_id, NOW(), :transfer)";
             $stmt = $pdo_db->prepare($sql);
@@ -414,7 +414,7 @@ class IbankTransfers
             $stmt->bindParam(':target_id', $target['ship_id'], \PDO::PARAM_INT);
             $stmt->bindParam(':transfer', $transfer, \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
         else
         {
@@ -489,14 +489,14 @@ class IbankTransfers
             $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
             $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $sql = "UPDATE ::prefix::planets SET credits=credits+:amount  WHERE planet_id=:planet_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
             $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
     }
 }

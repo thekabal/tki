@@ -408,7 +408,7 @@ class PlanetCombat
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $result = $stmt->execute();
-                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 \Tki\Bounty::collect($pdo_db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
             else
@@ -461,7 +461,7 @@ class PlanetCombat
             $stmt->bindParam(':rating_change', $rating_change, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
         $result4 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
@@ -551,6 +551,6 @@ class PlanetCombat
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
-        \Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
