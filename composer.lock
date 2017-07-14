@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "aedb0741bacf5d60bfea5c35ceda7d79",
+    "content-hash": "2e84db61ddb5bea9346bc80b59ea4a26",
     "packages": [
         {
             "name": "adodb/adodb-php",
@@ -563,61 +563,6 @@
             "time": "2015-06-14T21:17:01+00:00"
         },
         {
-            "name": "edsonmedina/php_testability",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/edsonmedina/php_testability.git",
-                "reference": "e9def941343573333c79bf24e7a8b1b00fb3d969"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/edsonmedina/php_testability/zipball/e9def941343573333c79bf24e7a8b1b00fb3d969",
-                "reference": "e9def941343573333c79bf24e7a8b1b00fb3d969",
-                "shasum": ""
-            },
-            "require": {
-                "mustache/mustache": "*",
-                "nategood/commando": "*",
-                "nikic/php-parser": "*",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpspec/prophecy": "*",
-                "phpunit/phpunit": "*"
-            },
-            "bin": [
-                "src/testability"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "edsonmedina\\php_testability\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Edson Medina",
-                    "email": "edsonmedina@gmail.com"
-                }
-            ],
-            "description": "Analyses and reports testability issues of a php codebase",
-            "homepage": "https://github.com/edsonmedina/php_testability/",
-            "keywords": [
-                "TDD",
-                "php",
-                "phpunit",
-                "testability",
-                "testing",
-                "unit"
-            ],
-            "time": "2017-07-14T10:01:41+00:00"
-        },
-        {
             "name": "friendsofphp/php-cs-fixer",
             "version": "v2.3.2",
             "source": {
@@ -823,57 +768,6 @@
             "time": "2015-04-20T18:58:01+00:00"
         },
         {
-            "name": "kevinlebrun/colors.php",
-            "version": "0.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kevinlebrun/colors.php.git",
-                "reference": "d132f36d06e48ea080855af19b4bcb1fb615224a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kevinlebrun/colors.php/zipball/d132f36d06e48ea080855af19b4bcb1fb615224a",
-                "reference": "d132f36d06e48ea080855af19b4bcb1fb615224a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*",
-                "satooshi/php-coveralls": "dev-master",
-                "squizlabs/php_codesniffer": "1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Colors": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kevin Le Brun",
-                    "email": "lebrun.k@gmail.com",
-                    "homepage": "http://kevinlebrun.fr",
-                    "role": "developer"
-                }
-            ],
-            "description": "Colors for PHP CLI scripts",
-            "homepage": "https://github.com/kevinlebrun/colors.php",
-            "keywords": [
-                "cli",
-                "color",
-                "colors",
-                "console",
-                "shell"
-            ],
-            "time": "2014-12-23T01:23:37+00:00"
-        },
-        {
             "name": "latte/latte",
             "version": "v2.4.5",
             "source": {
@@ -945,52 +839,6 @@
             "time": "2017-07-14T06:41:29+00:00"
         },
         {
-            "name": "mustache/mustache",
-            "version": "v2.12.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "fe8fe72e9d580591854de404cc59a1b83ca4d19e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/fe8fe72e9d580591854de404cc59a1b83ca4d19e",
-                "reference": "fe8fe72e9d580591854de404cc59a1b83ca4d19e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.4"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~1.11",
-                "phpunit/phpunit": "~3.7|~4.0|~5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Mustache": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Justin Hileman",
-                    "email": "justin@justinhileman.info",
-                    "homepage": "http://justinhileman.com"
-                }
-            ],
-            "description": "A Mustache implementation in PHP.",
-            "homepage": "https://github.com/bobthecow/mustache.php",
-            "keywords": [
-                "mustache",
-                "templating"
-            ],
-            "time": "2017-07-11T12:54:05+00:00"
-        },
-        {
             "name": "myclabs/deep-copy",
             "version": "1.6.1",
             "source": {
@@ -1031,52 +879,6 @@
                 "object graph"
             ],
             "time": "2017-04-12T18:52:22+00:00"
-        },
-        {
-            "name": "nategood/commando",
-            "version": "0.2.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nategood/commando.git",
-                "reference": "ba476a3928dcecfb257f9daf7d965a3abe53b6bd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nategood/commando/zipball/ba476a3928dcecfb257f9daf7d965a3abe53b6bd",
-                "reference": "ba476a3928dcecfb257f9daf7d965a3abe53b6bd",
-                "shasum": ""
-            },
-            "require": {
-                "kevinlebrun/colors.php": "~0.2",
-                "php": ">=5.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Commando": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nate Good",
-                    "email": "me@nategood.com"
-                }
-            ],
-            "description": "PHP CLI Commando Style",
-            "homepage": "http://github.com/nategood/commando",
-            "keywords": [
-                "automation",
-                "cli",
-                "command",
-                "command line",
-                "command line interface",
-                "scripting"
-            ],
-            "time": "2016-11-09T16:22:34+00:00"
         },
         {
             "name": "nette/application",
@@ -5108,9 +4910,7 @@
     ],
     "aliases": [],
     "minimum-stability": "alpha",
-    "stability-flags": {
-        "edsonmedina/php_testability": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
