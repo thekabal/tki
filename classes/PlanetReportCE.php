@@ -94,6 +94,7 @@ class PlanetReportCE
 
     public static function takeCredits(\PDO $pdo_db, array $langvars, int $planet_id): string
     {
+        $playerinfo = Array();
         // Get playerinfo from database
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
