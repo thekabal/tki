@@ -488,7 +488,7 @@ class IbankTransfers
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
             $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
-            $result = $stmt->execute();
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $sql = "UPDATE ::prefix::planets SET credits=credits+:amount  WHERE planet_id=:planet_id";
