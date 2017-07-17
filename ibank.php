@@ -67,7 +67,7 @@ $amount = null;
 $amount = (int) filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_INT);
 if ($amount === 0)
 {
-    $amount = false;
+    $amount = 0;
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
