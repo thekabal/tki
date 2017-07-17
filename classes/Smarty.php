@@ -61,7 +61,7 @@ class Smarty
 
         if (!$cache_perms)
         {
-            $smarty_errors .= 'The Kabal Invasion smarty error: The ' .
+            $smarty_errors .= '<br><br>The Kabal Invasion smarty error: The ' .
                               'templates/_cache directory needs to have its ' .
                               'permissions set to be writable by the web server ' .
                               'user, OR 777, or ugo+rwx.<br>';
@@ -69,7 +69,7 @@ class Smarty
 
         if (!$compile_perms)
         {
-            $smarty_errors .= 'The Kabal invasion smarty error: ' .
+            $smarty_errors .= '<br><br>The Kabal invasion smarty error: ' .
                               'The templates/_compile directory needs to have its ' .
                               'permissions set to be writable by the web server ' .
                               'user, OR 777, or ugo+rwx.<br>';

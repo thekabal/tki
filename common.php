@@ -96,7 +96,8 @@ try
 }
 catch (Exception $e)
 {
-    die($e);
+    echo "<html><pre>";
+    die($e . "</pre></html>");
 }
 
 $template->setTheme($tkireg->default_template);
