@@ -77,7 +77,6 @@ namespace Tki;
      * @property mixed fighter_prate
      * @property mixed fighter_price
      * @property mixed footer_show_debug
-     * @property mixed footer_style
      * @property mixed fullscan_cost
      * @property mixed game_closed
      * @property mixed game_name
