@@ -407,7 +407,7 @@ class PlanetCombat
                        "dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-                $result = $stmt->execute();
+                $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 \Tki\Bounty::collect($pdo_db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
@@ -460,7 +460,7 @@ class PlanetCombat
             $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
             $stmt->bindParam(':rating_change', $rating_change, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-            $result = $stmt->execute();
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
@@ -550,7 +550,7 @@ class PlanetCombat
         $sql = "UPDATE ::prefix::ships SET turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
