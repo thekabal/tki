@@ -96,8 +96,7 @@ class Db
             {
                 // We need to display the error message onto the screen.
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                            ' Database.<br> Database Error: '. $db->ErrorNo() .
-                            ': '. $db->ErrorMsg() .'<br>\n';
+                           ' Database. <br>Database Error: '. $db->ErrorNo();
                 throw new \Exception($err_msg);
             }
 
@@ -130,8 +129,7 @@ class Db
             catch (\PDOException $e)
             {
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                            ' Database.<br> Database Error: '.
-                            $e->getMessage() . "<br>\n";
+                           ' Database. <br>Database Error: '. $e->getMessage();
                 throw new \Exception($err_msg);
             }
 

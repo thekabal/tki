@@ -59,27 +59,28 @@ ob_start(array('Tki\Compress', 'compress'));       // Start a buffer, and when i
                                                    // call the callback function 'Tki\Compress' to properly handle
                                                    // detection of compression.
 
+$pdo_db = new Tki\Db();
 try
 {
-    $pdo_db = new Tki\Db();
+    $pdo_db = $pdo_db->initDb('pdo');                  // Connect to db using pdo
 }
 catch (Exception $e)
 {
-    die($e);
+    echo "<html><pre>";
+    die($e . "</pre></html>");
 }
 
-$pdo_db = $pdo_db->initDb('pdo');                  // Connect to db using pdo
-
+$db = new Tki\Db();
 try
 {
-    $db = new Tki\Db();
+    $db = $db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
 }
 catch (Exception $e)
 {
-    die($e);
+    echo "<html><pre>";
+    die($e . "</pre></html>");
 }
 
-$db = $db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
 
 if ($pdo_db !== null)
 {
