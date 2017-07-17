@@ -24,6 +24,7 @@ class PlanetReportCE
     public static function collectCredits(\PDO $pdo_db, $db, array $langvars, array $planetarray, Reg $tkireg): void
     {
         $CS = "GO"; // Current State
+        $playerinfo = Array();
 
         // Look up the info for the player that wants to collect the credits.
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
@@ -95,6 +96,8 @@ class PlanetReportCE
     public static function takeCredits(\PDO $pdo_db, array $langvars, int $planet_id): string
     {
         $playerinfo = Array();
+        $planetinfo = Array();
+
         // Get playerinfo from database
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
