@@ -92,7 +92,7 @@ class Db
                     $db->SetFetchMode(ADODB_FETCH_ASSOC);
                 }
             }
-            catch (\Throwable $e)
+            catch (Exception $e)
             {
                 // We need to display the error message onto the screen.
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
