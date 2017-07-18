@@ -750,8 +750,15 @@ class Traderoute
 
                 if ($traderoute['circuit'] == '1')
                 {
-                    $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ?, ship_energy = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_energy'], $playerinfo['ship_id']));
-                    \Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore, ship_goods = :ship_goods, ship_organics = :ship_organics, ship_energy = :ship_energy  WHERE ship_id=:ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ship_ore', $playerinfo['ship_ore'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_goods', $playerinfo['ship_goods'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_organics', $playerinfo['ship_organics'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_energy', $dist['ship_energy'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                    $result = $stmt->execute();
+                    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
             }
         }
@@ -831,8 +838,14 @@ class Traderoute
 
                     if ($traderoute['circuit'] == '1')
                     {
-                        $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $resg, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore, ship_goods = :ship_goods, ship_organics = :ship_organics WHERE ship_id=:ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':colonists_buy', $playerinfo['ship_ore'], \PDO::PARAM_INT);
+                        $stmt->bindParam(':fighters_buy', $playerinfo['ship_goods'], \PDO::PARAM_INT);
+                        $stmt->bindParam(':torps_buy', $playerinfo['ship_organics'], \PDO::PARAM_INT);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $result = $stmt->execute();
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                     }
                 }
 
