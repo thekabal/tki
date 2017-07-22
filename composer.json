@@ -23,7 +23,7 @@
         "sebastian/phpcpd": "^2.0.4",
         "friendsofphp/php-cs-fixer": "^2.1.1",
         "nette/nette": "^2.4.0",
-        "squizlabs/PHP_CodeSniffer": "3.0.1",
+        "squizlabs/PHP_CodeSniffer": "^3.0.2",
         "phpunit/phpunit": "^6.0.8",
         "povils/phpmnd": "^1.0",
         "phpstan/phpstan": "^0.6",
