@@ -21,7 +21,7 @@ namespace Tki;
 
 class Planet
 {
-    public function getOwner(\PDO $pdo_db, int $planet_id, &$owner_info): bool
+    public static function getOwner(\PDO $pdo_db, int $planet_id, &$owner_info): bool
     {
         $owner_info = null;
         if (($planet_id !== null) && is_numeric($planet_id) && $planet_id > 0)
