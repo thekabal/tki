@@ -63,7 +63,7 @@ class Ports
 
         $dropdownvar = "$dropdownvar       </select>\n";
 
-        return (string) $dropdownvar;
+        return $dropdownvar;
     }
 
     public static function buildOneCol($text = "&nbsp;", $align = "left"): void
