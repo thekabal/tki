@@ -404,7 +404,7 @@ class IbankTransfers
             $sql = "UPDATE ::prefix::ibank_accounts SET balance=balance+:amount WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
-            $stmt->bindParam(':ship_id', target['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $target['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
