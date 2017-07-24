@@ -71,7 +71,7 @@ if ($sort !== null)
 }
 
 $res = $db->Execute($query);
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 echo "<h1>" . $title . "</h1>\n";
 
 echo "<br>";
@@ -151,7 +151,7 @@ else
 
         $owner = $planet[$i]['owner'];
         $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = " . $owner);
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $player = $res->fields['character_name'];
 
         echo "<tr bgcolor=\"$color\">";

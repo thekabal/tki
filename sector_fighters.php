@@ -160,7 +160,7 @@ $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
 $stmt->bindParam(':playertorps', $playertorpnum, \PDO::PARAM_INT);
 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
 $result = $stmt->execute();
-Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
 $langvars['l_sf_lreport'] = str_replace("[armor]", $armor_lost, $langvars['l_sf_lreport']);
 $langvars['l_sf_lreport'] = str_replace("[fighters]", $fighters_lost, $langvars['l_sf_lreport']);
@@ -194,7 +194,7 @@ if ($playerarmor < 1)
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->bindParam(':rating', $rating, \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
         $ok = 0;

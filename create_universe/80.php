@@ -68,7 +68,7 @@ $stmt->bindParam(':ticks_full', $tkireg->sched_turns, \PDO::PARAM_INT);
 $stmt->bindValue(':sched_file', 'sched_kabal.php', \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
-$variables['update_kabal_results']['result'] = Tki\Db::LogDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
+$variables['update_kabal_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
 $variables['update_kabal_results']['sched'] = $tkireg->sched_turns;
 $local_table_timer->stop();
 $variables['update_kabal_results']['elapsed'] = $local_table_timer->elapsed();

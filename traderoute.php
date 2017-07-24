@@ -39,7 +39,7 @@ $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE owner = ?;", array($playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $num_traderoutes = $result->RecordCount();
 
 unset($traderoutes);
@@ -104,7 +104,7 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
     $result = $stmt->execute();
 
-    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 // Default to 1 run if we don't get a valid repeat value.
@@ -261,7 +261,7 @@ elseif ($engage !== null)
     while ($i > 0)
     {
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-        Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
         \Tki\Traderoute::engage($pdo_db, $db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
         $i--;
@@ -334,7 +334,7 @@ else
         else
         {
             $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['source_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if ($result)
             {
                 $planet1 = $result->fields;
@@ -350,7 +350,7 @@ else
         if ($traderoutes[$i]['source_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['source_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $port1 = $result->fields;
             echo "&nbsp;" . Tki\Ports::getType($port1['port_type'], $langvars) . "</font></td>";
         }
@@ -375,7 +375,7 @@ else
         else
         {
             $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['dest_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if ($result)
             {
                 $planet2 = $result->fields;
@@ -391,7 +391,7 @@ else
         if ($traderoutes[$i]['dest_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['dest_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $port2 = $result->fields;
             echo "&nbsp;" . Tki\Ports::getType($port2['port_type'], $langvars) . "</font></td>";
         }

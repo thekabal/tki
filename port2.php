@@ -509,7 +509,7 @@ else
 
             $query = $query . ", turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = " . $playerinfo['ship_id'];
             $purchase = $db->Execute("$query");
-            Tki\Db::LogDbErrors($pdo_db, $purchase, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $purchase, __LINE__, __FILE__);
 
             $hull_upgrade = 0;
             echo "</table>";
@@ -522,7 +522,7 @@ else
                 // Tki\Ports::buildTwoCol("<span style='color:#f00;'>Detected Illegal Cargo</span>", "<span style='color:#0f0;'>Fixed</span>", "left", "right");
                 echo "<span style='color:#f00; font-weight:bold;'>Detected illegal cargo, as a penalty, we are confiscating all of your cargo, you may now continue.</span>\n";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=0, ship_organics=0, ship_goods=0, ship_energy=0, ship_colonists =0 WHERE ship_id = ? LIMIT 1;", array($playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 $admin_log->writeLog($pdo_db, 5001, "Detected illegal cargo on shipID: {$playerinfo['ship_id']}");
             }
             else
@@ -682,7 +682,7 @@ else
 
             // Update ship cargo, credits and turns
             $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, rating = rating + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
 
             // Make all trades positive to change port values
             $trade_ore        = round(abs($trade_ore));
@@ -692,7 +692,7 @@ else
 
             // Decrease supply and demand on port
             $trade_result2 = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_organics = port_organics - ?, port_goods = port_goods - ?, port_energy = port_energy - ? WHERE sector_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $sectorinfo['sector_id']));
-            Tki\Db::LogDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
 
             echo $langvars['l_trade_complete'] . ".<br><br>";
         }

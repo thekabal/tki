@@ -31,7 +31,7 @@ echo "<h1>" . $title . "</h1>\n";
 $mail = filter_input(INPUT_GET, 'mail', FILTER_SANITIZE_EMAIL);
 
 $result = $db->SelectLimit("SELECT character_name, email, password, ship_id FROM {$db->prefix}ships WHERE email = ?", 1, -1, array('email' => $mail));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF)
 {
@@ -74,7 +74,7 @@ if (!$result->EOF)
         $stmt->bindParam(':time', time(), \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         mail($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'] . "\r\n\r\n" . htmlentities($link_to_reset, ENT_QUOTES | ENT_HTML5, 'UTF-8') . "\r\n", "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
         echo "<div style='color:#fff; text-align:left;'>" . $langvars['l_mail_sent'] . " <span style='color:#0f0;'>{$mail}</span></div>\n";

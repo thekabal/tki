@@ -104,7 +104,7 @@ else
     $schedCount = 0;
     $lastrunList = null;
     $sched_res = $db->Execute("SELECT * FROM {$db->prefix}scheduler");
-    Tki\Db::LogDbErrors($pdo_db, $sched_res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $sched_res, __LINE__, __FILE__);
     if ($sched_res)
     {
         while (!$sched_res->EOF)
@@ -129,7 +129,7 @@ else
                 if ($event['spawn'] - $multiplier == 0)
                 {
                     $resx = $db->Execute("DELETE FROM {$db->prefix}scheduler WHERE sched_id = ?", array($event['sched_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ else
                     $stmt->bindParam(':multiplier', $multiplier, \PDO::PARAM_INT);
                     $stmt->bindParam(':sched_id', $event['sched_id'], \PDO::PARAM_INT);
                     $result = $stmt->execute();
-                    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
             }
             else
@@ -149,7 +149,7 @@ else
                 $stmt->bindParam(':ticks_left', $ticks_left, \PDO::PARAM_INT);
                 $stmt->bindParam(':sched_id', $event['sched_id'], \PDO::PARAM_INT);
                 $result = $stmt->execute();
-                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
 
             $sched_var_id = $event['sched_id'];
@@ -184,7 +184,7 @@ else
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':time', time(), \PDO::PARAM_INT);
     $result = $stmt->execute();
-    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 echo "<br>";

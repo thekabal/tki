@@ -38,7 +38,7 @@ $furcount3a = 0;
 $furcount3h = 0;
 
 /*
-//Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+//Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email=kabal_id and active='Y' and ship_destroyed='N' ORDER BY ship_id");
 while (($res instanceof ADORecordSet) && ($res != false))
 //while (!$res->EOF)
@@ -59,7 +59,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             // Find a target in my sector, not myself, not on a planet
 
             $reso0 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? AND email! = ? AND email NOT LIKE '%@kabal' AND planet_id = 0 AND ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
-            Tki\Db::LogDbErrors($pdo_db, $res0, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $res0, __LINE__, __FILE__);
             if (!$reso0->EOF)
             {
                 $rowo0 = $reso0->fields;
@@ -108,7 +108,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             }
             // Find a target in my sector, not myself
             $reso1 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
-            Tki\Db::LogDbErrors($pdo_db, $reso1, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $reso1, __LINE__, __FILE__);
             if (!$reso1->EOF)
             {
                 $rowo1 = $reso1->fields;
@@ -170,7 +170,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             // FIND A TARGET
             // IN MY SECTOR, NOT MYSELF
             $reso2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
-            Tki\Db::LogDbErrors($pdo_db, $reso2, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $reso2, __LINE__, __FILE__);
             if (!$reso2->EOF)
             {
                 $rowo2 = $reso2->fields;
@@ -245,7 +245,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 // FIND A TARGET
                 // IN MY SECTOR, NOT MYSELF
                 $reso3 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
-                Tki\Db::LogDbErrors($pdo_db, $reso3, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $reso3, __LINE__, __FILE__);
                 if (!$reso3->EOF)
                 {
                     $rowo3 = $reso3->fields;

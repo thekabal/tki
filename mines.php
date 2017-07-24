@@ -137,7 +137,7 @@ if ($playerinfo['turns'] < 1)
 }
 
 $res = $db->Execute("SELECT allow_defenses, {$db->prefix}universe.zone_id, owner FROM {$db->prefix}zones, {$db->prefix}universe WHERE sector_id = ? AND {$db->prefix}zones.zone_id = {$db->prefix}universe.zone_id", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 
 if ($zoneinfo['allow_defenses'] == 'N')
@@ -268,12 +268,12 @@ else
                 $stmt->bindParam(':mode', $mode, \PDO::PARAM_INT);
                 $stmt->bindParam(':fighter_id', $fighter_id, \PDO::PARAM_INT);
                 $result = $stmt->execute();
-                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {
                 $update = $db->Execute("INSERT INTO {$db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'F', $numfighters, $mode));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
                 echo $db->ErrorMsg();
             }
         }
@@ -288,12 +288,12 @@ else
                 $stmt->bindParam(':mode', $mode, \PDO::PARAM_INT);
                 $stmt->bindParam(':defense_id', $mine_id, \PDO::PARAM_INT);
                 $result = $stmt->execute();
-                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {
                 $update = $db->Execute("INSERT INTO {$db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'M', $nummines, $mode));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
             }
         }
 
@@ -305,7 +305,7 @@ else
         $stmt->bindParam(':nummines', $nummines, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
 

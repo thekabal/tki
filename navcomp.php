@@ -166,7 +166,7 @@ elseif ($state == 1)
         }
         else
         {
-            Tki\Db::LogDbErrors($pdo_db, $search_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $search_result, __LINE__, __FILE__);
             $found = $search_result->RecordCount();
             if ($found > 0)
             {

@@ -104,7 +104,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         if ($playerinfo['on_planet'] == 'Y')
         {
             $resx = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         }
 
         echo $langvars['l_planet_none'] . " <p>";
@@ -172,11 +172,11 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 if ($playerinfo['dev_genesis'] > 0)
                 {
                     $update = $db->Execute("DELETE FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id));
-                    Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
                     $update2 = $db->Execute("UPDATE {$db->prefix}ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id = ?", array($playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $update2, __LINE__, __FILE__);
                     $update3 = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE planet_id = ?;", array($planet_id));
-                    Tki\Db::LogDbErrors($pdo_db, $update3, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $update3, __LINE__, __FILE__);
                     Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
                     header("Location: main.php");
                 }
@@ -352,13 +352,13 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 // Set planet to not sell
                 echo $langvars['l_planet_nownosell'] . "<br>";
                 $result4 = $db->Execute("UPDATE {$db->prefix}planets SET sells='N' WHERE planet_id = ?;", array($planet_id));
-                Tki\Db::LogDbErrors($pdo_db, $result4, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
             }
             else
             {
                 echo $langvars['l_planet_nowsell'] . "<br>";
                 $result4b = $db->Execute("UPDATE {$db->prefix}planets SET sells='Y' WHERE planet_id = ?;", array($planet_id));
-                Tki\Db::LogDbErrors($pdo_db, $result4b, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $result4b, __LINE__, __FILE__);
             }
         }
         elseif ($command == "name")
@@ -375,7 +375,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             // Name2 menu
             $new_name = trim(htmlentities($_POST['new_name'], ENT_HTML5, 'UTF-8'));
             $result5 = $db->Execute("UPDATE {$db->prefix}planets SET name = ? WHERE planet_id = ?;", array($new_name, $planet_id));
-            Tki\Db::LogDbErrors($pdo_db, $result5, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result5, __LINE__, __FILE__);
             echo $langvars['l_planet_cname'] . " " . $new_name . ".";
         }
         elseif ($command == "land")
@@ -383,14 +383,14 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             // Land menu
             echo $langvars['l_planet_landed'] . "<br><br>";
             $update = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='Y', planet_id = ? WHERE ship_id = ?;", array($planet_id, $playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
         }
         elseif ($command == "leave")
         {
             // Leave menu
             echo $langvars['l_planet_left'] . "<br><br>";
             $update = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
         }
         elseif ($command == "transfer")
         {
@@ -447,11 +447,11 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 {
                     // Create The Base
                     $update1 = $db->Execute("UPDATE {$db->prefix}planets SET base='Y', ore = ? - ?, organics = ? - ?, goods = ? - ?, credits = ? - ? WHERE planet_id = ?;", array($planetinfo['ore'], $tkireg->base_ore, $planetinfo['organics'], $tkireg->base_organics, $planetinfo['goods'], $tkireg->base_goods, $planetinfo['credits'], $tkireg->base_credits, $planet_id));
-                    Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
 
                     // Update User Turns
                     $update1b = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
 
                     // Refresh Planet Info
                     $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
@@ -501,7 +501,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             else
             {
                 $resx = $db->Execute("UPDATE {$db->prefix}planets SET prod_ore= ? , prod_organics = ?, prod_goods = ?, prod_energy = ?, prod_fighters = ?, prod_torp = ? WHERE planet_id = ?;", array($pore, $porganics, $pgoods, $penergy, $pfighters, $ptorp, $planet_id));
-                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 echo $langvars['l_planet_p_changed'] . "<br><br>";
             }
         }
@@ -517,7 +517,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             // Leave menu
             echo $langvars['l_planet_left'] . "<br><br>";
             $update = $db->Execute("UPDATE {$db->prefix}ships SET on_planet = 'N', planet_id = 0 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
             $langvars['l_global_mmenu'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
             echo $langvars['l_global_mmenu'] . "<br>\n";
             header("Location: main.php");
@@ -875,7 +875,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 // }
 
                 $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE on_planet = 'Y' and planet_id = ?;", array($planet_id));
-                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
                 while (!$res->EOF)
                 {
@@ -903,13 +903,13 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             }
 
             $update = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
         }
         elseif ($command == "capture" && $planetinfo['owner'] == 0)
         {
             echo $langvars['l_planet_captured'] . "<br>";
             $update = $db->Execute("UPDATE {$db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
-            Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
             $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg, $langvars);
 
             if ($ownership !== null)
@@ -941,7 +941,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         {
             echo $langvars['l_planet_notdef'] . "<br>";
             $resx = $db->Execute("UPDATE {$db->prefix}planets SET defeated='N' WHERE planet_id = ?;", array($planetinfo['planet_id']));
-            Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         }
         else
         {

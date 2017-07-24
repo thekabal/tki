@@ -38,7 +38,7 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 $planet_id = preg_replace('/[^0-9]/', '', $planet_id);
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?", array($planet_id));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 if ($result2)
 {
     $planetinfo = $result2->fields;
@@ -56,7 +56,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
 
         if ($ownership !== null)
@@ -73,7 +73,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
 
         // Kick other players off the planet
@@ -82,7 +82,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         if ($ownership !== null)
         {
             echo "<p>" . $ownership . "<p>";

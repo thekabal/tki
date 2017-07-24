@@ -105,7 +105,7 @@ $banned = 0;
 if ($playerinfo !== null && $playerfound !== false)
 {
     $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask OR ? LIKE ban_mask;", array($request->server->get('REMOTE_ADDR'), $playerinfo['ip_address']));
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     if ($res->RecordCount() != 0)
     {
         $banned = 1;
@@ -135,7 +135,7 @@ if ($playerfound)
                 $stmt->bindParam(':ip_address', $request->server->get('REMOTE_ADDR'), \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $result = $stmt->execute();
-                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 $_SESSION['logged_in'] = true;
                 $_SESSION['password'] = $filtered_post_password;
@@ -166,7 +166,7 @@ if ($playerfound)
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                     $result = $stmt->execute();
-                    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                     $langvars['l_login_died'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_login_died']);
                     echo $langvars['l_login_died'];
                 }
@@ -178,7 +178,7 @@ if ($playerfound)
                     if ($tkireg->newbie_nice)
                     {
                         $newbie_info = $db->Execute("SELECT hull, engines, power, computer, sensors, armor, shields, beams, torp_launchers, cloak FROM {$db->prefix}ships WHERE ship_id = ? AND hull <= ? AND engines <= ? AND power <= ? AND computer <= ? AND sensors <= ? AND armor <= ? AND shields <= ? AND beams <= ? AND torp_launchers <= ? AND cloak <= ?;", array($playerinfo['ship_id'], $tkireg->newbie_hull, $tkireg->newbie_engines, $tkireg->newbie_power, $tkireg->newbie_computer, $tkireg->newbie_sensors, $tkireg->newbie_armor, $tkireg->newbie_shields, $tkireg->newbie_beams, $tkireg->newbie_torp_launchers, $tkireg->newbie_cloak));
-                        Tki\Db::LogDbErrors($pdo_db, $newbie_info, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $newbie_info, __LINE__, __FILE__);
                         $num_rows = $newbie_info->RecordCount();
 
                         if ($num_rows)
@@ -200,7 +200,7 @@ if ($playerfound)
                             $stmt = $pdo_db->prepare($sql);
                             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                             $result = $stmt->execute();
-                            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                             $langvars['l_login_newlife'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_login_newlife']);
                             echo $langvars['l_login_newlife'];

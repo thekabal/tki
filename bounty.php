@@ -83,7 +83,7 @@ switch ($response) {
     case 'display':
         echo "<h1>" . $title . "</h1>\n";
         $res5 = $db->Execute("SELECT * FROM {$db->prefix}ships, {$db->prefix}bounty WHERE bounty_on = ship_id AND bounty_on = ?;", array($bounty_on));
-        Tki\Db::LogDbErrors($pdo_db, $res5, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res5, __LINE__, __FILE__);
         $j = 0;
         if ($res5)
         {
@@ -166,7 +166,7 @@ switch ($response) {
         }
 
         $res = $db->Execute("SELECT * FROM {$db->prefix}bounty WHERE bounty_id = ?;", array($bid));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if (!$res || $res->RowCount() == 0)
         {
             echo $langvars['l_by_nobounty'] . "<br><br>";
@@ -189,7 +189,7 @@ switch ($response) {
         }
 
         $del = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_id = ?;", array($bid));
-        Tki\Db::LogDbErrors($pdo_db, $del, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $del, __LINE__, __FILE__);
         $stamp = date("Y-m-d H:i:s");
         $refund = $bty['amount'];
 
@@ -199,14 +199,14 @@ switch ($response) {
         $stmt->bindParam(':refund', $refund, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         echo $langvars['l_by_canceled'] . "<br>";
         Tki\Text::gotoMain($pdo_db, $lang);
         die();
     case 'place':
         echo "<h1>" . $title . "</h1>\n";
         $ex = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounty_on));
-        Tki\Db::LogDbErrors($pdo_db, $ex, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $ex, __LINE__, __FILE__);
         if (!$ex)
         {
             echo $langvars['l_by_notexists'] . "<br><br>";
@@ -276,7 +276,7 @@ switch ($response) {
             $maxtrans = $score * $score * $tkireg->max_bountyvalue;
             $previous_bounty = 0;
             $pb = $db->Execute("SELECT SUM(amount) AS totalbounty FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = ?;", array($bounty_on, $playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $pb, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $pb, __LINE__, __FILE__);
             if ($pb)
             {
                 $prev = $pb->fields;
@@ -296,7 +296,7 @@ switch ($response) {
         }
 
         $insert = $db->Execute("INSERT INTO {$db->prefix}bounty (bounty_on, placed_by, amount) values (?, ?, ?);", array($bounty_on, $playerinfo['ship_id'], $amount));
-        Tki\Db::LogDbErrors($pdo_db, $insert, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $insert, __LINE__, __FILE__);
         $stamp = date("Y-m-d H:i:s");
 
         $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, turns_used=turns_used+1, credits=credits-:amount WHERE ship_id=:ship_id";
@@ -305,14 +305,14 @@ switch ($response) {
         $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         echo $langvars['l_by_placed'] . "<br>";
         Tki\Text::gotoMain($pdo_db, $lang);
         die();
     default:
         echo "<h1>" . $title . "</h1>\n";
         $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_destroyed = 'N' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         echo "<form accept-charset='utf-8' action=bounty.php method=post>";
         echo "<table>";
         echo "<tr><td>" . $langvars['l_by_bountyon'] . "</td><td><select name=bounty_on>";
@@ -341,7 +341,7 @@ switch ($response) {
         echo "</form>";
 
         $result3 = $db->Execute("SELECT bounty_on, SUM(amount) as total_bounty FROM {$db->prefix}bounty GROUP BY bounty_on;");
-        Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
         $i = 0;
         if ($result3)

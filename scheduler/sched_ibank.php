@@ -26,7 +26,7 @@ $expoloan = pow($tkireg->ibank_loaninterest + 1, $multiplier);
 echo "<strong>" . $langvars['l_sched_ibank_title'] . "</strong><p>";
 
 $ibank_result = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance * ?, loan = loan * ?", array($exponinter, $expoloan));
-Tki\Db::LogDbErrors($pdo_db, $ibank_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $ibank_result, __LINE__, __FILE__);
 $langvars['l_sched_ibank_note'] = str_replace("[multiplier]", $multiplier, $langvars['l_sched_ibank_note']);
 echo $langvars['l_sched_ibank_note'] . "<p>";
 

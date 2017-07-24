@@ -144,7 +144,7 @@ if ($flag == 0)
 
     $result2 = $db->Execute("INSERT INTO {$db->prefix}ships (ship_name, ship_destroyed, character_name, password, email, armor_pts, credits, ship_energy, ship_fighters, turns, on_planet, dev_warpedit, dev_genesis, dev_beacon, dev_emerwarp, dev_escapepod, dev_fuelscoop, dev_minedeflector, last_login, ip_address, trade_colonists, trade_fighters, trade_torps, trade_energy, cleared_defenses, lang, dev_lssd)
                              VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, 10, 1000, 100, 10, $mturns, 'N', 0, 0, 0, 0, 'N', 'N', 0, $stamp, $request->server->get('REMOTE_ADDR'), 'Y', 'N', 'N', 'Y', null, $lang, 'N'));
-    Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
     if (!$result2)
     {
@@ -153,7 +153,7 @@ if ($flag == 0)
     else
     {
         $result2 = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($username));
-        Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $shipid = $result2->fields;
         $shipid['ship_id'] = (int) $shipid['ship_id'];
 
@@ -175,10 +175,10 @@ if ($flag == 0)
 
         Tki\LogMove::writeLog($pdo_db, $shipid['ship_id'], 1); // A new player is placed into sector 1. Make sure his movement log shows it, so they see it on the galaxy map.
         $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES (NULL, ?, ?, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array($character . "\'s Territory", $shipid['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
         $resx = $db->Execute("INSERT INTO {$db->prefix}ibank_accounts (ship_id,balance,loan) VALUES (?,0,0);", array($shipid['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
         // Add presets for new player
         for ($zz = 0; $zz < $tkireg->max_presets; $zz++)

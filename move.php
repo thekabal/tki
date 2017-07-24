@@ -59,7 +59,7 @@ $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Retrive all the warp links out of the current sector
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 $i = 0;
 $flag = 0;
 
@@ -89,7 +89,7 @@ if ($flag == 1)
         $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?," .
                                     "turns = turns - 1, turns_used = turns_used + 1," .
                                     "sector = ? WHERE ship_id = ?;", array($stamp, $sector, $playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
         if (!$move_result)
         {
             // is this really STILL needed?
@@ -116,7 +116,7 @@ else
     echo $langvars['l_move_failed'] . '<br><br>';
     $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' " .
                          "WHERE ship_id = ?;", array($playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     Tki\Text::gotoMain($pdo_db, $lang);
 }
 

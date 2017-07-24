@@ -34,7 +34,7 @@ $picsperrow = 7;
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+$sql_test = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 if ($sql_test === true)
 {
     $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
@@ -70,7 +70,7 @@ $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($playerinfo['on_planet'] == "Y")
 {
     $res2 = $db->Execute("SELECT planet_id, owner FROM {$db->prefix}planets WHERE planet_id = ?;", array($playerinfo['planet_id']));
-    Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
     if ($res2->RecordCount() != 0)
     {
         echo "<a href=planet.php?planet_id=$playerinfo[planet_id]>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "    <br>";
@@ -83,7 +83,7 @@ if ($playerinfo['on_planet'] == "Y")
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         echo "<br>" . $langvars['l_nonexistant_pl'] . "<br><br>";
     }
 }
@@ -164,7 +164,7 @@ echo "</div>\n";
 $num_messages = 0;
 $sql = "SELECT COUNT(*) FROM ::prefix::messages WHERE recp_id=:recp_id AND notified='N'";
 $stmt = $pdo_db->prepare($sql);
-$sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+$sql_test = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
 if ($sql_test === true)
 {
@@ -187,7 +187,7 @@ if ($num_messages > 0)
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':sectors', $playerinfo['ship_id'], \PDO::PARAM_INT);
     $result = $stmt->execute();
-    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 $ply_turns     = number_format($playerinfo['turns'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
@@ -336,7 +336,7 @@ $num_traderoutes = 0;
 
 // Traderoute query
 $tr_result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE source_type = ? AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array("P", $playerinfo['sector'], $playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $tr_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $tr_result, __LINE__, __FILE__);
 while (!$tr_result->EOF)
 {
     $traderoutes[$i] = $tr_result->fields;
@@ -347,7 +347,7 @@ while (!$tr_result->EOF)
 
 // Sector defense trade route query - this is still under developement
 $sd_tr_result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE source_type='D' AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array($playerinfo['sector'], $playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $sd_tr_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $sd_tr_result, __LINE__, __FILE__);
 while (!$sd_tr_result->EOF)
 {
     $traderoutes[$i] = $sd_tr_result->fields;
@@ -358,7 +358,7 @@ while (!$sd_tr_result->EOF)
 
 // Personal planet traderoute type query
 $ppl_tr_result = $db->Execute("SELECT * FROM {$db->prefix}planets, {$db->prefix}traderoutes WHERE source_type = 'L' AND source_id = {$db->prefix}planets.planet_id AND {$db->prefix}planets.sector_id = ? AND {$db->prefix}traderoutes.owner = ?;", array($playerinfo['sector'], $playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $ppl_tr_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $ppl_tr_result, __LINE__, __FILE__);
 while (!$ppl_tr_result->EOF)
 {
     $traderoutes[$i] = $ppl_tr_result->fields;
@@ -369,7 +369,7 @@ while (!$ppl_tr_result->EOF)
 
 // Team planet traderoute type query
 $tmpl_tr_result = $db->Execute("SELECT * FROM {$db->prefix}planets, {$db->prefix}traderoutes WHERE source_type = 'C' AND source_id = {$db->prefix}planets.planet_id AND {$db->prefix}planets.sector_id = ? AND {$db->prefix}traderoutes.owner = ?;", array($playerinfo['sector'], $playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $tmpl_tr_result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $tmpl_tr_result, __LINE__, __FILE__);
 while (!$tmpl_tr_result->EOF)
 {
     $traderoutes[$i] = $tmpl_tr_result->fields;
@@ -402,7 +402,7 @@ else
         else
         {
             $pl_result = $db->Execute("SELECT name FROM {$db->prefix}planets WHERE planet_id = ?;", array($traderoutes[$i]['source_id']));
-            Tki\Db::LogDbErrors($pdo_db, $pl_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $pl_result, __LINE__, __FILE__);
             if (!$pl_result || $pl_result->RecordCount() == 0)
             {
                 echo $langvars['l_unknown'];
@@ -441,7 +441,7 @@ else
         else
         {
             $pl_dest_result = $db->Execute("SELECT name FROM {$db->prefix}planets WHERE planet_id = ?;", array($traderoutes[$i]['dest_id']));
-            Tki\Db::LogDbErrors($pdo_db, $pl_dest_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $pl_dest_result, __LINE__, __FILE__);
 
             if (!$pl_dest_result || $pl_dest_result->RecordCount() == 0)
             {
@@ -609,7 +609,7 @@ if ($playerinfo['sector'] !== 1)
     $sql .= "ORDER BY :rand";
 
     $stmt = $pdo_db->prepare($sql);
-    $sql_test = Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+    $sql_test = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     if ($sql_test === true)
     {
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
@@ -619,7 +619,7 @@ if ($playerinfo['sector'] !== 1)
         $result4 = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    Tki\Db::LogDbErrors($pdo_db, $result4, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
 
     if ($result4 !== false)
     {
@@ -851,7 +851,7 @@ echo '<table style="width:100%;">';
 // Pull the presets for the player from the db.
 $i = 0;
 $debug_query = $db->Execute("SELECT * FROM {$db->prefix}presets WHERE ship_id = ?;", array($playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $debug_query, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $debug_query, __LINE__, __FILE__);
 while (!$debug_query->EOF)
 {
     $presetinfo[$i] = $debug_query->fields;

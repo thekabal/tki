@@ -45,7 +45,7 @@ if (($filtered_ship_id === null) || (mb_strlen(trim($filtered_ship_id)) === 0))
 }
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($filtered_ship_id));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 $targetinfo = $result2->fields;
 
 $targetinfo['ship_id'] = (int) $targetinfo['ship_id'];
@@ -111,7 +111,7 @@ else
             // Get total bounty on this player, if any
             $btyamount = 0;
             $hasbounty = $db->Execute("SELECT SUM(amount) AS btytotal FROM {$db->prefix}bounty WHERE bounty_on = ?", array($targetinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $hasbounty, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $hasbounty, __LINE__, __FILE__);
 
             if ($hasbounty)
             {
@@ -125,7 +125,7 @@ else
 
                     // Check for Federation bounty
                     $hasfedbounty = $db->Execute("SELECT SUM(amount) AS btytotal FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0", array($targetinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $hasfedbounty, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $hasfedbounty, __LINE__, __FILE__);
                     if ($hasfedbounty)
                     {
                         $resy = $hasfedbounty->fields;
@@ -468,7 +468,7 @@ else
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
-        Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
 

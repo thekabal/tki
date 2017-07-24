@@ -41,7 +41,7 @@ $newpass2  = filter_input(INPUT_POST, 'newpass2', FILTER_SANITIZE_STRING);
 // because 8 characters is 4,294,967,296 combinations, and that should be sufficiently secure
 
 $result = $db->SelectLimit("SELECT ship_id, email, recovery_time FROM {$db->prefix}ships WHERE substr(MD5(password),6,8) = ?", 1, -1, array('password' => $reset_code));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF && $result !== false)
 {
@@ -91,7 +91,7 @@ if (!$result->EOF && $result !== false)
             $stmt->bindParam(':hashed_pass', $hashed_pass, \PDO::PARAM_STR);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             // Now check to see if we have a valid update and have ONLY 1 changed record.
             if ((is_bool($rs) && $rs === false) || $db->Affected_Rows() != 1)
@@ -123,7 +123,7 @@ if (!$result->EOF && $result !== false)
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             echo $langvars['l_pwr_success'] . "<br><br>";
             echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);

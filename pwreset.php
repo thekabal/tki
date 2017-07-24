@@ -39,7 +39,7 @@ $reset_code = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
 // because 8 characters is 4,294,967,296 combinations, and that should be sufficiently secure
 
 $result = $db->SelectLimit("SELECT character_name, email, recovery_time FROM {$db->prefix}ships WHERE substr(MD5(password),6,8) = ?", 1, -1, array('password' => $reset_code));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF && $result !== false)
 {
@@ -101,7 +101,7 @@ else
 // $stmt = $pdo_db->prepare($sql);
 // $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
 // $result = $stmt->execute();
-// Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+// Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
 /// Log user in (like login does)
 

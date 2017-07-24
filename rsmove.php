@@ -58,7 +58,7 @@ if ($destination === false || $engage === false)
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
     $result = $stmt->execute();
-    Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 else
 {
@@ -86,12 +86,12 @@ else
         // Ok, we have been given the destination value.
         // Get the players current sector information.
         $result2 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-        Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $start = $result2->fields;
 
         // Get the destination sector information.
         $result3 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($destination));
-        Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
         $finish = $result3->fields;
 
         // Calculate the distance.
@@ -174,7 +174,7 @@ else
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $result = $stmt->execute();
-                Tki\Db::LogDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {
@@ -190,7 +190,7 @@ else
                     $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
                     $stamp = date("Y-m-d H:i:s");
                     $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
                     // Future: Determine where $destination gets changed to something other than int. In the meantime, make it correct here.
                     $destination = (int) $destination;
 
