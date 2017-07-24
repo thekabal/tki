@@ -27,32 +27,32 @@ $info['GAMEID'] = md5($tkireg->game_name . $tkireg->tki_ls_key);
 $xsql = "SELECT UNIX_TIMESTAMP(time) as x FROM {$db->prefix}movement_log WHERE event_id = 1";
 $res = $db->Execute($xsql);
 $row = $res->fields;
-$info['START-DATE'] = $row[x];
+$info['START-DATE'] = $row['x'];
 $info['G-DURATION'] = -1;
 
 $xsql = "SELECT count(*) as x FROM {$db->prefix}ships";
 $res = $db->Execute($xsql);
 $row = $res->fields;
-$info['P-ALL'] = $row[x];
+$info['P-ALL'] = $row['x'];
 
 $xsql = "SELECT count(*) as x FROM {$db->prefix}ships WHERE ship_destroyed = 'N' ";
 $res = $db->Execute($xsql);
 $row = $res->fields;
-$info['P-ACTIVE'] = $row[x];
+$info['P-ACTIVE'] = $row['x'];
 
 $xsql = "SELECT count(*) as x FROM {$db->prefix}ships WHERE ship_destroyed = 'N' AND email NOT LIKE '%@kabal'";
 $res = $db->Execute($xsql);
 $row = $res->fields;
-$info['P-HUMAN'] = $row[x];
+$info['P-HUMAN'] = $row['x'];
 
 $xsql = "SELECT COUNT(*) as x FROM {$db->prefix}ships WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(last_login)) / 60 <= 5 and email NOT LIKE '%@kabal'";
 $res = $db->Execute($xsql);
 $row = $res->fields;
-$info['P-ONLINE'] = $row[x];
+$info['P-ONLINE'] = $row['x'];
 
 $res = $db->Execute("SELECT AVG(hull) AS a1 , AVG(engines) AS a2 , AVG(power) AS a3 , AVG(computer) AS a4 , AVG(sensors) AS a5 , AVG(beams) AS a6 , AVG(torp_launchers) AS a7 , AVG(shields) AS a8 , AVG(armor) AS a9 , AVG(cloak) AS a10 FROM {$db->prefix}ships WHERE ship_destroyed='N' and email LIKE '%@kabal'");
 $row = $res->fields;
-$dyn_kabal_lvl = $row[a1] + $row[a2] + $row[a3] + $row[a4] + $row[a5] + $row[a6] + $row[a7] + $row[a8] + $row[a9] + $row[a10];
+$dyn_kabal_lvl = $row['a1'] + $row['a2'] + $row['a3'] + $row['a4'] + $row['a5'] + $row['a6'] + $row['a7'] + $row['a8'] + $row['a9'] + $row['a10'];
 $dyn_kabal_lvl = $dyn_kabal_lvl / 10;
 $info['P-AI-LVL'] = $dyn_kabal_lvl;
 
