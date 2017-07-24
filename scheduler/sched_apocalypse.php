@@ -55,14 +55,14 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
         $resx = $db->Execute("UPDATE {$db->prefix}planets SET colonists = ROUND (colonists - colonists * ?) WHERE planet_id = ?;", array($space_plague_kills, $targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $logpercent = round($space_plague_kills * 100);
-        Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['owner'], \Tki\LogEnums::SPACE_PLAGUE, "$targetinfo[name]|$targetinfo[sector_id]|$logpercent");
+        Tki\PlayerLog::writeLog($pdo_db, $targetinfo['owner'], \Tki\LogEnums::SPACE_PLAGUE, "$targetinfo[name]|$targetinfo[sector_id]|$logpercent");
     }
     else
     {
         echo $langvars['l_apoc_plasma'] . "<br>.";
         $resy = $db->Execute("UPDATE {$db->prefix}planets SET energy = 0 WHERE planet_id = ?;", array($targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resy, __LINE__, __FILE__);
-        Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['owner'], \Tki\LogEnums::PLASMA_STORM, "$targetinfo[name]|$targetinfo[sector_id]");
+        Tki\PlayerLog::writeLog($pdo_db, $targetinfo['owner'], \Tki\LogEnums::PLASMA_STORM, "$targetinfo[name]|$targetinfo[sector_id]");
     }
 }
 

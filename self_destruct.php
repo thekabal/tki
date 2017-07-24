@@ -68,7 +68,7 @@ elseif ($sure == 2)
 
     $admin_log = new Tki\AdminLog;
     $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_HARAKIRI, "$playerinfo[character_name]|" . $request->server->get('REMOTE_ADDR') . "");
-    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::HARAKIRI, $request->server->get('REMOTE_ADDR'));
+    Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::HARAKIRI, $request->server->get('REMOTE_ADDR'));
     echo "Due to nobody looking after your Planets, all your Planets have reduced into dust and ruble. Your Planets are no more.<br>\n";
 }
 else

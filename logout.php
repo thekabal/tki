@@ -39,7 +39,7 @@ if (array_key_exists('username', $_SESSION))
     $current_score = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 
     $langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
-    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::LOGOUT, $request->server->get('REMOTE_ADDR'));
+    Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::LOGOUT, $request->server->get('REMOTE_ADDR'));
     $langvars['l_logout_text'] = str_replace("[name]", $_SESSION['username'], $langvars['l_logout_text']);
     $langvars['l_logout_text'] = str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_logout_text']);
 
