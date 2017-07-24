@@ -21,6 +21,8 @@ namespace Tki;
 
 class Schema
 {
+    const PDO_SUCCESS = '00000'; // PDO gives an error code of string 00000 if successful. Not extremely helpful.
+
     public static function dropTables(\PDO $pdo_db, string $db_prefix, string $dbtype) : array
     {
         $i = 0;
@@ -128,7 +130,6 @@ class Schema
         {
             $create_table_results = array();
             $i = 0;
-            define('PDO_SUCCESS', '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
             $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
             foreach ($seq_files as $seq_filename)
@@ -171,7 +172,6 @@ class Schema
     {
         $create_table_results = array();
         $i = 0;
-        define('PDO_SUCCESS', '00000'); // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)
@@ -209,7 +209,7 @@ class Schema
                 $sth = $pdo_db->prepare($sql_query);
                 $sth->execute();
 
-                if ($pdo_db->errorCode() !== PDO_SUCCESS)
+                if ($pdo_db->errorCode() !== self::PDO_SUCCESS)
                 {
                     $errorinfo = $pdo_db->errorInfo();
                     $create_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
