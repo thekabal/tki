@@ -621,7 +621,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 }
                 else
                 {
-                    PlanetCombat::prime($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo);
+                    \Tki\PlanetCombat::prime($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo);
                 }
             }
         }
@@ -651,7 +651,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         {
             try
             {
-                Planet::bombing($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
+                \Tki\Planet::bombing($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
             }
             catch (Exception $e)
             {
