@@ -96,7 +96,7 @@ if ($flag == 1)
             $error = $db->ErrorMsg();
             mail($tkireg->admin_mail, "Move Error", "Start Sector: $sectorinfo[sector_id]\n" .
                 "End Sector: $sector\nPlayer: $playerinfo[character_name] - " .
-                $playerinfo[ship_id] . "\n\nQuery:  $query\n\nSQL error: $error");
+                $playerinfo['ship_id'] . "\n\nQuery:  $query\n\nSQL error: $error");
         }
     }
 
