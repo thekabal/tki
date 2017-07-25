@@ -47,7 +47,7 @@ class Translate
                 }
             }
 
-            return (array) self::$langvars;
+            return self::$langvars;
         }
         else
         {
@@ -73,7 +73,7 @@ class Translate
                 }
             }
 
-            return (array) self::$langvars;
+            return self::$langvars;
         }
     }
 }
