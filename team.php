@@ -58,7 +58,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         $result = $stmt->execute();
         Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
-        echo "<p>" . $ownership . "<p>";
+        echo '<p>' . $ownership . '<p>';
     }
 
     if ($action == "planetpersonal")
@@ -79,7 +79,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
         Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        echo "<p>" . $ownership . "<p>";
+        echo '<p>' . $ownership . '<p>';
     }
 
     Tki\Text::gotoMain($pdo_db, $lang);
