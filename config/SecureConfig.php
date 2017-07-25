@@ -28,8 +28,8 @@ class SecureConfig
     // We are migrating away from adodb, switching to pure PDO instead.
 
     // Port to connect to database on.
-    // If you do not know the port, set this to '' for default.
-    //  MySQL default is 3306, PgSQL default is 5432
+    // If you do not know the port, set this to null for default.
+    // The default for MySQL is 3306, The default for PgSQL is 5432
 
     const DB_PORT = null;
 
