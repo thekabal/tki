@@ -21,7 +21,7 @@ namespace Tki;
 
 class Test extends \PHPUnit\Framework\TestCase
 {
-    public function testOnePlusOne()
+    public function testOnePlusOne(): void
     {
         $this->assertEquals(1 + 1, 2);
     }
