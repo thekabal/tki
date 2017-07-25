@@ -285,7 +285,7 @@ else
 
             echo $langvars['l_att_att'] . " " . $targetinfo['character_name'] . " " . $langvars['l_aboard'] . " " . $targetinfo['ship_name'] . ":<br><br>";
 
-            $bcs_info = null;
+            $bcs_info = [];
             $bcs_info[] = array("Beams(lvl)", "{$playerbeams}({$playerinfo['beams']})", "{$targetbeams}({$targetinfo['beams']})");
             $bcs_info[] = array("Shields(lvl)", "{$playershields}({$playerinfo['shields']})", "{$targetshields}({$targetinfo['shields']})");
             $bcs_info[] = array("Energy(Start)", "{$playerinfo['ship_energy']}({$playerenergy})", "{$targetinfo['ship_energy']}({$targetenergy})");

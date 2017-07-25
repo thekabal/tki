@@ -624,7 +624,7 @@ if ($playerinfo['sector'] !== 1)
     if ($result4 !== false)
     {
         $ships_detected = 0;
-        $ship_detected = null;
+        $ship_detected = [];
         foreach ($result4 as $row)
         {
             $success = Tki\Scan::success($playerinfo['sensors'], $row['cloak']);
