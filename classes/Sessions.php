@@ -91,6 +91,7 @@ class Sessions
         return (string) $result['sessdata'];
     }
 
+    /** @return mixed */
     public function write(string $sesskey, string $sessdata)
     {
         if (Db::isActive($this->pdo_db))
@@ -139,6 +140,7 @@ class Sessions
         }
     }
 
+    /** @return mixed */
     public function destroy(string $sesskey)
     {
         $qry = "DELETE from ::prefix::sessions where sesskey=:sesskey";
@@ -148,6 +150,7 @@ class Sessions
         return $result;
     }
 
+    /** @return mixed */
     public function gc()
     {
         $qry = "DELETE from ::prefix::sessions where expiry>:expiry";

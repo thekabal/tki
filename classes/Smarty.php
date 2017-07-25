@@ -113,6 +113,7 @@ class Smarty
         $this->smarty->assign($nodeName, $variables);
     }
 
+    /** @return mixed */
     public function getVariables($nodeName)
     {
         $temp_variable = $this->smarty->getTemplateVars($nodeName);
