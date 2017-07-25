@@ -624,7 +624,7 @@ class Kabal
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
 
-        if (!$gene === null || !$gena === null || !$genf === null || !$gent === null)
+        if ($gene !== null || $gena !== null || $genf !== null || $gent !== null)
         {
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal $gene $gena $genf $gent and has been updated.");
         }
