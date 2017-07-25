@@ -21,10 +21,17 @@ namespace Tki;
 
 class Sessions
 {
+    /** @var int */
     public $maxlifetime = 1800; // 30 mins
+
+    /** @var \PDO|null */
     private $pdo_db = null;
-    private $currenttime = null;
+
+    /** @var string|null */
     private $expiry = null;
+
+    /** @var string|null */
+    private $currenttime = null;
 
     public function __construct(\PDO $pdo_db)
     {

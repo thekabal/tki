@@ -174,6 +174,7 @@ namespace Tki;
      */
 class Reg
 {
+    /** @var Array **/
     protected $vars = array();
 
     public function __construct(\PDO $pdo_db)

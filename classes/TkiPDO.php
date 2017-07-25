@@ -23,6 +23,7 @@ namespace Tki;
 
 class TkiPDO extends \PDO
 {
+    /** @var string|null **/
     protected $table_prefix;
 
     public function __construct(
@@ -37,14 +38,14 @@ class TkiPDO extends \PDO
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
-    public function exec($statement)
+    public function exec($statement): int
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::exec($statement);
         return $replaced_statement;
     }
 
-    public function prepare($statement, $driver_options = array())
+    public function prepare($statement, $driver_options = array()): \PDOStatement
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::prepare($statement, $driver_options);

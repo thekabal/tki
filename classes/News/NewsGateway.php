@@ -21,6 +21,7 @@ namespace Tki\News; // Domain Entity organization pattern, Players objects
 
 class NewsGateway // Gateway for SQL calls related to Players
 {
+    /** @var \PDO **/
     protected $pdo_db; // This will hold a protected version of the pdo_db variable
 
     public function __construct(\PDO $pdo_db) // Create the this->pdo_db object
