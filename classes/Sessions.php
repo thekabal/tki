@@ -91,7 +91,7 @@ class Sessions
         return (string) $result['sessdata'];
     }
 
-    /** @return mixed */
+    /** @return boolean */
     public function write(string $sesskey, string $sessdata)
     {
         if (($this->pdo_db !== null) && (Db::isActive($this->pdo_db)))
