@@ -21,7 +21,7 @@ namespace Tki;
 
 class Checked
 {
-    public static function check(string $yesno)
+    public static function check(string $yesno): ?string
     {
         return (($yesno == 'Y') ? 'CHECKED' : null);
     }

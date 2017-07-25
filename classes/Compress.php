@@ -31,7 +31,7 @@ class Compress
     {
     }
 
-    public static function compress(string $output)
+    public static function compress(string $output): string
     {
         $request = Request::createFromGlobals();
 
