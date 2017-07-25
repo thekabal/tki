@@ -94,7 +94,7 @@ class Sessions
     /** @return mixed */
     public function write(string $sesskey, string $sessdata)
     {
-        if (Db::isActive($this->pdo_db))
+        if (($this->pdo_db !== null) && (Db::isActive($this->pdo_db)))
         {
             $err_mode = $this->pdo_db->getAttribute(\PDO::ATTR_ERRMODE);
             // Set the error mode to be exceptions,
