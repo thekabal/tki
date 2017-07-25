@@ -44,7 +44,7 @@ if (mb_strlen(trim($filtered_post_password)) === 0)
     $filtered_post_password = false;
 }
 
-if ($email !== null)
+if ($email !== null && $email !== false)
 {
     $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
     $playerinfo = $players_gateway->selectPlayerInfo($email);
