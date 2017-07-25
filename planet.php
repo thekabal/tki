@@ -465,10 +465,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
                     // Calc Ownership and Notify User Of Results
                     $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
-                    if ($ownership !== null)
-                    {
-                        echo $ownership . '<p>';
-                    }
+                    echo $ownership . '<p>';
                 }
             }
             else
@@ -911,11 +908,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             $update = $db->Execute("UPDATE {$db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
             Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
             $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg, $langvars);
-
-            if ($ownership !== null)
-            {
-                echo "$ownership<p>";
-            }
+            echo $ownership . '<p>';
 
             if ($planetinfo['owner'] != 0)
             {
