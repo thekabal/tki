@@ -26,7 +26,8 @@
         "phpunit/phpunit": "^6.0.8",
         "povils/phpmnd": "^1.0",
         "phpstan/phpstan": "^0.8",
-        "phpmetrics/phpmetrics": "^2.2"
+        "phpmetrics/phpmetrics": "^2.2",
+        "vimeo/psalm": "^0.3.47"
     },
     "autoload": {
         "psr-4": { "Tki\\": ["classes/", "tests/", "config/"]}
