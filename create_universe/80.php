@@ -223,8 +223,8 @@ $sql = "INSERT INTO ::prefix::ships " .
        "ip_address, lang) VALUES " .
        "(:ship_name, :ship_destroyed, :character_name, :password, " .
        ":recovery_time, " .
-       ":email, :turns, :armor_pts, :credits, :sector, :ship_energy, " .
-       ":ship_fighters, :last_login, " .
+       ":email, 1200, 10, 1000, :sector, 100, " .
+       "10, :last_login, " .
        ":ip_address, :lang)";
 $stmt = $pdo_db->prepare($sql);
 
@@ -240,13 +240,8 @@ $stmt->bindParam(':ship_destroyed', $admin_ship_destr, \PDO::PARAM_STR);
 $stmt->bindParam(':character_name', $tkireg->admin_name, \PDO::PARAM_STR);
 $stmt->bindParam(':password', $admin_hashed_pw, \PDO::PARAM_STR);
 $stmt->bindParam(':recovery_time', $admin_recovery_time, \PDO::PARAM_NULL);
-$stmt->bindParam(':email', $tkireg->admin_mail, PDO::PARAM_STR);
-$stmt->bindParam(':turns', 1200, \PDO::PARAM_INT);
-$stmt->bindParam(':armor_pts', 10, \PDO::PARAM_INT);
-$stmt->bindParam(':credits', 1000, \PDO::PARAM_INT);
+$stmt->bindParam(':email', $tkireg->admin_mail, \PDO::PARAM_STR);
 $stmt->bindParam(':sector', $admin_sector, \PDO::PARAM_INT);
-$stmt->bindParam(':ship_energy', 100, \PDO::PARAM_INT);
-$stmt->bindParam(':ship_fighters', 10, \PDO::PARAM_INT);
 $stmt->bindParam(':last_login', $admin_last_login, \PDO::PARAM_STR);
 $stmt->bindParam(':ip_address', $admin_ip, \PDO::PARAM_INT);
 $stmt->bindParam(':lang', $tkireg->default_lang, \PDO::PARAM_STR);
