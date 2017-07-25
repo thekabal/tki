@@ -145,7 +145,7 @@ $langvars['l_sf_sendlog'] = str_replace("[player]", $playerinfo['character_name'
 $langvars['l_sf_sendlog'] = str_replace("[lost]", $fighterslost, $langvars['l_sf_sendlog']);
 $langvars['l_sf_sendlog'] = str_replace("[sector]", $sector, $langvars['l_sf_sendlog']);
 
-Tki\Sectordefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog']);
+Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog']);
 Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::DEFS_DESTROYED_F, "$fighterslost|$sector");
 $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
@@ -172,7 +172,7 @@ if ($playerarmor < 1)
     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::DEFS_KABOOM, "$sector|$playerinfo[dev_escapepod]");
     $langvars['l_sf_sendlog2'] = str_replace("[player]", $playerinfo['character_name'], $langvars['l_sf_sendlog2']);
     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $sector, $langvars['l_sf_sendlog2']);
-    Tki\Sectordefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog2']);
+    Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog2']);
     if ($playerinfo['dev_escapepod'] == 'Y')
     {
         $rating = round($playerinfo['rating'] / 2);

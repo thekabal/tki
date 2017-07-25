@@ -164,7 +164,7 @@ switch ($response)
             $langvars['l_md_msgdownerb'] = str_replace("[sector]", $sector, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[mines]", $playerbeams, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[name]", $char_name, $langvars['l_md_msgdownerb']);
-            Tki\Sectordefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_md_msgdownerb']);
+            Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_md_msgdownerb']);
             Tki\Text::gotoMain($pdo_db, $lang);
             die();
         }
