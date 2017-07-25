@@ -152,5 +152,9 @@ class Player
                 die();
             }
         }
+        else
+        {
+            return false;
+        }
     }
 }
