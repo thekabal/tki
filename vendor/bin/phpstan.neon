@@ -6,3 +6,4 @@ parameters:
     ignoreErrors:
         - '#Access to an undefined property#'
         - '#Undefined variable#'
+        - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
