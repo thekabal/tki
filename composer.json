@@ -14,22 +14,31 @@
         "ezyang/htmlpurifier": "^4.8.0",
         "swiftmailer/swiftmailer": "^6.0.0",
         "adodb/adodb-php": "v5.20.9",
-        "symfony/http-foundation": "^3.2.0",
-        "phpstan/phpstan": "^0.6"
+        "symfony/http-foundation": "^3.3.3",
+        "ext-PDO": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
-            "phpmd/phpmd" : "^2.6.0",
-            "sebastian/phpcpd": "^2.0.4",
-            "friendsofphp/php-cs-fixer": "^2.1.1",
-            "nette/nette": "^2.4.0",
-            "squizlabs/PHP_CodeSniffer": "3.0.1",
-            "phpunit/phpunit": "^6.0.8",
-        "povils/phpmnd": "^1.0"
+        "phpmd/phpmd" : "^2.6.0",
+        "sebastian/phpcpd": "^2.0.4",
+        "friendsofphp/php-cs-fixer": "^2.1.1",
+        "squizlabs/PHP_CodeSniffer": "^3.0.2",
+        "phpunit/phpunit": "^6.0.8",
+        "povils/phpmnd": "^1.0",
+        "phpstan/phpstan": "^0.8",
+        "phpmetrics/phpmetrics": "^2.2",
+        "vimeo/psalm": "^0.3.47"
     },
     "autoload": {
         "psr-4": { "Tki\\": ["classes/", "tests/", "config/"]}
     },
     "scripts": {
+        "tests": [
+            "/usr/bin/php /var/www/html/tki/vendor/bin/phpmd . text /var/www/html/tki/vendor/bin/phpmd.xml --exclude vendor/,templates/",
+            "/usr/bin/php /var/www/html/tki/vendor/bin/phpcs --standard=/var/www/html/tki/vendor/bin/phpcs.xml . --ignore=templates,vendor",
+            "/usr/bin/php /var/www/html/tki/vendor/bin/phpstan analyze --no-progress --no-ansi -l 5 -c /var/www/html/tki/vendor/bin/phpstan.neon -vvv .",
+            "composer install"
+            ],
         "post-update-cmd": [
             "rm -rf vendor/ezyang/htmlpurifier/docs/",
             "rm -rf vendor/ezyang/htmlpurifier/extras/",
