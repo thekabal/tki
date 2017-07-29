@@ -1588,16 +1588,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v3.0.6",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "0808939f81c1347a3c8a82a5925385a08074b0f1"
+                "reference": "4d4896e553f2094e657fe493506dc37c509d4e2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/0808939f81c1347a3c8a82a5925385a08074b0f1",
-                "reference": "0808939f81c1347a3c8a82a5925385a08074b0f1",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4d4896e553f2094e657fe493506dc37c509d4e2b",
+                "reference": "4d4896e553f2094e657fe493506dc37c509d4e2b",
                 "shasum": ""
             },
             "require": {
@@ -1635,7 +1635,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2017-06-28T20:53:48+00:00"
+            "time": "2017-07-28T14:45:09+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -4365,16 +4365,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "0.3.47",
+            "version": "0.3.51",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "581cf5f7eb93cc1f2cf81f03bc20a6ed2662c01a"
+                "reference": "c8ec0dc65096cd4051e1b3298ea048bae776b090"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/581cf5f7eb93cc1f2cf81f03bc20a6ed2662c01a",
-                "reference": "581cf5f7eb93cc1f2cf81f03bc20a6ed2662c01a",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/c8ec0dc65096cd4051e1b3298ea048bae776b090",
+                "reference": "c8ec0dc65096cd4051e1b3298ea048bae776b090",
                 "shasum": ""
             },
             "require": {
@@ -4411,7 +4411,7 @@
                 "inspection",
                 "php"
             ],
-            "time": "2017-07-09T19:54:43+00:00"
+            "time": "2017-07-27T23:14:16+00:00"
         },
         {
             "name": "webmozart/assert",
