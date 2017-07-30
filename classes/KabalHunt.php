@@ -125,7 +125,7 @@ class KabalHunt
             {
                 // Attack sector defenses
                 $targetlink = $targetinfo['sector'];
-                \Tki\KabalTo::secDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
+                \Tki\KabalToSecDef::secDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
             }
 
             if ($kabalisdead > 0)
@@ -137,11 +137,11 @@ class KabalHunt
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                \Tki\KabalTo::planet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
+                \Tki\KabalToPlanet::planet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
             }
             else
             {
-                \Tki\KabalTo::ship($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
+                \Tki\KabalToShip::ship($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
             }
         }
         else
