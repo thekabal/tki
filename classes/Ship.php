@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,7 +21,7 @@ namespace Tki;
 
 class Ship
 {
-    public static function isDestroyed(\PDO $pdo_db, string $lang, Reg $tkireg, array $langvars, Smarty $template, array $playerinfo) : bool
+    public static function isDestroyed(\PDO $pdo_db, string $lang, Reg $tkireg, array $langvars, Smarty $template, array $playerinfo) : ?bool
     {
         // Check for destroyed ship
         if ($playerinfo['ship_destroyed'] === 'Y')
@@ -39,7 +38,7 @@ class Ship
                                "dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', " .
                                "dev_lssd='N' WHERE email=:email";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':email', $_SESSION['username']);
+                $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
                 $stmt->execute();
                 Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
@@ -55,9 +54,14 @@ class Ship
                 $error_status .= str_replace('[logout]', "<a href='logout.php'>" .
                                  $langvars['l_logout'] . '</a>', $langvars['l_die_please']);
                 $title = $langvars['l_error'];
-                Header::display($pdo_db, $lang, $template, $title);
+
+                $header = new \Tki\Header;
+                $header->display($pdo_db, $lang, $template, $title);
+
                 echo $error_status;
-                Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new \Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
         }
@@ -72,7 +76,7 @@ class Ship
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $ship_id);
+        $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $planets_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -82,8 +86,8 @@ class Ship
             {
                 $sql = "SELECT * FROM ::prefix::ships WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':planet_id', $tmp_planet['planet_id']);
-                $stmt->bindParam(':ship_id', $ship_id);
+                $stmt->bindParam(':planet_id', $tmp_planet['planet_id'], \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
                 $stmt->execute();
                 $ships_on_planet = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -93,9 +97,9 @@ class Ship
                     {
                         $sql = "UPDATE ::prefix::ships SET on_planet='N', planet_id = '0' WHERE ship_id = :ship_id";
                         $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':ship_id', $tmp_ship['ship_id']);
+                        $stmt->bindParam(':ship_id', $tmp_ship['ship_id'], \PDO::PARAM_INT);
                         $stmt->execute();
-                        PlayerLog::writeLog($pdo_db, $tmp_ship['ship_id'], LOG_PLANET_EJECT, $tmp_ship['sector'] .'|'. $tmp_ship['character_name']);
+                        PlayerLog::writeLog($pdo_db, $tmp_ship['ship_id'], LogEnums::PLANET_EJECT, $tmp_ship['sector'] .'|'. $tmp_ship['character_name']);
                     }
                 }
             }

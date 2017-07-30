@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_teamplanet_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('team_planets', 'planet_report', 'planet', 'main', 'port', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
@@ -30,7 +32,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('team_planets', 'planet_re
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -39,7 +41,9 @@ if ($playerinfo['team'] == 0)
     echo "<br>" . $langvars['l_teamplanet_notally'];
     echo "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     return;
 }
 
@@ -67,7 +71,7 @@ if ($sort !== null)
 }
 
 $res = $db->Execute($query);
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 echo "<h1>" . $title . "</h1>\n";
 
 echo "<br>";
@@ -140,14 +144,14 @@ else
             $total_selling++;
         }
 
-        if (empty ($planet[$i]['name']))
+        if (empty($planet[$i]['name']))
         {
             $planet[$i]['name'] = $langvars['l_unnamed'];
         }
 
         $owner = $planet[$i]['owner'];
         $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = " . $owner);
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $player = $res->fields['character_name'];
 
         echo "<tr bgcolor=\"$color\">";
@@ -196,4 +200,6 @@ else
 
 echo "<br><br>";
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,20 +16,16 @@ declare(strict_types = 1);
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: classes/Loan.php
-//
-// FUTURE: These are horribly bad. They should be broken out of classes, and turned mostly into template
-// behaviors. But in the interest of saying goodbye to the includes directory, and raw functions, this
-// will at least allow us to auto-load and use classes instead. Plenty to do in the future, though!
 
 namespace Tki;
 
 class Loan
 {
-    public static function isPending(\PDO $pdo_db, int $ship_id, Reg $tkireg): bool
+    public static function isPending(\PDO $pdo_db, int $ship_id, Reg $tkireg): ?bool
     {
         $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $account = $stmt->fetch(\PDO::FETCH_ASSOC);

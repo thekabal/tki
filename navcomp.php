@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,7 +24,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('navcomp', 'common', 'global_includes', 'global_funcs', 'footer'));
 $title = $langvars['l_nav_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
@@ -32,30 +34,40 @@ if (!$tkireg->allow_navcomp)
 {
     echo $langvars['l_nav_nocomp'] . '<br><br>';
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $state = null;
-$state = (int) filter_input(INPUT_POST, 'state', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($state)) === 0)
+$state = (string) filter_input(INPUT_POST, 'state', FILTER_SANITIZE_NUMBER_INT);
+if (($state === null) || (mb_strlen(trim($state)) === 0))
 {
     $state = false;
+}
+else
+{
+    $state = (int) $state;
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $stop_sector = null;
-$stop_sector = (int) filter_input(INPUT_POST, 'stop_sector', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($stop_sector)) === 0)
+$stop_sector = (string) filter_input(INPUT_POST, 'stop_sector', FILTER_SANITIZE_NUMBER_INT);
+if (($stop_sector === null) || (mb_strlen(trim($stop_sector)) === 0))
 {
     $stop_sector = false;
+}
+else
+{
+    $state = (int) $state;
 }
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -64,7 +76,7 @@ $computer_tech  = $playerinfo['computer'];
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $current_sector);
+$stmt->bindParam(':sector_id', $current_sector, PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -154,7 +166,7 @@ elseif ($state == 1)
         }
         else
         {
-            Tki\Db::LogDbErrors($pdo_db, $search_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $search_result, __LINE__, __FILE__);
             $found = $search_result->RecordCount();
             if ($found > 0)
             {
@@ -187,4 +199,6 @@ elseif ($state == 1)
 $db->SetFetchMode(ADODB_FETCH_ASSOC);
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

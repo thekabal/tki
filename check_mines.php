@@ -23,13 +23,13 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('check_mines', 'common', '
 // Get sectorinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $sector);
+$stmt->bindParam(':sector_id', $sector, PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Put the defense information into the array defenseinfo
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type ='M'", array($sector));
-Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
 // Correct the targetship bug to reflect the player info
 $targetship = $playerinfo;
@@ -65,7 +65,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
     // Find out if the mine owner and player are on the same team
     $fm_owner = $defenses[0]['ship_id'];
     $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
-    Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
     $mine_owner = $result2->fields;
     if ($mine_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
@@ -85,7 +85,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
         // You are hit. Tell the player and put it in the log
         $langvars['l_chm_youhitsomemines'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_youhitsomemines']);
         echo $langvars['l_chm_youhitsomemines'] . "<br>";
-        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_HIT_MINES, "$roll|$sector");
+        Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::HIT_MINES, "$roll|$sector");
 
         // Tell the owner that his mines were hit
         $langvars['l_chm_hehitminesinsector'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hehitminesinsector']);
@@ -99,7 +99,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
             $langvars['l_chm_youlostminedeflectors'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_youlostminedeflectors']);
             echo $langvars['l_chm_youlostminedeflectors'] . "<br>";
             $result2 = $db->Execute("UPDATE {$db->prefix}ships SET dev_minedeflector = dev_minedeflector - ? WHERE ship_id = ?", array($roll, $playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         }
         else
         {
@@ -126,7 +126,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                 echo $langvars['l_chm_yourshieldshitforminesdmg'] . "<br>";
 
                 $result2 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ship_energy - ?, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                 if ($playershields == $mines_left)
                 {
                     echo $langvars['l_chm_yourshieldsaredown'] . "<br>";
@@ -142,7 +142,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                     $langvars['l_chm_yourarmorhitforminesdmg'] = str_replace("[chm_mines_left]", $mines_left, $langvars['l_chm_yourarmorhitforminesdmg']);
                     echo $langvars['l_chm_yourarmorhitforminesdmg'] . "<br>";
                     $result2 = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts = armor_pts - ?, ship_energy = 0, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                     if ($playerinfo['armor_pts'] == $mines_left)
                     {
                         echo $langvars['l_chm_yourhullisbreached'] . "<br>";
@@ -152,7 +152,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                 {
                     // BOOM
                     $pod = $playerinfo['dev_escapepod'];
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_SHIP_DESTROYED_MINES, "$sector|$pod");
+                    Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::SHIP_DESTROYED_MINES, "$sector|$pod");
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hewasdestroyedbyyourmines']);
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_sector]", $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
                     Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
@@ -163,15 +163,16 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                     {
                         $rating = round($playerinfo['rating'] / 2);
                         echo $langvars['l_chm_luckescapepod'] . "<br><br>";
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, sensors=0, computer=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_organics=0, ship_ore=0, ship_goods=0, ship_energy=?, ship_colonists=0, ship_fighters=100, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, on_planet='N', rating=?, cleared_defenses=' ', dev_lssd='N' WHERE ship_id=?", array($tkireg->start_energy, $rating, $playerinfo['ship_id']));
-                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, sensors=0, computer=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=1, ship_organics=0, ship_ore=0, ship_goods=0, ship_energy=?, ship_colonists=0, ship_fighters=100, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, on_planet='N', rating=?, cleared_defenses=' ', dev_lssd='N' WHERE ship_id=?", array(100, $rating, $playerinfo['ship_id']));
+                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
                     }
                     else
                     {
                         // Or they lose!
                         Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                        Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                        $character_object = new Tki\Character;
+                        $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     }
                 }
             }

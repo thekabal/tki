@@ -1,5 +1,4 @@
-<?php
-//declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,20 +21,27 @@ namespace Tki;
 
 class Sessions
 {
+    /** @var int */
     public $maxlifetime = 1800; // 30 mins
+
+    /** @var \PDO|null */
     private $pdo_db = null;
-    private $currenttime = null;
+
+    /** @var string|null */
     private $expiry = null;
+
+    /** @var string|null */
+    private $currenttime = null;
 
     public function __construct(\PDO $pdo_db)
     {
         session_set_save_handler(
-        array($this, 'open'),
-        array($this, 'close'),
-        array($this, 'read'),
-        array($this, 'write'),
-        array($this, 'destroy'),
-        array($this, 'gc')
+            array($this, 'open'),
+            array($this, 'close'),
+            array($this, 'read'),
+            array($this, 'write'),
+            array($this, 'destroy'),
+            array($this, 'gc')
         );
 
         // Set the database variable for this class
@@ -58,7 +64,8 @@ class Sessions
 
     public function __destruct()
     {
-        session_write_close();
+        $temp = (bool) session_write_close();
+        return $temp;
     }
 
     public function open() : bool
@@ -75,61 +82,80 @@ class Sessions
     {
         $qry = "SELECT sessdata FROM ::prefix::sessions where sesskey=:sesskey and expiry>=:expiry";
         $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':sesskey', $sesskey);
-        $stmt->bindParam(':expiry', $this->currenttime);
+        $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
+        $stmt->bindParam(':expiry', $this->currenttime, \PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return (string) $result['sessdata']; // PHP7 change requires return to be string: https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
+        // PHP7 change requires return to be string:
+        // https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
+        return (string) $result['sessdata'];
     }
 
+    /** @return boolean */
     public function write(string $sesskey, string $sessdata)
     {
-        if (Db::isActive($this->pdo_db))
+        if (($this->pdo_db !== null) && (Db::isActive($this->pdo_db)))
         {
             $err_mode = $this->pdo_db->getAttribute(\PDO::ATTR_ERRMODE);
-            // Set the error mode to be exceptions, so that we can catch them -- This breaks everything in game except for sessions
+            // Set the error mode to be exceptions,
+            // so that we can catch them -- This breaks everything in game except for sessions
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
             try
             {
-                // Try to insert the record. This will fail if the record already exists, which will trigger catch below..
-                $qry = "INSERT into ::prefix::sessions (sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
+                // Try to insert the record. This will fail if the record already exists,
+                // which will trigger catch below..
+                $qry = "INSERT into ::prefix::sessions (" .
+                       "sesskey, sessdata, expiry) values (:sesskey, :sessdata, :expiry)";
                 $stmt = $this->pdo_db->prepare($qry);
-                $stmt->bindParam(':sesskey', $sesskey);
-                $stmt->bindParam(':sessdata', $sessdata);
-                $stmt->bindParam(':expiry', $this->expiry);
+                $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
+                $stmt->bindParam(':sessdata', $sessdata, \PDO::PARAM_STR);
+                $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
                 $result = $stmt->execute();
             }
             catch (\PDOException $e)
             {
                 // Insert didn't work, use update instead
-                $qry = "UPDATE ::prefix::sessions SET sessdata=:sessdata, expiry=:expiry where sesskey=:sesskey";
+                $qry = "UPDATE ::prefix::sessions SET sessdata=:sessdata, expiry=:expiry " .
+                       "where sesskey=:sesskey";
                 $stmt = $this->pdo_db->prepare($qry);
-                $stmt->bindParam(':sesskey', $sesskey);
-                $stmt->bindParam(':sessdata', $sessdata);
-                $stmt->bindParam(':expiry', $this->expiry);
+                $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
+                $stmt->bindParam(':sessdata', $sessdata, \PDO::PARAM_STR);
+                $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
                 $result = $stmt->execute();
             }
 
             $this->pdo_db->setAttribute(\PDO::ATTR_ERRMODE, $err_mode);
             return $result;
         }
+        else
+        {
+            // If you run create universe on an existing universe, at step 30,
+            // you would get an error - this prevents it by returning false to
+            // note that we didn't successfully write the session.
+            return false;
+            // The error was Session callback expects true/false return
+            // value in Unknown on line 0, and is triggered because
+            // the DB tables have been dropped in step 30 prior to the call.
+        }
     }
 
+    /** @return mixed */
     public function destroy(string $sesskey)
     {
         $qry = "DELETE from ::prefix::sessions where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':sesskey', $sesskey);
+        $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
         $result = $stmt->execute();
         return $result;
     }
 
+    /** @return mixed */
     public function gc()
     {
         $qry = "DELETE from ::prefix::sessions where expiry>:expiry";
         $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':expiry', $this->expiry);
+        $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
         $result = $stmt->execute();
         return $result;
     }
@@ -141,8 +167,8 @@ class Sessions
         $new_id = session_id();
         $qry = "UPDATE ::prefix::sessions SET sesskey=:newkey where sesskey=:sesskey";
         $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':newkey', $new_id);
-        $stmt->bindParam(':sesskey', $old_id);
+        $stmt->bindParam(':newkey', $new_id, \PDO::PARAM_STR);
+        $stmt->bindParam(':sesskey', $old_id, \PDO::PARAM_STR);
         $stmt->execute();
     }
 }

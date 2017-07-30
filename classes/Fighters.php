@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,9 +23,10 @@ class Fighters
 {
     public static function destroy(\PDO $pdo_db, int $sector, int $num_fighters): void
     {
-        $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type ='F' ORDER BY quantity ASC";
+        $sql = "SELECT * FROM ::prefix::sector_defense WHERE " .
+               "sector_id=:sector_id AND defense_type ='F' ORDER BY quantity ASC";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sector);
+        $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
         $defense_present = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -36,10 +36,11 @@ class Fighters
             {
                 if ($tmp_defense['quantity'] > $num_fighters)
                 {
-                    $sql = "UPDATE ::prefix::sector_defense SET quantity = :quantity - ? WHERE defense_id = :defense_id";
+                    $sql = "UPDATE ::prefix::sector_defense SET quantity = :quantity - ? " .
+                           "WHERE defense_id = :defense_id";
                     $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':quantity', $tmp_defense['quantity']);
-                    $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
+                    $stmt->bindParam(':quantity', $tmp_defense['quantity'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':defense_id', $tmp_defense['defense_id'], \PDO::PARAM_INT);
                     $stmt->execute();
                     $num_fighters = 0;
                 }
@@ -47,7 +48,7 @@ class Fighters
                 {
                     $sql = "DELETE FROM ::prefix::sector_defense WHERE defense_id = :defense_id";
                     $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':defense_id', $tmp_defense['defense_id']);
+                    $stmt->bindParam(':defense_id', $tmp_defense['defense_id'], \PDO::PARAM_INT);
                     $stmt->execute();
                     $num_fighters -= $tmp_defense['quantity'];
                 }

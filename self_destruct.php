@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,14 +24,16 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('self_destruct', 'ranking', 'common', 'global_includes', 'global_funcs', 'news', 'footer'));
 $title = $langvars['l_die_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -60,10 +62,13 @@ elseif ($sure == 2)
     echo $langvars['l_die_vapor'] . "<br><br>";
     $langvars['l_die_please'] = str_replace("[logout]", "<a href='logout.php'>" . $langvars['l_logout'] . "</a>", $langvars['l_die_please']);
     echo $langvars['l_die_please'] . "<br>";
-    Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, true);
+    $character_object = new Tki\Character;
+    $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, true);
     Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-    Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_HARAKIRI, "$playerinfo[character_name]|" . $request->server->get('REMOTE_ADDR') . "");
-    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_HARAKIRI, $request->server->get('REMOTE_ADDR'));
+
+    $admin_log = new Tki\AdminLog;
+    $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_HARAKIRI, "$playerinfo[character_name]|" . $request->server->get('REMOTE_ADDR') . "");
+    Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::HARAKIRI, $request->server->get('REMOTE_ADDR'));
     echo "Due to nobody looking after your Planets, all your Planets have reduced into dust and ruble. Your Planets are no more.<br>\n";
 }
 else
@@ -72,4 +77,6 @@ else
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

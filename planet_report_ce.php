@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_pr_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('planet_report', 'rsmove', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
@@ -46,7 +48,8 @@ if ($tpcreds !== null && $tpcreds !== false)
 }
 elseif ($buildp !== null && $builds !== null)
 {
-    Tki\Bases::buildBase($pdo_db, $langvars, $buildp, $builds, $tkireg);
+    $build_bases = new Tki\Bases;
+    $build_bases->buildBase($pdo_db, $langvars, $buildp, $builds, $tkireg);
 }
 else
 {
@@ -55,4 +58,6 @@ else
 
 echo '<br><br>';
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

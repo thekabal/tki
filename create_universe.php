@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -26,7 +26,7 @@ set_time_limit(0);
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $swordfish = null;
 $swordfish = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-if (mb_strlen(trim($swordfish)) === 0)
+if (($swordfish === null) || (mb_strlen(trim($swordfish)) === 0))
 {
     $swordfish = false;
 }
@@ -34,7 +34,8 @@ if (mb_strlen(trim($swordfish)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $step = null;
 $step = (int) filter_input(INPUT_POST, 'step', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($step)) === 0)
+
+if ($step === null)
 {
     $step = false;
 }
@@ -44,7 +45,7 @@ if ($swordfish === null || $swordfish === false) // If no swordfish password has
     $step = "1";
 }
 
-if (($swordfish !== false) && (\Tki\SecureConfig::ADMIN_PASS != $swordfish)) // If a swordfish password is not null and it does not match (bad pass), redirect to step 1 (default or 0.php)
+if (($swordfish !== false) && ($swordfish != \Tki\SecureConfig::ADMIN_PASS)) // If a swordfish password is not null and it does not match (bad pass), redirect to step 1 (default or 0.php)
 {
     $variables['goodpass'] = false;
     include_once 'create_universe/0.php';
@@ -52,15 +53,15 @@ if (($swordfish !== false) && (\Tki\SecureConfig::ADMIN_PASS != $swordfish)) // 
 else // If swordfish is set and matches (good pass)
 {
     $variables['goodpass'] = true;
-    if ($step !== null && $step !== 1) // We've got a good pass, and its not step 1
+
+    // Determine current step, next step, and number of steps
+    $step_finder = new Tki\BigBang;
+    $create_universe_info = $step_finder->findStep('');
+    natsort($create_universe_info['files']);
+    $loader_file = $create_universe_info['files'][$step];
+    $filename = 'create_universe/' . $loader_file;
+    if (file_exists($filename))
     {
-        $create_universe_info = Tki\BigBang::findStep('');
-        natsort($create_universe_info['files']);
-        $loader_file = $create_universe_info['files'][$step];
-        $filename = 'create_universe/' . $loader_file;
-        if (file_exists($filename))
-        {
-            include_once $filename;
-        }
+        include_once $filename;
     }
 }

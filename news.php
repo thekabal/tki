@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +25,9 @@ $link = null;
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'global_includes',
                                 'global_funcs', 'combat', 'footer', 'news'));
 $title = $langvars['l_news_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Default to today's date in case it isn't supplied
 $startdate = date('Y/m/d');
@@ -37,7 +39,7 @@ if (array_key_exists('startdate', $_GET) && ($_GET['startdate'] !== null))
 
 // Check and validate the date.
 $validformat = preg_match('/([0-9]{4})\/([0-9]{2})\/([0-9]{2})$/', $startdate, $regs);
-if ($validformat != 1 || checkdate($regs[2], $regs[3], $regs[1]) === false)
+if ($validformat != 1 || checkdate((int) $regs[2], (int) $regs[3], (int) $regs[1]) === false)
 {
     // The date wasn't supplied so use today's date
     $startdate = date('Y/m/d');
@@ -86,7 +88,7 @@ else
 echo "</table>\n";
 echo "<div style=\"height:16px;\"></div>\n";
 
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     echo str_replace('[here]', "<a href='index.php" . $link . "'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mlogin']);
 }
@@ -95,4 +97,5 @@ else
     echo str_replace('[here]', "<a href='main.php" . $link . "'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mmenu']);
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

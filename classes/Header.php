@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +24,14 @@ namespace Tki;
 
 class Header
 {
-    public static function display(\PDO $pdo_db, string $lang, Smarty $template, string $title = null, string $body_class = 'tki', bool $include_ckeditor = null): void
+    public function display(
+        \PDO $pdo_db,
+        string $lang,
+        Smarty $template,
+        ?string $title = null,
+        string $body_class = 'tki',
+        ?bool $include_ckeditor = null
+    ): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common'));
 

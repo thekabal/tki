@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -26,14 +25,14 @@ class SectorDefense
     {
         $sql = "SELECT ship_id FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sector);
+        $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
         $defense_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($defense_present !== null)
         {
             foreach ($defense_present as $tmp_defense)
             {
-                PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LOG_RAW, $message);
+                PlayerLog::writeLog($pdo_db, $tmp_defense['ship_id'], LogEnums::RAW, $message);
             }
         }
     }

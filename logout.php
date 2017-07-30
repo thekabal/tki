@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-unset ($variables);
+unset($variables);
 $variables = array();
 
 // Database driven language entries
@@ -32,14 +32,14 @@ if (array_key_exists('username', $_SESSION))
     // Get playerinfo from database
     $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':email', $_SESSION['username']);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
     $stmt->execute();
     $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $current_score = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 
     $langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
-    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_LOGOUT, $request->server->get('REMOTE_ADDR'));
+    Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::LOGOUT, $request->server->get('REMOTE_ADDR'));
     $langvars['l_logout_text'] = str_replace("[name]", $_SESSION['username'], $langvars['l_logout_text']);
     $langvars['l_logout_text'] = str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_logout_text']);
 
@@ -69,10 +69,12 @@ $variables['lang'] = $lang;
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
 $variables['title'] = $langvars['l_logout_title'];
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('logout.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

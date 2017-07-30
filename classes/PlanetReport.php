@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,7 +21,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function baseBuildCheck($langvars, Reg $tkireg, $planet, int $i): string
+    public static function baseBuildCheck(array $langvars, Reg $tkireg, array $planet, int $i): string
     {
         if($planet[$i]['base'] == 'Y')
         {
@@ -38,7 +37,7 @@ class PlanetReport
         }
     }
 
-    public static function planetReportMenu(array $playerinfo, array $langvars): void
+    public static function menu(array $playerinfo, array $langvars): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
@@ -57,31 +56,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function teamPlanetCheckboxes(int $planet, $i) : string
-    {
-        if ($planet[$i]['team'] <= 0)
-        {
-            return "<input type='checkbox' name='team[" . $i . "]' value='" . $planet[$i]['planet_id'] ."' />";
-        }
-        elseif ($planet[$i]['team'] > 0)
-        {
-            return "<input type='checkbox' name='team[" . $i . "]' value='{" . $planet[$i]['planet_id'] . "' checked />";
-        }
-    }
-
-    public static function sellingCheckboxes(int $planet, $i) : string
-    {
-        if ($planet[$i]['sells'] != 'Y')
-        {
-            return "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' />";
-        }
-        elseif ($planet[$i]['sells'] == 'Y')
-        {
-            return "<input type='checkbox' name='sells[" . $i . "]' value='" . $planet[$i]['planet_id'] . "' checked />";
-        }
-    }
-
-    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, $sort, Reg $tkireg): void
+    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, array $sort, Reg $tkireg): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -121,7 +96,7 @@ class PlanetReport
         }
 
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $playerinfo['ship_id']);
+        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $planet_owner_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $i = 0;
@@ -208,7 +183,7 @@ class PlanetReport
                     $total_selling++;
                 }
 
-                if (empty ($planet[$i]['name']))
+                if (empty($planet[$i]['name']))
                 {
                     $planet[$i]['name'] = $langvars['l_unnamed'];
                 }
@@ -222,7 +197,7 @@ class PlanetReport
                 echo "<td>" . number_format($planet[$i]['energy'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td align=right>" . number_format($planet[$i]['colonists'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td align=right>" . number_format($planet[$i]['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=center>" . "<input type=checkbox name=TPCreds[] value=\"" . $planet[$i]['planet_id'] . "\">" . "</td>";
+                echo "<td align=center><input type=checkbox name=TPCreds[] value=\"" . $planet[$i]['planet_id'] . "\"></td>";
                 echo "<td align=right>"  . number_format($planet[$i]['fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td align=right>"  . number_format($planet[$i]['torps'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td align=center>" . self::baseBuildCheck($langvars, $tkireg, $planet, $i) . "</td>";

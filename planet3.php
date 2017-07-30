@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_planet3_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('planet', 'main', 'port', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
@@ -58,20 +60,22 @@ if ($planet_id <= 0)
 {
     echo "Invalid Planet<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':planet_id', $planet_id);
+$stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
 $stmt->execute();
 $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -87,7 +91,9 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_trade_turnneed'] . '<br><br>';
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -95,15 +101,19 @@ if ($planetinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_planet2_sector'] . '<br><br>';
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
-if (empty ($planetinfo))
+if (empty($planetinfo))
 {
     echo $langvars['l_planet_none'] . "<br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -161,17 +171,37 @@ if ($planetinfo['sells'] == 'Y')
         echo $langvars['l_totalcost'] . ": $total_cost<br>" . $langvars['l_traded_ore'] . ": $trade_ore<br>" . $langvars['l_traded_organics'] . ": $trade_organics<br>" . $langvars['l_traded_goods'] . ": $trade_goods<br>" . $langvars['l_traded_energy'] . ": $trade_energy<br><br>";
 
         // Update ship cargo, credits and turns
-        $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, " .
-                                     "ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;",
-                                     array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1, credits = credits - :total_cost, ";
+        $sql = $sql . "ship_ore = ship_ore + :trade_ore, ship_organics = ship_organics + :trade_organics, ship_goods = ship_goods + :trade_goods, ";
+        $sql = $sql . "ship_energy = ship_energy + :trade_energy WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':total_cost', $total_cost, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_ore', $trade_ore, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_organics', $trade_organics, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_goods', $trade_goods, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_energy', $trade_energy, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+        $update = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 
-        $trade_result2 = $db->Execute("UPDATE {$db->prefix}planets SET ore = ore - ?, organics = organics - ?, goods = goods - ?, energy = energy - ?, credits = credits + ? WHERE planet_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $total_cost, $planet_id));
-        Tki\Db::LogDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::planets SET ore = ore - :trade_ore, organics = organics - :trade_organics, goods = goods - :trade_goods, ";
+        $sql = $sql . "energy = energy - :trade_energy, credits = credits + :total_cost WHERE planet_id = :planet_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':total_cost', $total_cost, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_ore', $trade_ore, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_organics', $trade_organics, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_goods', $trade_goods, \PDO::PARAM_INT);
+        $stmt->bindParam(':trade_energy', $trade_energy, \PDO::PARAM_INT);
+        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+        $update = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
+
         echo $langvars['l_trade_complete'] . "<br><br>";
     }
 }
 
 Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -20,14 +20,18 @@
 require_once './common.php';
 
 $title = $langvars['l_mail_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 
-$result = $db->SelectLimit("SELECT character_name, email, password FROM {$db->prefix}ships WHERE email = ?", 1, -1, array('email' => $mail));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+$mail = filter_input(INPUT_GET, 'mail', FILTER_SANITIZE_EMAIL);
+
+$result = $db->SelectLimit("SELECT character_name, email, password, ship_id FROM {$db->prefix}ships WHERE email = ?", 1, -1, array('email' => $mail));
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF)
 {
@@ -37,7 +41,7 @@ if (!$result->EOF)
         echo $langvars['l_mail_admin_denied'];
         echo "</div><br>\n";
 
-        if ($_SESSION['logged_in'] !== null && $_SESSION['logged_in'] === true)
+        if (array_key_exists('logged_in', $_SESSION) === true)
         {
             echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
         }
@@ -65,16 +69,19 @@ if (!$result->EOF)
 
         // Recovery time is a timestamp at the time of recovery attempt, which is valid for 30 minutes
         // After 30 minutes, it will be cleared to null by scheduler. If it is used, it will also be cleared.
-
-        $recovery_update_result = $db->Execute("UPDATE {$db->prefix}ships SET recovery_time=? WHERE email = ?;", array(time(), $playerinfo['email']));
-        Tki\Db::LogDbErrors($pdo_db, $recovery_update_result, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::ships SET recovery_time=:time WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':time', time(), \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         mail($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'] . "\r\n\r\n" . htmlentities($link_to_reset, ENT_QUOTES | ENT_HTML5, 'UTF-8') . "\r\n", "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
         echo "<div style='color:#fff; text-align:left;'>" . $langvars['l_mail_sent'] . " <span style='color:#0f0;'>{$mail}</span></div>\n";
         echo "<br>\n";
         echo "<div style='font-size:14px; font-weight:bold; color:#f00;'>";
         echo $langvars['l_mail_note_1'] . "<br><br>";
-        $langvars['l_mail_note_2'] = htmlentities($l_mail_note_2, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        // $langvars['l_mail_note_2'] = htmlentities($langvars['l_mail_note_2'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
         echo mb_strtoupper($langvars['l_mail_note_2']);
         echo "</div>\n";
     }
@@ -95,4 +102,5 @@ else
     }
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

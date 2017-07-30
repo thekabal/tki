@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,16 +16,14 @@ declare(strict_types = 1);
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: classes/Kabal.php
-//
-// FUTURE: This class is horribly bad, and needs to be refactored and tested.
 
 namespace Tki;
 
 class Kabal
 {
-    public static function kabalTrade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
+    public static function trade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
     {
-        // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional kabal. :)
+        // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want working kabal. :)
         $tkireg->ore_price = 11;
         $tkireg->organics_price = 5;
         $tkireg->goods_price = 15;
@@ -37,14 +34,14 @@ class Kabal
         // Obtain sector information
         $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $playerinfo['sector']);
+        $stmt->bindParam(':sector_id', $playerinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         $sectorinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Obtain zone information
         $sql = "SELECT zone_id, allow_attack, allow_trade FROM ::prefix::zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
+        $stmt->bindParam(':sector_id', $sectorinfo['zone_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $zonerow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -173,22 +170,22 @@ class Kabal
 
             $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':credits', $newcredits);
-            $stmt->bindParam(':ship_ore', $newore);
-            $stmt->bindParam(':ship_organics', $neworganics);
-            $stmt->bindParam(':ship_goods', $newgoods);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':credits', $newcredits, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_ore', $newore, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_organics', $neworganics, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_goods', $newgoods, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
             $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':port_ore', $amount_ore);
-            $stmt->bindParam(':port_organics', $amount_organics);
-            $stmt->bindParam(':port_goods', $amount_goods);
-            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->bindParam(':port_ore', $amount_ore, \PDO::PARAM_INT);
+            $stmt->bindParam(':port_organics', $amount_organics, \PDO::PARAM_INT);
+            $stmt->bindParam(':port_goods', $amount_goods, \PDO::PARAM_INT);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
         }
 
         if ($sectorinfo['port_type'] == "organics") // Port organics
@@ -220,22 +217,22 @@ class Kabal
 
             $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':credits', $newcredits);
-            $stmt->bindParam(':ship_ore', $newore);
-            $stmt->bindParam(':ship_organics', $neworganics);
-            $stmt->bindParam(':ship_goods', $newgoods);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':credits', $newcredits, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_ore', $newore, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_organics', $neworganics, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_goods', $newgoods, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
             $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':port_ore', $amount_ore);
-            $stmt->bindParam(':port_organics', $amount_organics);
-            $stmt->bindParam(':port_goods', $amount_goods);
-            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->bindParam(':port_ore', $amount_ore, \PDO::PARAM_INT);
+            $stmt->bindParam(':port_organics', $amount_organics, \PDO::PARAM_INT);
+            $stmt->bindParam(':port_goods', $amount_goods, \PDO::PARAM_INT);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
         }
 
         if ($sectorinfo['port_type'] == "goods") // Port goods
@@ -267,26 +264,26 @@ class Kabal
 
             $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':credits', $newcredits);
-            $stmt->bindParam(':ship_ore', $newore);
-            $stmt->bindParam(':ship_organics', $neworganics);
-            $stmt->bindParam(':ship_goods', $newgoods);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':credits', $newcredits, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_ore', $newore, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_organics', $neworganics, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_goods', $newgoods, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
             $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':port_ore', $amount_ore);
-            $stmt->bindParam(':port_organics', $amount_organics);
-            $stmt->bindParam(':port_goods', $amount_goods);
-            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->bindParam(':port_ore', $amount_ore, \PDO::PARAM_INT);
+            $stmt->bindParam(':port_organics', $amount_organics, \PDO::PARAM_INT);
+            $stmt->bindParam(':port_goods', $amount_goods, \PDO::PARAM_INT);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
         }
     }
 
-    public static function kabalMove(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
+    public static function move(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -296,7 +293,7 @@ class Kabal
 
         $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':link_start', $playerinfo['sector']);
+        $stmt->bindParam(':link_start', $playerinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         $links_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($links_present !== null)
@@ -339,7 +336,7 @@ class Kabal
                 if ($zonerow['allow_attack'] == "Y")
                 {
                     $targetlink = $wormto;
-                    \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Used a wormhole to warp to a zone where attacks are allowed.");
+                    \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Used a wormhole to warp to a zone where attacks are allowed.");
                 }
 
                 $wormto++;
@@ -358,7 +355,7 @@ class Kabal
 
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
@@ -374,7 +371,7 @@ class Kabal
             $i = 0;
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
@@ -397,7 +394,7 @@ class Kabal
                 }
                 else
                 {
-                    \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed, the sector is defended by $all_sector_fighters fighters and $total_sector_mines mines.");
+                    \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed, the sector is defended by $all_sector_fighters fighters and $total_sector_mines mines.");
 
                     return;
                 }
@@ -413,16 +410,16 @@ class Kabal
             if (!$move_result)
             {
                 $error = $db->ErrorMsg();
-                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed with error: $error ");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");
             }
         }
         else
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed due to lack of target link."); // We have no target link for some reason
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed due to lack of target link."); // We have no target link for some reason
         }
     }
 
-    public static function kabalHunter(\PDO $pdo_db, $db, array $playerinfo, $kabalisdead, array $langvars, Reg $tkireg): void
+    public static function goHunt(\PDO $pdo_db, $db, array $playerinfo, int $kabalisdead, array $langvars, Reg $tkireg): void
     {
         $targetinfo = array();
         $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");
@@ -456,7 +453,7 @@ class Kabal
         // Make sure we have a target
         if (!$targetinfo)
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Hunt Failed: No Target ");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Hunt Failed: No Target ");
             return;
         }
 
@@ -475,11 +472,11 @@ class Kabal
             $stamp = date("Y-m-d H:i:s");
             $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?", array($stamp, $targetinfo['sector'], $playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
             if (!$move_result)
             {
                 $error = $db->ErrorMsg();
-                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Move failed with error: $error ");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");
 
                 return;
             }
@@ -491,7 +488,7 @@ class Kabal
 
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $targetinfo['sector']);
+            $stmt->bindParam(':sector_id', $targetinfo['sector'], \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
@@ -509,7 +506,7 @@ class Kabal
 
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $targetinfo['sector']);
+            $stmt->bindParam(':sector_id', $targetinfo['sector'], \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
@@ -534,7 +531,7 @@ class Kabal
                 return; // Sector defenses killed the Kabal
             }
 
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal launching an attack on $targetinfo[character_name]."); // Attack the target
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal launching an attack on $targetinfo[character_name]."); // Attack the target
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
@@ -547,11 +544,11 @@ class Kabal
         }
         else
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal hunt failed, target $targetinfo[character_name] was in a no attack zone (sector $targetinfo[sector]).");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal hunt failed, target $targetinfo[character_name] was in a no attack zone (sector $targetinfo[sector]).");
         }
     }
 
-    public static function kabalRegen(\PDO $pdo_db, array $playerinfo, $kabal_unemployment, Reg $tkireg): void
+    public static function regen(\PDO $pdo_db, array $playerinfo, int $kabal_unemployment, Reg $tkireg): void
     {
         $gena = null;
         $gene = null;
@@ -619,17 +616,17 @@ class Kabal
         // Update Kabal record
         $sql = "UPDATE ::prefix::ships SET ship_energy = :ship_energy, armor_pts = :armor_pts, ship_fighters = :ship_fighters, torps = :torps, credits = :credits WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_energy', $playerinfo['ship_energy']);
-        $stmt->bindParam(':armor_pts', $playerinfo['armor_pts']);
-        $stmt->bindParam(':ship_fighters', $playerinfo['ship_fighters']);
-        $stmt->bindParam(':torps', $playerinfo['torps']);
-        $stmt->bindParam(':credits', $playerinfo['credits']);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->bindParam(':ship_energy', $playerinfo['ship_energy'], \PDO::PARAM_INT);
+        $stmt->bindParam(':armor_pts', $playerinfo['armor_pts'], \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_fighters', $playerinfo['ship_fighters'], \PDO::PARAM_INT);
+        $stmt->bindParam(':torps', $playerinfo['torps'], \PDO::PARAM_INT);
+        $stmt->bindParam(':credits', $playerinfo['credits'], \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
 
-        if (!$gene === null || !$gena === null || !$genf === null || !$gent === null)
+        if ($gene !== null || $gena !== null || $genf !== null || $gent !== null)
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Kabal $gene $gena $genf $gent and has been updated.");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal $gene $gena $genf $gent and has been updated.");
         }
     }
 }

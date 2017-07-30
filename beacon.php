@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,7 +24,9 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('beacon', 'common',
                                 'global_includes', 'global_funcs', 'combat',
                                 'footer', 'news'));
 $title = $langvars['l_beacon_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
@@ -33,14 +35,14 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get sectorinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -49,7 +51,7 @@ $allowed_rsw = "N";
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $beacon_text = null;
 $beacon_text = filter_input(INPUT_POST, 'beacon_text', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($beacon_text)) === 0)
+if ($beacon_text === 0)
 {
     $beacon_text = false;
 }
@@ -59,7 +61,7 @@ if ($playerinfo['dev_beacon'] > 0)
     // Get playerinfo from database
     $sql = "SELECT allow_beacon FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
+    $stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
     $stmt->execute();
     $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -71,13 +73,13 @@ if ($playerinfo['dev_beacon'] > 0)
     {
         $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sectorinfo['zone_id']);
+        $stmt->bindParam(':sector_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
         $stmt->execute();
         $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $zoneowner_info['owner']);
+        $stmt->bindParam(':sector_id', $zoneowner_info['owner'], PDO::PARAM_INT);
         $stmt->execute();
         $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -131,13 +133,13 @@ if ($playerinfo['dev_beacon'] > 0)
 
             $sql = "UPDATE ::prefix::universe SET beacon=:beacon WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':beacon', $beacon_text);
-            $stmt->bindParam(':sector_id', $sectorinfo['sector_id']);
+            $stmt->bindParam(':beacon', $beacon_text, PDO::PARAM_STR);
+            $stmt->bindParam(':sector_id', $sectorinfo['sector_id'], PDO::PARAM_INT);
             $stmt->execute();
 
             $sql = "UPDATE ::prefix::ships SET dev_beacon=dev_beacon-1 WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_STR);
             $stmt->execute();
         }
     }
@@ -148,4 +150,6 @@ else
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

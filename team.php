@@ -22,7 +22,8 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_teamm_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('team', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
@@ -30,14 +31,14 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('team', 'common', 'global_
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $planet_id = preg_replace('/[^0-9]/', '', $planet_id);
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?", array($planet_id));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 if ($result2)
 {
     $planetinfo = $result2->fields;
@@ -49,30 +50,36 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
     if ($action == "planetteam")
     {
         echo $langvars['l_teamm_toteam'] . "<br>";
-        $result = $db->Execute("UPDATE {$db->prefix}planets SET team=?, owner=? WHERE planet_id = ?;", array($playerinfo['team'], $playerinfo['ship_id'], $planet_id));
-        Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::planets SET team=:team, owner=:owner  WHERE planet_id=:planet_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':team', $playerinfo['team'], \PDO::PARAM_INT);
+        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
-
-        if ($ownership !== null)
-        {
-            echo "<p>$ownership<p>";
-        }
+        echo '<p>' . $ownership . '<p>';
     }
 
     if ($action == "planetpersonal")
     {
         echo $langvars['l_teamm_topersonal'] . "<br>";
-        $result = $db->Execute("UPDATE {$db->prefix}planets SET team='0', owner = ? WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
-        Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::planets SET team='0', owner=:owner  WHERE planet_id=:planet_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
 
         // Kick other players off the planet
-        $result = $db->Execute("UPDATE {$db->prefix}ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = ? AND ship_id <> ?;", array($planet_id, $playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
-        if ($ownership !== null)
-        {
-            echo "<p>" . $ownership . "<p>";
-        }
+        $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE on_planet='Y' AND planet_id=:planet_id AND ship_id <>:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        echo '<p>' . $ownership . '<p>';
     }
 
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -83,4 +90,5 @@ else
     Tki\Text::gotoMain($pdo_db, $lang);
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

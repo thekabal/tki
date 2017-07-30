@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,7 +24,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('presets'));
 $title = $langvars['l_pre_title'];
 $body_class = 'tki';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('presets', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
@@ -34,17 +36,20 @@ echo "<body class ='" . $body_class . "'>";
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Pull the presets for the player from the db.
+$preset_list = array();
 $sql = "SELECT * FROM ::prefix::presets WHERE ship_id=:ship_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
 $stmt->execute();
-$presetinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$preset_list = array();
+$preset_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Filter the array of presets from the form submission - first pass
+filter_var_array($_POST['preset'], FILTER_VALIDATE_INT);
 
 // Filter the array of presets from the form submission
 if (array_key_exists('preset', $_POST))
@@ -52,9 +57,14 @@ if (array_key_exists('preset', $_POST))
     foreach ($_POST['preset'] as $key => $value)
     {
         // Returns null if it doesn't have it set, bool false if its set but fails to validate and the actual value if it all passes.
+        $key = filter_var($key, FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_presets)));
+
+        // Returns null if it doesn't have it set, bool false if its set but fails to validate and the actual value if it all passes.
         $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
     }
 }
+
+filter_var_array($preset_list, FILTER_VALIDATE_INT);
 
 $change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
 foreach ($preset_list as $index => $preset)
@@ -75,7 +85,7 @@ if ($change !== 1)
     echo "<form accept-charset='utf-8' action='preset.php' method='post'>";
     for ($x = 0; $x < $tkireg->max_presets; $x++)
     {
-        echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $presetinfo[$x]['preset'] . "'></div>";
+        echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $preset_list[$x]['preset'] . "'></div>";
     }
 
     echo "<input type='hidden' name='change' value='1'>";
@@ -89,10 +99,11 @@ else
     {
         if ($key < $tkireg->max_presets)
         {
+            $new_id = $key + 1;
             $sql = "UPDATE ::prefix::presets SET preset=:preset WHERE preset_id=:preset_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':preset', $preset_list[key]);
-            $stmt->bindParam(':preset_id', $presetinfo[key]['preset_id']);
+            $stmt->bindParam(':preset', $value, PDO::PARAM_INT);
+            $stmt->bindParam(':preset_id', $new_id, PDO::PARAM_INT);
             $stmt->execute();
 
             $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);
@@ -103,4 +114,6 @@ else
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

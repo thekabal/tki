@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,25 +22,26 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_ship_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('ship', 'planet', 'main', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 
 // PHP7 Null coalescing operator - if it is set, great, if not, set to null
-$ship_id = $ship_id ?? null;
+$ship_id = $_GET['ship_id'] ?? null;
 
 // Get playerinfo from database
 $sql = "SELECT team, ship_name, character_name, sector FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT team, ship_name, character_name, sector FROM ::prefix::ships WHERE ship_id=:ship_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ship_id', $ship_id);
+$stmt->bindParam(':ship_id', $ship_id, PDO::PARAM_INT);
 $stmt->execute();
 $othership = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -55,7 +56,7 @@ else
     echo $langvars['l_ship_perform'] . "<br><br>";
     echo "<a href=scan.php?ship_id=$ship_id>" . $langvars['l_planet_scn_link'] . "</a><br>";
 
-    if (!Tki\Team::sameTeam($playerinfo['team'], $othership['team']))
+    if (!Tki\Team::isSameTeam($playerinfo['team'], $othership['team']))
     {
         echo "<a href=attack.php?ship_id=$ship_id>" . $langvars['l_planet_att_link'] . "</a><br>";
     }
@@ -65,4 +66,6 @@ else
 
 echo "<br>";
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

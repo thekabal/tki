@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_ze_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('zoneedit', 'report', 'port', 'main', 'zoneinfo', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
@@ -102,7 +104,7 @@ if (mb_strlen(trim($trades)) === 0)
 
 $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $zone);
+$stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
 $stmt->execute();
 $curzone = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -110,7 +112,9 @@ if (!$curzone)
 {
     echo "<p>" . $langvars['l_zi_nexist'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -121,7 +125,7 @@ if ($curzone['team_zone'] == 'N')
 {
     $sql = "SELECT ship_id FROM ::prefix::ships WHERE email=:email LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':email', $_SESSION['username']);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
     $stmt->execute();
     $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -129,7 +133,7 @@ else
 {
     $sql = "SELECT creator, id FROM ::prefix::teams WHERE creator=:creator LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':creator', $curzone['owner']);
+    $stmt->bindParam(':creator', $curzone['owner'], PDO::PARAM_INT);
     $stmt->execute();
     $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -138,7 +142,9 @@ if (($curzone['team_zone'] == 'N' && $curzone['owner'] != $ownerinfo['ship_id'])
 {
     echo "<p>" . $langvars['l_ze_notowner'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -149,20 +155,22 @@ if ($command == 'change')
 
     $sql = "UPDATE ::prefix::zones SET zone_name=:zone_name, allow_beacon=:allow_beacon, allow_attack=:allow_attack, allow_warpedit=:allow_warpedit, allow_planet=:allow_planet, allow_trade=:allow_trade, allow_defenses=:allow_defenses WHERE zone_id=:zone_id";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':zone_name', $name);
-    $stmt->bindParam(':allow_beacon', $beacons);
-    $stmt->bindParam(':allow_attack', $attacks);
-    $stmt->bindParam(':allow_warpedit', $warpedits);
-    $stmt->bindParam(':allow_planet', $planets);
-    $stmt->bindParam(':allow_trade', $trades);
-    $stmt->bindParam(':allow_defenses', $defenses);
-    $stmt->bindParam(':zone_id', $zone);
+    $stmt->bindParam(':zone_name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':allow_beacon', $beacons, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_attack', $attacks, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_warpedit', $warpedits, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_planet', $planets, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_trade', $trades, \PDO::PARAM_STR);
+    $stmt->bindParam(':allow_defenses', $defenses, \PDO::PARAM_STR);
+    $stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
     $stmt->execute();
 
     echo $langvars['l_ze_saved'] . "<p>";
     echo "<a href=zoneinfo.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_ze_return'] . ".<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -286,4 +294,6 @@ echo "<form accept-charset='utf-8' action=zoneedit.php?command=change&zone=$zone
 
 echo "<a href=zoneinfo.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_ze_return'] . ".<p>";
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

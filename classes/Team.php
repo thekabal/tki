@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,7 +21,7 @@ namespace Tki;
 
 class Team
 {
-    public static function sameTeam($attacker_team = null, $attackie_team = null) : bool
+    public static function isSameTeam($attacker_team = null, $attackie_team = null) : bool
     {
         if (($attacker_team != $attackie_team) || ($attacker_team == 0 || $attackie_team == 0))
         {
@@ -66,7 +65,7 @@ class Team
         $desc = trim($desc);
         $creator = (int) $creator;
 
-        if ($name === null || empty ($name) || $desc === null || empty ($desc) || $creator === null || empty ($creator))
+        if ($name === null || empty($name) || $desc === null || empty($desc) || $creator === null || empty($creator))
         {
             return (bool) false;
         }
@@ -87,8 +86,8 @@ class Team
         // This is just a temp fix until we find a better one.
         $sql = "SELECT COUNT(*) as found FROM ::prefix::teams WHERE team_name=:team_name AND creator <>:creator";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':team_name', $name);
-        $stmt->bindParam(':creator', $creator);
+        $stmt->bindParam(':team_name', $name, \PDO::PARAM_STR);
+        $stmt->bindParam(':creator', $creator, \PDO::PARAM_INT);
         $stmt->execute();
         $num_res = $stmt->fetch(\PDO::FETCH_ASSOC);
 

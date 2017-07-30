@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -78,7 +77,6 @@ namespace Tki;
      * @property mixed fighter_prate
      * @property mixed fighter_price
      * @property mixed footer_show_debug
-     * @property mixed footer_style
      * @property mixed fullscan_cost
      * @property mixed game_closed
      * @property mixed game_name
@@ -159,19 +157,6 @@ namespace Tki;
      * @property mixed sched_ticks
      * @property mixed sched_turns
      * @property mixed space_plague_kills
-     * @property mixed start_armor
-     * @property mixed start_beacon
-     * @property mixed start_credits
-     * @property mixed start_editors
-     * @property mixed start_emerwarp
-     * @property mixed start_energy
-     * @property mixed start_escape_pod
-     * @property mixed start_fighters
-     * @property mixed start_genesis
-     * @property mixed start_lssd
-     * @property mixed start_minedeflectors
-     * @property mixed start_scoop
-     * @property mixed start_turns
      * @property mixed starvation_death_rate
      * @property mixed team_planet_transfers
      * @property mixed tkitimer
@@ -184,12 +169,12 @@ namespace Tki;
      * @property mixed upgrade_factor
      * @property mixed kabal_aggression
      * @property mixed kabal_planets
-     * @property mixed kabal_start_credits
      * @property mixed kabal_unemployment
      *
      */
 class Reg
 {
+    /** @var Array **/
     protected $vars = array();
 
     public function __construct(\PDO $pdo_db)
@@ -214,7 +199,8 @@ class Reg
             else
             {
                 // Slurp in config variables from the ini file directly
-                $ini_file = 'config/classic_config.ini'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+                // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+                $ini_file = 'config/classic_config.ini';
                 $ini_keys = parse_ini_file($ini_file, true);
                 foreach ($ini_keys as $config_category => $config_line)
                 {
@@ -228,7 +214,8 @@ class Reg
         else
         {
             // Slurp in config variables from the ini file directly
-            $ini_file = 'config/classic_config.ini'; // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+            // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+            $ini_file = 'config/classic_config.ini';
             $ini_keys = parse_ini_file($ini_file, true);
             foreach ($ini_keys as $config_category => $config_line)
             {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -65,7 +65,9 @@ $index_page = true; // Ensure that we do not set sessions
 require_once './common.php';
 
 $title = $langvars['l_sys_update'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'scheduler'));
@@ -102,7 +104,7 @@ else
     $schedCount = 0;
     $lastrunList = null;
     $sched_res = $db->Execute("SELECT * FROM {$db->prefix}scheduler");
-    Tki\Db::LogDbErrors($pdo_db, $sched_res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $sched_res, __LINE__, __FILE__);
     if ($sched_res)
     {
         while (!$sched_res->EOF)
@@ -127,18 +129,27 @@ else
                 if ($event['spawn'] - $multiplier == 0)
                 {
                     $resx = $db->Execute("DELETE FROM {$db->prefix}scheduler WHERE sched_id = ?", array($event['sched_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 }
                 else
                 {
-                    $resy = $db->Execute("UPDATE {$db->prefix}scheduler SET ticks_left = ?, spawn = spawn - ? WHERE sched_id = ?", array($ticks_left, $multiplier, $event['sched_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resy, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::scheduler SET ticks_left=:ticks_left, spawn=spawn-:multiplier WHERE sched_id=:sched_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ticks_left', $ticks_left, \PDO::PARAM_INT);
+                    $stmt->bindParam(':multiplier', $multiplier, \PDO::PARAM_INT);
+                    $stmt->bindParam(':sched_id', $event['sched_id'], \PDO::PARAM_INT);
+                    $result = $stmt->execute();
+                    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
             }
             else
             {
-                $resz = $db->Execute("UPDATE {$db->prefix}scheduler SET ticks_left = ? WHERE sched_id = ?", array($ticks_left, $event['sched_id']));
-                Tki\Db::LogDbErrors($pdo_db, $resz, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::scheduler SET ticks_left=:ticks_left WHERE sched_id=:sched_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ticks_left', $ticks_left, \PDO::PARAM_INT);
+                $stmt->bindParam(':sched_id', $event['sched_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
 
             $sched_var_id = $event['sched_id'];
@@ -162,16 +173,22 @@ else
     if (abs($schedDiff) > ($tkireg->sched_ticks * 60))
     {
         // Hmmm, seems that we have missed at least 1 update, so log it to the admin.
-        Tki\AdminLog::writeLog($pdo_db, 2468, "Detected Scheduler Issue|{$lastRun}|". time() . "|" . (time() - ($tkireg->sched_ticks * 60)) . "|{$schedDiff}|" . serialize($lastrunList));
+        $admin_log = new Tki\AdminLog;
+        $admin_log->writeLog($pdo_db, 2468, "Detected Scheduler Issue|{$lastRun}|". time() . "|" . (time() - ($tkireg->sched_ticks * 60)) . "|{$schedDiff}|" . serialize($lastrunList));
     }
 
     $runtime = time() - $starttime;
     echo "<p>The scheduler took $runtime seconds to execute.<p>";
 
-    $res = $db->Execute("UPDATE {$db->prefix}scheduler SET last_run = ". time());
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::scheduler SET last_run=:time";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':time', time(), \PDO::PARAM_INT);
+    $result = $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 echo "<br>";
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

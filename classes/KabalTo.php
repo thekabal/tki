@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -26,17 +25,18 @@ class KabalTo
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id"; // Get target planet information
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planet_id);
+        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
         $stmt->execute();
         $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $planetinfo['owner']);
+        $stmt->bindParam(':ship_id', $planetinfo['owner'], \PDO::PARAM_INT);
         $stmt->execute();
         $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
+        $character_object = new Character;
 
         // Planet beams
         $targetbeams = \Tki\CalcLevels::beams($ownerinfo['beams'] + $base_factor, $tkireg);
@@ -261,8 +261,8 @@ class KabalTo
 
         if (!$attackerarmor > 0) // Check if attackers ship destroyed
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
-            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
+            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
@@ -273,7 +273,7 @@ class KabalTo
             $fighters_lost = $planetinfo['fighters'] - $targetfighters;
 
             // Log attack to planet owner
-            \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Kabal $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
+            \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LogEnums::PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Kabal $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
 
             // Update planet
             $resi = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($planetinfo['energy'], $fighters_lost, $targettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
@@ -283,7 +283,7 @@ class KabalTo
         {
             $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
             $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Made it past defenses on planet $planetinfo[name]");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Made it past defenses on planet $planetinfo[name]");
 
             // Update attackers
             $resj = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ? WHERE ship_id = ?;", array($playerinfo['ship_energy'], $fighters_lost, $attackertorps, $armor_lost, $playerinfo['ship_id']));
@@ -318,10 +318,10 @@ class KabalTo
             if ($shipsonplanet == 0)
             {
                 // Must have killed all ships on the planet
-                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Defeated all ships on planet $planetinfo[name]");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Defeated all ships on planet $planetinfo[name]");
 
                 // Log attack to planet owner
-                \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
                 // Update planet
                 $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
@@ -332,9 +332,9 @@ class KabalTo
             else
             {
                 // Must have died trying
-                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "We were KILLED by ships defending planet $planetinfo[name]");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "We were KILLED by ships defending planet $planetinfo[name]");
                 // Log attack to planet owner
-                \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Kabal $playerinfo[character_name]|0|0|0|0|0");
+                \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LogEnums::PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Kabal $playerinfo[character_name]|0|0|0|0|0");
                 // No salvage for planet because it went to the ship that won
             }
         }
@@ -344,6 +344,7 @@ class KabalTo
     {
         $armor_lost = null;
         $fighters_lost = null;
+        $character_object = new Character;
 
         // Lookup target details
         $resultt = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
@@ -366,7 +367,7 @@ class KabalTo
         $zonerow = $zoneres->fields;
         if ($zonerow['allow_attack'] == "N")                        //  Dest link must allow attacking
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack failed, you are in a sector that prohibits attacks.");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Attack failed, you are in a sector that prohibits attacks.");
 
             return;
         }
@@ -374,8 +375,8 @@ class KabalTo
         // Use emergency warp device
         if ($targetinfo['dev_emerwarp'] > 0)
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_EWD, "Kabal $playerinfo[character_name]");
-            $dest_sector = random_int(0, (int) $tkireg->max_sectors);
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_EWD, "Kabal $playerinfo[character_name]");
+            $dest_sector = random_int(1, (int) $tkireg->max_sectors);
             $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $targetinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $result_warp, __LINE__, __FILE__);
 
@@ -650,15 +651,15 @@ class KabalTo
             // Target had no escape pod
             {
                 $rating = round($targetinfo['rating'] / 2);
-                $resc = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 0, ship_ore = 0, ship_organics = 0, ship_energy = 1000, ship_colonists = 0, ship_goods = 0, ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, ship_destroyed = 'N', rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
+                $resc = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 1, ship_ore = 0, ship_organics = 0, ship_energy = 1000, ship_colonists = 0, ship_goods = 0, ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, ship_destroyed = 'N', rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Kabal $playerinfo[character_name]|Y");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "Kabal $playerinfo[character_name]|Y");
             }
             else
             // Target had no pod
             {
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "Kabal $playerinfo[character_name]|N");
-                \Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "Kabal $playerinfo[character_name]|N");
+                $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
             }
 
             if ($attackerarmor > 0)
@@ -711,9 +712,9 @@ class KabalTo
                 }
 
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull'])) + round(pow($tkireg->upgrade_factor, $targetinfo['engines'])) + round(pow($tkireg->upgrade_factor, $targetinfo['power'])) + round(pow($tkireg->upgrade_factor, $targetinfo['computer'])) + round(pow($tkireg->upgrade_factor, $targetinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $targetinfo['beams'])) + round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $targetinfo['shields'])) + round(pow($tkireg->upgrade_factor, $targetinfo['armor'])) + round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
-                $ship_salvage_rate = random_int (10, 20);
+                $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
                 $resd = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resd, __LINE__, __FILE__);
                 $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
@@ -735,8 +736,8 @@ class KabalTo
             $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $target_energy = $targetinfo['ship_energy'];
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "Attack failed, $targetinfo[character_name] survived.");
-            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Kabal $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Attack failed, $targetinfo[character_name] survived.");
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_WIN, "Kabal $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
             $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ? , armor_pts = armor_pts - ?, rating=rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
             $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts=armor_pts - ?, torps=torps - ?, rating = ? WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $target_rating_change, $targetinfo['ship_id']));
@@ -746,8 +747,8 @@ class KabalTo
         // Attacker ship destroyed
         if (!$attackerarmor > 0)
         {
-            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "$targetinfo[character_name] destroyed your ship!");
-            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "$targetinfo[character_name] destroyed your ship!");
+            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
             if ($targetarmor > 0)
             {
                 // Target still alive to salvage attacker
@@ -755,7 +756,7 @@ class KabalTo
                 $free_ore = round($playerinfo['ship_ore'] / 2);
                 $free_organics = round($playerinfo['ship_organics'] / 2);
                 $free_goods = round($playerinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $tkireg ) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $tkireg) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what target can carry
                     $salv_goods = $free_goods;
@@ -802,8 +803,8 @@ class KabalTo
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
                 $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_WIN, "Kabal $playerinfo[character_name]|$armor_lost|$fighters_lost");
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_RAW, "You destroyed the Kabal ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_WIN, "Kabal $playerinfo[character_name]|$armor_lost|$fighters_lost");
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::RAW, "You destroyed the Kabal ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
                 $resh = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $targetinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resh, __LINE__, __FILE__);
                 $armor_lost = $targetinfo['armor_pts'] - $targetarmor;
@@ -817,6 +818,8 @@ class KabalTo
 
     public static function secDef(\PDO $pdo_db, $db, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg): void
     {
+        $character_object = new Character;
+
         // Check for sector defenses
         if ($targetlink > 0)
         {
@@ -826,7 +829,7 @@ class KabalTo
 
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'F' ORDER BY quantity DESC";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
@@ -843,7 +846,7 @@ class KabalTo
             $total_sector_mines = 0;
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $targetlink);
+            $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
@@ -858,7 +861,7 @@ class KabalTo
 
             if ($all_sector_fighters > 0 || $total_sector_mines > 0 || ($all_sector_fighters > 0 && $total_sector_mines > 0)) // Dest link has defenses so lets attack them
             {
-                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LOG_RAW, "ATTACKING SECTOR DEFENSES $all_sector_fighters fighters and $total_sector_mines mines.");
+                \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "ATTACKING SECTOR DEFENSES $all_sector_fighters fighters and $total_sector_mines mines.");
                 $targetfighters = $all_sector_fighters;
                 $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
                 if ($playerbeams > $playerinfo['ship_energy'])
@@ -981,7 +984,7 @@ class KabalTo
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                    \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                    $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     return;
                 }
 
@@ -1021,7 +1024,7 @@ class KabalTo
 
                             // Actually kill the Kabal now
                             \Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
-                            \Tki\Character::kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 
                             // Lets get rid of the mines now and return
                             \Tki\Mines::explode($pdo_db, $targetlink, $roll);

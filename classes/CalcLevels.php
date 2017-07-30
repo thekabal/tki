@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -72,7 +71,7 @@ class CalcLevels
 
         $sql = "SELECT beams FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $beam_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($beam_defender_here !== null)
@@ -101,7 +100,7 @@ class CalcLevels
 
         $sql = "SELECT shields FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $shield_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($shield_defender_here !== null)
@@ -130,7 +129,7 @@ class CalcLevels
 
         $sql = "SELECT torp_launchers FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $torp_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($torp_defender_here !== null)
@@ -156,7 +155,7 @@ class CalcLevels
         return (int) $planettorps;
     }
 
-    public static function avgTech(array $ship_info = null, string $type = 'ship')
+    public static function avgTech(?array $ship_info = null, string $type = 'ship'): float
     {
         // Used to define what devices are used to calculate the average tech level.
         $calc_ship_tech    = array('hull', 'engines', 'computer', 'armor', 'shields', 'beams', 'torp_launchers');

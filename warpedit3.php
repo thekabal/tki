@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_warp_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('warpedit', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
@@ -47,7 +49,7 @@ if (mb_strlen(trim($target_sector)) === 0)
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -55,7 +57,9 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_warp_turn'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -63,7 +67,9 @@ if ($playerinfo['dev_warpedit'] < 1)
 {
     echo $langvars['l_warp_none'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -77,7 +83,7 @@ if ($target_sector === null)
 
 $sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -85,20 +91,22 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 $target_sector = round($target_sector);
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $target_sector);
+$stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -107,13 +115,15 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
     $langvars['l_warp_forbidtwo'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_forbidtwo']);
     echo $langvars['l_warp_forbidtwo'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :sector_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $target_sector);
+$stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();
 $tmpinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -126,7 +136,7 @@ if (!$tmpinfo)
 
 $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':link_start', $playerinfo['sector']);
+$stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -150,14 +160,14 @@ if ($linkinfo !== false)
     {
         $sql = "DELETE FROM ::prefix::links WHERE link_start=:link_start AND link_dest=:link_dest";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':link_start', $playerinfo['sector']);
-        $stmt->bindParam(':link_dest', $target_sector);
+        $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
+        $stmt->bindParam(':link_dest', $target_sector, PDO::PARAM_INT);
         $stmt->execute();
         $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $sql = "UPDATE ::prefix::ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':link_start', $playerinfo['ship_id']);
+        $stmt->bindParam(':link_start', $playerinfo['ship_id'], PDO::PARAM_INT);
         $stmt->execute();
         $update_ships = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -169,8 +179,8 @@ if ($linkinfo !== false)
         {
             $sql = "DELETE ::prefix::links link_start = :link_start AND link_dest = :link_dest";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':link_start', $target_sector);
-            $stmt->bindParam(':link_start', $playerinfo['sector']);
+            $stmt->bindParam(':link_start', $target_sector, PDO::PARAM_INT);
+            $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
             $stmt->execute();
             $update_ships = $stmt->fetch(PDO::FETCH_ASSOC);
             echo $langvars['l_warp_removedtwo'] . " " . $target_sector . ".<br><br>";
@@ -179,4 +189,6 @@ if ($linkinfo !== false)
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

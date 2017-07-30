@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -44,8 +44,8 @@ if (array_key_exists('newlang', $_POST) === true)
                 // Update the ship record to the requested language
                 $sql = "UPDATE ::prefix::ships SET lang=:lang WHERE email=:email LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':lang', $lang);
-                $stmt->bindParam(':email', $_SESSION['username']);
+                $stmt->bindParam(':lang', $lang, PDO::PARAM_STR);
+                $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
                 $stmt->execute();
                 $lang_changed = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -58,7 +58,9 @@ if (array_key_exists('newlang', $_POST) === true)
 }
 
 $title = $langvars['l_opt2_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('option2', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
@@ -90,7 +92,7 @@ else
 
     $sql = "SELECT ship_id, password FROM ::prefix::ships WHERE email=:email LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':email', $_SESSION['username']);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
     $stmt->execute();
     $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -106,13 +108,12 @@ else
             // Now update the players password.
             $sql = "UPDATE ::prefix::ships SET password=:pass WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':pass', $new_hashed_pass);
-            $stmt->bindParam(':email', $playerinfo['ship_id']);
+            $stmt->bindParam(':pass', $new_hashed_pass, PDO::PARAM_STR);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
             $stmt->execute();
             $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Now check to see if we have a valid update and have ONLY 1 changed record.
-            // if ((is_bool($rs) && $rs === false) || $db->Affected_Rows() != 1)
             if ($playerinfo === null)
             {
                 // Either we got an error in the SQL Query or <> 1 records was changed.
@@ -145,4 +146,6 @@ if ($changed_language)
 
 echo "<br>";
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

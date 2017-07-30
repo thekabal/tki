@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,14 +25,16 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'bounty', 'regional'));
 $title = $langvars['l_title_port'];
 $body_class = 'port';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<body class=" . $body_class . "><br>";
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -41,69 +43,69 @@ $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($playerinfo['ship_ore'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::LogDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
     $playerinfo['ship_ore'] = 0;
 }
 
 if ($playerinfo['ship_organics'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}ships SET ship_organics = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::LogDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
     $playerinfo['ship_organics'] = 0;
 }
 
 if ($playerinfo['ship_energy'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::LogDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
     $playerinfo['ship_energy'] = 0;
 }
 
 if ($playerinfo['ship_goods'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}ships SET ship_goods = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::LogDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
     $playerinfo['ship_goods'] = 0;
 }
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($sectorinfo['port_ore'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::LogDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
     $sectorinfo['port_ore'] = 0;
 }
 
 if ($sectorinfo['port_goods'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}universe SET port_goods = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::LogDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
     $sectorinfo['port_goods'] = 0;
 }
 
 if ($sectorinfo['port_organics'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}universe SET port_organics = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::LogDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
     $sectorinfo['port_organics'] = 0;
 }
 
 if ($sectorinfo['port_energy'] < 0)
 {
     $fixres = $db->Execute("UPDATE {$db->prefix}universe SET port_energy = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::LogDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
     $sectorinfo['port_energy'] = 0;
 }
 
 $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+$stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -113,7 +115,9 @@ if ($zoneinfo['zone_id'] == 4)
     echo "<h1>" . $title . "</h1>\n";
     echo $langvars['l_war_info'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 elseif ($zoneinfo['allow_trade'] == 'N')
@@ -123,7 +127,9 @@ elseif ($zoneinfo['allow_trade'] == 'N')
     echo "<h1>" . $title . "</h1>\n";
     echo $langvars['l_no_trade_info'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 elseif ($zoneinfo['allow_trade'] == 'L')
@@ -133,7 +139,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
         // Get playerinfo from database
         $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $zoneinfo['owner']);
+        $stmt->bindParam(':ship_id', $zoneinfo['owner'], PDO::PARAM_INT);
         $stmt->execute();
         $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -144,7 +150,9 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "<h1>" . $title . "</h1>\n";
             echo "Trading at this port is not allowed for outsiders<p>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -156,7 +164,9 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -307,19 +317,21 @@ elseif ($sectorinfo['port_type'] == "special")
         echo $langvars['l_port_loannotrade'] . "<p>";
         echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
         Tki\Text::gotoMain($pdo_db, $lang);
-        Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+        $footer = new Tki\Footer;
+        $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
 
     if ($tkireg->bounty_all_special)
     {
         $res2 = $db->Execute("SELECT SUM(amount) as total_bounty FROM {$db->prefix}bounty WHERE placed_by = 0 AND bounty_on = ?;", array($playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
     }
     else
     {
         $res2 = $db->Execute("SELECT SUM(amount) as total_bounty FROM {$db->prefix}bounty WHERE placed_by = 0 AND bounty_on = ? AND ?=2;", array($playerinfo['ship_id'], $sectorinfo['zone_id']));
-        Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
     }
 
     if ($res2)
@@ -329,7 +341,7 @@ elseif ($sectorinfo['port_type'] == "special")
         {
             $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
             $stmt->execute();
             $bank_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -345,10 +357,10 @@ elseif ($sectorinfo['port_type'] == "special")
                 else
                 {
                     $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits = credits - ? WHERE ship_id = ?;", array($bty['total_bounty'], $playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                     $resx = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0;", array($playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                     $langvars['l_port_bountypaid'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port_bountypaid']);
                     echo $langvars['l_port_bountypaid'] . "<br>";
@@ -359,7 +371,7 @@ elseif ($sectorinfo['port_type'] == "special")
             {
                 $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
                 $stmt->execute();
                 $bank_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -378,10 +390,10 @@ elseif ($sectorinfo['port_type'] == "special")
                         $bounty_payment = $bty['total_bounty'];
 
                         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                         $resx = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0;", array($playerinfo['ship_id']));
-                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                         $langvars['l_port_bountypaid'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port_bountypaid']);
                         echo $langvars['l_port_bountypaid'] . "<br>";
@@ -397,9 +409,9 @@ elseif ($sectorinfo['port_type'] == "special")
                         echo "<br>\n";
 
                         $resx = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         $resx = $db->Execute("UPDATE {$db->prefix}bounty SET amount = amount - ?  WHERE bounty_on = ? AND placed_by = 0;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         echo "You have paid part of the bounty.<br>\n";
                         echo "<br>\n";
 
@@ -1009,4 +1021,5 @@ echo "<br><br>\n";
 Tki\Text::gotoMain($pdo_db, $lang);
 echo "\n";
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

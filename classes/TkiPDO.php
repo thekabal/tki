@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,22 +23,29 @@ namespace Tki;
 
 class TkiPDO extends \PDO
 {
+    /** @var string|null **/
     protected $table_prefix;
 
-    public function __construct(string $dsn, string $user = null, string $password = null, string $prefix = null, array $driver_options = array())
+    public function __construct(
+        string $dsn,
+        ?string $user = null,
+        ?string $password = null,
+        ?string $prefix = null,
+        array $driver_options = array()
+    )
     {
         $this->table_prefix = $prefix;
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
-    public function exec($statement)
+    public function exec($statement): int
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::exec($statement);
         return $replaced_statement;
     }
 
-    public function prepare($statement, $driver_options = array())
+    public function prepare($statement, $driver_options = array()): \PDOStatement
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::prepare($statement, $driver_options);
@@ -64,7 +70,7 @@ class TkiPDO extends \PDO
 
     protected function tablePrefix(string $statement): string
     {
-        $statement_with_prefix = str_replace('::prefix::', $this->table_prefix, $statement);
-        return (string) $statement_with_prefix;
+        $stmt_with_prefix = str_replace('::prefix::', $this->table_prefix, $statement);
+        return (string) $stmt_with_prefix;
     }
 }

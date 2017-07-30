@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,11 +21,11 @@ namespace Tki;
 
 class Combat
 {
-    public static function shipToShip(\PDO $pdo_db, $db, array $langvars, int $ship_id, Reg $tkireg, array $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage): void
+    public static function shipToShip(\PDO $pdo_db, array $langvars, int $ship_id, Reg $tkireg, array $playerinfo, int $attackerbeams, int $attackerfighters, int $attackershields, int $attackertorps, int $attackerarmor, int $attackertorpdamage): void
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $targetinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -477,10 +476,10 @@ class Combat
 
                 $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':salv_ore', $salv_ore);
-                $stmt->bindParam(':salv_organics', $salv_organics);
-                $stmt->bindParam(':salv_goods', $salv_goods);
-                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->bindParam(':salv_ore', $salv_ore, \PDO::PARAM_INT);
+                $stmt->bindParam(':salv_organics', $salv_organics, \PDO::PARAM_INT);
+                $stmt->bindParam(':salv_goods', $salv_goods, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
             }
 
@@ -489,16 +488,29 @@ class Combat
                 $rating = round($targetinfo['rating'] / 2);
                 echo $langvars['l_cmb_escapepodlaunched'] . "<br><br>";
                 echo "<br><br>ship_id = $targetinfo[ship_id]<br><br>";
-                $test = $db->Execute("UPDATE {$db->prefix}ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy = ?,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($tkireg->start_energy, $rating, $targetinfo['ship_id']));
-                \Tki\Db::logDbErrors($pdo_db, $test, __LINE__, __FILE__);
 
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
+                $sql = "UPDATE ::prefix::ships SET hull = 0, engines = 0, power = 0, " .
+                       "sensors = 0, computer = 0, beams = 0, torp_launchers = 0, " .
+                       "torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, " .
+                       "sector = 1, ship_organics = 0, ship_ore = 0, " .
+                       "ship_goods = 0, ship_energy = 100, ship_colonists = 0, " .
+                       "ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, " .
+                       "dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', " .
+                       "dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', " .
+                       "rating = :rating, dev_lssd='N' WHERE ship_id = :ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':rating', $rating, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
+                $update = $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|Y");
                 \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
             else
             {
-                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
-                \Tki\Character::kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|N");
+                $character_object = new Character;
+                $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
                 \Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
         }
@@ -509,9 +521,20 @@ class Combat
             $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $target_energy = $targetinfo['ship_energy'];
-            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LOG_ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
-            $update4 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, torps = torps - ? WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $targetinfo['ship_id']));
-            \Tki\Db::logDbErrors($pdo_db, $update4, __LINE__, __FILE__);
+            \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
+
+            $sql = "UPDATE ::prefix::ships SET ship_energy = :target_energy, " .
+                   "ship_fighters = ship_fighters - :target_fighters_lost, " .
+                   "armor_pts = armor_pts - :target_armor_lost, " .
+                   "torps = torps - :target_torp_num WHERE ship_id = :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':target_energy', $target_energy, \PDO::PARAM_INT);
+            $stmt->bindParam(':target_fighters_lost', $target_fighters_lost, \PDO::PARAM_INT);
+            $stmt->bindParam(':target_armor_lost', $target_armor_lost, \PDO::PARAM_INT);
+            $stmt->bindParam(':target_torp_num', $targettorpnum, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
+            $update = $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
         }
 
         echo "<br>_+_+_+_+_+_+_<br>";

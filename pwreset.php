@@ -23,7 +23,9 @@ require_once './common.php';
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'options', 'pwreset'));
 $title = $langvars['l_pwr_title'];
 $body_class = 'options';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<h1>" . $title . "</h1>\n";
 
@@ -37,7 +39,7 @@ $reset_code = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
 // because 8 characters is 4,294,967,296 combinations, and that should be sufficiently secure
 
 $result = $db->SelectLimit("SELECT character_name, email, recovery_time FROM {$db->prefix}ships WHERE substr(MD5(password),6,8) = ?", 1, -1, array('password' => $reset_code));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF && $result !== false)
 {
@@ -95,10 +97,14 @@ else
 //mail ($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'], "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
 
 /// Reset recovery_time to zero
-//$recovery_update_result = $db->Execute ("UPDATE {$db->prefix}ships SET recovery_time = null WHERE email = ?;", array($playerinfo['email']));
-//echo (Tki\Db::logDbErrors ($pdo_db, $pdo_db, $recovery_update_result, __LINE__, __FILE__));
+// $sql = "UPDATE ::prefix::ships SET recovery_time=NULL  WHERE ship_id=:ship_id";
+// $stmt = $pdo_db->prepare($sql);
+// $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+// $result = $stmt->execute();
+// Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
 /// Log user in (like login does)
 
 /// Redirect to game (like login does)
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

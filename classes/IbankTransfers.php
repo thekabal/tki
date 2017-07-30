@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -26,14 +25,14 @@ class IbankTransfers
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@kabal' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns);
+        $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT name, planet_id, sector_id FROM ::prefix::planets WHERE owner=:owner ORDER BY sector_id ASC";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $playerinfo['ship_id']);
+        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -128,7 +127,7 @@ class IbankTransfers
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td></tr>";
     }
 
-    public static function ibankTransfer2(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, string $account, int $ship_id, int $splanet_id, int $dplanet_id, Smarty $template): void
+    public static function ibankTransfer2(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $account, int $ship_id, int $splanet_id, int $dplanet_id, Smarty $template): void
     {
         if ($ship_id !== null) // Ship transfer
         {
@@ -138,8 +137,8 @@ class IbankTransfers
             }
 
             $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
-            $stmt->bindParam(':ship_id', $ship_id);
-            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
+            $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$target)
@@ -166,9 +165,9 @@ class IbankTransfers
                 $curtime -= $tkireg->ibank_trate * 60;
 
                 $stmt = $pdo_db->prepare("SELECT UNIX_TIMESTAMP(time) as time FROM ::prefix::ibank_transfers WHERE UNIX_TIMESTAMP(time) > :curtime AND source_id = :source_id AND dest_id = :dest_id");
-                $stmt->bindParam(':curtime', $curtime);
-                $stmt->bindParam(':source_id', $playerinfo['ship_id']);
-                $stmt->bindParam(':dest_id', $target['ship_id']);
+                $stmt->bindParam(':curtime', $curtime, \PDO::PARAM_INT);
+                $stmt->bindParam(':source_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $stmt->bindParam(':dest_id', $target['ship_id'], \PDO::PARAM_INT);
                 $time = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                 if ($time !== null)
@@ -223,7 +222,7 @@ class IbankTransfers
 
             $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':planet_id', $splanet_id);
+            $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
             $stmt->execute();
             $source = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -239,7 +238,7 @@ class IbankTransfers
 
             $sql = "SELECT name, credits, owner, sector_id, base FROM ::prefix::planets WHERE planet_id=:planet_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':planet_id', $dplanet_id);
+            $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
             $stmt->execute();
             $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -288,7 +287,7 @@ class IbankTransfers
         }
     }
 
-    public static function ibankTransfer3(\PDO $pdo_db, $db, string $lang, array $langvars, array $playerinfo, string $account, int $ship_id, int $splanet_id, int $dplanet_id, $amount, Reg $tkireg, Smarty $template): void
+    public static function ibankTransfer3(\PDO $pdo_db, $db, string $lang, array $langvars, array $playerinfo, array $account, int $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Smarty $template): void
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 
@@ -306,8 +305,8 @@ class IbankTransfers
 
             // Need to check again to prevent cheating by manual posts
             $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
-            $stmt->bindParam(':ship_id', $ship_id);
-            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns);
+            $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($target === null)
@@ -336,9 +335,9 @@ class IbankTransfers
                 $sql = "SELECT UNIX_TIMESTAMP(time) as time FROM ::prefix::ibank_transfers WHERE " .
                        "UNIX_TIMESTAMP(time) > :curtime AND source_id = :source_id AND dest_id = :dest_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':curtime', $curtime);
-                $stmt->bindParam(':source_id', $playerinfo['ship_id']);
-                $stmt->bindParam(':dest_id', $target['ship_id']);
+                $stmt->bindParam(':curtime', $curtime, \PDO::PARAM_INT);
+                $stmt->bindParam(':source_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $stmt->bindParam(':dest_id', $target['ship_id'], \PDO::PARAM_INT);
                 $time = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                 if ($time !== null)
@@ -395,16 +394,26 @@ class IbankTransfers
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
 
-            $sql = "UPDATE {$db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?";
-            $db->Execute($sql, array($amount, $playerinfo['ship_id']));
+            $sql = "UPDATE ::prefix::ibank_accounts SET balance=balance-:amount WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "UPDATE {$db->prefix}ibank_accounts SET balance = balance + ? WHERE ship_id = ?";
-            $db->Execute($sql, array($transfer, $target['ship_id']));
+            $sql = "UPDATE ::prefix::ibank_accounts SET balance=balance+:amount WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $target['ship_id'], \PDO::PARAM_INT);
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "INSERT INTO {$db->prefix}ibank_transfers VALUES (NULL, ?, ?, NOW(), ?)";
-            $db->Execute($sql, array($playerinfo['ship_id'], $target['ship_id'], $transfer));
+            $sql = "INSERT ::prefix::ibank_transfers VALUES (null, :ship_id, :target_id, NOW(), :transfer)";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':target_id', $target['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':transfer', $transfer, \PDO::PARAM_INT);
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
         else
@@ -475,12 +484,18 @@ class IbankTransfers
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
 
-            $sql = "UPDATE {$db->prefix}planets SET credits=credits - ? WHERE planet_id = ?";
-            $db->Execute($sql, array($amount, $splanet_id));
+            $sql = "UPDATE ::prefix::planets SET credits=credits-:amount  WHERE planet_id=:planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "UPDATE {$db->prefix}planets SET credits=credits + ? WHERE planet_id = ?";
-            $db->Execute($sql, array($transfer, $dplanet_id));
+            $sql = "UPDATE ::prefix::planets SET credits=credits+:amount  WHERE planet_id=:planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
     }

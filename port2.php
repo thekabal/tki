@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_title_port'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
@@ -30,20 +32,20 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'device', 'report'
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+$stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -53,7 +55,9 @@ if ($zoneinfo['allow_trade'] == 'N')
     echo "<h1>" . $title . "</h1>\n";
     echo $langvars['l_no_trade_info'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 elseif ($zoneinfo['allow_trade'] == 'L')
@@ -62,7 +66,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
     {
         $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $zoneinfo['owner']);
+        $stmt->bindParam(':ship_id', $zoneinfo['owner'], PDO::PARAM_INT);
         $stmt->execute();
         $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -72,7 +76,9 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -84,7 +90,9 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "<h1>" . $title . "</h1>\n";
             echo $langvars['l_no_trade_out'] . "<p>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -97,6 +105,7 @@ $color_green = "#0f0"; // Light green
 $trade_deficit = $langvars['l_cost'] . " : ";
 $trade_benefit = $langvars['l_profit'] . " : ";
 
+$admin_log = new Tki\AdminLog;
 if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_trade_turnneed'] . "<br><br>";
@@ -108,7 +117,6 @@ else
         // Kami multi-browser window upgrade fix
         if (array_key_exists('port_shopping', $_SESSION) === false || $_SESSION['port_shopping'] !== true)
         {
-            Tki\AdminLog::writeLog($pdo_db, LOG_MULTI_BROWSER, "{$request->server->get('REMOTE_ADDR')}|{$playerinfo['ship_id']}|Tried to re-upgrade their ship without requesting new items.");
             echo "<META HTTP-EQUIV='Refresh' CONTENT='2; URL=main.php'>";
             echo "<div style='color:#f00; font-size:18px;'>Your last Sales Transaction has already been delivered, Please enter the Special Port and select your order.</div>\n";
             echo "<br>\n";
@@ -116,7 +124,9 @@ else
             echo "<br>\n";
 
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
@@ -126,7 +136,9 @@ else
             echo $langvars['l_port_loannotrade'] . "<p>";
             echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
@@ -497,7 +509,7 @@ else
 
             $query = $query . ", turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = " . $playerinfo['ship_id'];
             $purchase = $db->Execute("$query");
-            Tki\Db::LogDbErrors($pdo_db, $purchase, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $purchase, __LINE__, __FILE__);
 
             $hull_upgrade = 0;
             echo "</table>";
@@ -510,8 +522,8 @@ else
                 // Tki\Ports::buildTwoCol("<span style='color:#f00;'>Detected Illegal Cargo</span>", "<span style='color:#0f0;'>Fixed</span>", "left", "right");
                 echo "<span style='color:#f00; font-weight:bold;'>Detected illegal cargo, as a penalty, we are confiscating all of your cargo, you may now continue.</span>\n";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=0, ship_organics=0, ship_goods=0, ship_energy=0, ship_colonists =0 WHERE ship_id = ? LIMIT 1;", array($playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                Tki\AdminLog::writeLog($pdo_db, 5001, "Detected illegal cargo on shipID: {$playerinfo['ship_id']}");
+                Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                $admin_log->writeLog($pdo_db, 5001, "Detected illegal cargo on shipID: {$playerinfo['ship_id']}");
             }
             else
             {
@@ -670,7 +682,7 @@ else
 
             // Update ship cargo, credits and turns
             $trade_result = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, rating = rating + 1, credits = credits - ?, ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, ship_energy = ship_energy + ? WHERE ship_id = ?;", array($total_cost, $trade_ore, $trade_organics, $trade_goods, $trade_energy, $playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $trade_result, __LINE__, __FILE__);
 
             // Make all trades positive to change port values
             $trade_ore        = round(abs($trade_ore));
@@ -680,7 +692,7 @@ else
 
             // Decrease supply and demand on port
             $trade_result2 = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_organics = port_organics - ?, port_goods = port_goods - ?, port_energy = port_energy - ? WHERE sector_id = ?;", array($trade_ore, $trade_organics, $trade_goods, $trade_energy, $sectorinfo['sector_id']));
-            Tki\Db::LogDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $trade_result2, __LINE__, __FILE__);
 
             echo $langvars['l_trade_complete'] . ".<br><br>";
         }
@@ -695,4 +707,5 @@ if ($sectorinfo['port_type'] == "special")
     echo "<br><br>Click <a href=port.php>here</a> to return to the supply depot.";
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

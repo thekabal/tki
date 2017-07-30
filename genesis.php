@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -29,24 +29,26 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('genesis', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 $title = $langvars['l_gns_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get sectorinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 $planetinfo = $result3->fields;
 $num_planets = $result3->RecordCount();
 
@@ -84,7 +86,7 @@ elseif ($playerinfo['dev_genesis'] < 1)
 else
 {
     $res = $db->Execute("SELECT allow_planet, team_zone, owner FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     $zoneinfo = $res->fields;
     if ($zoneinfo['allow_planet'] == 'N')
     {
@@ -101,7 +103,7 @@ else
             else
             {
                 $res = $db->Execute("SELECT team FROM {$db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
-                Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 $ownerinfo = $res->fields;
                 if ($ownerinfo['team'] != $playerinfo['team'])
                 {
@@ -109,10 +111,14 @@ else
                 }
                 else
                 {
-                    $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(NULL, $playerinfo['sector'], $planetname, 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
-                    Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
-                    $update2 = $db->Execute("UPDATE {$db->prefix}ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+                    $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(null, $playerinfo['sector'], $planetname, 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
+                    Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+
+                    $sql = "UPDATE ::prefix::ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=:ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                    $result = $stmt->execute();
+                    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                     echo $langvars['l_gns_pcreate'];
                 }
             }
@@ -123,19 +129,27 @@ else
         }
         else
         {
-            $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(NULL, $playerinfo['sector'], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
-            Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
-            $update2 = $db->Execute("UPDATE {$db->prefix}ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id=?;", array($playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+            $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(null, $playerinfo['sector'], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
+            Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+
+            $sql = "UPDATE ::prefix::ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             echo $langvars['l_gns_pcreate'];
         }
     }
     else
     {
-        $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(NULL, $playerinfo['sector'], $planetname, 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
-        Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
-        $update2 = $db->Execute("UPDATE {$db->prefix}ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id=?;", array($playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+        $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(null, $playerinfo['sector'], $planetname, 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
+        Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+
+        $sql = "UPDATE ::prefix::ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         echo $langvars['l_gns_pcreate'];
     }
 }
@@ -143,4 +157,6 @@ else
 echo "<br><br>";
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

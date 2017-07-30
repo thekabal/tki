@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -20,7 +20,9 @@
 require_once './common.php';
 
 $title = $langvars['l_new_title2'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'combat', 'footer', 'news'));
@@ -66,12 +68,12 @@ if (mb_strlen(trim($filtered_post_password)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $newlang = null;
 $newlang = filter_input(INPUT_POST, 'newlang', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($newlang)) === 0)
+if (($newlang === null) || (mb_strlen(trim($newlang)) === 0))
 {
     $newlang = false;
 }
 
-if ($newlang !== null && $newlang !== null)
+if ($newlang !== false)
 {
     $lang = $newlang;
 }
@@ -81,11 +83,11 @@ else
 }
 
 $flag = 0;
-$sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email || character_name=:character_name || ship_name=:shipname";
+$sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email || character_name=:character_name || ship_name=:ship_name";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $username);
-$stmt->bindParam(':character_name', $character);
-$stmt->bindParam(':ship_name', $shipname);
+$stmt->bindParam(':email', $username, PDO::PARAM_STR);
+$stmt->bindParam(':character_name', $character, PDO::PARAM_STR);
+$stmt->bindParam(':ship_name', $shipname, PDO::PARAM_STR);
 $stmt->execute();
 $character_exists = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -141,8 +143,8 @@ if ($flag == 0)
     $hashed_pass = password_hash($filtered_post_password, PASSWORD_DEFAULT); // PASSWORD_DEFAULT is the strongest algorithm available to PHP at the current time - today, it is BCRYPT.
 
     $result2 = $db->Execute("INSERT INTO {$db->prefix}ships (ship_name, ship_destroyed, character_name, password, email, armor_pts, credits, ship_energy, ship_fighters, turns, on_planet, dev_warpedit, dev_genesis, dev_beacon, dev_emerwarp, dev_escapepod, dev_fuelscoop, dev_minedeflector, last_login, ip_address, trade_colonists, trade_fighters, trade_torps, trade_energy, cleared_defenses, lang, dev_lssd)
-                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, $tkireg->start_armor, $tkireg->start_credits, $tkireg->start_energy, $tkireg->start_fighters, $mturns, 'N', $tkireg->start_editors, $tkireg->start_genesis, $tkireg->start_beacon, $tkireg->start_emerwarp, $tkireg->start_escape_pod, $tkireg->start_scoop, $tkireg->start_minedeflectors, $stamp, $request->server->get('REMOTE_ADDR'), 'Y', 'N', 'N', 'Y', NULL, $lang, $tkireg->start_lssd));
-    Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array($shipname, 'N', $character, $hashed_pass, $username, 10, 1000, 100, 10, $mturns, 'N', 0, 0, 0, 0, 'N', 'N', 0, $stamp, $request->server->get('REMOTE_ADDR'), 'Y', 'N', 'N', 'Y', null, $lang, 'N'));
+    Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
     if (!$result2)
     {
@@ -151,8 +153,9 @@ if ($flag == 0)
     else
     {
         $result2 = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE email = ?;", array($username));
-        Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $shipid = $result2->fields;
+        $shipid['ship_id'] = (int) $shipid['ship_id'];
 
         // To do: build a bit better "new player" message
         $langvars['l_new_message'] = str_replace('[pass]', $filtered_post_password, $langvars['l_new_message']);
@@ -170,12 +173,12 @@ if ($flag == 0)
 
         mail("$username", $langvars['l_new_topic'], $langvars['l_new_message'] . "\r\n\r\n" . $link_to_game, 'From: ' . $tkireg->admin_mail . "\r\nReply-To: " . $tkireg->admin_mail . "\r\nX-Mailer: PHP/" . phpversion());
 
-        Tki\LogMove::writeLog($pdo_db, $shipid['ship_id'], 0); // A new player is placed into sector 0. Make sure his movement log shows it, so they see it on the galaxy map.
+        Tki\LogMove::writeLog($pdo_db, $shipid['ship_id'], 1); // A new player is placed into sector 1. Make sure his movement log shows it, so they see it on the galaxy map.
         $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES (NULL, ?, ?, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array($character . "\'s Territory", $shipid['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
         $resx = $db->Execute("INSERT INTO {$db->prefix}ibank_accounts (ship_id,balance,loan) VALUES (?,0,0);", array($shipid['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
         // Add presets for new player
         for ($zz = 0; $zz < $tkireg->max_presets; $zz++)
@@ -183,9 +186,9 @@ if ($flag == 0)
             $sql = "INSERT INTO ::prefix::presets (ship_id, preset, type) " .
                    "VALUES (:ship_id, :preset, :type)";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $shipid['ship_id']);
-            $stmt->bindValue(':preset', 1);
-            $stmt->bindValue(':type', 'R');
+            $stmt->bindParam(':ship_id', $shipid['ship_id'], PDO::PARAM_INT);
+            $stmt->bindValue(':preset', 1, \PDO::PARAM_INT);
+            $stmt->bindValue(':type', 'R', \PDO::PARAM_STR);
             $resxx = $stmt->execute();
         }
 
@@ -207,4 +210,5 @@ else
     echo $langvars['l_new_err'];
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

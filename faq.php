@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -31,7 +31,7 @@ $variables['link'] = $link;
 $variables['body_class'] = 'faq';
 $variables['title'] = $langvars['l_faq_title'];
 
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
 }
@@ -40,10 +40,13 @@ else
     $variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link" => "index.php");
 }
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('faq.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

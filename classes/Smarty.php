@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,6 +21,7 @@ namespace Tki;
 
 class Smarty
 {
+    /** @var \Smarty|null **/
     protected $smarty = null;
 
     public function __construct()
@@ -52,7 +52,9 @@ class Smarty
         $smarty_errors = null;
         if (!is_dir('templates'))
         {
-            $smarty_errors .= 'The Kabal Invasion smarty error: The templates/ subdirectory under the main TKI directory does not exist. Please create it.<br>';
+            $smarty_errors .= 'The Kabal Invasion smarty error: The ' .
+                              'templates/ subdirectory under the main TKI ' .
+                              'directory does not exist. Please create it.<br>';
         }
 
         $cache_perms = is_writable('templates/_cache');
@@ -60,17 +62,23 @@ class Smarty
 
         if (!$cache_perms)
         {
-            $smarty_errors .= 'The Kabal Invasion smarty error: The templates/_cache directory needs to have its permissions set to be writable by the web server user, OR 777, or ugo+rwx.<br>';
+            $smarty_errors .= '<br><br>The Kabal Invasion smarty error: The ' .
+                              'templates/_cache directory needs to have its ' .
+                              'permissions set to be writable by the web server ' .
+                              'user, OR 777, or ugo+rwx.<br>';
         }
 
         if (!$compile_perms)
         {
-            $smarty_errors .= 'The Kabal invasion smarty error: The templates/_compile directory needs to have its permissions set to be writable by the web server user, OR 777, or ugo+rwx.<br>';
+            $smarty_errors .= '<br><br>The Kabal invasion smarty error: ' .
+                              'The templates/_compile directory needs to have its ' .
+                              'permissions set to be writable by the web server ' .
+                              'user, OR 777, or ugo+rwx.<br>';
         }
 
         if ($smarty_errors !== null)
         {
-            die($smarty_errors);
+            throw new \Exception($smarty_errors);
         }
     }
 
@@ -105,6 +113,7 @@ class Smarty
         $this->smarty->assign($nodeName, $variables);
     }
 
+    /** @return mixed */
     public function getVariables($nodeName)
     {
         $temp_variable = $this->smarty->getTemplateVars($nodeName);
@@ -126,7 +135,9 @@ class Smarty
         }
         catch (\exception $e)
         {
-            $output = 'The smarty template system is not working. We suggest checking the specific template you are using for an error in the page that you want to access.';
+            $output = 'The smarty template system is not working. ' .
+                      'We suggest checking the specific template you ' .
+                      'are using for an error in the page that you want to access.';
         }
 
         echo $output;

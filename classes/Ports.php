@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,30 +23,23 @@ class Ports
 {
     public static function getType(string $ptype, array $langvars) : string
     {
-        $ret = '';
         switch ($ptype)
         {
             case 'ore':
-                $ret = $langvars['l_ore'];
-                break;
+                return $langvars['l_ore'];
             case 'none':
-                $ret = $langvars['l_none'];
-                break;
+                return $langvars['l_none'];
             case 'energy':
-                $ret = $langvars['l_energy'];
-                break;
+                return $langvars['l_energy'];
             case 'organics':
-                $ret = $langvars['l_organics'];
-                break;
+                return $langvars['l_organics'];
             case 'goods':
-                $ret = $langvars['l_goods'];
-                break;
+                return $langvars['l_goods'];
             case 'special':
-                $ret = $langvars['l_special'];
-                break;
+                return $langvars['l_special'];
+            default:
+                return 'unknown';
         }
-
-        return (string) $ret;
     }
 
     public static function dropdown($element_name, $current_value, $onchange, $temp_devices) : string
@@ -71,7 +63,7 @@ class Ports
 
         $dropdownvar = "$dropdownvar       </select>\n";
 
-        return (string) $dropdownvar;
+        return $dropdownvar;
     }
 
     public static function buildOneCol($text = "&nbsp;", $align = "left"): void
@@ -83,7 +75,12 @@ class Ports
         ";
     }
 
-    public static function buildTwoCol($text_col1 = "&nbsp;", $text_col2 = "&nbsp;", $align_col1 = "left", $align_col2 = "left"): void
+    public static function buildTwoCol(
+        $text_col1 = "&nbsp;",
+        $text_col2 = "&nbsp;",
+        $align_col1 = "left",
+        $align_col2 = "left"
+    ): void
     {
         echo "
         <tr>
@@ -115,12 +112,23 @@ class Ports
         return $delta_cost;
     }
 
-    // Here is the trade function to strip out some "spaghetti code". The function saves about 60 lines of code, I hope it will be
+    // Here is the trade function to strip out some "spaghetti code".
+    // The function saves about 60 lines of code, I hope it will be
     // easier to modify/add something in this part.
     /*
      * @return mixed
      */
-    public static function trade($price, $delta, $max, $limit, $factor, $port_type, $origin, array $price_array, array $sectorinfo)
+    public static function trade(
+        $price,
+        $delta,
+        $max,
+        $limit,
+        $factor,
+        $port_type,
+        $origin,
+        array $price_array,
+        array $sectorinfo
+    )
     {
         if ($sectorinfo['port_type'] == $port_type)
         {

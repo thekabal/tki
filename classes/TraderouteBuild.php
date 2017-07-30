@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,7 +21,7 @@ namespace Tki;
 
 class TraderouteBuild
 {
-    public static function new(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, $num_traderoutes, array $playerinfo, int $traderoute_id=null): void
+    public static function new(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
@@ -398,20 +397,22 @@ class TraderouteBuild
         \Tki\Text::gotoMain($pdo_db, $lang);
         echo "</div>\n";
 
-        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        $footer = new \Tki\Footer;
+        $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
 
-    public static function create(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, int $planet_id1=null, int $planet_id2=null): void
+    public static function create(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
+        $admin_log = new AdminLog;
 
         $src_id = null;
         $dest_id = null;
         $src_type = null;
         $dest_type = null;
 
-        if ($num_traderoutes >= $tkireg->max_traderoutes_player && empty ($editing))
+        if ($num_traderoutes >= $tkireg->max_traderoutes_player && empty($editing))
         { // Dont let them exceed max traderoutes
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_maxtdr']);
         }
@@ -466,7 +467,7 @@ class TraderouteBuild
                     // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_errnotownnotsell']);
 
                     // Check for valid Owned Source Planet
-                    \Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id1} as source.");
+                    $admin_log->writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id1} as source.");
                     \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invalidsrc']);
                 }
             }
@@ -532,7 +533,7 @@ class TraderouteBuild
                 // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_errnotownnotsell2']);
 
                 // Check for valid Owned Source Planet
-                \Tki\AdminLog::writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id2} as dest.");
+                $admin_log->writeLog($pdo_db, 902, "{$playerinfo['ship_id']}|Tried to find someones planet: {$planet_id2} as dest.");
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invaliddplanet']);
             }
         }
@@ -616,9 +617,9 @@ class TraderouteBuild
             $mtype = 'W';
         }
 
-        if (empty ($editing))
+        if (empty($editing))
         {
-            $query = $db->Execute("INSERT INTO {$db->prefix}traderoutes VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
+            $query = $db->Execute("INSERT INTO {$db->prefix}traderoutes VALUES(null, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             echo "<p>" . $langvars['l_tdr_newtdrcreated'];
         }

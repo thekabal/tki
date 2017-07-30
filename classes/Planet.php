@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,7 +21,7 @@ namespace Tki;
 
 class Planet
 {
-    public function getOwner(\PDO $pdo_db, int $planet_id, &$owner_info): bool
+    public static function getOwner(\PDO $pdo_db, int $planet_id, &$owner_info): bool
     {
         $owner_info = null;
         if (($planet_id !== null) && is_numeric($planet_id) && $planet_id > 0)
@@ -31,7 +30,7 @@ class Planet
             $sql .= "LEFT JOIN ::prefix::ships ON ::prefix::ships.ship_id = ::prefix::planets.owner ";
             $sql .= "WHERE ::prefix::planets.planet_id = :planet_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':planet_id', $planet_id);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
             $result = $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
@@ -45,14 +44,25 @@ class Planet
         return false;
     }
 
-    public static function planetBombing(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $ownerinfo, array $planetinfo, Smarty $template): void
+    public static function bombing(
+        \PDO $pdo_db,
+        string $lang,
+        array $langvars,
+        Reg $tkireg,
+        array $playerinfo,
+        array $ownerinfo,
+        array $planetinfo,
+        Smarty $template
+    ): void
     {
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
             \Tki\Text::gotoMain($pdo_db, $lang);
-            \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
-            die();
+
+            $footer = new \Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
+            throw new \Exception();
         }
 
         echo $langvars['l_bombsaway'] . "<br><br>\n";
@@ -103,7 +113,8 @@ class Planet
                 }
                 else
                 {
-                    $planetfighterslost = round(($attackerfighters - $attackerfighterslost) * $ownerfightercapacity / $attackerfitscapacity);
+                    $planetfighterslost = round(
+                    ($attackerfighters - $attackerfighterslost) * $ownerfightercapacity / $attackerfitscapacity);
                 }
 
                 if ($planetfighterslost > $planetfighters)
@@ -114,19 +125,31 @@ class Planet
         }
 
         echo "<br><br>\n";
-        \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
+        \Tki\PlayerLog::writeLog(
+            $pdo_db,
+            $ownerinfo['ship_id'],
+            LogEnums::PLANET_BOMBED,
+            "$planetinfo[name]|$playerinfo[sector]" .
+            "|$playerinfo[character_name]|$beamsused|" .
+            "$planettorps|$planetfighterslost"
+        );
 
-        $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1, ship_fighters = ship_fighters - :ship_fighters WHERE ship_id=:ship_id");
-        $stmt->bindParam(':ship_fighters', $attackerfighters);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, " .
+                                 "turns_used = turns_used + 1, " .
+                                 "ship_fighters = ship_fighters - :ship_fighters WHERE " .
+                                 "ship_id=:ship_id");
+        $stmt->bindParam(':ship_fighters', $attackerfighters, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
-        $stmt = $pdo_db->prepare("UPDATE ::prefix::planets SET energy = energy - :energy, fighters = fighters - :fighters, torps = torps - :torps WHERE planet_id=:planet_id");
-        $stmt->bindParam(':energy', $beamsused);
-        $stmt->bindParam(':fighters', $planetfighterslost);
-        $stmt->bindParam(':torps', $planettorps);
-        $stmt->bindParam(':planet_id', $planetinfo['planet_id']);
+        $stmt = $pdo_db->prepare("UPDATE ::prefix::planets SET energy = energy - " .
+                                 ":energy, fighters = fighters - :fighters, " .
+                                 "torps = torps - :torps WHERE planet_id=:planet_id");
+        $stmt->bindParam(':energy', $beamsused, \PDO::PARAM_INT);
+        $stmt->bindParam(':fighters', $planetfighterslost, \PDO::PARAM_INT);
+        $stmt->bindParam(':torps', $planettorps, \PDO::PARAM_INT);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,27 +17,26 @@
 //
 // File: common.php
 require_once './vendor/autoload.php';              // Load the auto-loader
-require_once './global_constants.php';             // Defines used in many places
 mb_http_output('UTF-8');                           // Our output should be served in UTF-8 no matter what.
 mb_internal_encoding('UTF-8');                     // We are explicitly UTF-8, with Unicode language variables.
 ini_set('include_path', '.');                      // Set include path to avoid issues on a few platforms
-ini_set('session.use_strict_mode', 1);             // Ensure that PHP will not accept uninitialized session ID
-ini_set('session.use_only_cookies', 1);            // Ensure that sessions will only be stored in a cookie
-ini_set('session.cookie_httponly', 1);             // Ensure that javascript cannot tamper with session cookies
-ini_set('session.use_trans_sid', 0);               // Prevent session ID from being put in URLs
-ini_set('session.cookie_secure', on);              // Cookies should only be sent over secure connections (SSL)
+ini_set('session.use_strict_mode', '1');           // Ensure that PHP will not accept uninitialized session ID
+ini_set('session.use_only_cookies', '1');          // Ensure that sessions will only be stored in a cookie
+ini_set('session.cookie_httponly', '1');           // Ensure that javascript cannot tamper with session cookies
+ini_set('session.use_trans_sid', '0');             // Prevent session ID from being put in URLs
+ini_set('session.cookie_secure', 'on');            // Cookies should only be sent over secure connections (SSL)
 ini_set('url_rewriter.tags', '');                  // Do not pass Session id on the url for improved security on login
 ini_set('default_charset', 'utf-8');               // Set PHP's default character set to utf-8
 
 if (file_exists('dev'))                            // Create/touch a file named dev to activate development mode
 {
-    ini_set('error_reporting', -1);                // During development, output all errors, even notices
-    ini_set('display_errors', 1);                  // During development, display all errors
+    ini_set('error_reporting', '-1');              // During development, output all errors, even notices
+    ini_set('display_errors', '1');                // During development, display all errors
 }
 else
 {
-    ini_set('error_reporting', 0);                 // Do not report errors
-    ini_set('display_errors', 0);                  // Do not display errors
+    ini_set('error_reporting', '0');               // Do not report errors
+    ini_set('display_errors', '0');                // Do not display errors
 }
 
 session_name('tki_session');                       // Change the default to defend better against session hijacking
@@ -61,9 +60,27 @@ ob_start(array('Tki\Compress', 'compress'));       // Start a buffer, and when i
                                                    // detection of compression.
 
 $pdo_db = new Tki\Db();
-$pdo_db = $pdo_db->initDb('pdo');                  // Connect to db using pdo
+try
+{
+    $pdo_db = $pdo_db->initDb('pdo');                  // Connect to db using pdo
+}
+catch (Exception $e)
+{
+    echo "<html><pre>";
+    die($e . "</pre></html>");
+}
+
 $db = new Tki\Db();
-$db = $db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
+try
+{
+    $db = $db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
+}
+catch (Exception $e)
+{
+    echo "<html><pre>";
+    die($e . "</pre></html>");
+}
+
 
 if ($pdo_db !== null)
 {
@@ -73,7 +90,16 @@ if ($pdo_db !== null)
 }
 
 $langvars = null;                                  // Language variables in every page, set them to a null value first
-$template = new \Tki\Smarty();
+try
+{
+    $template = new \Tki\Smarty();
+}
+catch (Exception $e)
+{
+    echo "<html><pre>";
+    die($e . "</pre></html>");
+}
+
 $template->setTheme($tkireg->default_template);
 
 if ($pdo_db !== null && Tki\Db::isActive($pdo_db))

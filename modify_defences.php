@@ -22,7 +22,8 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_md_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('modify_defenses', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
@@ -31,7 +32,9 @@ if (!isset($defense_id))
 {
     echo $langvars['l_md_invalid'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -46,13 +49,13 @@ if (mb_strlen(trim($response)) === 0)
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -60,13 +63,15 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_md_noturn'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 $sql = "SELECT * FROM ::prefix::sector_defense WHERE defense_id=:defense_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':defense_id', $defense_id);
+$stmt->bindParam(':defense_id', $defense_id, PDO::PARAM_INT);
 $stmt->execute();
 $defenseinfo = $stmt->fetchAll(PDO::FETCH_ASSOC); // Put the defense information into the array "defenseinfo"
 
@@ -81,7 +86,9 @@ if ($defenseinfo['sector_id'] != $playerinfo['sector'])
 {
     echo $langvars['l_md_nothere'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -118,7 +125,9 @@ switch ($response)
         {
             echo $langvars['l_md_yours'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
@@ -155,7 +164,7 @@ switch ($response)
             $langvars['l_md_msgdownerb'] = str_replace("[sector]", $sector, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[mines]", $playerbeams, $langvars['l_md_msgdownerb']);
             $langvars['l_md_msgdownerb'] = str_replace("[name]", $char_name, $langvars['l_md_msgdownerb']);
-            Tki\Sectordefense::messagedefenseOwner($pdo_db, $sector, $langvars['l_md_msgdownerb']);
+            Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_md_msgdownerb']);
             Tki\Text::gotoMain($pdo_db, $lang);
             die();
         }
@@ -166,7 +175,9 @@ switch ($response)
         {
              echo $langvars['l_md_notyours'] . "<br><br>";
              Tki\Text::gotoMain($pdo_db, $lang);
-             Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+             $footer = new Tki\Footer;
+             $footer->display($pdo_db, $lang, $tkireg, $template);
              die();
         }
 
@@ -228,7 +239,9 @@ switch ($response)
         {
             echo $langvars['l_md_notyours'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
 
@@ -298,4 +311,6 @@ switch ($response)
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

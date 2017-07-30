@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,14 +24,16 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('readmail', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
 $title = $langvars['l_readm_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -40,22 +42,25 @@ if (!array_key_exists('action', $_GET))
     $_GET['action'] = null;
 }
 
+// Returns null if it doesn't have it set, bool false if its set but fails to validate and the actual value if it all passes.
+$ID = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 255)));
+
 if ($_GET['action'] == "delete")
 {
     $resx = $db->Execute("DELETE FROM {$db->prefix}messages WHERE ID=? AND recp_id = ?;", array($ID, $playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 }
 elseif ($_GET['action'] == "delete_all")
 {
     $resx = $db->Execute("DELETE FROM {$db->prefix}messages WHERE recp_id = ?;", array($playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 }
 
 $cur_D = date("Y-m-d");
 $cur_T = date("H:i:s");
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}messages WHERE recp_id = ? ORDER BY sent DESC;", array($playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 ?>
 <div align="center">
   <table border="0" cellspacing="0" width="70%" bgcolor="silver" cellpadding="0">
@@ -103,9 +108,8 @@ else
     {
         $msg = $res->fields;
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($msg['sender_id']));
-        Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $sender = $result->fields;
-        // $isAdmin = isAdmin($sender);
         ?>
             <tr>
               <td width="100%" align="center" bgcolor="black" height="4"></td>
@@ -119,10 +123,6 @@ else
                       <td width="55%" style="text-align:left;"><font color="yellow" size="2">
         <?php
         echo "<span style='vertical-align:middle;'>{$sender['character_name']}</span>";
-        if ($isAdmin === true)
-        {
-            echo "&nbsp;<img style='width:64px; height:16px; border:none; padding:0px; vertical-align:text-bottom;' src='<?php echo $template->getVariables('template_dir'); ?>/images/validated_administrator2.gif' alt='Validated as Admin' />";
-        }
         ?>
         </font></td>
                       <td width="21%" align="center"><font color="white" size="2"><?php echo $msg['sent']; ?></font></td>
@@ -210,4 +210,6 @@ else
 <br>
 <?php
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

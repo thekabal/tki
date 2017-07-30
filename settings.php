@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -23,7 +23,7 @@ require_once './common.php';
 $link = null;
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common','regional', 'settings', 'footer','global_includes', 'global_funcs'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'login', 'logout', 'index', 'common', 'regional', 'settings', 'footer', 'global_includes', 'global_funcs'));
 
 $variables = null;
 $variables['lang'] = $lang;
@@ -92,7 +92,7 @@ $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 $variables['template'] = $tkireg->default_template;
 
 
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     $variables['loggedin'] = (bool) true;
     $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');
@@ -103,10 +103,13 @@ else
     $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
 }
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('settings.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

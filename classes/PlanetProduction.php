@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -19,8 +18,6 @@ declare(strict_types = 1);
 // File: classes/PlanetProduction.php
 
 namespace Tki;
-
-use Symfony\Component\HttpFoundation\Request;
 
 class PlanetProduction
 {
@@ -49,17 +46,9 @@ class PlanetProduction
         //  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
         //  This would save us from having to run through the database a second time checking our work.
 
-        //  This should patch the game to prevent being hacked with the planet hack.
-
-        $request = Request::createFromGlobals();
-
         $result = $db->Execute("SELECT ship_id, team FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $ship_id = $result->fields['ship_id'];
-
-        $planet_hack = false;
-        $hack_id = 0x0000;
-        $hack_count = array(0, 0, 0);
 
         echo str_replace("[here]", "<a href='planet_report.php?preptype=2'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_prod']);
         echo "<br><br>";
@@ -74,14 +63,6 @@ class PlanetProduction
                     {
                         $res = $db->Execute("SELECT COUNT(*) AS owned_planet FROM {$db->prefix}planets WHERE planet_id = ? AND owner = ?;", array($planet_id, $ship_id));
                         \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                        if ($res->fields['owned_planet'] == 0)
-                        {
-                            $ip = $request->query->get('REMOTE_ADDR');
-                            $planet_hack = true;
-                            $hack_id = 0x18582;
-                            $hack_count[0]++;
-                            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
-                        }
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET {$commod_type} = ? WHERE planet_id = ? AND owner = ?;", array($prodpercent, $planet_id, $ship_id));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
@@ -113,33 +94,9 @@ class PlanetProduction
 
                         $resx = $db->Execute("UPDATE {$db->prefix}planets SET team = ? WHERE planet_id = ? AND owner = ?;", array($team_id, $prodpercent, $ship_id));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        if (array_key_exists("team_id", $prodpercentarray) === true && $prodpercentarray['team_id'] != $team_id)
-                        {
-                            // They are different so send admin a log
-                            $ip = $request->query->get('REMOTE_ADDR');
-                            $planet_hack = true;
-                            $hack_id = 0x18531;
-                            $hack_count[1]++;
-                            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$prodpercent}|{$ship_id}|{$prodpercentarray['team_id']} not {$team_id}");
-                        }
-                    }
-                    else
-                    {
-                        $ip = $request->query->get('REMOTE_ADDR');
-                        $planet_hack = true;
-                        $hack_id = 0x18598;
-                        $hack_count[2]++;
-                        \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT, "{$hack_id}|{$ip}|{$planet_id}|{$ship_id}|commod_type={$commod_type}");
                     }
                 }
             }
-        }
-
-        if ($planet_hack)
-        {
-            $serial_data = serialize($prodpercentarray);
-            \Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_PLANETCHEAT + 1000, "{$ship_id}|{$serial_data}");
-            printf("<font color=\"red\"><strong>Your Cheat has been logged to the admin (%08x) [%02X:%02X:%02X].</strong></font><br>\n", $hack_id, $hack_count[0], $hack_count[1], $hack_count[2]);
         }
 
         echo "<br>";
@@ -162,7 +119,7 @@ class PlanetProduction
 
             foreach ($planets as $planet)
             {
-                if (empty ($planet['name']))
+                if (empty($planet['name']))
                 {
                     $planet['name'] = $langvars['l_unnamed'];
                 }

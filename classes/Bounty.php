@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,9 +23,10 @@ class Bounty
 {
     public static function cancel(\PDO $pdo_db, int $bounty_on): void
     {
-        $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on=:bounty_on AND bounty_on=ship_id";
+        // $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on=:bounty_on AND bounty_on=ship_id";
+        $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on=:bounty_on";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':bounty_on', $bounty_on);
+        $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
         $stmt->execute();
         $bounty_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($bounty_present !== null)
@@ -37,15 +37,15 @@ class Bounty
                 {
                     $sql = "UPDATE ::prefix::ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':bounty_amount', $tmp_bounty['amount']);
-                    $stmt->bindParam(':ship_id', $tmp_bounty['placed_by']);
+                    $stmt->bindParam(':bounty_amount', $tmp_bounty['amount'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_id', $tmp_bounty['placed_by'], \PDO::PARAM_INT);
                     $stmt->execute();
-                    PlayerLog::writeLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_CANCELLED, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
+                    PlayerLog::writeLog($pdo_db, $tmp_bounty['placed_by'], LogEnums::BOUNTY_CANCELLED, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
                 }
 
                 $sql = "DELETE FROM ::prefix::bounty WHERE bounty_id = :bounty_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':bounty_id', $tmp_bounty['bounty_id']);
+                $stmt->bindParam(':bounty_id', $tmp_bounty['bounty_id'], \PDO::PARAM_INT);
                 $stmt->execute();
             }
         }
@@ -53,9 +53,10 @@ class Bounty
 
     public static function collect(\PDO $pdo_db, array $langvars, int $attacker, int $bounty_on): void
     {
-        $sql = "SELECT * FROM ::prefix::bounty,::prefix::ships WHERE bounty_on=:bounty_on AND bounty_on=ship_id AND planced_by <> 0";
+        $sql = "SELECT * FROM ::prefix::bounty,::prefix::ships WHERE " .
+               "bounty_on=:bounty_on AND bounty_on=ship_id AND planced_by <> 0";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':bounty_on', $bounty_on);
+        $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
         $stmt->execute();
         $bounty_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($bounty_present !== null)
@@ -70,30 +71,30 @@ class Bounty
                 {
                     $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
                     $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':ship_id', $tmp_bounty['placed_by']);
+                    $stmt->bindParam(':ship_id', $tmp_bounty['placed_by'], \PDO::PARAM_INT);
                     $stmt->execute();
                     $placed = $stmt->fetch(\PDO::FETCH_ASSOC);
                 }
 
                 $sql = "UPDATE ::prefix::ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':bounty_amount', $tmp_bounty['amount']);
-                $stmt->bindParam(':ship_id', $attacker);
+                $stmt->bindParam(':bounty_amount', $tmp_bounty['amount'], \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $attacker, \PDO::PARAM_INT);
                 $stmt->execute();
 
                 $sql = "DELETE FROM ::prefix::bounty WHERE bounty_id = :bounty_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':bounty_id', $tmp_bounty['bounty_id']);
+                $stmt->bindParam(':bounty_id', $tmp_bounty['bounty_id'], \PDO::PARAM_INT);
                 $stmt->execute();
 
-                PlayerLog::writeLog($pdo_db, $attacker, LOG_BOUNTY_CLAIMED, "$tmp_bounty[amount]|$tmp_bounty[character_name]|$placed");
-                PlayerLog::writeLog($pdo_db, $tmp_bounty['placed_by'], LOG_BOUNTY_PAID, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
+                PlayerLog::writeLog($pdo_db, $attacker, LogEnums::BOUNTY_CLAIMED, "$tmp_bounty[amount]|$tmp_bounty[character_name]|$placed");
+                PlayerLog::writeLog($pdo_db, $tmp_bounty['placed_by'], LogEnums::BOUNTY_PAID, "$tmp_bounty[amount]|$tmp_bounty[character_name]");
             }
         }
 
         $sql = "DELETE FROM ::prefix::bounty WHERE bounty_on = :bounty_on";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':bounty_on', $bounty_on);
+        $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
         $stmt->execute();
     }
 }

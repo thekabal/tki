@@ -25,7 +25,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mines', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 
 $title = $langvars['l_mines_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$hader->display($pdo_db, $lang, $template, $title);
 
 $op = null;
 if (array_key_exists('op', $_GET) === true)
@@ -40,20 +42,20 @@ elseif (array_key_exists('op', $_POST) === true)
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $i = 0;
 $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($defense_present !== null)
@@ -128,12 +130,14 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_mines_noturn'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 $res = $db->Execute("SELECT allow_defenses, {$db->prefix}universe.zone_id, owner FROM {$db->prefix}zones, {$db->prefix}universe WHERE sector_id = ? AND {$db->prefix}zones.zone_id = {$db->prefix}universe.zone_id", array($playerinfo['sector']));
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 
 if ($zoneinfo['allow_defenses'] == 'N')
@@ -150,7 +154,7 @@ else
 
             $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $defense_owner);
+            $stmt->bindParam(':ship_id', $defense_owner, PDO::PARAM_INT);
             $stmt->execute();
             $fighters_owner = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -169,7 +173,7 @@ else
 
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $zone_owner);
+        $stmt->bindParam(':ship_id', $zone_owner, PDO::PARAM_INT);
         $stmt->execute();
         $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -210,12 +214,12 @@ else
     {
         $nummines = preg_replace('/[^0-9]/', '', $nummines);
         $numfighters = preg_replace('/[^0-9]/', '', $numfighters);
-        if (empty ($nummines))
+        if (empty($nummines))
         {
             $nummines = 0;
         }
 
-        if (empty ($numfighters))
+        if (empty($numfighters))
         {
             $numfighters = 0;
         }
@@ -258,13 +262,18 @@ else
         {
             if ($fighter_id != 0)
             {
-                $update = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity + ? ,fm_setting = ? WHERE defense_id = ?;", array($numfighters, $mode, $fighter_id));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::sector_defense SET quantity=quantity+:numfits, fm_setting=:mode WHERE defense_id=:fighter_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':numfits', $numfighters, \PDO::PARAM_INT);
+                $stmt->bindParam(':mode', $mode, \PDO::PARAM_INT);
+                $stmt->bindParam(':fighter_id', $fighter_id, \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {
                 $update = $db->Execute("INSERT INTO {$db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'F', $numfighters, $mode));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
                 echo $db->ErrorMsg();
             }
         }
@@ -273,20 +282,34 @@ else
         {
             if ($mine_id != 0)
             {
-                $update = $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity = quantity + ?, fm_setting = ? WHERE defense_id = ?;", array($nummines, $mode, $mine_id));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::sector_defense SET quantity=quantity+:nummines fm_setting=:mode WHERE defense_id=:defense_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':nummines', $nummines, \PDO::PARAM_INT);
+                $stmt->bindParam(':mode', $mode, \PDO::PARAM_INT);
+                $stmt->bindParam(':defense_id', $mine_id, \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {
                 $update = $db->Execute("INSERT INTO {$db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'M', $nummines, $mode));
-                Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
             }
         }
 
-        $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, ship_fighters = ship_fighters - ?, torps = torps - ? WHERE ship_id = ?;", array($stamp, $numfighters, $nummines, $playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, " .
+               "turns_used=turns_used+1, ship_fighters=ship_fighters-:numfighters, torps=torps-:nummines WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':stamp', $stamp, \PDO::PARAM_STR);
+        $stmt->bindParam(':numfighters', $numfighters, \PDO::PARAM_INT);
+        $stmt->bindParam(':nummines', $nummines, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

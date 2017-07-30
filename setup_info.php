@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -107,7 +107,7 @@ $variables['smarty_path_test'] = file_exists(realpath("vendor/smarty/smarty/libs
 $variables['title'] = $langvars['l_setup_info_title'];
 
 // Test Smarty
-$test_smarty = new \Smarty();
+$test_smarty = new Smarty();
 $test_smarty->setCompileDir('templates/_compile/');
 $test_smarty->setCacheDir('templates/_cache/');
 $test_smarty->setConfigDir('templates/_configs/');
@@ -179,10 +179,12 @@ else
     $variables['db_addr'] = $db_host;
 }
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/setup_info.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

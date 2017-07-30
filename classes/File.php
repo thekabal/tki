@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -18,7 +17,7 @@ declare(strict_types = 1);
 //
 // File: classes/File.php
 //
-// This class handles direct file functions for TKI. Included is iniToDb, a function
+// This class handles direct file methods for TKI. Included is iniToDb, a method
 // for importing values from an INI file into the database.
 
 namespace Tki;
@@ -38,7 +37,9 @@ class File
         $final_result = null;
         $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
 
-        $insert_sql = 'INSERT into ::prefix::' . $ini_table . ' (name, category, value, section, type) VALUES (:config_key, :config_category, :config_value, :section, :type)';
+        $insert_sql = "INSERT into ::prefix::" . $ini_table .
+                      " (name, category, value, section, type) VALUES " .
+                      "(:config_key, :config_category, :config_value, :section, :type)";
         $stmt = $pdo_db->prepare($insert_sql);
         Db::logDbErrors($pdo_db, $insert_sql, __LINE__, __FILE__);
 
@@ -46,7 +47,6 @@ class File
         {
             foreach ($config_line as $config_key => $type_n_value)
             {
-                $j++;
                 if (mb_strpos($ini_file, '_config') !== false)
                 {
                     // Import all the variables into the registry
@@ -54,19 +54,45 @@ class File
                     $tkireg->$config_key = $type_n_value['value'];
                 }
 
-                $stmt->bindParam(':config_key', $config_key);
-                $stmt->bindParam(':config_category', $config_category);
-                $stmt->bindParam(':config_value', $type_n_value['value']);
-                $stmt->bindParam(':section', $section);
-                $stmt->bindParam(':type', $type_n_value['type']);
+                $stmt->bindParam(':config_key', $config_key, \PDO::PARAM_STR);
+                $stmt->bindParam(':config_category', $config_category, \PDO::PARAM_STR);
+                $stmt->bindParam(':section', $section, \PDO::PARAM_STR);
+                $stmt->bindParam(':type', $type_n_value['type'], \PDO::PARAM_STR);
+                if (is_int($type_n_value['value']))
+                {
+                    $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_INT);
+                }
+                elseif ($type_n_value['value'] === null)
+                {
+                    // Not currently used - but this should handle it correctly if we add it
+                    $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_NULL);
+                }
+                elseif (is_bool($type_n_value['value']))
+                {
+                    // Boolean true/false are stored temporarily as 1 for true and 0 for false
+                    if ($type_n_value['value'])
+                    {
+                        $stmt->bindValue(':config_value', '1', \PDO::PARAM_INT);
+                    }
+                    else
+                    {
+                        $stmt->bindValue(':config_value', '0', \PDO::PARAM_INT);
+                    }
+                }
+                else
+                {
+                    $stmt->bindParam(':config_value', $type_n_value['value'], \PDO::PARAM_STR);
+                }
+
                 $result = $stmt->execute();
-                $status_array[$j] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+                $status_array[$j++] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             }
         }
 
         for ($k = 1; $k < $j; $k++)
         {
-            // Status array will continue the results of individual executes. It should be === true unless something went horribly wrong.
+            // Status array will continue the results of individual executes.
+            // It should be === true unless something went horribly wrong.
             if ($status_array[$k] !== true)
             {
                 $final_result = false;
@@ -167,7 +193,9 @@ class File
 
                 if ($container !== null)
                 {
-                    $out[$container][$name] = array('value' => $value, 'type' => gettype($value), 'comment' => $comment);
+                    $out[$container][$name] = array('value' => $value,
+                                                    'type' => gettype($value),
+                                                    'comment' => $comment);
                 }
             }
         }

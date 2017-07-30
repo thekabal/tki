@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_scan_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('scan', 'common', 'bounty', 'report', 'main', 'global_includes', 'global_funcs', 'footer', 'news', 'planet', 'regional'));
@@ -30,21 +32,24 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('scan', 'common', 'bounty'
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $filtered_ship_id = null;
-$filtered_ship_id = filter_input(INPUT_POST, 'ship_id', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($filtered_ship_id)) === 0)
+$filtered_ship_id = filter_input(INPUT_GET, 'ship_id', FILTER_SANITIZE_EMAIL);
+if (($filtered_ship_id === null) || (mb_strlen(trim($filtered_ship_id)) === 0))
 {
     $filtered_ship_id = false;
 }
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($filtered_ship_id));
-Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 $targetinfo = $result2->fields;
+
+$targetinfo['ship_id'] = (int) $targetinfo['ship_id'];
+$targetinfo['cloak'] = (int) $targetinfo['cloak'];
 
 $playerscore = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 $targetscore = Tki\Score::updateScore($pdo_db, $targetinfo['ship_id'], $tkireg, $playerinfo);
@@ -59,7 +64,9 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
 {
     echo "You need to Click on the ship first.<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -95,7 +102,7 @@ else
         {
             // If scan fails - inform both player and target.
             echo $langvars['l_planet_noscan'];
-            Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_SHIP_SCAN_FAIL, $playerinfo['character_name']);
+            Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::SHIP_SCAN_FAIL, $playerinfo['character_name']);
         }
         else
         {
@@ -104,7 +111,7 @@ else
             // Get total bounty on this player, if any
             $btyamount = 0;
             $hasbounty = $db->Execute("SELECT SUM(amount) AS btytotal FROM {$db->prefix}bounty WHERE bounty_on = ?", array($targetinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $hasbounty, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $hasbounty, __LINE__, __FILE__);
 
             if ($hasbounty)
             {
@@ -118,7 +125,7 @@ else
 
                     // Check for Federation bounty
                     $hasfedbounty = $db->Execute("SELECT SUM(amount) AS btytotal FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0", array($targetinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $hasfedbounty, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $hasfedbounty, __LINE__, __FILE__);
                     if ($hasfedbounty)
                     {
                         $resy = $hasfedbounty->fields;
@@ -133,7 +140,7 @@ else
 
             // Player will get a Federation Bounty on themselves if they attack a player who's score is less than bounty_ratio of
             // themselves. If the target has a Federation Bounty, they can attack without attracting a bounty on themselves.
-            if ($btyamount == 0 && ((($targetscore / $playerscore) < $bounty_ratio) || $targetinfo['turns_used'] < $bounty_minturns))
+            if ($btyamount == 0 && ((($targetscore / $playerscore) < $tkireg->bounty_ratio) || $targetinfo['turns_used'] < $tkireg->bounty_minturns))
             {
                 echo $langvars['l_by_fedbounty'] . "<br><br>";
             }
@@ -142,7 +149,7 @@ else
                 echo $langvars['l_by_nofedbounty'] . "<br><br>";
             }
 
-            $sc_error = Tki\Scan::error($playerinfo['sensors'], $targetinfo['cloak'], $scan_error_factor);
+            $sc_error = Tki\Scan::error($playerinfo['sensors'], $targetinfo['cloak'], $tkireg->scan_error_factor);
             echo $langvars['l_scan_ron'] . " " . $targetinfo['ship_name'] . ", " . $langvars['l_scan_capt'] . " " . $targetinfo['character_name'] . "<br><br>";
             echo "<strong>" . $langvars['l_ship_levels'] . ":</strong><br><br>";
             echo "<table  width=\"\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
@@ -454,14 +461,19 @@ else
             }
 
             echo "</table><br>";
-            Tki\PlayerLog::WriteLog($pdo_db, $targetinfo['ship_id'], LOG_SHIP_SCAN, "$playerinfo[character_name]");
+            Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::SHIP_SCAN, "$playerinfo[character_name]");
         }
 
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id=?", array($playerinfo['ship_id']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::ships SET turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 }
 
 echo "<br><br>";
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

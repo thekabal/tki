@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -35,13 +35,13 @@ $variables['color_line2'] = $tkireg->color_line2;
 
 // Load required language variables for the ranking page.
 $langvars = Tki\Translate::load($pdo_db, $lang,
-            array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams'));
+array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams'));
 
 // Get requested ranking order.
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $sort = null;
 $sort = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($sort)) === 0)
+if (($sort === null) || (mb_strlen(trim($sort)) === 0))
 {
     $sort = false;
 }
@@ -83,8 +83,8 @@ $sql = "SELECT {$db->prefix}ships.ship_id, {$db->prefix}ships.email, {$db->prefi
 "AND turns_used > 0 ORDER BY :order_by LIMIT :limit";
 
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':order_by', $by);
-$stmt->bindParam(':limit', $tkireg->max_ranks);
+$stmt->bindParam(':order_by', $by, PDO::PARAM_STR);
+$stmt->bindParam(':limit', $tkireg->max_ranks, PDO::PARAM_INT);
 $stmt->execute();
 $rankings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $variables['num_players'] = (int) count($rankings);
@@ -125,7 +125,8 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         }
 
         // Set the characters Insignia.
-        $row['insignia'] = Tki\Character::getInsignia($pdo_db, $row['email'], $langvars);
+        $insignia = new Tki\Character;
+        $row['insignia'] = $insignia->getInsignia($pdo_db, $row['email'], $langvars);
 
         // This is just to show that we can set the type of player.
         // like: banned, admin, player, npc etc.
@@ -141,7 +142,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         // Check for banned players.
         $ban_result = Tki\CheckBan::isBanned($pdo_db, $row);
 
-        if ($ban_result === false || (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
+        if ($ban_result === false)
         {
             $row['banned'] = (bool) false;
             $row['ban_info'] = null;
@@ -159,7 +160,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
     $template->addVariables('players', $player_list);
 }
 
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     $variables['loggedin'] = (bool) true;
     $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');
@@ -170,12 +171,13 @@ else
     $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
 }
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('variables', $variables);
 
 // Load required language variables for the ranking page.
 $langvars = Tki\Translate::load($pdo_db, $lang,
-            array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams', 'news'));
+array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 'teams', 'news'));
 
 // Modify the requires language variables here.
 $langvars['l_ranks_title'] = str_replace('[max_ranks]', $tkireg->max_ranks, $langvars['l_ranks_title']);
@@ -186,4 +188,5 @@ $template->addVariables('langvars', $langvars);
 // Now we tell Smarty to output the page
 $template->display('ranking.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

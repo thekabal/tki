@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -34,7 +34,7 @@ $menu_location = null;
 $button_main = false;
 
 // Clear variables array before use, and set array with all variables in page
-unset ($variables);
+unset($variables);
 $variables = array();
 
 $variables['is_admin'] = false;
@@ -98,10 +98,12 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
                                 'footer', 'news', 'report', 'main', 'zoneedit',
                                 'planet'));
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('admin.tpl');
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

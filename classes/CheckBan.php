@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -33,11 +32,10 @@ class CheckBan
         $request = Request::createFromGlobals();
 
         // Check for IP Ban
-        $sql = "SELECT * FROM ::prefix::bans WHERE (ban_type = :ban_type AND ban_mask = :ban_mask1) OR (ban_mask = :ban_mask2)";
+        $sql = "SELECT * FROM ::prefix::bans WHERE ban_mask = :ban_mask1 OR ban_mask = :ban_mask2";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindValue(':ban_type', IP_BAN);
-        $stmt->bindParam(':ban_mask1', $playerinfo['ip_address']);
-        $stmt->bindParam(':ban_mask2', $playerinfo['ip_address']);
+        $stmt->bindParam(':ban_mask1', $playerinfo['ip_address'], \PDO::PARAM_STR);
+        $stmt->bindParam(':ban_mask2', $playerinfo['ip_address'], \PDO::PARAM_STR);
         $stmt->execute();
         $ipban_count = $stmt->rowCount();
         $ipbans_res = $stmt->fetch();
@@ -52,7 +50,7 @@ class CheckBan
         // Check for ID Watch, Ban, Lock, 24H Ban etc linked to the platyers ShipID.
         $sql = "SELECT * FROM ::prefix::bans WHERE ban_ship = :ban_ship";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ban_ship', $playerinfo['ship_id']);
+        $stmt->bindParam(':ban_ship', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $idban_count = $stmt->rowCount();
         $idbans_res = $stmt->fetch();
@@ -77,12 +75,12 @@ class CheckBan
 
         // Check for Multi Ban (IP, ID)
         $remote_ip = $request->server->get('REMOTE_ADDR');
-        $sql = "SELECT * FROM ::prefix::bans WHERE ban_type = :ban_type AND (ban_mask = :ban_mask1 OR ban_mask = :ban_mask2 OR ban_ship = :ban_ship)";
+        $sql = "SELECT * FROM ::prefix::bans WHERE " .
+               "ban_mask = :ban_mask1 OR ban_mask = :ban_mask2 OR ban_ship = :ban_ship";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindValue(':ban_type', MULTI_BAN);
-        $stmt->bindParam(':ban_mask1', $playerinfo['ip_address']);
-        $stmt->bindParam(':ban_mask2', $remote_ip);
-        $stmt->bindParam(':ban_ship', $playerinfo['ship_id']);
+        $stmt->bindParam(':ban_mask1', $playerinfo['ip_address'], \PDO::PARAM_STR);
+        $stmt->bindParam(':ban_mask2', $remote_ip, \PDO::PARAM_STR);
+        $stmt->bindParam(':ban_ship', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $multiban_count = $stmt->rowCount();
         $multiban_res = $stmt->fetch();

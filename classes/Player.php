@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Player
 {
-    public static function handleAuth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template)
+    public static function auth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template)
     {
         $request = Request::createFromGlobals();
         $flag = true;
@@ -45,7 +44,7 @@ class Player
         {
             $sql = "SELECT ip_address, password, last_login, ship_id, ship_destroyed, dev_escapepod FROM ::prefix::ships WHERE email=:email LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':email', $_SESSION['username']);
+            $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
             $stmt->execute();
             $playerinfo = $stmt->fetch();
 
@@ -66,9 +65,9 @@ class Player
                         $remote_ip = $request->server->get('REMOTE_ADDR');
                         $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
                         $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':last_login', $stamp);
-                        $stmt->bindParam(':ip_address', $remote_ip);
-                        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                        $stmt->bindParam(':last_login', $stamp, \PDO::PARAM_STR);
+                        $stmt->bindParam(':ip_address', $remote_ip, \PDO::PARAM_STR);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                         $stmt->execute();
                         Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
@@ -86,9 +85,14 @@ class Player
         {
             $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_needlogin']);
             $title = $langvars['l_error'];
-            Header::display($pdo_db, $lang, $template, $title);
+
+            $header = new \Tki\Header;
+            $header->display($pdo_db, $lang, $template, $title);
+
             echo $error_status;
-            Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new \Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
         else
@@ -97,13 +101,13 @@ class Player
         }
     }
 
-    public static function handleBan(\PDO $pdo_db, string $lang, $timestamp, Smarty $template, array $playerinfo, array $langvars, Reg $tkireg)
+    public static function ban(\PDO $pdo_db, string $lang, array $timestamp, Smarty $template, array $playerinfo, array $langvars, Reg $tkireg): ?bool
     {
         // Check to see if the player is banned every 60 seconds (may need to ajust this).
         if ($timestamp['now'] >= ($timestamp['last'] + 60))
         {
             $ban_result = CheckBan::isBanned($pdo_db, $playerinfo);
-            if ($ban_result === false || (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_WATCH))
+            if ($ban_result === false)
             {
                 return false;
             }
@@ -118,11 +122,7 @@ class Player
                 session_destroy();
 
                 $error_status = "<div style='font-size:18px; color:#FF0000;'>\n";
-                if (array_key_exists('ban_type', $ban_result) && $ban_result['ban_type'] === ID_LOCKED)
-                {
-                    $error_status .= 'Your account has been Locked';
-                }
-                else
+                if (array_key_exists('ban_type', $ban_result))
                 {
                     $error_status .= 'Your account has been Banned';
                 }
@@ -142,11 +142,19 @@ class Player
                 $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mlogin']);
 
                 $title = $langvars['l_error'];
-                Header::display($pdo_db, $lang, $template, $title);
+
+                $header = new \Tki\Header;
+                $header->display($pdo_db, $lang, $template, $title);
                 echo $error_status;
-                Footer::display($pdo_db, $lang, $tkireg, $template);
+
+                $footer = new \Tki\Footer;
+                $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
+        }
+        else
+        {
+            return false;
         }
     }
 }

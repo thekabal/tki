@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,20 +24,26 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'port', 'galaxy', 'common', 'global_includes', 'global_funcs', 'footer'));
 $title = $langvars['l_map_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result3 = $db->Execute("SELECT distinct {$db->prefix}movement_log.sector_id, port_type, beacon FROM {$db->prefix}movement_log,{$db->prefix}universe WHERE ship_id = ? AND {$db->prefix}movement_log.sector_id={$db->prefix}universe.sector_id order by sector_id ASC", array($playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-$row = $result3->fields;
+
+$sql = "SELECT distinct ::prefix::movement_log.sector_id, port_type, beacon FROM ::prefix::movement_log,::prefix::universe WHERE ship_id = :ship_id AND ::prefix::movement_log.sector_id=::prefix::universe.sector_id order by sector_id ASC";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+$stmt->execute();
+$discovered_sectors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$discovered_count = 0;
 
 $tile['special'] = "port-special.png";
 $tile['ore'] = "port-ore.png";
@@ -47,7 +53,7 @@ $tile['goods'] = "port-goods.png";
 $tile['none'] = "space.png";
 $tile['unknown'] = "uspace.png";
 
-$cur_sector = 0; // Clear this before iterating through the sectors
+$cur_sector = 1; // Clear this before iterating through the sectors
 
 // Display sectors as imgs, and each class in css in header.php; then match the width and height here
 $div_w = 20; // Only this width to match the included images
@@ -63,48 +69,43 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
 {
     for ($c = 0; $c < $div_xmax; $c++) // Loop the columns
     {
-        if ($row['sector_id'] !== null && ($row['sector_id'] == $cur_sector) && $row !== false)
+        if ((count($discovered_sectors) > $discovered_count) && ($discovered_sectors[$discovered_count]['sector_id'] !== null && ($discovered_sectors[$discovered_count]['sector_id'] === $cur_sector)))
         {
-            $p = $row['port_type'];
+            $p = $discovered_sectors[$discovered_count]['port_type'];
             // Build the alt text for each image
-            $alt = $langvars['l_sector'] . ": {$row['sector_id']} Port: {$row['port_type']} ";
+            $alt = $langvars['l_sector'] . ": {$discovered_sectors[$discovered_count]['sector_id']} Port: {$discovered_sectors[$discovered_count]['port_type']} ";
 
-            if ($row['beacon'] !== null)
+            if ($discovered_sectors[$discovered_count]['beacon'] !== null)
             {
-                $alt .= "{$row['beacon']}";
+                $alt .= "{$discovered_sectors[$discovered_count]['beacon']}";
             }
 
-            echo "\n<a href=\"rsmove.php?engage=1&amp;destination=" . $row['sector_id'] . "\">";
-            echo "<img class='map " . $row['port_type'] . "' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
+            echo "\n<a href=\"rsmove.php?engage=1&amp;destination=" . $discovered_sectors[$discovered_count]['sector_id'] . "\">";
+            echo "<img class='map " . $discovered_sectors[$discovered_count]['port_type'] . "' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
 
             // Move to next explored sector in database results
-            $result3->Movenext();
-            $row = $result3->fields;
+            if ($discovered_count < count($discovered_sectors))
+            {
+                $discovered_count++;
+            }
+
             $cur_sector++;
         }
         else
         {
-            if (!(($c + ($div_xmax * $r)) == 0)) // We skip sector 0 because nothing is there.
-            {
-                $p = 'unknown';
-                // Build the alt text for each image
-                $alt = ($c + ($div_xmax * $r)) . " - " . $langvars['l_unknown'] . " ";
-
-                // I have not figured out why this formula works, but $row[sector_id] doesn't, so I'm not switching it.
-                echo "<!-- current sector is " . ($c + ($div_xmax * $r)) . " -->";
-                echo "<a href=\"rsmove.php?engage=1&amp;destination=" . ($c + ($div_xmax * $r)) . "\">";
-                echo "<img class='map un' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
-            }
-
+            // Build the alt text for each image
+            $alt = $cur_sector . " - " . $langvars['l_unknown'] . " ";
+            echo "<a href=\"rsmove.php?engage=1&amp;destination=" . $cur_sector . "\">";
+            echo "<img class='map un' src='" . $template->getVariables('template_dir') . "/images/" . $tile['unknown'] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
             $cur_sector++;
         }
     }
 }
 
-// This is the row numbers on the side of the map
-for ($a = 1; $a < ($tkireg->max_sectors / 50 + 1); $a++)
+// These are the row numbers on the side of the map
+for ($a = 1; $a <= ($tkireg->max_sectors / 50); $a++)
 {
-    echo "\n<div style='position:absolute;left:" . ($map_width + 10) . "px;top:".(($a - 1) * ($div_h + $div_border)) . "px;'>" . (($a * 50) - 1) . "</div>";
+    echo "\n<div style='position:absolute;left:" . ($map_width + 10) . "px;top:".(($a - 1) * ($div_h + $div_border)) . "px;'>" . ($a * 50) . "</div>";
 }
 
 echo "</div><div style='clear:both'></div><br>";
@@ -118,4 +119,6 @@ echo "    <div><img style='height:20px; width:20px' alt='" . $langvars['l_port']
 
 echo "<br><br>";
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

@@ -1,5 +1,4 @@
-<?php
-// declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,7 +24,7 @@
 namespace Tki;
 
 use PDO;
-use \Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 class Db
 {
@@ -97,9 +96,8 @@ class Db
             {
                 // We need to display the error message onto the screen.
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                            ' Database.<br> Database Error: '. $db->ErrorNo() .
-                            ': '. $db->ErrorMsg() .'<br>\n';
-                die($err_msg);
+                           ' Database. <br>Database Error: '. $db->ErrorNo();
+                throw new \Exception($err_msg);
             }
 
             $db->prefix = $db_prefix;
@@ -118,20 +116,21 @@ class Db
                         $db_port = '5432';
                     }
 
-                    $pdo_db = new \Tki\TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
+                    $pdo_db = new \Tki\TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;",
+                                              $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
                 else
                 {
                     // Include the charset when connecting
-                    $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
+                    $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4",
+                                              $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
                 }
             }
             catch (\PDOException $e)
             {
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                            ' Database.<br> Database Error: '.
-                            $e->getMessage() . "<br>\n";
-                die($err_msg);
+                           ' Database. <br>Database Error: '. $e->getMessage();
+                throw new \Exception($err_msg);
             }
 
             // Disable emulated prepares so that we get true prepared statements
@@ -177,7 +176,8 @@ class Db
             {
                 if ($db_log)
                 {
-                    AdminLog::writeLog($pdo_db, LOG_RAW, $text_error);
+                    $admin_log = new \Tki\AdminLog;
+                    $admin_log->writeLog($pdo_db, LogEnums::RAW, $text_error);
                 }
             }
 

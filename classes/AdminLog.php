@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -26,15 +25,15 @@ use PDO;
 
 class AdminLog
 {
-    public static function writeLog(\PDO $pdo_db, int $log_type, string $data = null)
+    public function writeLog(\PDO $pdo_db, int $log_type, ?string $data = null): bool
     {
         $result = false;
-        $query = "INSERT INTO ::prefix::logs VALUES (NULL, 0, :logtype, NOW(), :data)";
+        $query = "INSERT INTO ::prefix::logs VALUES (null, 0, :logtype, NOW(), :data)";
         $prep = $pdo_db->prepare($query);
         if ($prep !== false) // If the database is not live, this will return false
         {                      // so we should not attempt to write (or it will fail silently)
-            $prep->bindParam(':logtype', $log_type, PDO::PARAM_STR);
-            $prep->bindParam(':data', $data, PDO::PARAM_STR);
+            $prep->bindParam(':logtype', $log_type, \PDO::PARAM_STR);
+            $prep->bindParam(':data', $data, \PDO::PARAM_STR);
             $prep->execute();
             Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
         }

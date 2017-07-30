@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,12 +23,13 @@ use PDO;
 
 class Translate
 {
+    /** @var Array **/
     protected static $langvars = array();
 
-    public static function load(\PDO $pdo_db, string $language = null, array $categories = null) : array
+    public static function load(\PDO $pdo_db, ?string $language = null, ?array $categories = null) : array
     {
         // Check if all supplied args are valid, if not return an empty array.
-        if (($pdo_db === null) || ($language === null) || !is_array($categories))
+        if (($language === null) || !is_array($categories))
         {
             return self::$langvars;
         }
@@ -47,21 +47,22 @@ class Translate
                 }
             }
 
-            return (array) self::$langvars;
+            return self::$langvars;
         }
         else
         {
             // Populate the $langvars array
             foreach ($categories as $category)
             {
-                // Select from the database and return the value of the language variables requested, but do not use caching
-                $query = "SELECT name, value FROM ::prefix::languages WHERE category = :category AND section = :language;";
+                // Select from the DB and return the value of the language variables requested, but do not use caching
+                $query = "SELECT name, value FROM ::prefix::languages WHERE " .
+                         "category = :category AND section = :language;";
                 $result = $pdo_db->prepare($query);
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
-                // It is possible to use a single prepare, and multiple executes, but it makes the logic of this section much less clear.
-                $result->bindParam(':category', $category, PDO::PARAM_STR);
-                $result->bindParam(':language', $language, PDO::PARAM_STR);
+                // We could use a single prepare, and multiple executes, but it makes this section much less clear.
+                $result->bindParam(':category', $category, \PDO::PARAM_STR);
+                $result->bindParam(':language', $language, \PDO::PARAM_STR);
                 $result->execute();
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
@@ -72,7 +73,7 @@ class Translate
                 }
             }
 
-            return (array) self::$langvars;
+            return self::$langvars;
         }
     }
 }

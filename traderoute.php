@@ -23,7 +23,9 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'bounty', 'regional'));
 $title = $langvars['l_tdr_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
@@ -32,12 +34,12 @@ $portfull = null; // This fixes an error of undefined variables on 1518
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE owner = ?;", array($playerinfo['ship_id']));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $num_traderoutes = $result->RecordCount();
 
 unset($traderoutes);
@@ -54,35 +56,36 @@ while (!$result->EOF)
 $freeholds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
 $maxholds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
 $maxenergy = Tki\CalcLevels::energy($playerinfo['power'], $tkireg);
+$admin_log = new Tki\AdminLog;
 if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playerinfo['ship_organics'] < 0 || $playerinfo['ship_goods'] < 0 || $playerinfo['ship_energy'] < 0 || $freeholds < 0)
 {
     if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_colonists'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
+        $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
         $playerinfo['ship_colonists'] = 0;
     }
 
     if ($playerinfo['ship_ore'] < 0 || $playerinfo['ship_ore'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
+        $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
         $playerinfo['ship_ore'] = 0;
     }
 
     if ($playerinfo['ship_organics'] < 0 || $playerinfo['ship_organics'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
+        $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
         $playerinfo['ship_organics'] = 0;
     }
 
     if ($playerinfo['ship_goods'] < 0 || $playerinfo['ship_goods'] > $maxholds)
     {
-        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
+        $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
         $playerinfo['ship_goods'] = 0;
     }
 
     if ($playerinfo['ship_energy'] < 0 || $playerinfo['ship_energy'] > $maxenergy)
     {
-        Tki\AdminLog::writeLog($pdo_db, LOG_ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
+        $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_ILLEGVALUE, "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
         $playerinfo['ship_energy'] = 0;
     }
 
@@ -91,8 +94,17 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
         $freeholds = 0;
     }
 
-    $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=?, ship_organics=?, ship_goods=?, ship_energy=?, ship_colonists=? WHERE ship_id=?;", array($playerinfo['ship_ore'], $playerinfo['ship_organics'], $playerinfo['ship_goods'], $playerinfo['ship_energy'], $playerinfo['ship_colonists'], $playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods, ship_energy=:ship_energy, ship_colonists=:ship_colonists WHERE ship_id=:ship_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':ship_ore', $playerinfo['ship_ore'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_organics', $playerinfo['ship_organics'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_goods', $playerinfo['ship_goods'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_energy', $playerinfo['ship_energy'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_colonists', $playerinfo['ship_colonists'], \PDO::PARAM_INT);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+    $result = $stmt->execute();
+
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 // Default to 1 run if we don't get a valid repeat value.
@@ -212,36 +224,35 @@ if (mb_strlen(trim($confirm)) === 0)
     $confirm = false;
 }
 
-
 if ($command == 'new')
 {
     // Displays new trade route form
     \Tki\TraderouteBuild::new($pdo_db, $db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, null);
-}
-elseif ($command == 'create')
-{
-    // Enters new route in db
-    \Tki\TraderouteBuild::create($pdo_db, $db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $planet_id1, $planet_id2);
 }
 elseif ($command == 'edit')
 {
     // Displays new trade route form, edit
     \Tki\TraderouteBuild::new($pdo_db, $db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, $traderoute_id);
 }
+elseif ($command == 'create')
+{
+    // Enters new route in db
+    \Tki\TraderouteBuild::create($pdo_db, $db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $planet_id1, $planet_id2);
+}
 elseif ($command == 'delete')
 {
     // Displays delete info
-    \Tki\Traderoute3::traderouteDelete($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
+    \Tki\TraderouteDelete::prime($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
 }
 elseif ($command == 'settings')
 {
     // Global traderoute settings form
-    \Tki\Traderoute3::traderouteSettings($pdo_db, $lang, $tkireg, $template, $playerinfo);
+    \Tki\TraderouteSettings::before($pdo_db, $lang, $tkireg, $template, $playerinfo);
 }
 elseif ($command == 'setsettings')
 {
     // Enters settings in db
-    \Tki\Traderoute3::traderouteSetsettings($pdo_db, $db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
+    \Tki\TraderouteSettings::after($pdo_db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
 }
 elseif ($engage !== null)
 {
@@ -250,7 +261,7 @@ elseif ($engage !== null)
     while ($i > 0)
     {
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-        Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
         \Tki\Traderoute::engage($pdo_db, $db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
         $i--;
@@ -323,7 +334,7 @@ else
         else
         {
             $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['source_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if ($result)
             {
                 $planet1 = $result->fields;
@@ -339,13 +350,13 @@ else
         if ($traderoutes[$i]['source_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['source_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $port1 = $result->fields;
             echo "&nbsp;" . Tki\Ports::getType($port1['port_type'], $langvars) . "</font></td>";
         }
         else
         {
-            if (empty ($planet1))
+            if (empty($planet1))
             {
                 echo "&nbsp;" . $langvars['l_tdr_na'] . "</font></td>";
             }
@@ -364,7 +375,7 @@ else
         else
         {
             $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['dest_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if ($result)
             {
                 $planet2 = $result->fields;
@@ -380,7 +391,7 @@ else
         if ($traderoutes[$i]['dest_type'] == 'P')
         {
             $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['dest_id']));
-            Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $port2 = $result->fields;
             echo "&nbsp;" . Tki\Ports::getType($port2['port_type'], $langvars) . "</font></td>";
         }
@@ -447,7 +458,7 @@ else
                 $dst = $planet2['sector_id'];
             }
 
-            $dist = \Tki\Traderoute3::traderouteDistance($pdo_db, $traderoutes[$i]['source_type'], $traderoutes[$i]['dest_type'], $src, $dst, $traderoutes[$i]['circuit'], $playerinfo, $tkireg);
+            $dist = \Tki\TraderouteDistance::calc($pdo_db, $traderoutes[$i]['source_type'], $traderoutes[$i]['dest_type'], $src, $dst, $traderoutes[$i]['circuit'], $playerinfo, $tkireg);
 
             $langvars['l_tdr_escooped_temp'] = str_replace("[tdr_dist_triptime]", $dist['triptime'], $langvars['l_tdr_escooped']);
             $langvars['l_tdr_escooped2_temp'] = str_replace("[tdr_dist_scooped]", $dist['scooped'], $langvars['l_tdr_escooped2']);
@@ -497,4 +508,5 @@ echo "<div style='text-align:left;'>\n";
 Tki\Text::gotoMain($pdo_db, $lang);
 echo "</div>\n";
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

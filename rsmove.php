@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -26,12 +26,14 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news', 'regional'));
 $title = $langvars['l_rs_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -52,8 +54,11 @@ if ($destination === false || $engage === false)
     // Invalid destination
 
     echo $langvars['l_rs_invalid'] . ".<br><br>";
-    $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET cleared_defenses=' ' WHERE ship_id=:ship_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+    $result = $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 else
 {
@@ -81,12 +86,12 @@ else
         // Ok, we have been given the destination value.
         // Get the players current sector information.
         $result2 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
-        Tki\Db::LogDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $start = $result2->fields;
 
         // Get the destination sector information.
         $result3 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($destination));
-        Tki\Db::LogDbErrors($pdo_db, $result3, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
         $finish = $result3->fields;
 
         // Calculate the distance.
@@ -100,13 +105,13 @@ else
         $y = ($start['distance'] * sin($sa1) * sin($sa2)) - ($finish['distance'] * sin($fa1) * sin($fa2));
         $z = ($start['distance'] * cos($sa1)) - ($finish['distance'] * cos($fa1));
 
-        $distance = round(sqrt(pow($x, 2) + pow($y, 2) + pow($z, 2)));
+        $distance = (int) round(sqrt(pow($x, 2) + pow($y, 2) + pow($z, 2)));
 
         // Calculate the speed of the ship.
         $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);
 
         // Calculate the trip time.
-        $triptime = round($distance / $shipspeed);
+        $triptime = (int) round($distance / $shipspeed);
 
         if ($destination == $playerinfo['sector'])
         {
@@ -164,8 +169,12 @@ else
                 $langvars['l_rs_movetime'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_movetime']);
                 echo $langvars['l_rs_movetime'] . "<br><br>";
                 echo $langvars['l_rs_noturns'] . "<br><br>";
-                $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+                $sql = "UPDATE ::prefix::ships SET cleared_defenses=' ' WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else
             {
@@ -181,7 +190,10 @@ else
                     $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
                     $stamp = date("Y-m-d H:i:s");
                     $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
-                    Tki\Db::LogDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                    Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                    // Future: Determine where $destination gets changed to something other than int. In the meantime, make it correct here.
+                    $destination = (int) $destination;
+
                     Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $destination);
                     $langvars['l_rs_ready'] = str_replace("[sector]", $destination, $langvars['l_rs_ready']);
                     $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
@@ -195,4 +207,6 @@ else
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

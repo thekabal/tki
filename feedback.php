@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,21 +25,23 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('feedback', 'galaxy', 'common', 'global_includes', 'global_funcs', 'footer'));
 
 $title = $langvars['l_feedback_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $content = null;
 $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING); // URL doesn't allow spaces, string does.
-if (mb_strlen(trim($content)) === 0)
+if (($content === null) || (mb_strlen(trim($content)) === 0))
 {
     $content = false;
 }
@@ -65,7 +67,7 @@ else
 }
 
 echo "<br>\n";
-if (empty ($_SESSION['username']))
+if (empty($_SESSION['username']))
 {
     echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
 }
@@ -74,4 +76,5 @@ else
     Tki\Text::gotoMain($pdo_db, $lang);
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

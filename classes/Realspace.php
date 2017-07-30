@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,23 +21,23 @@ namespace Tki;
 
 class Realspace
 {
-    public static function realSpaceMove(\PDO $pdo_db, array $langvars, int $destination, Reg $tkireg)
+    public static function realSpaceMove(\PDO $pdo_db, array $langvars, int $destination, Reg $tkireg): string
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email=:email";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':email', $_SESSION['username']);
+        $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
         $stmt->execute();
         $playerinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:playersector";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':playersector', $playerinfo['sector']);
+        $stmt->bindParam(':playersector', $playerinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         $start = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:destination";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':destination', $destination);
+        $stmt->bindParam(':destination', $destination, \PDO::PARAM_INT);
         $stmt->execute();
         $finish = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -75,14 +74,15 @@ class Realspace
 
         $free_power = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg) - $playerinfo['ship_energy'];
 
-        // Amount of energy that can be stored is less than the amount scooped. Amount scooped is set to what can be stored.
+        // Amount of energy that can be stored is less than the amount scooped.
+        // Amount scooped is set to what can be stored.
         if ($free_power < $energyscooped)
         {
             $energyscooped = $free_power;
         }
 
         // Make sure energyscooped is not null
-        if (!isset ($energyscooped))
+        if (!isset($energyscooped))
         {
             $energyscooped = 0;
         }
@@ -108,7 +108,7 @@ class Realspace
 
             $sql = "UPDATE ::prefix::ships SET cleared_defenses = ' ' WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
             $retval = "BREAK-TURNS";
@@ -120,15 +120,15 @@ class Realspace
 
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND ship_id <> :ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $destination);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':sector_id', $destination, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== null)
             {
                 $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $defenses_present['ship_id']);
+                $stmt->bindParam(':ship_id', $defenses_present['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 $nsfighters = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -151,12 +151,12 @@ class Realspace
                        "ship_energy = ship_energy + :ship_energy, turns = turns - :turns, " .
                        "turns_used = turns_used + :turns_used WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':last_login', $stamp);
-                $stmt->bindParam(':sector', $destination);
-                $stmt->bindParam(':ship_energy', $energyscooped);
-                $stmt->bindParam(':turns', $triptime);
-                $stmt->bindParam(':turns_used', $triptime);
-                $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+                $stmt->bindParam(':last_login', $stamp, \PDO::PARAM_STR);
+                $stmt->bindParam(':sector', $destination, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_energy', $energyscooped, \PDO::PARAM_INT);
+                $stmt->bindParam(':turns', $triptime, \PDO::PARAM_INT);
+                $stmt->bindParam(':turns_used', $triptime, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
 
                 $langvars['l_rs_ready_result'] = null;

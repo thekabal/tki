@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -26,7 +25,7 @@ class Ownership
     {
         $sql = "SELECT owner, team FROM ::prefix::planets WHERE sector_id=:sector_id AND base='Y'";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sector);
+        $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
         $bases_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $i = 0;
@@ -120,7 +119,7 @@ class Ownership
             {
                 $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $owners[$loop]['id']);
+                $stmt->bindParam(':ship_id', $owners[$loop]['id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 $team_owner = $stmt->fetchAll(\PDO::FETCH_ASSOC);
                 if ($team_owner !== null)
@@ -139,7 +138,7 @@ class Ownership
         {
             $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $sector);
+            $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
             return (string) $langvars['l_global_warzone'];
@@ -159,7 +158,7 @@ class Ownership
         {
             $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $sector);
+            $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
             return (string) $langvars['l_global_warzone'];
@@ -170,7 +169,7 @@ class Ownership
         {
             $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $sector);
+            $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
             return (string) $langvars['l_global_warzone'];
@@ -189,7 +188,7 @@ class Ownership
             {
                 $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':sector_id', $sector);
+                $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
                 $stmt->execute();
                 return (string) $langvars['l_global_warzone'];
             }
@@ -219,7 +218,7 @@ class Ownership
         {
             $sql = "UPDATE ::prefix::universe SET zone_id=1 WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $sector);
+            $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
             return (string) $langvars['l_global_nzone'];
@@ -229,20 +228,20 @@ class Ownership
         {
             $sql = "SELECT zone_id FROM ::prefix::zones WHERE team_zone='Y' AND owner=:owner";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner', $owners[$winner]['id']);
+            $stmt->bindParam(':owner', $owners[$winner]['id'], \PDO::PARAM_INT);
             $stmt->execute();
             $zone = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $sql = "SELECT team_name FROM ::prefix::teams WHERE id=:id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':id', $owners[$winner]['id']);
+            $stmt->bindParam(':id', $owners[$winner]['id'], \PDO::PARAM_INT);
             $stmt->execute();
             $team = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $sql = "UPDATE ::prefix::universe SET zone_id=:zone_id WHERE sector_id=:sector_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':zone_id', $zone['zone_id']);
-            $stmt->bindParam(':sector_id', $sector);
+            $stmt->bindParam(':zone_id', $zone['zone_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
             return (string) $langvars['l_global_team'] . ' ' . $team['team_name'] . '!';
@@ -264,7 +263,7 @@ class Ownership
             {
                 $sql = "UPDATE ::prefix::universe SET zone_id=1 WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':sector_id', $sector);
+                $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
                 $stmt->execute();
 
                 return (string) $langvars['l_global_nzone'];
@@ -273,20 +272,20 @@ class Ownership
             {
                 $sql = "SELECT zone_id FROM ::prefix::zones WHERE team_zone='N' AND owner=:owner";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':owner', $owners[$winner]['id']);
+                $stmt->bindParam(':owner', $owners[$winner]['id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 $zone = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                 $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':email', $owners[$winner]['id']);
+                $stmt->bindParam(':ship_id', $owners[$winner]['id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 $ship = $stmt->fetch(\PDO::FETCH_ASSOC);
 
                 $sql = "UPDATE ::prefix::universe SET zone_id=:zone_id WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':zone_id', $zone['zone_id']);
-                $stmt->bindParam(':sector_id', $sector);
+                $stmt->bindParam(':zone_id', $zone['zone_id'], \PDO::PARAM_INT);
+                $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
                 $stmt->execute();
 
                 return (string) $langvars['l_global_player'] . ' ' . $ship['character_name'] . '!';

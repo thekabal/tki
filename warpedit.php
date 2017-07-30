@@ -22,7 +22,9 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_warp_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('warpedit', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
@@ -31,14 +33,14 @@ echo "<h1>" . $title . "</h1>\n";
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get sectorinfo from database
 $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector']);
+$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -46,7 +48,9 @@ if ($playerinfo['turns'] < 1)
 {
     echo $langvars['l_warp_turn'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -54,14 +58,16 @@ if ($playerinfo['dev_warpedit'] < 1)
 {
     echo $langvars['l_warp_none'] . ".<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
 // Get playerinfo from database
 $sql = "SELECT allow_warpedit FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+$stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -69,7 +75,9 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 {
     echo $langvars['l_warp_forbid'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
-    Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+    $footer = new Tki\Footer;
+    $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
 
@@ -78,14 +86,14 @@ if ($zoneinfo['allow_warpedit'] == 'L')
     // Get playerinfo from database
     $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':zone_id', $sectorinfo['zone_id']);
+    $stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
     $stmt->execute();
     $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Get playerinfo from database
     $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector_id', $zoneowner_info['owner']);
+    $stmt->bindParam(':sector_id', $zoneowner_info['owner'], PDO::PARAM_INT);
     $stmt->execute();
     $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -95,7 +103,9 @@ if ($zoneinfo['allow_warpedit'] == 'L')
         {
             echo $langvars['l_warp_forbid'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
-            Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+            $footer = new Tki\Footer;
+            $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
     }
@@ -103,7 +113,7 @@ if ($zoneinfo['allow_warpedit'] == 'L')
 
 $sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start ORDER BY link_dest ASC";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':link_start', $playerinfo['sector']);
+$stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if (!$link_present)
@@ -138,4 +148,6 @@ echo "<input type=\"submit\" value=\"" . $langvars['l_submit'] . "\"><input type
 echo "</form>";
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

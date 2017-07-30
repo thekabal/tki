@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,18 +16,15 @@ declare(strict_types = 1);
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: classes/Ibank.php
-//
-// FUTURE: These are horribly bad. They should be broken out of classes, and turned mostly into template
-// behaviors. But in the interest of saying goodbye to the includes directory, and raw functions, this
-// will at least allow us to auto-load and use classes instead. Plenty to do in the future, though!
 
 namespace Tki;
 
 class Ibank
 {
-    public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, string $account, $amount, Smarty $template): void
+    public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $account, int $amount, Smarty $template): void
     {
-        $amount = preg_replace("/[^0-9]/", '', $amount);
+        $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
+        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $template);
@@ -77,20 +73,20 @@ class Ibank
 
         $sql = "UPDATE ::prefix::ibank_accounts SET loan = :amount, loantime=NOW() WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':amount', $amount3);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->bindParam(':amount', $amount3, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE ::prefix::ships SET credits = credits + :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':amount', $amount);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankLogin(array $langvars, array $playerinfo, string $account): void
+    public static function ibankLogin(array $langvars, array $playerinfo, array $account): void
     {
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_welcometoibank'] . "<br>---------------------------------</td></tr>" .
             "<tr valign=top>" .
@@ -103,25 +99,9 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankWithdraw(array $langvars, string $account): void
+    public static function ibankLoans(\PDO $pdo_db, array $langvars, Reg $tkireg, array $playerinfo, array $account): void
     {
-        echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_withdrawfunds'] . "<br>---------------------------------</td></tr>" .
-             "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_fundsavailable'] . ":</td>" .
-             "<td align=right>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br></td>" .
-             "</tr><tr valign=top>" .
-             "<td>" . $langvars['l_ibank_selwithdrawamount'] . ":</td><td align=right>" .
-             "<form accept-charset='utf-8' action='ibank.php?command=withdraw2' method=post>" .
-             "<input class=term type=text size=15 maxlength=20 name=amount value=0>" .
-             "<br><br><input class=term type=submit value='" . $langvars['l_ibank_withdraw'] . "'>" .
-             "</form></td></tr>" .
-             "<tr valign=bottom>" .
-             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
-             "</tr>";
-    }
-
-    public static function ibankLoans(\PDO $pdo_db, array $langvars, Reg $tkireg, array $playerinfo, string $account): void
-    {
+        $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_currentloan'] . " :</td><td align=right>" . number_format($account['loan'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
@@ -132,7 +112,7 @@ class Ibank
 
             $sql = "SELECT UNIX_TIMESTAMP(loantime) as time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             $time = $stmt->fetch(\PDO::FETCH_COLUMN);
@@ -197,9 +177,9 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, string $account, $amount, Reg $tkireg, Smarty $template): void
+    public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, array $account, int $amount, Reg $tkireg, Smarty $template): void
     {
-        $amount = preg_replace("/[^0-9]/", '', $amount);
+        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
         if (($amount * 1) != $amount)
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $template);
@@ -247,45 +227,18 @@ class Ibank
 
         $sql = "UPDATE ::prefix::ibank_accounts SET loan = loan - :loanamount, loantime=:loantime WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':loanamount', $amount);
-        $stmt->bindParam(':loantime', $account['loantime']);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->bindParam(':loanamount', $amount, \PDO::PARAM_INT);
+        $stmt->bindParam(':loantime', $account['loantime'], \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':amount', $amount);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+        $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-    }
-
-    public static function ibankConsolidate(array $langvars, Reg $tkireg, int $dplanet_id): void
-    {
-        $percent = $tkireg->ibank_paymentfee * 100;
-
-        $langvars['l_ibank_transferrate3'] = str_replace("[ibank_num_percent]", number_format($percent, 1, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_transferrate3']);
-        $langvars['l_ibank_transferrate3'] = str_replace("[nbplanets]", $tkireg->ibank_tconsolidate, $langvars['l_ibank_transferrate3']);
-
-        echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_planetconsolidate'] . "<br>---------------------------------</td></tr>" .
-             "<form accept-charset='utf-8' action='ibank.php?command=consolidate2' method=post>" .
-             "<tr valign=top>" .
-             "<td colspan=2>" . $langvars['l_ibank_consolrates'] . " :</td>" .
-             "<tr valign=top>" .
-             "<td>" . $langvars['l_ibank_minimum'] . " :<br>" .
-             "<br>" . $langvars['l_ibank_maximum'] . " :</td>" .
-             "<td align=right>" .
-             "<input class=term type=text size=15 maxlength=20 name=minimum value=0><br><br>" .
-             "<input class=term type=text size=15 maxlength=20 name=maximum value=0><br><br>" .
-             "<input class=term type=submit value=\"" . $langvars['l_ibank_compute'] . "\"></td>" .
-             "<input type=hidden name=dplanet_id value=" . $dplanet_id . ">" .
-             "</form>" .
-             "<tr><td colspan=2 align=center>" .
-             $langvars['l_ibank_transferrate3'] .
-             "<tr valign=bottom>" .
-             "<td><a href='ibank.php?command=transfer'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
-             "</tr>";
     }
 
     public static function ibankError(\PDO $pdo_db, array $langvars, string $errmsg, string $backlink, string $lang, Reg $tkireg, Smarty $template): void
@@ -304,46 +257,8 @@ class Ibank
              "<img width=600 height=21 src=" . $template . "/images/div2.png>" .
              "</center>";
 
-        \Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+        $footer = new \Tki\Footer;
+        $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
-    }
-
-    public static function ibankDeposit(\PDO $pdo_db, string $lang, string $account, array $playerinfo): void
-    {
-        // Database driven language entries
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('ibank'));
-
-        $max_credits_allowed = 18446744073709000000;
-        $credit_space = ($max_credits_allowed - $account['balance']);
-
-        if ($credit_space > $playerinfo['credits'])
-        {
-            $credit_space = ($playerinfo['credits']);
-        }
-
-        if ($credit_space < 0)
-        {
-            $credit_space = 0;
-        }
-
-        echo "<tr><td height=53 colspan=2 align=center valign=top>" . $langvars['l_ibank_depositfunds'] . "<br>---------------------------------</td></tr>" .
-             "<tr valign=top>" .
-             "<td height=30>" . $langvars['l_ibank_fundsavailable'] . " :</td>" .
-             "<td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br></td>" .
-             "</tr><tr valign=top>" .
-             "<td height=90>" . $langvars['l_ibank_seldepositamount'] . " :</td><td align=right>" .
-             "<form accept-charset='utf-8' action='ibank.php?command=deposit2' method=post>" .
-             "<input class=term type=text size=15 maxlength=20 name=amount value=0>" .
-             "<br><br><input class=term type=submit value=" . $langvars['l_ibank_deposit'] . ">" .
-             "</form>" .
-             "</td></tr>" .
-             "<tr>" .
-             "  <td height=30  colspan=2 align=left>" .
-             "    <span style='color:\"#00ff00\";'>You can deposit only ". number_format($credit_space, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits.</span><br>" .
-             "  </td>" .
-             "</tr>" .
-             "<tr valign=bottom>" .
-             "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
-             "</tr>";
     }
 }

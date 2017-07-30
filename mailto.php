@@ -27,7 +27,8 @@ $include_ckeditor = true;
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mailto', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
 $title = $langvars['l_sendm_title'];
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class, $include_ckeditor);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class, $include_ckeditor);
 
 // Filter to the FILTER_SANITIZE_STRING ruleset, because we need to allow spaces for names & subject (FILTER_SANITIZE_URL doesn't allow spaces)
 // $name, $to, and $subject are all sent both via post and get, so we have to do a filter input for each
@@ -84,18 +85,18 @@ if ($subject !== null)
 // Get playerinfo from database
 $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $stmt->execute();
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 echo "<h1>" . $title . "</h1>\n";
 
-if (empty ($content))
+if (empty($content))
 {
     $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE email NOT LIKE '%@Kabal' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     $res2 = $db->Execute("SELECT team_name FROM {$db->prefix}teams WHERE admin ='N' ORDER BY team_name ASC;");
-    Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
     echo "<form accept-charset='utf-8' action=mailto.php method=post>\n";
     echo "  <table>\n";
     echo "    <tr>\n";
@@ -158,10 +159,10 @@ else
     {
         $timestamp = date("Y\-m\-d H\:i\:s");
         $res = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE character_name = ?;", array($to));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $target_info = $res->fields;
         $resx = $db->Execute("INSERT INTO {$db->prefix}messages (sender_id, recp_id, sent, subject, message) VALUES (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $target_info['ship_id'], $timestamp, $subject, $content));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         if ($db->ErrorNo() != 0)
         {
             echo "Message failed to send: " . $db->ErrorMsg() . "<br>\n";
@@ -178,21 +179,23 @@ else
         $to = trim($to);
         $to = addslashes($to);
         $res = $db->Execute("SELECT id FROM {$db->prefix}teams WHERE team_name = ?;", array($to));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $row = $res->fields;
 
         $res2 = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE team = ?;", array($row['id']));
-        Tki\Db::LogDbErrors($pdo_db, $res2, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
 
         while (!$res2->EOF)
         {
             $row2 = $res2->fields;
             $resx = $db->Execute("INSERT INTO {$db->prefix}messages (sender_id, recp_id, sent, subject, message) VALUES (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $row2['ship_id'], $timestamp, $subject, $content));
-            Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
             $res2->MoveNext();
         }
     }
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

@@ -21,7 +21,9 @@ require_once './common.php';
 
 $title = $langvars['l_pwr_title'];
 $body_class = 'options';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'options', 'pwreset', 'option2'));
@@ -39,7 +41,7 @@ $newpass2  = filter_input(INPUT_POST, 'newpass2', FILTER_SANITIZE_STRING);
 // because 8 characters is 4,294,967,296 combinations, and that should be sufficiently secure
 
 $result = $db->SelectLimit("SELECT ship_id, email, recovery_time FROM {$db->prefix}ships WHERE substr(MD5(password),6,8) = ?", 1, -1, array('password' => $reset_code));
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF && $result !== false)
 {
@@ -84,8 +86,12 @@ if (!$result->EOF && $result !== false)
             session_regenerate_id();
 
             // Now update the players password.
-            $rs = $db->Execute("UPDATE {$db->prefix}ships SET password = ? WHERE ship_id = ?;", array($hashed_pass, $playerinfo['ship_id']));
-            Tki\Db::LogDbErrors($pdo_db, $rs, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::ships SET password=:hashed_pass WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':hashed_pass', $hashed_pass, \PDO::PARAM_STR);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             // Now check to see if we have a valid update and have ONLY 1 changed record.
             if ((is_bool($rs) && $rs === false) || $db->Affected_Rows() != 1)
@@ -110,12 +116,14 @@ if (!$result->EOF && $result !== false)
 
             // Need to set the topic with the game name.
             $langvars['l_mail_topic'] = str_replace("[game_name]", $tkireg->game_name, $langvars['l_mail_topic']);
-
             mail($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'], "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
 
             // Reset recovery_time to zero
-            $recovery_update_result = $db->Execute("UPDATE {$db->prefix}ships SET recovery_time = null WHERE email = ?;", array($playerinfo['email']));
-            Tki\Db::LogDbErrors($pdo_db, $recovery_update_result, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::ships SET recovery_time=NULL WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             echo $langvars['l_pwr_success'] . "<br><br>";
             echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
@@ -133,4 +141,5 @@ else
     // Admin log this attempt to use an invalid code
 }
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

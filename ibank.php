@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -25,16 +25,18 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('ibank', 'common', 'global
 
 $title = $langvars['l_ibank_title'];
 $body_class = 'ibank';
-Tki\Header::display($pdo_db, $lang, $template, $title, $body_class);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $title, $body_class);
 
 $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE email=:email");
-$stmt->bindParam(':email', $_SESSION['username']);
+$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
 $result = $stmt->execute();
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id");
-$stmt->bindParam(':ship_id', $playerinfo['ship_id']);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
 $result = $stmt->execute();
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -55,7 +57,7 @@ if (!$tkireg->allow_ibank)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $command = null;
 $command = filter_input(INPUT_GET, 'command', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($command)) === 0)
+if (($command === null) || (mb_strlen(trim($command)) === 0))
 {
     $command = false;
 }
@@ -63,15 +65,15 @@ if (mb_strlen(trim($command)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $amount = null;
 $amount = (int) filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($amount)) === 0)
+if ($amount === 0)
 {
-    $amount = false;
+    $amount = 0;
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $dplanet_id = null;
 $dplanet_id = (int) filter_input(INPUT_POST, 'dplanet_id', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($dplanet_id)) === 0)
+if ($dplanet_id === 0)
 {
     $dplanet_id = 0;
 }
@@ -79,7 +81,8 @@ if (mb_strlen(trim($dplanet_id)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $minimum = null;
 $minimum = (int) filter_input(INPUT_POST, 'minimum', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($minimum)) === 0)
+
+if ($minimum === 0)
 {
     $minimum = 0;
 }
@@ -91,7 +94,7 @@ else
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $maximum = null;
 $maximum = (int) filter_input(INPUT_POST, 'maximum', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($maximum)) === 0)
+if ($maximum === 0)
 {
     $maximum = 0;
 }
@@ -106,19 +109,19 @@ if ($command == 'login') // Main menu
 }
 elseif ($command == 'withdraw') // Withdraw menu
 {
-    Tki\Ibank::ibankWithdraw($langvars, $account);
+    Tki\IbankWithdraw::before($langvars, $account);
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Tki\Ibank2::ibankWithdraw2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\IbankWithdraw::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
-    Tki\Ibank::ibankDeposit($pdo_db, $lang, $account, $playerinfo);
+    Tki\IbankDeposit::before($pdo_db, $lang, $account, $playerinfo);
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Tki\Ibank2::ibankDeposit2($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\IbankDeposit::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
@@ -146,15 +149,15 @@ elseif ($command == 'repay') // Repay operation
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {
-    Tki\Ibank::ibankConsolidate($langvars, $tkireg, $dplanet_id);
+    Tki\IbankConsolidate::before($langvars, $tkireg, $dplanet_id);
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Tki\Ibank2::ibankConsolidate2($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
+    Tki\IbankConsolidate::after($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Tki\Ibank2::ibankConsolidate3($pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
+    Tki\IbankConsolidate::third($pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
 }
 else
 {
@@ -192,4 +195,6 @@ echo "</table></td></tr></table></div>";
 echo '<img src="' . $template->getVariables('template_dir') . '/images/div2.png" alt="" style="width: 600px; height:21px">';
 echo '</center>';
 
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);
