@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -23,7 +23,7 @@ if (empty($planet))
 {
     echo "<select size='15' name='planet'>";
     $res = $db->Execute("SELECT planet_id, name, sector_id FROM {$db->prefix}planets ORDER BY sector_id");
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $row = $res->fields;
@@ -46,7 +46,7 @@ else
         // Get planet info from database
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planet);
+        $stmt->bindParam(':planet_id', $planet, \PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -64,7 +64,7 @@ else
         echo "<tr><td><tt>" . $langvars['l_admin_planet_owner'] . "</tt></td><td>";
         echo "<select size='1' name='owner'>";
         $ressuba = $db->Execute("SELECT ship_id,character_name FROM {$db->prefix}ships ORDER BY character_name");
-        Tki\Db::LogDbErrors($pdo_db, $ressuba, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $ressuba, __LINE__, __FILE__);
         echo "<option value='0'>" . $langvars['l_admin_no_one'] . "</option>";
         while (!$ressuba->EOF)
         {
@@ -114,7 +114,7 @@ else
         $_base = empty($base) ? "N" : "Y";
         $_sells = empty($sells) ? "N" : "Y";
         $planupdate = $db->Execute("UPDATE {$db->prefix}planets SET sector_id = ?, defeated = ?, name = ?, base = ?, sells = ?, owner = ?, organics = ?, ore = ?, goods = ?, energy = ?, team = ?, colonists = ?,credits = ? ,fighters = ?, torps = ?, prod_organics= ? , prod_ore = ?, prod_goods = ?, prod_energy = ?, prod_fighters = ?, prod_torp = ? WHERE planet_id = ?", array($sector_id, $_defeated, $name, $_base, $_sells, $owner, $organics, $ore, $goods, $energy, $team, $colonists, $credits, $fighters, $torps, $prod_organics, $prod_ore, $prod_goods, $prod_energy, $prod_fighters, $prod_torp, $planet));
-        Tki\Db::LogDbErrors($pdo_db, $planupdate, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $planupdate, __LINE__, __FILE__);
         if (!$planupdate)
         {
             echo $langvars['l_admin_changes_failed'] . "<br><br>";

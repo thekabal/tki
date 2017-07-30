@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team.
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 // File: create_universe/50.php
 
 // Determine current step, next step, and number of steps
-$create_universe_info = Tki\BigBang::findStep(__FILE__);
+$step_finder = new Tki\BigBang;
+$create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
 $variables['templateset']            = $tkireg->default_template;
@@ -97,15 +98,21 @@ for ($t = 0; $t < $z; $t++)
 
 // Write the number of sectors chosen during CU to the database
 $local_table_timer->start(); // Start benchmarking
-$stmt = $pdo_db->prepare("UPDATE ::prefix::gameconfig SET value = ? WHERE name='max_sectors'");
-$result = $stmt->execute(array($variables['max_sectors']));
+$sql = "UPDATE ::prefix::gameconfig SET value = :sectors WHERE name='max_sectors'";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':sectors', $variables['max_sectors'], \PDO::PARAM_INT);
+$result = $stmt->execute();
 $local_table_timer->stop();
 $variables['update_config_results']['result'] = Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $variables['update_config_results']['time'] = $local_table_timer->elapsed();
 
 $lang = $tkireg->default_lang;
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/50.tpl');
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

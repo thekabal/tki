@@ -1,4 +1,4 @@
-.<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -33,7 +33,7 @@ $variables['sector'] = $_POST['sector'];
 if ($_POST['sector'] === null)
 {
     $res = $db->Execute("SELECT sector_id FROM {$db->prefix}universe ORDER BY sector_id");
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $sectors[] = $res->fields;
@@ -49,14 +49,14 @@ else
         // Get playerinfo from database
         $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $_POST['sector']);
+        $stmt->bindParam(':sector_id', $_POST['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $variables['sector_name'] = $row['sector_name'];
 
         $ressubb = $db->Execute("SELECT zone_id,zone_name FROM {$db->prefix}zones ORDER BY zone_name");
-        Tki\Db::LogDbErrors($pdo_db, $ressubb, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $ressubb, __LINE__, __FILE__);
         while (!$ressubb->EOF)
         {
             $rowsubb = $ressubb->fields;
@@ -98,7 +98,7 @@ else
     {
         // Update database
         $secupdate = $db->Execute("UPDATE {$db->prefix}universe SET sector_name=?, zone_id=?, beacon=?, port_type=?, port_organics=?, port_ore=?, port_goods=?, port_energy=?, distance=?, angle1=?, angle2=? WHERE sector_id=?;", array($_POST['sector_name'], $_POST['zone_id'], $_POST['beacon'], $_POST['port_type'], $_POST['port_organics'], $_POST['port_ore'], $_POST['port_goods'], $_POST['port_energy'], $_POST['distance'], $_POST['angle1'], $_POST['angle2'], $_POST['sector']));
-        Tki\Db::LogDbErrors($pdo_db, $secupdate, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $secupdate, __LINE__, __FILE__);
 
         if (!$secupdate)
         {

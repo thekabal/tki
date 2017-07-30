@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -24,10 +24,10 @@ if (!array_key_exists('operation', $_POST))
     $_POST['operation'] = null;
 }
 
-if (empty ($_POST['user']))
+if (empty($_POST['user']))
 {
     $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships ORDER BY character_name");
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $players[] = $res->fields;
@@ -43,7 +43,7 @@ else
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $_POST['user']);
+        $stmt->bindParam(':ship_id', $_POST['user'], \PDO::PARAM_INT);
         $stmt->execute();
         $userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -107,7 +107,7 @@ else
         $_dev_fuelscoop = empty($_POST['dev_fuelscoop']) ? "N" : "Y";
         $variables['debug'] = $_dev_escapepod;
         $resx = $db->Execute("UPDATE {$db->prefix}ships SET character_name=?, password=?, email=?, ship_name=?, ship_destroyed=?, hull=?, engines=?, power=?, computer=?, sensors=?, armor=?, shields=?, beams=?, torp_launchers=?, cloak=?, credits=?, turns=?, dev_warpedit=?, dev_genesis=?, dev_beacon=?, dev_emerwarp=?, dev_escapepod=?, dev_fuelscoop=?, dev_minedeflector=?, sector=?, ship_ore=?, ship_organics=?, ship_goods=?, ship_energy=?, ship_colonists=?, ship_fighters=?, torps=?, armor_pts=? WHERE ship_id=?", array($_POST['character_name'], $_POST['password2'], $_POST['email'], $_POST['ship_name'], $_ship_destroyed, $_POST['hull'], $_POST['engines'], $_POST['power'], $_POST['computer'], $_POST['sensors'], $_POST['armor'], $_POST['shields'], $_POST['beams'], $_POST['torp_launchers'], $_POST['cloak'], $_POST['credits'], $_POST['turns'], $_POST['dev_warpedit'], $_POST['dev_genesis'], $_POST['dev_beacon'], $_POST['dev_emerwarp'], $_dev_escapepod, $_dev_fuelscoop, $_POST['dev_minedeflector'], $_POST['sector'], $_POST['ship_ore'], $_POST['ship_organics'], $_POST['ship_goods'], $_POST['ship_energy'], $_POST['ship_colonists'], $_POST['ship_fighters'], $_POST['torps'], $_POST['armor_pts'], $_POST['user']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $button_main = false;
         $variables['user'] = $_POST['user'];
     }

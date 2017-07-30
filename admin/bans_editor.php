@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -28,14 +28,14 @@ if (empty($command))
     echo "</form>";
 
     $res = $db->Execute("SELECT ban_mask FROM {$db->prefix}ip_bans");
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $bans[] = $res->fields['ban_mask'];
         $res->MoveNext();
     }
 
-    if (empty ($bans))
+    if (empty($bans))
     {
         echo "<strong>" . $langvars['l_admin_no_bans'] . "</strong>";
     }
@@ -72,7 +72,7 @@ if (empty($command))
                  "<td align=center><font size=2 color=white>";
 
             $res = $db->Execute("SELECT character_name, ship_id, email FROM {$db->prefix}ships WHERE ip_address LIKE ?;", array($ban));
-            Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
             unset($players);
             while (!$res->EOF)
             {
@@ -122,7 +122,7 @@ if (empty($command))
 elseif ($command == 'showips')
 {
     $res = $db->Execute("SELECT DISTINCT ip_address FROM {$db->prefix}ships");
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $ips[] = $res->fields['ip_address'];
@@ -159,7 +159,7 @@ elseif ($command == 'showips')
              "<td align=center><font size=2 color=white>";
 
         $res = $db->Execute("SELECT character_name, ship_id, email FROM {$db->prefix}ships WHERE ip_address = ?;", array($ip));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         unset($players);
         while (!$res->EOF)
         {
@@ -259,9 +259,9 @@ elseif ($command == 'banip2')
     echo "<font size=2 color=white><strong>" . $langvars['l_admin_ban_success'] . " " . $printban . "</strong>.<p>";
 
     $resx = $db->Execute("INSERT INTO {$db->prefix}ip_bans values (NULL, ?);", array($banmask));
-    Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     $res = $db->Execute("SELECT DISTINCT character_name FROM {$db->prefix}ships, {$db->prefix}ip_bans WHERE ip_address LIKE ban_mask");
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     echo $langvars['l_admin_affected_players'] . " :<p>";
     while (!$res->EOF)
     {
@@ -281,12 +281,12 @@ elseif ($command == 'unbanip')
     if ($ban !== null)
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ban_mask = ?;", array($ban));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     }
     else
     {
         $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask;", array($ip));
-        Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     }
 
     $nbbans = $res->RecordCount();
@@ -300,12 +300,12 @@ elseif ($command == 'unbanip')
     if ($ban !== null)
     {
         $resx = $db->Execute("DELETE FROM {$db->prefix}ip_bans WHERE ban_mask = ?;", array($ban));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
     else
     {
         $resx = $db->Execute("DELETE FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask;", array($ip));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     }
 
     $query_string = "ip_address LIKE '" . $bans[0]['ban_mask'] . "'";
@@ -315,7 +315,7 @@ elseif ($command == 'unbanip')
     }
 
     $res = $db->Execute("SELECT DISTINCT character_name FROM {$db->prefix}ships WHERE ?;", array($query_string));
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     $nbplayers = $res->RecordCount();
     while (!$res->EOF)
     {
@@ -331,7 +331,7 @@ elseif ($command == 'unbanip')
     }
 
     echo "<p><strong>" . $langvars['l_admin_affected_players'] . " :</strong><p>";
-    if (empty ($players))
+    if (empty($players))
     {
         echo " - " . $langvars['l_none'] . "<br>";
     }

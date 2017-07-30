@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -18,7 +18,7 @@
 // File: admin/log_viewer.php
 
 $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships ORDER BY character_name ASC");
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 while (!$res->EOF)
 {
     $players[] = $res->fields;

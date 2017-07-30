@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team.
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 // File: create_universe/70.php
 
 // Determine current step, next step, and number of steps
-$create_universe_info = Tki\BigBang::findStep(__FILE__);
+$step_finder = new Tki\BigBang;
+$create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
 $variables['templateset']            = $tkireg->default_template;
@@ -289,8 +290,8 @@ for ($i = 1; $i <= $loops; $i++)
 $local_table_timer->start(); // Start benchmarking
 $sql = "DELETE FROM ::prefix::links WHERE link_start = :linkstart OR link_dest = :linkdest";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':linkstart', $tkireg->max_sectors);
-$stmt->bindParam(':linkdest', $tkireg->max_sectors);
+$stmt->bindParam(':linkstart', $tkireg->max_sectors, \PDO::PARAM_INT);
+$stmt->bindParam(':linkdest', $tkireg->max_sectors, \PDO::PARAM_INT);
 $resx = $stmt->execute();
 
 $variables['remove_links_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
@@ -308,8 +309,11 @@ for ($t = 0; $t < $z; $t++)
     }
 }
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/70.tpl');
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

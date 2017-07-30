@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team.
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 // File: create_universe/60.php
 
 // Determine current step, next step, and number of steps
-$create_universe_info = Tki\BigBang::findStep(__FILE__);
+$step_finder = new Tki\BigBang;
+$create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
 $variables['templateset']            = $tkireg->default_template;
@@ -170,7 +171,7 @@ $local_table_timer->start(); // Start benchmarking
 $sql = "UPDATE ::prefix::universe SET zone_id='2' WHERE sector_id<=:fedsecs";
 
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':fedsecs', $variables['fedsecs']);
+$stmt->bindParam(':fedsecs', $variables['fedsecs'], \PDO::PARAM_INT);
 $update = $stmt->execute();
 
 $variables['create_fed_sectors_results']['result'] = Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
@@ -203,7 +204,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['spp']);
+$stmt->bindParam(':limit', $variables['spp'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -272,7 +273,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['oep']);
+$stmt->bindParam(':limit', $variables['oep'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -340,7 +341,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['ogp']);
+$stmt->bindParam(':limit', $variables['ogp'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -408,7 +409,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['gop']);
+$stmt->bindParam(':limit', $variables['gop'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -477,7 +478,7 @@ $local_table_timer->start(); // Start benchmarking
 
 $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :limit";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':limit', $variables['enp']);
+$stmt->bindParam(':limit', $variables['enp'], \PDO::PARAM_INT);
 $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
@@ -534,8 +535,11 @@ for ($t = 0; $t < $z; $t++)
     }
 }
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/60.tpl');
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

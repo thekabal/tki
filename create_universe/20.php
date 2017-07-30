@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team.
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 // File: create_universe/20.php
 
 // Determine current step, next step, and number of steps
-$create_universe_info = Tki\BigBang::findStep(__FILE__);
+$step_finder = new Tki\BigBang;
+$create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
 $variables['templateset']  = $tkireg->default_template;
@@ -43,8 +44,12 @@ $variables['autorun']      = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/20.tpl');
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team.
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 // File: create_universe/0.php
 
 // Determine current step, next step, and number of steps
-$create_universe_info = Tki\BigBang::findStep(__FILE__);
+$step_finder = new Tki\BigBang;
+$create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
 $variables['templateset'] = $tkireg->default_template;
@@ -45,7 +46,7 @@ foreach ($lang_dir as $file_info) // Get a list of the files in the languages di
 
         if ($result !== false)
         {
-            $result->bindParam(':section', $lang_file);
+            $result->bindParam(':section', $lang_file, \PDO::PARAM_STR);
             $final_result = $result->execute();
             Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $row = $result->fetch();
@@ -80,8 +81,12 @@ $variables['lang_list']['size'] = $i - 1;
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'options', 'news'));
 
-Tki\Header::display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+
+$header = new Tki\Header;
+$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/0.tpl');
-Tki\Footer::display($pdo_db, $lang, $tkireg, $template);
+
+$footer = new Tki\Footer;
+$footer->display($pdo_db, $lang, $tkireg, $template);

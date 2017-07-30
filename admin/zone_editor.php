@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -29,7 +29,7 @@ if (!array_key_exists('zone', $_POST))
 if ($_POST['zone'] === null)
 {
     $res = $db->Execute("SELECT zone_id, zone_name FROM {$db->prefix}zones ORDER BY zone_name");
-    Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
         $zones[] = $res->fields;
@@ -46,7 +46,7 @@ else
     {
         $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':email', $_POST['zone']);
+        $stmt->bindParam(':zone_id', $_POST['zone'], \PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -92,8 +92,8 @@ else
         $_zone_attack = empty($zone_attack) ? "N" : "Y";
         $_zone_warpedit = empty($zone_warpedit) ? "N" : "Y";
         $_zone_planet = empty($zone_planet) ? "N" : "Y";
-        $resx = $db->Execute("UPDATE {$db->prefix}zones SET zone_name = ?, allow_beacon = ? , allow_attack= ?  , allow_warpedit = ? , allow_planet = ?, max_hull = ? WHERE zone_id = ?;", array($zone_name, $_zone_beacon , $_zone_attack, $_zone_warpedit, $_zone_planet, $zone_hull, $_POST['zone']));
-        Tki\Db::LogDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+        $resx = $db->Execute("UPDATE {$db->prefix}zones SET zone_name = ?, allow_beacon = ? , allow_attack= ?  , allow_warpedit = ? , allow_planet = ?, max_hull = ? WHERE zone_id = ?;", array($zone_name, $_zone_beacon, $_zone_attack, $_zone_warpedit, $_zone_planet, $zone_hull, $_POST['zone']));
+        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $button_main = false;
     }
 }
