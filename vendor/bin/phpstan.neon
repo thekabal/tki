@@ -1,0 +1,9 @@
+parameters:
+    excludes_analyse:
+        - %rootDir%/../../../../tki/vendor/*
+        - %rootDir%/../../../../tki/templates/*
+        - %rootDir%/../../../../tki/classes/Db.php
+    ignoreErrors:
+        - '#Access to an undefined property#'
+        - '#Undefined variable#'
+        - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
