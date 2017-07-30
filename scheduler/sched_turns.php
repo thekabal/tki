@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -16,12 +16,18 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: sched_turns.php
+//
+// FUTURE: PDO, debug/output, error handling (what happens when run too often)
 
-echo "<strong>TURNS</strong><br><br>";
-echo "Adding turns...";
+// Database driven language entries
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+echo "<strong>" . $langvars['l_sched_turns_title'] . "</strong><br><br>";
+echo $langvars['l_sched_turns_note'];
+
 $resa = $db->Execute("UPDATE {$db->prefix}ships SET turns = LEAST (turns + ($tkireg->turns_per_tick * $multiplier), $tkireg->max_turns) WHERE turns < $tkireg->max_turns");
 //$resa = $db->Execute("UPDATE {$db->prefix}ships SET turns = LEAST (turns + (? * ?), ?) WHERE turns < ?", array($tkireg->turns_per_tick, $multiplier, $tkireg->max_turns, $tkireg->max_turns));
-$debug = Tki\Db::LogDbErrors($pdo_db, $resa, __LINE__, __FILE__);
+$debug = Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
 \Tki\Scheduler::isQueryOk($pdo_db, $debug);
 echo "<br>";
 $multiplier = 0;

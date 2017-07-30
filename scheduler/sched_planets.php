@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -16,15 +16,20 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // File: sched_planets.php
+//
+// FUTURE: PDO, better debugging, better output formatting
 
-echo "<strong>PLANETS</strong><p>";
+// Database driven language entries
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+echo "<strong>" . $langvars['l_sched_planets_title'] . "</strong><p>";
 
 $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner > 0");
-Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 // We are now using transactions to off load the SQL stuff in full to the Database Server.
 
 $result = $db->Execute("START TRANSACTION");
-Tki\Db::LogDbErrors($pdo_db, $result, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 while (!$res->EOF)
 {
     $row = $res->fields;
@@ -38,7 +43,7 @@ while (!$res->EOF)
         $starvation = floor($row['colonists'] * $starvation_death_rate);
         if ($row['owner'] && $starvation >= 1)
         {
-            Tki\PlayerLog::WriteLog($pdo_db, $row['owner'], LOG_STARVATION, "$row[sector_id]|$starvation");
+            Tki\PlayerLog::writeLog($pdo_db, $row['owner'], \Tki\LogEnums::STARVATION, "$row[sector_id]|$starvation");
         }
     }
     else
@@ -72,16 +77,16 @@ while (!$res->EOF)
 
     $credits_production = floor($production * $credits_prate * (100.0 - $total_percent) / 100.0);
     $ret = $db->Execute("UPDATE {$db->prefix}planets SET organics = organics + ?, ore = ore + ?, goods = goods + ?, energy = energy + ?, colonists = colonists + ? - ?, torps = torps + ?, fighters = fighters + ?, credits = credits * ? + ? WHERE planet_id = ? LIMIT 1; ", array($organics_production, $ore_production, $goods_production, $energy_production, $reproduction, $starvation, $torp_production, $fighter_production, $interest_rate, $credits_production, $row['planet_id']));
-    Tki\Db::LogDbErrors($pdo_db, $ret, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $ret, __LINE__, __FILE__);
     $res->MoveNext();
 }
 
 $ret = $db->Execute("COMMIT");
-Tki\Db::LogDbErrors($pdo_db, $ret, __LINE__, __FILE__);
+Tki\Db::logDbErrors($pdo_db, $ret, __LINE__, __FILE__);
 if ($tkireg->sched_planet_valid_credits)
 {
     $ret = $db->Execute("UPDATE {$db->prefix}planets SET credits = ? WHERE credits > ? AND base = 'N';", array($tkireg->max_credits_without_base, $tkireg->max_credits_without_base));
-    Tki\Db::LogDbErrors($pdo_db, $ret, __LINE__, __FILE__);
+    Tki\Db::logDbErrors($pdo_db, $ret, __LINE__, __FILE__);
 }
 
-echo "Planets updated.<br><br>";
+echo $langvars['l_sched_planets_updated'] . ".<br><br>";

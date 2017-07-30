@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -17,13 +17,13 @@
 //
 // File: sched_kabal.php
 //
-// FUTURE: SQL bind varibles
-
-// Kabal turn updates
-echo "<br><strong>Kabal TURNS</strong><br><br>";
+// FUTURE: SQL bind varibles, PDO, debugging, functional(!)
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('sched_kabal', 'common', 'global_includes', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+// Kabal turn updates
+echo "<br><strong>" . $langvars['l_sched_kabal_title'] . "</strong><br><br>";
 
 // Make Kabal selection
 $furcount = 0;
@@ -38,7 +38,7 @@ $furcount3a = 0;
 $furcount3h = 0;
 
 /*
-//Tki\Db::LogDbErrors($pdo_db, $res, __LINE__, __FILE__);
+//Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email=kabal_id and active='Y' and ship_destroyed='N' ORDER BY ship_id");
 while (($res instanceof ADORecordSet) && ($res != false))
 //while (!$res->EOF)
@@ -46,7 +46,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
     $kabalisdead = 0;
     $playerinfo = $res->fields;
     // Regenerate / Buy stats
-    Tki\Kabal::kabalRegen($pdo_db, $playerinfo, $kabal_unemployment, $tkireg);
+    Tki\Kabal::regen($pdo_db, $playerinfo, $kabal_unemployment, $tkireg);
 
     // Run through orders
     $furcount++;
@@ -59,7 +59,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             // Find a target in my sector, not myself, not on a planet
 
             $reso0 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? AND email! = ? AND email NOT LIKE '%@kabal' AND planet_id = 0 AND ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
-            Tki\Db::LogDbErrors($pdo_db, $res0, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $res0, __LINE__, __FILE__);
             if (!$reso0->EOF)
             {
                 $rowo0 = $reso0->fields;
@@ -73,7 +73,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     if ($playerinfo['ship_fighters'] > $rowo0['ship_fighters'])
                     {
                         $furcount0a++;
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo0[character_name]");
+                        Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo0[character_name]");
                         Tki\KabalTo::ship($pdo_db, $db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($kabalisdead > 0)
                         {
@@ -85,7 +85,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        // O = 0 & Aggression = 2 attack always
                 {
                     $furcount0a++;
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo0[character_name]");
+                    Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo0[character_name]");
                     Tki\KabalTo::ship($pdo_db, $db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
                     if ($kabalisdead > 0)
                     {
@@ -100,7 +100,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\Kabal::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -108,7 +108,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             }
             // Find a target in my sector, not myself
             $reso1 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
-            Tki\Db::LogDbErrors($pdo_db, $reso1, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $reso1, __LINE__, __FILE__);
             if (!$reso1->EOF)
             {
                 $rowo1 = $reso1->fields;
@@ -122,7 +122,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     if ($playerinfo['ship_fighters'] > $rowo1['ship_fighters'] && $rowo1['planet_id'] == 0)
                     {
                         $furcount1a++;
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo1[character_name]");
+                        Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo1[character_name]");
                         Tki\KabalTo::ship($pdo_db, $db, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($kabalisdead > 0)
                         {
@@ -134,7 +134,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        //  O = 1 & AGRESSION = 2 ATTACK ALLWAYS
                 {
                     $furcount1a++;
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo1[character_name]");
+                    Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo1[character_name]");
                     if (!$rowo1['planet_id'] == 0)
                     {              // Is on planet
                         Tki\KabalTo::planet($pdo_db, $db, $rowo1['planet_id'], $tkireg, $playerinfo, $langvars);
@@ -158,7 +158,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\Kabal::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -166,11 +166,11 @@ while (($res instanceof ADORecordSet) && ($res != false))
             }
 
             // NOW TRADE BEFORE WE DO ANY AGGRESSION CHECKS
-            Tki\Kabal::kabalTrade($pdo_db, $playerinfo, $tkireg);
+            Tki\Kabal::trade($pdo_db, $playerinfo, $tkireg);
             // FIND A TARGET
             // IN MY SECTOR, NOT MYSELF
             $reso2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
-            Tki\Db::LogDbErrors($pdo_db, $reso2, __LINE__, __FILE__);
+            Tki\Db::logDbErrors($pdo_db, $reso2, __LINE__, __FILE__);
             if (!$reso2->EOF)
             {
                 $rowo2 = $reso2->fields;
@@ -184,7 +184,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     if ($playerinfo['ship_fighters'] > $rowo2['ship_fighters'] && $rowo2['planet_id'] == 0)
                     {
                         $furcount2a++;
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo2[character_name]");
+                        Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo2[character_name]");
                         Tki\KabalTo::ship($pdo_db, $db, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($kabalisdead > 0)
                         {
@@ -196,7 +196,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 elseif ($playerinfo['aggression'] == 2)        // O = 2 & AGRESSION = 2 ATTACK ALLWAYS
                 {
                     $furcount2a++;
-                    Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo2[character_name]");
+                    Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo2[character_name]");
                     if (!$rowo2['planet_id'] == 0)
                     {              // IS ON PLANET
                         Tki\KabalTo::planet($pdo_db, $db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
@@ -225,7 +225,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             if ($hunt == 0)
             {
                 $furcount3h++;
-                Tki\Kabal::kabalHunter($pdo_db, $db, $playerinfo, $kabalisdead, $langvars, $tkireg);
+                Tki\Kabal::goHunt($pdo_db, $db, $playerinfo, $kabalisdead, $langvars, $tkireg);
                 if ($kabalisdead > 0)
                 {
                     $res->MoveNext();
@@ -235,7 +235,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Tki\Kabal::kabalMove($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+                Tki\Kabal::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
                 if ($kabalisdead > 0)
                 {
                     $res->MoveNext();
@@ -245,7 +245,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 // FIND A TARGET
                 // IN MY SECTOR, NOT MYSELF
                 $reso3 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
-                Tki\Db::LogDbErrors($pdo_db, $reso3, __LINE__, __FILE__);
+                Tki\Db::logDbErrors($pdo_db, $reso3, __LINE__, __FILE__);
                 if (!$reso3->EOF)
                 {
                     $rowo3 = $reso3->fields;
@@ -259,7 +259,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         if ($playerinfo['ship_fighters'] > $rowo3['ship_fighters'] && $rowo3['planet_id'] == 0)
                         {
                             $furcount3a++;
-                            Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo3[character_name]");
+                            Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo3[character_name]");
                             Tki\KabalTo::ship($pdo_db, $db, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
                             if ($kabalisdead > 0)
                             {
@@ -271,7 +271,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     elseif ($playerinfo['aggression'] == 2)        // O = 3 & AGRESSION = 2 ATTACK ALLWAYS
                     {
                         $furcount3a++;
-                        Tki\PlayerLog::WriteLog($pdo_db, $playerinfo['ship_id'], LOG_KABAL_ATTACK, "$rowo3[character_name]");
+                        Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo3[character_name]");
                         if (!$rowo3['planet_id'] == 0)
                         {              // IS ON PLANET
                             Tki\KabalTo::planet($pdo_db, $db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
@@ -296,12 +296,30 @@ while (($res instanceof ADORecordSet) && ($res != false))
 $res->_close();
 */
 $furnonmove = $furcount - ($furcount0 + $furcount1 + $furcount2 + $furcount3);
-echo "Counted $furcount Kabal players that are ACTIVE with working ships.<br>";
-echo "$furnonmove Kabal players did not do anything this round. <br>";
-echo "$furcount0 Kabal players had SENTINEL orders of which $furcount0a launched attacks. <br>";
-echo "$furcount1 Kabal players had ROAM orders of which $furcount1a launched attacks. <br>";
-echo "$furcount2 Kabal players had ROAM AND TRADE orders of which $furcount2a launched attacks. <br>";
-echo "$furcount3 Kabal players had ROAM AND HUNT orders of which $furcount3a launched attacks and $furcount3h went hunting. <br>";
-echo "Kabal TURNS COMPLETE. <br>";
+
+$langvars['l_sched_kabal_count'] = str_replace("[count]", $furcount, $langvars['l_sched_kabal_count']);
+echo $langvars['l_sched_kabal_count'] . ".<br>";
+
+$langvars['l_sched_kabal_inactive'] = str_replace("[count]", $furnonmove, $langvars['l_sched_kabal_inactive']);
+echo $langvars['l_sched_kabal_inactive'] . ".<br>";
+
+$langvars['l_sched_kabal_sentinel'] = str_replace("[count]", $furcount0, $langvars['l_sched_kabal_sentinel']);
+$langvars['l_sched_kabal_sentinel'] = str_replace("[count2]", $furcount0a, $langvars['l_sched_kabal_sentinel']);
+echo $langvars['l_sched_kabal_sentinel'] . ".<br>";
+
+$langvars['l_sched_kabal_roam'] = str_replace("[count]", $furcount1, $langvars['l_sched_kabal_roam']);
+$langvars['l_sched_kabal_roam'] = str_replace("[count2]", $furcount1a, $langvars['l_sched_kabal_roam']);
+echo $langvars['l_sched_kabal_roam'] . ".<br>";
+
+$langvars['l_sched_kabal_roam_trade'] = str_replace("[count]", $furcount2, $langvars['l_sched_kabal_roam_trade']);
+$langvars['l_sched_kabal_roam_trade'] = str_replace("[count2]", $furcount2a, $langvars['l_sched_kabal_roam_trade']);
+echo $langvars['l_sched_kabal_roam_trade'] . ".<br>";
+
+$langvars['l_sched_kabal_roam_hunt'] = str_replace("[count]", $furcount3, $langvars['l_sched_kabal_roam_hunt']);
+$langvars['l_sched_kabal_roam_hunt'] = str_replace("[count2]", $furcount3a, $langvars['l_sched_kabal_roam_hunt']);
+$langvars['l_sched_kabal_roam_hunt'] = str_replace("[count3]", $furcount3h, $langvars['l_sched_kabal_roam_hunt']);
+echo $langvars['l_sched_kabal_roam_hunt'] . ".<br>";
+
+echo $langvars['l_sched_kabal_done'] . ".<br>";
+
 echo "<br>";
-// END OF Kabal TURNS

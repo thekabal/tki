@@ -32,7 +32,18 @@
 {else}
     <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/main.css.php">
 {/if}
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu">
+    <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script type="text/javascript">
+     WebFontConfig = { google: { families: [ 'Ubuntu' ] }};
+     (function() {
+     var wf = document.createElement('script');
+     wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+       '://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js';
+     wf.type = 'text/javascript';
+     wf.async = 'true';
+     var s = document.getElementsByTagName('script')[0];
+     s.parentNode.insertBefore(wf, s);})();
+    </script>
 {if isset($variables['title'])}
     <title>{block name=title}{$variables['title']}{/block}</title>
 {/if}

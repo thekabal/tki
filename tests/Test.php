@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -20,11 +19,9 @@ declare(strict_types = 1);
 
 namespace Tki;
 
-use \PHPUnit\Framework\TestCase;
-
 class Test extends \PHPUnit\Framework\TestCase
 {
-    public function testOnePlusOne()
+    public function testOnePlusOne(): void
     {
         $this->assertEquals(1 + 1, 2);
     }
