@@ -1,5 +1,4 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -22,6 +21,7 @@ namespace Tki\Scheduler; // Domain Entity organization pattern, Players objects
 
 class SchedulerGateway // Gateway for SQL calls related to Players
 {
+    /** @var \PDO **/
     protected $pdo_db; // This will hold a protected version of the pdo_db variable
 
     public function __construct(\PDO $pdo_db) // Create the this->pdo_db object
