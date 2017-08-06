@@ -33,7 +33,7 @@ class File
         // We need a way to deal with errors in parse_ini_file here #fixit #future
 
         $status_array = array();
-        $j = 0;
+        $array_item = 0;
         $final_result = null;
         $pdo_db->beginTransaction(); // We enclose the inserts in a transaction as it is roughly 30 times faster
 
@@ -85,21 +85,18 @@ class File
                 }
 
                 $result = $stmt->execute();
-                $status_array[$j++] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+                $status_array[$array_item++] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             }
         }
 
-        for ($k = 1; $k < $j; $k++)
+        for ($k = 1; $k < $array_item; $k++)
         {
             // Status array will continue the results of individual executes.
             // It should be === true unless something went horribly wrong.
+            $final_result = true;
             if ($status_array[$k] !== true)
             {
                 $final_result = false;
-            }
-            else
-            {
-                $final_result = true;
             }
         }
 
