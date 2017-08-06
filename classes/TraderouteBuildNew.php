@@ -51,15 +51,13 @@ class TraderouteBuildNew
 
         echo "<p><font size=3 color=blue><strong>";
 
+        $tmp_output = $langvars['l_tdr_editinga'] . " ";
         if ($editroute === null)
         {
-            echo $langvars['l_tdr_createnew'];
-        }
-        else
-        {
-            echo $langvars['l_tdr_editinga'] . " ";
+            $tmp_output = $langvars['l_tdr_createnew'];
         }
 
+        echo $tmp_output;
         echo $langvars['l_tdr_traderoute'] . "</strong></font><p>";
 
         // Get Planet info Team and Personal
