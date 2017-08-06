@@ -351,6 +351,7 @@ class KabalToShip
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
                 $free_holds = \Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $salv_goods = 0;
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what we can carry
                     $salv_goods = $free_goods;
@@ -361,11 +362,8 @@ class KabalToShip
                     $salv_goods = $free_holds;
                     $free_holds = 0;
                 }
-                else
-                {
-                    $salv_goods = 0;
-                }
 
+                $salv_ore = 0;
                 if ($free_holds > $free_ore)
                 {
                     $salv_ore = $free_ore;
@@ -374,11 +372,8 @@ class KabalToShip
                 {
                     $salv_ore = $free_holds;
                 }
-                else
-                {
-                    $salv_ore = 0;
-                }
 
+                $salv_organics = 0;
                 if ($free_holds > $free_organics)
                 {
                     $salv_organics = $free_organics;
@@ -386,10 +381,6 @@ class KabalToShip
                 elseif ($free_holds > 0)
                 {
                     $salv_organics = $free_holds;
-                }
-                else
-                {
-                    $salv_organics = 0;
                 }
 
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull'])) + round(pow($tkireg->upgrade_factor, $targetinfo['engines'])) + round(pow($tkireg->upgrade_factor, $targetinfo['power'])) + round(pow($tkireg->upgrade_factor, $targetinfo['computer'])) + round(pow($tkireg->upgrade_factor, $targetinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $targetinfo['beams'])) + round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $targetinfo['shields'])) + round(pow($tkireg->upgrade_factor, $targetinfo['armor'])) + round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
@@ -438,6 +429,7 @@ class KabalToShip
                 $free_organics = round($playerinfo['ship_organics'] / 2);
                 $free_goods = round($playerinfo['ship_goods'] / 2);
                 $free_holds = \Tki\CalcLevels::abstractLevels($targetinfo['hull'], $tkireg) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
+                $salv_goods = 0;
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what target can carry
                     $salv_goods = $free_goods;
@@ -448,11 +440,8 @@ class KabalToShip
                     $salv_goods = $free_holds;
                     $free_holds = 0;
                 }
-                else
-                {
-                    $salv_goods = 0;
-                }
 
+                $salv_ore = 0;
                 if ($free_holds > $free_ore)
                 {
                     $salv_ore = $free_ore;
@@ -463,11 +452,8 @@ class KabalToShip
                     $salv_ore = $free_holds;
                     $free_holds = 0;
                 }
-                else
-                {
-                    $salv_ore = 0;
-                }
 
+                $salv_organics = 0;
                 if ($free_holds > $free_organics)
                 {
                     $salv_organics = $free_organics;
@@ -475,10 +461,6 @@ class KabalToShip
                 elseif ($free_holds > 0)
                 {
                     $salv_organics = $free_holds;
-                }
-                else
-                {
-                    $salv_organics = 0;
                 }
 
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
