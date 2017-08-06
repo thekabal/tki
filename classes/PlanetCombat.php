@@ -426,13 +426,10 @@ class PlanetCombat
             $ship_salvage_rate = 0;
             $ship_salvage = 0;
             $planetrating = $ownerinfo['hull'] + $ownerinfo['engines'] + $ownerinfo['computer'] + $ownerinfo['beams'] + $ownerinfo['torp_launchers'] + $ownerinfo['shields'] + $ownerinfo['armor'];
+            $rating_change = -100;
             if ($ownerinfo['rating'] != 0)
             {
                 $rating_change = ($ownerinfo['rating'] / abs($ownerinfo['rating'])) * $planetrating * 10;
-            }
-            else
-            {
-                $rating_change = -100;
             }
 
             echo "<center><br><strong><font size='+2'>" . $langvars['l_cmb_finalcombatstats'] . "</font></strong><br><br>";

@@ -194,13 +194,10 @@ class Traderoute
         }
 
         // Warp or real space and generate distance
+        $dist = \Tki\TraderouteDistance::calc($pdo_db, 'P', 'P', $sourceport, $destport, $traderoute['circuit'], $playerinfo, $tkireg);
         if ($traderoute['move_type'] == 'W')
         {
             $dist = \Tki\TraderouteDistance::warpCalc($pdo_db, $db, $lang, $langvars, $tkireg, $template, $traderoute, $source, $dest);
-        }
-        else
-        {
-            $dist = \Tki\TraderouteDistance::calc($pdo_db, 'P', 'P', $sourceport, $destport, $traderoute['circuit'], $playerinfo, $tkireg);
         }
 
         // Check if player has enough turns
@@ -465,14 +462,11 @@ class Traderoute
                 if ($source['port_type'] != 'ore')
                 {
                     $tkireg->ore_price = $tkireg->ore_price + $$tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_buy = $playerinfo['ship_ore'];
                     if ($source['port_ore'] - $playerinfo['ship_ore'] < 0)
                     {
                         $ore_buy = $source['port_ore'];
                         $portfull = 1;
-                    }
-                    else
-                    {
-                        $ore_buy = $playerinfo['ship_ore'];
                     }
 
                     $sourcecost += $ore_buy * $tkireg->ore_price;
@@ -495,14 +489,11 @@ class Traderoute
                 if ($source['port_type'] != 'goods')
                 {
                     $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $source['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+                    $goods_buy = $playerinfo['ship_goods'];
                     if ($source['port_goods'] - $playerinfo['ship_goods'] < 0)
                     {
                         $goods_buy = $source['port_goods'];
                         $portfull = 1;
-                    }
-                    else
-                    {
-                        $goods_buy = $playerinfo['ship_goods'];
                     }
 
                     $sourcecost += $goods_buy * $tkireg->goods_price;
@@ -525,14 +516,11 @@ class Traderoute
                 if ($source['port_type'] != 'organics')
                 {
                     $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $source['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+                    $organics_buy = $playerinfo['ship_organics'];
                     if ($source['port_organics'] - $playerinfo['ship_organics'] < 0)
                     {
                         $organics_buy = $source['port_organics'];
                         $portfull = 1;
-                    }
-                    else
-                    {
-                        $organics_buy = $playerinfo['ship_organics'];
                     }
 
                     $sourcecost += $organics_buy * $tkireg->organics_price;
@@ -555,14 +543,11 @@ class Traderoute
                 if ($source['port_type'] != 'energy' && $playerinfo['trade_energy'] == 'Y')
                 {
                     $tkireg->energy_price = $tkireg->energy_price + $tkireg->energy_delta * $source['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
+                    $energy_buy = $playerinfo['ship_energy'];
                     if ($source['port_energy'] - $playerinfo['ship_energy'] < 0)
                     {
                         $energy_buy = $source['port_energy'];
                         $portfull = 1;
-                    }
-                    else
-                    {
-                        $energy_buy = $playerinfo['ship_energy'];
                     }
 
                     $sourcecost += $energy_buy * $tkireg->energy_price;
@@ -773,13 +758,10 @@ class Traderoute
                 {
                     if ($source['goods'] > 0 && $free_holds > 0 && $dest['port_type'] != 'goods')
                     {
+                        $goods_buy = $source['goods'];
                         if ($source['goods'] > $free_holds)
                         {
                             $goods_buy = $free_holds;
-                        }
-                        else
-                        {
-                            $goods_buy = $source['goods'];
                         }
 
                         $free_holds -= $goods_buy;
@@ -793,13 +775,10 @@ class Traderoute
 
                     if ($source['ore'] > 0 && $free_holds > 0 && $dest['port_type'] != 'ore')
                     {
+                        $ore_buy = $source['ore'];
                         if ($source['ore'] > $free_holds)
                         {
                             $ore_buy = $free_holds;
-                        }
-                        else
-                        {
-                            $ore_buy = $source['ore'];
                         }
 
                         $free_holds -= $ore_buy;
@@ -813,13 +792,10 @@ class Traderoute
 
                     if ($source['organics'] > 0 && $free_holds > 0 && $dest['port_type'] != 'organics')
                     {
+                        $organics_buy = $source['organics'];
                         if ($source['organics'] > $free_holds)
                         {
                             $organics_buy = $free_holds;
-                        }
-                        else
-                        {
-                            $organics_buy = $source['organics'];
                         }
 
                         $free_holds -= $organics_buy;
@@ -863,13 +839,10 @@ class Traderoute
             {
                 if ($source['colonists'] > 0 && $free_holds > 0 && $playerinfo['trade_colonists'] == 'Y')
                 {
+                    $colonists_buy = $source['colonists'];
                     if ($source['colonists'] > $free_holds)
                     {
                         $colonists_buy = $free_holds;
-                    }
-                    else
-                    {
-                        $colonists_buy = $source['colonists'];
                     }
 
                     $free_holds -= $colonists_buy;
@@ -884,13 +857,10 @@ class Traderoute
                 $free_torps = \Tki\CalcLevels::abstractLevels($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
                 if ($source['torps'] > 0 && $free_torps > 0 && $playerinfo['trade_torps'] == 'Y')
                 {
+                    $torps_buy = $source['torps'];
                     if ($source['torps'] > $free_torps)
                     {
                         $torps_buy = $free_torps;
-                    }
-                    else
-                    {
-                        $torps_buy = $source['torps'];
                     }
 
                     $free_torps -= $torps_buy;
@@ -905,13 +875,10 @@ class Traderoute
                 $free_fighters = \Tki\CalcLevels::abstractLevels($playerinfo['computer'], $tkireg) - $playerinfo['ship_fighters'];
                 if ($source['fighters'] > 0 && $free_fighters > 0 && $playerinfo['trade_fighters'] == 'Y')
                 {
+                    $fighters_buy = $source['fighters'];
                     if ($source['fighters'] > $free_fighters)
                     {
                         $fighters_buy = $free_fighters;
-                    }
-                    else
-                    {
-                        $fighters_buy = $source['fighters'];
                     }
 
                     $free_fighters -= $fighters_buy;
@@ -963,14 +930,11 @@ class Traderoute
                 if ($dest['port_type'] != 'ore')
                 {
                     $tkireg->ore_price = $tkireg->ore_price + $$tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_buy = $playerinfo['ship_ore'];
                     if ($dest['port_ore'] - $playerinfo['ship_ore'] < 0)
                     {
                         $ore_buy = $dest['port_ore'];
                         $portfull = 1;
-                    }
-                    else
-                    {
-                        $ore_buy = $playerinfo['ship_ore'];
                     }
 
                     $destcost += $ore_buy * $tkireg->ore_price;
@@ -994,14 +958,11 @@ class Traderoute
                 if ($dest['port_type'] != 'goods')
                 {
                     $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $dest['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+                    $goods_buy = $playerinfo['ship_goods'];
                     if ($dest['port_goods'] - $playerinfo['ship_goods'] < 0)
                     {
                         $goods_buy = $dest['port_goods'];
                         $portfull = 1;
-                    }
-                    else
-                    {
-                        $goods_buy = $playerinfo['ship_goods'];
                     }
 
                     $destcost += $goods_buy * $tkireg->goods_price;
@@ -1024,14 +985,11 @@ class Traderoute
                 if ($dest['port_type'] != 'organics')
                 {
                     $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $dest['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+                    $organics_buy = $playerinfo['ship_organics'];
                     if ($dest['port_organics'] - $playerinfo['ship_organics'] < 0)
                     {
                         $organics_buy = $dest['port_organics'];
                         $portfull = 1;
-                    }
-                    else
-                    {
-                        $organics_buy = $playerinfo['ship_organics'];
                     }
 
                     $destcost += $organics_buy * $tkireg->organics_price;
@@ -1054,14 +1012,11 @@ class Traderoute
                 if ($dest['port_type'] != 'energy' && $playerinfo['trade_energy'] == 'Y')
                 {
                     $tkireg->energy_price = $tkireg->energy_price + $tkireg->energy_delta * $dest['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
+                    $energy_buy = $playerinfo['ship_energy'];
                     if ($dest['port_energy'] - $playerinfo['ship_energy'] < 0)
                     {
                         $energy_buy = $dest['port_energy'];
                         $portfull = 1;
-                    }
-                    else
-                    {
-                        $energy_buy = $playerinfo['ship_energy'];
                     }
 
                     $destcost += $energy_buy * $tkireg->energy_price;
@@ -1272,6 +1227,7 @@ class Traderoute
 
                 $setcol = 0;
 
+                $col_dump = 0;
                 if ($playerinfo['trade_colonists'] == 'Y')
                 {
                     $colonists_buy += $playerinfo['ship_colonists'];
@@ -1288,10 +1244,6 @@ class Traderoute
                         }
                     }
                 }
-                else
-                {
-                    $col_dump = 0;
-                }
 
                 if ($colonists_buy != 0)
                 {
@@ -1305,14 +1257,11 @@ class Traderoute
                     }
                 }
 
+                $fight_dump = 0;
                 if ($playerinfo['trade_fighters'] == 'Y')
                 {
                     $fighters_buy += $playerinfo['ship_fighters'];
                     $fight_dump = $playerinfo['ship_fighters'];
-                }
-                else
-                {
-                    $fight_dump = 0;
                 }
 
                 if ($fighters_buy != 0)
@@ -1320,14 +1269,11 @@ class Traderoute
                     echo $langvars['l_tdr_dumped'] . " " . number_format($fighters_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_fighters'] . "<br>";
                 }
 
+                $torps_dump = 0;
                 if ($playerinfo['trade_torps'] == 'Y')
                 {
                     $torps_buy += $playerinfo['torps'];
                     $torps_dump = $playerinfo['torps'];
-                }
-                else
-                {
-                    $torps_dump = 0;
                 }
 
                 if ($torps_buy != 0)
@@ -1354,22 +1300,16 @@ class Traderoute
                         $col_dump = $playerinfo['ship_colonists'];
                     }
 
+                    $fight_dump = $playerinfo['ship_fighters'];
                     if ($playerinfo['trade_fighters'] == 'Y')
                     {
                         $fight_dump = 0;
                     }
-                    else
-                    {
-                        $fight_dump = $playerinfo['ship_fighters'];
-                    }
 
+                    $torps_dump = $playerinfo['torps'];
                     if ($playerinfo['trade_torps'] == 'Y')
                     {
                         $torps_dump = 0;
-                    }
-                    else
-                    {
-                        $torps_dump = $playerinfo['torps'];
                     }
                 }
 
@@ -1455,13 +1395,10 @@ class Traderoute
         $total_profit = $sourcecost + $destcost;
         \Tki\TraderouteResults::displayTotals($pdo_db, $lang, $total_profit);
 
+        $newsec = $sourceport['sector_id'];
         if ($traderoute['circuit'] == '1')
         {
             $newsec = $destport['sector_id'];
-        }
-        else
-        {
-            $newsec = $sourceport['sector_id'];
         }
 
         $rest = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - ?, credits = credits + ?, turns_used = turns_used + ?, sector = ? WHERE ship_id = ?;", array($dist['triptime'], $total_profit, $dist['triptime'], $newsec, $playerinfo['ship_id']));

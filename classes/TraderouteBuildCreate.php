@@ -227,13 +227,10 @@ class TraderouteBuildCreate
             $dest_type = 'C';
         }
 
+        $mtype = 'W';
         if ($move_type == 'realspace')
         {
             $mtype = 'R';
-        }
-        else
-        {
-            $mtype = 'W';
         }
 
         if (empty($editing))
