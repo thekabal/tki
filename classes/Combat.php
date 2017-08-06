@@ -420,6 +420,7 @@ class Combat
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
                 $free_holds = \Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $salv_goods = 0;
                 if ($free_holds > $free_goods)
                 {
                     $salv_goods = $free_goods;
@@ -430,11 +431,8 @@ class Combat
                     $salv_goods = $free_holds;
                     $free_holds = 0;
                 }
-                else
-                {
-                    $salv_goods = 0;
-                }
 
+                $salv_ore = 0;
                 if ($free_holds > $free_ore)
                 {
                     $salv_ore = $free_ore;
@@ -445,11 +443,8 @@ class Combat
                     $salv_ore = $free_holds;
                     $free_holds = 0;
                 }
-                else
-                {
-                    $salv_ore = 0;
-                }
 
+                $salv_organics = 0;
                 if ($free_holds > $free_organics)
                 {
                     $salv_organics = $free_organics;
@@ -457,10 +452,6 @@ class Combat
                 elseif ($free_holds > 0)
                 {
                     $salv_organics = $free_holds;
-                }
-                else
-                {
-                    $salv_organics = 0;
                 }
 
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull'])) + round(pow($tkireg->upgrade_factor, $targetinfo['engines'])) + round(pow($tkireg->upgrade_factor, $targetinfo['power'])) + round(pow($tkireg->upgrade_factor, $targetinfo['computer'])) + round(pow($tkireg->upgrade_factor, $targetinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $targetinfo['beams'])) + round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $targetinfo['shields'])) + round(pow($tkireg->upgrade_factor, $targetinfo['armor'])) + round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
