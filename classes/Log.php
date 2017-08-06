@@ -59,13 +59,10 @@ class Log
                 $retvalue['text'] = str_replace("[player]", "<font color=white><strong>$name</strong></font>", $texttemp);
                 $retvalue['title'] = $titletemp;
                 $retvalue['title'] = "<font color=red>" . $retvalue['title'] . "</font>";
+                $retvalue['text'] = $retvalue['text'] . $langvars['l_log_nopod'];
                 if ($pod == 'Y')
                 {
                     $retvalue['text'] = $retvalue['text'] . $langvars['l_log_pod'];
-                }
-                else
-                {
-                    $retvalue['text'] = $retvalue['text'] . $langvars['l_log_nopod'];
                 }
                 break;
 
@@ -99,13 +96,10 @@ class Log
                 $retvalue['text'] = str_replace("[sector]", "<font color=white><strong>$sector</strong></font>", $texttemp);
                 $retvalue['title'] = $titletemp;
                 $retvalue['title'] = "<font color=red>" . $retvalue['title'] . "</font>";
+                $retvalue['text'] = $retvalue['text'] . $langvars['l_log_nopod'];
                 if ($pod == 'Y')
                 {
                     $retvalue['text'] = $retvalue['text'] . $langvars['l_log_pod'];
-                }
-                else
-                {
-                    $retvalue['text'] = $retvalue['text'] . $langvars['l_log_nopod'];
                 }
                 break;
 
@@ -114,13 +108,10 @@ class Log
                 $retvalue['text'] = str_replace("[sector]", "<font color=white><strong>$sector</strong></font>", $texttemp);
                 $retvalue['title'] = $titletemp;
                 $retvalue['title'] = "<font color=red>" . $retvalue['title'] . "</font>";
+                $retvalue['text'] = $retvalue['text'] . $langvars['l_log_nopod'];
                 if ($pod == 'Y')
                 {
                     $retvalue['text'] = $retvalue['text'] . $langvars['l_log_pod'];
-                }
-                else
-                {
-                    $retvalue['text'] = $retvalue['text'] . $langvars['l_log_nopod'];
                 }
                 break;
 
