@@ -235,7 +235,7 @@ else
             // change the display of stats also
             $targetenergy = $targetinfo['ship_energy'];
             $playerenergy = $playerinfo['ship_energy'];
-            $targetbeams = Tki\CalcLevels::beams($targetinfo['beams'], $tkireg);
+            $targetbeams = Tki\CalcLevels::abstractLevels($targetinfo['beams'], $tkireg);
             if ($targetbeams > $targetinfo['ship_energy'])
             {
                 $targetbeams = $targetinfo['ship_energy'];
@@ -243,21 +243,21 @@ else
 
             $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
             // Why dont we set targetinfo[ship_energy] to a variable instead?
-            $playerbeams = Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
+            $playerbeams = Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
             if ($playerbeams > $playerinfo['ship_energy'])
             {
                 $playerbeams = $playerinfo['ship_energy'];
             }
 
             $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
-            $playershields = Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
+            $playershields = Tki\CalcLevels::abstractLevels($playerinfo['shields'], $tkireg);
             if ($playershields > $playerinfo['ship_energy'])
             {
                 $playershields = $playerinfo['ship_energy'];
             }
 
             $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playershields;
-            $targetshields = Tki\CalcLevels::shields($targetinfo['shields'], $tkireg);
+            $targetshields = Tki\CalcLevels::abstractLevels($targetinfo['shields'], $tkireg);
             if ($targetshields > $targetinfo['ship_energy'])
             {
                 $targetshields = $targetinfo['ship_energy'];
@@ -672,7 +672,7 @@ else
                     $free_ore = round($targetinfo['ship_ore'] / 2);
                     $free_organics = round($targetinfo['ship_organics'] / 2);
                     $free_goods = round($targetinfo['ship_goods'] / 2);
-                    $free_holds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                    $free_holds = Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                     if ($free_holds > $free_goods)
                     {
                         $salv_goods = $free_goods;
@@ -813,7 +813,7 @@ else
                     $free_ore = round($playerinfo['ship_ore'] / 2);
                     $free_organics = round($playerinfo['ship_organics'] / 2);
                     $free_goods = round($playerinfo['ship_goods'] / 2);
-                    $free_holds = Tki\CalcLevels::holds($targetinfo['hull'], $tkireg) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
+                    $free_holds = Tki\CalcLevels::abstractLevels($targetinfo['hull'], $tkireg) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
                     if ($free_holds > $free_goods)
                     {
                         $salv_goods = $free_goods;

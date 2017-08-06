@@ -68,14 +68,14 @@ class KabalToSecDef
             {
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "ATTACKING SECTOR DEFENSES $all_sector_fighters fighters and $total_sector_mines mines.");
                 $targetfighters = $all_sector_fighters;
-                $playerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
+                $playerbeams = \Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
                 if ($playerbeams > $playerinfo['ship_energy'])
                 {
                     $playerbeams = $playerinfo['ship_energy'];
                 }
 
                 $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
-                $playershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
+                $playershields = \Tki\CalcLevels::abstractLevels($playerinfo['shields'], $tkireg);
                 if ($playershields > $playerinfo['ship_energy'])
                 {
                     $playershields = $playerinfo['ship_energy'];

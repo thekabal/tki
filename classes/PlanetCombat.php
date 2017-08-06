@@ -41,9 +41,9 @@ class PlanetCombat
 
         // Attacking ship calculations
 
-        $attackerbeams      = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
+        $attackerbeams      = \Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
         $attackerfighters   = $playerinfo['ship_fighters'];
-        $attackershields    = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
+        $attackershields    = \Tki\CalcLevels::abstractLevels($playerinfo['shields'], $tkireg);
         $attackertorps      = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
         $attackerarmor      = $playerinfo['armor_pts'];
 

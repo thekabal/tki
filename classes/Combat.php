@@ -39,14 +39,14 @@ class Combat
         " . $langvars['l_cmb_statattackerarmor'] . ": $attackerarmor<br>
         " . $langvars['l_cmb_statattackertorpdamage'] . ": $attackertorpdamage<br>";
 
-        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $tkireg);
+        $targetbeams = \Tki\CalcLevels::abstractLevels($targetinfo['beams'], $tkireg);
         if ($targetbeams > $targetinfo['ship_energy'])
         {
             $targetbeams = $targetinfo['ship_energy'];
         }
 
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
-        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg);
+        $targetshields = \Tki\CalcLevels::abstractLevels($targetinfo['shields'], $tkireg);
         if ($targetshields > $targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
@@ -419,7 +419,7 @@ class Combat
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {
                     $salv_goods = $free_goods;

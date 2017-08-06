@@ -53,8 +53,8 @@ while (!$result->EOF)
     $result->MoveNext();
 }
 
-$freeholds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
-$maxholds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
+$freeholds = Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+$maxholds = Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg);
 $maxenergy = Tki\CalcLevels::energy($playerinfo['power'], $tkireg);
 $admin_log = new Tki\AdminLog;
 if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playerinfo['ship_organics'] < 0 || $playerinfo['ship_goods'] < 0 || $playerinfo['ship_energy'] < 0 || $freeholds < 0)

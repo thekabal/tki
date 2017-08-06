@@ -37,7 +37,7 @@ class KabalRegen
             $gene = "regenerated Energy to $playerinfo[ship_energy] units,";
         }
 
-        $maxarmor = \Tki\CalcLevels::armor($playerinfo['armor'], $tkireg); // Regenerate armor
+        $maxarmor = \Tki\CalcLevels::abstractLevels($playerinfo['armor'], $tkireg); // Regenerate armor
         if ($playerinfo['armor_pts'] <= ($maxarmor - 50))  // Stop regen when within 50 of max
         {
             $playerinfo['armor_pts'] = $playerinfo['armor_pts'] + round(($maxarmor - $playerinfo['armor_pts']) / 2); // Regen half of remaining armor
@@ -45,7 +45,7 @@ class KabalRegen
         }
 
         // Buy fighters & torpedos at 6 credits per fighter
-        $available_fighters = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg) - $playerinfo['ship_fighters'];
+        $available_fighters = \Tki\CalcLevels::abstractLevels($playerinfo['computer'], $tkireg) - $playerinfo['ship_fighters'];
         if (($playerinfo['credits'] > 5) && ($available_fighters > 0))
         {
             if (round($playerinfo['credits'] / 6) > $available_fighters)
@@ -66,7 +66,7 @@ class KabalRegen
         }
 
         // Kabal pay 3 credits per torpedo
-        $available_torpedoes = \Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
+        $available_torpedoes = \Tki\CalcLevels::abstractLevels($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
         if (($playerinfo['credits'] > 2) && ($available_torpedoes > 0))
         {
             if (round($playerinfo['credits'] / 3) > $available_torpedoes)

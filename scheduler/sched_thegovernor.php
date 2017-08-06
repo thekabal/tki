@@ -36,9 +36,9 @@ $admin_log = new Tki\AdminLog;
 while (!$tdres->EOF)
 {
     $playerinfo = $tdres->fields;
-    $ship_fighters_max = Tki\CalcLevels::fighters((int) $playerinfo['computer'], $tkireg);
-    $torps_max = Tki\CalcLevels::torpedoes((int) $playerinfo['torp_launchers'], $tkireg);
-    $armor_pts_max = Tki\CalcLevels::armor((int) $playerinfo['armor'], $tkireg);
+    $ship_fighters_max = Tki\CalcLevels::abstractLevels((int) $playerinfo['computer'], $tkireg);
+    $torps_max = Tki\CalcLevels::abstractLevels((int) $playerinfo['torp_launchers'], $tkireg);
+    $armor_pts_max = Tki\CalcLevels::abstractLevels((int) $playerinfo['armor'], $tkireg);
 
     // Checking Fighters
     if ($playerinfo['ship_fighters'] > $ship_fighters_max)

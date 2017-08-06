@@ -590,9 +590,9 @@ else
                     }
 
                     $maxenergy = Tki\CalcLevels::energy($kaballevel, $tkireg);
-                    $maxarmor = Tki\CalcLevels::armor($kaballevel, $tkireg);
-                    $maxfighters = Tki\CalcLevels::fighters($kaballevel, $tkireg);
-                    $maxtorps = Tki\CalcLevels::torpedoes($kaballevel, $tkireg);
+                    $maxarmor = Tki\CalcLevels::abstractLevels($kaballevel, $tkireg);
+                    $maxfighters = Tki\CalcLevels::abstractLevels($kaballevel, $tkireg);
+                    $maxtorps = Tki\CalcLevels::abstractLevels($kaballevel, $tkireg);
                     $stamp = date("Y-m-d H:i:s");
 
                     // Add kabal record to ships table ... modify if the ships schema changes

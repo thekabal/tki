@@ -235,7 +235,7 @@ else
         }
 
         $fighter_number = round(abs($fighter_number));
-        $fighter_max = Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg) - $playerinfo['ship_fighters'];
+        $fighter_max = Tki\CalcLevels::abstractLevels($playerinfo['computer'], $tkireg) - $playerinfo['ship_fighters'];
         if ($fighter_max < 0)
         {
             $fighter_max = 0;
@@ -253,7 +253,7 @@ else
         }
 
         $torpedo_number = round(abs($torpedo_number));
-        $torpedo_max = Tki\CalcLevels::torpedoes($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
+        $torpedo_max = Tki\CalcLevels::abstractLevels($playerinfo['torp_launchers'], $tkireg) - $playerinfo['torps'];
         if ($torpedo_max < 0)
         {
             $torpedo_max = 0;
@@ -271,7 +271,7 @@ else
         }
 
         $armor_number = round(abs($armor_number));
-        $armor_max = Tki\CalcLevels::armor($playerinfo['armor'], $tkireg) - $playerinfo['armor_pts'];
+        $armor_max = Tki\CalcLevels::abstractLevels($playerinfo['armor'], $tkireg) - $playerinfo['armor_pts'];
         if ($armor_max < 0)
         {
             $armor_max = 0;
@@ -289,7 +289,7 @@ else
         }
 
         $colonist_number = round(abs($colonist_number));
-        $colonist_max    = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+        $colonist_max    = Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
 
         if ($colonist_max < 0)
         {
@@ -517,7 +517,7 @@ else
             echo "<div style='font-size:16px; color:#fff;'><br>[<span style='color:#0f0;'>Border Patrol</span>]<br>\n";
             echo "Halt, while we scan your cargo...<br>\n";
 
-            if ((Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists']) < 0)
+            if ((Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists']) < 0)
             {
                 // Tki\Ports::buildTwoCol("<span style='color:#f00;'>Detected Illegal Cargo</span>", "<span style='color:#0f0;'>Fixed</span>", "left", "right");
                 echo "<span style='color:#f00; font-weight:bold;'>Detected illegal cargo, as a penalty, we are confiscating all of your cargo, you may now continue.</span>\n";
@@ -586,7 +586,7 @@ else
 
         $cargo_exchanged = $trade_ore + $trade_organics + $trade_goods;
 
-        $free_holds = Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+        $free_holds = Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
         $free_power = Tki\CalcLevels::energy($playerinfo['power'], $tkireg) - $playerinfo['ship_energy'];
         $total_cost = $trade_ore * $tkireg->ore_price + $trade_organics * $tkireg->organics_price + $trade_goods * $tkireg->goods_price + $trade_energy * $tkireg->energy_price;
 

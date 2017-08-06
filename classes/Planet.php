@@ -67,8 +67,8 @@ class Planet
 
         echo $langvars['l_bombsaway'] . "<br><br>\n";
         $planetfighterslost = 0;
-        $attackerfitscapacity = \Tki\CalcLevels::fighters($playerinfo['computer'], $tkireg);
-        $ownerfightercapacity = \Tki\CalcLevels::fighters($ownerinfo['computer'], $tkireg);
+        $attackerfitscapacity = \Tki\CalcLevels::abstractLevels($playerinfo['computer'], $tkireg);
+        $ownerfightercapacity = \Tki\CalcLevels::abstractLevels($ownerinfo['computer'], $tkireg);
 
         $planettorps = \Tki\CalcLevels::planetTorps($pdo_db, $ownerinfo, $planetinfo, $tkireg);
         $planetbeams = \Tki\CalcLevels::planetBeams($pdo_db, $ownerinfo, $tkireg->base_defense, $planetinfo);

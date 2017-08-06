@@ -21,39 +21,10 @@ namespace Tki;
 
 class CalcLevels
 {
-    public static function armor(int $level_armor, Reg $tkireg): float
+    // This method can be used for armor, holds, shields, torps, beams, and fighters
+    public static function abstractLevels(int $level, Reg $tkireg): float
     {
-        $result = round(pow($tkireg->level_factor, $level_armor) * 100);
-        return $result;
-    }
-
-    public static function holds(int $level_hull, Reg $tkireg): float
-    {
-        $result = round(pow($tkireg->level_factor, $level_hull) * 100);
-        return $result;
-    }
-
-    public static function shields(int $level_shields, Reg $tkireg): float
-    {
-        $result = round(pow($tkireg->level_factor, $level_shields) * 100);
-        return $result;
-    }
-
-    public static function torpedoes(int $level_torp_launchers, Reg $tkireg): float
-    {
-        $result = round(pow($tkireg->level_factor, $level_torp_launchers) * 100);
-        return $result;
-    }
-
-    public static function beams(int $level_beams, Reg $tkireg): float
-    {
-        $result = round(pow($tkireg->level_factor, $level_beams) * 100);
-        return $result;
-    }
-
-    public static function fighters(int $level_computer, Reg $tkireg): float
-    {
-        $result = round(pow($tkireg->level_factor, $level_computer) * 100);
+        $result = round(pow($tkireg->level_factor, $level) * 100);
         return $result;
     }
 
@@ -66,7 +37,7 @@ class CalcLevels
     public static function planetBeams(\PDO $pdo_db, array $ownerinfo, Reg $tkireg, array $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
-        $planetbeams = self::beams($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
+        $planetbeams = self::abstractLevels($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
         $sql = "SELECT beams FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
@@ -78,7 +49,7 @@ class CalcLevels
         {
             foreach ($beam_defender_here as $tmp_beams)
             {
-                $planetbeams = $planetbeams + self::beams($tmp_beams['beams'], $tkireg->level_factor);
+                $planetbeams = $planetbeams + self::abstractLevels($tmp_beams['beams'], $tkireg->level_factor);
             }
         }
 
@@ -95,7 +66,7 @@ class CalcLevels
     public static function planetShields(\PDO $pdo_db, array $ownerinfo, Reg $tkireg, array $planetinfo) : int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
-        $planetshields = self::shields($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
+        $planetshields = self::abstractLevels($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
         $sql = "SELECT shields FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
@@ -107,7 +78,7 @@ class CalcLevels
         {
             foreach ($shield_defender_here as $tmp_shields)
             {
-                $planetshields = $planetshields + self::shields($tmp_shields['shields'], $tkireg->level_factor);
+                $planetshields = $planetshields + self::abstractLevels($tmp_shields['shields'], $tkireg->level_factor);
             }
         }
 

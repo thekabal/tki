@@ -39,7 +39,7 @@ class KabalToPlanet
         $character_object = new Character;
 
         // Planet beams
-        $targetbeams = \Tki\CalcLevels::beams($ownerinfo['beams'] + $base_factor, $tkireg);
+        $targetbeams = \Tki\CalcLevels::abstractLevels($ownerinfo['beams'] + $base_factor, $tkireg);
         if ($targetbeams > $planetinfo['energy'])
         {
             $targetbeams = $planetinfo['energy'];
@@ -48,7 +48,7 @@ class KabalToPlanet
         $planetinfo['energy'] -= $targetbeams;
 
         // Planet shields
-        $targetshields = \Tki\CalcLevels::shields($ownerinfo['shields'] + $base_factor, $tkireg);
+        $targetshields = \Tki\CalcLevels::abstractLevels($ownerinfo['shields'] + $base_factor, $tkireg);
         if ($targetshields > $planetinfo['energy'])
         {
             $targetshields = $planetinfo['energy'];
@@ -73,7 +73,7 @@ class KabalToPlanet
         $targetfighters = $planetinfo['fighters'];
 
         // Attacker beams
-        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
+        $attackerbeams = \Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
         if ($attackerbeams > $playerinfo['ship_energy'])
         {
             $attackerbeams = $playerinfo['ship_energy'];
@@ -82,7 +82,7 @@ class KabalToPlanet
         $playerinfo['ship_energy'] -= $attackerbeams;
 
         // Attacker shields
-        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
+        $attackershields = \Tki\CalcLevels::abstractLevels($playerinfo['shields'], $tkireg);
         if ($attackershields > $playerinfo['ship_energy'])
         {
             $attackershields = $playerinfo['ship_energy'];

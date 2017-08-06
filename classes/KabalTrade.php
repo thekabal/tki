@@ -153,7 +153,7 @@ class KabalTrade
             $amount_goods = $playerinfo['ship_goods'];
 
             // Since we sell all other holds we set amount to be our total hold limit
-            $amount_ore = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
+            $amount_ore = \Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg);
 
             // We adjust this to make sure it does not exceed what the port has to sell
             $amount_ore = min($amount_ore, $sectorinfo['port_ore']);
@@ -200,7 +200,7 @@ class KabalTrade
             $amount_goods = $playerinfo['ship_goods'];
 
             // SINCE WE SELL ALL OTHER HOLDS WE SET AMOUNT TO BE OUR TOTAL HOLD LIMIT
-            $amount_organics = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
+            $amount_organics = \Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg);
 
             // WE ADJUST THIS TO MAKE SURE IT DOES NOT EXCEED WHAT THE PORT HAS TO SELL
             $amount_organics = min($amount_organics, $sectorinfo['port_organics']);
@@ -247,7 +247,7 @@ class KabalTrade
             $amount_organics = $playerinfo['ship_organics'];
 
             // Since we sell all other holds we set amount to be our total hold limit
-            $amount_goods = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg);
+            $amount_goods = \Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg);
 
             // We adjust this to make sure it does not exceed what the port has to sell
             $amount_goods = min($amount_goods, $sectorinfo['port_goods']);

@@ -65,14 +65,14 @@ class KabalToShip
         }
 
         // Setup attacker variables
-        $attackerbeams = \Tki\CalcLevels::beams($playerinfo['beams'], $tkireg);
+        $attackerbeams = \Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
         if ($attackerbeams > $playerinfo['ship_energy'])
         {
             $attackerbeams = $playerinfo['ship_energy'];
         }
 
         $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $attackerbeams;
-        $attackershields = \Tki\CalcLevels::shields($playerinfo['shields'], $tkireg);
+        $attackershields = \Tki\CalcLevels::abstractLevels($playerinfo['shields'], $tkireg);
         if ($attackershields > $playerinfo['ship_energy'])
         {
             $attackershields = $playerinfo['ship_energy'];
@@ -91,14 +91,14 @@ class KabalToShip
         $attackerfighters = $playerinfo['ship_fighters'];
 
         // Setup target variables
-        $targetbeams = \Tki\CalcLevels::beams($targetinfo['beams'], $tkireg);
+        $targetbeams = \Tki\CalcLevels::abstractLevels($targetinfo['beams'], $tkireg);
         if ($targetbeams > $targetinfo['ship_energy'])
         {
             $targetbeams = $targetinfo['ship_energy'];
         }
 
         $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
-        $targetshields = \Tki\CalcLevels::shields($targetinfo['shields'], $tkireg);
+        $targetshields = \Tki\CalcLevels::abstractLevels($targetinfo['shields'], $tkireg);
         if ($targetshields > $targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
@@ -350,7 +350,7 @@ class KabalToShip
                 $free_ore = round($targetinfo['ship_ore'] / 2);
                 $free_organics = round($targetinfo['ship_organics'] / 2);
                 $free_goods = round($targetinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what we can carry
                     $salv_goods = $free_goods;
@@ -437,7 +437,7 @@ class KabalToShip
                 $free_ore = round($playerinfo['ship_ore'] / 2);
                 $free_organics = round($playerinfo['ship_organics'] / 2);
                 $free_goods = round($playerinfo['ship_goods'] / 2);
-                $free_holds = \Tki\CalcLevels::holds($targetinfo['hull'], $tkireg) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
+                $free_holds = \Tki\CalcLevels::abstractLevels($targetinfo['hull'], $tkireg) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
                 if ($free_holds > $free_goods)
                 {                                                        // Figure out what target can carry
                     $salv_goods = $free_goods;
