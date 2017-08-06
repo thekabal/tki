@@ -50,9 +50,7 @@ class IbankTransferMain
 
         echo "</select></td><td valign=center align=right>" .
              "<input class=term type=submit name=shipt value='" . $langvars['l_ibank_shiptransfer'] . "'>" .
-             "</form></td></tr>" .
-             "<tr valign=top>" .
-             "<td><br>" . $langvars['l_ibank_fromplanet'] . " :<br><br>" .
+             "</form></td></tr><tr valign=top><td><br>" . $langvars['l_ibank_fromplanet'] . " :<br><br>" .
              "<form accept-charset='utf-8' action='ibank.php?command=transfer2' method=post>" .
              $langvars['l_ibank_source'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class=term name=splanet_id>";
 
@@ -92,8 +90,8 @@ class IbankTransferMain
             echo "<option value=none>" . $langvars['l_ibank_none'] . "</option>";
         }
 
-        echo "</select></td><td valign=center align=right>" .
-             "<br><input class=term type=submit name=planett value='" . $langvars['l_ibank_planettransfer'] . "'>" .
+        echo "</select></td><td valign=center align=right><br>" .
+             "<input class=term type=submit name=planett value='" . $langvars['l_ibank_planettransfer'] . "'>" .
              "</td></tr></form>";
 
         // Begin consolidate credits form
@@ -118,8 +116,8 @@ class IbankTransferMain
             echo "<option value=none>" . $langvars['l_ibank_none'] . "</option>";
         }
 
-        echo "</select></td><td valign=top align=right>" .
-             "<br><input class=term type=submit name=planetc value='" . $langvars['l_ibank_consolidate'] . "'>" .
+        echo "</select></td><td valign=top align=right><br>" .
+             "<input class=term type=submit name=planetc value='" . $langvars['l_ibank_consolidate'] . "'>" .
              "</td></tr></form>";
         // End consolidate credits form
 

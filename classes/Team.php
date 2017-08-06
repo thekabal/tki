@@ -106,12 +106,12 @@ class Team
         if ($type == "d")
         {
             $type = "a";
-            $by = "ASC";
+            $sort_by = "ASC";
         }
         else
         {
             $type = "d";
-            $by = "DESC";
+            $sort_by = "DESC";
         }
 
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=team_name&type=$type>" . $langvars['l_name'] . "</a></strong></td>";
@@ -139,7 +139,7 @@ class Team
 
         $sql_query .= ";";
 
-        $res = $db->Execute($sql_query, array($order, $by));
+        $res = $db->Execute($sql_query, array($order, $sort_by));
         \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $color = $tkireg->color_line1;
 
@@ -202,14 +202,12 @@ class Team
         if ($playerinfo['team'] == $team['id'])
         {
             echo "<font color=white>";
+            $tmp_output = $langvars['l_team_member'] . " ";
             if ($playerinfo['ship_id'] == $team['creator'])
             {
-                echo $langvars['l_team_coord'] . " ";
+                $tmp_output = $langvars['l_team_coord'] . " ";
             }
-            else
-            {
-                echo $langvars['l_team_member'] . " ";
-            }
+            echo $tmp_output;
 
             echo $langvars['l_options'] . " <br><font size=2>";
             if (self::isTeamOwner($team, $playerinfo) === true)
