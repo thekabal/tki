@@ -30,17 +30,15 @@ class Ownership
         $bases_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $count = 0;
         $bases = array();
-        if ($bases_present !== null)
-        {
-            foreach ($bases_present as $tmp_base)
-            {
-                $bases[$count] = $tmp_base;
-                $count++;
-            }
-        }
-        else
+        if ($bases_present === null)
         {
             return "Sector ownership didn't change";
+        }
+
+        foreach ($bases_present as $tmp_base)
+        {
+            $bases[$count] = $tmp_base;
+            $count++;
         }
 
         $owner_num = 0;
