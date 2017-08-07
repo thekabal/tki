@@ -46,10 +46,10 @@ class Realspace
         $sa2 = $start['angle2'] * $deg;
         $fa1 = $finish['angle1'] * $deg;
         $fa2 = $finish['angle2'] * $deg;
-        $loc_x = ($start['distance'] * sin($sa1) * cos($sa2)) - ($finish['distance'] * sin($fa1) * cos($fa2));
-        $loc_y = ($start['distance'] * sin($sa1) * sin($sa2)) - ($finish['distance'] * sin($fa1) * sin($fa2));
-        $loc_z = ($start['distance'] * cos($sa1)) - ($finish['distance'] * cos($fa1));
-        $distance = round(sqrt(pow($loc_x, 2) + pow($loc_y, 2) + pow($loc_z, 2)));
+        $pos_x = ($start['distance'] * sin($sa1) * cos($sa2)) - ($finish['distance'] * sin($fa1) * cos($fa2));
+        $pos_y = ($start['distance'] * sin($sa1) * sin($sa2)) - ($finish['distance'] * sin($fa1) * sin($fa2));
+        $pos_z = ($start['distance'] * cos($sa1)) - ($finish['distance'] * cos($fa1));
+        $distance = round(sqrt(pow($pos_x, 2) + pow($pos_y, 2) + pow($pos_z, 2)));
         $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);
         $triptime = round($distance / $shipspeed);
 

@@ -105,15 +105,15 @@ class PlanetProduction
 
         $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ? ORDER BY sector_id;", array($ship_id));
         \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $i = 0;
+        $counter = 0;
         $planet = array();
         $planets = array();
         if ($res)
         {
             while (!$res->EOF)
             {
-                $planets[$i] = $res->fields;
-                $i++;
+                $planets[$counter] = $res->fields;
+                $counter++;
                 $res->MoveNext();
             }
 

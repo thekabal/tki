@@ -67,10 +67,10 @@ class TraderouteDistance
         $sa2 = $start['angle2'] * $deg;
         $fa1 = $dest['angle1'] * $deg;
         $fa2 = $dest['angle2'] * $deg;
-        $x = $start['distance'] * sin($sa1) * cos($sa2) - $dest['distance'] * sin($fa1) * cos($fa2);
-        $y = $start['distance'] * sin($sa1) * sin($sa2) - $dest['distance'] * sin($fa1) * sin($fa2);
-        $z = $start['distance'] * cos($sa1) - $dest['distance'] * cos($fa1);
-        $distance = round(sqrt(pow($x, 2) + pow($y, 2) + pow($z, 2)));
+        $pos_x = $start['distance'] * sin($sa1) * cos($sa2) - $dest['distance'] * sin($fa1) * cos($fa2);
+        $pos_y = $start['distance'] * sin($sa1) * sin($sa2) - $dest['distance'] * sin($fa1) * sin($fa2);
+        $pos_z = $start['distance'] * cos($sa1) - $dest['distance'] * cos($fa1);
+        $distance = round(sqrt(pow($pos_x, 2) + pow($pos_y, 2) + pow($pos_z, 2)));
         $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);
         $triptime = round($distance / $shipspeed);
 
