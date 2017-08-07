@@ -25,7 +25,7 @@ class Schema
 
     public static function dropTables(\PDO $pdo_db, string $db_prefix, string $dbtype) : array
     {
-        $i = 0;
+        $counter = 0;
         $destroy_results = array();
 
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
@@ -57,23 +57,23 @@ class Schema
 
                     if ($drop_res !== false)
                     {
-                        $destroy_results[$i]['result'] = true;
+                        $destroy_results[$counter]['result'] = true;
                     }
                     else
                     {
                         $errorinfo = $pdo_db->errorInfo();
-                        $destroy_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                        $destroy_results[$counter]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                     }
                 }
                 else
                 {
-                    $destroy_results[$i]['result'] = 'Skipped - Persistent table';
+                    $destroy_results[$counter]['result'] = 'Skipped - Persistent table';
                 }
 
-                $destroy_results[$i]['name'] = $db_prefix . $tablename;
+                $destroy_results[$counter]['name'] = $db_prefix . $tablename;
                 $table_timer->stop();
-                $destroy_results[$i]['time'] = $table_timer->elapsed();
-                $i++;
+                $destroy_results[$counter]['time'] = $table_timer->elapsed();
+                $counter++;
             }
         }
 
@@ -82,7 +82,7 @@ class Schema
 
     public static function dropSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
     {
-        $i = 0;
+        $counter = 0;
         $destroy_results = array();
 
         if ($dbtype == 'postgres9')
@@ -101,18 +101,18 @@ class Schema
 
                     if ($drop_res !== false)
                     {
-                        $destroy_results[$i]['result'] = true;
+                        $destroy_results[$counter]['result'] = true;
                     }
                     else
                     {
                          $errorinfo = $pdo_db->errorInfo();
-                         $destroy_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                         $destroy_results[$counter]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                     }
 
-                    $destroy_results[$i]['name'] = $db_prefix . $seqname;
+                    $destroy_results[$counter]['name'] = $db_prefix . $seqname;
                     $table_timer->stop();
-                    $destroy_results[$i]['time'] = $table_timer->elapsed();
-                    $i++;
+                    $destroy_results[$counter]['time'] = $table_timer->elapsed();
+                    $counter++;
                 }
             }
 
@@ -129,7 +129,7 @@ class Schema
         if ($dbtype == 'postgres9')
         {
             $create_table_results = array();
-            $i = 0;
+            $counter = 0;
 
             $seq_files = new \DirectoryIterator('schema/' . $dbtype . '/seq/');
             foreach ($seq_files as $seq_filename)
@@ -145,18 +145,18 @@ class Schema
 
                     if ($drop_res !== false)
                     {
-                        $create_table_results[$i]['result'] = true;
+                        $create_table_results[$counter]['result'] = true;
                     }
                     else
                     {
                         $errorinfo = $pdo_db->errorInfo();
-                        $create_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                        $create_table_results[$counter]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                     }
 
-                    $create_table_results[$i]['name'] = $db_prefix . $seqname;
+                    $create_table_results[$counter]['name'] = $db_prefix . $seqname;
                     $table_timer->stop();
-                    $create_table_results[$i]['time'] = $table_timer->elapsed();
-                    $i++;
+                    $create_table_results[$counter]['time'] = $table_timer->elapsed();
+                    $counter++;
                 }
             }
 
@@ -171,7 +171,7 @@ class Schema
     public static function createTables(\PDO $pdo_db, string $db_prefix, string $dbtype)
     {
         $create_table_results = array();
-        $i = 0;
+        $counter = 0;
 
         $schema_files = new \DirectoryIterator('schema/' . $dbtype);
         foreach ($schema_files as $schema_filename)
@@ -212,18 +212,18 @@ class Schema
                 if ($pdo_db->errorCode() !== self::PDO_SUCCESS)
                 {
                     $errorinfo = $pdo_db->errorInfo();
-                    $create_table_results[$i]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                    $create_table_results[$counter]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
                 }
                 else
                 {
-                    $create_table_results[$i]['result'] = true;
+                    $create_table_results[$counter]['result'] = true;
                 }
 
                 // Db::logDbErrors($pdo_db, $execute_res, __LINE__, __FILE__); // Triggers errors because there is no DB
-                $create_table_results[$i]['name'] = $db_prefix . $tablename;
+                $create_table_results[$counter]['name'] = $db_prefix . $tablename;
                 $table_timer->stop();
-                $create_table_results[$i]['time'] = $table_timer->elapsed();
-                $i++;
+                $create_table_results[$counter]['time'] = $table_timer->elapsed();
+                $counter++;
             }
         }
 

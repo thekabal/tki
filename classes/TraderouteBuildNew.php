@@ -66,18 +66,18 @@ class TraderouteBuildNew
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
         $num_planets = $result->RecordCount();
-        $i = 0;
+        $counter = 0;
         $planets = array();
         while (!$result->EOF)
         {
-            $planets[$i] = $result->fields;
+            $planets[$counter] = $result->fields;
 
-            if ($planets[$i]['name'] === null)
+            if ($planets[$counter]['name'] === null)
             {
-                $planets[$i]['name'] = $langvars['l_tdr_unnamed'];
+                $planets[$counter]['name'] = $langvars['l_tdr_unnamed'];
             }
 
-            $i++;
+            $counter++;
             $result->MoveNext();
         }
 
@@ -85,18 +85,18 @@ class TraderouteBuildNew
         \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
         $num_team_planets = $result->RecordCount();
-        $i = 0;
+        $counter = 0;
         $planets_team = array();
         while (!$result->EOF)
         {
-            $planets_team[$i] = $result->fields;
+            $planets_team[$counter] = $result->fields;
 
-            if ($planets_team[$i]['name'] === null)
+            if ($planets_team[$counter]['name'] === null)
             {
-                $planets_team[$i]['name'] = $langvars['l_tdr_unnamed'];
+                $planets_team[$counter]['name'] = $langvars['l_tdr_unnamed'];
             }
 
-            $i++;
+            $counter++;
             $result->MoveNext();
         }
 
@@ -155,18 +155,18 @@ class TraderouteBuildNew
         }
         else
         {
-            $i = 0;
-            while ($i < $num_planets)
+            $counter = 0;
+            while ($counter < $num_planets)
             {
                 echo "<option ";
 
-                if ($planets[$i]['planet_id'] == $editroute['source_id'])
+                if ($planets[$counter]['planet_id'] == $editroute['source_id'])
                 {
                     echo "selected ";
                 }
 
-                echo "value=" . $planets[$i]['planet_id'] . ">" . $planets[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$i]['sector_id'] . "</option>";
-                $i++;
+                echo "value=" . $planets[$counter]['planet_id'] . ">" . $planets[$counter]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$counter]['sector_id'] . "</option>";
+                $counter++;
             }
         }
 
@@ -193,18 +193,18 @@ class TraderouteBuildNew
         }
         else
         {
-            $i = 0;
-            while ($i < $num_team_planets)
+            $counter = 0;
+            while ($counter < $num_team_planets)
             {
                 echo "<option ";
 
-                if ($planets_team[$i]['planet_id'] == $editroute['source_id'])
+                if ($planets_team[$counter]['planet_id'] == $editroute['source_id'])
                 {
                     echo "selected ";
                 }
 
-                echo "value=" . $planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
-                $i++;
+                echo "value=" . $planets_team[$counter]['planet_id'] . ">" . $planets_team[$counter]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$counter]['sector_id'] . "</option>";
+                $counter++;
             }
         }
 
@@ -264,18 +264,18 @@ class TraderouteBuildNew
         }
         else
         {
-            $i = 0;
-            while ($i < $num_planets)
+            $counter = 0;
+            while ($counter < $num_planets)
             {
                 echo "<option ";
 
-                if ($planets[$i]['planet_id'] == $editroute['dest_id'])
+                if ($planets[$counter]['planet_id'] == $editroute['dest_id'])
                 {
                     echo "selected ";
                 }
 
-                echo "value=" . $planets[$i]['planet_id'] . ">" . $planets[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$i]['sector_id'] . "</option>";
-                $i++;
+                echo "value=" . $planets[$counter]['planet_id'] . ">" . $planets[$counter]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$counter]['sector_id'] . "</option>";
+                $counter++;
             }
         }
 
@@ -302,18 +302,18 @@ class TraderouteBuildNew
         }
         else
         {
-            $i = 0;
-            while ($i < $num_team_planets)
+            $counter = 0;
+            while ($counter < $num_team_planets)
             {
                 echo "<option ";
 
-                if ($planets_team[$i]['planet_id'] == $editroute['dest_id'])
+                if ($planets_team[$counter]['planet_id'] == $editroute['dest_id'])
                 {
                     echo "selected ";
                 }
 
-                echo "value=" . $planets_team[$i]['planet_id'] . ">" . $planets_team[$i]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$i]['sector_id'] . "</option>";
-                $i++;
+                echo "value=" . $planets_team[$counter]['planet_id'] . ">" . $planets_team[$counter]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets_team[$counter]['sector_id'] . "</option>";
+                $counter++;
             }
         }
 

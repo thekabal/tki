@@ -226,9 +226,9 @@ class Log
                 break;
 
             case LogEnums::ADMIN_HARAKIRI: //data args are : [player] [ip]
-                list ($player, $ip) = explode("|", $entry['data']);
+                list ($player, $ip_address) = explode("|", $entry['data']);
                 $retvalue['text'] = str_replace("[player]", "<font color=white><strong>$player</strong></font>", $texttemp);
-                $retvalue['text'] = str_replace("[ip]", "<font color=white><strong>$ip</strong></font>", $retvalue['text']);
+                $retvalue['text'] = str_replace("[ip]", "<font color=white><strong>$ip_address</strong></font>", $retvalue['text']);
                 $retvalue['title'] = $titletemp;
                 break;
 
@@ -344,21 +344,21 @@ class Log
         return $retvalue;
     }
 
-    public static function getLogInfo(array $log_list, ?int $id = null, ?string &$title = null, ?string &$text = null): void
+    public static function getLogInfo(array $log_list, ?int $log_id = null, ?string &$title = null, ?string &$text = null): void
     {
         $title = null;
         $text = null;
 
-        if ($id < count($log_list))
+        if ($log_id < count($log_list))
         {
-            if (array_key_exists("l_log_title_". $log_list[$id], $GLOBALS))
+            if (array_key_exists("l_log_title_". $log_list[$log_id], $GLOBALS))
             {
-                $title = $GLOBALS["l_log_title_". $log_list[$id]];
+                $title = $GLOBALS["l_log_title_". $log_list[$log_id]];
             }
 
-            if (array_key_exists("l_log_text_". $log_list[$id], $GLOBALS))
+            if (array_key_exists("l_log_text_". $log_list[$log_id], $GLOBALS))
             {
-                $text = $GLOBALS["l_log_text_". $log_list[$id]];
+                $text = $GLOBALS["l_log_text_". $log_list[$log_id]];
             }
         }
     }

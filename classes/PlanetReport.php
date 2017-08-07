@@ -21,15 +21,15 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function baseBuildCheck(array $langvars, Reg $tkireg, array $planet, int $i): string
+    public static function baseBuildCheck(array $langvars, Reg $tkireg, array $planet, int $num): string
     {
-        if($planet[$i]['base'] == 'Y')
+        if($planet[$num]['base'] == 'Y')
         {
             return $langvars['l_yes'];
         }
-        elseif($planet[$i]['ore'] >= $tkireg->base_ore && $planet[$i]['organics'] >= $tkireg->base_organics && $planet[$i]['goods'] >= $tkireg->base_goods && $planet[$i]['credits'] >= $tkireg->base_credits)
+        elseif($planet[$num]['ore'] >= $tkireg->base_ore && $planet[$num]['organics'] >= $tkireg->base_organics && $planet[$num]['goods'] >= $tkireg->base_goods && $planet[$num]['credits'] >= $tkireg->base_credits)
         {
-            return "<a href=planet-report-ce.php?buildp=" . $planet[$i]['planet_id'] . "&builds=" . $planet[$i]['sector_id'] . ">Build</a>";
+            return "<a href=planet-report-ce.php?buildp=" . $planet[$num]['planet_id'] . "&builds=" . $planet[$num]['sector_id'] . ">Build</a>";
         }
         else
         {

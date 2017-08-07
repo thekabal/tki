@@ -28,14 +28,14 @@ class Ownership
         $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
         $bases_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $i = 0;
+        $count = 0;
         $bases = array();
         if ($bases_present !== null)
         {
             foreach ($bases_present as $tmp_base)
             {
-                $bases[$i] = $tmp_base;
-                $i++;
+                $bases[$count] = $tmp_base;
+                $count++;
             }
         }
         else
@@ -196,22 +196,22 @@ class Ownership
 
         // Ok, all bases are allied at this point. Let's make a winner.
         $winner = 0;
-        $i = 1;
-        while ($i < $owner_num)
+        $count = 1;
+        while ($count < $owner_num)
         {
-            if ($owners[$i]['num'] > $owners[$winner]['num'])
+            if ($owners[$count]['num'] > $owners[$winner]['num'])
             {
-                $winner = $i;
+                $winner = $count;
             }
-            elseif ($owners[$i]['num'] == $owners[$winner]['num'])
+            elseif ($owners[$count]['num'] == $owners[$winner]['num'])
             {
-                if ($owners[$i]['type'] == 'C')
+                if ($owners[$count]['type'] == 'C')
                 {
-                    $winner = $i;
+                    $winner = $count;
                 }
             }
 
-            $i++;
+            $count++;
         }
 
         if ($owners[$winner]['num'] < $tkireg->min_bases_to_own)

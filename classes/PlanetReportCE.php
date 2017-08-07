@@ -23,7 +23,7 @@ class PlanetReportCE
 {
     public static function collectCredits(\PDO $pdo_db, $db, array $langvars, array $planetarray, Reg $tkireg): void
     {
-        $CS = "GO"; // Current State
+        $current_state = "GO"; // Current State
         $playerinfo = Array();
 
         // Look up the info for the player that wants to collect the credits.
@@ -62,18 +62,18 @@ class PlanetReportCE
         // Based on the way realspace works we don't need a sub loop -- might add a subloop to clean things up later.
 
         $temp_count2 = count($s_p_pair);
-        for ($i = 0; $i < $temp_count2 && $CS == "GO"; $i++)
+        for ($i = 0; $i < $temp_count2 && $current_state == "GO"; $i++)
         {
             echo "<br>";
-            $CS = \Tki\Realspace::realSpaceMove($pdo_db, $langvars, $s_p_pair[$i][0], $tkireg);
+            $current_state = \Tki\Realspace::realSpaceMove($pdo_db, $langvars, $s_p_pair[$i][0], $tkireg);
 
-            if ($CS == "HOSTILE")
+            if ($current_state == "HOSTILE")
             {
-                $CS = "GO";
+                $current_state = "GO";
             }
-            elseif ($CS == "GO")
+            elseif ($current_state == "GO")
             {
-                $CS = self::takeCredits($pdo_db, $langvars, $s_p_pair[$i][1]);
+                $current_state = self::takeCredits($pdo_db, $langvars, $s_p_pair[$i][1]);
             }
             else
             {
@@ -83,7 +83,7 @@ class PlanetReportCE
             echo "<br>";
         }
 
-        if ($CS != "GO" && $CS != "HOSTILE")
+        if ($current_state != "GO" && $current_state != "HOSTILE")
         {
             echo "<br>" . $langvars['l_pr_low_turns'] . "<br>";
         }
