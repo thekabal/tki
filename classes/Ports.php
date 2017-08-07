@@ -44,21 +44,21 @@ class Ports
 
     public static function dropdown($element_name, $current_value, $onchange, $temp_devices) : string
     {
-        $i = $current_value;
+        $counter = $current_value;
         $dropdownvar = "<select size='1' name='$element_name'";
         $dropdownvar = "$dropdownvar $onchange>\n";
-        while ($i <= (int) $temp_devices)
+        while ($counter <= (int) $temp_devices)
         {
-            if ($current_value == $i)
+            if ($current_value == $counter)
             {
-                $dropdownvar = "$dropdownvar        <option value='$i' selected>$i</option>\n";
+                $dropdownvar = "$dropdownvar        <option value='$counter' selected>$counter</option>\n";
             }
             else
             {
-                $dropdownvar = "$dropdownvar        <option value='$i'>$i</option>\n";
+                $dropdownvar = "$dropdownvar        <option value='$counter'>$counter</option>\n";
             }
 
-            $i++;
+            $counter++;
         }
 
         $dropdownvar = "$dropdownvar       </select>\n";

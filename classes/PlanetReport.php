@@ -99,18 +99,18 @@ class PlanetReport
         $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $planet_owner_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $i = 0;
+        $counter = 0;
         $planet = array();
         if ($planet_owner_present !== null)
         {
             foreach ($planet_owner_present as $tmp_owner)
             {
-                $planet[$i] = $tmp_owner;
-                $i++;
+                $planet[$counter] = $tmp_owner;
+                $counter++;
             }
         }
 
-        $num_planets = $i;
+        $num_planets = $counter;
         if ($num_planets < 1)
         {
             echo "<br>" . $langvars['l_pr_noplanet'];
@@ -158,56 +158,56 @@ class PlanetReport
             $total_team = 0;
             $total_selling = 0;
             $color = $tkireg->color_line1;
-            for ($i = 0; $i < $num_planets; $i++)
+            for ($counter = 0; $counter < $num_planets; $counter++)
             {
-                $total_organics += $planet[$i]['organics'];
-                $total_ore += $planet[$i]['ore'];
-                $total_goods += $planet[$i]['goods'];
-                $total_energy += $planet[$i]['energy'];
-                $total_colonists += $planet[$i]['colonists'];
-                $total_credits += $planet[$i]['credits'];
-                $total_fighters += $planet[$i]['fighters'];
-                $total_torp += $planet[$i]['torps'];
-                if ($planet[$i]['base'] == "Y")
+                $total_organics += $planet[$counter]['organics'];
+                $total_ore += $planet[$counter]['ore'];
+                $total_goods += $planet[$counter]['goods'];
+                $total_energy += $planet[$counter]['energy'];
+                $total_colonists += $planet[$counter]['colonists'];
+                $total_credits += $planet[$counter]['credits'];
+                $total_fighters += $planet[$counter]['fighters'];
+                $total_torp += $planet[$counter]['torps'];
+                if ($planet[$counter]['base'] == "Y")
                 {
                     $total_base++;
                 }
 
-                if ($planet[$i]['team'] > 0)
+                if ($planet[$counter]['team'] > 0)
                 {
                     $total_team++;
                 }
 
-                if ($planet[$i]['sells'] == "Y")
+                if ($planet[$counter]['sells'] == "Y")
                 {
                     $total_selling++;
                 }
 
-                if (empty($planet[$i]['name']))
+                if (empty($planet[$counter]['name']))
                 {
-                    $planet[$i]['name'] = $langvars['l_unnamed'];
+                    $planet[$counter]['name'] = $langvars['l_unnamed'];
                 }
 
                 echo "<tr bgcolor=\"$color\">";
-                echo "<td><a href=rsmove.php?engage=1&destination=". $planet[$i]['sector_id'] . ">". $planet[$i]['sector_id'] . "</a></td>";
-                echo "<td>" . $planet[$i]['name'] . "</td>";
-                echo "<td>" . number_format($planet[$i]['ore'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td>" . number_format($planet[$i]['organics'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td>" . number_format($planet[$i]['goods'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td>" . number_format($planet[$i]['energy'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=right>" . number_format($planet[$i]['colonists'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=right>" . number_format($planet[$i]['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=center><input type=checkbox name=TPCreds[] value=\"" . $planet[$i]['planet_id'] . "\"></td>";
-                echo "<td align=right>"  . number_format($planet[$i]['fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=right>"  . number_format($planet[$i]['torps'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=center>" . self::baseBuildCheck($langvars, $tkireg, $planet, $i) . "</td>";
+                echo "<td><a href=rsmove.php?engage=1&destination=". $planet[$counter]['sector_id'] . ">". $planet[$counter]['sector_id'] . "</a></td>";
+                echo "<td>" . $planet[$counter]['name'] . "</td>";
+                echo "<td>" . number_format($planet[$counter]['ore'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td>" . number_format($planet[$counter]['organics'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td>" . number_format($planet[$counter]['goods'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td>" . number_format($planet[$counter]['energy'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td align=right>" . number_format($planet[$counter]['colonists'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td align=right>" . number_format($planet[$counter]['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td align=center><input type=checkbox name=TPCreds[] value=\"" . $planet[$counter]['planet_id'] . "\"></td>";
+                echo "<td align=right>"  . number_format($planet[$counter]['fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td align=right>"  . number_format($planet[$counter]['torps'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
+                echo "<td align=center>" . self::baseBuildCheck($langvars, $tkireg, $planet, $counter) . "</td>";
 
                 if ($playerinfo['team'] > 0)
                 {
-                    echo "<td align=center>" . ($planet[$i]['team'] > 0 ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
+                    echo "<td align=center>" . ($planet[$counter]['team'] > 0 ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
                 }
 
-                echo "<td align=center>" . ($planet[$i]['sells'] == 'Y' ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
+                echo "<td align=center>" . ($planet[$counter]['sells'] == 'Y' ? $langvars['l_yes'] : $langvars['l_no']) . "</td>";
                 echo "</tr>";
 
                 if ($color == $tkireg->color_line1)

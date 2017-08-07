@@ -39,16 +39,16 @@ class KabalHunt
         \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
         // Choose a target from the top player list
-        $i = 1;
+        $counter = 1;
         $targetnum = random_int(1, $topnum);
         while (!$res->EOF)
         {
-            if ($i == $targetnum)
+            if ($counter == $targetnum)
             {
                 $targetinfo = $res->fields;
             }
 
-            $i++;
+            $counter++;
             $res->MoveNext();
         }
 
@@ -84,7 +84,7 @@ class KabalHunt
             }
 
             // Check for sector defenses
-            $i = 0;
+            $counter = 0;
             $all_sector_fighters = 0;
             $defenses = array();
 
@@ -97,13 +97,13 @@ class KabalHunt
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $tmp_defense;
-                    $all_sector_fighters += $defenses[$i]['quantity'];
-                    $i++;
+                    $defenses[$counter] = $tmp_defense;
+                    $all_sector_fighters += $defenses[$counter]['quantity'];
+                    $counter++;
                 }
             }
 
-            $i = 0;
+            $counter = 0;
             $total_sector_mines = 0;
 
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
@@ -115,9 +115,9 @@ class KabalHunt
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $tmp_defense;
-                    $total_sector_mines += $defenses[$i]['quantity'];
-                    $i++;
+                    $defenses[$counter] = $tmp_defense;
+                    $total_sector_mines += $defenses[$counter]['quantity'];
+                    $counter++;
                 }
             }
 

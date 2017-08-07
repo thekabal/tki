@@ -86,7 +86,7 @@ class KabalMove
         if ($targetlink > 0) // Check for sector defenses
         {
             // Check for sector defenses
-            $i = 0;
+            $counter = 0;
             $all_sector_fighters = 0;
             $total_sector_mines = 0;
             $defenses = array();
@@ -100,13 +100,13 @@ class KabalMove
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $tmp_defense;
-                    $all_sector_fighters += $defenses[$i]['quantity'];
-                    $i++;
+                    $defenses[$counter] = $tmp_defense;
+                    $all_sector_fighters += $defenses[$counter]['quantity'];
+                    $counter++;
                 }
             }
 
-            $i = 0;
+            $counter = 0;
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
@@ -116,9 +116,9 @@ class KabalMove
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $tmp_defense;
-                    $total_sector_mines += $defenses[$i]['quantity'];
-                    $i++;
+                    $defenses[$counter] = $tmp_defense;
+                    $total_sector_mines += $defenses[$counter]['quantity'];
+                    $counter++;
                 }
             }
 

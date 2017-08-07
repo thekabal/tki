@@ -28,7 +28,7 @@ class KabalToSecDef
         // Check for sector defenses
         if ($targetlink > 0)
         {
-            $i = 0;
+            $counter = 0;
             $all_sector_fighters = 0;
             $defenses = array();
 
@@ -41,13 +41,13 @@ class KabalToSecDef
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
-                    $defenses[$i] = $tmp_defense;
-                    $all_sector_fighters += $defenses[$i]['quantity'];
-                    $i++;
+                    $defenses[$counter] = $tmp_defense;
+                    $all_sector_fighters += $defenses[$counter]['quantity'];
+                    $counter++;
                 }
             }
 
-            $i = 0;
+            $counter = 0;
             $total_sector_mines = 0;
             $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
@@ -58,9 +58,9 @@ class KabalToSecDef
             {
                 foreach ($defenses_present as $tmp_defenses)
                 {
-                    $defenses[$i] = $tmp_defenses;
-                    $total_sector_mines += $defenses[$i]['quantity'];
-                    $i++;
+                    $defenses[$counter] = $tmp_defenses;
+                    $total_sector_mines += $defenses[$counter]['quantity'];
+                    $counter++;
                 }
             }
 
