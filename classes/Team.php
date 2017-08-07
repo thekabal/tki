@@ -207,6 +207,7 @@ class Team
             {
                 $tmp_output = $langvars['l_team_coord'] . " ";
             }
+
             echo $tmp_output;
 
             echo $langvars['l_options'] . " <br><font size=2>";
