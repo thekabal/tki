@@ -51,52 +51,37 @@ class Ownership
             $loop = 0;
             while ($loop < $owner_num)
             {
-                if ($curbase['team'] != 0)
+                if (($curbase['team'] != 0) && ($owners[$loop]['type'] == 'C') && ($owners[$loop]['id'] == $curbase['team']))
                 {
-                    if ($owners[$loop]['type'] == 'C')
-                    {
-                        if ($owners[$loop]['id'] == $curbase['team'])
-                        {
-                            $curteam = $loop;
-                            $owners[$loop]['num']++;
-                        }
-                    }
+                    $curteam = $loop;
+                    $owners[$loop]['num']++;
                 }
 
-                if ($owners[$loop]['type'] == 'S')
+                if ($owners[$loop]['type'] == 'S' && $owners[$loop]['id'] == $curbase['owner'])
                 {
-                    if ($owners[$loop]['id'] == $curbase['owner'])
-                    {
-                        $curship = $loop;
-                        $owners[$loop]['num']++;
-                    }
+                    $curship = $loop;
+                    $owners[$loop]['num']++;
                 }
 
                 $loop++;
             }
 
-            if ($curteam == -1)
+            if ($curteam == -1 && $curbase['team'] != 0)
             {
-                if ($curbase['team'] != 0)
-                {
-                    $curteam = $owner_num;
-                    $owner_num++;
-                    $owners[$curteam]['type'] = 'C';
-                    $owners[$curteam]['num'] = 1;
-                    $owners[$curteam]['id'] = $curbase['team'];
-                }
+                $curteam = $owner_num;
+                $owner_num++;
+                $owners[$curteam]['type'] = 'C';
+                $owners[$curteam]['num'] = 1;
+                $owners[$curteam]['id'] = $curbase['team'];
             }
 
-            if ($curship == -1)
+            if ($curship == -1 && $curbase['owner'] != 0)
             {
-                if ($curbase['owner'] != 0)
-                {
-                    $curship = $owner_num;
-                    $owner_num++;
-                    $owners[$curship]['type'] = 'S';
-                    $owners[$curship]['num'] = 1;
-                    $owners[$curship]['id'] = $curbase['owner'];
-                }
+                $curship = $owner_num;
+                $owner_num++;
+                $owners[$curship]['type'] = 'S';
+                $owners[$curship]['num'] = 1;
+                $owners[$curship]['id'] = $curbase['owner'];
             }
         }
 
@@ -201,12 +186,9 @@ class Ownership
             {
                 $winner = $count;
             }
-            elseif ($owners[$count]['num'] == $owners[$winner]['num'])
+            elseif (($owners[$count]['num'] == $owners[$winner]['num']) && ($owners[$count]['type'] == 'C'))
             {
-                if ($owners[$count]['type'] == 'C')
-                {
                     $winner = $count;
-                }
             }
 
             $count++;
