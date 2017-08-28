@@ -26,7 +26,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('ibank', 'common', 'global
 $title = $langvars['l_ibank_title'];
 $body_class = 'ibank';
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE email=:email");
@@ -196,5 +196,5 @@ echo '<img src="' . $template->getVariables('template_dir') . '/images/div2.png"
 echo '</center>';
 
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

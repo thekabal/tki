@@ -87,7 +87,7 @@ $stmt->bindParam(':order_by', $by, PDO::PARAM_STR);
 $stmt->bindParam(':limit', $tkireg->max_ranks, PDO::PARAM_INT);
 $stmt->execute();
 $rankings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$variables['num_players'] = (int) count($rankings);
+$variables['num_players'] = count($rankings);
 $player_list = array();
 $xx = 1;
 
@@ -125,7 +125,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         }
 
         // Set the characters Insignia.
-        $insignia = new Tki\Character;
+        $insignia = new Tki\Character();
         $row['insignia'] = $insignia->getInsignia($pdo_db, $row['email'], $langvars);
 
         // This is just to show that we can set the type of player.
@@ -171,7 +171,7 @@ else
     $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
 }
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('variables', $variables);
 
@@ -188,5 +188,5 @@ $template->addVariables('langvars', $langvars);
 // Now we tell Smarty to output the page
 $template->display('ranking.tpl');
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

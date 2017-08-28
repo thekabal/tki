@@ -30,7 +30,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('genesis', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 $title = $langvars['l_gns_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Get playerinfo from database
@@ -158,5 +158,5 @@ echo "<br><br>";
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

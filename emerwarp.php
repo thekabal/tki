@@ -54,7 +54,7 @@ $variables['playerinfo_dev_emerwarp'] = $playerinfo['dev_emerwarp'];
 $variables['title'] = $langvars['l_ewd_title'];
 
 $variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link" => "main.php");
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
@@ -62,5 +62,5 @@ $template->addVariables('variables', $variables);
 $template->display('emerwarp.tpl');
 
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

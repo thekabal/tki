@@ -27,7 +27,7 @@ $include_ckeditor = true;
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mailto', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
 $title = $langvars['l_sendm_title'];
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class, $include_ckeditor);
 
 // Filter to the FILTER_SANITIZE_STRING ruleset, because we need to allow spaces for names & subject (FILTER_SANITIZE_URL doesn't allow spaces)
@@ -197,5 +197,5 @@ else
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

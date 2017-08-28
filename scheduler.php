@@ -66,7 +66,7 @@ require_once './common.php';
 
 $title = $langvars['l_sys_update'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
@@ -173,7 +173,7 @@ else
     if (abs($schedDiff) > ($tkireg->sched_ticks * 60))
     {
         // Hmmm, seems that we have missed at least 1 update, so log it to the admin.
-        $admin_log = new Tki\AdminLog;
+        $admin_log = new Tki\AdminLog();
         $admin_log->writeLog($pdo_db, 2468, "Detected Scheduler Issue|{$lastRun}|". time() . "|" . (time() - ($tkireg->sched_ticks * 60)) . "|{$schedDiff}|" . serialize($lastrunList));
     }
 
@@ -190,5 +190,5 @@ else
 echo "<br>";
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

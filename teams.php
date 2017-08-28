@@ -28,7 +28,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('teams', 'common', 'global_includes', 'global_funcs', 'main', 'footer'));
 $title = $langvars['l_team_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
@@ -617,5 +617,5 @@ switch ($teamwhat)
 echo "<br><br>";
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

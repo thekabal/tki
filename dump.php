@@ -23,7 +23,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_dump_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
@@ -49,7 +49,7 @@ if ($playerinfo['turns'] < 1)
     echo $langvars['l_dump_turn']  . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
-    $footer = new Tki\Footer;
+    $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -73,5 +73,5 @@ else
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

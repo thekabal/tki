@@ -21,7 +21,7 @@ require_once './common.php';
 
 $title = $langvars['l_new_title2'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
@@ -210,5 +210,5 @@ else
     echo $langvars['l_new_err'];
 }
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

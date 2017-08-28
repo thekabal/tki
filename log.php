@@ -37,7 +37,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('log', 'common', 'global_i
 $title = $langvars['l_log_titlet'];
 $body_class = 'log';
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Get playerinfo from database
@@ -385,5 +385,5 @@ if ($mode != 'compat')
 
 echo "</table></center>";
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

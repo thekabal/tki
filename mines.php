@@ -26,7 +26,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('mines', 'common', 'global
 
 $title = $langvars['l_mines_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $hader->display($pdo_db, $lang, $template, $title);
 
 $op = null;
@@ -131,7 +131,7 @@ if ($playerinfo['turns'] < 1)
     echo $langvars['l_mines_noturn'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
-    $footer = new Tki\Footer;
+    $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -311,5 +311,5 @@ else
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

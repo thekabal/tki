@@ -24,7 +24,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'bounty', 'regional'));
 $title = $langvars['l_tdr_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
@@ -56,7 +56,7 @@ while (!$result->EOF)
 $freeholds = Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
 $maxholds = Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg);
 $maxenergy = Tki\CalcLevels::energy($playerinfo['power'], $tkireg);
-$admin_log = new Tki\AdminLog;
+$admin_log = new Tki\AdminLog();
 if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playerinfo['ship_organics'] < 0 || $playerinfo['ship_goods'] < 0 || $playerinfo['ship_energy'] < 0 || $freeholds < 0)
 {
     if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_colonists'] > $maxholds)
@@ -508,5 +508,5 @@ echo "<div style='text-align:left;'>\n";
 Tki\Text::gotoMain($pdo_db, $lang);
 echo "</div>\n";
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

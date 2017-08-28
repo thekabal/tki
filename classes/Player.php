@@ -86,12 +86,12 @@ class Player
             $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_needlogin']);
             $title = $langvars['l_error'];
 
-            $header = new \Tki\Header;
+            $header = new \Tki\Header();
             $header->display($pdo_db, $lang, $template, $title);
 
             echo $error_status;
 
-            $footer = new \Tki\Footer;
+            $footer = new \Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -143,11 +143,11 @@ class Player
 
                 $title = $langvars['l_error'];
 
-                $header = new \Tki\Header;
+                $header = new \Tki\Header();
                 $header->display($pdo_db, $lang, $template, $title);
                 echo $error_status;
 
-                $footer = new \Tki\Footer;
+                $footer = new \Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }

@@ -27,7 +27,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'port', 'common'
                                 'footer', 'news'));
 $title = $langvars['l_by_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
@@ -160,7 +160,7 @@ switch ($response) {
             echo $langvars['l_by_noturn'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -172,7 +172,7 @@ switch ($response) {
             echo $langvars['l_by_nobounty'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -183,7 +183,7 @@ switch ($response) {
             echo $langvars['l_by_notyours'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -212,7 +212,7 @@ switch ($response) {
             echo $langvars['l_by_notexists'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -223,7 +223,7 @@ switch ($response) {
             echo $langvars['l_by_destroyed'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -233,7 +233,7 @@ switch ($response) {
             echo $langvars['l_by_noturn'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -243,7 +243,7 @@ switch ($response) {
             echo $langvars['l_by_zeroamount'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -253,7 +253,7 @@ switch ($response) {
             echo $langvars['l_by_yourself'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -263,7 +263,7 @@ switch ($response) {
             echo $langvars['l_by_notenough'] . "<br><br>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -289,7 +289,7 @@ switch ($response) {
                 echo $langvars['l_by_toomuch'] . "<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
-                $footer = new Tki\Footer;
+                $footer = new Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
@@ -399,5 +399,5 @@ switch ($response) {
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

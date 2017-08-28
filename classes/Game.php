@@ -33,12 +33,12 @@ class Game
         {
             $title = $langvars['l_login_closed_message'];
 
-            $header = new \Tki\Header;
+            $header = new \Tki\Header();
             $header->display($pdo_db, $lang, $template, $title);
 
             echo $langvars['l_login_closed_message'];
 
-            $footer = new \Tki\Footer;
+            $footer = new \Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }

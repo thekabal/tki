@@ -87,12 +87,12 @@ if ($tkireg->game_closed)
 {
     $title = $langvars['l_login_sclosed'];
 
-    $header = new Tki\Header;
+    $header = new Tki\Header();
     $header->display($pdo_db, $lang, $template, $title);
     echo "<div style='text-align:center; color:#ff0; font-size:20px;'><br>" . $langvars['l_login_closed_message'] . "</div><br>\n";
     echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
 
-    $footer = new Tki\Footer;
+    $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -112,7 +112,7 @@ if ($playerinfo !== null && $playerfound !== false)
     }
 }
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 echo "<h1>" . $title . "</h1>\n";
 
@@ -244,7 +244,7 @@ if ($playerfound)
         // password is incorrect
         echo $langvars['l_login_4gotpw1a'] . "<br><br>" . $langvars['l_login_4gotpw1b'] . " <a href='mail.php?mail=" . $email . "'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw2a'] . "<br><br>" . $langvars['l_login_4gotpw2b'] . " <a href='index.php'>" . $langvars['l_clickme'] . "</a> " . $langvars['l_login_4gotpw3'] . " " . $request->server->get('REMOTE_ADDR') . "...";
         Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::BADLOGIN, $request->server->get('REMOTE_ADDR'));
-        $admin_log = new Tki\AdminLog;
+        $admin_log = new Tki\AdminLog();
         $admin_log->writeLog($pdo_db, (1000 + \Tki\LogEnums::BADLOGIN), "{$request->server->get('REMOTE_ADDR')}|{$email}|{$filtered_post_password}");
     }
 }
@@ -255,5 +255,5 @@ else
     echo "<strong>" . $langvars['l_login_noone'] . "</strong><br>";
 }
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

@@ -32,7 +32,7 @@ Tki\Db::logDbErrors($pdo_db, $tdres, __LINE__, __FILE__);
 
 $detected = (bool) false;
 
-$admin_log = new Tki\AdminLog;
+$admin_log = new Tki\AdminLog();
 while (!$tdres->EOF)
 {
     $playerinfo = $tdres->fields;

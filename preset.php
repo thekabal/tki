@@ -25,7 +25,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('presets'));
 $title = $langvars['l_pre_title'];
 $body_class = 'tki';
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Database driven language entries
@@ -115,5 +115,5 @@ else
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

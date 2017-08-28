@@ -24,7 +24,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_
 $title = $langvars['l_pwr_title'];
 $body_class = 'options';
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<h1>" . $title . "</h1>\n";
@@ -106,5 +106,5 @@ else
 /// Log user in (like login does)
 
 /// Redirect to game (like login does)
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

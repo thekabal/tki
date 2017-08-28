@@ -17,7 +17,7 @@
 // File: create_universe/30.php
 
 // Determine current step, next step, and number of steps
-$step_finder = new Tki\BigBang;
+$step_finder = new Tki\BigBang();
 $create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
@@ -72,11 +72,11 @@ for ($i = 0; $i < $destroy_array_size; $i++)
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/30.tpl');
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

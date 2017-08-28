@@ -40,7 +40,7 @@ else
     $variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link" => "index.php");
 }
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
@@ -48,5 +48,5 @@ $template->addVariables('variables', $variables);
 $template->display('faq.tpl');
 
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

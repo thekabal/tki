@@ -26,7 +26,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'report', 'device'
 $title = $langvars['l_title_port'];
 $body_class = 'port';
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<body class=" . $body_class . "><br>";
@@ -116,7 +116,7 @@ if ($zoneinfo['zone_id'] == 4)
     echo $langvars['l_war_info'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
-    $footer = new Tki\Footer;
+    $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -128,7 +128,7 @@ elseif ($zoneinfo['allow_trade'] == 'N')
     echo $langvars['l_no_trade_info'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
-    $footer = new Tki\Footer;
+    $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -151,7 +151,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo "Trading at this port is not allowed for outsiders<p>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -165,7 +165,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
             echo $langvars['l_no_trade_out'] . "<p>";
             Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer;
+            $footer = new Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
             die();
         }
@@ -318,7 +318,7 @@ elseif ($sectorinfo['port_type'] == "special")
         echo "<a href=ibank.php>" . $langvars['l_ibank_term'] . "</a><p>";
         Tki\Text::gotoMain($pdo_db, $lang);
 
-        $footer = new Tki\Footer;
+        $footer = new Tki\Footer();
         $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
@@ -1021,5 +1021,5 @@ echo "<br><br>\n";
 Tki\Text::gotoMain($pdo_db, $lang);
 echo "\n";
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

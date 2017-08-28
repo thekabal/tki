@@ -22,7 +22,7 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_att_title'];
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
@@ -43,7 +43,7 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
     echo "You need to click on the ship first.<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
-    $footer = new Tki\Footer;
+    $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -68,7 +68,7 @@ $targetscore = Tki\Score::updateScore($pdo_db, $targetinfo['ship_id'], $tkireg, 
 $playerscore = $playerscore * $playerscore;
 $targetscore = $targetscore * $targetscore;
 
-$character_object = new \Tki\Character;
+$character_object = new \Tki\Character();
 
 // Check to ensure target is in the same sector as player
 if ($targetinfo['sector'] != $playerinfo['sector'] || $targetinfo['on_planet'] == 'Y')
@@ -86,7 +86,7 @@ elseif (Tki\Team::isSameTeam($playerinfo['team'], $targetinfo['team']))
 elseif ($_SESSION['in_combat'] !== null && $_SESSION['in_combat'] === true)
 {
     echo "<div style='color:#ff0;'>" . $langvars['l_team_already_combat'] . "</div>\n";
-    $admin_log = new Tki\AdminLog;
+    $admin_log = new Tki\AdminLog();
     $admin_log->writeLog($pdo_db, 13371337, "{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected multi attack.");
 }
 else
@@ -627,7 +627,7 @@ else
                     Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                     Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|Y");
                     Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
-                    $admin_log = new Tki\AdminLog;
+                    $admin_log = new Tki\AdminLog();
                     $admin_log->writeLog($pdo_db, \Tki\LogEnums::ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Just lost the Escape Pod.");
                 }
                 else
@@ -635,7 +635,7 @@ else
                     Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|N");
                     $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
                     Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
-                    $admin_log = new Tki\AdminLog;
+                    $admin_log = new Tki\AdminLog();
                     $admin_log->writeLog($pdo_db, \Tki\LogEnums::ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Didn't have the Escape Pod.");
                 }
 
@@ -653,7 +653,7 @@ else
                     {
                         $resx = $db->Execute("UPDATE {$db->prefix}kabal SET active= N WHERE kabal_id = ?;", array($targetinfo['email']));
                         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        $admin_log = new Tki\AdminLog;
+                        $admin_log = new Tki\AdminLog();
                         $admin_log->writeLog($pdo_db, \Tki\LogEnums::ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected as AI.");
 
                         if ($rating_change > 0)
@@ -662,7 +662,7 @@ else
                             Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|N");
                             Tki\Bounty::collect($pdo_db, $langvars, $playerinfo['ship_id'], $targetinfo['ship_id']);
                             $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
-                            $admin_log = new Tki\AdminLog;
+                            $admin_log = new Tki\AdminLog();
                             $admin_log->writeLog($pdo_db, \Tki\LogEnums::ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Hope fully we only killed off the AI.");
                         }
 
@@ -904,5 +904,5 @@ $_SESSION['in_combat'] = (bool) false;
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

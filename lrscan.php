@@ -25,7 +25,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'lrscan', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 $title = $langvars['l_lrs_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 echo "<h1>" . $title . "</h1>\n";
 
@@ -61,7 +61,7 @@ if ($sector == "*")
         echo $langvars['l_lrs_nofull'] . "<br><br>";
         Tki\Text::gotoMain($pdo_db, $lang);
 
-        $footer = new Tki\Footer;
+        $footer = new Tki\Footer();
         $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
@@ -72,7 +72,7 @@ if ($sector == "*")
         echo $langvars['l_lrs_noturns'] . "<br><br>";
         Tki\Text::gotoMain($pdo_db, $lang);
 
-        $footer = new Tki\Footer;
+        $footer = new Tki\Footer();
         $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
@@ -476,5 +476,5 @@ else
 echo "<br><br>";
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

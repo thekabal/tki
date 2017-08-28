@@ -257,7 +257,7 @@ class Ibank
              "<img width=600 height=21 src=" . $template . "/images/div2.png>" .
              "</center>";
 
-        $footer = new \Tki\Footer;
+        $footer = new \Tki\Footer();
         $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }

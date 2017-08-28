@@ -25,7 +25,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common', 'main', 'modify_defenses', 'admin', 'footer', 'global_includes', 'regional'));
 $title = $langvars['l_main_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 $stylefontsize = "12pt";
@@ -155,7 +155,7 @@ $planettypes[2] = "mediumplanet.png";
 $planettypes[3] = "largeplanet.png";
 $planettypes[4] = "hugeplanet.png";
 
-$insignia = new Tki\Character;
+$insignia = new Tki\Character();
 $signame = $insignia->getInsignia($pdo_db, $_SESSION['username'], $langvars);
 echo "<div style='width:90%; margin:auto; background-color:#400040; color:#C0C0C0; text-align:center; border:#fff 1px solid; padding:4px;'>\n";
 echo "{$signame} <span style='color:#fff; font-weight:bold;'>{$playerinfo['character_name']}</span>{$langvars['l_aboard']} <span style='color:#fff; font-weight:bold;'><a class='new_link' style='font-size:14px;' href='report.php'>{$playerinfo['ship_name']}</a></span>\n";
@@ -940,5 +940,5 @@ echo "</div>
 </tr>
 </table>";
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

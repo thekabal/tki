@@ -59,7 +59,7 @@ if (array_key_exists('newlang', $_POST) === true)
 
 $title = $langvars['l_opt2_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
@@ -147,5 +147,5 @@ if ($changed_language)
 echo "<br>";
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

@@ -26,7 +26,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'main', 'attack', 
 $title = $langvars['l_zi_title'];
 $body_class = 'zoneinfo';
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<h1>" . $title . "</h1>\n";
@@ -205,5 +205,5 @@ echo "<br><br>";
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

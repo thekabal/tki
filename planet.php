@@ -23,7 +23,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_planet_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
@@ -71,7 +71,7 @@ if ($planet_id <= 0)
     echo 'Invalid Planet<br><br>';
     Tki\Text::gotoMain($pdo_db, $lang);
 
-    $footer = new Tki\Footer;
+    $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
@@ -95,7 +95,7 @@ if (!$planetinfo)
     die();
 }
 
-$admin_log = new Tki\AdminLog;
+$admin_log = new Tki\AdminLog();
 
 if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 {
@@ -110,7 +110,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         echo $langvars['l_planet_none'] . " <p>";
         Tki\Text::gotoMain($pdo_db, $lang);
 
-        $footer = new Tki\Footer;
+        $footer = new Tki\Footer();
         $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
@@ -128,7 +128,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         echo "<br>";
         Tki\Text::gotoMain($pdo_db, $lang);
 
-        $footer = new Tki\Footer;
+        $footer = new Tki\Footer();
         $footer->display($pdo_db, $lang, $tkireg, $template);
         die();
     }
@@ -428,7 +428,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
-                $footer = new Tki\Footer;
+                $footer = new Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
@@ -554,7 +554,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
-                $footer = new Tki\Footer;
+                $footer = new Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
@@ -602,7 +602,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
-                $footer = new Tki\Footer;
+                $footer = new Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
@@ -663,7 +663,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 echo "You need to Click on the planet first.<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
-                $footer = new Tki\Footer;
+                $footer = new Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
@@ -675,7 +675,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 echo $langvars['l_plant_scn_turn'] . "<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
-                $footer = new Tki\Footer;
+                $footer = new Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
@@ -700,7 +700,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 Tki\Text::gotoMain($pdo_db, $lang);
                 Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], \Tki\LogEnums::PLANET_SCAN_FAIL, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
-                $footer = new Tki\Footer;
+                $footer = new Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }
@@ -961,5 +961,5 @@ echo "<a href =\"bounty.php\">" . $langvars['l_by_placebounty'] . "</a><p>";
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

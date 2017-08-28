@@ -43,7 +43,7 @@ class Team
 
         // Check to see if the player is a member of $team['id'] if so return true, else return false.
         $returnvalue = ($playerinfo['team'] == $team['id']);
-        return (bool) $returnvalue;
+        return $returnvalue;
     }
 
     public static function isTeamOwner(int $team, array $playerinfo) : bool
@@ -56,7 +56,7 @@ class Team
 
         // Check to see if the player is the Owner of $team['creator'] if so return true, else return false.
         $returnvalue = ($playerinfo['ship_id'] == $team['creator']);
-        return (bool) $returnvalue;
+        return $returnvalue;
     }
 
     public static function validateTeam(\PDO $pdo_db, $name = null, $desc = null, $creator = null) : bool

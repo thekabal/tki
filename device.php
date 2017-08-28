@@ -26,7 +26,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('device', 'common', 'globa
 $title = $langvars['l_device_title'];
 $body_class = 'device';
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 echo "<body class=" . $body_class . "><br>";
@@ -77,5 +77,5 @@ echo "<br>";
 
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

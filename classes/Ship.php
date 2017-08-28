@@ -55,12 +55,12 @@ class Ship
                                  $langvars['l_logout'] . '</a>', $langvars['l_die_please']);
                 $title = $langvars['l_error'];
 
-                $header = new \Tki\Header;
+                $header = new \Tki\Header();
                 $header->display($pdo_db, $lang, $template, $title);
 
                 echo $error_status;
 
-                $footer = new \Tki\Footer;
+                $footer = new \Tki\Footer();
                 $footer->display($pdo_db, $lang, $tkireg, $template);
                 die();
             }

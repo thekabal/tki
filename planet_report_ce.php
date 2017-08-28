@@ -23,7 +23,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_pr_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
@@ -48,7 +48,7 @@ if ($tpcreds !== null && $tpcreds !== false)
 }
 elseif ($buildp !== null && $builds !== null)
 {
-    $build_bases = new Tki\Bases;
+    $build_bases = new Tki\Bases();
     $build_bases->buildBase($pdo_db, $langvars, $buildp, $builds, $tkireg);
 }
 else
@@ -59,5 +59,5 @@ else
 echo '<br><br>';
 Tki\Text::gotoMain($pdo_db, $lang);
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

@@ -21,7 +21,7 @@ require_once './common.php';
 
 $title = $langvars['l_mail_title'];
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
@@ -102,5 +102,5 @@ else
     }
 }
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

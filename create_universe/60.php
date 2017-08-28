@@ -17,7 +17,7 @@
 // File: create_universe/60.php
 
 // Determine current step, next step, and number of steps
-$step_finder = new Tki\BigBang;
+$step_finder = new Tki\BigBang();
 $create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
@@ -535,11 +535,11 @@ for ($t = 0; $t < $z; $t++)
     }
 }
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/60.tpl');
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

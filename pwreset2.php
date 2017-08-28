@@ -22,7 +22,7 @@ require_once './common.php';
 $title = $langvars['l_pwr_title'];
 $body_class = 'options';
 
-$header = new Tki\Header;
+$header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Database driven language entries
@@ -141,5 +141,5 @@ else
     // Admin log this attempt to use an invalid code
 }
 
-$footer = new Tki\Footer;
+$footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);
