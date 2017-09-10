@@ -102,11 +102,7 @@ class Bases
 
             // Calc Ownership and Notify User Of Results
             $ownership = \Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
-            if ($ownership !== null)
-            {
-                echo $ownership . "<p>";
-            }
-
+            echo $ownership . "<p>";
             return $planetinfo;
         }
     }

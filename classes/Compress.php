@@ -35,12 +35,6 @@ class Compress
     {
         $request = Request::createFromGlobals();
 
-        // Check to see if we have data, if not, then return empty string
-        if ($output === null)
-        {
-            return '';
-        }
-
         // Handle the supported compressions.
         $supported_enc = array();
         if ($request->headers->get('HTTP_ACCEPT_ENCODING'))
