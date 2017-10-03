@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "phpmd/phpmd" : "^2.6.0",
-        "sebastian/phpcpd": "^2.0.4",
+        "sebastian/phpcpd": "^3.0.0",
         "friendsofphp/php-cs-fixer": "^2.1.1",
         "squizlabs/PHP_CodeSniffer": "^3.0.2",
         "phpunit/phpunit": "^6.0.8",
