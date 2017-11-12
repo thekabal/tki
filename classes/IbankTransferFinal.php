@@ -163,9 +163,9 @@ class IbankTransferFinal
             $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             if ($sql_test === true)
             {
-                $stmt->bindParam(':planet_id', $splanet_id, PDO::PARAM_INT);
+                $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
                 $stmt->execute();
-                $source = $stmt->fetch(PDO::FETCH_ASSOC);
+                $source = $stmt->fetch(\PDO::FETCH_ASSOC);
             }
 
             if (empty($source))
@@ -183,9 +183,9 @@ class IbankTransferFinal
             $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             if ($sql_test === true)
             {
-                $stmt->bindParam(':planet_id', $dplanet_id, PDO::PARAM_INT);
+                $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
                 $stmt->execute();
-                $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+                $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
             }
 
             if (empty($dest))
