@@ -21,7 +21,7 @@ namespace Tki;
 
 class IbankTransferFinal
 {
-    public static function final(\PDO $pdo_db, $db, string $lang, array $langvars, array $playerinfo, array $account, int $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Smarty $template): void
+    public static function final(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, array $account, int $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Smarty $template): void
     {
         $amount = preg_replace("/[^0-9]/", '', $amount);
 
@@ -157,30 +157,41 @@ class IbankTransferFinal
                 \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errplanetsrcanddest'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
 
-            $sql = "SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?";
-            $res = $db->Execute($sql, array($splanet_id));
-            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            if (!$res || $res->EOF)
+            $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
+
+            $stmt = $pdo_db->prepare($sql);
+            $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            if ($sql_test === true)
+            {
+                $stmt->bindParam(':planet_id', $splanet_id, PDO::PARAM_INT);
+                $stmt->execute();
+                $source = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+
+            if (empty($source))
             {
                 \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
-
-            $source = $res->fields;
 
             if (empty($source['name']))
             {
                 $source['name'] = $langvars['l_ibank_unnamed'];
             }
 
-            $sql = "SELECT name, credits, owner, sector_id FROM {$db->prefix}planets WHERE planet_id = ?";
-            $res = $db->Execute($sql, array($dplanet_id));
-            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            if (!$res || $res->EOF)
+            $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            if ($sql_test === true)
+            {
+                $stmt->bindParam(':planet_id', $dplanet_id, PDO::PARAM_INT);
+                $stmt->execute();
+                $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+
+            if (empty($dest))
             {
                 \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
-
-            $dest = $res->fields;
 
             if (empty($dest['name']))
             {
