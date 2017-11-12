@@ -21,22 +21,21 @@ namespace Tki;
 
 class TraderouteBuildNew
 {
-    public static function new(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
+    public static function new(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
 
         if ($traderoute_id !== null)
         {
-            $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
-            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::traderoutes WHERE traderoute_id=:traderoute_id");
+            $stmt->bindParam(':traderoute_id', $traderoute_id, \PDO::PARAM_INT);
+            $editroute = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if (!$result || $result->EOF)
+            if ($editroute === null)
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_editerr']);
             }
-
-            $editroute = $result->fields;
 
             if ($editroute['owner'] != $playerinfo['ship_id'])
             {
@@ -61,44 +60,51 @@ class TraderouteBuildNew
         echo $langvars['l_tdr_traderoute'] . "</strong></font><p>";
 
         // Get Planet info Team and Personal
-
-        $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ? ORDER BY sector_id", array($playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-
-        $num_planets = $result->RecordCount();
-        $counter = 0;
-        $planets = array();
-        while (!$result->EOF)
+        $i = 0;
+        $sql = "SELECT * FROM ::prefix::planets WHERE owner=:ship_id ORDER BY sector_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        $personal_planet_list = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($personal_planet_list !== null)
         {
-            $planets[$counter] = $result->fields;
-
-            if ($planets[$counter]['name'] === null)
+            foreach ($personal_planet_list as $tmp_planet)
             {
-                $planets[$counter]['name'] = $langvars['l_tdr_unnamed'];
-            }
+                $planets[$i] = $tmp_planet['link_dest'];
 
-            $counter++;
-            $result->MoveNext();
+                if ($planets[$i]['name'] === null)
+                {
+                    $planets[$i]['name'] = $langvars['l_tdr_unnamed'];
+                }
+
+                $i++;
+            }
         }
 
-        $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE team = ? AND team <> 0 AND owner <> ? ORDER BY sector_id", array($playerinfo['team'], $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-
-        $num_team_planets = $result->RecordCount();
-        $counter = 0;
+        $i = 0;
         $planets_team = array();
-        while (!$result->EOF)
+        $sql = "SELECT * FROM ::prefix::planets WHERE team = :player_team AND team <> 0 AND owner <> :ship_id ORDER BY sector_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':player_team', $playerinfo['team'], \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        $team_planet_list = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($team_planet_list !== null)
         {
-            $planets_team[$counter] = $result->fields;
-
-            if ($planets_team[$counter]['name'] === null)
+            foreach ($team_planet_list as $tmp_planet)
             {
-                $planets_team[$counter]['name'] = $langvars['l_tdr_unnamed'];
-            }
+                $planets_team[$i] = $tmp_planet['link_dest'];
 
-            $counter++;
-            $result->MoveNext();
+                if ($planets_team[$i]['name'] === null)
+                {
+                    $planets_team[$i]['name'] = $langvars['l_tdr_unnamed'];
+                }
+
+                $i++;
+            }
         }
+
+        $num_team_planets = count ($planets_team);
 
         // Display Current Sector
         echo $langvars['l_tdr_cursector'] . " " . $playerinfo['sector'] . "<br>";

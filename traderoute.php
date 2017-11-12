@@ -227,12 +227,12 @@ if (mb_strlen(trim($confirm)) === 0)
 if ($command == 'new')
 {
     // Displays new trade route form
-    \Tki\TraderouteBuildNew::new($pdo_db, $db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, null);
+    \Tki\TraderouteBuildNew::new($pdo_db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, null);
 }
 elseif ($command == 'edit')
 {
     // Displays new trade route form, edit
-    \Tki\TraderouteBuildNew::new($pdo_db, $db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, $traderoute_id);
+    \Tki\TraderouteBuildNew::new($pdo_db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, $traderoute_id);
 }
 elseif ($command == 'create')
 {
