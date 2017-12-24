@@ -16,7 +16,8 @@
         "adodb/adodb-php": "v5.20.9",
         "symfony/http-foundation": "^4.0.1",
         "ext-PDO": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "symfony/thanks": "^1.0"
     },
     "require-dev": {
         "phpmd/phpmd" : "^2.6.0",
@@ -27,6 +28,9 @@
         "povils/phpmnd": "^1.0",
         "phpstan/phpstan": "^0.9.1",
         "phpmetrics/phpmetrics": "^2.2"
+    },
+    "config": {
+        "optimize-autoloader": true
     },
     "autoload": {
         "psr-4": { "Tki\\": ["classes/", "tests/", "config/"]}
