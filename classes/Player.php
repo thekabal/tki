@@ -42,7 +42,7 @@ class Player
 
         if ($_SESSION['username'] !== null && $_SESSION['password'] !== null)
         {
-            $sql = "SELECT ip_address, password, last_login, ship_id, ship_destroyed, dev_escapepod FROM ::prefix::ships WHERE email=:email LIMIT 1";
+            $sql = "SELECT ip_address, last_login, ship_id, ship_destroyed, dev_escapepod FROM ::prefix::ships WHERE email=:email LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
             $stmt->execute();
@@ -50,6 +50,14 @@ class Player
 
             if ($playerinfo !== false)
             {
+                // This is slightly non-ideal. However, I'm working towards splitting the player object & table out of the Ships object & table. First up is password. Temporarily merge it back into playerinfo, later to be managed by the objects.
+                $sql = "SELECT password FROM ::prefix::players WHERE player_id=:player_id LIMIT 1";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':player_id', $playerinfo['ship_id'], \PDO::PARAM_STR);
+                $stmt->execute();
+                $dump = $stmt->fetch();
+                $playerinfo['password'] = $dump['password'];
+
                 // Check the password against the stored hashed password
                 // Check the cookie to see if username/password are empty - check password against database
                 if (password_verify($_SESSION['password'], $playerinfo['password']))

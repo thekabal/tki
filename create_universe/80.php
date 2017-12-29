@@ -254,6 +254,18 @@ $variables['admin_pass'] = \Tki\SecureConfig::ADMIN_PASS;
 $local_table_timer->stop();
 $variables['admin_account_results']['elapsed'] = $local_table_timer->elapsed();
 
+$local_table_timer->start(); // Start benchmarking for set password on admin account
+$sql2 = "INSERT INTO ::prefix::players " .
+        "(password) VALUES" .
+        "(:password)";
+$stmt2 = $pdo_db->prepare($sql2);
+$admin_hashed_pw = password_hash(\Tki\SecureConfig::ADMIN_PASS, PASSWORD_DEFAULT);
+$stmt2->bindParam(':password', $admin_hashed_pw, \PDO::PARAM_STR);
+$resxx = $stmt2->execute();
+$variables['admin_password_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
+$local_table_timer->stop();
+$variables['admin_password_results']['elapsed'] = $local_table_timer->elapsed();
+
 for ($zz = 0; $zz < $tkireg->max_presets; $zz++)
 {
     $local_table_timer->start(); // Start benchmarking for admin preset #$zz

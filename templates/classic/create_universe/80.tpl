@@ -196,6 +196,17 @@
       <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="red">{$langvars['l_error']}</font></td>
     </tr>
     {/if}
+    {if $variables['admin_password_results']['result'] === true}
+    <tr title="{$langvars['l_cu_no_errors_found']}">
+      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_insert_shipinfo_admin']} {$variables['admin_name']} - {$langvars['l_cu_completed_in']|replace:'[time]':$variables['admin_password_results'].elapsed}</font></td>
+      <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="Blue">{$langvars['l_cu_inserted']}</font></td>
+    </tr>
+    {else}
+    <tr title="{$variables['admin_password_results']['result']}">
+      <td width="600" bgcolor="#ccccff"><font size="1" color="#000000">{$langvars['l_cu_insert_shipinfo_admin']} {$variables['admin_name']}</font></td>
+      <td width="100" align="center" bgcolor="#C0C0C0"><font size="1" color="red">{$langvars['l_error']}</font></td>
+    </tr>
+    {/if}
 
     {foreach from=$variables['admin_preset_results'] key=count item=result}
         {if $result['result'] === true}
