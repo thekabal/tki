@@ -40,7 +40,7 @@ $variables['link_forums'] = $tkireg->link_forums;
 $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'index';
 
-// Get list of available languages
+ // Get list of available languages
 $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 
 // Temporarily set the template to the default template until we have a user option
