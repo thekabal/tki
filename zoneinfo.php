@@ -34,11 +34,8 @@ echo "<body class=" . $body_class . ">";
 $zone = (int) filter_input(INPUT_GET, 'zone', FILTER_SANITIZE_NUMBER_INT);
 
 // Get playerinfo from database
-$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
-$stmt->execute();
-$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);

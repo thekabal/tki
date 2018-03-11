@@ -29,11 +29,8 @@ $body_class = 'ibank';
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
-$stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE email=:email");
-$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
-$result = $stmt->execute();
-Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id");
 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);

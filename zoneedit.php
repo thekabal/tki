@@ -123,11 +123,8 @@ $curzone['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $curzone['
 
 if ($curzone['team_zone'] == 'N')
 {
-    $sql = "SELECT ship_id FROM ::prefix::ships WHERE email=:email LIMIT 1";
-    $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
-    $stmt->execute();
-    $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+    $ownerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 }
 else
 {

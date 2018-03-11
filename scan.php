@@ -30,11 +30,8 @@ $header->display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('scan', 'common', 'bounty', 'report', 'main', 'global_includes', 'global_funcs', 'footer', 'news', 'planet', 'regional'));
 
 // Get playerinfo from database
-$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
-$stmt->execute();
-$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $filtered_ship_id = null;

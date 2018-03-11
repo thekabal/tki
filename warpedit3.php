@@ -47,11 +47,8 @@ if (mb_strlen(trim($target_sector)) === 0)
 }
 
 // Get playerinfo from database
-$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
-$stmt->execute();
-$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 if ($playerinfo['turns'] < 1)
 {
@@ -98,11 +95,9 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 }
 
 $target_sector = round($target_sector);
-$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
-$stmt->execute();
-$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 $sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);

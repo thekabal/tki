@@ -32,11 +32,8 @@ $header->display($pdo_db, $lang, $template, $title, $body_class);
 echo "<body class=" . $body_class . "><br>";
 
 // Get playerinfo from database
-$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
-$stmt->execute();
-$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Fix negative quantities. How do the quantities acutally get negative?
 

@@ -51,11 +51,8 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
 unset($_SESSION['ship_selected']);
 
 // Get playerinfo from database
-$sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_INT);
-$stmt->execute();
-$playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
