@@ -42,11 +42,8 @@ class Player
 
         if ($_SESSION['username'] !== null && $_SESSION['password'] !== null)
         {
-            $sql = "SELECT password, ip_address, last_login, ship_id, ship_destroyed, dev_escapepod FROM ::prefix::ships WHERE email=:email LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
-            $stmt->execute();
-            $playerinfo = $stmt->fetch();
+            $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
             if ($playerinfo !== false)
             {

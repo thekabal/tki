@@ -100,14 +100,8 @@ class Character
     public function getInsignia(\PDO $pdo_db, string $a_username, array $langvars) : string
     {
         // Lookup players score.
-        $sql = "SELECT score FROM ::prefix::ships WHERE email =:email";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':email', $a_username, \PDO::PARAM_STR);
-        $stmt->execute();
-        Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        $res = $stmt->fetch();
-        $playerinfo = array();
-        $playerinfo['score'] = $res['score'];
+        $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $playerinfo = $players_gateway->selectPlayerInfo($a_username);
 
         for ($i = 0; $i < 20; $i++)
         {

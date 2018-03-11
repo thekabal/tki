@@ -26,16 +26,8 @@ class PlanetReportCE
         $current_state = "GO"; // Current State
         $playerinfo = Array();
 
-        // Look up the info for the player that wants to collect the credits.
-        $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        if ($sql_test === true)
-        {
-            $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
-            $stmt->execute();
-            $playerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
-        }
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
         // Set s_p_pair as an array.
         $s_p_pair = array();
@@ -99,15 +91,8 @@ class PlanetReportCE
         $planetinfo = Array();
 
         // Get playerinfo from database
-        $sql = "SELECT * FROM ::prefix::ships WHERE email=:email LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        if ($sql_test === true)
-        {
-            $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
-            $stmt->execute();
-            $playerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
-        }
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
         // Get planetinfo from database
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
