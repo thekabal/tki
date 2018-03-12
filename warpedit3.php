@@ -116,7 +116,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
     die();
 }
 
-$sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :sector_id";
+$sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :sector_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();
