@@ -52,10 +52,9 @@ if ($playerinfo['cleared_defenses'] > ' ')
     die();
 }
 
-
 // Pull sector info from database
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
-$sectorinfo = $sectors_gateway->selectsectorInfo($playerinfo['sector']);
+$sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 if ($playerinfo['on_planet'] == "Y")
 {

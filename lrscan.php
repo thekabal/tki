@@ -124,12 +124,9 @@ if ($sector == "*")
         $row2 = $result2->fields;
         $num_ships = $row2['count'];
 
-        // Get sectorinfo from database
-        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $row['link_dest'], PDO::PARAM_INT);
-        $stmt->execute();
-        $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Pull sector info from database
+        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+        $sectorinfo = $sectors_gateway->selectSectorInfo($row['link_dest']);
 
         // Get port type and discover the presence of a planet in scanned sector
         $result3 = $db->Execute("SELECT planet_id FROM {$db->prefix}planets WHERE sector_id = ?;", array($row['link_dest']));

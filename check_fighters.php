@@ -21,11 +21,8 @@
 $langvars = Tki\Translate::load($pdo_db, $lang, array('check_fighters', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
 
 // Get sectorinfo from database
-$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $sector, PDO::PARAM_INT);
-$stmt->execute();
-$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectorinfo = $sectors_gateway->selectSectorInfo($sector);
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type ='F' ORDER BY quantity DESC;", array($sector));
 Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
