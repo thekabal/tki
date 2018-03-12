@@ -54,11 +54,8 @@ if ($playerinfo['cleared_defenses'] > ' ')
 
 
 // Pull sector info from database
-$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
-$stmt->execute();
-$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectorinfo = $sectors_gateway->selectsectorInfo($playerinfo['sector']);
 
 if ($playerinfo['on_planet'] == "Y")
 {
