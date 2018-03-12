@@ -102,7 +102,7 @@ if (mb_strlen(trim($trades)) === 0)
     $trades = false;
 }
 
-$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
+$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
 $stmt->execute();

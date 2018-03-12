@@ -100,7 +100,7 @@ if ($sectorinfo['port_energy'] < 0)
     $sectorinfo['port_energy'] = 0;
 }
 
-$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
+$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
 $stmt->execute();

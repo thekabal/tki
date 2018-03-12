@@ -68,7 +68,7 @@ if ($playerinfo['dev_beacon'] > 0)
     }
     elseif ($zoneinfo['allow_beacon'] == 'L')
     {
-        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id";
+        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
         $stmt->execute();
