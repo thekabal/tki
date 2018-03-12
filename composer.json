@@ -37,7 +37,7 @@
         "tests": [
             "/usr/bin/php /var/www/html/tki/vendor/bin/phpmd . text /var/www/html/tki/vendor/bin/phpmd.xml --exclude vendor/,templates/",
             "/usr/bin/php /var/www/html/tki/vendor/bin/phpcs --standard=/var/www/html/tki/vendor/bin/phpcs.xml . --ignore=templates,vendor",
-            "/usr/bin/php /var/www/html/tki/vendor/bin/phpstan analyze --no-progress --no-ansi -l 5 -c /var/www/html/tki/vendor/bin/phpstan.neon -vvv ."
+            "/usr/bin/php /var/www/html/tki/vendor/bin/phpstan analyze --no-progress --no-ansi -l 3 -c /var/www/html/tki/vendor/bin/phpstan.neon -vvv ."
             ],
         "post-update-cmd": [
             "rm -rf vendor/ezyang/htmlpurifier/docs/",
