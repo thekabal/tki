@@ -54,11 +54,9 @@ unset($_SESSION['ship_selected']);
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ship_id', $ship_id, PDO::PARAM_INT);
-$stmt->execute();
-$targetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get targetinfo from database
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$targetinfo = $players_gateway->selectPlayerInfo($ship_id);
 
 $playerscore = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 $targetscore = Tki\Score::updateScore($pdo_db, $targetinfo['ship_id'], $tkireg, $playerinfo);
