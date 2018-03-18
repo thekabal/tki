@@ -31,12 +31,9 @@ class KabalTrade
         $shiporganics = null;
         $shipgoods = null;
 
-        // Obtain sector information
-        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $playerinfo['sector'], \PDO::PARAM_INT);
-        $stmt->execute();
-        $sectorinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
+        // Pull sector info from database
+        $sectors_gateway = new Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+        $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
         // Obtain zone information
         $sql = "SELECT zone_id, allow_attack, allow_trade FROM ::prefix::zones WHERE zone_id=:zone_id";

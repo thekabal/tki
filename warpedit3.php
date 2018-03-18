@@ -116,13 +116,11 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
     die();
 }
 
-$sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :sector_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
-$stmt->execute();
-$tmpinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get sectorinfo from database
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectorinfo = $sectors_gateway->selectSectorInfo($target_sector);
 
-if (!$tmpinfo)
+if (!$sectorinfo)
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);

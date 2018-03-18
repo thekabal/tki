@@ -220,12 +220,9 @@ else
 {
     // User requested a single sector (standard) long range scan
 
-    // Get playerinfo from database
-    $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-    $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector_id', $sector, PDO::PARAM_INT);
-    $stmt->execute();
-    $sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Get sectorinfo from database
+    $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+    $sectorinfo = $sectors_gateway->selectSectorInfo($sector);
 
     // Get sectors which can be reached through scanned sector
     $result3 = $db->Execute("SELECT link_dest FROM {$db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($sector));

@@ -38,11 +38,8 @@ $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player g
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Get sectorinfo from database
-$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
-$stmt->execute();
-$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 $result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE sector_id = ?;", array($playerinfo['sector']));
 Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);

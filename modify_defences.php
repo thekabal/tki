@@ -50,11 +50,9 @@ if (mb_strlen(trim($response)) === 0)
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
-$stmt->execute();
-$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get sectorinfo from database
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 if ($playerinfo['turns'] < 1)
 {

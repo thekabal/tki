@@ -71,11 +71,9 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 $current_sector = $playerinfo['sector'];
 $computer_tech  = $playerinfo['computer'];
 
-$sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $current_sector, PDO::PARAM_INT);
-$stmt->execute();
-$sectorinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get sectorinfo from database
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectorinfo = $sectors_gateway->selectSectorInfo($current_sector);
 
 if ($state == 0)
 {
