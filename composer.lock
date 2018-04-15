@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "beb51d7ce0f07699383d59e09de990a9",
+    "content-hash": "adf2075fe037f07ddfafaba9f592437c",
     "packages": [
         {
             "name": "adodb/adodb-php",
-            "version": "v5.20.9",
+            "version": "v5.20.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ADOdb/ADOdb.git",
-                "reference": "f601748cca1ccb86dfd427620a1692a70e681075"
+                "reference": "0e5243790c5a02a88b0dfe78c390fe795ad2d672"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ADOdb/ADOdb/zipball/f601748cca1ccb86dfd427620a1692a70e681075",
-                "reference": "f601748cca1ccb86dfd427620a1692a70e681075",
+                "url": "https://api.github.com/repos/ADOdb/ADOdb/zipball/0e5243790c5a02a88b0dfe78c390fe795ad2d672",
+                "reference": "0e5243790c5a02a88b0dfe78c390fe795ad2d672",
                 "shasum": ""
             },
             "require": {
@@ -32,7 +32,7 @@
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause",
-                "LGPL-2.1"
+                "LGPL-2.1-or-later"
             ],
             "authors": [
                 {
@@ -58,7 +58,7 @@
                 "library",
                 "php"
             ],
-            "time": "2016-12-21T17:19:42+00:00"
+            "time": "2018-03-30T17:31:04+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -116,16 +116,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.3",
+            "version": "2.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "1bec00a10039b823cc94eef4eddd47dcd3b2ca04"
+                "reference": "8790f594151ca6a2010c6218e09d96df67173ad3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/1bec00a10039b823cc94eef4eddd47dcd3b2ca04",
-                "reference": "1bec00a10039b823cc94eef4eddd47dcd3b2ca04",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/8790f594151ca6a2010c6218e09d96df67173ad3",
+                "reference": "8790f594151ca6a2010c6218e09d96df67173ad3",
                 "shasum": ""
             },
             "require": {
@@ -134,7 +134,7 @@
             },
             "require-dev": {
                 "dominicsayers/isemail": "dev-master",
-                "phpunit/phpunit": "^4.8.35",
+                "phpunit/phpunit": "^4.8.35||^5.7||^6.0",
                 "satooshi/php-coveralls": "^1.0.1"
             },
             "suggest": {
@@ -169,7 +169,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2017-11-15T23:40:40+00:00"
+            "time": "2018-04-10T10:11:19+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -2303,16 +2303,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.1.1",
+            "version": "7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "f7fe5127889519e421600fe0feeb113a5e210f20"
+                "reference": "a7834993ddbf4b0ed2c3b2dc1f3b1d093ef910a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f7fe5127889519e421600fe0feeb113a5e210f20",
-                "reference": "f7fe5127889519e421600fe0feeb113a5e210f20",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a7834993ddbf4b0ed2c3b2dc1f3b1d093ef910a9",
+                "reference": "a7834993ddbf4b0ed2c3b2dc1f3b1d093ef910a9",
                 "shasum": ""
             },
             "require": {
@@ -2330,7 +2330,7 @@
                 "phpunit/php-file-iterator": "^1.4.3",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-timer": "^2.0",
-                "phpunit/phpunit-mock-objects": "^6.1",
+                "phpunit/phpunit-mock-objects": "^6.1.1",
                 "sebastian/comparator": "^2.1",
                 "sebastian/diff": "^3.0",
                 "sebastian/environment": "^3.1",
@@ -2379,20 +2379,20 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-04-06T12:39:30+00:00"
+            "time": "2018-04-13T02:28:50+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "3f5ca97eee66a07951d018f6726017629c85c86d"
+                "reference": "70c740bde8fd9ea9ea295be1cd875dd7b267e157"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3f5ca97eee66a07951d018f6726017629c85c86d",
-                "reference": "3f5ca97eee66a07951d018f6726017629c85c86d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/70c740bde8fd9ea9ea295be1cd875dd7b267e157",
+                "reference": "70c740bde8fd9ea9ea295be1cd875dd7b267e157",
                 "shasum": ""
             },
             "require": {
@@ -2435,7 +2435,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2018-04-06T08:14:40+00:00"
+            "time": "2018-04-11T04:50:36+00:00"
         },
         {
             "name": "psr/container",
