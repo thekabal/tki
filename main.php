@@ -695,12 +695,12 @@ if ($playerinfo['sector'] !== 1)
     }
     else
     {
-        echo "<div style='color:#fff;'>{$langvars['l_none']}</div>\n";
+        echo "<div style='color:#fff;'><br>{$langvars['l_none']}</div>\n";
     }
 }
 else
 {
-        echo "<div style='color:#fff;'>{$langvars['l_sector_0']}</div>\n";
+        echo "<div style='color:#fff;'><br>{$langvars['l_sector_0']}</div>\n";
 }
 
 echo "</div>";
