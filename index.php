@@ -26,31 +26,42 @@ if (!Tki\Db::isActive($pdo_db))
 {
     // If DB is not active, redirect to create universe to run install
     header('Location: create_universe.php');
-    die();
 }
+else
+{
+    // Database driven language entries
+    $langvars = Tki\Translate::load(
+        $pdo_db,
+        $lang,
+        array(
+            'footer',
+            'global_includes',
+            'index',
+            'login',
+            'logout',
+            'main'
+            ));
 
-// Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('regional', 'admin', 'attack', 'beacon', 'bounty', 'check_fighters', 'check_mines', 'combat', 'common', 'team', 'create_universe', 'defense_report', 'device', 'dump', 'emerwarp', 'error', 'faq', 'feedback', 'footer', 'galaxy', 'genesis', 'ibank', 'index', 'log', 'login', 'logout', 'lrscan', 'mail', 'mailto', 'main', 'mines', 'modify_defenses', 'move', 'navcomp', 'new', 'new_player_guide', 'news', 'option2', 'options', 'planet', 'planet_report', 'port', 'presets', 'pwreset', 'ranking', 'readmail', 'report', 'rsmove', 'scan', 'scheduler', 'sector_fighters', 'self_destruct', 'settings', 'setup_info', 'ship', 'team_planets', 'teams', 'traderoutes', 'warpedit', 'kabal_control', 'zoneedit', 'zoneinfo', 'global_includes'));
+    $variables = null;
+    $variables['lang'] = $lang;
+    $variables['link'] = $link;
+    $variables['title'] = $langvars['l_welcome_tki'];
+    $variables['link_forums'] = $tkireg->link_forums;
+    $variables['admin_mail'] = $tkireg->admin_mail;
+    $variables['body_class'] = 'index';
 
-$variables = null;
-$variables['lang'] = $lang;
-$variables['link'] = $link;
-$variables['title'] = $langvars['l_welcome_tki'];
-$variables['link_forums'] = $tkireg->link_forums;
-$variables['admin_mail'] = $tkireg->admin_mail;
-$variables['body_class'] = 'index';
+    // Get list of available languages
+    $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
 
- // Get list of available languages
-$variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
+    // Temporarily set the template to the default template until we have a user option
+    $variables['template'] = $tkireg->default_template;
+    $header = new Tki\Header();
+    $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
-// Temporarily set the template to the default template until we have a user option
-$variables['template'] = $tkireg->default_template;
-$header = new Tki\Header();
-$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
+    $template->addVariables('langvars', $langvars);
+    $template->addVariables('variables', $variables);
+    $template->display('index.tpl');
 
-$template->addVariables('langvars', $langvars);
-$template->addVariables('variables', $variables);
-$template->display('index.tpl');
-
-$footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer = new Tki\Footer();
+    $footer->display($pdo_db, $lang, $tkireg, $template);
+}
