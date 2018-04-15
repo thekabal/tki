@@ -22,7 +22,7 @@ require_once './common.php';
 Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $body_class = 'tki';
-$include_ckeditor = true;
+$include_ckeditor = "include";
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('mailto', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
