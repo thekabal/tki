@@ -397,12 +397,6 @@ class TraderouteBuildNew
             </form>
             ";
 
-        echo "<div style='text-align:left;'>\n";
-        \Tki\Text::gotoMain($pdo_db, $lang);
-        echo "</div>\n";
-
-        $footer = new \Tki\Footer();
-        $footer->display($pdo_db, $lang, $tkireg, $template);
-        die();
+        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
     }
 }
