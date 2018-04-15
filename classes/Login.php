@@ -29,11 +29,18 @@ class Login
             $lang,
         array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
 
-        // Check if game is closed
-        Game::isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars);
+        $flag = false;
+        if (Game::isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars))
+        {
+            $flag = false;
+        }
 
-        // Handle authentication check - Will die if fails, or return correct playerinfo
         $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $template);
+
+        if ($playerinfo === false)
+        {
+            $flag = false;
+        }
 
         // Establish timestamp for interval in checking bans
         $stamp = date('Y-m-d H:i:s');
@@ -41,12 +48,23 @@ class Login
         $timestamp['now']  = (int) strtotime($stamp);
         $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
 
-        // Check for ban - Ignore the false return if not
-        Player::ban($pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars, $tkireg);
+        if (Player::ban($pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars, $tkireg))
+        {
+            $flag = false;
+        }
 
-        // Check for destroyed ship - Ignore the false return if not
-        Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo);
+        if (Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo))
+        {
+            $flag = false;
+        }
 
-        return true;
+        if ($flag)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
