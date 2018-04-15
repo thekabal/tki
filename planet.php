@@ -613,7 +613,10 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                 }
                 else
                 {
-                    \Tki\PlanetCombat::prime($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo);
+                    if (\Tki\PlanetCombat::prime($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo))
+                    {
+                        die();
+                    }
                 }
             }
         }
