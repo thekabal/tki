@@ -106,22 +106,19 @@ class Db
             // Connect to database with pdo
             try
             {
+                $charset = "charset=utf8mb4";
                 if ($db_type === 'postgres9')
                 {
+                    $charset = null;
                     if ($db_port === null)
                     {
                         $db_port = '5432';
                     }
+                }
 
-                    $pdo_db = new \Tki\TkiPDO("pgsql:host=$db_host; port=$db_port; dbname=$db_name;",
-                                              $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
-                }
-                else
-                {
-                    // Include the charset when connecting
-                    $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4",
-                                              $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
-                }
+                // Include the charset when connecting
+                $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; " . $charset,
+                                          $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
             }
             catch (\PDOException $e)
             {
