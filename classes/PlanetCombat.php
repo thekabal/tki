@@ -21,7 +21,7 @@ namespace Tki;
 
 class PlanetCombat
 {
-    public static function prime(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): void
+    public static function prime(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo)
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -30,7 +30,7 @@ class PlanetCombat
 
             $footer = new \Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
+            return false;
         }
 
         // Planetary defense system calculation
