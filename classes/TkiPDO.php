@@ -32,7 +32,7 @@ class TkiPDO extends \PDO
         ?string $user = null,
         ?string $password = null,
         ?string $prefix = null,
-        array $driver_options = array()
+        array $driver_options = [ \PDO::ATTR_EMULATE_PREPARES   => false ]
     )
     {
         $this->table_prefix = $prefix;
