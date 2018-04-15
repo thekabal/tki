@@ -30,7 +30,7 @@ class Header
         Smarty $template,
         ?string $title = null,
         string $body_class = 'tki',
-        ?bool $include_ckeditor = null
+        ?string $include_ckeditor = null
     ): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common'));
