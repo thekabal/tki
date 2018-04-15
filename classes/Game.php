@@ -40,7 +40,7 @@ class Game
 
             $footer = new \Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
+            return true;
         }
         else
         {
