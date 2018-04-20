@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -534,7 +534,7 @@ else
         // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
         $trade_ore = null;
         $trade_ore = (int) filter_input(INPUT_POST, 'trade_ore', FILTER_SANITIZE_NUMBER_INT);
-        if (mb_strlen(trim($trade_ore)) === 0)
+        if ($trade_ore === 0)
         {
             $trade_ore = false;
         }
@@ -542,7 +542,7 @@ else
         // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
         $trade_organics = null;
         $trade_organics = (int) filter_input(INPUT_POST, 'trade_organics', FILTER_SANITIZE_NUMBER_INT);
-        if (mb_strlen(trim($trade_organics)) === 0)
+        if ($trade_organics === 0)
         {
             $trade_organics = false;
         }
@@ -550,7 +550,7 @@ else
         // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
         $trade_goods = null;
         $trade_goods = (int) filter_input(INPUT_POST, 'trade_goods', FILTER_SANITIZE_NUMBER_INT);
-        if (mb_strlen(trim($trade_goods)) === 0)
+        if ($trade_goods === 0)
         {
             $trade_goods = false;
         }
@@ -558,7 +558,7 @@ else
         // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
         $trade_energy = null;
         $trade_energy = (int) filter_input(INPUT_POST, 'trade_energy', FILTER_SANITIZE_NUMBER_INT);
-        if (mb_strlen(trim($trade_energy)) === 0)
+        if ($trade_energy === 0)
         {
             $trade_energy = false;
         }
