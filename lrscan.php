@@ -45,6 +45,8 @@ else
     $sector = null;
 }
 
+$image_string = null;
+
 // Get playerinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
@@ -219,6 +221,7 @@ if ($sector == "*")
 else
 {
     // User requested a single sector (standard) long range scan
+    $links = array();
 
     // Get sectorinfo from database
     $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
