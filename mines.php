@@ -73,6 +73,7 @@ $fighter_id = 0;
 $mine_id = 0;
 $set_attack = 'CHECKED';
 $set_toll = null;
+$defenses = array();
 
 // Do we have a valid recordset?
 if ($defense_present)

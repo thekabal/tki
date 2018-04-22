@@ -1,4 +1,5 @@
 <?php
+// declare(strict_types = 1);
 // The Kabal Invasion - A web-based 4X space game
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team
 //
@@ -110,7 +111,7 @@ $tr_repeat = 1;
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $tr_repeat = null;
 $tr_repeat = (int) filter_input(INPUT_POST, 'tr_repeat', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($tr_repeat)) === 0)
+if ($tr_repeat === 0)
 {
     $tr_repeat = 0;
 }
@@ -118,105 +119,105 @@ if (mb_strlen(trim($tr_repeat)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $command = null;
 $command = filter_input(INPUT_GET, 'command', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($command)) === 0)
+if (($command === null) || (mb_strlen(trim($command)) === 0))
 {
     $command = false;
 }
 
 $engage = null;
 $engage = filter_input(INPUT_POST, 'engage', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($engage)) === 0)
+if (($engage === null) || (mb_strlen(trim($engage)) === 0))
 {
     $engage = false;
 }
 
 $ptype1 = null;
 $ptype1 = filter_input(INPUT_POST, 'ptype1', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($ptype1)) === 0)
+if (($ptype1 === null) || (mb_strlen(trim($ptype1)) === 0))
 {
     $ptype1 = false;
 }
 
 $ptype2 = null;
 $ptype2 = filter_input(INPUT_POST, 'ptype2', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($ptype2)) === 0)
+if (($ptype2 === null) || (mb_strlen(trim($ptype2)) === 0))
 {
     $ptype2 = false;
 }
 
 $port_id1 = null;
 $port_id1 = filter_input(INPUT_POST, 'port_id1', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($port_id1)) === 0)
+if (($port_id1 === null) || (mb_strlen(trim($port_id1)) === 0))
 {
     $port_id1 = false;
 }
 
 $port_id2 = null;
 $port_id2 = filter_input(INPUT_POST, 'port_id2', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($port_id2)) === 0)
+if (($port_id2 === null) || (mb_strlen(trim($port_id2)) === 0))
 {
     $port_id2 = false;
 }
 
 $team_planet_id1 = null;
 $team_planet_id1 = filter_input(INPUT_POST, 'team_planet_id1', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($team_planet_id1)) === 0)
+if (($team_planet_id1 === null) || (mb_strlen(trim($team_planet_id1)) === 0))
 {
     $team_planet_id1 = false;
 }
 
 $team_planet_id2 = null;
 $team_planet_id2 = filter_input(INPUT_POST, 'team_planet_id2', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($team_planet_id2)) === 0)
+if (($team_planet_id2 === null) || (mb_strlen(trim($team_planet_id2)) === 0))
 {
     $team_planet_id2 = false;
 }
 
 $planet_id1 = null;
 $planet_id1 = filter_input(INPUT_POST, 'planet_id1', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($planet_id1)) === 0)
+if (($planet_id1 === null) || (mb_strlen(trim($planet_id1)) === 0))
 {
     $planet_id1 = false;
 }
 
 $planet_id2 = null;
 $planet_id2 = filter_input(INPUT_POST, 'planet_id2', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($planet_id2)) === 0)
+if (($planet_id2 === null) || (mb_strlen(trim($planet_id2)) === 0))
 {
     $planet_id2 = false;
 }
 
 $move_type = null;
 $move_type = filter_input(INPUT_POST, 'move_type', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($move_type)) === 0)
+if (($move_type === null) || (mb_strlen(trim($move_type)) === 0))
 {
     $move_type = false;
 }
 
 $circuit_type = null;
 $circuit_type = filter_input(INPUT_POST, 'circuit_type', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($circuit_type)) === 0)
+if (($circuit_type === null) || (mb_strlen(trim($circuit_type)) === 0))
 {
     $circuit_type = false;
 }
 
 $editing = null;
 $editing = filter_input(INPUT_POST, 'editing', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($editing)) === 0)
+if (($editing === null) || (mb_strlen(trim($editing)) === 0))
 {
     $editing = false;
 }
 
 $traderoute_id = null;
 $traderoute_id = filter_input(INPUT_GET, 'traderoute_id', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($traderoute_id)) === 0)
+if (($traderoute_id === null) || (mb_strlen(trim($traderoute_id)) === 0))
 {
     $traderoute_id = false;
 }
 
 $confirm = null;
 $confirm = filter_input(INPUT_GET, 'confirm', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($confirm)) === 0)
+if (($confirm === null) || (mb_strlen(trim($confirm)) === 0))
 {
     $confirm = false;
 }
@@ -277,6 +278,11 @@ else
     $langvars['l_tdr_confdel'] = str_replace("[here]", "<a href='traderoute.php?command=delete&amp;confirm=yes&amp;traderoute_id=" . $traderoute_id . "'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_confdel']);
     echo "<p>" . $langvars['l_tdr_confdel'] . "<p>";
 }
+
+$port1 = null;
+$port2 = null;
+$planet1 = null;
+$planet2 = null;
 
 if ($num_traderoutes == 0)
 {

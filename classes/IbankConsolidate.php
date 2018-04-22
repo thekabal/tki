@@ -153,7 +153,7 @@ class IbankConsolidate
             \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
         }
 
-        $amount = Array();
+        $amount = array();
         if ($minimum != 0)
         {
             $sql = "SELECT SUM(credits) as total, COUNT(*) AS count FROM ::prefix::planets WHERE owner = :owner_id AND credits <> 0 AND planet_id <> :planet_id AND credits >= :minimum";

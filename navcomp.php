@@ -70,6 +70,8 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 $current_sector = $playerinfo['sector'];
 $computer_tech  = $playerinfo['computer'];
+$found = null;
+$search_result = null;
 
 // Get sectorinfo from database
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls

@@ -29,6 +29,7 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
+$sector = array();
 
 // Get playerinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls

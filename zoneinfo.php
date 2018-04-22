@@ -42,6 +42,7 @@ $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
 $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$ownerinfo = array();
 
 if (!$zoneinfo)
 {

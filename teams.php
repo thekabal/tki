@@ -118,6 +118,8 @@ else
     $invite_info = null;
 }
 
+$sectors = array();
+
 // Get Team Info
 if ($whichteam !== null)
 {

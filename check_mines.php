@@ -57,6 +57,8 @@ $shipavg = Tki\CalcLevels::avgTech($targetship, 'ship');
 //    3) You are not the owner or on the team of the owner - team 0 dosent count
 //    4) You ship is at least $tkireg->mine_hullsize (setable in config/classic_config.ini) big
 
+$defenses = null;
+
 if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkireg->mine_hullsize)
 {
     // Find out if the mine owner and player are on the same team

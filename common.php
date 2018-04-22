@@ -81,6 +81,7 @@ catch (Exception $e)
     die($e . "</pre></html>");
 }
 
+$tkireg = null;
 
 if ($pdo_db !== null)
 {

@@ -40,6 +40,7 @@ if (($response === null) || (mb_strlen(trim($response)) === 0))
     $response = false;
 }
 
+$defenses = array();
 $destination = null;
 if (array_key_exists('destination', $_REQUEST) === true)
 {

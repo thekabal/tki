@@ -28,6 +28,8 @@ if (!array_key_exists('zone', $_POST))
 
 if ($_POST['zone'] === null)
 {
+    $zones = array();
+    
     $res = $db->Execute("SELECT zone_id, zone_name FROM {$db->prefix}zones ORDER BY zone_name");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)

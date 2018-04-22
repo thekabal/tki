@@ -23,6 +23,7 @@ Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Set a flag that we have not changed the language
 $changed_language = false;
+$lang = null;
 
 // Get POST['newlang'] returns null if not found.
 if (array_key_exists('newlang', $_POST) === true)

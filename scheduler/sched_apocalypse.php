@@ -32,6 +32,8 @@ if ($reccount > 200)
     $chance = 7; // Increase the chance it will happen if we have lots of planets meeting the criteria
 }
 
+$targetinfo = null;
+
 $affliction = random_int(1, $chance); // The chance something bad will happen
 if ($doomsday && $affliction < 3 && $reccount > 0)
 {

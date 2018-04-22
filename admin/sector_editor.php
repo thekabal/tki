@@ -32,6 +32,7 @@ if (!array_key_exists('operation', $_POST))
 $variables['sector'] = $_POST['sector'];
 if ($_POST['sector'] === null)
 {
+    $sectors = array();
     $res = $db->Execute("SELECT sector_id FROM {$db->prefix}universe ORDER BY sector_id");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
@@ -55,6 +56,7 @@ else
 
         $variables['sector_name'] = $row['sector_name'];
 
+        $zones = array();
         $ressubb = $db->Execute("SELECT zone_id,zone_name FROM {$db->prefix}zones ORDER BY zone_name");
         Tki\Db::logDbErrors($pdo_db, $ressubb, __LINE__, __FILE__);
         while (!$ressubb->EOF)

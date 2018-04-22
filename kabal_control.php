@@ -41,6 +41,10 @@ if ($menu !== null && $menu !== false)
 {
     $module = $menu;
 }
+else
+{
+    $module = null;
+}
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $swordfish = null;
@@ -50,6 +54,8 @@ if (mb_strlen(trim($swordfish)) === 0)
     $swordfish = false;
 }
 
+$shipname = null;
+$character = null;
 if ($swordfish != \Tki\SecureConfig::ADMIN_PASS)
 {
     echo "<form accept-charset='utf-8' action=kabal_control.php method=post>";

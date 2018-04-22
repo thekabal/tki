@@ -76,6 +76,8 @@ echo "<strong><a href=planet_report.php>" . $langvars['l_teamplanet_personal'] .
 echo "<br>";
 echo "<br>";
 
+
+$planet = array();
 $i = 0;
 if ($res)
 {

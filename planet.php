@@ -128,6 +128,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         die();
     }
 
+    $ownerinfo = null;
     if ($planetinfo['owner'] != 0)
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";

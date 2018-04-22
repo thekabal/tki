@@ -44,6 +44,8 @@ $header->display($pdo_db, $lang, $template, $title, $body_class);
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
+$startdate = null;
+
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $swordfish = null;
 $swordfish = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);

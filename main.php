@@ -78,6 +78,7 @@ if ($playerinfo['on_planet'] == "Y")
 }
 
 $i = 0;
+$links = array();
 $sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start ORDER BY link_dest ASC";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
@@ -94,6 +95,8 @@ if ($link_present !== null)
 
 $num_links = $i;
 $i = 0;
+$planets = array();
+
 $sql = "SELECT * FROM ::prefix::planets WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
@@ -115,6 +118,8 @@ $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
 $defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$defenses = array();
+
 if ($defense_present !== null)
 {
     foreach ($defense_present as $tmp_defense)
@@ -322,6 +327,7 @@ echo "</table>\n";
 // Menu
 $i = 0;
 $num_traderoutes = 0;
+$traderoutes = array();
 
 // Traderoute query
 $tr_result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE source_type = ? AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array("P", $playerinfo['sector'], $playerinfo['ship_id']));
@@ -492,6 +498,8 @@ echo "<div style='text-align:center; font-size:12px; color:#fff; font-weight:bol
 echo "<table style='height:150px; text-align:center; margin:auto; border:0px'>\n";
 echo "  <tr>\n";
 
+$planet_owner = null;
+
 if ($num_planets > 0)
 {
     $totalcount = 0;
@@ -588,6 +596,7 @@ echo "<div style='text-align:center; font-size:12px; color:#fff; font-weight:bol
 
 if ($playerinfo['sector'] !== 1)
 {
+    $result4 = null;
     $sql  = null;
     $sql .= "SELECT ::prefix::ships.*, ::prefix::teams.team_name, ::prefix::teams.id ";
     $sql .= "FROM ::prefix::ships LEFT OUTER JOIN ::prefix::teams ON ::prefix::ships.team = ::prefix::teams.id ";
@@ -710,6 +719,8 @@ if ($num_defenses > 0)
             echo "<div style='padding-top:4px; padding-bottom:4px; width:500px; margin:auto; background-color:#303030; text-align:center;'>" . $langvars['l_sector_def'] . "</div>\n";
             echo "<div style='width:498px; margin:auto; overflow:auto; height:125px; scrollbar-base-color: #303030; scrollbar-arrow-color: #fff; padding:0px; text-align:center;'>\n";
 }
+
+$def_type = null;
 
 echo "<table><tr>";
 if ($num_defenses > 0)
@@ -836,6 +847,8 @@ echo '<table style="width:100%;">';
 
 // Pull the presets for the player from the db.
 $i = 0;
+$presetinfo = array();
+
 $debug_query = $db->Execute("SELECT * FROM {$db->prefix}presets WHERE ship_id = ?;", array($playerinfo['ship_id']));
 Tki\Db::logDbErrors($pdo_db, $debug_query, __LINE__, __FILE__);
 while (!$debug_query->EOF)

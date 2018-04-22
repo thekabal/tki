@@ -24,7 +24,7 @@ class PlanetReportCE
     public static function collectCredits(\PDO $pdo_db, $db, array $langvars, array $planetarray, Reg $tkireg): void
     {
         $current_state = "GO"; // Current State
-        $playerinfo = Array();
+        $playerinfo = array();
 
         $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
@@ -87,8 +87,8 @@ class PlanetReportCE
 
     public static function takeCredits(\PDO $pdo_db, array $langvars, int $planet_id): string
     {
-        $playerinfo = Array();
-        $planetinfo = Array();
+        $playerinfo = array();
+        $planetinfo = array();
 
         // Get playerinfo from database
         $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls

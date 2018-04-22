@@ -36,6 +36,8 @@ $planet_id = preg_replace('/[^0-9]/', '', $planet_id);
 
 $result2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?", array($planet_id));
 Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+$planetinfo = array();
+
 if ($result2)
 {
     $planetinfo = $result2->fields;

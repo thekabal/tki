@@ -27,6 +27,8 @@ if (empty($command))
     echo "<input type=submit value=\"" . $langvars['l_admin_show_ip'] . "\">";
     echo "</form>";
 
+    $bans = null;
+    $players = null;
     $res = $db->Execute("SELECT ban_mask FROM {$db->prefix}ip_bans");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
@@ -74,6 +76,7 @@ if (empty($command))
             $res = $db->Execute("SELECT character_name, ship_id, email FROM {$db->prefix}ships WHERE ip_address LIKE ?;", array($ban));
             Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
             unset($players);
+            $players = null;
             while (!$res->EOF)
             {
                 $players[] = $res->fields;
@@ -121,6 +124,7 @@ if (empty($command))
 }
 elseif ($command == 'showips')
 {
+    $ips = array();
     $res = $db->Execute("SELECT DISTINCT ip_address FROM {$db->prefix}ships");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
@@ -142,7 +146,6 @@ elseif ($command == 'showips')
          "</tr>";
 
     $curcolor = $tkireg->color_line1;
-
     foreach ($ips as $ip)
     {
         echo "<tr bgcolor=$curcolor>";
@@ -161,6 +164,7 @@ elseif ($command == 'showips')
         $res = $db->Execute("SELECT character_name, ship_id, email FROM {$db->prefix}ships WHERE ip_address = ?;", array($ip));
         Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         unset($players);
+        $players = null;
         while (!$res->EOF)
         {
             $players[] = $res->fields;
@@ -290,6 +294,7 @@ elseif ($command == 'unbanip')
     }
 
     $nbbans = $res->RecordCount();
+    $bans = array();
     while (!$res->EOF)
     {
         $res->fields['print_mask'] = str_replace("%", "*", $res->fields['ban_mask']);
@@ -317,6 +322,7 @@ elseif ($command == 'unbanip')
     $res = $db->Execute("SELECT DISTINCT character_name FROM {$db->prefix}ships WHERE ?;", array($query_string));
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     $nbplayers = $res->RecordCount();
+    $players = null;
     while (!$res->EOF)
     {
         $players[] = $res->fields['character_name'];

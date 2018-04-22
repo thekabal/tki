@@ -150,10 +150,11 @@ $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $playerinfo['sector'], PDO::PARAM_STR);
 $stmt->execute();
 $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$flag = 0;
+$flag2 = 0;
 
 if ($linkinfo)
 {
-    $flag = 0;
     foreach ($linkinfo as $tmp_linkinfo)
     {
         if ($target_sector == $tmp_linkinfo['link_dest'])
@@ -198,7 +199,6 @@ if ($linkinfo)
 
             if ($linkinfo2 !== false)
             {
-                $flag2 = 0;
                 foreach ($linkinfo2 as $tmp_link)
                 {
                     if ($playerinfo['sector'] == $tmp_link['link_dest'])

@@ -43,6 +43,7 @@ if (mb_strlen(trim($filtered_post_password)) === 0)
 {
     $filtered_post_password = false;
 }
+$playerinfo = null;
 
 if ($email !== null && $email !== false)
 {

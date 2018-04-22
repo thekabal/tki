@@ -25,6 +25,7 @@ class TraderouteBuildNew
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer'));
         $editroute = null;
+        $planets = array();
 
         if ($traderoute_id !== null)
         {
