@@ -35,7 +35,7 @@ if (($swordfish === null) || (mb_strlen(trim($swordfish)) === 0))
 $step = null;
 $step = (int) filter_input(INPUT_POST, 'step', FILTER_SANITIZE_NUMBER_INT);
 
-if ($step === null)
+if ($step === 0)
 {
     $step = false;
 }

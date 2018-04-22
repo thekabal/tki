@@ -49,13 +49,10 @@ class Footer
         }
 
         $elapsed = 999; // Default value for elapsed, overridden with an actual value if its available
-        if ($tkireg !== null)
+        if (property_exists($tkireg, 'tkitimer'))
         {
-            if (property_exists($tkireg, 'tkitimer'))
-            {
-                $tkireg->tkitimer->stop();
-                $elapsed = $tkireg->tkitimer->elapsed();
-            }
+            $tkireg->tkitimer->stop();
+            $elapsed = $tkireg->tkitimer->elapsed();
         }
 
         // Suppress the news ticker on the IBANK and index pages

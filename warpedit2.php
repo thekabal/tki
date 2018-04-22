@@ -41,9 +41,14 @@ if (mb_strlen(trim($oneway)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $target_sector = null;
 $target_sector = (int) filter_input(INPUT_POST, 'target_sector', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($target_sector)) === 0)
+if ($target_sector === 0)
 {
     $target_sector = false;
+    // This is the best that I can do without adding a new language variable.
+    $langvars['l_warp_twoerror'] = str_replace('[target_sector]', $langvars['l_unknown'], $langvars['l_warp_twoerror']);
+    echo $langvars['l_warp_twoerror'] . "<br><br>";
+    Tki\Text::gotoMain($pdo_db, $lang);
+    die();
 }
 
 // Get playerinfo from database
@@ -70,15 +75,6 @@ if ($playerinfo['dev_warpedit'] < 1)
     die();
 }
 
-if ($target_sector === null)
-{
-    // This is the best that I can do without adding a new language variable.
-    $langvars['l_warp_twoerror'] = str_replace('[target_sector]', $langvars['l_unknown'], $langvars['l_warp_twoerror']);
-    echo $langvars['l_warp_twoerror'] . "<br><br>";
-    Tki\Text::gotoMain($pdo_db, $lang);
-    die();
-}
-
 $sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM  FROM ::prefix::zones, ::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id ";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $playerinfo['sector'], PDO::PARAM_STR);
@@ -94,8 +90,6 @@ if ($zoneinfo['allow_warpedit'] == 'N')
     $footer->display($pdo_db, $lang, $tkireg, $template);
     die();
 }
-
-$target_sector = round($target_sector);
 
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);

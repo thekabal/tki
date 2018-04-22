@@ -24,7 +24,7 @@ class Planet
     public static function getOwner(\PDO $pdo_db, int $planet_id, &$owner_info): bool
     {
         $owner_info = null;
-        if (($planet_id !== null) && is_numeric($planet_id) && $planet_id > 0)
+        if ($planet_id > 0)
         {
             $sql  = "SELECT ship_id, character_name, team FROM ::prefix::planets ";
             $sql .= "LEFT JOIN ::prefix::ships ON ::prefix::ships.ship_id = ::prefix::planets.owner ";

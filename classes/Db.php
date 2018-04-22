@@ -63,13 +63,17 @@ class Db
                 $db_host .= ":$db_port";
             }
 
+            $db = null;
             // Attempt to connect to the database
             try
             {
-                $db = \ADONewConnection('mysqli');
                 if ($db_type === 'postgres9')
                 {
                     $db = \ADONewConnection('postgres9');
+                }
+                else
+                {
+                    $db = \ADONewConnection('mysqli');
                 }
 
                 $db_init_result = $db->Connect($db_host, $db_user, $db_pwd, $db_name);
@@ -97,7 +101,11 @@ class Db
                 throw new \Exception($err_msg);
             }
 
-            $db->prefix = $db_prefix;
+            if (property_exists('db', 'prefix'))
+            {
+                $db->prefix = $db_prefix;
+            }
+
             // End of database work
             return $db;
         }

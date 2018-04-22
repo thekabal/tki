@@ -15,6 +15,9 @@
         <property name="minimum" value="17"/>
     </properties>
     </rule>
+    <rule ref="rulesets/naming.xml/LongVariable"/>
+    <rule ref="rulesets/naming.xml/ConstructorWithNameAsEnclosingClass"/>
     <rule ref="rulesets/naming.xml/ConstantNamingConventions"/>
+    <rule ref="rulesets/naming.xml/BooleanGetMethodName"/>
     <rule ref="rulesets/unusedcode.xml"/>
 </ruleset>

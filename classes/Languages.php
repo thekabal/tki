@@ -56,7 +56,7 @@ class Languages
                         array('lang_name' => $langinfo['value']));
                         break;
                     default: // Future: Handle this better
-                        die('unknown switch/case');
+                        break;
                 }
             }
 
