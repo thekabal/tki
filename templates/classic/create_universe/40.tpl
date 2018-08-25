@@ -31,6 +31,7 @@
       <th width="700" colspan="2" bgcolor="#9999cc" align="left"><h1 style="color:#000; height: 0.8em; font-size: 0.8em;font-weight: normal;">{$langvars['l_cu_create_tables']}</h1></th>
     </tr>
 
+    {if $variables['create_seq_count'] > 0}
     {for $i=0 to $variables['create_seq_count']}
     {if $variables['create_seq_results'][$i]['result'] === true}
     <tr title='{$langvars['l_cu_no_errors_found']}'>
@@ -45,6 +46,7 @@
       {/if}
     </tr>
     {/for}
+    {/if}
 
     {for $i=0 to $variables['create_tables_count']}
     {if $variables['create_tables_results'][$i]['result'] === true}
