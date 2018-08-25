@@ -101,11 +101,7 @@ class Db
                 throw new \Exception($err_msg);
             }
 
-            if (property_exists('db', 'prefix'))
-            {
-                $db->prefix = $db_prefix;
-            }
-
+            $db->prefix = $db_prefix;
             // End of database work
             return $db;
         }
