@@ -1,4 +1,5 @@
-<?php declare(strict_types = 1);
+<?php 
+/////<?php declare(strict_types = 1);
 // Copyright © 2014 The Kabal Invasion development team, Ron Harwood, and the BNT development team.
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -46,8 +47,19 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 session_write_close();
 $variables['drop_tables_results']    = Tki\Schema::dropTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all tables in the database
 $variables['drop_tables_count']      = count($variables['drop_tables_results']) - 1;
-$variables['drop_seq_results']       = Tki\Schema::dropSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all sequences in the database
-$variables['drop_seq_count']         = count($variables['drop_seq_results']) - 1;
+
+if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
+{
+    $variables['drop_seq_results']       = Tki\Schema::dropSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all sequences in the database
+}
+else
+{
+    $destroy_results[0]['result'] = true;
+    $destroy_results[0]['name'] = NULL;
+    $destroy_results[0]['time'] = 0;    
+    $variables['drop_seq_results']     = $destroy_results;
+    $variables['drop_seq_count'] = 0;
+}
 
 // Check for failures in drop tables
 $destroy_array_size = count($variables['drop_tables_results']);
@@ -60,7 +72,15 @@ for ($i = 0; $i < $destroy_array_size; $i++)
 }
 
 // Check for failures in drop sequences
-$destroy_array_size = count($variables['drop_seq_results']);
+if ($variables['drop_seq_results'] !== null)
+{
+    $destroy_array_size = count($variables['drop_seq_results']);
+}
+else
+{
+    $destroy_array_size = 0;
+}
+
 for ($i = 0; $i < $destroy_array_size; $i++)
 {
     if ($variables['drop_seq_results'][$i]['result'] !== true)

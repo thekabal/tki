@@ -40,13 +40,31 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-$variables['create_seq_results']     = Tki\Schema::createSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
-$variables['create_seq_count']       = count($variables['create_seq_results']) - 1;
+
+if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
+{
+    $variables['create_seq_results']     = Tki\Schema::createSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
+    $variables['create_seq_count']       = count($variables['create_seq_results']) - 1;
+    $create_array_size = count($variables['create_seq_results']);
+}
+else
+{
+    $variables['create_seq_results']     = false; // Create all tables in the database
+    $variables['create_seq_count']       = 0;
+    $create_array_size = 0;
+}
+
+//    $destroy_results[0]['result'] = true;
+//    $destroy_results[0]['name'] = NULL;
+//    $destroy_results[0]['time'] = 0;
+//    $variables['drop_seq_results']     = $destroy_results;
+//    $variables['drop_seq_count'] = 0;
+                    
+
 $variables['create_tables_results']  = Tki\Schema::createTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
 $variables['create_tables_count']    = count($variables['create_tables_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
-$create_array_size = count($variables['create_seq_results']);
 for ($i = 0; $i < $create_array_size; $i++)
 {
     if ($variables['create_seq_results'][$i]['result'] !== true)
