@@ -41,10 +41,10 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
-$result3 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE sector_id = ?;", array($playerinfo['sector']));
-Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-$planetinfo = $result3->fields;
-$num_planets = $result3->RecordCount();
+// Get planetinfo from database
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+$planetinfo = $planets_gateway->selectPlanetInfo($playerinfo['sector']);
+$num_planets = count($planetinfo);
 
 // Generate Planetname
 $planetname = mb_substr($playerinfo['character_name'], 0, 1) . mb_substr($playerinfo['ship_name'], 0, 1) . "-" . $playerinfo['sector'] . "-" . ($num_planets + 1);
