@@ -512,7 +512,7 @@ if ($num_planets > 0)
         {
             // Get playerinfo from database
             $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
-            $planet_owner = $players_gateway->selectPlayerInfo($planets[$i]['owner']);
+            $planet_owner = $players_gateway->selectPlayerInfoById($planets[$i]['owner']);
 
             $planetavg = Tki\CalcLevels::avgTech($planet_owner, "planet");
 
