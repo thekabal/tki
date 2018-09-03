@@ -44,7 +44,14 @@ $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 // Get planetinfo from database
 $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
 $planetinfo = $planets_gateway->selectPlanetInfo($playerinfo['sector']);
-$num_planets = count($planetinfo);
+if ($planetinfo !== null && $planetinfo !== false)
+{
+    $num_planets = count($planetinfo);
+}
+else
+{
+    $num_planets = 0;
+}
 
 // Generate Planetname
 $planetname = mb_substr($playerinfo['character_name'], 0, 1) . mb_substr($playerinfo['ship_name'], 0, 1) . "-" . $playerinfo['sector'] . "-" . ($num_planets + 1);
