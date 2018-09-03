@@ -188,7 +188,7 @@ class KabalToSecDef
                 $stmt->bindParam(':ship_torps', $playertorpnum, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $result = $stmt->execute();
-                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 // Check to see if Kabal is dead
                 if ($playerarmor < 1)
@@ -220,7 +220,7 @@ class KabalToSecDef
                         $stmt->bindParam(':mines_left', $mines_left, \PDO::PARAM_INT);
                         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                         $result = $stmt->execute();
-                        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                     }
                     else
                     {
@@ -234,7 +234,7 @@ class KabalToSecDef
                             $stmt->bindParam(':mines_left', $mines_left, \PDO::PARAM_INT);
                             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                             $result = $stmt->execute();
-                            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                         }
                         else
                         {

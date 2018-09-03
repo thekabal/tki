@@ -72,10 +72,18 @@ class KabalHunt
         if ($zonerow['allow_attack'] == "Y")
         {
             $stamp = date("Y-m-d H:i:s");
-            $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?", array($stamp, $targetinfo['sector'], $playerinfo['ship_id']));
-            \Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
+
+            $sql = "UPDATE ::prefix::ships SET last_login = :time_stamp, turns_used = turns_used + 1, sector=:new_sector WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':time_stamp', $stamp, \PDO::PARAM_STR);
+            $stmt->bindParam(':new_sector', $targetinfo['sector'], \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            echo "<br>" . $langvars['l_nonexistant_pl'] . "<br><br>";
+
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
-            if (!$move_result)
+            if (!$result)
             {
                 $error = $db->ErrorMsg();
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");
