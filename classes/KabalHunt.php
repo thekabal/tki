@@ -125,7 +125,7 @@ class KabalHunt
             {
                 // Attack sector defenses
                 $targetlink = $targetinfo['sector'];
-                \Tki\KabalToSecDef::secDef($pdo_db, $db, $langvars, $playerinfo, $targetlink, $tkireg);
+                \Tki\KabalToSecDef::secDef($pdo_db, $langvars, $playerinfo, $targetlink, $tkireg);
             }
 
             if ($kabalisdead > 0)

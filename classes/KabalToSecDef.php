@@ -21,7 +21,7 @@ namespace Tki;
 
 class KabalToSecDef
 {
-    public static function secDef(\PDO $pdo_db, $db, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg): void
+    public static function secDef(\PDO $pdo_db, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg): void
     {
         $character_object = new Character;
 
@@ -179,8 +179,16 @@ class KabalToSecDef
                 $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
                 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
                 $energy = $playerinfo['ship_energy'];
-                $update1 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?,torps = torps - ? WHERE ship_id = ?", array($energy, $fighters_lost, $armor_lost, $playertorpnum, $playerinfo['ship_id']));
-                \Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
+
+                $sql = "UPDATE ::prefix::ships SET ship_energy = :energy, ship_fighters = ship_fighters - :fighters_lost, armor_pts = armor_pts - :armor_lost,torps = torps - :ship_torps WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':energy', $energy, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_fighters', $fighters_lost, \PDO::PARAM_INT);
+                $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_torps', $playertorpnum, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 // Check to see if Kabal is dead
                 if ($playerarmor < 1)
@@ -207,8 +215,12 @@ class KabalToSecDef
                     // Shields v. mines
                     if ($playershields >= $mines_left)
                     {
-                        $update2 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy=ship_energy-? WHERE ship_id = ?;", array($mines_left, $playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ships SET ship_energy = ship_energy - :mines_left WHERE ship_id=:ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':mines_left', $mines_left, \PDO::PARAM_INT);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $result = $stmt->execute();
+                        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                     }
                     else
                     {
@@ -217,8 +229,12 @@ class KabalToSecDef
                         // Armor v. mines
                         if ($playerarmor >= $mines_left)
                         {
-                            $update2 = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts=armor_pts-?, ship_energy=0 WHERE ship_id = ?;", array($mines_left, $playerinfo['ship_id']));
-                            \Tki\Db::logDbErrors($pdo_db, $update2, __LINE__, __FILE__);
+                            $sql = "UPDATE ::prefix::ships SET armor_pts = armor_pts - :mines_left, ship_energy=0 WHERE ship_id=:ship_id";
+                            $stmt = $pdo_db->prepare($sql);
+                            $stmt->bindParam(':mines_left', $mines_left, \PDO::PARAM_INT);
+                            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                            $result = $stmt->execute();
+                            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                         }
                         else
                         {
