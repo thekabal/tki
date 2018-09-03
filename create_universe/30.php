@@ -54,8 +54,8 @@ if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
 else
 {
     $destroy_results[0]['result'] = true;
-    $destroy_results[0]['name'] = NULL;
-    $destroy_results[0]['time'] = 0;    
+    $destroy_results[0]['name'] = null;
+    $destroy_results[0]['time'] = 0;
     $variables['drop_seq_results']     = $destroy_results;
     $variables['drop_seq_count'] = 0;
 }

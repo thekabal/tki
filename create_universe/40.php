@@ -59,7 +59,6 @@ else
 //    $destroy_results[0]['time'] = 0;
 //    $variables['drop_seq_results']     = $destroy_results;
 //    $variables['drop_seq_count'] = 0;
-                    
 
 $variables['create_tables_results']  = Tki\Schema::createTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
 $variables['create_tables_count']    = count($variables['create_tables_results']) - 1;
