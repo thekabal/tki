@@ -29,14 +29,14 @@ class PlayersGateway // Gateway for SQL calls related to Players
         $this->pdo_db = $pdo_db;
     }
 
-    public function selectPlayersLoggedIn(string $since_stamp, string $stamp) : int
+    public function selectPlayersLoggedIn(string $since_stamp, string $cur_time_stamp) : int
     {
         // SQL call that selected the number (count) of logged in ships (should be players)
-        // where last login time is between the since_stamp, and the current timestamp ($stamp)
+        // where last login time is between the since_stamp, and the current timestamp ($cur_time_stamp)
         // But it excludes kabal.
         $sql = "SELECT COUNT(*) AS loggedin FROM ::prefix::ships " .
                "WHERE ::prefix::ships.last_login BETWEEN timestamp '"
-               . $since_stamp . "' AND timestamp '" . $stamp . "' AND email NOT LIKE '%@kabal'";
+               . $since_stamp . "' AND timestamp '" . $cur_time_stamp . "' AND email NOT LIKE '%@kabal'";
         $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
         $row = $stmt->fetchObject(); // Fetch the associated object from the select

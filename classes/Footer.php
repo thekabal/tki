@@ -38,14 +38,14 @@ class Footer
 
         if (Db::isActive($pdo_db))
         {
-            $stamp = date("Y-m-d H:i:s", time()); // Now (as seen by PHP)
+            $cur_time_stamp = date("Y-m-d H:i:s", time()); // Now (as seen by PHP)
             $since_stamp = date("Y-m-d H:i:s", time() - 5 * 60); // Five minutes ago
 
             // Build a player gateway object to handle the SQL calls
             $players_gateway = new Players\PlayersGateway($pdo_db);
 
             // Online is the (int) count of the numbers of players currently logged in via SQL select
-            $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $stamp);
+            $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $cur_time_stamp);
         }
 
         $elapsed = 999; // Default value for elapsed, overridden with an actual value if its available

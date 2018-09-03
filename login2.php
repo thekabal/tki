@@ -128,11 +128,11 @@ if ($playerfound)
             {
                 // Player's ship has not been destroyed
                 Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::LOGIN, $request->server->get('REMOTE_ADDR'));
-                $stamp = date("Y-m-d H:i:s");
+                $cur_time_stamp = date("Y-m-d H:i:s");
 
                 $sql = "UPDATE ::prefix::ships SET last_login=:time, ip_address=:ip_address WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':time', $stamp, \PDO::PARAM_STR);
+                $stmt->bindParam(':time', $cur_time_stamp, \PDO::PARAM_STR);
                 $stmt->bindParam(':ip_address', $request->server->get('REMOTE_ADDR'), \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $result = $stmt->execute();

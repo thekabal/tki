@@ -24,7 +24,7 @@ class PlayerLog
     public static function writeLog(\PDO $pdo_db, int $ship_id, int $log_type, $data = null): void
     {
         $data = addslashes($data);
-        $stamp = date('Y-m-d H:i:s'); // Now (as seen by PHP)
+        $cur_time_stamp = date('Y-m-d H:i:s'); // Now (as seen by PHP)
 
         // Write log_entry to the player's log - identified by player's ship_id.
         if ($ship_id !== null && $log_type !== null)
@@ -34,7 +34,7 @@ class PlayerLog
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
             $stmt->bindParam(':type', $log_type, \PDO::PARAM_INT);
-            $stmt->bindParam(':time', $stamp, \PDO::PARAM_STR);
+            $stmt->bindParam(':time', $cur_time_stamp, \PDO::PARAM_STR);
             $stmt->bindParam(':data', $data, \PDO::PARAM_STR);
             $stmt->execute();
             Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);

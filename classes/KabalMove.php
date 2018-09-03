@@ -141,11 +141,17 @@ class KabalMove
 
         if ($targetlink > 0) // Move to target link
         {
-            $stamp = date("Y-m-d H:i:s");
+            $cur_time_stamp = date("Y-m-d H:i:s");
+            $sql = "UPDATE ::prefix::ships SET last_login = :stamp, turns_used = turns_used + 1, sector = :targetlink WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':stamp', $cur_time_stamp, \PDO::PARAM_STR);
+            $stmt->bindParam(':targetlink', $targetlink, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            echo "<br>" . $langvars['l_nonexistant_pl'] . "<br><br>";
 
-            $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?", array($stamp, $targetlink, $playerinfo['ship_id']));
-            \Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
-            if (!$move_result)
+            if (!$result)
             {
                 $error = $db->ErrorMsg();
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");

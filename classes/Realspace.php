@@ -142,13 +142,13 @@ class Realspace
             }
             else
             {
-                $stamp = date("Y-m-d H:i:s");
+                $cur_time_stamp = date("Y-m-d H:i:s");
 
                 $sql = "UPDATE ::prefix::ships SET last_login = :last_login, sector = :destination, " .
                        "ship_energy = ship_energy + :ship_energy, turns = turns - :turns, " .
                        "turns_used = turns_used + :turns_used WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':last_login', $stamp, \PDO::PARAM_STR);
+                $stmt->bindParam(':last_login', $cur_time_stamp, \PDO::PARAM_STR);
                 $stmt->bindParam(':sector', $destination, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_energy', $energyscooped, \PDO::PARAM_INT);
                 $stmt->bindParam(':turns', $triptime, \PDO::PARAM_INT);

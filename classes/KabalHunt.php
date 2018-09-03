@@ -71,11 +71,11 @@ class KabalHunt
         // Only travel there if we can attack in the target sector
         if ($zonerow['allow_attack'] == "Y")
         {
-            $stamp = date("Y-m-d H:i:s");
+            $cur_time_stamp = date("Y-m-d H:i:s");
 
             $sql = "UPDATE ::prefix::ships SET last_login = :time_stamp, turns_used = turns_used + 1, sector=:new_sector WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':time_stamp', $stamp, \PDO::PARAM_STR);
+            $stmt->bindParam(':time_stamp', $cur_time_stamp, \PDO::PARAM_STR);
             $stmt->bindParam(':new_sector', $targetinfo['sector'], \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();

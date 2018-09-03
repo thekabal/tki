@@ -599,11 +599,11 @@ else
                     $maxarmor = Tki\CalcLevels::abstractLevels($kaballevel, $tkireg);
                     $maxfighters = Tki\CalcLevels::abstractLevels($kaballevel, $tkireg);
                     $maxtorps = Tki\CalcLevels::abstractLevels($kaballevel, $tkireg);
-                    $stamp = date("Y-m-d H:i:s");
+                    $cur_time_stamp = date("Y-m-d H:i:s");
 
                     // Add kabal record to ships table ... modify if the ships schema changes
                     $thesql = "INSERT INTO {$db->prefix}ships ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `last_login` , `rating` , `score` , `team` , `team_invite` , `interface` , `ip_address` , `planet_id` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defenses` , `lang` , `dev_lssd` )
-                               VALUES (NULL,'$shipname','N','$character','$makepass','$emailname',$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$maxtorps,$kaballevel,$kaballevel,$maxarmor,$kaballevel,1000,$sector,0,0,0,$maxenergy,0,$maxfighters,0,1200,'N',0,0,0,0,'N','N',0,0, '$stamp',0,0,0,0,'N','127.0.0.1',0,'Y','N','N','Y',NULL,'$default_lang','Y')";
+                               VALUES (NULL,'$shipname','N','$character','$makepass','$emailname',$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$maxtorps,$kaballevel,$kaballevel,$maxarmor,$kaballevel,1000,$sector,0,0,0,$maxenergy,0,$maxfighters,0,1200,'N',0,0,0,0,'N','N',0,0, '$cur_time_stamp',0,0,0,0,'N','127.0.0.1',0,'Y','N','N','Y',NULL,'$default_lang','Y')";
                     $result2 = $db->Execute($thesql);
                     Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                     if (!$result2)

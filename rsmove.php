@@ -185,8 +185,8 @@ else
                     // You are now in sector X. You used Y turns, and gained Z energy units.
 
                     $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
-                    $stamp = date("Y-m-d H:i:s");
-                    $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
+                    $cur_time_stamp = date("Y-m-d H:i:s");
+                    $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($cur_time_stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
                     Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
                     // Future: Determine where $destination gets changed to something other than int. In the meantime, make it correct here.
                     $destination = (int) $destination;

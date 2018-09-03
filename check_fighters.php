@@ -90,8 +90,8 @@ if ($num_defenses > 0 && $total_sector_fighters > 0 && !$owner)
             case "retreat":
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                $stamp = date("Y-m-d H:i:s");
-                $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login='$stamp', turns = turns - 2, turns_used = turns_used + 2, sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
+                $cur_time_stamp = date("Y-m-d H:i:s");
+                $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login='$cur_time_stamp', turns = turns - 2, turns_used = turns_used + 2, sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 echo "<h1>" . $title . "</h1>\n";
                 echo $langvars['l_chf_youretreatback'] . "<br>";

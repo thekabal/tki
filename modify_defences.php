@@ -220,9 +220,9 @@ switch ($response)
             $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0");
         }
 
-        $stamp = date("Y-m-d H:i:s");
+        $cur_time_stamp = date("Y-m-d H:i:s");
 
-        $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($stamp, $playerinfo['sector'], $playerinfo['ship_id']));
+        $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $playerinfo['sector'], $playerinfo['ship_id']));
         echo "<h1>" . $title . "</h1>\n";
         echo $langvars['l_md_retr'] . " " . $quantity . " " . $defense_type . ".<br>";
         Tki\Text::gotoMain($pdo_db, $lang);
@@ -241,8 +241,8 @@ switch ($response)
         }
 
         $db->Execute("UPDATE {$db->prefix}sector_defense SET fm_setting = ? WHERE defense_id = ?", array($mode, $defense_id));
-        $stamp = date("Y-m-d H:i:s");
-        $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($stamp, $playerinfo['sector'], $playerinfo['ship_id']));
+        $cur_time_stamp = date("Y-m-d H:i:s");
+        $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $playerinfo['sector'], $playerinfo['ship_id']));
         if ($mode == 'attack')
         {
             $mode = $langvars['l_md_attack'];

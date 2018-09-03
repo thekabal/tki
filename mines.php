@@ -253,7 +253,7 @@ else
             echo $langvars['l_mines_dfighter'] . "<br>";
         }
 
-        $stamp = date("Y-m-d H:i:s");
+        $cur_time_stamp = date("Y-m-d H:i:s");
         if ($numfighters > 0)
         {
             if ($fighter_id != 0)
@@ -296,7 +296,7 @@ else
         $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, " .
                "turns_used=turns_used+1, ship_fighters=ship_fighters-:numfighters, torps=torps-:nummines WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':stamp', $stamp, \PDO::PARAM_STR);
+        $stmt->bindParam(':stamp', $cur_time_stamp, \PDO::PARAM_STR);
         $stmt->bindParam(':numfighters', $numfighters, \PDO::PARAM_INT);
         $stmt->bindParam(':nummines', $nummines, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);

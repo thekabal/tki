@@ -51,9 +51,9 @@ class Player
                 // Check the cookie to see if username/password are empty - check password against database
                 if (password_verify($_SESSION['password'], $playerinfo['password']))
                 {
-                    $stamp = date('Y-m-d H:i:s');
+                    $cur_time_stamp = date('Y-m-d H:i:s');
                     $timestamp = array();
-                    $timestamp['now']  = (int) strtotime($stamp);
+                    $timestamp['now']  = (int) strtotime($cur_time_stamp);
                     $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
 
                     // Update the players last_login every 60 seconds to cut back SQL Queries.
@@ -62,7 +62,7 @@ class Player
                         $remote_ip = $request->server->get('REMOTE_ADDR');
                         $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
                         $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':last_login', $stamp, \PDO::PARAM_STR);
+                        $stmt->bindParam(':last_login', $cur_time_stamp, \PDO::PARAM_STR);
                         $stmt->bindParam(':ip_address', $remote_ip, \PDO::PARAM_STR);
                         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                         $stmt->execute();

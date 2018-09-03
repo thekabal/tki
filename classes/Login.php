@@ -43,9 +43,9 @@ class Login
         }
 
         // Establish timestamp for interval in checking bans
-        $stamp = date('Y-m-d H:i:s');
+        $cur_time_stamp = date('Y-m-d H:i:s');
         $timestamp = array();
-        $timestamp['now']  = (int) strtotime($stamp);
+        $timestamp['now']  = (int) strtotime($cur_time_stamp);
         $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
 
         if (Player::ban($pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars, $tkireg))
