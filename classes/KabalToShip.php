@@ -40,12 +40,18 @@ class KabalToShip
         }
 
         // Verify sector allows attack
-        $sectres = $db->Execute("SELECT sector_id,zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($targetinfo['sector']));
-        \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
-        $sectrow = $sectres->fields;
-        $zoneres = $db->Execute("SELECT zone_id,allow_attack FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
-        \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
-        $zonerow = $zoneres->fields;
+        $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id=:sector_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $targetinfo['sector'], PDO::PARAM_INT);
+        $stmt->execute();
+        $sectrow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id=:zone_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $sectrow['zone_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $zonerow = $stmt->fetch(PDO::FETCH_ASSOC);
+
         if ($zonerow['allow_attack'] == "N")                        //  Dest link must allow attacking
         {
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Attack failed, you are in a sector that prohibits attacks.");
