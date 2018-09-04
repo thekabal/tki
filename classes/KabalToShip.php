@@ -64,9 +64,13 @@ class KabalToShip
         {
             \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_EWD, "Kabal $playerinfo[character_name]");
             $dest_sector = random_int(1, (int) $tkireg->max_sectors);
-            $result_warp = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = ?;", array($dest_sector, $targetinfo['ship_id']));
-            \Tki\Db::logDbErrors($pdo_db, $result_warp, __LINE__, __FILE__);
 
+            $sql = "UPDATE ::prefix::ships SET sector = :sector, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector', $dest_sector, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             return;
         }
 
