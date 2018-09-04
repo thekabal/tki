@@ -44,12 +44,14 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 
 // Close the session prior to dropping the databases. This prevents/fixes #56 - session_write_close(): Failed to write session data using user defined save handler
 session_write_close();
-$variables['drop_tables_results']    = Tki\Schema::dropTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all tables in the database
+$tki_schema = new Tki\Schema;
+
+$variables['drop_tables_results']    = $tki_schema->dropTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all tables in the database
 $variables['drop_tables_count']      = count($variables['drop_tables_results']) - 1;
 
 if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
 {
-    $variables['drop_seq_results']       = Tki\Schema::dropSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all sequences in the database
+    $variables['drop_seq_results']       = $tki_schema->dropSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all sequences in the database
 }
 else
 {

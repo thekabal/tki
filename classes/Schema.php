@@ -23,7 +23,7 @@ class Schema
 {
     const PDO_SUCCESS = '00000'; // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
-    public static function dropTables(\PDO $pdo_db, string $db_prefix, string $dbtype) : array
+    public function dropTables(\PDO $pdo_db, string $db_prefix, string $dbtype) : array
     {
         $counter = 0;
         $destroy_results = array();
@@ -80,7 +80,7 @@ class Schema
         return $destroy_results;
     }
 
-    public static function dropSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
+    public function dropSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
     {
         $counter = 0;
         $destroy_results = array();
@@ -124,7 +124,7 @@ class Schema
         }
     }
 
-    public static function createSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
+    public function createSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
     {
         if ($dbtype == 'postgres9')
         {
@@ -168,7 +168,7 @@ class Schema
         }
     }
 
-    public static function createTables(\PDO $pdo_db, string $db_prefix, string $dbtype)
+    public function createTables(\PDO $pdo_db, string $db_prefix, string $dbtype)
     {
         $create_table_results = array();
         $counter = 0;

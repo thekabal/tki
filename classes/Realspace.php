@@ -21,7 +21,7 @@ namespace Tki;
 
 class Realspace
 {
-    public static function realSpaceMove(\PDO $pdo_db, array $langvars, int $destination, Reg $tkireg): string
+    public function realSpaceMove(\PDO $pdo_db, array $langvars, int $destination, Reg $tkireg): string
     {
         $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);

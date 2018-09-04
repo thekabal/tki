@@ -40,10 +40,11 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
+$tki_schema = new Tki\Schema;
 
 if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
 {
-    $variables['create_seq_results']     = Tki\Schema::createSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
+    $variables['create_seq_results']     = $tki_schema->createSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
     $variables['create_seq_count']       = count($variables['create_seq_results']) - 1;
     $create_array_size = count($variables['create_seq_results']);
 }
@@ -60,7 +61,7 @@ else
 //    $variables['drop_seq_results']     = $destroy_results;
 //    $variables['drop_seq_count'] = 0;
 
-$variables['create_tables_results']  = Tki\Schema::createTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
+$variables['create_tables_results']  = $tki_schema->createTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
 $variables['create_tables_count']    = count($variables['create_tables_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
