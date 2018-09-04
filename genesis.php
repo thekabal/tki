@@ -52,7 +52,6 @@ else
 {
     $num_planets = 0;
 }
-
 // Generate Planetname
 $planetname = mb_substr($playerinfo['character_name'], 0, 1) . mb_substr($playerinfo['ship_name'], 0, 1) . "-" . $playerinfo['sector'] . "-" . ($num_planets + 1);
 
