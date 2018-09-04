@@ -95,7 +95,7 @@ class Team
         return $returnvalue;
     }
 
-    // Rewritten display of teams list
+    // Display list of teams
     public static function displayAllTeams(\PDO $pdo_db, $db, array $langvars, Reg $tkireg, $order, $type): void
     {
         $row2 = array();
