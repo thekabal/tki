@@ -47,7 +47,7 @@ class Smarty
         $this->smarty->enableSecurity();
 
         // Smarty Caching.
-        $this->smarty->caching = false;
+        $this->smarty->caching = 0;
 
         $smarty_errors = null;
         if (!is_dir('templates'))
@@ -88,41 +88,53 @@ class Smarty
 
     public function setTheme($themeName = null): void
     {
-        $this->smarty->setTemplateDir("templates/{$themeName}");
-        $this->addVariables('template_dir', "templates/{$themeName}");
+        if ($this->smarty !== null)
+        {
+            $this->smarty->setTemplateDir("templates/{$themeName}");
+            $this->addVariables('template_dir', "templates/{$themeName}");
+        }
     }
 
     public function addVariables(string $nodeName, $variables): void
     {
-        $tmpNode = $this->smarty->getTemplateVars($nodeName);
-
-        if ($tmpNode !== null)
+        if ($this->smarty !== null)
         {
-            // Now we make sure we don't want dupes which causes them to become an array.
-            foreach ($variables as $key => $value)
+            $tmpNode = $this->smarty->getTemplateVars($nodeName);
+
+            if ($tmpNode !== null)
             {
-                if (array_key_exists($key, $tmpNode) && $tmpNode[$key] == $value)
+                // Now we make sure we don't want dupes which causes them to become an array.
+                foreach ($variables as $key => $value)
                 {
-                    unset($variables[$key]);
+                    if (array_key_exists($key, $tmpNode) && $tmpNode[$key] == $value)
+                    {
+                        unset($variables[$key]);
+                    }
                 }
+
+                $variables = array_merge_recursive($tmpNode, $variables);
             }
 
-            $variables = array_merge_recursive($tmpNode, $variables);
+            $this->smarty->assign($nodeName, $variables);
         }
-
-        $this->smarty->assign($nodeName, $variables);
     }
 
     /** @return mixed */
     public function getVariables($nodeName)
     {
-        $temp_variable = $this->smarty->getTemplateVars($nodeName);
-        return $temp_variable;
+        if ($this->smarty !== null)
+        {
+            $temp_variable = $this->smarty->getTemplateVars($nodeName);
+            return $temp_variable;
+        }
     }
 
     public function test(): void
     {
-        $this->smarty->testInstall();
+        if ($this->smarty !== null)
+        {
+            $this->smarty->testInstall();
+        }
     }
 
     public function display($template_file): void
@@ -131,7 +143,14 @@ class Smarty
         // varable so that we can compress it or not.
         try
         {
-            $output = $this->smarty->fetch($template_file);
+            if ($this->smarty !== null)
+            {
+                $output = $this->smarty->fetch($template_file);
+            }
+            else
+            {
+                $output = null;
+            }
         }
         catch (\exception $e)
         {

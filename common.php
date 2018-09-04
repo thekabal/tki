@@ -101,7 +101,10 @@ catch (Exception $e)
     die($e . "</pre></html>");
 }
 
-$template->setTheme($tkireg->default_template);
+if ($tkireg !== null)
+{
+    $template->setTheme($tkireg->default_template);
+}
 
 if ($pdo_db !== null && Tki\Db::isActive($pdo_db))
 {
@@ -109,7 +112,10 @@ if ($pdo_db !== null && Tki\Db::isActive($pdo_db))
     session_start();
 }
 
-$lang = $tkireg->default_lang;
+if ($tkireg !== null)
+{
+    $lang = $tkireg->default_lang;
+}
 
 use Symfony\Component\HttpFoundation\Request;
 

@@ -56,7 +56,7 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Get targetinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
-$targetinfo = $players_gateway->selectPlayerInfo($ship_id);
+$targetinfo = $players_gateway->selectPlayerInfoById($ship_id);
 
 $playerscore = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 $targetscore = Tki\Score::updateScore($pdo_db, $targetinfo['ship_id'], $tkireg, $playerinfo);

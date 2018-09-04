@@ -80,15 +80,18 @@ class Sessions
 
     public function read(string $sesskey) : string
     {
-        $qry = "SELECT sessdata FROM ::prefix::sessions where sesskey=:sesskey and expiry>=:expiry";
-        $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
-        $stmt->bindParam(':expiry', $this->currenttime, \PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        // PHP7 change requires return to be string:
-        // https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
-        return (string) $result['sessdata'];
+        if ($this->pdo_db !== null)
+        {
+            $qry = "SELECT sessdata FROM ::prefix::sessions where sesskey=:sesskey and expiry>=:expiry";
+            $stmt = $this->pdo_db->prepare($qry);
+            $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
+            $stmt->bindParam(':expiry', $this->currenttime, \PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            // PHP7 change requires return to be string:
+            // https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
+            return (string) $result['sessdata'];
+        }
     }
 
     /** @return boolean */
@@ -143,32 +146,41 @@ class Sessions
     /** @return mixed */
     public function destroy(string $sesskey)
     {
-        $qry = "DELETE from ::prefix::sessions where sesskey=:sesskey";
-        $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
-        $result = $stmt->execute();
-        return $result;
+        if ($this->pdo_db !== null)
+        {
+            $qry = "DELETE from ::prefix::sessions where sesskey=:sesskey";
+            $stmt = $this->pdo_db->prepare($qry);
+            $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
+            $result = $stmt->execute();
+            return $result;
+        }
     }
 
     /** @return mixed */
     public function gc()
     {
-        $qry = "DELETE from ::prefix::sessions where expiry>:expiry";
-        $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
-        $result = $stmt->execute();
-        return $result;
+        if ($this->pdo_db !== null)
+        {
+            $qry = "DELETE from ::prefix::sessions where expiry>:expiry";
+            $stmt = $this->pdo_db->prepare($qry);
+            $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
+            $result = $stmt->execute();
+            return $result;
+        }
     }
 
     public function regen(): void
     {
-        $old_id = session_id();
-        session_regenerate_id();
-        $new_id = session_id();
-        $qry = "UPDATE ::prefix::sessions SET sesskey=:newkey where sesskey=:sesskey";
-        $stmt = $this->pdo_db->prepare($qry);
-        $stmt->bindParam(':newkey', $new_id, \PDO::PARAM_STR);
-        $stmt->bindParam(':sesskey', $old_id, \PDO::PARAM_STR);
-        $stmt->execute();
+        if ($this->pdo_db !== null)
+        {
+            $old_id = session_id();
+            session_regenerate_id();
+            $new_id = session_id();
+            $qry = "UPDATE ::prefix::sessions SET sesskey=:newkey where sesskey=:sesskey";
+            $stmt = $this->pdo_db->prepare($qry);
+            $stmt->bindParam(':newkey', $new_id, \PDO::PARAM_STR);
+            $stmt->bindParam(':sesskey', $old_id, \PDO::PARAM_STR);
+            $stmt->execute();
+        }
     }
 }

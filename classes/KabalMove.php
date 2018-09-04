@@ -148,7 +148,7 @@ class KabalMove
             $stmt->bindParam(':targetlink', $targetlink, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             echo "<br>" . $langvars['l_nonexistant_pl'] . "<br><br>";
 
             if (!$result)
