@@ -62,17 +62,17 @@ class KabalHunt
         // Jump to target sector
         $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $targetinfo['sector'], PDO::PARAM_INT);
+        $stmt->bindParam(':sector_id', $targetinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
-        $sectrow = $stmt->fetch(PDO::FETCH_ASSOC);
+        Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+        $sectrow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':zone_id', $sectrow['zone_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':zone_id', $sectrow['zone_id'], \PDO::PARAM_INT);
         $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
-        $zonerow = $stmt->fetch(PDO::FETCH_ASSOC);
+        Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+        $zonerow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Only travel there if we can attack in the target sector
         if ($zonerow['allow_attack'] == "Y")

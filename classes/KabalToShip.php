@@ -42,15 +42,15 @@ class KabalToShip
         // Verify sector allows attack
         $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id=:sector_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $targetinfo['sector'], PDO::PARAM_INT);
+        $stmt->bindParam(':sector_id', $targetinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
-        $sectrow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sectrow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id=:zone_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sectrow['zone_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':sector_id', $sectrow['zone_id'], \PDO::PARAM_INT);
         $stmt->execute();
-        $zonerow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $zonerow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if ($zonerow['allow_attack'] == "N")                        //  Dest link must allow attacking
         {
@@ -65,12 +65,13 @@ class KabalToShip
             \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_EWD, "Kabal $playerinfo[character_name]");
             $dest_sector = random_int(1, (int) $tkireg->max_sectors);
 
-            $sql = "UPDATE ::prefix::ships SET sector = :sector, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET sector = :sector, dev_emerwarp = dev_emerwarp - 1 " .
+                   "WHERE ship_id=:ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector', $dest_sector, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
-            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             return;
         }
 
@@ -127,17 +128,17 @@ class KabalToShip
         $targetfighters = $targetinfo['ship_fighters'];
 
         // Begin combat procedures
-        if ($attackerbeams > 0 && $targetfighters > 0)                  // Attacker has beams - target has fighters - beams vs. fighters
+        if ($attackerbeams > 0 && $targetfighters > 0)                      // Attacker has beams - target has fighters - beams vs. fighters
         {
-            if ($attackerbeams > round($targetfighters / 2))           // Attacker beams GT half target fighters
+            if ($attackerbeams > round($targetfighters / 2))                // Attacker beams GT half target fighters
             {
                 $lost = $targetfighters - (round($targetfighters / 2));
-                $targetfighters = $targetfighters - $lost;              // T loses half all fighters
+                $targetfighters = $targetfighters - $lost;                  // T loses half all fighters
             }
-            else                                                        // Attacker beams LE half target fighters
+            else                                                            // Attacker beams LE half target fighters
             {
-                $targetfighters = $targetfighters - $attackerbeams;     // T loses fighters EQ to A beams
-                $attackerbeams = 0;                                     // A loses all beams
+                $targetfighters = $targetfighters - $attackerbeams;         // T loses fighters EQ to A beams
+                $attackerbeams = 0;                                         // A loses all beams
             }
         }
 
@@ -146,13 +147,13 @@ class KabalToShip
             if ($targetbeams > round($attackerfighters / 2))                // Target beams GT half attacker fighters
             {
                 $lost = $attackerfighters - (round($attackerfighters / 2));
-                $attackerfighters = $attackerfighters - $lost;               // A loses half of all fighters
-                $targetbeams = $targetbeams - $lost;                         // T loses beams EQ to half A fighters
+                $attackerfighters = $attackerfighters - $lost;              // A loses half of all fighters
+                $targetbeams = $targetbeams - $lost;                        // T loses beams EQ to half A fighters
             }
             else
-            {                                                                 // Target beams LE half attacker fighters
-                $attackerfighters = $attackerfighters - $targetbeams;         // A loses fighters EQ to T beams A loses fighters
-                $targetbeams = 0;                                             // T loses all beams
+            {                                                               // Target beams LE half attacker fighters
+                $attackerfighters = $attackerfighters - $targetbeams;       // A loses fighters EQ to T beams A loses fighters
+                $targetbeams = 0;                                           // T loses all beams
             }
         }
 
@@ -342,7 +343,16 @@ class KabalToShip
             // Target had no escape pod
             {
                 $rating = round($targetinfo['rating'] / 2);
-                $resc = $db->Execute("UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 1, ship_ore = 0, ship_organics = 0, ship_energy = 1000, ship_colonists = 0, ship_goods = 0, ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, ship_destroyed = 'N', rating = ?, dev_lssd='N' WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
+                $resc = $db->Execute("UPDATE {$db->prefix}ships SET " .
+                                     "hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, " .
+                                     "torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, " .
+                                     "cloak = 0, shields = 0, sector = 1, ship_ore = 0, ship_organics = 0, " .
+                                     "ship_energy = 1000, ship_colonists = 0, ship_goods = 0, " .
+                                     "ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, " .
+                                     "dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, " .
+                                     "dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, " .
+                                     "ship_destroyed = 'N', rating = ?, dev_lssd='N' " .
+                                     "WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "Kabal $playerinfo[character_name]|Y");
             }
@@ -397,12 +407,18 @@ class KabalToShip
                 $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
-                $resd = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id']));
+                $resd = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, " .
+                                     "ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, " .
+                                     "credits = credits + ? WHERE " .
+                                     "ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resd, __LINE__, __FILE__);
                 $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
                 $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
                 $energy = $playerinfo['ship_energy'];
-                $rese = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ?, rating = rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
+                $rese = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, " .
+                                     "ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ?, " .
+                                     "rating = rating - ? " .
+                                     "WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $rese, __LINE__, __FILE__);
             }
         }
@@ -420,9 +436,11 @@ class KabalToShip
             $target_energy = $targetinfo['ship_energy'];
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Attack failed, $targetinfo[character_name] survived.");
             \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_WIN, "Kabal $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
-            $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ? , armor_pts = armor_pts - ?, rating=rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
+            $resf = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ? , armor_pts = armor_pts - ?, rating=rating - ? " .
+                                 "WHERE ship_id = ?;", array($energy, $fighters_lost, $attackertorps, $armor_lost, $rating_change, $playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
-            $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts=armor_pts - ?, torps=torps - ?, rating = ? WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $target_rating_change, $targetinfo['ship_id']));
+            $resg = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts=armor_pts - ?, torps=torps - ?, rating = ? " .
+                                 "WHERE ship_id = ?;", array($target_energy, $target_fighters_lost, $target_armor_lost, $targettorpnum, $target_rating_change, $targetinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $resg, __LINE__, __FILE__);
         }
 
@@ -478,13 +496,31 @@ class KabalToShip
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_WIN, "Kabal $playerinfo[character_name]|$armor_lost|$fighters_lost");
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::RAW, "You destroyed the Kabal ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
-                $resh = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $targetinfo['ship_id']));
+
+                $resh = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, " .
+                                     "ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, credits = credits + ? " .
+                                     "WHERE ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $targetinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resh, __LINE__, __FILE__);
+
                 $armor_lost = $targetinfo['armor_pts'] - $targetarmor;
                 $fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
                 $energy = $targetinfo['ship_energy'];
-                $resi = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ? , ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ?, rating=rating - ? WHERE ship_id = ?;", array($energy, $fighters_lost, $targettorpnum, $armor_lost, $rating_change, $targetinfo['ship_id']));
-                \Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
+
+                $sql = "UPDATE ::prefix::ships SET ship_energy = :energy , " .
+                       "ship_fighters = ship_fighters - :fighters_lost, " .
+                       "torps = torps - :targettorpnum, " .
+                       "armor_pts = armor_pts - :armor_lost, " .
+                       "rating=rating - :rating_change " .
+                       "WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':energy', $energy, \PDO::PARAM_INT);
+                $stmt->bindParam(':fighters_lost', $fighters_lost, \PDO::PARAM_INT);
+                $stmt->bindParam(':targettorpnum', $targettorpnum, \PDO::PARAM_INT);
+                $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
+                $stmt->bindParam(':rating_change', $rating_change, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
         }
     }

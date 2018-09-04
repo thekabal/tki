@@ -156,10 +156,10 @@ class TraderouteDistance
         $dist = array();
         $sql = "SELECT link_id FROM ::prefix::links WHERE link_start=:link_start AND link_dest=:link_dest";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':link_start', $source['sector_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':link_dest', $dest['sector_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':link_start', $source['sector_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':link_dest', $dest['sector_id'], \PDO::PARAM_INT);
         $stmt->execute();
-        $link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $link_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($link_present !== null)
         {
             $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink1']);
@@ -171,10 +171,10 @@ class TraderouteDistance
         {
             $sql = "SELECT link_id FROM ::prefix::links WHERE link_start=:link_start AND link_dest=:link_dest";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':link_start', $dest['sector_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':link_dest', $source['sector_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':link_start', $dest['sector_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':link_dest', $source['sector_id'], \PDO::PARAM_INT);
             $stmt->execute();
-            $link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $link_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($link_present !== null)
             {
                 $langvars['l_tdr_nowlink2'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink2']);
