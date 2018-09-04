@@ -30,7 +30,8 @@ class Login
         array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
 
         $flag = false;
-        if (Game::isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars))
+        $game_closed = new Game;
+        if ($game_closed->isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars))
         {
             $flag = false;
         }
