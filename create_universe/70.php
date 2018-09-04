@@ -67,8 +67,7 @@ foreach ($open_sectors_result as $element)
 }
 
 unset($open_sectors_result); // Clear that 2d array
-
-shuffle($open_sectors_array); // Internally, shuffle uses rand() so it isn't ideally random, but good enough for now
+shuffle($open_sectors_array);
 
 // Prep the beginning of the insert SQL call
 $p_add = 0;
