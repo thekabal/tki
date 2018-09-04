@@ -197,7 +197,7 @@ class Traderoute
         $dist = \Tki\TraderouteDistance::calc($pdo_db, 'P', 'P', $sourceport, $destport, $traderoute['circuit'], $playerinfo, $tkireg);
         if ($traderoute['move_type'] == 'W')
         {
-            $dist = \Tki\TraderouteDistance::warpCalc($pdo_db, $db, $lang, $langvars, $tkireg, $template, $traderoute, $source, $dest);
+            $dist = \Tki\TraderouteDistance::warpCalc($pdo_db, $lang, $langvars, $tkireg, $template, $traderoute, $source, $dest);
         }
 
         // Check if player has enough turns
