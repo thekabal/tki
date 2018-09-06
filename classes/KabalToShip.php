@@ -28,9 +28,12 @@ class KabalToShip
         $character_object = new Character;
 
         // Lookup target details
-        $resultt = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($ship_id));
-        \Tki\Db::logDbErrors($pdo_db, $resultt, __LINE__, __FILE__);
-        $targetinfo = $resultt->fields;
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+        $targetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Verify not attacking another Kabal
         // Added because the kabal were killing each other off
@@ -343,17 +346,21 @@ class KabalToShip
             // Target had no escape pod
             {
                 $rating = round($targetinfo['rating'] / 2);
-                $resc = $db->Execute("UPDATE {$db->prefix}ships SET " .
-                                     "hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, " .
-                                     "torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, " .
-                                     "cloak = 0, shields = 0, sector = 1, ship_ore = 0, ship_organics = 0, " .
-                                     "ship_energy = 1000, ship_colonists = 0, ship_goods = 0, " .
-                                     "ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, " .
-                                     "dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, " .
-                                     "dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, " .
-                                     "ship_destroyed = 'N', rating = ?, dev_lssd='N' " .
-                                     "WHERE ship_id = ?;", array($rating, $targetinfo['ship_id']));
-                \Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::ships SET " .
+                       "hull = 0, engines = 0, power = 0, computer = 0, sensors = 0, beams = 0, " .
+                       "torp_launchers = 0, torps = 0, armor = 0, armor_pts = 100, " .
+                       "cloak = 0, shields = 0, sector = 1, ship_ore = 0, ship_organics = 0, " .
+                       "ship_energy = 1000, ship_colonists = 0, ship_goods = 0, " .
+                       "ship_fighters = 100, ship_damage = 0, on_planet='N', planet_id = 0, " .
+                       "dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, " .
+                       "dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, " .
+                       "ship_destroyed = 'N', rating = :rating, dev_lssd='N' " .
+                       "WHERE ship_id = :ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':rating', $rating, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "Kabal $playerinfo[character_name]|Y");
             }
             else
@@ -407,14 +414,24 @@ class KabalToShip
                 $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
-                $resd = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, " .
-                                     "ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, " .
-                                     "credits = credits + ? WHERE " .
-                                     "ship_id = ?;", array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id']));
-                \Tki\Db::logDbErrors($pdo_db, $resd, __LINE__, __FILE__);
+
+                $sql = "UPDATE ::prefix::ships SET  ship_ore = ship_ore + :salv_ore, " .
+                       "ship_organics = ship_organics + :salv_organics, ship_goods = ship_goods + :salv_goods, " .
+                       "credits = credits + :ship_salvage WHERE " .
+                       "WHERE ship_id=:ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':salv_ore', $salv_ore, \PDO::PARAM_INT);
+                $stmt->bindParam(':salv_organics', $salv_organics, \PDO::PARAM_INT);
+                $stmt->bindParam(':salv_goods', $salv_goods, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_salvage', $ship_salvage, \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $result = $stmt->execute();
+                Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
                 $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
                 $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
                 $energy = $playerinfo['ship_energy'];
+
                 $rese = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, " .
                                      "ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ?, " .
                                      "rating = rating - ? " .
