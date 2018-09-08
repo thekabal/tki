@@ -72,7 +72,7 @@ The two areas we need the most focus in would be the documentation, and testing.
 Please report all security issues to thekabal@gmail.com.
 
 ## Contributing:
-Feel free to contribute to the project! We use [GitHub](https://github.com/thekabal/tki/) for our issues tracking (provide feedback!), milestone planning, code storage, and releases.
+Feel free to contribute to the project! We use [Gitlab](https://gitlab.com/thekabal/tki/) for our issues tracking (provide feedback!), milestone planning, code storage, and releases.
 
 I hope you enjoy the game!
 <br>The Kabal
