@@ -307,7 +307,7 @@ class KabalToPlanet
                 while (!$resultps->EOF)
                 {
                     $onplanet = $resultps->fields;
-                    \Tki\KabalToShip::ship($pdo_db, $db, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
+                    \Tki\KabalToShip::ship($pdo_db, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
                     $resultps->MoveNext();
                 }
             }

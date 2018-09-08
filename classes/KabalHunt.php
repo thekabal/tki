@@ -155,7 +155,7 @@ class KabalHunt
             }
             else
             {
-                \Tki\KabalToShip::ship($pdo_db, $db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
+                \Tki\KabalToShip::ship($pdo_db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
             }
         }
         else
