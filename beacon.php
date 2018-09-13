@@ -30,7 +30,8 @@ $header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
-Tki\Login::checkLogin($pdo_db, $lang, $tkireg, $template);
+$login = new Tki\Login;
+$login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Get playerinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
