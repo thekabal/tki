@@ -21,7 +21,7 @@ namespace Tki;
 
 class Bounty
 {
-    public static function cancel(\PDO $pdo_db, int $bounty_on): void
+    public function cancel(\PDO $pdo_db, int $bounty_on): void
     {
         // $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on=:bounty_on AND bounty_on=ship_id";
         $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on=:bounty_on";

@@ -62,7 +62,8 @@ elseif ($sure == 2)
     echo $langvars['l_die_please'] . "<br>";
     $character_object = new Tki\Character();
     $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, true);
-    Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
+    $bounty = new Tki\Bounty;
+    $bounty->cancel($pdo_db, $playerinfo['ship_id']);
 
     $admin_log = new Tki\AdminLog();
     $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_HARAKIRI, "$playerinfo[character_name]|" . $request->server->get('REMOTE_ADDR') . "");

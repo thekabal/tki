@@ -196,14 +196,17 @@ if ($playerarmor < 1)
         $result = $stmt->execute();
         Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
+        $bounty = new Tki\Bounty;
+        $bounty->cancel($pdo_db, $playerinfo['ship_id']);
+
         $ok = 0;
         Tki\Text::gotoMain($pdo_db, $lang);
         die();
     }
     else
     {
-        Tki\Bounty::cancel($pdo_db, $playerinfo['ship_id']);
+        $bounty = new Tki\Bounty;
+        $bounty->cancel($pdo_db, $playerinfo['ship_id']);
         $character_object = new Tki\Character();
         $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
         $ok = 0;
