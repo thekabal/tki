@@ -161,7 +161,7 @@ class Ownership
         // Unallied ship, another ship in a team, war
         if ($numunallied > 0)
         {
-            $questionMarks = join(",", array_pad(array(), count($ships), "?"));
+            $questionMarks = join(',', array_pad(array(), count($ships), '?'));
             $sql = "SELECT team FROM ::prefix::ships WHERE ship_id in ($questionMarks) AND team <> 0";
             $stmt = $pdo_db->prepare($sql);
             $stmt->execute($ships);
