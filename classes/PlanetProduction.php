@@ -53,11 +53,11 @@ class PlanetProduction
         echo str_replace("[here]", "<a href='planet_report.php?preptype=2'>" . $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_prod']);
         echo "<br><br>";
 
-        foreach($prodpercentarray as $commod_type => $valarray)
+        foreach ($prodpercentarray as $commod_type => $valarray)
         {
             if ($commod_type != "team_id" && $commod_type != "ship_id")
             {
-                foreach($valarray as $planet_id => $prodpercent)
+                foreach ($valarray as $planet_id => $prodpercent)
                 {
                     if ($commod_type == "prod_ore" || $commod_type == "prod_organics" || $commod_type == "prod_goods" || $commod_type == "prod_energy" || $commod_type == "prod_fighters" || $commod_type == "prod_torp")
                     {
