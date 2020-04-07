@@ -162,8 +162,8 @@ ksort($_SERVER);
 reset($_SERVER);
 foreach ($_SERVER as $name => $value)
 {
-    $array_var = explode(";", "$value");
-    $value = implode("; ", $array_var);
+    $array_var = explode(';', $value);
+    $value = implode('; ', $array_var);
     $variables['env_vars'][$id]['name'] = trim($name);
     $variables['env_vars'][$id]['value'] = trim($value);
     $id++;
