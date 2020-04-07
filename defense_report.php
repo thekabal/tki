@@ -37,7 +37,7 @@ $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player g
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 $query = "SELECT * FROM {$db->prefix}sector_defense WHERE ship_id = ?";
-if ($sort !== null)
+if (isset($sort) && ($sort !== null))
 {
     $query .= " ORDER BY";
     if ($sort == "quantity")
