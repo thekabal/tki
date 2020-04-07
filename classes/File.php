@@ -47,7 +47,7 @@ class File
         {
             foreach ($config_line as $config_key => $type_n_value)
             {
-                if (str_contains($ini_file, '_config'))
+                if (strpos($ini_file, '_config'))
                 {
                     // Import all the variables into the registry
                     settype($type_n_value['value'], $type_n_value['type']);
