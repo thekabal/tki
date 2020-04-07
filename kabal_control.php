@@ -32,7 +32,7 @@ echo "<h1>" . $title . "</h1>\n";
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $menu = null;
 $menu = filter_input(INPUT_POST, 'menu', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($menu)) === 0)
+if (strlen(trim($menu)) === 0)
 {
     $menu = false;
 }
@@ -49,7 +49,7 @@ else
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $swordfish = null;
 $swordfish = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($swordfish)) === 0)
+if (strlen(trim($swordfish)) === 0)
 {
     $swordfish = false;
 }
@@ -326,7 +326,7 @@ else
                             default: // Defensive programming - FUTURE: Find a routine for this.
                         }
 
-                        $logdatetime = mb_substr($logrow['time'], 4, 2) . "/" . mb_substr($logrow['time'], 6, 2) . "/" . mb_substr($logrow['time'], 0, 4) . " " . mb_substr($logrow['time'], 8, 2) . ":" . mb_substr($logrow['time'], 10, 2) . ":" . mb_substr($logrow['time'], 12, 2);
+                        $logdatetime = substr($logrow['time'], 4, 2) . "/" . substr($logrow['time'], 6, 2) . "/" . substr($logrow['time'], 0, 4) . " " . substr($logrow['time'], 8, 2) . ":" . substr($logrow['time'], 10, 2) . ":" . substr($logrow['time'], 12, 2);
                         echo "$logdatetime $logtype$logrow[data] <br>";
                         $logres->MoveNext();
                     }

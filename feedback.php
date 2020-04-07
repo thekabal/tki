@@ -39,7 +39,7 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $content = null;
 $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING); // URL doesn't allow spaces, string does.
-if (($content === null) || (mb_strlen(trim($content)) === 0))
+if (($content === null) || (strlen(trim($content)) === 0))
 {
     $content = false;
 }

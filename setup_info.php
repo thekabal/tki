@@ -96,7 +96,7 @@ $variables['sched_news'] = $tkireg->sched_news;
 $variables['sched_degrade'] = $tkireg->sched_degrade;
 $variables['sched_apocalypse'] = $tkireg->sched_apocalypse;
 $variables['sched_thegovernor'] = $tkireg->sched_thegovernor;
-$variables['hash'] = mb_strtoupper(md5_file(__FILE__));
+$variables['hash'] = strtoupper(md5_file(__FILE__));
 $variables['updated_on'] = date("l, F d, Y", filemtime(basename(__FILE__)));
 $variables['cookie_test'] = ($_COOKIE['TestCookie'] !== null);
 $variables['dev_mode'] = file_exists('dev');
@@ -117,7 +117,7 @@ ob_start();
 $test_smarty->testInstall();
 $variables['smarty_test_err'] = ob_get_contents();
 ob_end_clean();
-if (mb_strpos($variables['smarty_test_err'], 'FAILED'))
+if (strpos($variables['smarty_test_err'], 'FAILED'))
 {
     $variables['smarty_test'] = false;
 }

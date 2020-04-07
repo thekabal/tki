@@ -35,7 +35,7 @@ if (array_key_exists('newlang', $_POST) === true)
         // If it is a PHP file, add it to the list of accepted language files
         if ($file_info->isFile() && $file_info->getExtension() == 'php') // If it is a PHP file, add it to the list of accepted make galaxy files
         {
-            $lang_file = mb_substr($file_info->getFilename(), 0, -8); // The actual file name
+            $lang_file = substr($file_info->getFilename(), 0, -8); // The actual file name
 
             // Trim and compare the new langauge with the supported.
             if (trim($_POST['newlang']) == $lang_file)

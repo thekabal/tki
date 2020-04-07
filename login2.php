@@ -31,7 +31,7 @@ if(!isset($_SERVER['HTTPS']))
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $email = null;
 $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($email)) === 0)
+if (strlen(trim($email)) === 0)
 {
     $email = false;
 }
@@ -39,7 +39,7 @@ if (mb_strlen(trim($email)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $filtered_post_password = null;
 $filtered_post_password = filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_URL);
-if (mb_strlen(trim($filtered_post_password)) === 0)
+if (strlen(trim($filtered_post_password)) === 0)
 {
     $filtered_post_password = false;
 }
@@ -65,7 +65,7 @@ else
     // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
     $lang = null;
     $lang = filter_input(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-    if (mb_strlen(trim($lang)) === 0)
+    if (strlen(trim($lang)) === 0)
     {
         $lang = false;
     }
@@ -226,7 +226,7 @@ if ($playerfound)
                 echo "Your account has been Banned";
             }
 
-            if (array_key_exists('public_info', $ban_result) && mb_strlen(trim($ban_result['public_info'])) > 0)
+            if (array_key_exists('public_info', $ban_result) && strlen(trim($ban_result['public_info'])) > 0)
             {
                 echo " for the following:<br>\n";
                 echo "<br>\n";

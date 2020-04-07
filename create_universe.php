@@ -26,7 +26,7 @@ set_time_limit(0);
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $swordfish = null;
 $swordfish = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-if (($swordfish === null) || (mb_strlen(trim($swordfish)) === 0))
+if (($swordfish === null) || (strlen(trim($swordfish)) === 0))
 {
     $swordfish = false;
 }

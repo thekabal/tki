@@ -34,7 +34,7 @@ $header->display($pdo_db, $lang, $template, $title);
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $response = null;
 $response = filter_input(INPUT_POST, 'response', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($response)) === 0)
+if (strlen(trim($response)) === 0)
 {
     $response = false;
 }
@@ -47,7 +47,7 @@ if (array_key_exists('response', $_GET))
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $bounty_on = null;
 $bounty_on = (int) filter_input(INPUT_POST, 'bounty_on', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($bounty_on)) === 0)
+if (strlen(trim($bounty_on)) === 0)
 {
     $bounty_on = false;
 }
@@ -60,7 +60,7 @@ if (array_key_exists('bounty_on', $_GET))
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $bid = null;
 $bid = (int) filter_input(INPUT_POST, 'bid', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($bid)) === 0)
+if (strlen(trim($bid)) === 0)
 {
     $bid = false;
 }
@@ -68,7 +68,7 @@ if (mb_strlen(trim($bid)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $amount = null;
 $amount = (int) filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($amount)) === 0)
+if (strlen(trim($amount)) === 0)
 {
     $amount = false;
 }

@@ -55,7 +55,7 @@ if (!$tkireg->allow_ibank)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $command = null;
 $command = filter_input(INPUT_GET, 'command', FILTER_SANITIZE_STRING);
-if (($command === null) || (mb_strlen(trim($command)) === 0))
+if (($command === null) || (strlen(trim($command)) === 0))
 {
     $command = false;
 }

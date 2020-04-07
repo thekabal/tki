@@ -36,7 +36,7 @@ if ($tkireg->account_creation_closed)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $character = null;
 $character = filter_input(INPUT_POST, 'character', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($character)) === 0)
+if (strlen(trim($character)) === 0)
 {
     $character = false;
 }
@@ -44,7 +44,7 @@ if (mb_strlen(trim($character)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $shipname = null;
 $shipname = filter_input(INPUT_POST, 'shipname', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($shipname)) === 0)
+if (strlen(trim($shipname)) === 0)
 {
     $shipname = false;
 }
@@ -52,7 +52,7 @@ if (mb_strlen(trim($shipname)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $username = null;
 $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($username)) === 0)
+if (strlen(trim($username)) === 0)
 {
     $username = false;
 }
@@ -60,7 +60,7 @@ if (mb_strlen(trim($username)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $filtered_post_password = null;
 $filtered_post_password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_URL);
-if (mb_strlen(trim($filtered_post_password)) === 0)
+if (strlen(trim($filtered_post_password)) === 0)
 {
     $filtered_post_password = false;
 }
@@ -68,7 +68,7 @@ if (mb_strlen(trim($filtered_post_password)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $newlang = null;
 $newlang = filter_input(INPUT_POST, 'newlang', FILTER_SANITIZE_STRING);
-if (($newlang === null) || (mb_strlen(trim($newlang)) === 0))
+if (($newlang === null) || (strlen(trim($newlang)) === 0))
 {
     $newlang = false;
 }
@@ -101,20 +101,20 @@ if ($character_exists !== null)
 {
     foreach ($character_exists as $tmp_char)
     {
-        if (mb_strtolower($tmp_char['email']) == mb_strtolower($username))
+        if (strtolower($tmp_char['email']) == strtolower($username))
         {
             echo $langvars['l_new_inuse'] . ' ' .  $langvars['l_new_4gotpw1'] . ' <a href=mail.php?mail=' . $username . '>' . $langvars['l_clickme'] . '</a> ' . $langvars['l_new_4gotpw2'] . '<br>';
             $flag = 1;
         }
 
-        if (mb_strtolower($tmp_char['character_name']) == mb_strtolower($character))
+        if (strtolower($tmp_char['character_name']) == strtolower($character))
         {
             $langvars['l_new_inusechar'] = str_replace('[character]', $character, $langvars['l_new_inusechar']);
             echo $langvars['l_new_inusechar'] . '<br>';
             $flag = 1;
         }
 
-        if (mb_strtolower($tmp_char['ship_name']) == mb_strtolower($shipname))
+        if (strtolower($tmp_char['ship_name']) == strtolower($shipname))
         {
             $langvars['l_new_inuseship'] = str_replace('[shipname]', $shipname, $langvars['l_new_inuseship']);
             echo $langvars['l_new_inuseship'] . '<br>';

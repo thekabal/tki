@@ -37,7 +37,7 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $filtered_ship_id = null;
 $filtered_ship_id = filter_input(INPUT_GET, 'ship_id', FILTER_SANITIZE_EMAIL);
-if (($filtered_ship_id === null) || (mb_strlen(trim($filtered_ship_id)) === 0))
+if (($filtered_ship_id === null) || (strlen(trim($filtered_ship_id)) === 0))
 {
     $filtered_ship_id = false;
 }

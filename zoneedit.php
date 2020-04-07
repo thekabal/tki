@@ -34,7 +34,7 @@ echo "<h1>" . $title . "</h1>\n";
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $command = null;
 $command = filter_input(INPUT_GET, 'command', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($command)) === 0)
+if (strlen(trim($command)) === 0)
 {
     $command = false;
 }
@@ -42,7 +42,7 @@ if (mb_strlen(trim($command)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $zone = null;
 $zone = filter_input(INPUT_GET, 'zone', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($zone)) === 0)
+if (strlen(trim($zone)) === 0)
 {
     $zone = false;
 }
@@ -50,7 +50,7 @@ if (mb_strlen(trim($zone)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $name = null;
 $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($name)) === 0)
+if (strlen(trim($name)) === 0)
 {
     $name = false;
 }
@@ -58,7 +58,7 @@ if (mb_strlen(trim($name)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $beacons = null;
 $beacons = filter_input(INPUT_POST, 'beacons', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($beacons)) === 0)
+if (strlen(trim($beacons)) === 0)
 {
     $beacons = false;
 }
@@ -66,7 +66,7 @@ if (mb_strlen(trim($beacons)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $attacks = null;
 $attacks = filter_input(INPUT_POST, 'attacks', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($attacks)) === 0)
+if (strlen(trim($attacks)) === 0)
 {
     $attacks = false;
 }
@@ -74,7 +74,7 @@ if (mb_strlen(trim($attacks)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $warpedits = null;
 $warpedits = filter_input(INPUT_POST, 'warpedits', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($warpedits)) === 0)
+if (strlen(trim($warpedits)) === 0)
 {
     $warpedits = false;
 }
@@ -82,7 +82,7 @@ if (mb_strlen(trim($warpedits)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $defenses = null;
 $defenses = filter_input(INPUT_POST, 'defenses', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($defenses)) === 0)
+if (strlen(trim($defenses)) === 0)
 {
     $defenses = false;
 }
@@ -90,7 +90,7 @@ if (mb_strlen(trim($defenses)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $planets = null;
 $planets = filter_input(INPUT_POST, 'planets', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($planets)) === 0)
+if (strlen(trim($planets)) === 0)
 {
     $planets = false;
 }
@@ -98,7 +98,7 @@ if (mb_strlen(trim($planets)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $trades = null;
 $trades = filter_input(INPUT_POST, 'trades', FILTER_SANITIZE_EMAIL);
-if (mb_strlen(trim($trades)) === 0)
+if (strlen(trim($trades)) === 0)
 {
     $trades = false;
 }

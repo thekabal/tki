@@ -34,7 +34,7 @@ echo "<h1>" . $title . "</h1>\n";
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $oneway = null;
 $oneway = filter_input(INPUT_POST, 'oneway', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($oneway)) === 0)
+if (strlen(trim($oneway)) === 0)
 {
     $oneway = false;
 }

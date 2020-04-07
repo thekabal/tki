@@ -41,7 +41,7 @@ array('main', 'ranking', 'common', 'global_includes', 'global_funcs', 'footer', 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $sort = null;
 $sort = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_STRING);
-if (($sort === null) || (mb_strlen(trim($sort)) === 0))
+if (($sort === null) || (strlen(trim($sort)) === 0))
 {
     $sort = false;
 }

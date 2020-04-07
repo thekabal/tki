@@ -34,7 +34,7 @@ echo "<h1>" . $title . "</h1>\n";
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $bothway = null;
 $bothway = filter_input(INPUT_POST, 'bothway', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($bothway)) === 0)
+if (strlen(trim($bothway)) === 0)
 {
     $bothway = false;
 }
@@ -42,7 +42,7 @@ if (mb_strlen(trim($bothway)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $target_sector = null;
 $target_sector = (int) filter_input(INPUT_POST, 'target_sector', FILTER_SANITIZE_NUMBER_INT);
-if (mb_strlen(trim($target_sector)) === 0)
+if (strlen(trim($target_sector)) === 0)
 {
     $target_sector = false;
 }

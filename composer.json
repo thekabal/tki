@@ -15,8 +15,7 @@
         "swiftmailer/swiftmailer": "^6.2.3",
         "adodb/adodb-php": "^5.20.17",
         "symfony/http-foundation": "^5.0.7",
-        "ext-PDO": "*",
-        "ext-mbstring": "*"
+        "ext-PDO": "*"
     },
     "require-dev": {
         "phpmd/phpmd" : "^2.8.2",

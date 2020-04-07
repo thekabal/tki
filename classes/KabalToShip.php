@@ -37,7 +37,7 @@ class KabalToShip
 
         // Verify not attacking another Kabal
         // Added because the kabal were killing each other off
-        if (mb_strstr($targetinfo['email'], '@kabal'))                       // He's a kabal
+        if (strstr($targetinfo['email'], '@kabal'))                       // He's a kabal
         {
             return;
         }

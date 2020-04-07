@@ -31,7 +31,7 @@ class SetPaths
     {
         $request = Request::createFromGlobals();
         $gamepath = dirname($request->server->get('SCRIPT_NAME'));
-        if ($gamepath !== null && mb_strlen($gamepath) > 0)
+        if ($gamepath !== null && strlen($gamepath) > 0)
         {
             if ($gamepath === "\\")
             {
@@ -45,7 +45,7 @@ class SetPaths
                     $gamepath = "/$gamepath";
                 }
 
-                if ($gamepath[mb_strlen($gamepath) - 1] != '/')
+                if ($gamepath[strlen($gamepath) - 1] != '/')
                 {
                     $gamepath = "$gamepath/";
                 }
@@ -67,28 +67,28 @@ class SetPaths
         $remove_port = true;
         $gamedomain = $request->server->get('HTTP_HOST');
 
-        if ($gamedomain !== null && mb_strlen($gamedomain) > 0)
+        if ($gamedomain !== null && strlen($gamedomain) > 0)
         {
-            $pos = mb_strpos($gamedomain, 'https://');
+            $pos = strpos($gamedomain, 'https://');
             if (is_int($pos))
             {
-                $gamedomain = mb_substr($gamedomain, $pos + 7);
+                $gamedomain = substr($gamedomain, $pos + 7);
             }
 
-            $pos = mb_strpos($gamedomain, 'www.');
+            $pos = strpos($gamedomain, 'www.');
             if (is_int($pos))
             {
-                $gamedomain = mb_substr($gamedomain, $pos + 4);
+                $gamedomain = substr($gamedomain, $pos + 4);
             }
 
             if ($remove_port)
             {
-                $pos = mb_strpos($gamedomain, ':');
+                $pos = strpos($gamedomain, ':');
             }
 
             if (is_int($pos))
             {
-                $gamedomain = mb_substr($gamedomain, 0, $pos);
+                $gamedomain = substr($gamedomain, 0, $pos);
             }
 
             if ($gamedomain[0] != '.')

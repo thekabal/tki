@@ -42,7 +42,7 @@ if (!isset($defense_id))
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $response = null;
 $response = filter_input(INPUT_POST, 'response', FILTER_SANITIZE_STRING);
-if (mb_strlen(trim($response)) === 0)
+if (strlen(trim($response)) === 0)
 {
     $response = false;
 }

@@ -153,7 +153,7 @@ if (empty($content))
 }
 else
 {
-    if (mb_strpos($to, $langvars['l_sendm_ally']) === false)
+    if (strpos($to, $langvars['l_sendm_ally']) === false)
     {
         $timestamp = date("Y\-m\-d H\:i\:s");
         $res = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE character_name = ?;", array($to));

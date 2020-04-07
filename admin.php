@@ -58,7 +58,7 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
             $filename[$i]['file'] = $file_info->getFilename();
 
             // Set option title to lang string of the form l_admin + file name
-            $option_title = 'l_admin_' . mb_substr($filename[$i]['file'], 0, -4);
+            $option_title = 'l_admin_' . substr($filename[$i]['file'], 0, -4);
 
             if ($langvars[$option_title] !== null)
             {
@@ -76,7 +76,7 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
                 if ($menu == $filename[$i]['file'])
                 {
                     $button_main = true;
-                    $module_name = mb_substr($filename[$i]['file'], 0, -4);
+                    $module_name = substr($filename[$i]['file'], 0, -4);
                     include_once './admin/'. $filename[$i]['file'];
                 }
             }
