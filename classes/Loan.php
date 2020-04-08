@@ -21,11 +21,15 @@ namespace Tki;
 
 class Loan
 {
-    public static function isPending(\PDO $pdo_db, int $ship_id, Reg $tkireg): ?bool
+    public static function isPending(\PDO $pdo_db, Reg $tkireg): bool
     {
+        // Get playerinfo from database
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
+
         $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $account = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -39,9 +43,7 @@ class Loan
                 return true;
             }
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 }
