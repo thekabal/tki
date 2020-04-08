@@ -18,8 +18,6 @@
 // File: logout.php
 
 require_once './common.php';
-
-unset($variables);
 $variables = array();
 
 // Database driven language entries

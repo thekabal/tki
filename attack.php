@@ -32,10 +32,13 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('attack', 'bounty', 'main'
                                 'global_funcs', 'combat', 'footer', 'news'));
 echo '<h1>' . $title . '</h1>';
 
-$ship_id = null;
 if (array_key_exists('ship_id', $_GET))
 {
     $ship_id = (int) filter_input(INPUT_GET, 'ship_id', FILTER_SANITIZE_NUMBER_INT);
+}
+else
+{
+    $ship_id = null;
 }
 
 // Kami multi-browser window attack fix

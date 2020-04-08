@@ -87,7 +87,7 @@ class IbankTransferSpecific
                 $score = \Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
                 $maxtrans = $score * $score * $tkireg->ibank_svalue;
 
-                $langvars['l_ibank_maxtransferpercent'] = str_replace("[ibank_percent]", $percent, $langvars['l_ibank_maxtransferpercent']);
+                $langvars['l_ibank_maxtransferpercent'] = str_replace("[ibank_percent]", (string) $percent, $langvars['l_ibank_maxtransferpercent']);
                 echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_maxtransferpercent'] . " :</td><td align=right>" . number_format($maxtrans, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
             }
 

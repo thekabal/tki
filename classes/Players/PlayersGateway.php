@@ -57,7 +57,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
         return $playerinfo; // FUTURE: Eventually we want this to return a player object instead, for now, playerinfo array or false for no user found.
     }
 
-    public function selectPlayerInfoById(int $user_id)
+    public function selectPlayerInfoById(?int $user_id)
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :user_id LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);

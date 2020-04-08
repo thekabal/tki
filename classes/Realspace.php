@@ -138,7 +138,7 @@ class Realspace
             if (($hostile > 0) && ($playerinfo['hull'] > $tkireg->mine_hullsize))
             {
                 $retval = "HOSTILE";
-                echo str_replace("[destination]", $destination, $langvars['l_pr_cannot_move_defenses']). "<br>";
+                echo str_replace("[destination]", (string) $destination, $langvars['l_pr_cannot_move_defenses']). "<br>";
             }
             else
             {
@@ -157,7 +157,7 @@ class Realspace
                 $stmt->execute();
 
                 $langvars['l_rs_ready_result'] = null;
-                $langvars['l_rs_ready_result'] = str_replace("[sector]", $destination, $langvars['l_rs_ready']);
+                $langvars['l_rs_ready_result'] = str_replace("[sector]", (string) $destination, $langvars['l_rs_ready']);
                 $langvars['l_rs_ready_result'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready_result']);
                 $langvars['l_rs_ready_result'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready_result']);
                 echo $langvars['l_rs_ready_result'] . "<br>";

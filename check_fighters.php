@@ -118,7 +118,7 @@ if ($num_defenses > 0 && $total_sector_fighters > 0 && !$owner)
                     echo $langvars['l_chf_youpaidsometoll'] . "<br>";
                     $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits - $fighterstoll WHERE ship_id = ?;", array($playerinfo['ship_id']));
                     Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                    Tki\Toll::distribute($pdo_db, $sector, $fighterstoll, $total_sector_fighters);
+                    Tki\Toll::distribute($pdo_db, $sector, $fighterstoll, (int) $total_sector_fighters);
                     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::TOLL_PAID, "$tollstring|$sector");
                     $ok = 1;
                 }

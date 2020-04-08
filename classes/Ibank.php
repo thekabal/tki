@@ -54,8 +54,8 @@ class Ibank
         $hours = $tkireg->ibank_lrate / 60;
         $mins = $tkireg->ibank_lrate % 60;
 
-        $langvars['l_ibank_loanreminder'] = str_replace("[hours]", $hours, $langvars['l_ibank_loanreminder']);
-        $langvars['l_ibank_loanreminder'] = str_replace("[mins]", $mins, $langvars['l_ibank_loanreminder']);
+        $langvars['l_ibank_loanreminder'] = str_replace("[hours]", (string) $hours, $langvars['l_ibank_loanreminder']);
+        $langvars['l_ibank_loanreminder'] = str_replace("[mins]", (string) $mins, $langvars['l_ibank_loanreminder']);
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_takenaloan'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td colspan=2 align=center>" . $langvars['l_ibank_loancongrats'] . "<br><br></tr>" .
@@ -137,8 +137,8 @@ class Ibank
             $factor = $tkireg->ibank_loanfactor *= 100;
             $interest = $tkireg->ibank_loaninterest *= 100;
 
-            $langvars['l_ibank_loanrates'] = str_replace("[factor]", $factor, $langvars['l_ibank_loanrates']);
-            $langvars['l_ibank_loanrates'] = str_replace("[interest]", $interest, $langvars['l_ibank_loanrates']);
+            $langvars['l_ibank_loanrates'] = str_replace("[factor]", (string) $factor, $langvars['l_ibank_loanrates']);
+            $langvars['l_ibank_loanrates'] = str_replace("[interest]", (string) $interest, $langvars['l_ibank_loanrates']);
 
             echo "<form accept-charset='utf-8' action='ibank.php?command=repay' method=post>" .
                  "<tr valign=top>" .
@@ -154,14 +154,14 @@ class Ibank
             $score = \Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
             $maxloan = $score * $score * $tkireg->ibank_loanlimit;
 
-            $langvars['l_ibank_maxloanpercent'] = str_replace("[ibank_percent]", $percent, $langvars['l_ibank_maxloanpercent']);
+            $langvars['l_ibank_maxloanpercent'] = str_replace("[ibank_percent]", (string) $percent, $langvars['l_ibank_maxloanpercent']);
             echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_maxloanpercent'] . " :</td><td align=right>" . number_format($maxloan, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
 
             $factor = $tkireg->ibank_loanfactor *= 100;
             $interest = $tkireg->ibank_loaninterest *= 100;
 
-            $langvars['l_ibank_loanrates'] = str_replace("[factor]", $factor, $langvars['l_ibank_loanrates']);
-            $langvars['l_ibank_loanrates'] = str_replace("[interest]", $interest, $langvars['l_ibank_loanrates']);
+            $langvars['l_ibank_loanrates'] = str_replace("[factor]", (string) $factor, $langvars['l_ibank_loanrates']);
+            $langvars['l_ibank_loanrates'] = str_replace("[interest]", (string) $interest, $langvars['l_ibank_loanrates']);
 
             echo "<form accept-charset='utf-8' action='ibank.php?command=borrow' method=post>" .
                  "<tr valign=top>" .

@@ -18,7 +18,6 @@
 // File: admin/zone_editor.php
 
 // Set array with all used variables in page
-unset($variables);
 $variables = array();
 
 if (!array_key_exists('zone', $_POST))

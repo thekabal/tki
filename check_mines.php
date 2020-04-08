@@ -78,7 +78,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
         // (it will always be at least 5% of the mines or at the very least 1 mine);
         // and if you are very unlucky they will all hit you
         $pren = (random_int(5, 100) / 100);
-        $roll = round($pren * $total_sector_mines - 1) + 1;
+        $roll = (int) round($pren * $total_sector_mines - 1) + 1;
         $totalmines = $totalmines - $roll;
 
         // You are hit. Tell the player and put it in the log

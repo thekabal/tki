@@ -28,6 +28,7 @@ class Combat
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $targetinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        // Future: Handle a bad return for targetinfo
 
         echo "<br><br>-=-=-=-=-=-=-=--<br>
         " . $langvars['l_cmb_startingstats'] . ":<br>
@@ -72,13 +73,13 @@ class Combat
                 $lost = $targetfighters - $temp;
                 $targetfighters = $temp;
                 $attackerbeams = $attackerbeams - $lost;
-                $langvars['l_cmb_beamsdestroy'] = str_replace("[cmb_lost]", $lost, $langvars['l_cmb_beamsdestroy']);
+                $langvars['l_cmb_beamsdestroy'] = str_replace("[cmb_lost]", (string) $lost, $langvars['l_cmb_beamsdestroy']);
                 echo "<-- " . $langvars['l_cmb_beamsdestroy'] . "<br>";
             }
             else
             {
                 $targetfighters = $targetfighters - $attackerbeams;
-                $langvars['l_cmb_beamsdestroy2']  = str_replace("[cmb_attackerbeams]", $attackerbeams, $langvars['l_cmb_beamsdestroy2']);
+                $langvars['l_cmb_beamsdestroy2']  = str_replace("[cmb_attackerbeams]", (string) $attackerbeams, $langvars['l_cmb_beamsdestroy2']);
                 echo "--> " . $langvars['l_cmb_beamsdestroy2'] . "<br>";
                 $attackerbeams = 0;
             }
@@ -101,15 +102,15 @@ class Combat
                 $attackerfighters = $temp;
                 $targetbeams = $targetbeams - $lost;
                 $langvars['l_cmb_fighterdestroyedbybeams'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_fighterdestroyedbybeams']);
-                $langvars['l_cmb_fighterdestroyedbybeams'] = str_replace("[cmb_lost]", $lost, $langvars['l_cmb_fighterdestroyedbybeams']);
+                $langvars['l_cmb_fighterdestroyedbybeams'] = str_replace("[cmb_lost]", (string) $lost, $langvars['l_cmb_fighterdestroyedbybeams']);
                 echo "--> " . $langvars['l_cmb_fighterdestroyedbybeams'] . "<br>";
             }
             else
             {
                 $attackerfighters = $attackerfighters - $targetbeams;
                 $langvars['l_cmb_beamsdestroystillhave'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_beamsdestroystillhave']);
-                $langvars['l_cmb_beamsdestroystillhave'] = str_replace("[cmb_targetbeams]", $targetbeams, $langvars['l_cmb_beamsdestroystillhave']);
-                $langvars['l_cmb_beamsdestroystillhave'] = str_replace("[cmb_attackerfighters]", $attackerfighters, $langvars['l_cmb_beamsdestroystillhave']);
+                $langvars['l_cmb_beamsdestroystillhave'] = str_replace("[cmb_targetbeams]", (string) $targetbeams, $langvars['l_cmb_beamsdestroystillhave']);
+                $langvars['l_cmb_beamsdestroystillhave'] = str_replace("[cmb_attackerfighters]", (string) $attackerfighters, $langvars['l_cmb_beamsdestroystillhave']);
                 echo "<-- " . $langvars['l_cmb_beamsdestroystillhave'] . "<br>";
                 $targetbeams = 0;
             }
@@ -134,7 +135,7 @@ class Combat
             else
             {
                 $langvars['l_cmb_shieldsarehitbybeams'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_shieldsarehitbybeams']);
-                $langvars['l_cmb_shieldsarehitbybeams'] = str_replace("[cmb_attackerbeams]", $attackerbeams, $langvars['l_cmb_shieldsarehitbybeams']);
+                $langvars['l_cmb_shieldsarehitbybeams'] = str_replace("[cmb_attackerbeams]", (string) $attackerbeams, $langvars['l_cmb_shieldsarehitbybeams']);
                 echo $langvars['l_cmb_shieldsarehitbybeams'] . "<br>";
                 $attackerbeams = 0;
             }
@@ -180,7 +181,7 @@ class Combat
             else
             {
                 $targetarmor = $targetarmor - $attackerbeams;
-                $langvars['l_cmb_yourbeamshavedonedamage'] = str_replace("[cmb_attackerbeams]", $attackerbeams, $langvars['l_cmb_yourbeamshavedonedamage']);
+                $langvars['l_cmb_yourbeamshavedonedamage'] = str_replace("[cmb_attackerbeams]", (string) $attackerbeams, $langvars['l_cmb_yourbeamshavedonedamage']);
                 $langvars['l_cmb_yourbeamshavedonedamage'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_yourbeamshavedonedamage']);
                 echo $langvars['l_cmb_yourbeamshavedonedamage'] . "<br>";
             }
@@ -223,14 +224,14 @@ class Combat
                 $targetfighters = $temp;
                 $attackertorpdamage = $attackertorpdamage - $lost;
                 $langvars['l_cmb_yourtorpsdestroy'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_yourtorpsdestroy']);
-                $langvars['l_cmb_yourtorpsdestroy'] = str_replace("[cmb_lost]", $lost, $langvars['l_cmb_yourtorpsdestroy']);
+                $langvars['l_cmb_yourtorpsdestroy'] = str_replace("[cmb_lost]", (string) $lost, $langvars['l_cmb_yourtorpsdestroy']);
                 echo "--> " . $langvars['l_cmb_yourtorpsdestroy'] . "<br>";
             }
             else
             {
                 $targetfighters = $targetfighters - $attackertorpdamage;
                 $langvars['l_cmb_yourtorpsdestroy2'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_yourtorpsdestroy2']);
-                $langvars['l_cmb_yourtorpsdestroy2'] = str_replace("[cmb_attackertorpdamage]", $attackertorpdamage, $langvars['l_cmb_yourtorpsdestroy2']);
+                $langvars['l_cmb_yourtorpsdestroy2'] = str_replace("[cmb_attackertorpdamage]", (string) $attackertorpdamage, $langvars['l_cmb_yourtorpsdestroy2']);
                 echo "<-- " . $langvars['l_cmb_yourtorpsdestroy2'] . "<br>";
                 $attackertorpdamage = 0;
             }
@@ -255,14 +256,14 @@ class Combat
                 $attackerfighters = $temp;
                 $targettorpdmg = $targettorpdmg - $lost;
                 $langvars['l_cmb_torpsdestroyyou'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_torpsdestroyyou']);
-                $langvars['l_cmb_torpsdestroyyou'] = str_replace("[cmb_lost]", $lost, $langvars['l_cmb_torpsdestroyyou']);
+                $langvars['l_cmb_torpsdestroyyou'] = str_replace("[cmb_lost]", (string) $lost, $langvars['l_cmb_torpsdestroyyou']);
                 echo "--> " . $langvars['l_cmb_torpsdestroyyou'] . "<br>";
             }
             else
             {
                 $attackerfighters = $attackerfighters - $targettorpdmg;
                 $langvars['l_cmb_someonedestroyedfighters'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_someonedestroyedfighters']);
-                $langvars['l_cmb_someonedestroyedfighters'] = str_replace("[cmb_targettorpdmg]", $targettorpdmg, $langvars['l_cmb_someonedestroyedfighters']);
+                $langvars['l_cmb_someonedestroyedfighters'] = str_replace("[cmb_targettorpdmg]", (string) $targettorpdmg, $langvars['l_cmb_someonedestroyedfighters']);
                 echo "<-- " . $langvars['l_cmb_someonedestroyedfighters'] . "<br>";
                 $targettorpdmg = 0;
             }
@@ -290,7 +291,7 @@ class Combat
             {
                 $targetarmor = $targetarmor - $attackertorpdamage;
                 $langvars['l_cmb_hisarmorishitbytorps'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_hisarmorishitbytorps']);
-                $langvars['l_cmb_hisarmorishitbytorps'] = str_replace("[cmb_attackertorpdamage]", $attackertorpdamage, $langvars['l_cmb_hisarmorishitbytorps']);
+                $langvars['l_cmb_hisarmorishitbytorps'] = str_replace("[cmb_attackertorpdamage]", (string) $attackertorpdamage, $langvars['l_cmb_hisarmorishitbytorps']);
                 echo "<-- " . $langvars['l_cmb_hisarmorishitbytorps'] . "<br>";
             }
         }
@@ -311,7 +312,7 @@ class Combat
             else
             {
                 $attackerarmor = $attackerarmor - $targettorpdmg;
-                $langvars['l_cmb_yourarmorhitdmgtorps'] = str_replace("[cmb_targettorpdmg]", $targettorpdmg, $langvars['l_cmb_yourarmorhitdmgtorps']);
+                $langvars['l_cmb_yourarmorhitdmgtorps'] = str_replace("[cmb_targettorpdmg]", (string) $targettorpdmg, $langvars['l_cmb_yourarmorhitdmgtorps']);
                 $langvars['l_cmb_yourarmorhitdmgtorps'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_yourarmorhitdmgtorps']);
                 echo "<-- " . $langvars['l_cmb_yourarmorhitdmgtorps'] . "<br>";
             }
@@ -334,7 +335,7 @@ class Combat
             else
             {
                 $langvars['l_cmb_helostsomefighters'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_helostsomefighters']);
-                $langvars['l_cmb_helostsomefighters'] = str_replace("[cmb_attackerfighters]", $attackerfighters, $langvars['l_cmb_helostsomefighters']);
+                $langvars['l_cmb_helostsomefighters'] = str_replace("[cmb_attackerfighters]", (string) $attackerfighters, $langvars['l_cmb_helostsomefighters']);
                 echo $langvars['l_cmb_helostsomefighters'] . "<br>";
                 $temptargfighters = $targetfighters - $attackerfighters;
             }
@@ -346,7 +347,7 @@ class Combat
             }
             else
             {
-                $langvars['l_cmb_youalsolostsomefighters'] = str_replace("[cmb_targetfighters]", $targetfighters, $langvars['l_cmb_youalsolostsomefighters']);
+                $langvars['l_cmb_youalsolostsomefighters'] = str_replace("[cmb_targetfighters]", (string) $targetfighters, $langvars['l_cmb_youalsolostsomefighters']);
                 echo "<-- " . $langvars['l_cmb_youalsolostsomefighters'] . "<br>";
                 $tempplayfighters = $attackerfighters - $targetfighters;
             }
@@ -377,7 +378,7 @@ class Combat
             {
                 $targetarmor = $targetarmor - $attackerfighters;
                 $langvars['l_cmb_youhitarmordmgfighters'] = str_replace("[cmb_targetinfo_ship_name]", $targetinfo['ship_name'], $langvars['l_cmb_youhitarmordmgfighters']);
-                $langvars['l_cmb_youhitarmordmgfighters'] = str_replace("[cmb_attackerfighters]", $attackerfighters, $langvars['l_cmb_youhitarmordmgfighters']);
+                $langvars['l_cmb_youhitarmordmgfighters'] = str_replace("[cmb_attackerfighters]", (string) $attackerfighters, $langvars['l_cmb_youhitarmordmgfighters']);
                 echo "<-- " . $langvars['l_cmb_youhitarmordmgfighters'] . "<br>";
             }
         }
@@ -457,11 +458,11 @@ class Combat
                 $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $targetinfo['hull'])) + round(pow($tkireg->upgrade_factor, $targetinfo['engines'])) + round(pow($tkireg->upgrade_factor, $targetinfo['power'])) + round(pow($tkireg->upgrade_factor, $targetinfo['computer'])) + round(pow($tkireg->upgrade_factor, $targetinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $targetinfo['beams'])) + round(pow($tkireg->upgrade_factor, $targetinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $targetinfo['shields'])) + round(pow($tkireg->upgrade_factor, $targetinfo['armor'])) + round(pow($tkireg->upgrade_factor, $targetinfo['cloak'])));
                 $ship_salvage_rate = random_int(10, 20);
                 $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_ore]", $salv_ore, $langvars['l_cmb_yousalvaged']);
-                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_organics]", $salv_organics, $langvars['l_cmb_yousalvaged']);
-                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_goods]", $salv_goods, $langvars['l_cmb_yousalvaged']);
-                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salvage_rate]", $ship_salvage_rate, $langvars['l_cmb_yousalvaged']);
-                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salvage]", $ship_salvage, $langvars['l_cmb_yousalvaged']);
+                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_ore]", (string) $salv_ore, $langvars['l_cmb_yousalvaged']);
+                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_organics]", (string) $salv_organics, $langvars['l_cmb_yousalvaged']);
+                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salv_goods]", (string) $salv_goods, $langvars['l_cmb_yousalvaged']);
+                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salvage_rate]", (string) $ship_salvage_rate, $langvars['l_cmb_yousalvaged']);
+                $langvars['l_cmb_yousalvaged'] = str_replace("[cmb_salvage]", (string) $ship_salvage, $langvars['l_cmb_yousalvaged']);
                 $langvars['l_cmb_yousalvaged2'] = str_replace("[cmb_number_rating_change]", number_format(abs($rating_change), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_cmb_yousalvaged2']);
                 echo $langvars['l_cmb_yousalvaged'] . "<br>" . $langvars['l_cmb_yousalvaged2'];
 
