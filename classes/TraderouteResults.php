@@ -89,7 +89,7 @@ class TraderouteResults
         }
     }
 
-    public static function displaySummary(\PDO $pdo_db, string $lang, string $tdr_display_creds, $dist, array $playerinfo): void
+    public static function displaySummary(\PDO $pdo_db, string $lang, string $tdr_display_creds, array $dist, array $playerinfo): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
