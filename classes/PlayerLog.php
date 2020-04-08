@@ -21,9 +21,13 @@ namespace Tki;
 
 class PlayerLog
 {
-    public static function writeLog(\PDO $pdo_db, int $ship_id, int $log_type, $data = null): void
+    public static function writeLog(\PDO $pdo_db, ?int $ship_id, ?int $log_type, ?string $data = null): void
     {
-        $data = addslashes($data);
+        if ($data !== null)
+        {
+            $data = addslashes($data);
+        }
+
         $cur_time_stamp = date('Y-m-d H:i:s'); // Now (as seen by PHP)
 
         // Write log_entry to the player's log - identified by player's ship_id.
