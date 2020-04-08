@@ -93,7 +93,7 @@ class TraderouteDistance
             $energyscooped = 100;
         }
 
-        $free_power = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg) - $playerinfo['ship_energy'];
+        $free_power = (int) \Tki\CalcLevels::energy((int) $playerinfo['power'], $tkireg) - (int) $playerinfo['ship_energy'];
 
         if ($free_power < $energyscooped)
         {
