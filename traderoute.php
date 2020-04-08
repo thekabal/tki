@@ -41,7 +41,6 @@ $result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE owner = ?;"
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $num_traderoutes = $result->RecordCount();
 
-unset($traderoutes);
 $traderoutes = array();
 $i = 0;
 while (!$result->EOF)
@@ -111,7 +110,7 @@ $tr_repeat = 1;
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $tr_repeat = null;
-$tr_repeat = (int) filter_input(INPUT_POST, 'tr_repeat', FILTER_SANITIZE_NUMBER_INT);
+$tr_repeat = (int) filter_input(INPUT_POST, 'tr_repeat', FILTER_VALIDATE_INT);
 if ($tr_repeat === 0)
 {
     $tr_repeat = 0;
@@ -126,7 +125,7 @@ if (($command === null) || (strlen(trim($command)) === 0))
 }
 
 $engage = null;
-$engage = filter_input(INPUT_POST, 'engage', FILTER_SANITIZE_STRING);
+$engage = filter_input(INPUT_GET, 'engage', FILTER_VALIDATE_INT);
 if (($engage === null) || (strlen(trim($engage)) === 0))
 {
     $engage = false;
@@ -175,17 +174,17 @@ if (($team_planet_id2 === null) || (strlen(trim($team_planet_id2)) === 0))
 }
 
 $planet_id1 = null;
-$planet_id1 = filter_input(INPUT_POST, 'planet_id1', FILTER_SANITIZE_STRING);
+$planet_id1 = filter_input(INPUT_POST, 'planet_id1', FILTER_SANITIZE_NUMBER_INT);
 if (($planet_id1 === null) || (strlen(trim($planet_id1)) === 0))
 {
-    $planet_id1 = false;
+    $planet_id1 = null;
 }
 
 $planet_id2 = null;
-$planet_id2 = filter_input(INPUT_POST, 'planet_id2', FILTER_SANITIZE_STRING);
+$planet_id2 = filter_input(INPUT_POST, 'planet_id2', FILTER_SANITIZE_NUMBER_INT);
 if (($planet_id2 === null) || (strlen(trim($planet_id2)) === 0))
 {
-    $planet_id2 = false;
+    $planet_id2 = null;
 }
 
 $move_type = null;
@@ -262,7 +261,7 @@ elseif ($engage !== null)
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
-        \Tki\Traderoute::engage($pdo_db, $db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $dist, $traderoutes, $portfull, $template);
+        \Tki\Traderoute::engage($pdo_db, $db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $traderoutes, $portfull, $template);
         $i--;
     }
 }
