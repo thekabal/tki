@@ -1,4 +1,5 @@
 parameters:
+    checkMissingIterableValueType: false
     excludes_analyse:
         - %rootDir%/../../../../tki/vendor/*
         - %rootDir%/../../../../tki/templates/*
