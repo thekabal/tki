@@ -33,8 +33,7 @@ $filename = null;
 $menu_location = null;
 $button_main = false;
 
-// Clear variables array before use, and set array with all variables in page
-unset($variables);
+// Clear variables array for use with all variables in page
 $variables = array();
 
 $variables['is_admin'] = false;
