@@ -21,7 +21,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function engage(\PDO $pdo_db, $db, string $lang, int $j, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $dist, array $traderoutes, ?int $portfull, Smarty $template): void
+    public static function engage(\PDO $pdo_db, $db, string $lang, int $j, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
     {
         $traderoute = array();
         $source = array();
@@ -49,9 +49,12 @@ class Traderoute
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_engagenonexist']);
         }
 
-        if ($traderoute['owner'] != $playerinfo['ship_id'])
+        if (array_key_exists('owner', $traderoute))
         {
-            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
+            if ($traderoute['owner'] !== $playerinfo['ship_id'])
+            {
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
+            }
         }
 
         // Source check
