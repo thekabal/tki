@@ -22,7 +22,7 @@ namespace Tki;
 class Sessions
 {
     /** @var int */
-    public $maxlifetime = 1800; // 30 mins
+    private $maxlifetime = 1800; // 30 mins
 
     /** @var \PDO|null */
     private $pdo_db = null;
