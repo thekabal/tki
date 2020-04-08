@@ -161,7 +161,7 @@ if ($num_defenses > 0 && $total_sector_fighters > 0 && !$owner)
                 $fighterstoll = (int) round($total_sector_fighters * $fighter_price * 0.6);
                 echo "<h1>" . $title . "</h1>\n";
                 echo "<form accept-charset='utf-8' action='{$calledfrom}' method='post'>";
-                $langvars['l_chf_therearetotalfightersindest'] = str_replace("[chf_total_sector_fighters]", $total_sector_fighters, $langvars['l_chf_therearetotalfightersindest']);
+                $langvars['l_chf_therearetotalfightersindest'] = str_replace("[chf_total_sector_fighters]", (string) $total_sector_fighters, $langvars['l_chf_therearetotalfightersindest']);
                 echo $langvars['l_chf_therearetotalfightersindest'] . "<br>";
                 if ($defenses[0]['fm_setting'] == "toll")
                 {

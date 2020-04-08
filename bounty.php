@@ -285,7 +285,7 @@ switch ($response) {
 
             if ($amount + $previous_bounty > $maxtrans)
             {
-                $langvars['l_by_toomuch'] = str_replace("[percent]", $percent, $langvars['l_by_toomuch']);
+                $langvars['l_by_toomuch'] = str_replace("[percent]", (string) $percent, $langvars['l_by_toomuch']);
                 echo $langvars['l_by_toomuch'] . "<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 

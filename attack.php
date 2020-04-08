@@ -718,11 +718,11 @@ else
                     $ship_salvage_rate = random_int(10, 20);
                     $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Kabal - 0 if normal player
 
-                    $langvars['l_att_ysalv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_ysalv']);
-                    $langvars['l_att_ysalv'] = str_replace("[salv_organics]", $salv_organics, $langvars['l_att_ysalv']);
-                    $langvars['l_att_ysalv'] = str_replace("[salv_goods]", $salv_goods, $langvars['l_att_ysalv']);
-                    $langvars['l_att_ysalv'] = str_replace("[ship_salvage_rate]", $ship_salvage_rate, $langvars['l_att_ysalv']);
-                    $langvars['l_att_ysalv'] = str_replace("[ship_salvage]", $ship_salvage, $langvars['l_att_ysalv']);
+                    $langvars['l_att_ysalv'] = str_replace("[salv_ore]", (string) $salv_ore, $langvars['l_att_ysalv']);
+                    $langvars['l_att_ysalv'] = str_replace("[salv_organics]", (string) $salv_organics, $langvars['l_att_ysalv']);
+                    $langvars['l_att_ysalv'] = str_replace("[salv_goods]", (string) $salv_goods, $langvars['l_att_ysalv']);
+                    $langvars['l_att_ysalv'] = str_replace("[ship_salvage_rate]", (string) $ship_salvage_rate, $langvars['l_att_ysalv']);
+                    $langvars['l_att_ysalv'] = str_replace("[ship_salvage]", (string) $ship_salvage, $langvars['l_att_ysalv']);
                     $langvars['l_att_ysalv2'] = str_replace("[rating_change]", number_format(abs($rating_change), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_att_ysalv2']);
 
                     echo $langvars['l_att_ysalv'] . "<br>" . $langvars['l_att_ysalv2'] . "<br>\n";
@@ -859,11 +859,11 @@ else
                     $ship_salvage_rate = random_int(10, 20);
                     $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  // Added credits for Kabal - 0 if normal player
 
-                    $langvars['l_att_salv'] = str_replace("[salv_ore]", $salv_ore, $langvars['l_att_salv']);
-                    $langvars['l_att_salv'] = str_replace("[salv_organics]", $salv_organics, $langvars['l_att_salv']);
-                    $langvars['l_att_salv'] = str_replace("[salv_goods]", $salv_goods, $langvars['l_att_salv']);
-                    $langvars['l_att_salv'] = str_replace("[ship_salvage_rate]", $ship_salvage_rate, $langvars['l_att_salv']);
-                    $langvars['l_att_salv'] = str_replace("[ship_salvage]", $ship_salvage, $langvars['l_att_salv']);
+                    $langvars['l_att_salv'] = str_replace("[salv_ore]", (string) $salv_ore, $langvars['l_att_salv']);
+                    $langvars['l_att_salv'] = str_replace("[salv_organics]", (string) $salv_organics, $langvars['l_att_salv']);
+                    $langvars['l_att_salv'] = str_replace("[salv_goods]", (string) $salv_goods, $langvars['l_att_salv']);
+                    $langvars['l_att_salv'] = str_replace("[ship_salvage_rate]", (string) $ship_salvage_rate, $langvars['l_att_salv']);
+                    $langvars['l_att_salv'] = str_replace("[ship_salvage]", (string) $ship_salvage, $langvars['l_att_salv']);
                     $langvars['l_att_salv'] = str_replace("[name]", $targetinfo['character_name'], $langvars['l_att_salv']);
 
                     echo $langvars['l_att_salv'] . "<br>";

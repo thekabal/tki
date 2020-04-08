@@ -82,7 +82,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
         $totalmines = $totalmines - $roll;
 
         // You are hit. Tell the player and put it in the log
-        $langvars['l_chm_youhitsomemines'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_youhitsomemines']);
+        $langvars['l_chm_youhitsomemines'] = str_replace("[chm_roll]", (string) $roll, $langvars['l_chm_youhitsomemines']);
         echo $langvars['l_chm_youhitsomemines'] . "<br>";
         Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::HIT_MINES, "$roll|$sector");
 
@@ -95,7 +95,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
         // If the player has enough mine deflectors then subtract the ammount and continue
         if ($playerinfo['dev_minedeflector'] >= $roll)
         {
-            $langvars['l_chm_youlostminedeflectors'] = str_replace("[chm_roll]", $roll, $langvars['l_chm_youlostminedeflectors']);
+            $langvars['l_chm_youlostminedeflectors'] = str_replace("[chm_roll]", (string) $roll, $langvars['l_chm_youlostminedeflectors']);
             echo $langvars['l_chm_youlostminedeflectors'] . "<br>";
             $result2 = $db->Execute("UPDATE {$db->prefix}ships SET dev_minedeflector = dev_minedeflector - ? WHERE ship_id = ?", array($roll, $playerinfo['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
@@ -121,7 +121,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
 
             if ($playershields >= $mines_left)
             {
-                $langvars['l_chm_yourshieldshitforminesdmg'] = str_replace("[chm_mines_left]", $mines_left, $langvars['l_chm_yourshieldshitforminesdmg']);
+                $langvars['l_chm_yourshieldshitforminesdmg'] = str_replace("[chm_mines_left]", (string) $mines_left, $langvars['l_chm_yourshieldshitforminesdmg']);
                 echo $langvars['l_chm_yourshieldshitforminesdmg'] . "<br>";
 
                 $result2 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ship_energy - ?, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
@@ -138,7 +138,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                 $mines_left = $mines_left - $playershields;
                 if ($playerinfo['armor_pts'] >= $mines_left)
                 {
-                    $langvars['l_chm_yourarmorhitforminesdmg'] = str_replace("[chm_mines_left]", $mines_left, $langvars['l_chm_yourarmorhitforminesdmg']);
+                    $langvars['l_chm_yourarmorhitforminesdmg'] = str_replace("[chm_mines_left]", (string) $mines_left, $langvars['l_chm_yourarmorhitforminesdmg']);
                     echo $langvars['l_chm_yourarmorhitforminesdmg'] . "<br>";
                     $result2 = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts = armor_pts - ?, ship_energy = 0, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
                     Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
@@ -153,7 +153,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                     $pod = $playerinfo['dev_escapepod'];
                     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::SHIP_DESTROYED_MINES, "$sector|$pod");
                     $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_playerinfo_character_name]", $playerinfo['character_name'], $langvars['l_chm_hewasdestroyedbyyourmines']);
-                    $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_sector]", $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
+                    $langvars['l_chm_hewasdestroyedbyyourmines'] = str_replace("[chm_sector]", (string) $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
                     Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_chm_hewasdestroyedbyyourmines']);
                     echo $langvars['l_chm_yourshiphasbeendestroyed'] . "<br><br>";
 

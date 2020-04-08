@@ -41,7 +41,7 @@ if ($action == "doexpand")
             Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
             $changed_sectors[$i] = str_replace("[sector]", $row['sector_id'], $langvars['l_admin_updated_distance']);
-            $changed_sectors[$i] = str_replace("[distance]", $distance, $changed_sectors[$i]);
+            $changed_sectors[$i] = str_replace("[distance]", (string) $distance, $changed_sectors[$i]);
             $i++;
             $result->MoveNext();
         }
