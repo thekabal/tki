@@ -29,43 +29,35 @@ class Login
             $lang,
         array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
 
-        $flag = false;
-        $game_closed = new Game;
-        if ($game_closed->isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars))
-        {
-            $flag = false;
-        }
-
-        $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $template);
-
-        if ($playerinfo === false)
-        {
-            $flag = false;
-        }
-
         // Establish timestamp for interval in checking bans
         $cur_time_stamp = date('Y-m-d H:i:s');
         $timestamp = array();
         $timestamp['now']  = (int) strtotime($cur_time_stamp);
         $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
 
+        $game_closed = new Game;
+        $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $template);
+
+        if ($game_closed->isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars))
+        {
+            return false;
+        }
+
+        if ($playerinfo === false)
+        {
+            return false;
+        }
+
         if (Player::ban($pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars, $tkireg))
         {
-            $flag = false;
+            return false;
         }
 
         if (Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo))
         {
-            $flag = false;
-        }
-
-        if ($flag)
-        {
-            return true;
-        }
-        else
-        {
             return false;
         }
+
+        return true;
     }
 }
