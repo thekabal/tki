@@ -40,7 +40,7 @@ class Compress
         $supported_enc = array();
         if ($request->headers->get('HTTP_ACCEPT_ENCODING'))
         {
-            $supported_enc = explode(',', $request->headers->get('HTTP_ACCEPT_ENCODING'));
+            $supported_enc = explode(',', (string) $request->headers->get('HTTP_ACCEPT_ENCODING'));
         }
 
         if (in_array('gzip', $supported_enc) === true)
