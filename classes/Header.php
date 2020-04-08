@@ -52,10 +52,6 @@ class Header
         {
             $variables['include_ckeditor'] = $include_ckeditor;
         }
-        else
-        {
-            unset($variables['include_ckeditor']); // Otherwise, we make sure it is NOT set
-        }
 
         $template->addVariables('langvars', $langvars);
         $template->addVariables('variables', $variables);
