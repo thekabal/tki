@@ -357,7 +357,6 @@ switch ($teamwhat)
         }
         else
         {
-            $who = preg_replace('/[^0-9]/', '', $who);
             $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($who));
             Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             $whotoexpel = $result->fields;
