@@ -29,14 +29,14 @@ class Login
             $lang,
         array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
 
+        $game_closed = new Game;
+        $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $template);
+
         // Establish timestamp for interval in checking bans
         $cur_time_stamp = date('Y-m-d H:i:s');
         $timestamp = array();
         $timestamp['now']  = (int) strtotime($cur_time_stamp);
         $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
-
-        $game_closed = new Game;
-        $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $template);
 
         if ($game_closed->isGameClosed($pdo_db, $tkireg, $lang, $template, $langvars))
         {
