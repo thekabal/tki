@@ -104,7 +104,7 @@ class Player
         if ($timestamp['now'] >= ($timestamp['last'] + 60))
         {
             $ban_result = CheckBan::isBanned($pdo_db, $playerinfo);
-            if ($ban_result === false)
+            if ($ban_result === null)
             {
                 return false;
             }

@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CheckBan
 {
-    public static function isBanned(\PDO $pdo_db, array $playerinfo)
+    public static function isBanned(\PDO $pdo_db, array $playerinfo): ?array
     {
         $request = Request::createFromGlobals();
 
@@ -93,6 +93,6 @@ class CheckBan
         }
 
         // Well we got here, so we haven't found anything, so we return a Bool false.
-        return (bool) false;
+        return null;
     }
 }
