@@ -25,7 +25,7 @@ $playerfound = false;
 // Detect if the server is configured using HTTP only - HTTPS is required for TKI to work correctly.
 if(!isset($_SERVER['HTTPS']))
 {
-    die("This game is not currently configured to use HTTPS, please notify the admin(s) that they need to implement HTTPS!");
+    die("This game is not currently configured to use HTTPS, please notify the admin(s) that HTTPS is required.");
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
