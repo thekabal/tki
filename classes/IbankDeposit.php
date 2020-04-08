@@ -64,7 +64,8 @@ class IbankDeposit
     {
         $max_credits_allowed = 18446744073709000000;
 
-        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
+        $amount = preg_replace("/[^0-9]/", '', (string) $amount);
+        $amount = (int) $amount;
 
         if (($amount * 1) != $amount)
         {
@@ -97,7 +98,7 @@ class IbankDeposit
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_operationsuccessful'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
-             "<td colspan=2 align=center>" . number_format($amount, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_ibank_creditstoyou'] . "</td>" .
+             "<td colspan=2 align=center>" . number_format((float) $amount, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_ibank_creditstoyou'] . "</td>" .
              "<tr><td colspan=2 align=center>" . $langvars['l_ibank_accounts'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
              "<td>" . $langvars['l_ibank_shipaccount'] . " :<br>" . $langvars['l_ibank_ibankaccount'] . " :</td>" .
