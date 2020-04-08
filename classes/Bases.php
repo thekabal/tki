@@ -21,7 +21,7 @@ namespace Tki;
 
 class Bases
 {
-    public function buildBase(\PDO $pdo_db, array $langvars, int $planet_id, int $sector_id, Reg $tkireg)
+    public function buildBase(\PDO $pdo_db, array $langvars, int $planet_id, int $sector_id, Reg $tkireg): void
     {
         echo "<br>";
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" .
@@ -45,13 +45,13 @@ class Bases
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_invalid_info'] . "</div>\n";
 
-            return (bool) false;
+            return;
         }
 
         if (!is_numeric($planet_id) || !is_numeric($sector_id)) // Old admin planet cheat - simply prevent it.
         {
             echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
-            return (bool) false;
+            return;
         }
 
         // Build a base
@@ -101,7 +101,7 @@ class Bases
             // Calc Ownership and Notify User Of Results
             $ownership = \Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
             echo $ownership . "<p>";
-            return $planetinfo;
+            return;
         }
     }
 }
