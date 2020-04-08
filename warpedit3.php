@@ -108,7 +108,7 @@ $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 {
-    $langvars['l_warp_forbidtwo'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_forbidtwo']);
+    $langvars['l_warp_forbidtwo'] = str_replace("[target_sector]", (string) $target_sector, $langvars['l_warp_forbidtwo']);
     echo $langvars['l_warp_forbidtwo'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
@@ -147,7 +147,7 @@ if ($linkinfo !== false)
 
     if ($flag != 1)
     {
-        $langvars['l_warp_unlinked'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_unlinked']);
+        $langvars['l_warp_unlinked'] = str_replace("[target_sector]", (string) $target_sector, $langvars['l_warp_unlinked']);
         echo $langvars['l_warp_unlinked'] . "<br><br>";
     }
     else

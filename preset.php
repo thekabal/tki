@@ -105,7 +105,7 @@ else
             $stmt->execute();
 
             $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);
-            $preset_result_echo = str_replace("[num]", $key + 1, $preset_result_echo);
+            $preset_result_echo = str_replace("[num]", (string) ($key + 1), $preset_result_echo);
             echo $preset_result_echo . "<br>";
         }
     }

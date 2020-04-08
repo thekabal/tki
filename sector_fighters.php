@@ -57,7 +57,7 @@ if ($targetfighters > 0 && $playerbeams > 0)
     {
         $temp = round($targetfighters / 2);
         $lost = $targetfighters - $temp;
-        $langvars['l_sf_destfight'] = str_replace("[lost]", $lost, $langvars['l_sf_destfight']);
+        $langvars['l_sf_destfight'] = str_replace("[lost]", (string) $lost, $langvars['l_sf_destfight']);
         echo $langvars['l_sf_destfight'] . "<br>";
         $targetfighters = $temp;
         $playerbeams = $playerbeams - $lost;
@@ -65,7 +65,7 @@ if ($targetfighters > 0 && $playerbeams > 0)
     else
     {
         $targetfighters = $targetfighters - $playerbeams;
-        $langvars['l_sf_destfightb'] = str_replace("[lost]", $playerbeams, $langvars['l_sf_destfightb']);
+        $langvars['l_sf_destfightb'] = str_replace("[lost]", (string) $playerbeams, $langvars['l_sf_destfightb']);
         echo $langvars['l_sf_destfightb'] . "<br>";
         $playerbeams = 0;
     }
@@ -78,7 +78,7 @@ if ($targetfighters > 0 && $playertorpdmg > 0)
     {
         $temp = round($targetfighters / 2);
         $lost = $targetfighters - $temp;
-        $langvars['l_sf_destfightt'] = str_replace("[lost]", $lost, $langvars['l_sf_destfightt']);
+        $langvars['l_sf_destfightt'] = str_replace("[lost]", (string) $lost, $langvars['l_sf_destfightt']);
         echo $langvars['l_sf_destfightt'] . "<br>";
         $targetfighters = $temp;
         $playertorpdmg = $playertorpdmg - $lost;
@@ -86,7 +86,7 @@ if ($targetfighters > 0 && $playertorpdmg > 0)
     else
     {
         $targetfighters = $targetfighters - $playertorpdmg;
-        $langvars['l_sf_destfightt'] = str_replace("[lost]", $playertorpdmg, $langvars['l_sf_destfightt']);
+        $langvars['l_sf_destfightt'] = str_replace("[lost]", (string) $playertorpdmg, $langvars['l_sf_destfightt']);
         echo $langvars['l_sf_destfightt'];
         $playertorpdmg = 0;
     }
@@ -102,7 +102,7 @@ if ($playerfighters > 0 && $targetfighters > 0)
     }
     else
     {
-        $langvars['l_sf_destfightt2'] = str_replace("[lost]", $playerfighters, $langvars['l_sf_destfightt2']);
+        $langvars['l_sf_destfightt2'] = str_replace("[lost]", (string) $playerfighters, $langvars['l_sf_destfightt2']);
         echo $langvars['l_sf_destfightt2'] . "<br>";
         $temptargfighters = $targetfighters - $playerfighters;
     }
@@ -114,7 +114,7 @@ if ($playerfighters > 0 && $targetfighters > 0)
     }
     else
     {
-         $langvars['l_sf_lostfight2'] = str_replace("[lost]", $targetfighters, $langvars['l_sf_lostfight2']);
+         $langvars['l_sf_lostfight2'] = str_replace("[lost]", (string) $targetfighters, $langvars['l_sf_lostfight2']);
          echo $langvars['l_sf_lostfight2'] . "<br>";
          $tempplayfighters = $playerfighters - $targetfighters;
     }
@@ -133,7 +133,7 @@ if ($targetfighters > 0)
     else
     {
         $playerarmor = $playerarmor - $targetfighters;
-        $langvars['l_sf_armorbreach2'] = str_replace("[lost]", $targetfighters, $langvars['l_sf_armorbreach2']);
+        $langvars['l_sf_armorbreach2'] = str_replace("[lost]", (string) $targetfighters, $langvars['l_sf_armorbreach2']);
         echo $langvars['l_sf_armorbreach2'] . "<br>";
     }
 }
@@ -142,8 +142,8 @@ $fighterslost = $total_sector_fighters - $targetfighters;
 Tki\Fighters::destroy($pdo_db, $sector, $fighterslost);
 
 $langvars['l_sf_sendlog'] = str_replace("[player]", $playerinfo['character_name'], $langvars['l_sf_sendlog']);
-$langvars['l_sf_sendlog'] = str_replace("[lost]", $fighterslost, $langvars['l_sf_sendlog']);
-$langvars['l_sf_sendlog'] = str_replace("[sector]", $sector, $langvars['l_sf_sendlog']);
+$langvars['l_sf_sendlog'] = str_replace("[lost]", (string) $fighterslost, $langvars['l_sf_sendlog']);
+$langvars['l_sf_sendlog'] = str_replace("[sector]", (string) $sector, $langvars['l_sf_sendlog']);
 
 Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog']);
 Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::DEFS_DESTROYED_F, "$fighterslost|$sector");
@@ -162,9 +162,9 @@ $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
 $result = $stmt->execute();
 Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-$langvars['l_sf_lreport'] = str_replace("[armor]", $armor_lost, $langvars['l_sf_lreport']);
-$langvars['l_sf_lreport'] = str_replace("[fighters]", $fighters_lost, $langvars['l_sf_lreport']);
-$langvars['l_sf_lreport'] = str_replace("[torps]", $playertorpnum, $langvars['l_sf_lreport']);
+$langvars['l_sf_lreport'] = str_replace("[armor]", (string) $armor_lost, $langvars['l_sf_lreport']);
+$langvars['l_sf_lreport'] = str_replace("[fighters]", (string) $fighters_lost, $langvars['l_sf_lreport']);
+$langvars['l_sf_lreport'] = str_replace("[torps]", (string) $playertorpnum, $langvars['l_sf_lreport']);
 echo $langvars['l_sf_lreport'] . "<br><br>";
 if ($playerarmor < 1)
 {

@@ -42,7 +42,7 @@ do
             echo $langvars['l_sched_tow_who'];
 
             $newsector = random_int(0, (int) $max_sectors - 1);
-            $langvars['l_sched_tow_where'] = str_replace("[sector]", $newsector, $langvars['l_sched_tow_where']);
+            $langvars['l_sched_tow_where'] = str_replace("[sector]", (string) $newsector, $langvars['l_sched_tow_where']);
             echo $langvars['l_sched_tow_where'] . ".<br>";
 
             $query = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, cleared_defenses=' ' WHERE ship_id=?", array($newsector, $row['ship_id']));

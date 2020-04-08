@@ -72,8 +72,8 @@ else
         // </form>
 
         echo "<form accept-charset='utf-8' action='rsmove.php' method='post'>\n";
-        $langvars['l_rs_insector'] = str_replace("[sector]", $playerinfo['sector'], $langvars['l_rs_insector']);
-        $langvars['l_rs_insector'] = str_replace("[max_sectors]", $tkireg->max_sectors - 1, $langvars['l_rs_insector']);
+        $langvars['l_rs_insector'] = str_replace("[sector]", (string) $playerinfo['sector'], $langvars['l_rs_insector']);
+        $langvars['l_rs_insector'] = str_replace("[max_sectors]", (string) ($tkireg->max_sectors - 1), $langvars['l_rs_insector']);
         echo $langvars['l_rs_insector'] . "<br><br>\n";
         echo $langvars['l_rs_whichsector'] . ":  <input type='text' name='destination' size='10' maxlength='10'><br><br>\n";
         echo "<input type='submit' value='" . $langvars['l_rs_submit'] . "'><br><br>\n";
@@ -193,7 +193,7 @@ else
                     $destination = (int) $destination;
 
                     Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $destination);
-                    $langvars['l_rs_ready'] = str_replace("[sector]", $destination, $langvars['l_rs_ready']);
+                    $langvars['l_rs_ready'] = str_replace("[sector]", (string) $destination, $langvars['l_rs_ready']);
                     $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                     $langvars['l_rs_ready'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                     echo $langvars['l_rs_ready'] . "<br><br>";

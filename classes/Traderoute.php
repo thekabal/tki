@@ -1418,7 +1418,7 @@ class Traderoute
             $langvars['l_tdr_engageagain'] = str_replace("[five]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=5\">" . $langvars['l_tdr_five'] . "</a>", $langvars['l_tdr_engageagain']);
             $langvars['l_tdr_engageagain'] = str_replace("[ten]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=10\">" . $langvars['l_tdr_ten'] . "</a>", $langvars['l_tdr_engageagain']);
             $langvars['l_tdr_engageagain'] = str_replace("[fifty]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=50\">" . $langvars['l_tdr_fifty'] . "</a>", $langvars['l_tdr_engageagain']);
-            $langvars['l_tdr_engageagain'] = str_replace("[tdr_engage]", $engage, $langvars['l_tdr_engageagain']);
+            $langvars['l_tdr_engageagain'] = str_replace("[tdr_engage]", (string) $engage, $langvars['l_tdr_engageagain']);
             if ($j == 1)
             {
                 echo $langvars['l_tdr_engageagain'] . "\n";

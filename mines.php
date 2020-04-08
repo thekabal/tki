@@ -190,12 +190,12 @@ else
         $availmines = number_format($playerinfo['torps'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         $availfighters = number_format($playerinfo['ship_fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         echo "<form accept-charset='utf-8' action=mines.php method=post>";
-        $langvars['l_mines_info1'] = str_replace("[sector]", $playerinfo['sector'], $langvars['l_mines_info1']);
+        $langvars['l_mines_info1'] = str_replace("[sector]", (string) $playerinfo['sector'], $langvars['l_mines_info1']);
         $langvars['l_mines_info1'] = str_replace("[mines]", number_format($total_sector_mines, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_mines_info1']);
         $langvars['l_mines_info1'] = str_replace("[fighters]", number_format($total_sector_fighters, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_mines_info1']);
         echo $langvars['l_mines_info1'] . "<br><br>";
-        $langvars['l_mines_info2'] = str_replace("[mines]", $availmines, $langvars['l_mines_info2']);
-        $langvars['l_mines_info2'] = str_replace("[fighters]", $availfighters, $langvars['l_mines_info2']);
+        $langvars['l_mines_info2'] = str_replace("[mines]", (string) $availmines, $langvars['l_mines_info2']);
+        $langvars['l_mines_info2'] = str_replace("[fighters]", (string) $availfighters, $langvars['l_mines_info2']);
         echo "You have $availmines mines and $availfighters fighters available to deploy.<br>\n";
         echo "<br>\n";
         echo $langvars['l_mines_deploy'] . " <input type=text name=nummines size=10 maxlength=10 value=$playerinfo[torps]> " . $langvars['l_mines'] . ".<br>";
@@ -238,7 +238,7 @@ else
         }
         else
         {
-            $langvars['l_mines_dmines'] = str_replace("[mines]", $nummines, $langvars['l_mines_dmines']);
+            $langvars['l_mines_dmines'] = str_replace("[mines]", (string) $nummines, $langvars['l_mines_dmines']);
             echo $langvars['l_mines_dmines'] . "<br>";
         }
 
@@ -249,7 +249,7 @@ else
         }
         else
         {
-            $langvars['l_mines_dfighter'] = str_replace("[fighters]", $numfighters, $langvars['l_mines_dfighter']);
+            $langvars['l_mines_dfighter'] = str_replace("[fighters]", (string) $numfighters, $langvars['l_mines_dfighter']);
             $langvars['l_mines_dfighter'] = str_replace("[mode]", $mode, $langvars['l_mines_dfighter']);
             echo $langvars['l_mines_dfighter'] . "<br>";
         }

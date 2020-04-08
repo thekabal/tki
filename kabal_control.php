@@ -533,10 +533,10 @@ else
                 }
 
                 // Change Spaces to Underscores in shipname
-                $shipname = str_replace(" ", "_", $shipname);
+                $shipname = str_replace(" ", "_", (string) $shipname);
 
                 // Create emailname from character
-                $emailname = str_replace(" ", "_", $character) . "@kabal";
+                $emailname = str_replace(" ", "_", (string) $character) . "@kabal";
                 // $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
                 // $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
                 // Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);

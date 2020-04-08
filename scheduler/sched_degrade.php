@@ -46,8 +46,8 @@ while (!$res->EOF)
         Tki\Db::logDbErrors($pdo_db, $res4, __LINE__, __FILE__);
         $planet_energy = $res4->fields;
         $energy_available = $planet_energy['energy_available'];
-        $langvars['l_degrade_note'] = str_replace("[energy_avail]", $energy_available, $langvars['l_degrade_note']);
-        $langvars['l_degrade_note'] = str_replace("[energy_required]", $energy_required, $langvars['l_degrade_note']);
+        $langvars['l_degrade_note'] = str_replace("[energy_avail]", (string) $energy_available, $langvars['l_degrade_note']);
+        $langvars['l_degrade_note'] = str_replace("[energy_required]", (string) $energy_required, $langvars['l_degrade_note']);
         echo $langvars['l_degrade_note'];
         if ($energy_available > $energy_required)
         {

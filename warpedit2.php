@@ -113,7 +113,7 @@ $stmt->execute();
 $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($zoneinfo['allow_warpedit'] == 'N' && !$oneway)
 {
-    $langvars['l_warp_twoerror'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_twoerror']);
+    $langvars['l_warp_twoerror'] = str_replace("[target_sector]", (string) $target_sector, $langvars['l_warp_twoerror']);
     echo $langvars['l_warp_twoerror'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
@@ -160,7 +160,7 @@ if ($linkinfo)
 
     if ($flag == 1)
     {
-        $langvars['l_warp_linked'] = str_replace("[target_sector]", $target_sector, $langvars['l_warp_linked']);
+        $langvars['l_warp_linked'] = str_replace("[target_sector]", (string) $target_sector, $langvars['l_warp_linked']);
         echo $langvars['l_warp_linked'] . "<br><br>";
     }
     elseif ($playerinfo['sector'] == $target_sector)
