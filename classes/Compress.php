@@ -38,19 +38,19 @@ class Compress
 
         // Handle the supported compressions.
         $supported_enc = array();
-        if ($request->headers->get('HTTP_ACCEPT_ENCODING'))
+        if (!is_null($request->headers->get('HTTP_ACCEPT_ENCODING')))
         {
-            $supported_enc = explode(',', (string) $request->headers->get('HTTP_ACCEPT_ENCODING'));
+            $supported_enc = explode(',', $request->headers->get('HTTP_ACCEPT_ENCODING'));
         }
 
-        if (in_array('gzip', $supported_enc) === true)
+        if (in_array('gzip', $supported_enc, true) === true)
         {
             header('Vary: Accept-Encoding');
             header('Content-Encoding: gzip');
             $encoded_output = gzencode($output, 9);
             return (string) $encoded_output;
         }
-        elseif (in_array('deflate', $supported_enc) === true)
+        elseif (in_array('deflate', $supported_enc, true) === true)
         {
             header('Vary: Accept-Encoding');
             header('Content-Encoding: deflate');

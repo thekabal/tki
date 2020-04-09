@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ship
 {
-    public static function isDestroyed(\PDO $pdo_db, string $lang, Reg $tkireg, array $langvars, Smarty $template, array $playerinfo) : ?bool
+    public static function isDestroyed(\PDO $pdo_db, string $lang, Reg $tkireg, array $langvars, Smarty $template, array $playerinfo): bool
     {
         // Check for destroyed ship
         if ($playerinfo['ship_destroyed'] === 'Y')
@@ -41,12 +41,13 @@ class Ship
                 $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
                 $stmt->execute();
                 Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                return true;
 
                 // $error_status = str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_login_died']); Error status is not used anywhere
             }
             else
             {
-                // if the player doesn't have an escapepod - they're dead, delete them.
+                // If the player doesn't have an escapepod - they're dead, delete them.
                 // But we can't delete them yet. (This prevents the self-distruct inherit bug)
                 $error_status = str_replace('[here]', "<a href='log.php'>" .
                                  ucfirst($langvars['l_here']) . '</a>', $langvars['l_global_died']) .
@@ -80,7 +81,7 @@ class Ship
         $stmt->execute();
         $planets_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        if ($planets_owned !== null)
+        if (is_array($planets_owned))
         {
             foreach ($planets_owned as $tmp_planet)
             {
@@ -91,7 +92,7 @@ class Ship
                 $stmt->execute();
                 $ships_on_planet = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-                if ($ships_on_planet !== null)
+                if (is_array($ships_on_planet))
                 {
                     foreach ($ships_on_planet as $tmp_ship)
                     {

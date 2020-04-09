@@ -180,12 +180,9 @@ class File
                     $value = (strtolower($value) == 'true' ? true : false);
                     settype($value, 'bool');
                 }
-                elseif (is_string($value))
+                elseif (strlen(trim($value)) == 0)
                 {
-                    if (strlen(trim($value)) == 0)
-                    {
                         $value = null;
-                    }
                 }
 
                 if ($container !== null)

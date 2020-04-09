@@ -35,6 +35,9 @@ class Footer
         $langvars = array();
 
         $online = 0;
+        $sf_logo_type = 0;
+        $sf_logo_width = 0;
+        $sf_logo_height = 0;
 
         if (Db::isActive($pdo_db))
         {
@@ -87,15 +90,15 @@ class Footer
         // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
         if ($tkireg->footer_show_debug === true)
         {
-            $sf_logo_type = '14';
-            $sf_logo_width = "150";
-            $sf_logo_height = "40";
+            $sf_logo_type = 14;
+            $sf_logo_width = 150;
+            $sf_logo_height = 40;
         }
         else
         {
-            $sf_logo_type = '11';
-            $sf_logo_width = "120";
-            $sf_logo_height = "30";
+            $sf_logo_type = 11;
+            $sf_logo_width = 120;
+            $sf_logo_height = 30;
         }
 
         if ($news_ticker_active === true)
