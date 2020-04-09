@@ -41,6 +41,7 @@ $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
 $stmt->execute();
 $discovered_sectors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $discovered_count = 0;
+$tile = array();
 
 $tile['special'] = "port-special.png";
 $tile['ore'] = "port-ore.png";

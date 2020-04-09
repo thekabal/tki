@@ -29,6 +29,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'device'
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
+$shiptypes = array();
 $shiptypes[0] = "tinyship.png";
 $shiptypes[1] = "smallship.png";
 $shiptypes[2] = "mediumship.png";

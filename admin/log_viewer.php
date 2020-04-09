@@ -17,6 +17,7 @@
 //
 // File: admin/log_viewer.php
 
+$players = array();
 $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships ORDER BY character_name ASC");
 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 while (!$res->EOF)
@@ -25,6 +26,7 @@ while (!$res->EOF)
     $res->MoveNext();
 }
 
+$variables = array();
 $variables['lang'] = $lang;
 $variables['swordfish'] = $swordfish;
 $variables['players'] = $players;
@@ -34,6 +36,7 @@ $variables['module'] = $module_name;
 
 // Now set a container for the variables and langvars and send them off to the template system
 $variables['container'] = "variable";
+$langvars = array();
 $langvars['container'] = "langvar";
 
 $template->addVariables('langvars', $langvars);

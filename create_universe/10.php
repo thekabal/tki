@@ -32,6 +32,7 @@ foreach ($ini_keys as $config_category => $config_line)
 }
 
 // Set variables
+$variables = array();
 $variables['templateset'] = $tkireg->default_template;
 $variables['body_class'] = 'create_universe';
 $variables['title'] = $langvars['l_cu_title'];

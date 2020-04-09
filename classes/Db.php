@@ -67,7 +67,7 @@ class Db
             // Attempt to connect to the database
             try
             {
-                if ($db_type === 'postgres9')
+                if (SecureConfig::DB_TYPE === 'postgres9')
                 {
                     $db = \ADONewConnection('postgres9');
                 }
@@ -138,6 +138,7 @@ class Db
         }
     }
 
+    // Future: Sometimes $query is an object (!), so we need to iterate until it is only a string.
     public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
     {
         $request = Request::createFromGlobals();
@@ -147,16 +148,13 @@ class Db
         $db_log = false;
         $error = null;
         $db_error = null;
-        if ($pdo_db instanceof \PDO)
-        {
-            $error = $pdo_db->errorInfo()[1];
-            $db_error = $pdo_db->errorInfo()[2];
-            $db_log = true; // We need to create a method for disabling db logging on PDO
-        }
+        $error = $pdo_db->errorInfo()[1];
+        $db_error = $pdo_db->errorInfo()[2];
+        $db_log = true; // We need to create a method for disabling db logging on PDO
 
         if ($error === null || $error == '')
         {
-            return (bool) true;
+            return true;
         }
         else
         {

@@ -91,7 +91,7 @@ elseif ($_SESSION['in_combat'] !== null && $_SESSION['in_combat'] === true)
 else
 {
     // Set in combat flag
-    $_SESSION['in_combat'] = (bool) true;
+    $_SESSION['in_combat'] = true;
 
     // Determine percent chance of success in detecting target ship - based on player's sensors and opponent's cloak
     $success = (10 - $targetinfo['cloak'] + $playerinfo['sensors']) * 5;
@@ -899,7 +899,7 @@ else
     }
 }
 
-$_SESSION['in_combat'] = (bool) false;
+$_SESSION['in_combat'] = false;
 
 Tki\Text::gotoMain($pdo_db, $lang);
 

@@ -21,6 +21,7 @@ $step_finder = new Tki\BigBang();
 $create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
+$variables = array();
 $variables['templateset']            = $tkireg->default_template;
 $variables['body_class']             = 'create_universe';
 $variables['title']                  = $langvars['l_cu_title'];
@@ -55,11 +56,13 @@ $sth = $pdo_db->prepare("SELECT ::prefix::universe.sector_id FROM ::prefix::univ
 $sth->execute();
 
 // Place those id's into an array.
+$catch_results = array();
 $open_sectors_result = $sth->fetchAll();
 $catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $open_sectors_result, __LINE__, __FILE__);
 $z++;
 
 $i = 0;
+$open_sectors_array = array();
 foreach ($open_sectors_result as $element)
 {
     $open_sectors_array[$i] = $element['sector_id']; // Lets trim that 2d array down to a single array

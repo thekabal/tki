@@ -55,6 +55,7 @@ if ($action == "doexpand")
 $title = $langvars['l_change_uni_title'];
 
 // Set array with all used variables in page
+$variables = array();
 $variables['lang'] = $lang;
 $variables['changed_sectors'] = $changed_sectors;
 $variables['swordfish'] = $swordfish;
@@ -67,6 +68,7 @@ $variables['module'] = $module_name;
 
 // Now set a container for the variables and langvars and send them off to the template system
 $variables['container'] = "variable";
+$langvars = array();
 $langvars['container'] = "langvar";
 
 $template->addVariables('langvars', $langvars);

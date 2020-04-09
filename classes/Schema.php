@@ -37,7 +37,7 @@ class Schema
             if ($schema_filename->isFile() && $schema_filename->getExtension() == 'sql')
             {
                 // Since we are using strict types, the Directory Iterator returns an object, and we want a string to pass to substr.
-                $simple_filename = (string) $schema_filename->getFilename();
+                $simple_filename = $schema_filename->getFilename();
 
                 // Routine to handle persistent database tables. If a SQL schema file starts with persist-, then it is a persistent table. Fix the name.
                 $persist_file = (substr($simple_filename, 0, 8) === 'persist-');
@@ -182,7 +182,7 @@ class Schema
             if ($schema_filename->isFile() && $schema_filename->getExtension() == 'sql')
             {
                 // Since we are using strict types, the Directory Iterator returns an object, and we want a string to pass to substr.
-                $simple_filename = (string) $schema_filename->getFilename();
+                $simple_filename = $schema_filename->getFilename();
 
                 // Routine to handle persistent database tables. If a SQL schema file starts with persist-, then it is a persistent table
                 $persist_file = (substr($simple_filename, 0, 8) === 'persist-');

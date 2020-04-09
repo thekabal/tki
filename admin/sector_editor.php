@@ -17,6 +17,7 @@
 //
 // File: admin/sector_editor.php
 
+$variables = array();
 $variables['operation'] = null;
 
 if (!array_key_exists('sector', $_POST))
@@ -125,6 +126,7 @@ $variables['module'] = $module_name;
 
 // Now set a container for the variables and langvars and send them off to the template system
 $variables['container'] = "variable";
+$langvars = array();
 $langvars['container'] = "langvar";
 
 $template->addVariables('langvars', $langvars);

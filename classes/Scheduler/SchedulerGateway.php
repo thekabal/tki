@@ -29,7 +29,7 @@ class SchedulerGateway // Gateway for SQL calls related to Players
         $this->pdo_db = $pdo_db;
     }
 
-    public function selectSchedulerLastRun()
+    public function selectSchedulerLastRun(): ?int
     {
         // It is possible to have this call run before the game is setup, so we need to test to ensure the db is active
         if (\Tki\Db::isActive($this->pdo_db))
@@ -37,15 +37,17 @@ class SchedulerGateway // Gateway for SQL calls related to Players
             // SQL call that selects the last run of the scheduler, and only one record
             $sql = "SELECT last_run FROM ::prefix::scheduler LIMIT 1";
             $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
+
+            // Future: Handle a bad return (aka false) as it is causing problems for the fetchObject call
             $row = $stmt->fetchObject();
             \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 
-            if (is_object($row))
+            if (property_exists($row, 'last_run'))
             {
                 return (int) $row->last_run; // Return the int value of the last scheduler run
             }
         }
 
-        return false; // If anything goes wrong, db not active, etc, return false
+        return null; // If anything goes wrong, db not active, etc, return null
     }
 }

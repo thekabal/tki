@@ -21,6 +21,7 @@ $step_finder = new Tki\BigBang();
 $create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
+$variables = array();
 $variables['templateset']            = $tkireg->default_template;
 $variables['body_class']             = 'create_universe';
 $variables['title']                  = $langvars['l_cu_title'];
@@ -45,6 +46,7 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
 
+$catch_results = array();
 $z = 0;
 $initsore = $tkireg->ore_limit * $variables['initscommod'] / 100.0;
 $initsorganics = $tkireg->organics_limit * $variables['initscommod'] / 100.0;

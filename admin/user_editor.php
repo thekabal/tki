@@ -18,6 +18,8 @@
 // File: admin/user_editor.php
 
 $button_main = true;
+$variables = array();
+$langvars = array();
 
 if (!array_key_exists('operation', $_POST))
 {

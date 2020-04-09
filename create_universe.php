@@ -23,6 +23,8 @@ require_once './common.php';
 // Set timelimit to infinite
 set_time_limit(0);
 
+$variables = array();
+
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $swordfish = null;
 $swordfish = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);

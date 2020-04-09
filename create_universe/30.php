@@ -21,6 +21,7 @@ $step_finder = new Tki\BigBang();
 $create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
+$variables = array();
 $variables['templateset']            = $tkireg->default_template;
 $variables['body_class']             = 'create_universe';
 $variables['title']                  = $langvars['l_cu_title'];
@@ -49,6 +50,7 @@ $tki_schema = new Tki\Schema;
 $variables['drop_tables_results']    = $tki_schema->dropTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all tables in the database
 $variables['drop_tables_count']      = count($variables['drop_tables_results']) - 1;
 
+$destroy_results = array();
 if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
 {
     $variables['drop_seq_results']       = $tki_schema->dropSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all sequences in the database

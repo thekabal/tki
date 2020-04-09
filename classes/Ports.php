@@ -47,7 +47,7 @@ class Ports
         $counter = $current_value;
         $dropdownvar = "<select size='1' name='$element_name'";
         $dropdownvar = "$dropdownvar $onchange>\n";
-        while ($counter <= (int) $temp_devices)
+        while ($counter <= $temp_devices)
         {
             if ($current_value == $counter)
             {

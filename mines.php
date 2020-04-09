@@ -48,6 +48,7 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
+$links = array();
 $i = 0;
 $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
 $stmt = $pdo_db->prepare($sql);
@@ -194,8 +195,8 @@ else
         $langvars['l_mines_info1'] = str_replace("[mines]", number_format($total_sector_mines, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_mines_info1']);
         $langvars['l_mines_info1'] = str_replace("[fighters]", number_format($total_sector_fighters, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_mines_info1']);
         echo $langvars['l_mines_info1'] . "<br><br>";
-        $langvars['l_mines_info2'] = str_replace("[mines]", (string) $availmines, $langvars['l_mines_info2']);
-        $langvars['l_mines_info2'] = str_replace("[fighters]", (string) $availfighters, $langvars['l_mines_info2']);
+        $langvars['l_mines_info2'] = str_replace("[mines]", $availmines, $langvars['l_mines_info2']);
+        $langvars['l_mines_info2'] = str_replace("[fighters]", $availfighters, $langvars['l_mines_info2']);
         echo "You have $availmines mines and $availfighters fighters available to deploy.<br>\n";
         echo "<br>\n";
         echo $langvars['l_mines_deploy'] . " <input type=text name=nummines size=10 maxlength=10 value=$playerinfo[torps]> " . $langvars['l_mines'] . ".<br>";

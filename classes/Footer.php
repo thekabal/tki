@@ -71,7 +71,7 @@ class Footer
         // Last run is the (int) count of the numbers of players currently
         // logged in via SQL select or false if DB is not active
         $last_run = $scheduler_gateway->selectSchedulerLastRun();
-        if ($last_run !== false)
+        if (!is_null($last_run))
         {
             $seconds_left = ($tkireg->sched_ticks * 60) - (time() - $last_run);
             $show_update_ticker = true;
@@ -156,9 +156,10 @@ class Footer
 
         $mem_peak_usage = floor(memory_get_peak_usage() / 1024);
         $public_pages = array('ranking.php', 'new.php', 'faq.php', 'settings.php', 'news.php', 'index.php');
-        $slash_position = strrpos($request->server->get('SCRIPT_NAME'), '/') + 1;
+        $slash_position = strrpos($request->server->get('SCRIPT_NAME'), '/');
+        $slash_position = (int) $slash_position + 1;
         $current_page = substr($request->server->get('SCRIPT_NAME'), $slash_position);
-        if (in_array($current_page, $public_pages))
+        if (in_array($current_page, $public_pages, true))
         {
             // If it is a non-login required page, such as ranking, new, faq,
             // settings, news, and index use the public SF logo, which increases project stats.

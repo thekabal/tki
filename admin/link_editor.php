@@ -17,6 +17,10 @@
 //
 // File: admin/link_editor.php
 
+// Create empty arrays first
+$variables = array();
+$langvars = array();
+
 $variables['lang'] = $lang;
 $variables['swordfish'] = $swordfish;
 

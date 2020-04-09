@@ -31,6 +31,7 @@ Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 // Correct the targetship bug to reflect the player info
 $targetship = $playerinfo;
 
+$defenses = array();
 $num_defenses = 0;
 $total_sector_mines = 0;
 $owner = true;

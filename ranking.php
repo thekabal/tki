@@ -118,10 +118,10 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         }
 
         // Set the players online/offline status.
-        $row['online'] = (bool) false;
+        $row['online'] = false;
         if ($difftime <= 5)
         {
-            $row['online'] = (bool) true;
+            $row['online'] = true;
         }
 
         // Set the characters Insignia.
@@ -144,12 +144,12 @@ if ($rankings !== null && ($variables['num_players'] > 0))
 
         if ($ban_result === null)
         {
-            $row['banned'] = (bool) false;
+            $row['banned'] = false;
             $row['ban_info'] = null;
         }
         else
         {
-            $row['banned'] = (bool) true;
+            $row['banned'] = true;
             $row['ban_info'] = array('type' => $ban_result['ban_type'],
                 'public_info' => "Player banned/locked for the following:\n{$ban_result['public_info']}");
         }
@@ -162,12 +162,12 @@ if ($rankings !== null && ($variables['num_players'] > 0))
 
 if (empty($_SESSION['username']))
 {
-    $variables['loggedin'] = (bool) true;
+    $variables['loggedin'] = true;
     $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');
 }
 else
 {
-    $variables['loggedin'] = (bool) false;
+    $variables['loggedin'] = false;
     $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
 }
 

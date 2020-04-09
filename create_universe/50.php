@@ -21,6 +21,7 @@ $step_finder = new Tki\BigBang();
 $create_universe_info = $step_finder->findStep(__FILE__);
 
 // Set variables
+$variables = array();
 $variables['templateset']            = $tkireg->default_template;
 $variables['body_class']             = 'create_universe';
 $variables['title']                  = $langvars['l_cu_title'];
@@ -51,6 +52,7 @@ $i = 0;
 $language_files = new DirectoryIterator("languages/");
 $lang_file_import_results = array();
 
+$catch_results = array();
 foreach ($language_files as $language_filename)
 {
     if ($language_filename->isFile() && $language_filename->getExtension() == 'ini')

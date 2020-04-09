@@ -25,11 +25,11 @@ class Team
     {
         if (($attacker_team != $attackie_team) || ($attacker_team == 0 || $attackie_team == 0))
         {
-            return (bool) false;
+            return false;
         }
         else
         {
-            return (bool) true;
+            return true;
         }
     }
 
@@ -38,7 +38,7 @@ class Team
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
         {
-            return (bool) false;
+            return false;
         }
 
         // Check to see if the player is a member of $team['id'] if so return true, else return false.
@@ -51,7 +51,7 @@ class Team
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
         {
-            return (bool) false;
+            return false;
         }
 
         // Check to see if the player is the Owner of $team['creator'] if so return true, else return false.
@@ -67,19 +67,19 @@ class Team
 
         if (empty($name) || empty($desc) || empty($creator))
         {
-            return (bool) false;
+            return false;
         }
 
         $res_new = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $name, $matches);
         if ($res_new != 0)
         {
-            return (bool) false;
+            return false;
         }
 
         $res_new2 = preg_match('/[^A-Za-z0-9\_\s\-\.\']+/', $desc, $matches);
         if ($res_new2 != 0)
         {
-            return (bool) false;
+            return false;
         }
 
         // Just a test to see if an team with a name of $name exists.
