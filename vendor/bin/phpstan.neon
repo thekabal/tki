@@ -16,7 +16,7 @@ parameters:
         - %rootDir%/../../../../tki/templates/*
         - %rootDir%/../../../../tki/classes/Db.php
     ignoreErrors:
-        - '#Access to an undefined property#'
+        - '#Access to an undefined property Tki#'
         - '#Undefined variable#'
         - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
 
@@ -28,7 +28,7 @@ rules:
     - PHPStan\Rules\BooleansInConditions\BooleanInIfConditionRule
     - PHPStan\Rules\BooleansInConditions\BooleanInTernaryOperatorRule
     - PHPStan\Rules\Classes\RequireParentConstructCallRule
-    - PHPStan\Rules\DisallowedConstructs\DisallowedEmptyRule
+#    - PHPStan\Rules\DisallowedConstructs\DisallowedEmptyRule
     - PHPStan\Rules\DisallowedConstructs\DisallowedImplicitArrayCreationRule
     - PHPStan\Rules\DisallowedConstructs\DisallowedShortTernaryRule
     - PHPStan\Rules\ForeachLoop\OverwriteVariablesWithForeachRule
