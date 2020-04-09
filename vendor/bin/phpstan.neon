@@ -1,4 +1,15 @@
 parameters:
+    polluteScopeWithLoopInitialAssignments: false
+    polluteScopeWithAlwaysIterableForeach: false
+    checkAlwaysTrueCheckTypeFunctionCall: true
+    checkAlwaysTrueInstanceof: true
+    checkAlwaysTrueStrictComparison: true
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+    checkMissingClosureNativeReturnTypehintRule: true
+    reportMaybesInMethodSignatures: true
+    reportStaticMethodSignatures: true
+
     checkMissingIterableValueType: false
     excludes_analyse:
         - %rootDir%/../../../../tki/vendor/*
@@ -7,4 +18,72 @@ parameters:
     ignoreErrors:
         - '#Access to an undefined property#'
         - '#Undefined variable#'
-#        - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
+        - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
+
+rules:
+    - PHPStan\Rules\BooleansInConditions\BooleanInBooleanAndRule
+    - PHPStan\Rules\BooleansInConditions\BooleanInBooleanNotRule
+    - PHPStan\Rules\BooleansInConditions\BooleanInBooleanOrRule
+    - PHPStan\Rules\BooleansInConditions\BooleanInElseIfConditionRule
+    - PHPStan\Rules\BooleansInConditions\BooleanInIfConditionRule
+    - PHPStan\Rules\BooleansInConditions\BooleanInTernaryOperatorRule
+    - PHPStan\Rules\Classes\RequireParentConstructCallRule
+    - PHPStan\Rules\DisallowedConstructs\DisallowedEmptyRule
+    - PHPStan\Rules\DisallowedConstructs\DisallowedImplicitArrayCreationRule
+    - PHPStan\Rules\DisallowedConstructs\DisallowedShortTernaryRule
+    - PHPStan\Rules\ForeachLoop\OverwriteVariablesWithForeachRule
+    - PHPStan\Rules\Methods\WrongCaseOfInheritedMethodRule
+    - PHPStan\Rules\Operators\OperandInArithmeticPostDecrementRule
+    - PHPStan\Rules\Operators\OperandInArithmeticPostIncrementRule
+    - PHPStan\Rules\Operators\OperandInArithmeticPreDecrementRule
+    - PHPStan\Rules\Operators\OperandInArithmeticPreIncrementRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticAdditionRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticDivisionRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticExponentiationRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticModuloRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticMultiplicationRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticSubtractionRule
+    - PHPStan\Rules\StrictCalls\DynamicCallOnStaticMethodsRule
+    - PHPStan\Rules\StrictCalls\StrictFunctionCallsRule
+    - PHPStan\Rules\SwitchConditions\MatchingTypeInSwitchCaseConditionRule
+    - PHPStan\Rules\VariableVariables\VariableMethodCallRule
+    - PHPStan\Rules\VariableVariables\VariableStaticMethodCallRule
+    - PHPStan\Rules\VariableVariables\VariableStaticPropertyFetchRule
+    - PHPStan\Rules\VariableVariables\VariableVariablesRule
+    - PHPStan\Rules\Deprecations\AccessDeprecatedPropertyRule
+    - PHPStan\Rules\Deprecations\AccessDeprecatedStaticPropertyRule
+    - PHPStan\Rules\Deprecations\CallToDeprecatedFunctionRule
+    - PHPStan\Rules\Deprecations\CallToDeprecatedMethodRule
+    - PHPStan\Rules\Deprecations\CallToDeprecatedStaticMethodRule
+    - PHPStan\Rules\Deprecations\FetchingClassConstOfDeprecatedClassRule
+    - PHPStan\Rules\Deprecations\FetchingDeprecatedConstRule
+    - PHPStan\Rules\Deprecations\ImplementationOfDeprecatedInterfaceRule
+    - PHPStan\Rules\Deprecations\InheritanceOfDeprecatedClassRule
+    - PHPStan\Rules\Deprecations\InheritanceOfDeprecatedInterfaceRule
+    - PHPStan\Rules\Deprecations\InstantiationOfDeprecatedClassRule
+    - PHPStan\Rules\Deprecations\TypeHintDeprecatedInClassMethodSignatureRule
+    - PHPStan\Rules\Deprecations\TypeHintDeprecatedInClosureSignatureRule
+    - PHPStan\Rules\Deprecations\TypeHintDeprecatedInFunctionSignatureRule
+    - PHPStan\Rules\Deprecations\UsageOfDeprecatedTraitRule
+
+services:
+    -
+        class: PHPStan\Rules\Deprecations\DeprecatedClassHelper
+    -
+        class: PHPStan\Rules\BooleansInConditions\BooleanRuleHelper
+
+    -
+        class: PHPStan\Rules\Cast\UselessCastRule
+        arguments:
+            treatPhpDocTypesAsCertain: %treatPhpDocTypesAsCertain%
+        tags:
+            - phpstan.rules.rule
+
+    -
+        class: PHPStan\Rules\Operators\OperatorRuleHelper
+    -
+        class: PHPStan\Rules\VariableVariables\VariablePropertyFetchRule
+        arguments:
+            universalObjectCratesClasses: %universalObjectCratesClasses%
+        tags:
+            - phpstan.rules.rule
