@@ -26,7 +26,7 @@ found in the `/vendor/bin` directory.
   bugs even before you write tests for the code. Currently it errors on adodb,
   in classes/Db, which is acceptable until we eliminate adodb. We use it like this:
 
-  `php vendor/bin/phpstan analyze --no-progress --no-ansi -l 5 -c vendor/bin/phpstan.neon -vvv .`
+  `php vendor/phpstan/phpstan/phpstan analyze --no-progress --no-ansi -l 8 -vvv -c vendor/bin/phpstan.neon .`
 
 - [`tki-code-check.sh`] is a short bash script which is located in vendor/bin.
   It runs phpmd, phpcs, and phpstan with our project coding standards defined.
