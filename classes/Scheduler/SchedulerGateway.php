@@ -42,7 +42,7 @@ class SchedulerGateway // Gateway for SQL calls related to Players
             $row = $stmt->fetchObject();
             \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 
-            if (property_exists($row, 'last_run'))
+            if (($row) && (property_exists($row, 'last_run')))
             {
                 return (int) $row->last_run; // Return the int value of the last scheduler run
             }
