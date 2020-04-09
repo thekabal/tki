@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Hack for log bug issue - this really needs to be fixed
@@ -147,8 +147,8 @@ if ($logs !== null)
              "    <td style='text-align:left; font-size:12px; color:#040658; font-weight:bold;'>{$event['title']}</td>\n" .
              "    <td style='text-align:right; font-size:12px; color:#040658; font-weight:bold;'>{$time}</td>\n" .
              "  </tr>\n" .
-             "  <tr>\n".
-             "    <td colspan=2 style='text-align:left; font-size:12px; color:#DEDEEF;'>{$event['text']}</td>\n".
+             "  <tr>\n" .
+             "    <td colspan=2 style='text-align:left; font-size:12px; color:#DEDEEF;'>{$event['text']}</td>\n" .
              "  </tr>\n" .
              "</table>\n" .
              "<center><hr width='80%' size='1' noshade style='color: #040658;'></center>\n";
@@ -263,7 +263,7 @@ if ($mode != 'compat')
                  "<tr>\n" .
                  "<td style='text-align:left;'><font size=2 color=#040658><strong>$event[title]</strong></td>\n" .
                  "<td align=right><font size=2 color=#040658><strong>$time</strong></td>\n" .
-                 "</tr>\n".
+                 "</tr>\n" .
                  "<tr>\n<td colspan=2 align=left>\n" .
                  "<font size=2 color=#DEDEEF>" .
                  "$event[text]" .

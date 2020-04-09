@@ -23,7 +23,7 @@ namespace Tki;
 
 class News
 {
-    public static function previousDay(string $day) : string
+    public static function previousDay(string $day): string
     {
         // Convert the formatted date into a timestamp
         $day = strtotime($day);
@@ -36,7 +36,7 @@ class News
         return $date;
     }
 
-    public static function nextDay(string $day) : string
+    public static function nextDay(string $day): string
     {
         // Convert the formatted date into a timestamp
         $day = strtotime($day);

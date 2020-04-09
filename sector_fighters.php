@@ -178,7 +178,7 @@ if ($playerarmor < 1)
         $rating = round($playerinfo['rating'] / 2);
         echo $langvars['l_sf_escape'] . "<br><br>";
 
-        $sql = "UPDATE ::prefix::ships SET hull=0,".
+        $sql = "UPDATE ::prefix::ships SET hull=0," .
                "engines=0, power=0, computer=0, sensors=0," .
                "beams=0, torp_launchers=0, torps=0, armor=0," .
                "armor_pts=100, cloak=0, shields=0, sector=1," .
@@ -196,7 +196,7 @@ if ($playerarmor < 1)
         $result = $stmt->execute();
         Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $bounty = new Tki\Bounty;
+        $bounty = new Tki\Bounty();
         $bounty->cancel($pdo_db, $playerinfo['ship_id']);
 
         $ok = 0;
@@ -205,7 +205,7 @@ if ($playerarmor < 1)
     }
     else
     {
-        $bounty = new Tki\Bounty;
+        $bounty = new Tki\Bounty();
         $bounty->cancel($pdo_db, $playerinfo['ship_id']);
         $character_object = new Tki\Character();
         $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);

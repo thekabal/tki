@@ -25,7 +25,7 @@ class KabalToShip
     {
         $armor_lost = null;
         $fighters_lost = null;
-        $character_object = new Character;
+        $character_object = new Character();
 
         // Lookup target details
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";

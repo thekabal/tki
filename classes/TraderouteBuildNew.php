@@ -46,7 +46,7 @@ class TraderouteBuildNew
 
         if ($num_traderoutes >= $tkireg->max_traderoutes_player && ($editroute === null))
         {
-            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, '<p>' . $langvars['l_tdr_maxtdr'].'<p>');
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, '<p>' . $langvars['l_tdr_maxtdr'] . '<p>');
         }
 
         echo "<p><font size=3 color=blue><strong>";

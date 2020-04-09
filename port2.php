@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_title_port'];
@@ -463,7 +463,7 @@ else
             if ($dev_beacon_number)
             {
                 $query = $query . ", dev_beacon = dev_beacon + $dev_beacon_number";
-                Tki\Ports::buildTwoCol($langvars['l_beacons']. " " . $langvars['l_trade_added'] . ":", $dev_beacon_number, "left", "right");
+                Tki\Ports::buildTwoCol($langvars['l_beacons'] . " " . $langvars['l_trade_added'] . ":", $dev_beacon_number, "left", "right");
             }
 
             if ($dev_emerwarp_number)
@@ -569,19 +569,6 @@ else
         $trade_goods = round(abs($trade_goods));
         $trade_energy = round(abs($trade_energy));
 
-/*
-   public static function trade(
-        int $price,
-        int $delta,
-        int $max,
-        int $limit,
-        float/int $factor,
-        string $port_type,
-        int $origin,
-        array $price_array,
-        array $sectorinfo
-    )
-*/
         $trade_ore = Tki\Ports::trade($tkireg->ore_price, $tkireg->ore_delta, $sectorinfo['port_ore'], $tkireg->ore_limit, $tkireg->inventory_factor, "ore", $trade_ore, $price_array, $sectorinfo);
         $trade_organics = Tki\Ports::trade($tkireg->organics_price, $tkireg->organics_delta, $sectorinfo['port_organics'], $tkireg->organics_limit, $tkireg->inventory_factor, "organics", $trade_organics, $price_array, $sectorinfo);
         $trade_goods = Tki\Ports::trade($tkireg->goods_price, $tkireg->goods_delta, $sectorinfo['port_goods'], $tkireg->goods_limit, $tkireg->inventory_factor, "goods", $trade_goods, $price_array, $sectorinfo);
@@ -672,7 +659,7 @@ else
                         <td colspan=99 align=center><font size=3 color=white><strong>" . $langvars['l_trade_result'] . "</strong></font></td>
                     </tr>
                     <tr>
-                        <td colspan=99 align=center><strong><font style='color:{$trade_color};'>". $trade_result . " " . number_format(abs($total_cost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_credits'] . "</font></strong></td>
+                        <td colspan=99 align=center><strong><font style='color:{$trade_color};'>" . $trade_result . " " . number_format(abs($total_cost), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_credits'] . "</font></strong></td>
                     </tr>
                     <tr bgcolor=$tkireg->color_line1>
                         <td><strong><font size=2 color=white>" . $langvars['l_traded_ore'] . ": </font><strong></td><td align=right><strong><font size=2 color=white>" . number_format($trade_ore, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</font></strong></td>

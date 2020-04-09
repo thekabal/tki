@@ -45,7 +45,7 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 
 // Close the session prior to dropping the databases. This prevents/fixes #56 - session_write_close(): Failed to write session data using user defined save handler
 session_write_close();
-$tki_schema = new Tki\Schema;
+$tki_schema = new Tki\Schema();
 
 $variables['drop_tables_results']    = $tki_schema->dropTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all tables in the database
 $variables['drop_tables_count']      = count($variables['drop_tables_results']) - 1;

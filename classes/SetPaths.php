@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SetPaths
 {
-    public static function setGamepath() : string
+    public static function setGamepath(): string
     {
         $request = Request::createFromGlobals();
         $gamepath = dirname($request->server->get('SCRIPT_NAME'));
@@ -61,7 +61,7 @@ class SetPaths
         return $gamepath;
     }
 
-    public static function setGamedomain() : string
+    public static function setGamedomain(): string
     {
         $request = Request::createFromGlobals();
         $remove_port = true;

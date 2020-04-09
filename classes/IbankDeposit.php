@@ -52,7 +52,7 @@ class IbankDeposit
              "</td></tr>" .
              "<tr>" .
              "  <td height=30  colspan=2 align=left>" .
-             "    <span style='color:\"#00ff00\";'>You can deposit only ". number_format($credit_space, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits.</span><br>" .
+             "    <span style='color:\"#00ff00\";'>You can deposit only " . number_format($credit_space, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits.</span><br>" .
              "  </td>" .
              "</tr>" .
              "<tr valign=bottom>" .

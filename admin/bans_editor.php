@@ -226,10 +226,10 @@ elseif ($command == 'banip')
          "<td><font size=2 color=white>" . $langvars['l_admin_ip_only'] . ": " . $ip . "</td>" .
          "<tr><td>" .
          "<input type=radio name=class value=A>" .
-         "<td><font size=2 color=white>" . $langvars['l_admin_class_a'] . ": " . $ipparts[0].$ipparts[1].$ipparts[2] . ".*</td>" .
+         "<td><font size=2 color=white>" . $langvars['l_admin_class_a'] . ": " . $ipparts[0] . $ipparts[1] . $ipparts[2] . ".*</td>" .
          "<tr><td>" .
          "<input type=radio name=class value=B>" .
-         "<td><font size=2 color=white>" . $langvars['l_admin_class_b'] . ": " . $ipparts[0].$ipparts[1] . ".*</td>" .
+         "<td><font size=2 color=white>" . $langvars['l_admin_class_b'] . ": " . $ipparts[0] . $ipparts[1] . ".*</td>" .
          "<tr><td><td><br><input type=submit value=" . $langvars['l_admin_ban'] . ">" .
          "</table>" .
          "</form>";

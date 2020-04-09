@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_teamplanet_title'];
@@ -53,8 +53,7 @@ if ($sort !== null)
     {
         $query .= " $sort ASC";
     }
-    elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" ||
-    $sort == "colonists" || $sort == "credits" || $sort == "fighters")
+    elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" || $sort == "colonists" || $sort == "credits" || $sort == "fighters")
     {
         $query .= " $sort DESC";
     }
@@ -155,7 +154,7 @@ else
         $player = $res->fields['character_name'];
 
         echo "<tr bgcolor=\"$color\">";
-        echo "<td><a href=rsmove.php?engage=1&destination=". $planet[$i]['sector_id'] . ">". $planet[$i]['sector_id'] . "</a></td>";
+        echo "<td><a href=rsmove.php?engage=1&destination=" . $planet[$i]['sector_id'] . ">" . $planet[$i]['sector_id'] . "</a></td>";
         echo "<td>" . $planet[$i]['name']              . "</td>";
         echo "<td>" . number_format($planet[$i]['ore'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])       . "</td>";
         echo "<td>" . number_format($planet[$i]['organics'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep'])  . "</td>";

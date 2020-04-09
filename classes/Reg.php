@@ -203,11 +203,14 @@ class Reg
                 // This is hard-coded for now, but when we get multiple game support, we may need to change this.
                 $ini_file = 'config/classic_config.ini';
                 $ini_keys = parse_ini_file($ini_file, true);
-                foreach ($ini_keys as $config_category => $config_line)
+                if ($ini_keys !== false)
                 {
-                    foreach ($config_line as $config_key => $config_value)
+                    foreach ($ini_keys as $config_category => $config_line)
                     {
-                        $this->$config_key = $config_value;
+                        foreach ($config_line as $config_key => $config_value)
+                        {
+                            $this->$config_key = $config_value;
+                        }
                     }
                 }
             }
@@ -218,11 +221,14 @@ class Reg
             // This is hard-coded for now, but when we get multiple game support, we may need to change this.
             $ini_file = 'config/classic_config.ini';
             $ini_keys = parse_ini_file($ini_file, true);
-            foreach ($ini_keys as $config_category => $config_line)
+            if ($ini_keys !== false)
             {
-                foreach ($config_line as $config_key => $config_value)
+                foreach ($ini_keys as $config_category => $config_line)
                 {
-                    $this->$config_key = $config_value;
+                    foreach ($config_line as $config_key => $config_value)
+                    {
+                        $this->$config_key = $config_value;
+                    }
                 }
             }
         }

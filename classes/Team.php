@@ -21,7 +21,7 @@ namespace Tki;
 
 class Team
 {
-    public static function isSameTeam($attacker_team = null, $attackie_team = null) : bool
+    public static function isSameTeam($attacker_team = null, $attackie_team = null): bool
     {
         if (($attacker_team != $attackie_team) || ($attacker_team == 0 || $attackie_team == 0))
         {
@@ -33,7 +33,7 @@ class Team
         }
     }
 
-    public static function isTeamMember(int $team, array $playerinfo) : bool
+    public static function isTeamMember(int $team, array $playerinfo): bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
@@ -46,7 +46,7 @@ class Team
         return $returnvalue;
     }
 
-    public static function isTeamOwner(int $team, array $playerinfo) : bool
+    public static function isTeamOwner(int $team, array $playerinfo): bool
     {
         // Check to see if the player is in a team?  if not return false right there, else carry on.
         if ($playerinfo['team'] == 0)
@@ -59,7 +59,7 @@ class Team
         return $returnvalue;
     }
 
-    public static function validateTeam(\PDO $pdo_db, $name = null, $desc = null, $creator = null) : bool
+    public static function validateTeam(\PDO $pdo_db, $name = null, $desc = null, $creator = null): bool
     {
         $name = trim($name);
         $desc = trim($desc);

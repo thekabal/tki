@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
@@ -62,7 +62,7 @@ elseif ($sure == 2)
     echo $langvars['l_die_please'] . "<br>";
     $character_object = new Tki\Character();
     $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, true);
-    $bounty = new Tki\Bounty;
+    $bounty = new Tki\Bounty();
     $bounty->cancel($pdo_db, $playerinfo['ship_id']);
 
     $admin_log = new Tki\AdminLog();

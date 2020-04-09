@@ -189,7 +189,7 @@ class PlanetReport
                 }
 
                 echo "<tr bgcolor=\"$color\">";
-                echo "<td><a href=rsmove.php?engage=1&destination=". $planet[$counter]['sector_id'] . ">". $planet[$counter]['sector_id'] . "</a></td>";
+                echo "<td><a href=rsmove.php?engage=1&destination=" . $planet[$counter]['sector_id'] . ">" . $planet[$counter]['sector_id'] . "</a></td>";
                 echo "<td>" . $planet[$counter]['name'] . "</td>";
                 echo "<td>" . number_format($planet[$counter]['ore'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td>" . number_format($planet[$counter]['organics'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";

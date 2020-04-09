@@ -54,7 +54,7 @@ do
     }
     else
     {
-        echo $langvars['l_sched_tow_none']. ".<br>";
+        echo $langvars['l_sched_tow_none'] . ".<br>";
     }
 } while ($num_to_tow);
 

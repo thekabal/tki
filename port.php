@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
@@ -982,7 +982,7 @@ elseif ($sectorinfo['port_type'] == "special")
     echo "</td>\n";
     echo "    <td>" . $langvars['l_colonists'] . "</td>\n";
     echo "    <td>" . number_format($tkireg->colonist_price, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
-    echo "    <td>" . number_format($playerinfo['ship_colonists'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " / ". number_format($colonist_max, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']). "</td>\n";
+    echo "    <td>" . number_format($playerinfo['ship_colonists'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " / " . number_format($colonist_max, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>\n";
     echo "    <td>";
     if ($playerinfo['ship_colonists'] != $colonist_max)
     {

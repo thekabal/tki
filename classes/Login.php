@@ -21,7 +21,7 @@ namespace Tki;
 
 class Login
 {
-    public function checkLogin(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template) : bool
+    public function checkLogin(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template): bool
     {
         // Database driven language entries
         $langvars = Translate::load(
@@ -29,7 +29,7 @@ class Login
             $lang,
         array('login', 'global_funcs', 'common', 'footer', 'self_destruct'));
 
-        $game_closed = new Game;
+        $game_closed = new Game();
         $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $template);
 
         // Establish timestamp for interval in checking bans

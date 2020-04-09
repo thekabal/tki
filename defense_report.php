@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
@@ -91,7 +91,7 @@ else
     for ($i = 0; $i < $num_sectors; $i++)
     {
         echo "<tr bgcolor=\"$color\">";
-        echo "<td><a href=rsmove.php?engage=1&destination=". $sector[$i]['sector_id'] . ">". $sector[$i]['sector_id'] . "</a></td>";
+        echo "<td><a href=rsmove.php?engage=1&destination=" . $sector[$i]['sector_id'] . ">" . $sector[$i]['sector_id'] . "</a></td>";
         echo "<td>" . number_format($sector[$i]['quantity'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
         $defense_type = $sector[$i]['defense_type'] == 'F' ? $langvars['l_fighters'] : $langvars['l_mines'];
         echo "<td> $defense_type </td>";

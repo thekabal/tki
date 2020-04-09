@@ -21,7 +21,7 @@ namespace Tki;
 
 class BigBang
 {
-    public function findStep(string $current_file) : array
+    public function findStep(string $current_file): array
     {
         $num_files = 0;
 

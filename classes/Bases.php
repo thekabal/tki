@@ -49,7 +49,7 @@ class Bases
         }
 
         // Build a base
-        $rs_move = new \Tki\Realspace;
+        $rs_move = new \Tki\Realspace();
         $rs_move->realSpaceMove($pdo_db, $langvars, $sector_id, $tkireg);
         echo "<br>";
         echo str_replace("[here]", "<a href='planet.php?planet_id=$planet_id'>" .

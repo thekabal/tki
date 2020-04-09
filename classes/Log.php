@@ -21,7 +21,7 @@ namespace Tki;
 
 class Log
 {
-    public static function logParse(array $langvars, array $entry) : array
+    public static function logParse(array $langvars, array $entry): array
     {
         $log_list = array();
         $retvalue = array();
@@ -351,14 +351,14 @@ class Log
 
         if ($log_id < count($log_list))
         {
-            if (array_key_exists("l_log_title_". $log_list[$log_id], $GLOBALS))
+            if (array_key_exists("l_log_title_" . $log_list[$log_id], $GLOBALS))
             {
-                $title = $GLOBALS["l_log_title_". $log_list[$log_id]];
+                $title = $GLOBALS["l_log_title_" . $log_list[$log_id]];
             }
 
-            if (array_key_exists("l_log_text_". $log_list[$log_id], $GLOBALS))
+            if (array_key_exists("l_log_text_" . $log_list[$log_id], $GLOBALS))
             {
-                $text = $GLOBALS["l_log_text_". $log_list[$log_id]];
+                $text = $GLOBALS["l_log_text_" . $log_list[$log_id]];
             }
         }
     }

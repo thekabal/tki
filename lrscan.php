@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
@@ -160,7 +160,7 @@ if ($sector == "*")
         {
             $icon_alt_text = ucfirst(Tki\Ports::getType($port_type, $langvars));
             $icon_port_type_name = $port_type . ".png";
-            $image_string = "<img align=absmiddle height=12 width=12 alt=\"$icon_alt_text\" src=\"". $template->getVariables('template_dir') . "/images/$icon_port_type_name\">&nbsp;";
+            $image_string = "<img align=absmiddle height=12 width=12 alt=\"$icon_alt_text\" src=\"" . $template->getVariables('template_dir') . "/images/$icon_port_type_name\">&nbsp;";
         }
         else
         {

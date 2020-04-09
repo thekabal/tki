@@ -32,6 +32,29 @@
     <rule ref="Generic.PHP.NoSilencedErrors"/>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
     <rule ref="Generic.WhiteSpace.ScopeIndent"/>
+    <rule ref="Generic.ControlStructures.InlineControlStructure"/>
+    <rule ref="Generic.Files.ByteOrderMark"/>
+    <rule ref="Generic.Files.LineEndings"/>
+<!--
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+Future work to do!
+-->
+    <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
+    <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
+    <rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
+    <rule ref="Generic.PHP.DisallowShortOpenTag"/>
+    <rule ref="Generic.PHP.LowerCaseConstant"/>
+    <rule ref="Generic.PHP.LowerCaseKeyword"/>
+    <rule ref="Generic.PHP.LowerCaseType"/>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
+    <rule ref="Generic.WhiteSpace.IncrementDecrementSpacing"/>
+    <rule ref="Generic.WhiteSpace.ScopeIndent"/>
     <rule ref="MySource.PHP.EvalObjectFactory"/>
     <rule ref="MySource.PHP.ReturnFunctionValue"/>
     <rule ref="MySource.PHP.AjaxNullComparison"/>
@@ -43,6 +66,7 @@
     <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
     <rule ref="PSR1.Classes.ClassDeclaration"/>
     <rule ref="PSR1.Files.SideEffects"/>
+    <rule ref="PSR1.Methods.CamelCapsMethodName"/>
     <rule ref="PSR2.Classes.ClassDeclaration"/>
     <rule ref="PSR2.Classes.PropertyDeclaration"/>
     <rule ref="PSR2.ControlStructures.ControlStructureSpacing"/>
@@ -52,6 +76,46 @@
     <rule ref="PSR2.Methods.MethodDeclaration"/>
     <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
     <rule ref="PSR2.Namespaces.UseDeclaration"/>
+    <rule ref="PSR2.Files.ClosingTag"/>
+<!--    <rule ref="PSR2.Methods.FunctionCallSignature"/>
+Prefer function call signatures as they are
+-->
+    <rule ref="PSR2.Methods.FunctionClosingBrace"/>
+    <rule ref="PSR12.Classes.AnonClassDeclaration"/>
+    <rule ref="PSR12.Classes.ClassInstantiation"/>
+    <rule ref="PSR12.ControlStructures.BooleanOperatorPlacement"/>
+    <rule ref="PSR12.ControlStructures.ControlStructureSpacing"/>
+    <rule ref="PSR12.Files.ImportStatement"/>
+<!--
+    <rule ref="PSR12.Files.DeclareStatement"/>
+    <rule ref="PSR12.Files.OpenTag"/>
+    <rule ref="PSR12.Files.FileHeader"/>
+Prefer the top three lines of php files as they are
+-->
+    <rule ref="PSR12.Properties.ConstantVisibility"/>
+    <rule ref="PSR12.Classes.ClosingBrace"/>
+    <rule ref="PSR12.Functions.NullableTypeDeclaration"/>
+    <rule ref="PSR12.Functions.ReturnTypeDeclaration"/>
+    <rule ref="PSR12.Keywords.ShortFormTypeKeywords"/>
+    <rule ref="PSR12.Namespaces.CompoundNamespaceDepth"/>
+    <rule ref="PSR12.Operators.OperatorSpacing"/>
+    <rule ref="PSR12.Traits.UseDeclaration"/>
+    <rule ref="Squiz.Classes.ValidClassName"/>
+<!--    <rule ref="Squiz.ControlStructures.ControlSignature"/>
+Prefer the Allman/BSD open/close brackets.
+-->
+    <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration"/>
+    <rule ref="Squiz.ControlStructures.ForLoopDeclaration"/>
+    <rule ref="Squiz.ControlStructures.LowercaseDeclaration"/>
+    <rule ref="Squiz.Functions.FunctionDeclaration"/>
+<!--    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+Prefer $traderoute_id = null, not $traderoute_id=null
+-->
+    <rule ref="Squiz.Functions.LowercaseFunctionKeywords"/>
+<!--    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration"/>
+Prefer the Allman/BSD open/close brackets.
+-->
+    <rule ref="Squiz.WhiteSpace.ScopeClosingBrace"/>
     <rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
     <rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
     <rule ref="Squiz.PHP.DiscouragedFunctions"/>

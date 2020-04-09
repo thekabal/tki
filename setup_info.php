@@ -150,7 +150,7 @@ try
 catch (\PDOException $e)
 {
     $err_msg = "Unable to connect to the " . $db_type .
-               " Database.<br>\n Database Error: ".
+               " Database.<br>\n Database Error: " .
                $e->getMessage() . "<br>\n";
     $variables['pdo_conn_test'] = false;
     $variables['pdo_conn_err'] = $err_msg;

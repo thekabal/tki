@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
@@ -103,7 +103,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
 // These are the row numbers on the side of the map
 for ($a = 1; $a <= ($tkireg->max_sectors / 50); $a++)
 {
-    echo "\n<div style='position:absolute;left:" . ($map_width + 10) . "px;top:".(($a - 1) * ($div_h + $div_border)) . "px;'>" . ($a * 50) . "</div>";
+    echo "\n<div style='position:absolute;left:" . ($map_width + 10) . "px;top:" . (($a - 1) * ($div_h + $div_border)) . "px;'>" . ($a * 50) . "</div>";
 }
 
 echo "</div><div style='clear:both'></div><br>";

@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
@@ -105,14 +105,14 @@ elseif ($state == 1)
         $search_query = "SELECT distinct a1.link_start, a1.link_dest ";
         for ($i = 2; $i <= $search_depth; $i++)
         {
-            $search_query = $search_query . " ,a". $i . ".link_dest ";
+            $search_query = $search_query . " ,a" . $i . ".link_dest ";
         }
 
         $search_query = $search_query . "FROM     {$db->prefix}links AS a1 ";
 
         for ($i = 2; $i <= $search_depth; $i++)
         {
-            $search_query = $search_query . "    ,{$db->prefix}links AS a". $i . " ";
+            $search_query = $search_query . "    ,{$db->prefix}links AS a" . $i . " ";
         }
 
         $search_query = $search_query . "WHERE         a1.link_start = $current_sector ";

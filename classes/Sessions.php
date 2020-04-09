@@ -67,17 +67,17 @@ class Sessions
         session_write_close();
     }
 
-    public function open() : bool
+    public function open(): bool
     {
         return true;
     }
 
-    public function close() : bool
+    public function close(): bool
     {
         return true;
     }
 
-    public function read(string $sesskey) : string
+    public function read(string $sesskey): string
     {
         if ($this->pdo_db !== null)
         {

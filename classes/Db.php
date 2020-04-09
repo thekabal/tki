@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Db
 {
-    public static function isActive(\PDO $pdo_db) : bool
+    public static function isActive(\PDO $pdo_db): bool
     {
         // Get the config_values from the DB
         $results = $pdo_db->query("SELECT * FROM ::prefix::gameconfig LIMIT 1");
@@ -82,7 +82,7 @@ class Db
                 // However ADOdb's postgres driver returns null if postgres insn't installed.
                 if ($db_init_result === false || $db_init_result === 0)
                 {
-                    throw new \Exception;
+                    throw new \Exception();
                 }
                 else
                 {
@@ -97,7 +97,7 @@ class Db
             {
                 // We need to display the error message onto the screen.
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                           ' Database. <br>Database Error: '. $db->ErrorNo();
+                           ' Database. <br>Database Error: ' . $db->ErrorNo();
                 throw new \Exception($err_msg);
             }
 
@@ -127,7 +127,7 @@ class Db
             catch (\PDOException $e)
             {
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                           ' Database. <br>Database Error: '. $e->getMessage();
+                           ' Database. <br>Database Error: ' . $e->getMessage();
                 throw new \Exception($err_msg);
             }
 

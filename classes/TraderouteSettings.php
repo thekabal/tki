@@ -26,10 +26,10 @@ class TraderouteSettings
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
 
         echo "<p><font size=3 color=blue><strong>" . $langvars['l_tdr_globalset'] . "</strong></font><p>";
-        echo "<font color=white size=2><strong>" . $langvars['l_tdr_sportsrc'] . " :</strong></font><p>".
-             "<form accept-charset='utf-8' action=traderoute.php?command=setsettings method=post>".
-             "<table border=0><tr>".
-             "<td><font size=2 color=white> - " . $langvars['l_tdr_colonists'] . " :</font></td>".
+        echo "<font color=white size=2><strong>" . $langvars['l_tdr_sportsrc'] . " :</strong></font><p>" .
+             "<form accept-charset='utf-8' action=traderoute.php?command=setsettings method=post>" .
+             "<table border=0><tr>" .
+             "<td><font size=2 color=white> - " . $langvars['l_tdr_colonists'] . " :</font></td>" .
              "<td><input type=checkbox name=colonists";
 
         if ($playerinfo['trade_colonists'] == 'Y')
@@ -37,8 +37,8 @@ class TraderouteSettings
             echo " checked";
         }
 
-        echo "></tr><tr>".
-            "<td><font size=2 color=white> - " . $langvars['l_tdr_fighters'] . " :</font></td>".
+        echo "></tr><tr>" .
+            "<td><font size=2 color=white> - " . $langvars['l_tdr_fighters'] . " :</font></td>" .
             "<td><input type=checkbox name=fighters";
 
         if ($playerinfo['trade_fighters'] == 'Y')
@@ -46,8 +46,8 @@ class TraderouteSettings
             echo " checked";
         }
 
-        echo "></tr><tr>".
-            "<td><font size=2 color=white> - " . $langvars['l_tdr_torps'] . " :</font></td>".
+        echo "></tr><tr>" .
+            "<td><font size=2 color=white> - " . $langvars['l_tdr_torps'] . " :</font></td>" .
             "<td><input type=checkbox name=torps";
 
         if ($playerinfo['trade_torps'] == 'Y')
@@ -55,12 +55,12 @@ class TraderouteSettings
             echo " checked";
         }
 
-        echo "></tr>".
-            "</table>".
-            "<p>".
-            "<font color=white size=2><strong>" . $langvars['l_tdr_tdrescooped'] . " :</strong></font><p>".
-            "<table border=0><tr>".
-            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;" . $langvars['l_tdr_trade'] . "</font></td>".
+        echo "></tr>" .
+            "</table>" .
+            "<p>" .
+            "<font color=white size=2><strong>" . $langvars['l_tdr_tdrescooped'] . " :</strong></font><p>" .
+            "<table border=0><tr>" .
+            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;" . $langvars['l_tdr_trade'] . "</font></td>" .
             "<td><input type=radio name=energy value=\"Y\"";
 
         if ($playerinfo['trade_energy'] == 'Y')
@@ -68,8 +68,8 @@ class TraderouteSettings
             echo " checked";
         }
 
-        echo "></td></tr><tr>".
-            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;" . $langvars['l_tdr_keep'] . "</font></td>".
+        echo "></td></tr><tr>" .
+            "<td><font size=2 color=white>&nbsp;&nbsp;&nbsp;" . $langvars['l_tdr_keep'] . "</font></td>" .
             "<td><input type=radio name=energy value=\"N\"";
 
         if ($playerinfo['trade_energy'] == 'N')
@@ -77,9 +77,9 @@ class TraderouteSettings
             echo " checked";
         }
 
-        echo "></td></tr><tr><td>&nbsp;</td></tr><tr><td>".
-            "<td><input type=submit value=\"" . $langvars['l_tdr_save'] . "\"></td>".
-            "</tr></table>".
+        echo "></td></tr><tr><td>&nbsp;</td></tr><tr><td>" .
+            "<td><input type=submit value=\"" . $langvars['l_tdr_save'] . "\"></td>" .
+            "</tr></table>" .
             "</form>";
 
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);

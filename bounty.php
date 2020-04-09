@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
@@ -376,7 +376,7 @@ switch ($response) {
                 $stmt->execute();
                 $details = $stmt->fetch(PDO::FETCH_ASSOC);
                 echo "<tr bgcolor=\"$color\">";
-                echo "<td><a href=bounty.php?bounty_on=" . $bounties[$i]['bounty_on'] . "&response=display>". $details['character_name'] . "</a></td>";
+                echo "<td><a href=bounty.php?bounty_on=" . $bounties[$i]['bounty_on'] . "&response=display>" . $details['character_name'] . "</a></td>";
                 echo "<td>" . $bounties[$i]['total_bounty'] . "</td>";
                 echo "</tr>";
 

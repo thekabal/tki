@@ -21,7 +21,7 @@ namespace Tki;
 
 class Ports
 {
-    public static function getType(string $ptype, array $langvars) : string
+    public static function getType(string $ptype, array $langvars): string
     {
         switch ($ptype)
         {
@@ -42,7 +42,7 @@ class Ports
         }
     }
 
-    public static function dropdown(string $element_name, int $current_value, string $onchange, int $temp_devices) : string
+    public static function dropdown(string $element_name, int $current_value, string $onchange, int $temp_devices): string
     {
         $counter = $current_value;
         $dropdownvar = "<select size='1' name='$element_name'";

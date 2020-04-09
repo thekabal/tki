@@ -23,7 +23,7 @@ class KabalToSecDef
 {
     public static function secDef(\PDO $pdo_db, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg): void
     {
-        $character_object = new Character;
+        $character_object = new Character();
 
         // Check for sector defenses
         if ($targetlink > 0)
@@ -197,7 +197,7 @@ class KabalToSecDef
                     $langvars['l_sf_sendlog2'] = str_replace("[sector]", (string) $targetlink, $langvars['l_sf_sendlog2']);
                     \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_sf_sendlog2']);
 
-                    $bounty = new \Tki\Bounty;
+                    $bounty = new \Tki\Bounty();
                     $bounty->cancel($pdo_db, $playerinfo['ship_id']);
                     $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
                     return;
@@ -246,7 +246,7 @@ class KabalToSecDef
                             \Tki\SectorDefense::messageDefenseOwner($pdo_db, $targetlink, $langvars['l_chm_hewasdestroyedbyyourmines']);
 
                             // Actually kill the Kabal now
-                            $bounty = new \Tki\Bounty;
+                            $bounty = new \Tki\Bounty();
                             $bounty->cancel($pdo_db, $playerinfo['ship_id']);
                             $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
 

@@ -76,7 +76,7 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
                 {
                     $button_main = true;
                     $module_name = substr($filename[$i]['file'], 0, -4);
-                    include_once './admin/'. $filename[$i]['file'];
+                    include_once './admin/' . $filename[$i]['file'];
                 }
             }
         }

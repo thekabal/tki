@@ -27,7 +27,7 @@ class Game
         string $lang,
         Smarty $template,
         array $langvars
-    ) : bool
+    ): bool
     {
         if ($tkireg->game_closed)
         {

@@ -36,7 +36,7 @@ class KabalToPlanet
         $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
-        $character_object = new Character;
+        $character_object = new Character();
 
         // Planet beams
         $targetbeams = \Tki\CalcLevels::abstractLevels($ownerinfo['beams'] + $base_factor, $tkireg);

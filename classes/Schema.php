@@ -21,9 +21,9 @@ namespace Tki;
 
 class Schema
 {
-    const PDO_SUCCESS = '00000'; // PDO gives an error code of string 00000 if successful. Not extremely helpful.
+    private const PDO_SUCCESS = '00000'; // PDO gives an error code of string 00000 if successful. Not extremely helpful.
 
-    public function dropTables(\PDO $pdo_db, string $db_prefix, string $dbtype) : array
+    public function dropTables(\PDO $pdo_db, string $db_prefix, string $dbtype): array
     {
         $counter = 0;
         $destroy_results = array();

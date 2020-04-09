@@ -21,7 +21,7 @@ namespace Tki;
 
 class Languages
 {
-    public static function listAvailable(\PDO $pdo_db, string $lang) : array
+    public static function listAvailable(\PDO $pdo_db, string $lang): array
     {
         // Get a list of supported languages
         $sql = "SELECT section, name, value FROM ::prefix::languages WHERE " .

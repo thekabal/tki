@@ -166,13 +166,13 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                         $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, sensors=0, computer=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=1, ship_organics=0, ship_ore=0, ship_goods=0, ship_energy=?, ship_colonists=0, ship_fighters=100, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, on_planet='N', rating=?, cleared_defenses=' ', dev_lssd='N' WHERE ship_id=?", array(100, $rating, $playerinfo['ship_id']));
                         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
-                        $bounty = new Tki\Bounty;
+                        $bounty = new Tki\Bounty();
                         $bounty->cancel($pdo_db, $playerinfo['ship_id']);
                     }
                     else
                     {
                         // Or they lose!
-                        $bounty = new Tki\Bounty;
+                        $bounty = new Tki\Bounty();
                         $bounty->cancel($pdo_db, $playerinfo['ship_id']);
 
                         $character_object = new Tki\Character();

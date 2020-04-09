@@ -152,7 +152,7 @@ if ($playerfound)
                 // Player's ship has been destroyed
                 if ($playerinfo['dev_escapepod'] == "Y")
                 {
-                    $sql = "UPDATE ::prefix::ships SET hull=0,".
+                    $sql = "UPDATE ::prefix::ships SET hull=0," .
                            "engines=0, power=0, computer=0, sensors=0," .
                            "beams=0, torp_launchers=0, torps=0, armor=0," .
                            "armor_pts=100, cloak=0, shields=0, sector=1," .
@@ -186,7 +186,7 @@ if ($playerfound)
                         {
                             echo "<br><br>" . $langvars['l_login_newbie'] . "<br><br>";
 
-                            $sql = "UPDATE ::prefix::ships SET hull=0,".
+                            $sql = "UPDATE ::prefix::ships SET hull=0," .
                                    "engines=0, power=0, computer=0, sensors=0," .
                                    "beams=0, torp_launchers=0, torps=0, armor=0," .
                                    "armor_pts=100, cloak=0, shields=0, sector=1," .

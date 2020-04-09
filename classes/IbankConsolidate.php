@@ -196,7 +196,7 @@ class IbankConsolidate
              number_format($tcost, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>" .
              "<tr valign=bottom>" .
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] .
-             "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout ']. "</a></td>" .
+             "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout '] . "</a></td>" .
              "</tr>";
 
         if ($minimum != 0)

@@ -41,7 +41,7 @@ $variables['initbcommod']            = filter_input(INPUT_POST, 'initbcommod', F
 $variables['fedsecs']                = filter_input(INPUT_POST, 'fedsecs', FILTER_SANITIZE_NUMBER_INT);
 $variables['loops']                  = filter_input(INPUT_POST, 'loops', FILTER_SANITIZE_NUMBER_INT);
 $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
-$tki_schema = new Tki\Schema;
+$tki_schema = new Tki\Schema();
 
 if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
 {

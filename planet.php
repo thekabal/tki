@@ -19,7 +19,7 @@
 
 require_once './common.php';
 
-$login = new Tki\Login;
+$login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 $title = $langvars['l_planet_title'];
@@ -284,7 +284,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
             echo "<tr bgcolor=\"$tkireg->color_line2\"><td>" . $langvars['l_planet_perc'] . "</td>";
             echo "<td><input type=text name=pore value=\"$planetinfo[prod_ore]\" size=6 maxlength=6></td>";
             echo "<td><input type=text name=porganics value=\"$planetinfo[prod_organics]\" size=6 maxlength=6></td>";
-            echo "<td><input type=text name=pgoods value=\"" .round($planetinfo['prod_goods']) . "\" size=6 maxlength=6></td>";
+            echo "<td><input type=text name=pgoods value=\"" . round($planetinfo['prod_goods']) . "\" size=6 maxlength=6></td>";
             echo "<td><input type=text name=penergy value=\"$planetinfo[prod_energy]\" size=6 maxlength=6></td>";
             echo "<td>n/a</td><td>*</td>";
             echo "<td><input type=text name=pfighters value=\"$planetinfo[prod_fighters]\" size=6 maxlength=6></td>";
@@ -780,7 +780,7 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     echo "<td>???</td></tr>";
                 }
 
-                echo "<tr><td>". $langvars['l_credits'] . ":</td>";
+                echo "<tr><td>" . $langvars['l_credits'] . ":</td>";
                 $roll = random_int(1, 100);
                 if ($roll < $success)
                 {

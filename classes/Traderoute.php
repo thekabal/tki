@@ -1184,7 +1184,7 @@ class Traderoute
                             $energy_buy = $dest['port_energy'];
                             if ($dest['port_energy'] == 0)
                             {
-                                echo $langvars['l_tdr_bought'] . " ".number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
+                                echo $langvars['l_tdr_bought'] . " " . number_format($energy_buy, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_tdr_energy'] . " (" . $langvars['l_tdr_portisempty'] . ")<br>";
                             }
                         }
 

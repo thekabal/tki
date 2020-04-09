@@ -133,7 +133,7 @@ class Realspace
             if (($hostile > 0) && ($playerinfo['hull'] > $tkireg->mine_hullsize))
             {
                 $retval = "HOSTILE";
-                echo str_replace("[destination]", (string) $destination, $langvars['l_pr_cannot_move_defenses']). "<br>";
+                echo str_replace("[destination]", (string) $destination, $langvars['l_pr_cannot_move_defenses']) . "<br>";
             }
             else
             {

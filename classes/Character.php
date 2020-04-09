@@ -85,7 +85,7 @@ class Character
         $stmt->execute();
         $name = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $headline = $name['character_name'] .' '. $langvars['l_killheadline'];
+        $headline = $name['character_name'] . ' ' . $langvars['l_killheadline'];
         $newstext = str_replace('[name]', $name['character_name'], $langvars['l_news_killed']);
 
         $sql = "INSERT INTO ::prefix::news (headline, newstext, user_id, date, news_type) " .
@@ -97,7 +97,7 @@ class Character
         $stmt->execute();
     }
 
-    public function getInsignia(\PDO $pdo_db, string $a_username, array $langvars) : string
+    public function getInsignia(\PDO $pdo_db, string $a_username, array $langvars): string
     {
         // Lookup players score.
         $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
