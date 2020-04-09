@@ -48,18 +48,6 @@ class Bases
             return;
         }
 
-        if (!is_numeric($planet_id)) // Old admin planet cheat - simply prevent it.
-        {
-            echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
-            return;
-        }
-
-        if (!is_numeric($sector_id)) // Old admin planet cheat - simply prevent it.
-        {
-            echo "<div style='color:#f00; font-size:16px;'>" . $langvars['l_pr_make_base_failed'] . "</div>\n";
-            return;
-        }
-
         // Build a base
         $rs_move = new \Tki\Realspace;
         $rs_move->realSpaceMove($pdo_db, $langvars, $sector_id, $tkireg);
