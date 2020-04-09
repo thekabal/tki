@@ -119,6 +119,7 @@ class Footer
             // SQL call that selects all of the news items between the start date beginning of day, and the end of day.
             $news_gateway = new News\NewsGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
             $row = $news_gateway->selectNewsByDay(date('Y-m-d'));
+            // Future: Handle bad row return, as it's causing issues for count($row)
 
             $news_ticker = array();
             if (count($row) == 0)

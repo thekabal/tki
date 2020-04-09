@@ -23,7 +23,8 @@ class IbankTransferFinal
 {
     public static function final(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, array $account, int $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Smarty $template): void
     {
-        $amount = preg_replace("/[^0-9]/", '', $amount);
+        $amount = preg_replace("/[^0-9]/", '', (string) $amount);
+        $amount = (int) $amount;
         $source = null;
         $dest = null;
 

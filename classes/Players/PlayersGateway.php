@@ -39,12 +39,14 @@ class PlayersGateway // Gateway for SQL calls related to Players
                . $since_stamp . "' AND timestamp '" . $cur_time_stamp . "' AND email NOT LIKE '%@kabal'";
         $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
+        // Future: Correctly handle a false condition, which will not work for fetchObject
+
         $row = $stmt->fetchObject(); // Fetch the associated object from the select
         $online = $row->loggedin; // Set online variable to the loggedin count from SQL
         return (int) $online;
     }
 
-    public function selectPlayerInfo(string $email)
+    public function selectPlayerInfo(string $email): array
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email = :email LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);
@@ -57,7 +59,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
         return $playerinfo; // FUTURE: Eventually we want this to return a player object instead, for now, playerinfo array or false for no user found.
     }
 
-    public function selectPlayerInfoById(?int $user_id)
+    public function selectPlayerInfoById(?int $user_id): array
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :user_id LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);

@@ -29,7 +29,7 @@ class NewsGateway // Gateway for SQL calls related to Players
         $this->pdo_db = $pdo_db;
     }
 
-    public function selectNewsByDay(string $day)
+    public function selectNewsByDay(string $day): ?array
     {
         // SQL call that selects all of the news items between the start date beginning of day, and the end of day.
         $sql = "SELECT * FROM ::prefix::news WHERE date > :start AND date < :end ORDER BY news_id";
@@ -40,6 +40,13 @@ class NewsGateway // Gateway for SQL calls related to Players
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log errors, if there are any
 
         $return_value = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        return $return_value;
+        if ($return_value !== false)
+        {
+            return $return_value;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

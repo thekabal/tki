@@ -43,11 +43,6 @@ class Login
             return false;
         }
 
-        if ($playerinfo === false)
-        {
-            return false;
-        }
-
         if (Player::ban($pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars, $tkireg))
         {
             return false;

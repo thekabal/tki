@@ -56,7 +56,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, array $sort, Reg $tkireg): void
+    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, string $sort, Reg $tkireg): void
     {
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
@@ -70,7 +70,11 @@ class PlanetReport
 
         $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
 
-        if ($sort !== null)
+        if ($sort == null)
+        {
+            $sql .= " ORDER BY sector_id ASC";
+        }
+        else
         {
             $sql .= " ORDER BY";
             if ($sort == "name")
@@ -89,10 +93,6 @@ class PlanetReport
             {
                 $sql .= " sector_id ASC";
             }
-        }
-        else
-        {
-            $sql .= " ORDER BY sector_id ASC";
         }
 
         $stmt = $pdo_db->prepare($sql);

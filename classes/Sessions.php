@@ -64,8 +64,7 @@ class Sessions
 
     public function __destruct()
     {
-        $temp = (bool) session_write_close();
-        return $temp;
+        session_write_close();
     }
 
     public function open() : bool
@@ -91,6 +90,10 @@ class Sessions
             // PHP7 change requires return to be string:
             // https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
             return (string) $result['sessdata'];
+        }
+        else
+        {
+            return (string) '';
         }
     }
 

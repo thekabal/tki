@@ -40,7 +40,9 @@ class IbankWithdraw
 
     public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $amount, array $account, Reg $tkireg, Smarty $template): void
     {
-        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
+        $amount = preg_replace("/[^0-9]/", '', (string) $amount);
+        $amount = (int) $amount;
+
         if (($amount * 1) != $amount)
         {
             \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidwithdrawinput'], "ibank.php?command=withdraw", $lang, $tkireg, $template);

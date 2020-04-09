@@ -569,6 +569,19 @@ else
         $trade_goods = round(abs($trade_goods));
         $trade_energy = round(abs($trade_energy));
 
+/*
+   public static function trade(
+        int $price,
+        int $delta,
+        int $max,
+        int $limit,
+        float/int $factor,
+        string $port_type,
+        int $origin,
+        array $price_array,
+        array $sectorinfo
+    )
+*/
         $trade_ore = Tki\Ports::trade($tkireg->ore_price, $tkireg->ore_delta, $sectorinfo['port_ore'], $tkireg->ore_limit, $tkireg->inventory_factor, "ore", $trade_ore, $price_array, $sectorinfo);
         $trade_organics = Tki\Ports::trade($tkireg->organics_price, $tkireg->organics_delta, $sectorinfo['port_organics'], $tkireg->organics_limit, $tkireg->inventory_factor, "organics", $trade_organics, $price_array, $sectorinfo);
         $trade_goods = Tki\Ports::trade($tkireg->goods_price, $tkireg->goods_delta, $sectorinfo['port_goods'], $tkireg->goods_limit, $tkireg->inventory_factor, "goods", $trade_goods, $price_array, $sectorinfo);

@@ -21,7 +21,7 @@ namespace Tki;
 
 class PlanetCombat
 {
-    public static function prime(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo)
+    public static function prime(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): bool
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -549,5 +549,6 @@ class PlanetCombat
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        return true;
     }
 }

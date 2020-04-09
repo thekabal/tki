@@ -93,7 +93,7 @@ class KabalToSecDef
                 $totalmines = $total_sector_mines;
                 if ($totalmines > 1)
                 {
-                    $roll = random_int(1, $totalmines);
+                    $roll = random_int(1, (int) $totalmines);
                 }
                 else
                 {

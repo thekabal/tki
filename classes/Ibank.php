@@ -24,7 +24,9 @@ class Ibank
     public static function ibankBorrow(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, array $account, int $amount, Smarty $template): void
     {
         $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
-        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
+        $amount = preg_replace("/[^0-9]/", '', (string) $amount);
+        $amount = (int) $amount;
+
         if (($amount * 1) != $amount)
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $template);
@@ -179,7 +181,9 @@ class Ibank
 
     public static function ibankRepay(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, array $account, int $amount, Reg $tkireg, Smarty $template): void
     {
-        $amount = (int) preg_replace("/[^0-9]/", '', $amount);
+        $amount = preg_replace("/[^0-9]/", '', (string) $amount);
+        $amount = (int) $amount;
+
         if (($amount * 1) != $amount)
         {
             self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $template);

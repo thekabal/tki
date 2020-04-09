@@ -35,10 +35,10 @@ if (array_key_exists('preptype', $_GET))
     $preptype = $_GET['preptype'];
 }
 
-$sort = array();
+$sort = null;
 if (array_key_exists('sort', $_GET))
 {
-    $preptype = $_GET['sort'];
+    $sort = $_GET['sort'];
 }
 
 // Get playerinfo from database

@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Player
 {
-    public static function auth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template)
+    public static function auth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template): array
     {
         $request = Request::createFromGlobals();
         $flag = true;
@@ -90,7 +90,7 @@ class Player
 
             $footer = new \Tki\Footer();
             $footer->display($pdo_db, $lang, $tkireg, $template);
-            return false;
+            die();
         }
         else
         {

@@ -29,7 +29,7 @@ class PlanetsGateway // Gateway for SQL calls related to Planets
         $this->pdo_db = $pdo_db;
     }
 
-    public function selectPlanetInfo(int $sector_id)
+    public function selectPlanetInfo(int $sector_id): array
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE sector_id = :sector_id";
         $stmt = $this->pdo_db->prepare($sql);

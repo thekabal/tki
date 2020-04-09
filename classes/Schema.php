@@ -80,7 +80,7 @@ class Schema
         return $destroy_results;
     }
 
-    public function dropSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
+    public function dropSequences(\PDO $pdo_db, string $db_prefix, string $dbtype): ?array
     {
         $counter = 0;
         $destroy_results = array();
@@ -95,7 +95,7 @@ class Schema
 
                 if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
                 {
-                    $seqname = substr($seq_filename, 0, -4);
+                    $seqname = substr((string) $seq_filename, 0, -4);
                     $drop_res = $pdo_db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
                     // Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
@@ -124,7 +124,7 @@ class Schema
         }
     }
 
-    public function createSequences(\PDO $pdo_db, string $db_prefix, string $dbtype)
+    public function createSequences(\PDO $pdo_db, string $db_prefix, string $dbtype): ?array
     {
         if ($dbtype == 'postgres9')
         {
@@ -139,7 +139,7 @@ class Schema
 
                 if ($seq_filename->isFile() && $seq_filename->getExtension() == 'sql')
                 {
-                    $seqname = substr($seq_filename, 0, -4);
+                    $seqname = substr((string) $seq_filename, 0, -4);
                     $drop_res = $pdo_db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
                     // Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
@@ -168,7 +168,7 @@ class Schema
         }
     }
 
-    public function createTables(\PDO $pdo_db, string $db_prefix, string $dbtype)
+    public function createTables(\PDO $pdo_db, string $db_prefix, string $dbtype): array
     {
         $create_table_results = array();
         $counter = 0;
@@ -199,11 +199,11 @@ class Schema
                 $sql_query = file_get_contents('schema/' . $dbtype . '/' . $schema_filename);
 
                 // Replace the default prefix (tki_) with the chosen table prefix from the game
-                $sql_query = preg_replace('/tki_/', $db_prefix, $sql_query);
+                $sql_query = preg_replace('/tki_/', $db_prefix, (string) $sql_query);
 
                 // Remove comments from SQL
                 $RXSQLComments = '@(--[^\r\n]*)|(\#[^\r\n]*)|(/\*[\w\W]*?(?=\*/)\*/)@ms';
-                $sql_query = (($sql_query == '') ? '' : preg_replace($RXSQLComments, '', $sql_query));
+                $sql_query = (($sql_query == '') ? '' : preg_replace($RXSQLComments, '', (string) $sql_query));
 
                 // FUTURE: Test handling invalid SQL to ensure it hits the error logger below AND the visible output during running
                 $sth = $pdo_db->prepare($sql_query);

@@ -41,10 +41,14 @@ if (strlen(trim($bothway)) === 0)
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $target_sector = null;
-$target_sector = (int) filter_input(INPUT_POST, 'target_sector', FILTER_SANITIZE_NUMBER_INT);
-if (strlen(trim($target_sector)) === 0)
+$target_sector = (int) filter_input(INPUT_POST, 'target_sector', FILTER_VALIDATE_INT);
+if (strlen((string) $target_sector) === 0)
 {
     $target_sector = false;
+}
+else
+{
+    $target_sector = (string) $target_sector;
 }
 
 // Get playerinfo from database
@@ -95,7 +99,7 @@ if ($zoneinfo['allow_warpedit'] == 'N')
     die();
 }
 
-$target_sector = round($target_sector);
+$target_sector = (int) $target_sector;
 
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);

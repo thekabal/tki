@@ -42,7 +42,7 @@ class Ports
         }
     }
 
-    public static function dropdown($element_name, $current_value, $onchange, $temp_devices) : string
+    public static function dropdown(string $element_name, int $current_value, string $onchange, int $temp_devices) : string
     {
         $counter = $current_value;
         $dropdownvar = "<select size='1' name='$element_name'";
@@ -66,7 +66,7 @@ class Ports
         return $dropdownvar;
     }
 
-    public static function buildOneCol($text = "&nbsp;", $align = "left"): void
+    public static function buildOneCol(string $text = "&nbsp;", string $align = "left"): void
     {
         echo "
         <tr>
@@ -76,10 +76,10 @@ class Ports
     }
 
     public static function buildTwoCol(
-        $text_col1 = "&nbsp;",
-        $text_col2 = "&nbsp;",
-        $align_col1 = "left",
-        $align_col2 = "left"
+        string $text_col1 = "&nbsp;",
+        string $text_col2 = "&nbsp;",
+        string $align_col1 = "left",
+        string $align_col2 = "left"
     ): void
     {
         echo "
@@ -89,14 +89,14 @@ class Ports
         </tr>";
     }
 
-    public static function phpTrueDelta($futurevalue, $shipvalue)
+    public static function phpTrueDelta(int $futurevalue, int $shipvalue): int
     {
         $tempval = $futurevalue - $shipvalue;
 
         return $tempval;
     }
 
-    public static function phpChangeDelta($desired_value, $current_value, $upgrade_cost)
+    public static function phpChangeDelta(int $desired_value, int $current_value, int $upgrade_cost): int
     {
         $delta_cost = 0;
         $delta = $desired_value - $current_value;
@@ -115,20 +115,18 @@ class Ports
     // Here is the trade function to strip out some "spaghetti code".
     // The function saves about 60 lines of code, I hope it will be
     // easier to modify/add something in this part.
-    /*
-     * @return mixed
-     */
+
     public static function trade(
-        $price,
-        $delta,
-        $max,
-        $limit,
-        $factor,
-        $port_type,
-        $origin,
+        int $price,
+        int $delta,
+        int $max,
+        int $limit,
+        float $factor,
+        string $port_type,
+        int $origin,
         array $price_array,
         array $sectorinfo
-    )
+    ): int
     {
         if ($sectorinfo['port_type'] == $port_type)
         {

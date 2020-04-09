@@ -23,6 +23,7 @@ class Realspace
 {
     public function realSpaceMove(\PDO $pdo_db, array $langvars, int $destination, Reg $tkireg): string
     {
+        $energyscooped = 0;
         $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
@@ -76,12 +77,6 @@ class Realspace
         if ($free_power < $energyscooped)
         {
             $energyscooped = $free_power;
-        }
-
-        // Make sure energyscooped is not null
-        if (!isset($energyscooped))
-        {
-            $energyscooped = 0;
         }
 
         // Make sure energyscooped is not negative, or decimal
