@@ -224,7 +224,7 @@ $sql = "INSERT INTO ::prefix::ships " .
        "ip_address, lang) VALUES " .
        "(:ship_name, :ship_destroyed, :character_name, :password, " .
        ":recovery_time, " .
-       ":email, 1200, 10, 1000, :sector, 100, " .
+       ":email, 1200, 10, :credits, :sector, 100, " .
        "10, :last_login, " .
        ":ip_address, :lang)";
 $stmt = $pdo_db->prepare($sql);
@@ -235,6 +235,7 @@ $admin_recovery_time = null;
 $admin_sector = 1;
 $admin_last_login = date("Y-m-d H:i:s");
 $admin_hashed_pw = password_hash(\Tki\SecureConfig::ADMIN_PASS, PASSWORD_DEFAULT);
+$admin_credits = 200000000;
 
 $stmt->bindParam(':ship_name', $tkireg->admin_ship_name, \PDO::PARAM_STR);
 $stmt->bindParam(':ship_destroyed', $admin_ship_destr, \PDO::PARAM_STR);
@@ -242,6 +243,7 @@ $stmt->bindParam(':character_name', $tkireg->admin_name, \PDO::PARAM_STR);
 $stmt->bindParam(':password', $admin_hashed_pw, \PDO::PARAM_STR);
 $stmt->bindParam(':recovery_time', $admin_recovery_time, \PDO::PARAM_NULL);
 $stmt->bindParam(':email', $tkireg->admin_mail, \PDO::PARAM_STR);
+$stmt->bindParam(':credits', $admin_credits, \PDO::PARAM_INT);
 $stmt->bindParam(':sector', $admin_sector, \PDO::PARAM_INT);
 $stmt->bindParam(':last_login', $admin_last_login, \PDO::PARAM_STR);
 $stmt->bindParam(':ip_address', $admin_ip, \PDO::PARAM_INT);
