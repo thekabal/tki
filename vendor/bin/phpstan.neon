@@ -17,10 +17,10 @@ parameters:
         - %rootDir%/../../../../tki/templates/*
         - %rootDir%/../../../../tki/classes/Db.php
     ignoreErrors:
-        - '#Access to an undefined property Tki#'
+#        - '#Access to an undefined property Tki#'
         - '#Undefined variable#'
         - '#Variable variables#'
-        - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
+#        - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
 
 rules:
     - PHPStan\Rules\BooleansInConditions\BooleanInBooleanAndRule
