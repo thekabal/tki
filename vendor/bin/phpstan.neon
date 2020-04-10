@@ -17,9 +17,9 @@ parameters:
         - %rootDir%/../../../../tki/templates/*
         - %rootDir%/../../../../tki/classes/Db.php
     ignoreErrors:
-#        - '#Access to an undefined property Tki#'
-        - '#Undefined variable#'
-        - '#Variable variables#'
+        - '#Access to an undefined property Tki#'
+        - '#Variable property access#' #// In (class) Reg, File, and in create_universe/10, this flags an error during the config variable/value import code.
+        - '#Undefined variable#' #// 4200! Lots of work to do, real errors too.
 #        - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
 
 rules:
@@ -51,7 +51,7 @@ rules:
     - PHPStan\Rules\VariableVariables\VariableMethodCallRule
     - PHPStan\Rules\VariableVariables\VariableStaticMethodCallRule
     - PHPStan\Rules\VariableVariables\VariableStaticPropertyFetchRule
-    - PHPStan\Rules\VariableVariables\VariableVariablesRule
+#    - PHPStan\Rules\VariableVariables\VariableVariablesRule
     - PHPStan\Rules\Deprecations\AccessDeprecatedPropertyRule
     - PHPStan\Rules\Deprecations\AccessDeprecatedStaticPropertyRule
     - PHPStan\Rules\Deprecations\CallToDeprecatedFunctionRule
