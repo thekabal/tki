@@ -210,8 +210,11 @@ else
     }
     else
     {
-        $nummines = preg_replace('/[^0-9]/', '', $nummines);
-        $numfighters = preg_replace('/[^0-9]/', '', $numfighters);
+        $nummines = (string) preg_replace('/[^0-9]/', '', (string) $nummines);
+        $numfighters = (string) preg_replace('/[^0-9]/', '', (string) $numfighters);
+        $nummines = (int) $nummines;
+        $numfighters = (int) $numfighters;
+
         if (empty($nummines))
         {
             $nummines = 0;

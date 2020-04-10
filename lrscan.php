@@ -335,7 +335,7 @@ else
                 $result4->MoveNext();
             }
 
-            if (!$num_detected)
+            if ($num_detected == 0)
             {
                 echo $langvars['l_none'];
             }

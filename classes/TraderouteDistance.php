@@ -74,7 +74,7 @@ class TraderouteDistance
         $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);
         $triptime = round($distance / $shipspeed);
 
-        if (!$triptime && $dest['sector_id'] != $playerinfo['sector'])
+        if (($triptime > 0) && ($dest['sector_id'] != $playerinfo['sector']))
         {
             $triptime = 1;
         }
@@ -88,7 +88,7 @@ class TraderouteDistance
             $energyscooped = 0;
         }
 
-        if ($playerinfo['dev_fuelscoop'] == "Y" && !$energyscooped && $triptime == 1)
+        if (($playerinfo['dev_fuelscoop'] == "Y") && ($energyscooped > 0) && ($triptime == 1))
         {
             $energyscooped = 100;
         }

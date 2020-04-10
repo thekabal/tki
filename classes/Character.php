@@ -106,15 +106,6 @@ class Character
         for ($i = 0; $i < 20; $i++)
         {
             $value = pow(2, $i * 2);
-            if (!$value)
-            {
-                // Pow returned false so we need to return an error.
-                $player_insignia = "<span style='color:#f00;'>ERR</span> " .
-                "[<span style='color:#09f; font-size:12px; cursor:help;' " .
-                "title='Error looking up insignia, please report this error.'>?</span>]";
-                break;
-            }
-
             $value *= (500 * 2);
             if ($playerinfo['score'] <= $value)
             {

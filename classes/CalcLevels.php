@@ -22,10 +22,10 @@ namespace Tki;
 class CalcLevels
 {
     // This method can be used for armor, holds, shields, torps, beams, and fighters
-    public static function abstractLevels(int $level, Reg $tkireg): float
+    public static function abstractLevels(int $level, Reg $tkireg): int
     {
         $result = round(pow($tkireg->level_factor, $level) * 100);
-        return $result;
+        return (int) $result;
     }
 
     public static function energy(int $level_power, Reg $tkireg): float

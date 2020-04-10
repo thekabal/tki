@@ -906,7 +906,7 @@ echo "<table style='width:150px; border:0px; padding:0px; border-spacing:0px; ma
 echo "<tr><td style='white-space:nowrap; border:#fff 1px solid; background-color:#500050; text-align:center; padding:0px;'>";
 echo "<div class=mnu>";
 
-if (!$num_links)
+if ($num_links < 1)
 {
     echo "&nbsp;<a class=dis>" . $langvars['l_no_warplink'] . "</a>&nbsp;<br>";
 }

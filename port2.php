@@ -149,15 +149,15 @@ else
         $torp_launchers_upgrade     = (int) filter_input(INPUT_POST, 'torp_launchers_upgrade', FILTER_SANITIZE_NUMBER_INT);
         $shields_upgrade            = (int) filter_input(INPUT_POST, 'shields_upgrade', FILTER_SANITIZE_NUMBER_INT);
 
-        $fighter_number             = filter_input(INPUT_POST, 'fighter_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
-        $torpedo_number             = filter_input(INPUT_POST, 'torpedo_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
-        $armor_number               = filter_input(INPUT_POST, 'armor_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
-        $colonist_number            = filter_input(INPUT_POST, 'colonist_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
-        $dev_genesis_number         = filter_input(INPUT_POST, 'dev_genesis_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
-        $dev_beacon_number          = filter_input(INPUT_POST, 'dev_beacon_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
-        $dev_emerwarp_number        = filter_input(INPUT_POST, 'dev_emerwarp_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
-        $dev_warpedit_number        = filter_input(INPUT_POST, 'dev_warpedit_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
-        $dev_minedeflector_number   = filter_input(INPUT_POST, 'dev_minedeflector_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
+        $fighter_number             = (int) filter_input(INPUT_POST, 'fighter_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
+        $torpedo_number             = (int) filter_input(INPUT_POST, 'torpedo_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
+        $armor_number               = (int) filter_input(INPUT_POST, 'armor_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
+        $colonist_number            = (int) filter_input(INPUT_POST, 'colonist_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
+        $dev_genesis_number         = (int) filter_input(INPUT_POST, 'dev_genesis_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
+        $dev_beacon_number          = (int) filter_input(INPUT_POST, 'dev_beacon_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
+        $dev_emerwarp_number        = (int) filter_input(INPUT_POST, 'dev_emerwarp_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
+        $dev_warpedit_number        = (int) filter_input(INPUT_POST, 'dev_warpedit_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
+        $dev_minedeflector_number   = (int) filter_input(INPUT_POST, 'dev_minedeflector_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
 
         $escapepod_purchase         = filter_input(INPUT_POST, 'escapepod_purchase', FILTER_VALIDATE_BOOLEAN);
         if ($escapepod_purchase !== true)
@@ -445,55 +445,55 @@ else
                 Tki\Ports::buildOneCol($langvars['l_shields'] . " " . $langvars['l_trade_upgraded'] . " " . $shields_upgrade);
             }
 
-            if ($fighter_number)
+            if ($fighter_number > 0)
             {
                 $query = $query . ", ship_fighters = ship_fighters + $fighter_number";
                 Tki\Ports::buildTwoCol($langvars['l_fighters'] . " " .  $langvars['l_trade_added'] . ":", $fighter_number, "left", "right");
             }
 
-            if ($torpedo_number)
+            if ($torpedo_number > 0)
             {
                 $query = $query . ", torps=torps + $torpedo_number";
                 Tki\Ports::buildTwoCol($langvars['l_torps'] . " " . $langvars['l_trade_added'] . ":", $torpedo_number, "left", "right");
             }
 
-            if ($armor_number)
+            if ($armor_number > 0)
             {
                 $query = $query . ", armor_pts=armor_pts + $armor_number";
                 Tki\Ports::buildTwoCol($langvars['l_armorpts'] . " " . $langvars['l_trade_added'] . ":", $armor_number, "left", "right");
             }
 
-            if ($colonist_number)
+            if ($colonist_number > 0)
             {
                 $query = $query . ", ship_colonists = ship_colonists + $colonist_number";
                 Tki\Ports::buildTwoCol($langvars['l_colonists'] . " " .  $langvars['l_trade_added'] . ":", $colonist_number, "left", "right");
             }
 
-            if ($dev_genesis_number)
+            if ($dev_genesis_number > 0)
             {
                 $query = $query . ", dev_genesis = dev_genesis + $dev_genesis_number";
                 Tki\Ports::buildTwoCol($langvars['l_genesis'] . " " . $langvars['l_trade_added'] . ":", $dev_genesis_number, "left", "right");
             }
 
-            if ($dev_beacon_number)
+            if ($dev_beacon_number > 0)
             {
                 $query = $query . ", dev_beacon = dev_beacon + $dev_beacon_number";
                 Tki\Ports::buildTwoCol($langvars['l_beacons'] . " " . $langvars['l_trade_added'] . ":", $dev_beacon_number, "left", "right");
             }
 
-            if ($dev_emerwarp_number)
+            if ($dev_emerwarp_number > 0)
             {
                 $query = $query . ", dev_emerwarp = dev_emerwarp + $dev_emerwarp_number";
                 Tki\Ports::buildTwoCol($langvars['l_ewd'] . " " .  $langvars['l_trade_added'] . ":", $dev_emerwarp_number, "left", "right");
             }
 
-            if ($dev_warpedit_number)
+            if ($dev_warpedit_number > 0)
             {
                 $query = $query . ", dev_warpedit = dev_warpedit + $dev_warpedit_number";
                 Tki\Ports::buildTwoCol($langvars['l_warpedit'] . " " . $langvars['l_trade_added'] . ":", $dev_warpedit_number, "left", "right");
             }
 
-            if ($dev_minedeflector_number)
+            if ($dev_minedeflector_number > 0)
             {
                 $query = $query . ", dev_minedeflector = dev_minedeflector + $dev_minedeflector_number";
                 Tki\Ports::buildTwoCol($langvars['l_deflect'] . " " . $langvars['l_trade_added'] . ":", $dev_minedeflector_number, "left", "right");

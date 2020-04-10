@@ -23,12 +23,13 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('sector_fighters', 'common
 echo $langvars['l_sf_attacking'] . "<br>";
 $targetfighters = $total_sector_fighters;
 $playerbeams = Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
+
 if ($calledfrom == 'rsmove.php')
 {
     $playerinfo['ship_energy'] += $energyscooped;
 }
 
-if ($playerbeams > $playerinfo['ship_energy'])
+if ($playerbeams > (int) $playerinfo['ship_energy'])
 {
     $playerbeams = $playerinfo['ship_energy'];
 }
@@ -51,7 +52,7 @@ if ($playertorpnum > $playerinfo['torps'])
 $playertorpdmg = $tkireg->torp_dmg_rate * $playertorpnum;
 $playerarmor = $playerinfo['armor_pts'];
 $playerfighters = $playerinfo['ship_fighters'];
-if ($targetfighters > 0 && $playerbeams > 0)
+if (($targetfighters > 0) && ($playerbeams > 0))
 {
     if ($playerbeams > round($targetfighters / 2))
     {

@@ -52,7 +52,8 @@ if (array_key_exists('teamwhat', $_REQUEST) === true)
 $confirmleave = null;
 if (array_key_exists('confirmleave', $_REQUEST) === true)
 {
-    $confirmleave = preg_replace('/[^0-9]/', '', $_REQUEST['confirmleave']);
+    $confirmleave = (string) preg_replace('/[^0-9]/', '', $_REQUEST['confirmleave']);
+    $confirmleave = (int) $confirmleave;
 }
 
 $invited = null;

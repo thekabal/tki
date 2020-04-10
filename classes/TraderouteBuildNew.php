@@ -164,7 +164,7 @@ class TraderouteBuildNew
         else
         {
             $counter = 0;
-            while ($counter < $num_planets)
+            while ($counter <= $num_planets)
             {
                 echo "<option ";
 
@@ -273,7 +273,7 @@ class TraderouteBuildNew
         else
         {
             $counter = 0;
-            while ($counter < $num_planets)
+            while ($counter <= $num_planets)
             {
                 echo "<option ";
 
