@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS tki_ships (
   trade_energy varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Y',
   cleared_defenses varchar(99) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   lang varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'english.inc',
-  dev_lssd varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Y',
+  dev_lssd varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   PRIMARY KEY (ship_id),
   KEY tki_email (email),
   KEY tki_sector (sector),
