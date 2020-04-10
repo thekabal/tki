@@ -35,7 +35,7 @@ class IbankTransferSpecific
             $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if (!$target)
+            if (!is_object($target))
             {
                 \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_unknowntargetship'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }

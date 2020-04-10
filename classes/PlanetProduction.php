@@ -106,7 +106,6 @@ class PlanetProduction
         $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner = ? ORDER BY sector_id;", array($ship_id));
         \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $counter = 0;
-        $planet = array();
         $planets = array();
         if ($res)
         {

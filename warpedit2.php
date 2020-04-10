@@ -31,12 +31,11 @@ $header->display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('warpedit', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 
+$oneway = false;
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-$oneway = null;
-$oneway = filter_input(INPUT_POST, 'oneway', FILTER_SANITIZE_STRING);
-if (strlen(trim($oneway)) === 0)
+if (isset($_POST['oneway']) && $_POST['oneway'] == 'oneway')
 {
-    $oneway = false;
+    $oneway = true;
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.

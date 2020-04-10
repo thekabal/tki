@@ -331,9 +331,9 @@ elseif ($command == 'unbanip')
 
     echo "<font size=2 color=white><strong>Successfully removed " . $nbbans . "bans</strong> :<p>";
 
-    foreach ($bans as $ban)
+    foreach ($bans as $each_ban)
     {
-        echo " - " . $ban['print_mask'] . "<br>";
+        echo " - " . $each_ban['print_mask'] . "<br>";
     }
 
     echo "<p><strong>" . $langvars['l_admin_affected_players'] . " :</strong><p>";

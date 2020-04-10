@@ -160,8 +160,23 @@ else
         $dev_minedeflector_number   = filter_input(INPUT_POST, 'dev_minedeflector_number', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
 
         $escapepod_purchase         = filter_input(INPUT_POST, 'escapepod_purchase', FILTER_VALIDATE_BOOLEAN);
+        if ($escapepod_purchase !== true)
+        {
+            $escapepod_purchase = false;
+        }
+
         $fuelscoop_purchase         = filter_input(INPUT_POST, 'fuelscoop_purchase', FILTER_VALIDATE_BOOLEAN);
+        if ($fuelscoop_purchase !== true)
+        {
+            $fuelscoop_purchase = false;
+        }
+
         $lssd_purchase              = filter_input(INPUT_POST, 'lssd_purchase', FILTER_VALIDATE_BOOLEAN);
+        if ($lssd_purchase !== true)
+        {
+            $lssd_purchase = false;
+        }
+
         $upgrade_cost = null;
 
         $hull_upgrade_cost = 0;
@@ -319,17 +334,17 @@ else
 
         if (($escapepod_purchase) && ($playerinfo['dev_escapepod'] != 'Y'))
         {
-            $dev_escapepod_cost = $dev_escapepod_price;
+            $dev_escapepod_cost = $tkireg->dev_escapepod_price;
         }
 
         if (($fuelscoop_purchase) && ($playerinfo['dev_fuelscoop'] != 'Y'))
         {
-            $dev_fuelscoop_cost = $dev_fuelscoop_price;
+            $dev_fuelscoop_cost = $tkireg->dev_fuelscoop_price;
         }
 
         if (($lssd_purchase) && ($playerinfo['dev_lssd'] != 'Y'))
         {
-            $dev_lssd_cost = $dev_lssd_price;
+            $dev_lssd_cost = $tkireg->dev_lssd_price;
         }
 
         $total_cost = $hull_upgrade_cost + $engine_upgrade_cost + $power_upgrade_cost + $computer_upgrade_cost + $sensors_upgrade_cost + $beams_upgrade_cost + $armor_upgrade_cost + $cloak_upgrade_cost + $torp_launchers_upgrade_cost + $fighter_cost + $torpedo_cost + $armor_cost + $colonist_cost + $dev_genesis_cost + $dev_beacon_cost + $dev_emerwarp_cost + $dev_warpedit_cost + $dev_minedeflector_cost + $dev_escapepod_cost + $dev_fuelscoop_cost + $dev_lssd_cost + $shields_upgrade_cost;

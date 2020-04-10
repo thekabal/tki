@@ -31,12 +31,11 @@ $header->display($pdo_db, $lang, $template, $title);
 $langvars = Tki\Translate::load($pdo_db, $lang, array('warpedit', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 echo "<h1>" . $title . "</h1>\n";
 
+$bothway = false;
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-$bothway = null;
-$bothway = filter_input(INPUT_POST, 'bothway', FILTER_SANITIZE_STRING);
-if (strlen(trim($bothway)) === 0)
+if (isset($_POST['bothway']) && $_POST['bothway'] == 'bothway')
 {
-    $bothway = false;
+    $bothway = true;
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
