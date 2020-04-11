@@ -23,10 +23,11 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('sector_fighters', 'common
 echo $langvars['l_sf_attacking'] . "<br>";
 $targetfighters = $total_sector_fighters;
 $playerbeams = Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
+$playerenergy = $playerinfo['ship_energy'];
 
 if ($calledfrom == 'rsmove.php')
 {
-    $playerinfo['ship_energy'] += $energyscooped;
+    $playerenergy += $energyscooped;
 }
 
 if ($playerbeams > (int) $playerinfo['ship_energy'])
@@ -34,12 +35,12 @@ if ($playerbeams > (int) $playerinfo['ship_energy'])
     $playerbeams = $playerinfo['ship_energy'];
 }
 
-$playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
+$playerenergy = $playerenergy - $playerbeams;
 $playershields = Tki\CalcLevels::abstractLevels($playerinfo['shields'], $tkireg);
 
-if ($playershields > $playerinfo['ship_energy'])
+if ($playershields > $playerenergy)
 {
-    $playershields = $playerinfo['ship_energy'];
+    $playershields = $playerenergy;
 }
 
 $playertorpnum = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
@@ -150,12 +151,11 @@ Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog
 Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::DEFS_DESTROYED_F, "$fighterslost|$sector");
 $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
-$energy = $playerinfo['ship_energy'];
 
 $sql = "UPDATE ::prefix::ships SET ship_energy=:ship_energy, ship_fighters=ship_fighters-:fighters_lost," .
        "armor_pts=armor_pts-:armor_lost, torps=torps-:playertorps WHERE ship_id=:ship_id";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ship_energy', $energy, \PDO::PARAM_INT);
+$stmt->bindParam(':ship_energy', $playerenergy, \PDO::PARAM_INT);
 $stmt->bindParam(':fighters_lost', $fighters_lost, \PDO::PARAM_INT);
 $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
 $stmt->bindParam(':playertorps', $playertorpnum, \PDO::PARAM_INT);

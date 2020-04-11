@@ -175,10 +175,10 @@ $month = substr($startdate, 5, 2);
 $day = substr($startdate, 8, 2);
 $year = substr($startdate, 0, 4);
 
-$yesterday = mktime(0, 0, 0, $month, (date("j") - 1), $year);
+$yesterday = mktime(0, 0, 0, $month, ((int) date("j") - 1), $year);
 $yesterday = date("Y-m-d", $yd1);
 
-$tomorrow = mktime(0, 0, 0, $month, (date("j") + 1), $year);
+$tomorrow = mktime(0, 0, 0, $month, ((int) date("j") + 1), $year);
 $tomorrow = date("Y-m-d", $tm);
 
 if ($mode == 'compat')
@@ -293,13 +293,17 @@ $log_months_short_temp = "l_log_months_short_" . date("n", $tm);// (int) (substr
 $date3 = $langvars[$log_months_short_temp] . " " . date("d", $tm);//substr($tomorrow, 8, 2);
 
 $month = substr($startdate, 5, 2);
-$day = substr($startdate, 8, 2) - 3;
+$day = substr($startdate, 8, 2);
+$day = (int) $day;
+$day = $day - 3;
 $year = substr($startdate, 0, 4);
 
 $backlink = mktime(0, 0, 0, $month, $day, $year);
 $backlink = date("Y-m-d", $backlink);
 
-$day = substr($startdate, 8, 2) + 3;
+$day = substr($startdate, 8, 2);
+$day = (int) $day;
+$day = $day +3;
 
 $nextlink = mktime(0, 0, 0, $month, $day, $year);
 $nextlink = date("Y-m-d", $nextlink);

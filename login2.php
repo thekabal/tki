@@ -44,7 +44,6 @@ if (strlen(trim($filtered_post_password)) === 0)
     $filtered_post_password = false;
 }
 
-$playerinfo = null;
 if ($email !== null && $email !== false)
 {
     $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
@@ -124,7 +123,7 @@ if ($playerfound)
         $ban_result = Tki\CheckBan::isBanned($pdo_db, $playerinfo);
         if ($ban_result === null)
         {
-            if ($playerinfo['ship_destroyed'] == "N")
+            if ($playerinfo['ship_destroyed'] == 'N')
             {
                 // Player's ship has not been destroyed
                 Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::LOGIN, $request->server->get('REMOTE_ADDR'));

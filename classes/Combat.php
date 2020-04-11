@@ -28,7 +28,6 @@ class Combat
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $targetinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        // Future: Handle a bad return for targetinfo
 
         echo "<br><br>-=-=-=-=-=-=-=--<br>
         " . $langvars['l_cmb_startingstats'] . ":<br>
@@ -46,14 +45,14 @@ class Combat
             $targetbeams = $targetinfo['ship_energy'];
         }
 
-        $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
+        $target_energy = $targetinfo['ship_energy'] - $targetbeams;
         $targetshields = \Tki\CalcLevels::abstractLevels($targetinfo['shields'], $tkireg);
         if ($targetshields > $targetinfo['ship_energy'])
         {
             $targetshields = $targetinfo['ship_energy'];
         }
 
-        $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
+        $target_energy = $targetinfo['ship_energy'] - $targetshields;
         $targettorpnum = round(pow($tkireg->level_factor, $targetinfo['torp_launchers'])) * 2;
         if ($targettorpnum > $targetinfo['torps'])
         {

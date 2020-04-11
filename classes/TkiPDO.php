@@ -38,11 +38,11 @@ class TkiPDO extends \PDO
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
-    public function exec($statement)
+    public function exec($statement): int
     {
         $statement = $this->tablePrefix($statement);
-        $replaced_statement = parent::exec($statement);
-        return $replaced_statement;
+        $rows_affected = parent::exec($statement);
+        return $rows_affected;
     }
 
     public function prepare($statement, $driver_options = array()): \PDOStatement
@@ -52,7 +52,7 @@ class TkiPDO extends \PDO
         return $replaced_statement;
     }
 
-    public function query(string $statement)
+    public function query(string $statement): \PDOStatement
     {
         $statement = $this->tablePrefix($statement);
         $args = func_get_args();

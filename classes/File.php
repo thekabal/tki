@@ -173,6 +173,7 @@ class File
                 // Check for Numeric types (int/long, double/float)
                 if (is_numeric($value))
                 {
+                    $value = (int) $value;
                     $value += 0;
                 }
                 elseif (strtolower($value) === 'true' || strtolower($value) === 'false')

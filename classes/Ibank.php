@@ -258,7 +258,7 @@ class Ibank
              "</table>" .
              "</td></tr>" .
              "</table>" .
-             "<img width=600 height=21 src=" . $template . "/images/div2.png>" .
+             "<img width=600 height=21 src=" . $template->getVariables('template_dir') . "/images/div2.png>" .
              "</center>";
 
         $footer = new \Tki\Footer();
