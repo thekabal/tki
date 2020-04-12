@@ -7,7 +7,7 @@
             "email": "TheKabal@gmail.com"
         }
     ],
-    "license": "AGPL-3.0",
+    "license": "AGPL-3.0-only",
     "minimum-stability": "alpha",
     "require": {
         "smarty/smarty": "~3.1",
