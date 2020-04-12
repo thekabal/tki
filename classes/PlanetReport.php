@@ -70,7 +70,7 @@ class PlanetReport
 
         $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
 
-        if ($sort == null)
+        if ($sort === null)
         {
             $sql .= " ORDER BY sector_id ASC";
         }
