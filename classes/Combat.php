@@ -47,9 +47,9 @@ class Combat
 
         $target_energy = $targetinfo['ship_energy'] - $targetbeams;
         $targetshields = \Tki\CalcLevels::abstractLevels($targetinfo['shields'], $tkireg);
-        if ($targetshields > $targetinfo['ship_energy'])
+        if ($targetshields > $target_energy)
         {
-            $targetshields = $targetinfo['ship_energy'];
+            $targetshields = $target_energy;
         }
 
         $target_energy = $target_energy - $targetshields;
@@ -511,7 +511,6 @@ class Combat
             echo $langvars['l_cmb_youdidntdestroyhim'] . "<br>";
             $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
-            $target_energy = $targetinfo['ship_energy'];
             \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACKED_WIN, "$playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
 
             $sql = "UPDATE ::prefix::ships SET ship_energy = :target_energy, " .
