@@ -17,10 +17,6 @@
 //
 // File: classes/Reg.php
 
-namespace Tki;
-
-class Reg
-{
     /**
      * @property mixed account_creation_closed
      * @property mixed admin_mail
@@ -172,10 +168,15 @@ class Reg
      * @property mixed kabal_aggression
      * @property mixed kabal_planets
      * @property mixed kabal_unemployment
-     *
      */
 
-    /** @var Array **/
+namespace Tki;
+
+class Reg
+{
+    /**
+     * @var array
+    */
     protected $vars = array();
 
     public function __construct(\PDO $pdo_db)
