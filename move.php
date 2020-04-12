@@ -75,37 +75,26 @@ while (!$result3->EOF)
 // Check if there was a valid warp link to move to
 if ($flag == 1)
 {
-    $ok = 1;
     $calledfrom = "move.php";
     include_once './check_fighters.php';
-    if ($ok > 0)
+    $cur_time_stamp = date("Y-m-d H:i:s");
+    Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $sector);
+    $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?," .
+                                "turns = turns - 1, turns_used = turns_used + 1," .
+                                "sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $sector, $playerinfo['ship_id']));
+    Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
+    if (!$move_result)
     {
-        $cur_time_stamp = date("Y-m-d H:i:s");
-        Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $sector);
-        $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?," .
-                                    "turns = turns - 1, turns_used = turns_used + 1," .
-                                    "sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $sector, $playerinfo['ship_id']));
-        Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
-        if (!$move_result)
-        {
-            // is this really STILL needed?
-            $error = $db->ErrorMsg();
-            mail($tkireg->admin_mail, "Move Error", "Start Sector: $sectorinfo[sector_id]\n" .
-                "End Sector: $sector\nPlayer: $playerinfo[character_name] - " .
-                $playerinfo['ship_id'] . "\n\nQuery:  $query\n\nSQL error: $error");
-        }
+        // Is this really STILL needed?
+        $error = $db->ErrorMsg();
+        mail($tkireg->admin_mail, "Move Error", "Start Sector: $sectorinfo[sector_id]\n" .
+            "End Sector: $sector\nPlayer: $playerinfo[character_name] - " .
+            $playerinfo['ship_id'] . "\n\nQuery:  $query\n\nSQL error: $error");
     }
 
     // Enter code for checking dangers in new sector
     include_once './check_mines.php';
-    if ($ok == 1)
-    {
-        header("Location: main.php");
-    }
-    else
-    {
-        Tki\Text::gotoMain($pdo_db, $lang);
-    }
+    header("Location: main.php");
 }
 else
 {
