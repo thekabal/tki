@@ -47,7 +47,7 @@ if (array_key_exists('response', $_GET))
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $bounty_on = null;
 $bounty_on = (int) filter_input(INPUT_POST, 'bounty_on', FILTER_SANITIZE_NUMBER_INT);
-if (strlen(trim($bounty_on)) === 0)
+if (strlen(trim((string) $bounty_on)) === 0)
 {
     $bounty_on = false;
 }
@@ -60,7 +60,7 @@ if (array_key_exists('bounty_on', $_GET))
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $bid = null;
 $bid = (int) filter_input(INPUT_POST, 'bid', FILTER_SANITIZE_NUMBER_INT);
-if (strlen(trim($bid)) === 0)
+if (strlen(trim((string) $bid)) === 0)
 {
     $bid = false;
 }
@@ -68,7 +68,7 @@ if (strlen(trim($bid)) === 0)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
 $amount = null;
 $amount = (int) filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_INT);
-if (strlen(trim($amount)) === 0)
+if (strlen(trim((string) $amount)) === 0)
 {
     $amount = false;
 }
@@ -283,7 +283,7 @@ switch ($response) {
                 $previous_bounty = $prev['totalbounty'];
             }
 
-            if ($amount + $previous_bounty > $maxtrans)
+            if ( $amount + $previous_bounty > $maxtrans)
             {
                 $langvars['l_by_toomuch'] = str_replace("[percent]", (string) $percent, $langvars['l_by_toomuch']);
                 echo $langvars['l_by_toomuch'] . "<br><br>";
