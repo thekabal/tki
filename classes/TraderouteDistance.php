@@ -21,7 +21,7 @@ namespace Tki;
 
 class TraderouteDistance
 {
-    public static function calc(\PDO $pdo_db, string $type1, string $type2, $start, $dest, $circuit, array $playerinfo, Reg $tkireg, $sells = 'N'): array
+    public static function calc(\PDO $pdo_db, string $type1, string $type2, int $start, int $dest, int $circuit, array $playerinfo, Reg $tkireg, string $sells = 'N'): array
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;
@@ -160,7 +160,7 @@ class TraderouteDistance
         $stmt->bindParam(':link_dest', $dest['sector_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $link_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($link_present !== null)
+        if (is_array($link_present))
         {
             $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink1']);
             $langvars['l_tdr_nowlink1'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink1']);
@@ -175,7 +175,7 @@ class TraderouteDistance
             $stmt->bindParam(':link_dest', $source['sector_id'], \PDO::PARAM_INT);
             $stmt->execute();
             $link_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if ($link_present !== null)
+            if (is_array($link_present))
             {
                 $langvars['l_tdr_nowlink2'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink2']);
                 $langvars['l_tdr_nowlink2'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink2']);

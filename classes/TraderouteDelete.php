@@ -29,7 +29,7 @@ class TraderouteDelete
         Reg $tkireg,
         Smarty $template,
         array $playerinfo,
-        $confirm,
+        string $confirm,
         ?int $traderoute_id = null
     ): void
     {
@@ -48,7 +48,7 @@ class TraderouteDelete
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
         }
 
-        if (!empty($confirm))
+        if ($confirm === "yes")
         {
             $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes " .
                                   "WHERE traderoute_id = ?;", array($traderoute_id));
