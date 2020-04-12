@@ -576,7 +576,7 @@ class KabalToShip
                 $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
                 $stmt->bindParam(':rating_change', $rating_change, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
-                $result = $stmt->execute();
+                $stmt->execute();
                 Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
         }
