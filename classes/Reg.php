@@ -19,8 +19,6 @@
 
 namespace Tki;
 
-class Reg
-{
     /**
      * @property mixed account_creation_closed
      * @property mixed admin_mail
@@ -174,7 +172,8 @@ class Reg
      * @property mixed kabal_unemployment
      *
      */
-
+class Reg
+{
     /** @var Array **/
     protected $vars = array();
 
