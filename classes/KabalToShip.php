@@ -37,7 +37,7 @@ class KabalToShip
 
         // Verify not attacking another Kabal
         // Added because the kabal were killing each other off
-        if (strstr($targetinfo['email'], '@kabal'))                       // He's a kabal
+        if ((bool) strstr($targetinfo['email'], '@kabal'))                       // He's a kabal
         {
             return;
         }
@@ -73,7 +73,7 @@ class KabalToShip
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector', $dest_sector, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
-            $result = $stmt->execute();
+            $stmt->execute();
             Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             return;
         }
@@ -359,7 +359,7 @@ class KabalToShip
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':rating', $rating, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
-                $result = $stmt->execute();
+                $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "Kabal $playerinfo[character_name]|Y");
             }
@@ -425,7 +425,7 @@ class KabalToShip
                 $stmt->bindParam(':salv_goods', $salv_goods, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_salvage', $ship_salvage, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-                $result = $stmt->execute();
+                $stmt->execute();
                 Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
@@ -442,7 +442,7 @@ class KabalToShip
                 $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
                 $stmt->bindParam(':rating_change', $rating_change, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-                $result = $stmt->execute();
+                $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
         }
@@ -474,7 +474,7 @@ class KabalToShip
             $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
             $stmt->bindParam(':rating_change', $rating_change, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-            $result = $stmt->execute();
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $sql = "UPDATE ::prefix::ships SET ship_energy = :target_energy, " .
@@ -490,7 +490,7 @@ class KabalToShip
             $stmt->bindParam(':targettorpnum', $targettorpnum, \PDO::PARAM_INT);
             $stmt->bindParam(':target_rating_change', $target_rating_change, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
-            $result = $stmt->execute();
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
@@ -556,7 +556,7 @@ class KabalToShip
                 $stmt->bindParam(':salv_goods', $salv_goods, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_salvage', $ship_salvage, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
-                $result = $stmt->execute();
+                $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 $armor_lost = $targetinfo['armor_pts'] - $targetarmor;

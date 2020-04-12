@@ -145,12 +145,10 @@ class Db
 
         // Convert the content of SCRIPT_NAME (in case it has been tainted) to the correct html entities
         $safe_script_name = htmlentities($request->server->get('SCRIPT_NAME'), ENT_HTML5, 'UTF-8');
-        $db_log = false;
         $error = null;
         $db_error = null;
         $error = $pdo_db->errorInfo()[1];
         $db_error = $pdo_db->errorInfo()[2];
-        $db_log = true; // We need to create a method for disabling db logging on PDO
 
         if ($error === null || $error == '')
         {
@@ -170,11 +168,8 @@ class Db
 
             if (self::isActive($pdo_db))
             {
-                if ($db_log)
-                {
-                    $admin_log = new \Tki\AdminLog();
-                    $admin_log->writeLog($pdo_db, LogEnums::RAW, $text_error);
-                }
+                $admin_log = new \Tki\AdminLog();
+                $admin_log->writeLog($pdo_db, LogEnums::RAW, $text_error);
             }
 
             return (string) $db_error;

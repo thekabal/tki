@@ -59,7 +59,7 @@ class Sessions
         $this->expiry = gmdate('Y-m-d H:i:s', strtotime($row['currenttime']) + $this->maxlifetime);
 
         // This line prevents unexpected effects when using objects as save handlers.
-        register_shutdown_function('session_write_close');
+        session_register_shutdown();
     }
 
     public function __destruct()
@@ -146,8 +146,7 @@ class Sessions
         }
     }
 
-    /** @return mixed */
-    public function destroy(string $sesskey)
+    public function destroy(string $sesskey): bool
     {
         if ($this->pdo_db !== null)
         {
@@ -157,10 +156,13 @@ class Sessions
             $result = $stmt->execute();
             return $result;
         }
+        else
+        {
+            return false;
+        }
     }
 
-    /** @return mixed */
-    public function gc()
+    public function gc(): bool
     {
         if ($this->pdo_db !== null)
         {
@@ -169,6 +171,10 @@ class Sessions
             $stmt->bindParam(':expiry', $this->expiry, \PDO::PARAM_STR);
             $result = $stmt->execute();
             return $result;
+        }
+        else
+        {
+            return false;
         }
     }
 
