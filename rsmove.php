@@ -176,29 +176,25 @@ else
             }
             else
             {
-                $ok = 1;
                 $sector = $destination;
                 $calledfrom = "rsmove.php";
                 include_once './check_fighters.php';
-                if ($ok > 0)
-                {
-                    // Output:
-                    // You are now in sector X. You used Y turns, and gained Z energy units.
 
-                    $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
-                    $cur_time_stamp = date("Y-m-d H:i:s");
-                    $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($cur_time_stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
-                    // Future: Determine where $destination gets changed to something other than int. In the meantime, make it correct here.
-                    $destination = (int) $destination;
+                // Output:
+                // You are now in sector X. You used Y turns, and gained Z energy units.
+                $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
+                $cur_time_stamp = date("Y-m-d H:i:s");
+                $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($cur_time_stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
+                Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
+                // Future: Determine where $destination gets changed to something other than int. In the meantime, make it correct here.
+                $destination = (int) $destination;
 
-                    Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $destination);
-                    $langvars['l_rs_ready'] = str_replace("[sector]", (string) $destination, $langvars['l_rs_ready']);
-                    $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
-                    $langvars['l_rs_ready'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
-                    echo $langvars['l_rs_ready'] . "<br><br>";
-                    include_once './check_mines.php';
-                }
+                Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $destination);
+                $langvars['l_rs_ready'] = str_replace("[sector]", (string) $destination, $langvars['l_rs_ready']);
+                $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
+                $langvars['l_rs_ready'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
+                echo $langvars['l_rs_ready'] . "<br><br>";
+                include_once './check_mines.php';
             }
         }
     }
