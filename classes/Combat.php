@@ -52,7 +52,7 @@ class Combat
             $targetshields = $targetinfo['ship_energy'];
         }
 
-        $target_energy = $targetinfo['ship_energy'] - $targetshields;
+        $target_energy = $target_energy - $targetshields;
         $targettorpnum = round(pow($tkireg->level_factor, $targetinfo['torp_launchers'])) * 2;
         if ($targettorpnum > $targetinfo['torps'])
         {
