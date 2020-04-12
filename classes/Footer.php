@@ -59,7 +59,7 @@ class Footer
         }
 
         // Suppress the news ticker on the IBANK and index pages
-        $news_ticker_active = (!(preg_match("/index.php/i", (bool) $request->server->get('SCRIPT_NAME')) || preg_match("/ibank.php/i", $request->server->get('SCRIPT_NAME')) || preg_match("/new.php/i", $request->server->get('SCRIPT_NAME'))));
+        $news_ticker_active = ((bool) preg_match("/index.php/i", (string) $request->server->get('SCRIPT_NAME')) || (bool) preg_match("/ibank.php/i", (string) $request->server->get('SCRIPT_NAME')) || (bool) preg_match("/new.php/i", (string) $request->server->get('SCRIPT_NAME')));
 
         // Suppress the news ticker if the database is not active
         if (!Db::isActive($pdo_db))
@@ -125,7 +125,7 @@ class Footer
             // Future: Handle bad row return, as it's causing issues for count($row)
 
             $news_ticker = array();
-            if (count($row) == 0)
+            if ($row === null)
             {
                 array_push($news_ticker, array('url' => null,
                                                'text' => $langvars['l_news_none'],
