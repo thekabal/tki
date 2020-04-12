@@ -30,7 +30,7 @@
     <td><h1>Setup Information System</h1></td>
   </tr>
   <tr>
-    <td style="font-color:#fff"><strong>This version of setup info has been written for TKI v0.80</strong></td>
+    <td style="font-color:#fff"><strong>This version of setup info has been written for TKI v0.88</strong></td>
   </tr>
 </table>
 </div><br>
