@@ -5,10 +5,10 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 ![PHP7 ready](https://img.shields.io/badge/PHP7-ready-green.svg)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3c726484ea8845da8b11399d26792dcb)](https://www.codacy.com/app/thekabal/tki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekabal/tki&amp;utm_campaign=Badge_Grade)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thekabal/tki/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/thekabal/tki/?branch=master)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/124/badge)](https://bestpractices.coreinfrastructure.org/projects/124)
 [![GitHub stars](https://img.shields.io/github/stars/thekabal/tki.svg)](https://github.com/thekabal/tki/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/thekabal/tki.svg)](https://github.com/thekabal/tki/issues)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thekabal/tki/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/thekabal/tki/?branch=develop)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1efef371-bff2-4809-a330-5470a0e7b9fa/mini.png)](https://insight.sensiolabs.com/projects/1efef371-bff2-4809-a330-5470a0e7b9fa)
 [![Powered by HTML Purifier](http://htmlpurifier.org/live/art/powered.png)](http://htmlpurifier.org/)
 
@@ -51,7 +51,7 @@ The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/proje
 
 ### Notes:
 - TKI will likely run on `lighttpd` and `nginix`, however htaccess will not work out of the box - potentially causing security risks. It has not been tested on either. 
-- **IIS is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
+- **IIS and/or Windows is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc).
 - We make use of [Smarty templates](http://www.smarty.net/), [HTML Purifier](http://htmlpurifier.org/), [Swiftmailer](http://swiftmailer.org/), and [Adodb](http://adodb.org/dokuwiki/doku.php) (although we are working to replace adodb with PDO).
 
