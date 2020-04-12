@@ -21,9 +21,9 @@ namespace Tki;
 
 class Team
 {
-    public static function isSameTeam(int $attacker_team = null, int $attackie_team = null): bool
+    public static function isSameTeam(int $attacker_team = 0, int $attackie_team = 0): bool
     {
-        return !(($attacker_team != $attackie_team) || ($attacker_team == 0 || $attackie_team == 0));
+        return !(($attacker_team != $attackie_team) || ($attacker_team === 0 || $attackie_team === 0));
     }
 
     public static function isTeamMember(array $team, array $playerinfo): bool
