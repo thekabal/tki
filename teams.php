@@ -37,7 +37,7 @@ echo "<h1>" . $title . "</h1>\n";
 $testing = false; // set to false to get rid of password when creating new team
 
 // Typecast into ints (this also removes all non numbers)
-$whichteam = null;
+$whichteam = 0;
 if (array_key_exists('whichteam', $_REQUEST) === true)
 {
     $whichteam = (int) $_REQUEST['whichteam'];
@@ -123,7 +123,7 @@ else
 $sectors = null;
 
 // Get Team Info
-if ($whichteam !== null)
+if ($whichteam !== 0)
 {
     $result_team = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
     Tki\Db::logDbErrors($pdo_db, $result_team, __LINE__, __FILE__);
@@ -139,7 +139,7 @@ else
 switch ($teamwhat)
 {
     case 1: // Info on single team
-        Tki\Team::showInfo($pdo_db, $db, $langvars, $whichteam, 0, $playerinfo, $invite_info, $team, $tkireg);
+        Tki\Team::showInfo($pdo_db, $db, $langvars, $whichteam, true, $playerinfo, $invite_info, $team, $tkireg);
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         break;
 

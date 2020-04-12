@@ -21,16 +21,9 @@ namespace Tki;
 
 class Team
 {
-    public static function isSameTeam($attacker_team = null, $attackie_team = null): bool
+    public static function isSameTeam(int $attacker_team = null, int $attackie_team = null): bool
     {
-        if (($attacker_team != $attackie_team) || ($attacker_team == 0 || $attackie_team == 0))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return !(($attacker_team != $attackie_team) || ($attacker_team == 0 || $attackie_team == 0));
     }
 
     public static function isTeamMember(array $team, array $playerinfo): bool
@@ -59,11 +52,10 @@ class Team
         return $returnvalue;
     }
 
-    public static function validateTeam(\PDO $pdo_db, $name = null, $desc = null, $creator = null): bool
+    public static function validateTeam(\PDO $pdo_db, string $name, string $desc, int $creator = null): bool
     {
         $name = trim($name);
         $desc = trim($desc);
-        $creator = (int) $creator;
 
         if (empty($name) || empty($desc) || empty($creator))
         {
@@ -96,7 +88,7 @@ class Team
     }
 
     // Display list of teams
-    public static function displayAllTeams(\PDO $pdo_db, $db, array $langvars, Reg $tkireg, $order, $type): void
+    public static function displayAllTeams(\PDO $pdo_db, $db, array $langvars, Reg $tkireg, bool $order, string $type): void
     {
         $row2 = array();
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
@@ -178,7 +170,7 @@ class Team
         echo "</table><br>";
     }
 
-    public static function displayInviteInfo(array $langvars, array $playerinfo, $invite_info): void
+    public static function displayInviteInfo(array $langvars, array $playerinfo, array $invite_info): void
     {
         if (!$playerinfo['team_invite'])
         {
@@ -194,7 +186,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, $db, array $langvars, $whichteam, $isowner, array $playerinfo, $invite_info, $team, Reg $tkireg): void
+    public static function showInfo(\PDO $pdo_db, $db, array $langvars, int $whichteam, bool $isowner, array $playerinfo, array $invite_info, array $team, Reg $tkireg): void
     {
         // Heading
         echo "<div align=center><h3><font color=white><strong>$team[team_name]</strong>";
