@@ -51,7 +51,7 @@ The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/proje
 
 ### Notes:
 - TKI will likely run on `lighttpd` and `nginix`, however htaccess will not work out of the box - potentially causing security risks. It has not been tested on either. 
-- **IIS is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
+- **IIS and/or Windows is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc).
 - We make use of [Smarty templates](http://www.smarty.net/), [HTML Purifier](http://htmlpurifier.org/), [Swiftmailer](http://swiftmailer.org/), and [Adodb](http://adodb.org/dokuwiki/doku.php) (although we are working to replace adodb with PDO).
 
