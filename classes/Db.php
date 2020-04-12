@@ -139,7 +139,7 @@ class Db
     }
 
     // Future: Sometimes $query is an object (!), so we need to iterate until it is only a string.
-    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
+    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page): ?string
     {
         $request = Request::createFromGlobals();
 
@@ -154,7 +154,7 @@ class Db
 
         if ($error === null || $error == '')
         {
-            return true;
+            return null;
         }
         else
         {
