@@ -177,7 +177,7 @@ class Reg
     /**
      * @var array
     */
-    protected $vars = array();
+    public $vars = array();
 
     public function __construct(\PDO $pdo_db)
     {
