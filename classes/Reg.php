@@ -157,7 +157,7 @@
      * @property mixed space_plague_kills
      * @property mixed starvation_death_rate
      * @property mixed team_planet_transfers
-     * @property mixed tkitimer
+     * @object mixed tkitimer
      * @property mixed torp_dmg_rate
      * @property mixed torpedo_prate
      * @property mixed torpedo_price
