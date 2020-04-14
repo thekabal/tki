@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Footer
 {
-    public function display(\PDO $pdo_db, string $lang, $tkireg, Smarty $template): void
+    public function display(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template): void
     {
         $request = Request::createFromGlobals();
 
@@ -48,7 +48,7 @@ class Footer
         }
 
         $elapsed = 999; // Default value for elapsed, overridden with an actual value if its available
-        if (($tkireg !== null) && (property_exists($tkireg, 'tkitimer')))
+        if (is_object($tkireg->tkitimer))
         {
             $tkireg->tkitimer->stop();
             $elapsed = $tkireg->tkitimer->elapsed();
