@@ -138,21 +138,25 @@ class Db
         }
     }
 
-    // Future: Sometimes $query is an object (!), so we need to iterate until it is only a string.
-    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page): ?string
+    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
     {
         $request = Request::createFromGlobals();
 
         // Convert the content of SCRIPT_NAME (in case it has been tainted) to the correct html entities
         $safe_script_name = htmlentities($request->server->get('SCRIPT_NAME'), ENT_HTML5, 'UTF-8');
+        $db_log = false;
         $error = null;
         $db_error = null;
-        $error = $pdo_db->errorInfo()[1];
-        $db_error = $pdo_db->errorInfo()[2];
+        if ($pdo_db instanceof \PDO)
+        {
+            $error = $pdo_db->errorInfo()[1];
+            $db_error = $pdo_db->errorInfo()[2];
+            $db_log = true; // We need to create a method for disabling db logging on PDO
+        }
 
         if ($error === null || $error == '')
         {
-            return null;
+            return (bool) true;
         }
         else
         {
@@ -168,8 +172,11 @@ class Db
 
             if (self::isActive($pdo_db))
             {
-                $admin_log = new \Tki\AdminLog();
-                $admin_log->writeLog($pdo_db, LogEnums::RAW, $text_error);
+                if ($db_log)
+                {
+                    $admin_log = new \Tki\AdminLog();
+                    $admin_log->writeLog($pdo_db, LogEnums::RAW, $text_error);
+                }
             }
 
             return (string) $db_error;
