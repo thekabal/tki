@@ -26,12 +26,11 @@ class File
 {
     public static function iniToDb(\PDO $pdo_db, string $ini_file, string $ini_table, string $section, Reg $tkireg): bool
     {
-        // This is a loop, that reads a ini file, of the type variable = value.
+        // This is a loop, that reads an ini file, of the type variable = value.
         // It will loop thru the list of the ini variables, and push them into the db.
 
         $ini_keys = self::betterParseIni($ini_file);
         // We need a way to deal with errors in parse_ini_file here #fixit #future
-
         $status_array = array();
         $array_item = 0;
         $final_result = null;
@@ -53,7 +52,6 @@ class File
                     settype($type_n_value['value'], $type_n_value['type']);
                     $tkireg->$config_key = $type_n_value['value'];
                 }
-
                 $stmt->bindParam(':config_key', $config_key, \PDO::PARAM_STR);
                 $stmt->bindParam(':config_category', $config_category, \PDO::PARAM_STR);
                 $stmt->bindParam(':section', $section, \PDO::PARAM_STR);
@@ -88,7 +86,6 @@ class File
                 $status_array[$array_item++] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             }
         }
-
         for ($k = 1; $k < $array_item; $k++)
         {
             // Status array will continue the results of individual executes.
@@ -101,6 +98,7 @@ class File
         }
 
         unset($ini_keys);
+
         if ($final_result !== true) // If the final result is not true, rollback our transaction, and return false.
         {
             $pdo_db->rollBack();
