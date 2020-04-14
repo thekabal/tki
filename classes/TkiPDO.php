@@ -24,7 +24,7 @@ namespace Tki;
 class TkiPDO extends \PDO
 {
     /** @var string|null **/
-    protected $table_prefix;
+    public $table_prefix;
 
     public function __construct(
         string $dsn,
@@ -38,7 +38,7 @@ class TkiPDO extends \PDO
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
-    public function exec($statement): int
+    public function exec($statement)
     {
         $statement = $this->tablePrefix($statement);
         $rows_affected = parent::exec($statement);
@@ -52,7 +52,8 @@ class TkiPDO extends \PDO
         return $replaced_statement;
     }
 
-    public function query(string $statement): \PDOStatement
+
+    public function query(string $statement)
     {
         $statement = $this->tablePrefix($statement);
         $args = func_get_args();
