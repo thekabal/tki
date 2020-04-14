@@ -22,13 +22,13 @@ namespace Tki;
 class Timer
 {
     /** @var float */
-    private $t_start = 0.0;
+    public $t_start = 0.0;
 
     /** @var float */
-    private $t_stop = 0.0;
+    public $t_stop = 0.0;
 
     /** @var float */
-    private $t_elapsed = 0.0;
+    public $t_elapsed = 0.0;
 
     public function start(): void
     {
