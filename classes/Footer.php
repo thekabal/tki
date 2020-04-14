@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Footer
 {
-    public function display(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template): void
+    public function display(\PDO $pdo_db, string $lang, $tkireg, Smarty $template): void
     {
         $request = Request::createFromGlobals();
 
@@ -35,10 +35,6 @@ class Footer
         $langvars = array();
 
         $online = 0;
-        $sf_logo_type = 0;
-        $sf_logo_width = 0;
-        $sf_logo_height = 0;
-
         if (Db::isActive($pdo_db))
         {
             $cur_time_stamp = date("Y-m-d H:i:s", time()); // Now (as seen by PHP)
@@ -52,7 +48,7 @@ class Footer
         }
 
         $elapsed = 999; // Default value for elapsed, overridden with an actual value if its available
-        if (property_exists($tkireg, 'tkitimer'))
+        if (($tkireg !== null) && (property_exists($tkireg, 'tkitimer')))
         {
             $tkireg->tkitimer->stop();
             $elapsed = $tkireg->tkitimer->elapsed();
@@ -86,20 +82,6 @@ class Footer
         }
 
         // End update counter
-
-        // Make the SF logo a little bit larger to balance the extra line from the benchmark for page generation
-        if ($tkireg->footer_show_debug === true)
-        {
-            $sf_logo_type = 14;
-            $sf_logo_width = 150;
-            $sf_logo_height = 40;
-        }
-        else
-        {
-            $sf_logo_type = 11;
-            $sf_logo_width = 120;
-            $sf_logo_height = 30;
-        }
 
         if ($news_ticker_active === true)
         {
@@ -148,14 +130,6 @@ class Footer
             $news_ticker['container'] = "article";
             $template->addVariables("news", $news_ticker);
         }
-        else
-        {
-            // Make the SF logo darker for all pages except login. No need to
-            // change the sizes as 12 is the same size as 11 and 15 is the same size as 14.
-            $sf_logo_type++;
-        }
-
-        $sf_logo_link = null;
 
         $mem_peak_usage = floor(memory_get_peak_usage() / 1024);
         $public_pages = array('ranking.php', 'new.php', 'faq.php', 'settings.php', 'news.php', 'index.php');
@@ -179,10 +153,6 @@ class Footer
                                             "seconds_left" => $seconds_left,
                                             "sched_ticks" => $tkireg->sched_ticks);
         $variables['players_online'] = $online;
-        $variables['sf_logo_type'] = $sf_logo_type;
-        $variables['sf_logo_height'] = $sf_logo_height;
-        $variables['sf_logo_width'] = $sf_logo_width;
-        $variables['sf_logo_link'] = $sf_logo_link;
         $variables['elapsed'] = $elapsed;
         $variables['mem_peak_usage'] = $mem_peak_usage;
         $variables['footer_show_debug'] = $tkireg->footer_show_debug;
