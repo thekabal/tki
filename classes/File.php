@@ -52,6 +52,7 @@ class File
                     settype($type_n_value['value'], $type_n_value['type']);
                     $tkireg->$config_key = $type_n_value['value'];
                 }
+
                 $stmt->bindParam(':config_key', $config_key, \PDO::PARAM_STR);
                 $stmt->bindParam(':config_category', $config_category, \PDO::PARAM_STR);
                 $stmt->bindParam(':section', $section, \PDO::PARAM_STR);
@@ -86,6 +87,7 @@ class File
                 $status_array[$array_item++] = Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             }
         }
+
         for ($k = 1; $k < $array_item; $k++)
         {
             // Status array will continue the results of individual executes.

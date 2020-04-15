@@ -303,7 +303,7 @@ $backlink = date("Y-m-d", $backlink);
 
 $day = substr($startdate, 8, 2);
 $day = (int) $day;
-$day = $day +3;
+$day = $day + 3;
 
 $nextlink = mktime(0, 0, 0, $month, $day, $year);
 $nextlink = date("Y-m-d", $nextlink);

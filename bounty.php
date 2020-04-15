@@ -283,7 +283,7 @@ switch ($response) {
                 $previous_bounty = $prev['totalbounty'];
             }
 
-            if ( $amount + $previous_bounty > $maxtrans)
+            if ($amount + $previous_bounty > $maxtrans)
             {
                 $langvars['l_by_toomuch'] = str_replace("[percent]", (string) $percent, $langvars['l_by_toomuch']);
                 echo $langvars['l_by_toomuch'] . "<br><br>";

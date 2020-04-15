@@ -577,10 +577,10 @@ else
             $trade_energy = false;
         }
 
-        $trade_ore = (int) round(abs((int) $trade_ore),0);
-        $trade_organics = (int) round(abs((int) $trade_organics),0);
-        $trade_goods = (int) round(abs((int) $trade_goods),0);
-        $trade_energy = (int) round(abs((int) $trade_energy),0);
+        $trade_ore = (int) round(abs((int) $trade_ore), 0);
+        $trade_organics = (int) round(abs((int) $trade_organics), 0);
+        $trade_goods = (int) round(abs((int) $trade_goods), 0);
+        $trade_energy = (int) round(abs((int) $trade_energy), 0);
 
         $trade_ore = Tki\Ports::trade($tkireg->ore_price, $tkireg->ore_delta, $sectorinfo['port_ore'], $tkireg->ore_limit, $tkireg->inventory_factor, "ore", $trade_ore, $price_array, $sectorinfo);
         $trade_organics = Tki\Ports::trade($tkireg->organics_price, $tkireg->organics_delta, $sectorinfo['port_organics'], $tkireg->organics_limit, $tkireg->inventory_factor, "organics", $trade_organics, $price_array, $sectorinfo);
