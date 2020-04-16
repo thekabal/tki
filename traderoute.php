@@ -195,10 +195,10 @@ if (($move_type === null) || (strlen(trim($move_type)) === 0))
 }
 
 $circuit_type = null;
-$circuit_type = filter_input(INPUT_POST, 'circuit_type', FILTER_SANITIZE_STRING);
+$circuit_type = filter_input(INPUT_POST, 'circuit_type', FILTER_SANITIZE_NUMBER_INT);
 if (($circuit_type === null) || (strlen(trim($circuit_type)) === 0))
 {
-    $circuit_type = false;
+    $circuit_type = 2;
 }
 
 $editing = null;

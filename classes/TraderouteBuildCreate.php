@@ -21,7 +21,7 @@ namespace Tki;
 
 class TraderouteBuildCreate
 {
-    public static function create(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
+    public static function create(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $num_traderoutes, string $ptype1, string $ptype2, int $port_id1, int $port_id2, int $team_planet_id1, int $team_planet_id2, string $move_type, int $circuit_type, int $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
         $admin_log = new AdminLog();
@@ -49,7 +49,7 @@ class TraderouteBuildCreate
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if (!$query || $query->EOF)
             {
-                $langvars['l_tdr_errnotvalidport'] = str_replace("[tdr_port_id]", $port_id1, $langvars['l_tdr_errnotvalidport']);
+                $langvars['l_tdr_errnotvalidport'] = str_replace("[tdr_port_id]", (string) $port_id1, $langvars['l_tdr_errnotvalidport']);
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_errnotvalidport']);
             }
 
@@ -57,7 +57,7 @@ class TraderouteBuildCreate
             $source = $query->fields;
             if ($source['port_type'] == 'none')
             {
-                $langvars['l_tdr_errnoport'] = str_replace("[tdr_port_id]", $port_id1, $langvars['l_tdr_errnoport']);
+                $langvars['l_tdr_errnoport'] = str_replace("[tdr_port_id]", (string) $port_id1, $langvars['l_tdr_errnoport']);
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_errnoport']);
             }
         }
@@ -117,7 +117,7 @@ class TraderouteBuildCreate
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if (!$query || $query->EOF)
             {
-                $langvars['l_tdr_errnotvaliddestport'] = str_replace("[tdr_port_id]", $port_id2, $langvars['l_tdr_errnotvaliddestport']);
+                $langvars['l_tdr_errnotvaliddestport'] = str_replace("[tdr_port_id]", (string) $port_id2, $langvars['l_tdr_errnotvaliddestport']);
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_errnotvaliddestport']);
             }
 
@@ -125,7 +125,7 @@ class TraderouteBuildCreate
 
             if ($destination['port_type'] == 'none')
             {
-                $langvars['l_tdr_errnoport2'] = str_replace("[tdr_port_id]", $port_id2, $langvars['l_tdr_errnoport2']);
+                $langvars['l_tdr_errnoport2'] = str_replace("[tdr_port_id]", (string) $port_id2, $langvars['l_tdr_errnoport2']);
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_errnoport2']);
             }
         }

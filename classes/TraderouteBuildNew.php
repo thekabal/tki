@@ -68,7 +68,7 @@ class TraderouteBuildNew
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $personal_planet_list = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($personal_planet_list !== null)
+        if ($personal_planet_list !== false)
         {
             foreach ($personal_planet_list as $tmp_planet)
             {
@@ -91,7 +91,7 @@ class TraderouteBuildNew
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $team_planet_list = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($team_planet_list !== null)
+        if ($team_planet_list !== false)
         {
             foreach ($team_planet_list as $tmp_planet)
             {
