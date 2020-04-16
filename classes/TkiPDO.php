@@ -23,7 +23,7 @@ namespace Tki;
 
 class TkiPDO extends \PDO
 {
-    /** @var string|null **/
+    /** @var string|null */
     public $table_prefix;
 
     public function __construct(
@@ -52,7 +52,7 @@ class TkiPDO extends \PDO
         return $replaced_statement;
     }
 
-    /** @return \PDOStatement|false **/
+    /** @return \PDOStatement|false */
     public function query(string $statement)
     {
         $statement = $this->tablePrefix($statement);
