@@ -61,15 +61,29 @@ foreach ($lang_dir as $file_info) // Get a list of the files in the languages di
                 // Load language ini file to get regional local_lang_name value
                 $ini_file = './languages/' . $lang_file . '.ini';
                 $parsed_lang_file = parse_ini_file($ini_file, true);
-                $variables['lang_list'][$i]['value'] = $parsed_lang_file['regional']['local_lang_name'];
+                if (is_array($parsed_lang_file))
+                {
+                    $variables['lang_list'][$i]['value'] = $parsed_lang_file['regional']['local_lang_name'];
+                }
+                else
+                {
+                    $variables['lang_list'][$i]['value'] = '';
+                }
             }
         }
         else
         {
-                // Load language ini file to get regional local_lang_name value
-                $ini_file = './languages/' . $lang_file . '.ini';
-                $parsed_lang_file = parse_ini_file($ini_file, true);
+            // Load language ini file to get regional local_lang_name value
+            $ini_file = './languages/' . $lang_file . '.ini';
+            $parsed_lang_file = parse_ini_file($ini_file, true);
+            if (is_array($parsed_lang_file))
+            {
                 $variables['lang_list'][$i]['value'] = $parsed_lang_file['regional']['local_lang_name'];
+            }
+            else
+            {
+                $variables['lang_list'][$i]['value'] = '';
+            }
         }
 
         $variables['lang_list'][$i]['file'] = $lang_file;
