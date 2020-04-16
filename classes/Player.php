@@ -70,6 +70,7 @@ class Player
                     // replacement for the (now removed) update_cookie function.
                     $_SESSION['last_activity'] = $timestamp['now'];
                 }
+
                 $flag = false;
             }
         }
