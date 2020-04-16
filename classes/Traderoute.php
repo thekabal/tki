@@ -1395,7 +1395,7 @@ class Traderoute
 
         \Tki\TraderouteResults::closeTable();
 
-        $total_profit = $sourcecost + $destcost;
+        $total_profit = (int) round($sourcecost + $destcost);
         \Tki\TraderouteResults::displayTotals($pdo_db, $lang, $total_profit);
 
         $newsec = $sourceport['sector_id'];
