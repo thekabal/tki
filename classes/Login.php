@@ -48,6 +48,7 @@ class Login
             return false;
         }
 
-        return !\Tki\Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo);
+        $is_ship_destroyed = !\Tki\Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo);
+        return $is_ship_destroyed;
     }
 }
