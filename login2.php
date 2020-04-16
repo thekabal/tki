@@ -48,19 +48,14 @@ if ($email !== null && $email !== false)
 {
     $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
     $playerinfo = $players_gateway->selectPlayerInfo($email);
-    if ($playerinfo !== false)
-    {
-        $playerfound = true;
-    }
-    else
-    {
-        $playerfound = false;
-    }
-
+    $playerfound = true;
     $lang = $playerinfo['lang'];
 }
 else
 {
+    $playerinfo = array();
+    $playerfound = false;
+
     // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
     $lang = null;
     $lang = filter_input(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
@@ -102,7 +97,7 @@ $title = $langvars['l_login_title2'];
 // Check Banned
 $banned = 0;
 
-if ($playerinfo !== null && $playerfound !== false)
+if (!empty($playerinfo) && $playerfound !== false)
 {
     $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask OR ? LIKE ban_mask;", array($request->server->get('REMOTE_ADDR'), $playerinfo['ip_address']));
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);

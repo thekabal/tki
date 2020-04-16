@@ -340,7 +340,8 @@ elseif ($sectorinfo['port_type'] == "special")
             $stmt->execute();
             $bank_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($pay !== null && $pay == 1)
+            $pay = (int) filter_input(INPUT_POST, 'pay', FILTER_SANITIZE_NUMBER_INT);
+            if ($pay === 1)
             {
                 if ($playerinfo['credits'] < $bty['total_bounty'])
                 {
@@ -362,7 +363,7 @@ elseif ($sectorinfo['port_type'] == "special")
                     die();
                 }
             }
-            elseif ($pay !== null && $pay == 2)
+            elseif ($pay === 2)
             {
                 $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
