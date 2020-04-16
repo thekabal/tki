@@ -26,7 +26,7 @@ class TkiPDO extends \PDO
     /**
     * @var string|null
     */
-    public $table_prefix;
+    public $tablePrefix;
 
     public function __construct(
         string $dsn,
@@ -36,7 +36,7 @@ class TkiPDO extends \PDO
         array $driver_options = [ \PDO::ATTR_EMULATE_PREPARES   => false ]
     )
     {
-        $this->table_prefix = $prefix;
+        $this->tablePrefix = $prefix;
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
@@ -75,7 +75,7 @@ class TkiPDO extends \PDO
 
     protected function tablePrefix(string $statement): string
     {
-        $stmt_with_prefix = str_replace('::prefix::', (string) $this->table_prefix, $statement);
+        $stmt_with_prefix = str_replace('::prefix::', (string) $this->tablePrefix, $statement);
         return $stmt_with_prefix;
     }
 }
