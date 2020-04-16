@@ -202,9 +202,8 @@ class Reg
             {
                 // Slurp in config variables from the ini file directly
                 // This is hard-coded for now, but when we get multiple game support, we may need to change this.
-                $ini_file = 'config/classic_config.ini';
-                $ini_keys = parse_ini_file($ini_file, true);
-                if ($ini_keys !== false)
+                $ini_keys = parse_ini_file('config/classic_config.ini', true);
+                if (is_array($ini_keys))
                 {
                     foreach ($ini_keys as $config_category => $config_line)
                     {
@@ -220,9 +219,8 @@ class Reg
         {
             // Slurp in config variables from the ini file directly
             // This is hard-coded for now, but when we get multiple game support, we may need to change this.
-            $ini_file = 'config/classic_config.ini';
-            $ini_keys = parse_ini_file($ini_file, true);
-            if ($ini_keys !== false)
+            $ini_keys = parse_ini_file('config/classic_config.ini', true);
+            if (is_array($ini_keys))
             {
                 foreach ($ini_keys as $config_category => $config_line)
                 {
