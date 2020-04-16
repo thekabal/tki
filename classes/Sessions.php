@@ -22,23 +22,23 @@ namespace Tki;
 class Sessions
 {
     /**
-    * @var int
-    */
+     * @var int
+     */
     private $maxlifetime = 1800; // 30 mins
 
     /**
-    * @var \PDO|null
-    */
+     * @var \PDO|null
+     */
     private $pdo_db = null;
 
     /*
-    * @var string|null
-    */
+     * @var string|null
+     */
     private $expiry = null;
 
     /**
-    * @var string|null
-    */
+     * @var string|null
+     */
     private $currenttime = null;
 
     public function __construct(\PDO $pdo_db)
@@ -106,8 +106,8 @@ class Sessions
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function write(string $sesskey, string $sessdata)
     {
         if (($this->pdo_db !== null) && (Db::isActive($this->pdo_db)))
