@@ -48,11 +48,6 @@ class Login
             return false;
         }
 
-        if (Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo))
-        {
-            return false;
-        }
-
-        return true;
+        return !\Tki\Ship::isDestroyed($pdo_db, $lang, $tkireg, $langvars, $template, $playerinfo);
     }
 }
