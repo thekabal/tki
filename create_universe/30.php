@@ -50,17 +50,17 @@ $tki_schema = new Tki\Schema();
 $variables['drop_tables_results']    = $tki_schema->dropTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all tables in the database
 $variables['drop_tables_count']      = count($variables['drop_tables_results']) - 1;
 
-$destroy_results = array();
 if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
 {
     $variables['drop_seq_results']       = $tki_schema->dropSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Delete all sequences in the database
 }
 else
 {
+    $destroy_results = array();
     $destroy_results[0]['result'] = true;
     $destroy_results[0]['name'] = null;
     $destroy_results[0]['time'] = 0;
-    $variables['drop_seq_results']     = $destroy_results;
+    $variables['drop_seq_results'] = $destroy_results;
     $variables['drop_seq_count'] = 0;
 }
 
@@ -84,9 +84,9 @@ else
     $destroy_array_size = 0;
 }
 
-for ($i = 0; $i < $destroy_array_size; $i++)
+for ($loop = 0; $loop < $destroy_array_size; $loop++)
 {
-    if ($variables['drop_seq_results'][$i]['result'] !== true)
+    if ($variables['drop_seq_results'][$loop]['result'] !== true)
     {
         $variables['autorun'] = false; // We disable autorun if any errors occur in processing
     }
