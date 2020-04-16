@@ -174,7 +174,7 @@ if ($num_defenses > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $tkire
                         $bounty->cancel($pdo_db, $playerinfo['ship_id']);
 
                         $character_object = new Tki\Character();
-                        $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                        $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
                     }
                 }
             }

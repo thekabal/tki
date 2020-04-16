@@ -21,7 +21,7 @@ namespace Tki;
 
 class Character
 {
-    public function kill(\PDO $pdo_db, int $ship_id, array $langvars, Reg $tkireg, bool $remove_planets = false): void
+    public function kill(\PDO $pdo_db, int $ship_id, array $langvars, Reg $tkireg): void
     {
         $sql = "UPDATE ::prefix::ships SET ship_destroyed='Y', " .
                "on_planet='N', sector=1, cleared_defenses=' ' WHERE ship_id=:ship_id";
@@ -34,20 +34,10 @@ class Character
         $stmt->bindParam(':placed_by', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
 
-        if ($remove_planets === true && $ship_id > 0)
-        {
-            $sql = "DELETE FROM ::prefix::planets WHERE owner=:owner";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
-            $stmt->execute();
-        }
-        else
-        {
-            $sql = "UPDATE ::prefix::planets SET owner=0, team=0, fighters=0, base='N' WHERE owner=:owner";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
-            $stmt->execute();
-        }
+        $sql = "UPDATE ::prefix::planets SET owner=0, team=0, fighters=0, base='N' WHERE owner=:owner";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
+        $stmt->execute();
 
         $sql = "SELECT DISTINCT sector_id FROM ::prefix::planets WHERE owner=:owner AND base='Y'";
         $stmt = $pdo_db->prepare($sql);

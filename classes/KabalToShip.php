@@ -367,7 +367,7 @@ class KabalToShip
             // Target had no pod
             {
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "Kabal $playerinfo[character_name]|N");
-                $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg, false);
+                $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg);
             }
 
             if ($attackerarmor > 0)
@@ -498,7 +498,7 @@ class KabalToShip
         if (!$attackerarmor > 0)
         {
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "$targetinfo[character_name] destroyed your ship!");
-            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
             if ($targetarmor > 0)
             {
                 // Target still alive to salvage attacker

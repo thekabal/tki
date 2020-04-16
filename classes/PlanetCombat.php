@@ -414,7 +414,7 @@ class PlanetCombat
             else
             {
                 $character_object = new Character();
-                $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg, false);
+                $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
                 \Tki\Bounty::collect($pdo_db, $langvars, $planetinfo['owner'], $playerinfo['ship_id']);
             }
         }
