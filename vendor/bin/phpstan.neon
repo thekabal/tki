@@ -20,7 +20,7 @@ parameters:
         - '#Access to an undefined property Tki#'
         - '#Variable property access#' #// In (class) Reg, File, and in create_universe/10, this flags an error during the config variable/value import code.
         - '#Undefined variable#' #// 4200! Lots of work to do, real errors too.
-#        - '#Parameter \#[0-9] \$callback of method Smarty_Internal_TemplateBase::registerPlugin\(\) expects callback, string given.#'
+#        - '#has parameter \$db with no typehint#'
 
 rules:
     - PHPStan\Rules\BooleansInConditions\BooleanInBooleanAndRule
