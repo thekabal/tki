@@ -52,6 +52,7 @@ class TkiPDO extends \PDO
         return $replaced_statement;
     }
 
+    /** @return \PDOStatement|false **/
     public function query(string $statement)
     {
         $statement = $this->tablePrefix($statement);
