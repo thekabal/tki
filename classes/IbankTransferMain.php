@@ -54,7 +54,7 @@ class IbankTransferMain
              "<form accept-charset='utf-8' action='ibank.php?command=transfer2' method=post>" .
              $langvars['l_ibank_source'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class=term name=splanet_id>";
 
-        if ($planets !== null)
+        if ($planets !== false)
         {
             foreach ($planets as $planet)
             {
@@ -73,7 +73,7 @@ class IbankTransferMain
 
         echo "</select><br>" . $langvars['l_ibank_destination'] . "<select class=term name=dplanet_id>";
 
-        if ($planets !== null)
+        if ($planets !== false)
         {
             foreach ($planets as $planet)
             {
@@ -99,7 +99,7 @@ class IbankTransferMain
              "<form accept-charset='utf-8' action='ibank.php?command=consolidate' method=post>" .
              $langvars['l_ibank_destination'] . " <select class=term name=dplanet_id>";
 
-        if ($planets !== null)
+        if ($planets !== false)
         {
             foreach ($planets as $planet)
             {

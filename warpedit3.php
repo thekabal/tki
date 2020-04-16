@@ -74,7 +74,7 @@ if ($playerinfo['dev_warpedit'] < 1)
     die();
 }
 
-if ($target_sector === null)
+if ($target_sector === false)
 {
     // This is the best that I can do without adding a new language variable.
     echo $langvars['l_warp_nosector'] . "<br><br>";
@@ -124,12 +124,14 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
 $sectorinfo = $sectors_gateway->selectSectorInfo($target_sector);
 
+/* FUTURE: This is broken
 if (!is_array($sectorinfo))
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }
+*/
 
 $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
 $stmt = $pdo_db->prepare($sql);
@@ -168,7 +170,7 @@ if ($linkinfo !== false)
         $stmt->execute();
         $update_ships = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($bothway === null)
+        if ($bothway === false)
         {
             echo $langvars['l_warp_removed'] . " " . $target_sector . ".<br><br>";
         }

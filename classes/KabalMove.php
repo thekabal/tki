@@ -34,7 +34,7 @@ class KabalMove
         $stmt->bindParam(':link_start', $playerinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         $links_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($links_present !== null)
+        if ($links_present !== false)
         {
             foreach ($links_present as $row)
             {
@@ -96,7 +96,7 @@ class KabalMove
             $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if ($defenses_present !== null)
+            if ($defenses_present !== false)
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
@@ -112,7 +112,7 @@ class KabalMove
             $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if ($defenses_present !== null)
+            if ($defenses_present !== false)
             {
                 foreach ($defenses_present as $tmp_defense)
                 {

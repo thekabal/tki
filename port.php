@@ -411,6 +411,7 @@ elseif ($sectorinfo['port_type'] == "special")
                         echo "You have paid part of the bounty.<br>\n";
                         echo "<br>\n";
 
+                        $bounty_left = $bty['total_bounty'] - $bounty_payment;
                         Tki\Text::gotoMain($pdo_db, $lang);
                         die();
                     }
@@ -425,10 +426,6 @@ elseif ($sectorinfo['port_type'] == "special")
                     Tki\Text::gotoMain($pdo_db, $lang);
                     die();
                 }
-
-                $bounty_left = $bty['total_bounty'] - $bounty_payment;
-                Tki\Text::gotoMain($pdo_db, $lang);
-                die();
             }
             else
             {

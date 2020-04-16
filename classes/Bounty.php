@@ -29,7 +29,7 @@ class Bounty
         $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
         $stmt->execute();
         $bounty_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($bounty_present !== null)
+        if ($bounty_present !== false)
         {
             foreach ($bounty_present as $tmp_bounty)
             {
@@ -59,7 +59,7 @@ class Bounty
         $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
         $stmt->execute();
         $bounty_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($bounty_present !== null)
+        if ($bounty_present !== false)
         {
             foreach ($bounty_present as $tmp_bounty)
             {

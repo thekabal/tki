@@ -29,7 +29,7 @@ $header->display($pdo_db, $lang, $template, $title);
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('modify_defenses', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 
-if (!isset($defense_id))
+if ($defense_id === null)
 {
     echo $langvars['l_md_invalid'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -177,7 +177,7 @@ switch ($response)
              die();
         }
 
-        $quantity = preg_replace('/[^0-9]/', '', $quantity);
+        $quantity = (int) preg_replace('/[^0-9]/', '', $quantity);
         if ($quantity < 0)
         {
             $quantity = 0;

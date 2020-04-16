@@ -166,19 +166,19 @@ echo "<center>" .
 $start_time = strtotime($startdate);
 
 // Calculate timestamp for midnight 1 day ago.
-$yd1 = $start_time - (mktime(0, 0, 0, 0, 1, 0) - 943920000);
+$yd1 = (int) $start_time - (mktime(0, 0, 0, 0, 1, 0) - 943920000);
 
 // Calculate timestamp for midnight tomorrow.
-$tm = $start_time + (mktime(0, 0, 0, 0, 1, 0) - 943920000);
+$tm = (int) $start_time + (mktime(0, 0, 0, 0, 1, 0) - 943920000);
 
 $month = substr($startdate, 5, 2);
 $day = substr($startdate, 8, 2);
 $year = substr($startdate, 0, 4);
 
-$yesterday = mktime(0, 0, 0, $month, ((int) date("j") - 1), $year);
+$yesterday = mktime(0, 0, 0, (int) $month, ((int) date("j") - 1), (int) $year);
 $yesterday = date("Y-m-d", $yd1);
 
-$tomorrow = mktime(0, 0, 0, $month, ((int) date("j") + 1), $year);
+$tomorrow = mktime(0, 0, 0, (int) $month, ((int) date("j") + 1), (int) $year);
 $tomorrow = date("Y-m-d", $tm);
 
 if ($mode == 'compat')
@@ -283,14 +283,14 @@ if ($mode != 'compat')
 
 echo "</div>";
 
-$log_months_short_temp = "l_log_months_short_" . date("n", $yd1);// (int) (substr($startdate, 5, 2));
-$date1 = $langvars[$log_months_short_temp] . " " . date("d", $yd1);//substr($yesterday1, 8, 2);
+$log_months_short_temp = "l_log_months_short_" . date("n", $yd1); // (int) (substr($startdate, 5, 2));
+$date1 = $langvars[$log_months_short_temp] . " " . date("d", $yd1); //substr($yesterday1, 8, 2);
 
-$log_months_short_temp = "l_log_months_short_" . date("n", $start_time);//(int) (substr($startdate, 5, 2));
-$date2 = $langvars[$log_months_short_temp] . " " . date("d", $start_time);//substr($startdate, 8, 2);
+$log_months_short_temp = "l_log_months_short_" . date("n", (int) $start_time); //(int) (substr($startdate, 5, 2));
+$date2 = $langvars[$log_months_short_temp] . " " . date("d", (int) $start_time); //substr($startdate, 8, 2);
 
-$log_months_short_temp = "l_log_months_short_" . date("n", $tm);// (int) (substr($startdate, 5, 2));
-$date3 = $langvars[$log_months_short_temp] . " " . date("d", $tm);//substr($tomorrow, 8, 2);
+$log_months_short_temp = "l_log_months_short_" . date("n", $tm); // (int) (substr($startdate, 5, 2));
+$date3 = $langvars[$log_months_short_temp] . " " . date("d", $tm); //substr($tomorrow, 8, 2);
 
 $month = substr($startdate, 5, 2);
 $day = substr($startdate, 8, 2);
@@ -298,14 +298,14 @@ $day = (int) $day;
 $day = $day - 3;
 $year = substr($startdate, 0, 4);
 
-$backlink = mktime(0, 0, 0, $month, $day, $year);
+$backlink = mktime(0, 0, 0, (int) $month, $day, (int) $year);
 $backlink = date("Y-m-d", $backlink);
 
 $day = substr($startdate, 8, 2);
 $day = (int) $day;
 $day = $day + 3;
 
-$nextlink = mktime(0, 0, 0, $month, $day, $year);
+$nextlink = mktime(0, 0, 0, (int) $month, $day, (int) $year);
 $nextlink = date("Y-m-d", $nextlink);
 
 $nonext = 0;

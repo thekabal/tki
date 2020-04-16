@@ -66,7 +66,7 @@ $news_gateway = new \Tki\News\NewsGateway($pdo_db); // Build a scheduler gateway
 $row = $news_gateway->selectNewsByDay($startdate);
 
 $news_ticker = array();
-if (count($row) == 0)
+if (($row !== null) && (count($row) == 0))
 {
     // Nope none found.
     echo "  <tr>\n";

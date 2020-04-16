@@ -107,7 +107,7 @@ class KabalHunt
             $stmt->bindParam(':sector_id', $targetinfo['sector'], \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if ($defenses_present !== null)
+            if ($defenses_present !== false)
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
@@ -125,7 +125,7 @@ class KabalHunt
             $stmt->bindParam(':sector_id', $targetinfo['sector'], \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if ($defenses_present !== null)
+            if ($defenses_present !== false)
             {
                 foreach ($defenses_present as $tmp_defense)
                 {

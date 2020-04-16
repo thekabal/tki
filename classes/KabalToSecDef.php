@@ -37,7 +37,7 @@ class KabalToSecDef
             $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if ($defenses_present !== null)
+            if ($defenses_present !== false)
             {
                 foreach ($defenses_present as $tmp_defense)
                 {
@@ -54,7 +54,7 @@ class KabalToSecDef
             $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if ($defenses_present !== null)
+            if ($defenses_present !== false)
             {
                 foreach ($defenses_present as $tmp_defenses)
                 {

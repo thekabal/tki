@@ -55,7 +55,7 @@ class Character
         $stmt->execute();
         $sectors_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        if ($sectors_owned !== null)
+        if ($sectors_owned !== false)
         {
             foreach ($sectors_owned as $tmp_sector)
             {

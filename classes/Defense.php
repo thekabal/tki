@@ -29,7 +29,7 @@ class Defense
         $stmt->execute();
         $secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        if ($secdef_present !== null)
+        if ($secdef_present !== false)
         {
             foreach ($secdef_present as $tmp_defense)
             {
@@ -44,7 +44,7 @@ class Defense
                 $stmt->execute();
                 $other_secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-                if ($other_secdef_present !== null && $qty > 0)
+                if ($other_secdef_present !== false && $qty > 0)
                 {
                     foreach ($other_secdef_present as $tmp_other_defense)
                     {

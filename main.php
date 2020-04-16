@@ -564,7 +564,10 @@ if ($num_planets > 0)
         }
         else
         {
-            echo "<br>(" . $planet_owner['character_name'] . ")";
+            if (isset($planet_owner['character_name']))
+            {
+                echo "<br>(" . $planet_owner['character_name'] . ")";
+            }
         }
 
         echo "</span></td>";

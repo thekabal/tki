@@ -98,7 +98,7 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
 $sectorinfo = $sectors_gateway->selectSectorInfo($target_sector);
 
-if (!is_object($sectorinfo))
+if (count($sectorinfo) === 0)
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -179,7 +179,7 @@ if ($linkinfo)
         $stmt->bindParam(':ship_id', $playerinfo['sector'], PDO::PARAM_INT);
         $stmt->execute();
 
-        if ($oneway !== null)
+        if ($oneway !== false)
         {
             echo $langvars['l_warp_coneway'] . " " . $target_sector . " <br><br>";
         }

@@ -24,7 +24,7 @@ $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Set a flag that we have not changed the language
 $changed_language = false;
-$lang = null;
+$lang = 'english';
 
 // Get POST['newlang'] returns null if not found.
 if (array_key_exists('newlang', $_POST) === true)
@@ -95,44 +95,40 @@ else
     $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
     $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-    // Do we have a valid RecordSet?
-    if ($playerinfo !== null)
+    // Does the oldpass and the players password match?
+    if (password_verify($oldpass, $playerinfo['password']))
     {
-        // Does the oldpass and the players password match?
-        if (password_verify($oldpass, $playerinfo['password']))
+        // Yes they match so hash the password.  $hashedPassword will be a 60-character string.
+        $new_hashed_pass = password_hash($newpass1, PASSWORD_DEFAULT);
+
+        // Now update the players password.
+        $sql = "UPDATE ::prefix::ships SET password=:pass WHERE ship_id=:ship_id LIMIT 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':pass', $new_hashed_pass, PDO::PARAM_STR);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Now check to see if we have a valid update and have ONLY 1 changed record.
+        if ($playerinfo === null)
         {
-            // Yes they match so hash the password.  $hashedPassword will be a 60-character string.
-            $new_hashed_pass = password_hash($newpass1, PASSWORD_DEFAULT);
-
-            // Now update the players password.
-            $sql = "UPDATE ::prefix::ships SET password=:pass WHERE ship_id=:ship_id LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':pass', $new_hashed_pass, PDO::PARAM_STR);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-            $stmt->execute();
-            $playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // Now check to see if we have a valid update and have ONLY 1 changed record.
-            if ($playerinfo === null)
-            {
-                // Either we got an error in the SQL Query or <> 1 records was changed.
-                echo $langvars['l_opt2_passchangeerr'] . "<br><br>";
-            }
-            else
-            {
-                // Everything went well so update the password session to the new password.
-                echo $langvars['l_opt2_passchanged'] . "<br><br>";
-                $_SESSION['password'] = $newpass1;
-
-                // They have changed their password successfully, so update their session ID as well
-                session_regenerate_id();
-            }
+            // Either we got an error in the SQL Query or <> 1 records was changed.
+            echo $langvars['l_opt2_passchangeerr'] . "<br><br>";
         }
         else
         {
-            // The oldpass did not match the players password.
-            echo $langvars['l_opt2_srcpassfalse'] . "<br><br>";
+            // Everything went well so update the password session to the new password.
+            echo $langvars['l_opt2_passchanged'] . "<br><br>";
+            $_SESSION['password'] = $newpass1;
+
+            // They have changed their password successfully, so update their session ID as well
+            session_regenerate_id();
         }
+    }
+    else
+    {
+        // The oldpass did not match the players password.
+        echo $langvars['l_opt2_srcpassfalse'] . "<br><br>";
     }
 }
 

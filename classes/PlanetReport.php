@@ -70,29 +70,22 @@ class PlanetReport
 
         $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
 
-        if ($sort === null)
+        $sql .= " ORDER BY";
+        if ($sort == "name")
         {
-            $sql .= " ORDER BY sector_id ASC";
+            $sql .= " name ASC";
+        }
+        elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" || $sort == "colonists" || $sort == "credits" || $sort == "fighters")
+        {
+            $sql .= " $sort DESC, sector_id ASC";
+        }
+        elseif ($sort == "torp")
+        {
+            $sql .= " torps DESC, sector_id ASC";
         }
         else
         {
-            $sql .= " ORDER BY";
-            if ($sort == "name")
-            {
-                $sql .= " name ASC";
-            }
-            elseif ($sort == "organics" || $sort == "ore" || $sort == "goods" || $sort == "energy" || $sort == "colonists" || $sort == "credits" || $sort == "fighters")
-            {
-                $sql .= " $sort DESC, sector_id ASC";
-            }
-            elseif ($sort == "torp")
-            {
-                $sql .= " torps DESC, sector_id ASC";
-            }
-            else
-            {
-                $sql .= " sector_id ASC";
-            }
+            $sql .= " sector_id ASC";
         }
 
         $stmt = $pdo_db->prepare($sql);
@@ -101,7 +94,7 @@ class PlanetReport
         $planet_owner_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $counter = 0;
         $planet = array();
-        if ($planet_owner_present !== null)
+        if ($planet_owner_present !== false)
         {
             foreach ($planet_owner_present as $tmp_owner)
             {

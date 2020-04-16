@@ -45,7 +45,7 @@ class CalcLevels
         $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $beam_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($beam_defender_here !== null)
+        if ($beam_defender_here !== false)
         {
             foreach ($beam_defender_here as $tmp_beams)
             {
@@ -74,7 +74,7 @@ class CalcLevels
         $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $shield_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($shield_defender_here !== null)
+        if ($shield_defender_here !== false)
         {
             foreach ($shield_defender_here as $tmp_shields)
             {
@@ -103,7 +103,7 @@ class CalcLevels
         $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
         $torp_defender_here = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($torp_defender_here !== null)
+        if ($torp_defender_here !== false)
         {
             foreach ($torp_defender_here as $tmp_torp)
             {

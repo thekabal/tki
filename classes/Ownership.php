@@ -30,7 +30,7 @@ class Ownership
         $bases_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $count = 0;
         $bases = array();
-        if ($bases_present === null)
+        if ($bases_present === false)
         {
             return "Sector ownership didn't change";
         }
@@ -105,7 +105,7 @@ class Ownership
                 $stmt->bindParam(':ship_id', $owners[$loop]['id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 $team_owner = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-                if ($team_owner !== null)
+                if ($team_owner !== false)
                 {
                     $ships[$nbships] = $owners[$loop]['id'];
                     $steams[$nbships] = $team_owner['team'];
@@ -167,7 +167,7 @@ class Ownership
             $stmt->execute($ships);
             $select_team = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-            if ($select_team !== null)
+            if ($select_team !== false)
             {
                 $sql = "UPDATE ::prefix::universe SET zone_id=4 WHERE sector_id=:sector_id";
                 $stmt = $pdo_db->prepare($sql);

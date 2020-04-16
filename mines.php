@@ -186,7 +186,7 @@ else
         }
     }
 
-    if (!isset($nummines) || !isset($numfighters) || !isset($mode))
+    if (!isset($nummines))
     {
         $availmines = number_format($playerinfo['torps'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         $availfighters = number_format($playerinfo['ship_fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);

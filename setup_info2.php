@@ -125,11 +125,6 @@ else
     $variables['smarty_test'] = true;
 }
 
-if ($db_port !== null)
-{
-    $db_host .= ":$db_port";
-}
-
 // Attempt to connect to the database via adodb
 $test_db = new Tki\Db();
 $variables['adodb_conn_test'] = $test_db->initDb('adodb');
@@ -142,7 +137,7 @@ if (!($variables['adodb_conn_test']))
 // Attempt to connect to the database via PDO
 try
 {
-    $test_pdo_db = new PDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd);
+    $test_pdo_db = new PDO("mysql:host=$db_host; dbname=$db_name; charset=utf8mb4", $db_user, $db_pwd);
     $variables['pdo_conn_test'] = true;
     $variables['pdo_server_ver'] = $test_pdo_db->getAttribute(constant("PDO::ATTR_SERVER_VERSION"));
 }
@@ -169,14 +164,7 @@ foreach ($_SERVER as $name => $value)
 }
 
 // Properly format the database host/port
-if ($db_port !== null)
-{
-    $variables['db_addr'] = $db_host . ":" . $db_port;
-}
-else
-{
-    $variables['db_addr'] = $db_host;
-}
+$variables['db_addr'] = $db_host;
 
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);

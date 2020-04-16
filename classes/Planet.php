@@ -34,7 +34,7 @@ class Planet
             $result = $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
-            if ($result !== null)
+            if ($result !== false)
             {
                 $owner_info = (array) $stmt->fetch(\PDO::FETCH_ASSOC);
                 return true;

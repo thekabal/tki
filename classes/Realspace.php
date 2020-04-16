@@ -116,7 +116,7 @@ class Realspace
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            if ($defenses_present !== null)
+            if ($defenses_present !== false)
             {
                 $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
                 $stmt = $pdo_db->prepare($sql);

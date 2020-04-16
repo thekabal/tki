@@ -45,36 +45,32 @@ class Player
             $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
             $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-            if ($playerinfo !== false)
+            // Check the password against the stored hashed password
+            // Check the cookie to see if username/password are empty - check password against database
+            if (password_verify($_SESSION['password'], $playerinfo['password']))
             {
-                // Check the password against the stored hashed password
-                // Check the cookie to see if username/password are empty - check password against database
-                if (password_verify($_SESSION['password'], $playerinfo['password']))
+                $cur_time_stamp = date('Y-m-d H:i:s');
+                $timestamp = array();
+                $timestamp['now']  = (int) strtotime($cur_time_stamp);
+                $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
+
+                // Update the players last_login every 60 seconds to cut back SQL Queries.
+                if ($timestamp['now'] >= ($timestamp['last'] + 60))
                 {
-                    $cur_time_stamp = date('Y-m-d H:i:s');
-                    $timestamp = array();
-                    $timestamp['now']  = (int) strtotime($cur_time_stamp);
-                    $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
+                    $remote_ip = $request->server->get('REMOTE_ADDR');
+                    $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':last_login', $cur_time_stamp, \PDO::PARAM_STR);
+                    $stmt->bindParam(':ip_address', $remote_ip, \PDO::PARAM_STR);
+                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                    $stmt->execute();
+                    Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-                    // Update the players last_login every 60 seconds to cut back SQL Queries.
-                    if ($timestamp['now'] >= ($timestamp['last'] + 60))
-                    {
-                        $remote_ip = $request->server->get('REMOTE_ADDR');
-                        $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
-                        $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':last_login', $cur_time_stamp, \PDO::PARAM_STR);
-                        $stmt->bindParam(':ip_address', $remote_ip, \PDO::PARAM_STR);
-                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-                        $stmt->execute();
-                        Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-
-                        // Reset the last activity time on the session so that the session renews - this is the
-                        // replacement for the (now removed) update_cookie function.
-                        $_SESSION['last_activity'] = $timestamp['now'];
-                    }
-
-                    $flag = false;
+                    // Reset the last activity time on the session so that the session renews - this is the
+                    // replacement for the (now removed) update_cookie function.
+                    $_SESSION['last_activity'] = $timestamp['now'];
                 }
+                $flag = false;
             }
         }
 

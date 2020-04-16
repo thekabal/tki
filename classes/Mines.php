@@ -29,7 +29,7 @@ class Mines
         $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
         $defense_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if ($defense_present !== null)
+        if ($defense_present !== false)
         {
             foreach ($defense_present as $tmp_defense)
             {
