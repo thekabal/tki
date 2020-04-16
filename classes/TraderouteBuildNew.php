@@ -62,7 +62,7 @@ class TraderouteBuildNew
         echo $langvars['l_tdr_traderoute'] . "</strong></font><p>";
 
         // Get Planet info Team and Personal
-        $i = 0;
+        $planet_loop = 0;
         $sql = "SELECT * FROM ::prefix::planets WHERE owner=:ship_id ORDER BY sector_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
@@ -72,18 +72,18 @@ class TraderouteBuildNew
         {
             foreach ($personal_planet_list as $tmp_planet)
             {
-                $planets[$i] = $tmp_planet['link_dest'];
+                $planets[$planet_loop] = $tmp_planet['link_dest'];
 
-                if ($planets[$i]['name'] === null)
+                if ($planets[$planet_loop]['name'] === null)
                 {
-                    $planets[$i]['name'] = $langvars['l_tdr_unnamed'];
+                    $planets[$planet_loop]['name'] = $langvars['l_tdr_unnamed'];
                 }
 
-                $i++;
+                $planet_loop++;
             }
         }
 
-        $i = 0;
+        $planet_loop = 0;
         $planets_team = array();
         $sql = "SELECT * FROM ::prefix::planets WHERE team = :player_team AND team <> 0 AND owner <> :ship_id ORDER BY sector_id";
         $stmt = $pdo_db->prepare($sql);
@@ -95,14 +95,14 @@ class TraderouteBuildNew
         {
             foreach ($team_planet_list as $tmp_planet)
             {
-                $planets_team[$i] = $tmp_planet['link_dest'];
+                $planets_team[$planet_loop] = $tmp_planet['link_dest'];
 
-                if ($planets_team[$i]['name'] === null)
+                if ($planets_team[$planet_loop]['name'] === null)
                 {
-                    $planets_team[$i]['name'] = $langvars['l_tdr_unnamed'];
+                    $planets_team[$planet_loop]['name'] = $langvars['l_tdr_unnamed'];
                 }
 
-                $i++;
+                $planet_loop++;
             }
         }
 
