@@ -21,7 +21,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function engage(\PDO $pdo_db, $db, string $lang, int $j, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
+    public static function engage(\PDO $pdo_db, $db, string $lang, int $tr_repeat, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
     {
         $traderoute = array();
         $source = array();
@@ -1411,7 +1411,7 @@ class Traderoute
 
         $tdr_display_creds = number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         \Tki\TraderouteResults::displaySummary($pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo);
-        // echo $j . " -- ";
+        // echo $tr_repeat . " -- ";
         if ($traderoute['circuit'] == 2)
         {
             $langvars['l_tdr_engageagain'] = str_replace("[here]", "<a href=\"traderoute.php?engage=[tdr_engage]\">" . $langvars['l_here'] . "</a>", $langvars['l_tdr_engageagain']);
@@ -1419,14 +1419,14 @@ class Traderoute
             $langvars['l_tdr_engageagain'] = str_replace("[ten]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=10\">" . $langvars['l_tdr_ten'] . "</a>", $langvars['l_tdr_engageagain']);
             $langvars['l_tdr_engageagain'] = str_replace("[fifty]", "<a href=\"traderoute.php?engage=[tdr_engage]&amp;tr_repeat=50\">" . $langvars['l_tdr_fifty'] . "</a>", $langvars['l_tdr_engageagain']);
             $langvars['l_tdr_engageagain'] = str_replace("[tdr_engage]", (string) $engage, $langvars['l_tdr_engageagain']);
-            if ($j == 1)
+            if ($tr_repeat == 1)
             {
                 echo $langvars['l_tdr_engageagain'] . "\n";
                 \Tki\TraderouteResults::showRepeat($engage);
             }
         }
 
-        if ($j == 1)
+        if ($tr_repeat == 1)
         {
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
         }

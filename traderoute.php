@@ -255,14 +255,13 @@ elseif ($command == 'setsettings')
 elseif ($engage !== null)
 {
     // Perform trade route
-    $i = $tr_repeat;
-    while ($i > 0)
+    while ($tr_repeat > 0)
     {
         $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
         Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
         $playerinfo = $result->fields;
-        \Tki\Traderoute::engage($pdo_db, $db, $lang, $i, $langvars, $tkireg, $playerinfo, $engage, $traderoutes, $portfull, $template);
-        $i--;
+        \Tki\Traderoute::engage($pdo_db, $db, $lang, $tr_repeat, $langvars, $tkireg, $playerinfo, $engage, $traderoutes, $portfull, $template);
+        $tr_repeat--;
     }
 }
 
