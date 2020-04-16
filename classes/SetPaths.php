@@ -31,7 +31,7 @@ class SetPaths
     {
         $request = Request::createFromGlobals();
         $gamepath = dirname($request->server->get('SCRIPT_NAME'));
-        if ($gamepath !== null && strlen($gamepath) > 0)
+        if (strlen($gamepath) > 0)
         {
             if ($gamepath === "\\")
             {
@@ -64,7 +64,6 @@ class SetPaths
     public static function setGamedomain(): string
     {
         $request = Request::createFromGlobals();
-        $remove_port = true;
         $gamedomain = $request->server->get('HTTP_HOST');
 
         if ($gamedomain !== null && strlen($gamedomain) > 0)
@@ -81,10 +80,7 @@ class SetPaths
                 $gamedomain = substr($gamedomain, $pos + 4);
             }
 
-            if ($remove_port)
-            {
-                $pos = strpos($gamedomain, ':');
-            }
+            $pos = strpos($gamedomain, ':');
 
             if (is_int($pos))
             {
