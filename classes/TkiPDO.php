@@ -38,7 +38,7 @@ class TkiPDO extends \PDO
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
-    public function exec($statement)
+    public function exec($statement): int
     {
         $statement = $this->tablePrefix($statement);
         $rows_affected = parent::exec($statement);
@@ -51,7 +51,6 @@ class TkiPDO extends \PDO
         $replaced_statement = parent::prepare($statement, $driver_options);
         return $replaced_statement;
     }
-
 
     public function query(string $statement)
     {
