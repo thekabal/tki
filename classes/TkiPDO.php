@@ -24,8 +24,8 @@ namespace Tki;
 class TkiPDO extends \PDO
 {
     /**
-    * @var string|null
-    */
+     * @var string|null
+     */
     public $tablePrefix;
 
     public function __construct(
@@ -55,8 +55,8 @@ class TkiPDO extends \PDO
     }
 
     /**
-    * @var \PDOStatement|false
-    */
+     * @var \PDOStatement|false
+     */
     public function query(string $statement)
     {
         $statement = $this->tablePrefix($statement);

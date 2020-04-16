@@ -238,16 +238,16 @@ class Reg
     }
 
     /**
-    * @param mixed $value
-    */
+     * @param mixed $value
+     */
     public function __set(string $key, $value): void
     {
         $this->vars[$key] = $value;
     }
 
     /**
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function &__get(string $key)
     {
         if (array_key_exists($key, $this->vars))

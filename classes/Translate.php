@@ -24,8 +24,8 @@ use PDO;
 class Translate
 {
     /**
-    * @var Array
-    */
+     * @var Array
+     */
     protected static $langvars = array();
 
     public static function load(\PDO $pdo_db, ?string $language = null, ?array $categories = null): array
