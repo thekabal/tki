@@ -45,15 +45,15 @@ $tki_schema = new Tki\Schema();
 
 if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
 {
-    $variables['create_seq_results']     = $tki_schema->createSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
-    $variables['create_seq_count']       = count($variables['create_seq_results']) - 1;
-    $create_array_size = count($variables['create_seq_results']);
+    $variables['create_seq_results'] = $tki_schema->createSequences($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
+    $variables['create_seq_count']   = count($variables['create_seq_results']) - 1;
+    $create_array_size               = count($variables['create_seq_results']);
 }
 else
 {
-    $variables['create_seq_results']     = false; // Create all tables in the database
-    $variables['create_seq_count']       = 0;
-    $create_array_size = 0;
+    $variables['create_seq_results'] = false; // Create all tables in the database
+    $variables['create_seq_count']   = 0;
+    $create_array_size               = 0;
 }
 
 //    $destroy_results[0]['result'] = true;
