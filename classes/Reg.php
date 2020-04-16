@@ -157,7 +157,6 @@
      * @property mixed space_plague_kills
      * @property mixed starvation_death_rate
      * @property mixed team_planet_transfers
-     * @object mixed tkitimer
      * @property mixed torp_dmg_rate
      * @property mixed torpedo_prate
      * @property mixed torpedo_price
@@ -168,6 +167,7 @@
      * @property mixed kabal_aggression
      * @property mixed kabal_planets
      * @property mixed kabal_unemployment
+     * @object   mixed tkitimer
      */
 
 namespace Tki;
@@ -233,17 +233,13 @@ class Reg
         }
     }
 
-    /**
-     * @param mixed $value
-     */
+    /** @param mixed $value */
     public function __set(string $key, $value): void
     {
         $this->vars[$key] = $value;
     }
 
-    /**
-     * @return mixed
-     */
+    /** @return mixed */
     public function &__get(string $key)
     {
         if (array_key_exists($key, $this->vars))
