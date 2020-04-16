@@ -41,7 +41,7 @@ class Sessions
             array($this, 'read'),
             array($this, 'write'),
             array($this, 'destroy'),
-            array($this, 'garbage_collection')
+            array($this, 'garbageCollection')
         );
 
         // Set the database variable for this class
@@ -162,7 +162,7 @@ class Sessions
         }
     }
 
-    public function garbage_collection(): bool
+    public function garbageCollection(): bool
     {
         if ($this->pdo_db !== null)
         {
