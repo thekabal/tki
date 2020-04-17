@@ -40,17 +40,20 @@ class TkiPDO extends \PDO
         parent::__construct($dsn, $user, $password, $driver_options);
     }
 
-    public function exec($statement): int
+    /**
+     * @return int
+     */
+    public function exec($query)
     {
-        $statement = $this->tablePrefix($statement);
-        $rows_affected = parent::exec($statement);
+        $query = $this->tablePrefix($query);
+        $rows_affected = parent::exec($query);
         return $rows_affected;
     }
 
-    public function prepare($statement, $driver_options = array()): \PDOStatement
+    public function prepare($statement, $options = array()): \PDOStatement
     {
         $statement = $this->tablePrefix($statement);
-        $replaced_statement = parent::prepare($statement, $driver_options);
+        $replaced_statement = parent::prepare($statement, $options);
         return $replaced_statement;
     }
 
@@ -63,7 +66,7 @@ class TkiPDO extends \PDO
         $args = func_get_args();
         if (count($args) > 1)
         {
-            $replaced_statement = call_user_func_array(array($this, 'parent::query'), $args);
+            $replaced_statement = call_user_func('PDO::query', $args);
             return $replaced_statement;
         }
         else
