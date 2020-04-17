@@ -55,7 +55,7 @@ class TkiPDO extends \PDO
     }
 
     /**
-     * @var \PDOStatement|false
+     * @return \PDOStatement|false
      */
     public function query(string $statement)
     {
