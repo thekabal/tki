@@ -33,10 +33,6 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'port', 'ibank',
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $destroy = null;
 $destroy = (int) filter_input(INPUT_GET, 'destroy', FILTER_SANITIZE_NUMBER_INT);
-if ($destroy === null)
-{
-    $destroy = false;
-}
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $command = null;
@@ -49,10 +45,6 @@ if ($command === null)
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $planet_id = null;
 $planet_id = (int) filter_input(INPUT_GET, 'planet_id', FILTER_SANITIZE_NUMBER_INT);
-if ($planet_id === null)
-{
-    $planet_id = false;
-}
 
 echo '<h1>' . $title . '</h1>';
 
