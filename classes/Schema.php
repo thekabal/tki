@@ -55,7 +55,7 @@ class Schema
                     $drop_res = $pdo_db->exec('DROP TABLE ' . $db_prefix . $tablename);
                     // Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
-                    if ($drop_res !== false)
+                    if ($drop_res === 0)
                     {
                         $destroy_results[$counter]['result'] = true;
                     }
@@ -99,7 +99,7 @@ class Schema
                     $drop_res = $pdo_db->exec('DROP SEQUENCE ' . $db_prefix . $seqname);
                     // Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
-                    if ($drop_res !== false)
+                    if ($drop_res === 0)
                     {
                         $destroy_results[$counter]['result'] = true;
                     }
@@ -143,7 +143,7 @@ class Schema
                     $drop_res = $pdo_db->exec('CREATE SEQUENCE ' . $db_prefix . $seqname);
                     // Db::logDbErrors($pdo_db, $drop_res, __LINE__, __FILE__); // Triggers errors because there is no DB
 
-                    if ($drop_res !== false)
+                    if ($drop_res === 0)
                     {
                         $create_table_results[$counter]['result'] = true;
                     }
@@ -205,18 +205,24 @@ class Schema
                 $RXSQLComments = '@(--[^\r\n]*)|(\#[^\r\n]*)|(/\*[\w\W]*?(?=\*/)\*/)@ms';
                 $sql_query = (($sql_query == '') ? '' : preg_replace($RXSQLComments, '', (string) $sql_query));
 
-                // FUTURE: Test handling invalid SQL to ensure it hits the error logger below AND the visible output during running
-                $sth = $pdo_db->prepare($sql_query);
-                $sth->execute();
-
-                if ($pdo_db->errorCode() !== self::PDO_SUCCESS)
+                if ($sql_query === null)
                 {
-                    $errorinfo = $pdo_db->errorInfo();
-                    $create_table_results[$counter]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                        $create_table_results[$counter]['result'] = 'Please report this bug to the developers. No SQL remaining in create tables.';
                 }
                 else
                 {
-                    $create_table_results[$counter]['result'] = true;
+                    $sth = $pdo_db->prepare($sql_query);
+                    $sth->execute();
+
+                    if ($pdo_db->errorCode() !== self::PDO_SUCCESS)
+                    {
+                        $errorinfo = $pdo_db->errorInfo();
+                        $create_table_results[$counter]['result'] = $errorinfo[1] . ': ' . $errorinfo[2];
+                    }
+                    else
+                    {
+                        $create_table_results[$counter]['result'] = true;
+                    }
                 }
 
                 // Db::logDbErrors($pdo_db, $execute_res, __LINE__, __FILE__); // Triggers errors because there is no DB
