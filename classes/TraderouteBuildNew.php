@@ -121,7 +121,7 @@ class TraderouteBuildNew
             <td><input type=radio name=\"ptype1\" value=\"port\"
             ";
 
-        if (($editroute === null) || ($editroute !== null) && $editroute['source_type'] == 'P')
+        if (($editroute !== null) && $editroute['source_type'] == 'P')
         {
             echo " checked";
         }
@@ -230,7 +230,7 @@ class TraderouteBuildNew
             <td><input type=radio name=\"ptype2\" value=\"port\"
             ";
 
-        if (($editroute === null) || ($editroute !== null && $editroute['dest_type'] == 'P'))
+        if (($editroute !== null && $editroute['dest_type'] == 'P'))
         {
             echo " checked";
         }
@@ -338,7 +338,7 @@ class TraderouteBuildNew
             <td colspan=2 valign=top><font size=2><input type=radio name=\"move_type\" value=\"realspace\"
             ";
 
-        if ($editroute === null || ($editroute !== null && $editroute['move_type'] == 'R'))
+        if ($editroute !== null && $editroute['move_type'] == 'R')
         {
             echo " checked";
         }
@@ -359,7 +359,7 @@ class TraderouteBuildNew
             <td colspan=2 valign=top><font size=2><input type=radio name=\"circuit_type\" value=\"1\"
             ";
 
-        if (($editroute === null) || ($editroute !== null) && $editroute['circuit'] == '1')
+        if (($editroute !== null) && $editroute['circuit'] == '1')
         {
             echo " checked";
         }
