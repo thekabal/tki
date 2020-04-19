@@ -88,9 +88,8 @@ class Team
     }
 
     // Display list of teams
-    public static function displayAllTeams(\PDO $pdo_db, $db, array $langvars, Reg $tkireg, bool $order, string $type): void
+    public static function displayAllTeams(\PDO $pdo_db, array $langvars, Reg $tkireg, ?string $order, string $type): void
     {
-        $row2 = array();
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
         echo "<table style='width:100%; border:#fff 1px solid;' border='0' cellspacing='0' cellpadding='2'>";
         echo "<tr bgcolor=\"$tkireg->color_header\">";
@@ -111,17 +110,45 @@ class Team
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=character_name&type=$type>" . $langvars['l_team_coord'] . "</a></strong></td>";
         echo "<td><strong><a class='new_link' style='font-size:14px;' href=teams.php?order=total_score&type=$type>" . $langvars['l_score'] . "</a></strong></td>";
         echo "</tr>";
-        $sql_query = "SELECT {$db->prefix}ships.character_name,
-                    COUNT(*) as number_of_members,
-                    ROUND (SQRT (SUM(POW ({$db->prefix}ships.score, 2)))) as total_score,
-                    {$db->prefix}teams.id,
-                    {$db->prefix}teams.team_name,
-                    {$db->prefix}teams.creator
-                    FROM {$db->prefix}ships
-                    LEFT JOIN {$db->prefix}teams ON {$db->prefix}ships.team = {$db->prefix}teams.id
-                    WHERE {$db->prefix}ships.team = {$db->prefix}teams.id AND admin = 'N'
-                    GROUP BY {$db->prefix}teams.team_name";
 
+        $sql = "SELECT ::prefix::ships.character_name, " .
+               "COUNT(*) as number_of_members, " .
+               "ROUND(SQRT(SUM(POW(::prefix::ships.score, 2)))) as total_score, " .
+               "::prefix::teams.id, ::prefix::teams.team_name, ::prefix::teams.creator " .
+               "FROM ::prefix::ships " .
+               "LEFT JOIN ::prefix::teams ON ::prefix::ships.team = ::prefix::teams.id " .
+               "WHERE ::prefix::ships.team = ::prefix::teams.id " .
+               "AND admin = 'N' GROUP BY ::prefix::teams.team_name";
+
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->execute();
+        $somethingteam = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+
+        $color = $tkireg->color_line1;
+        if ($somethingteam !== false)
+        {
+            foreach ($somethingteam as $row)
+            {
+                echo "<tr bgcolor=\"$color\">";
+                echo "<td><a href='teams.php?teamwhat=1&whichteam={$row['id']}'>{$row['team_name']}</a></td>";
+                echo "<td>{$row['number_of_members']}</td>";
+                echo "<td><a href='mailto.php?name={$row['character_name']}'>{$row['character_name']}</a></td>";
+                echo "<td>{$row['total_score']}</td>";
+                echo "</tr>";
+                if ($color == $tkireg->color_line1)
+                {
+                    $color = $tkireg->color_line2;
+                }
+                else
+                {
+                    $color = $tkireg->color_line1;
+                }
+            }
+        }
+        echo "</table><br>";
+
+/*
         // Setting if the order is Ascending or descending, if any.
         // Default is ordered by teams.team_name
         if ($order)
@@ -129,45 +156,7 @@ class Team
             $sql_query .= " ORDER BY ? ?";
         }
 
-        $sql_query .= ";";
-
-        $res = $db->Execute($sql_query, array($order, $sort_by));
-        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $color = $tkireg->color_line1;
-
-        while (!$res->EOF)
-        {
-            $row = $res->fields;
-            echo "<tr bgcolor=\"$color\">";
-            echo "<td><a href='teams.php?teamwhat=1&whichteam={$row['id']}'>{$row['team_name']}</a></td>";
-            echo "<td>{$row['number_of_members']}</td>";
-
-            // This fixes it so that it actually displays the coordinator, and not the first member of the team.
-            $res2 = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($row['creator']));
-            \Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
-            while (!$res2->EOF)
-            {
-                $row2 = $res2->fields;
-                $res2->MoveNext();
-            }
-
-            // If there is a way to redo the original sql query instead, please, do so, but I didnt see a way to.
-            echo "<td><a href='mailto.php?name={$row2['character_name']}'>{$row2['character_name']}</a></td>";
-            echo "<td>{$row['total_score']}</td>";
-            echo "</tr>";
-            if ($color == $tkireg->color_line1)
-            {
-                $color = $tkireg->color_line2;
-            }
-            else
-            {
-                $color = $tkireg->color_line1;
-            }
-
-            $res->MoveNext();
-        }
-
-        echo "</table><br>";
+        $res = $db->Execute($sql_query, array($order, $sort_by));*/
     }
 
     public static function displayInviteInfo(array $langvars, array $playerinfo, array $invite_info): void
