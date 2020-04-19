@@ -120,10 +120,24 @@ class Team
                "WHERE ::prefix::ships.team = ::prefix::teams.id " .
                "AND admin = 'N' GROUP BY ::prefix::teams.team_name";
 
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->execute();
-        $somethingteam = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+        if ($order === null)
+        {
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->execute();
+            $somethingteam = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+        }
+        else
+        {
+            // This is not currently working - not sure why the SQL fails
+//            $sql = $sql . " ORDER BY :order :sort_by";
+            $stmt = $pdo_db->prepare($sql);
+//            $stmt->bindParam(':order', $order, \PDO::PARAM_STR);
+//            $stmt->bindParam(':sort_by', $sort_by, \PDO::PARAM_STR);
+            $stmt->execute();
+            $somethingteam = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+        }
 
         $color = $tkireg->color_line1;
         if ($somethingteam !== false)
@@ -147,16 +161,6 @@ class Team
             }
         }
         echo "</table><br>";
-
-/*
-        // Setting if the order is Ascending or descending, if any.
-        // Default is ordered by teams.team_name
-        if ($order)
-        {
-            $sql_query .= " ORDER BY ? ?";
-        }
-
-        $res = $db->Execute($sql_query, array($order, $sort_by));*/
     }
 
     public static function displayInviteInfo(array $langvars, array $playerinfo, array $invite_info): void
@@ -175,7 +179,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, $db, array $langvars, int $whichteam, bool $isowner, array $playerinfo, array $invite_info, array $team, Reg $tkireg): void
+    public static function showInfo(\PDO $pdo_db, array $langvars, int $whichteam, bool $isowner, array $playerinfo, array $invite_info, array $team, Reg $tkireg): void
     {
         // Heading
         echo "<div align=center><h3><font color=white><strong>$team[team_name]</strong>";
@@ -206,42 +210,56 @@ class Team
         // Main table
         echo "<table border=2 cellspacing=2 cellpadding=2 bgcolor=\"#400040\" width=\"75%\" align=center><tr>";
         echo "<td><font color=white>" . $langvars['l_team_members'] . "</font></td></tr><tr bgcolor=$tkireg->color_line2>";
-        $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE team = ?;", array($whichteam));
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-        while (!$result->EOF)
-        {
-            $member = $result->fields;
-            echo "<td> - " . $member['character_name'] . " (" . $langvars['l_score'] . " " . $member['score'] . ")";
-            if ($isowner && ($member['ship_id'] != $playerinfo['ship_id']))
-            {
-                echo " - <font size=2>[<a href=\"teams.php?teamwhat=5&who=$member[ship_id]\">" . $langvars['l_team_eject'] . "</a>]</font></td>";
-            }
-            else
-            {
-                if ($member['ship_id'] == $team['creator'])
-                {
-                    echo " - " . $langvars['l_team_coord'] . " </td>";
-                }
-            }
 
-            echo "</tr><tr bgcolor=$tkireg->color_line2>";
-            $result->MoveNext();
+        $sql = "SELECT * FROM ::prefix::ships " .
+               "WHERE ::prefix::ships.team = :whichteam ";
+
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':whichteam', $whichteam, \PDO::PARAM_INT);
+        $stmt->execute();
+        $somethingteam = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+
+        if ($somethingteam !== false)
+        {
+            foreach ($somethingteam as $member)
+            {
+                echo "<td> - " . $member['character_name'] . " (" . $langvars['l_score'] . " " . $member['score'] . ")";
+                if ($isowner && ($member['ship_id'] != $playerinfo['ship_id']))
+                {
+                    echo " - <font size=2>[<a href=\"teams.php?teamwhat=5&who=$member[ship_id]\">" . $langvars['l_team_eject'] . "</a>]</font></td>";
+                }
+                else
+                {
+                    if ($member['ship_id'] == $team['creator'])
+                    {
+                        echo " - " . $langvars['l_team_coord'] . " </td>";
+                    }
+                }
+
+                echo "</tr><tr bgcolor=$tkireg->color_line2>";
+            }
         }
 
-        // Displays for members name
-        $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships WHERE team_invite = ?;", array($whichteam));
-        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        $sql2 = "SELECT ship_id, character_name FROM ::prefix::ships " .
+               "WHERE team_invite = :whichteam ";
+
+        $stmt2 = $pdo_db->prepare($sql2);
+        $stmt2->bindParam(':whichteam', $whichteam, \PDO::PARAM_INT);
+        $stmt2->execute();
+        $somethingteam2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
+        \Tki\Db::logDbErrors($pdo_db, $stmt2, __LINE__, __FILE__);
+
         echo "<td bgcolor=$tkireg->color_line2><font color=white>" . $langvars['l_team_pending'] . " <strong>" . $team['team_name'] . "</strong></font></td>";
         echo "</tr><tr>";
-        if ($res->RecordCount() > 0)
+
+        if ($somethingteam2 !== false)
         {
-            echo "</tr><tr bgcolor=$tkireg->color_line2>";
-            while (!$res->EOF)
+            foreach ($somethingteam2 as $who)
             {
-                $who = $res->fields;
+                echo "</tr><tr bgcolor=$tkireg->color_line2>";
                 echo "<td> - $who[character_name]</td>";
                 echo "</tr><tr bgcolor=$tkireg->color_line2>";
-                $res->MoveNext();
             }
         }
         else

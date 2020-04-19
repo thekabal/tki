@@ -92,6 +92,18 @@ if (array_key_exists('who', $_REQUEST) === true)
     $who = (int) $_REQUEST['who'];
 }
 
+$order = null;
+if (array_key_exists('order', $_REQUEST) === true)
+{
+    $order = (string) $_REQUEST['order'];
+}
+
+$type = '';
+if (array_key_exists('type', $_POST) === true)
+{
+    $type = (string) $_REQUEST['type'];
+}
+
 // Setting up some recordsets.
 // I noticed before the rewriting of this page that in some case recordset may be fetched more thant once, which is NOT optimized.
 
@@ -117,7 +129,7 @@ if ($playerinfo['team_invite'] != 0)
 }
 else
 {
-    $invite_info = null;
+    $invite_info = array();
 }
 
 $sectors = null;
@@ -139,7 +151,7 @@ else
 switch ($teamwhat)
 {
     case 1: // Info on single team
-        Tki\Team::showInfo($pdo_db, $db, $langvars, $whichteam, true, $playerinfo, $invite_info, $team, $tkireg);
+        Tki\Team::showInfo($pdo_db, $langvars, $whichteam, true, $playerinfo, $invite_info, $team, $tkireg);
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         break;
 
@@ -164,7 +176,7 @@ switch ($teamwhat)
                     $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
                     echo $langvars['l_team_error'];
                     echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-                    continue;
+                    break;
                 }
 
                 $resx = $db->Execute("DELETE FROM {$db->prefix}teams WHERE id = ?;", array($whichteam));
@@ -354,7 +366,7 @@ switch ($teamwhat)
             $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
             echo $langvars['l_team_error'];
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-            continue;
+            break;
         }
         else
         {
@@ -393,7 +405,7 @@ switch ($teamwhat)
         {
             echo $langvars['l_team_leavefirst'] . "<br>";
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
-            continue;
+            break;
         }
 
         if ($teamname === null)
@@ -420,14 +432,33 @@ switch ($teamwhat)
                 break;
             }
 
-            $res = $db->Execute("INSERT INTO {$db->prefix}teams (id, creator, team_name, number_of_members, description) VALUES (?, ?, ?, '1', ?);", array($playerinfo['ship_id'], $playerinfo['ship_id'], $teamname, $teamdesc));
-            Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            $number_of_members = 1;
+            $sql = "INSERT INTO ::prefix::teams (id, creator, team_name, description, number_of_members) VALUES (:ship_id, :team_creator, :team_name, :description, :number_of_members)";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':team_creator', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':team_name', $teamname, \PDO::PARAM_STR);
+            $stmt->bindParam(':description', $teamdesc, \PDO::PARAM_STR);
+            $stmt->bindParam(':number_of_members', $number_of_members, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            $debug1 = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $resx = $db->Execute("INSERT INTO {$db->prefix}zones VALUES(NULL, ?, ?, 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0);", array("{$teamname}\'s Empire", $playerinfo['ship_id']));
-            Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+            $teamZone = 'Y';
+            $sql = "INSERT INTO ::prefix::zones (zone_id, zone_name, owner, team_zone) VALUES (:zone_id, :zone_name, :owner, :team_zone)";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':zone_id', null, \PDO::PARAM_NULL);
+            $stmt->bindParam(':zone_name', "{$teamname}\'s Empire", \PDO::PARAM_STR);
+            $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':team_zone', $teamZone, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            $debug2 = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $resy = $db->Execute("UPDATE {$db->prefix}ships SET team=? WHERE ship_id = ?;", array($playerinfo['ship_id'], $playerinfo['ship_id']));
-            Tki\Db::logDbErrors($pdo_db, $resy, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::ships SET team=:team_id WHERE ship_id=:ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':team_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            $debug3 = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             echo $langvars['l_team_team'] . " <strong>" . $teamname . "</strong> " . $langvars['l_team_hcreated'] . ".<br><br>";
             Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::TEAM_CREATE, $teamname);
@@ -588,9 +619,13 @@ switch ($teamwhat)
                 break;
             }
 
-            $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team']));
-            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-            $whichteam = $result->fields;
+            $sql = "SELECT * FROM ::prefix::teams WHERE id=:player_team";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':player_team', $playerinfo['team'], PDO::PARAM_INT);
+            $stmt->execute();
+            $whichteam = $stmt->fetch(PDO::FETCH_ASSOC);
+            Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+
             if ($playerinfo['team_invite'])
             {
                 $result = $db->Execute("SELECT * FROM {$db->prefix}teams WHERE id = ?;", array($playerinfo['team_invite']));
@@ -599,7 +634,7 @@ switch ($teamwhat)
             }
 
             $isowner = Tki\Team::isTeamOwner($whichteam, $playerinfo);
-            Tki\Team::showInfo($pdo_db, $db, $langvars, $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
+            Tki\Team::showInfo($pdo_db, $langvars, (int) $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
         }
 
         $res = $db->Execute("SELECT COUNT(*) as total FROM {$db->prefix}teams WHERE admin='N'");
@@ -608,7 +643,7 @@ switch ($teamwhat)
 
         if ($num_res['total'] > 0)
         {
-            Tki\Team::displayAllTeams($pdo_db, $db, $langvars, $tkireg, $order, $type);
+            Tki\Team::displayAllTeams($pdo_db, $langvars, $tkireg, $order, $type);
         }
         else
         {
