@@ -130,10 +130,10 @@ class Team
         else
         {
             // This is not currently working - not sure why the SQL fails
-//            $sql = $sql . " ORDER BY :order :sort_by";
+            // $sql = $sql . " ORDER BY :order :sort_by";
             $stmt = $pdo_db->prepare($sql);
-//            $stmt->bindParam(':order', $order, \PDO::PARAM_STR);
-//            $stmt->bindParam(':sort_by', $sort_by, \PDO::PARAM_STR);
+            // $stmt->bindParam(':order', $order, \PDO::PARAM_STR);
+            // $stmt->bindParam(':sort_by', $sort_by, \PDO::PARAM_STR);
             $stmt->execute();
             $somethingteam = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             \Tki\Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
@@ -160,6 +160,7 @@ class Team
                 }
             }
         }
+
         echo "</table><br>";
     }
 
