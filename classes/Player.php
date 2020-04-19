@@ -26,7 +26,6 @@ class Player
     public static function auth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template): array
     {
         $request = Request::createFromGlobals();
-        $flag = true;
         $error_status = null;
         $playerinfo = array();
 
@@ -71,27 +70,26 @@ class Player
                     $_SESSION['last_activity'] = $timestamp['now'];
                 }
 
-                $flag = false;
+                return $playerinfo;
             }
-        }
+            else
+            {
+                $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_needlogin']);
+                $title = $langvars['l_error'];
 
-        if ($flag)
-        {
-            $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_needlogin']);
-            $title = $langvars['l_error'];
+                $header = new \Tki\Header();
+                $header->display($pdo_db, $lang, $template, $title);
 
-            $header = new \Tki\Header();
-            $header->display($pdo_db, $lang, $template, $title);
+                echo $error_status;
 
-            echo $error_status;
-
-            $footer = new \Tki\Footer();
-            $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
+                $footer = new \Tki\Footer();
+                $footer->display($pdo_db, $lang, $tkireg, $template);
+                die();
+            }
         }
         else
         {
-            return $playerinfo;
+            return array();
         }
     }
 
