@@ -32,6 +32,7 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 echo "<h1>" . $title . "</h1>\n";
 
+$sector = '';
 if (array_key_exists('sector', $_GET))
 {
     if ($_GET['sector'] == "*")
@@ -42,10 +43,6 @@ if (array_key_exists('sector', $_GET))
     {
         $sector = htmlentities($_GET['sector'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
-}
-else
-{
-    $sector = null;
 }
 
 $image_string = null;
@@ -228,7 +225,7 @@ else
 
     // Get sectorinfo from database
     $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
-    $sectorinfo = $sectors_gateway->selectSectorInfo($sector);
+    $sectorinfo = $sectors_gateway->selectSectorInfo((int) $sector);
 
     // Get sectors which can be reached through scanned sector
     $result3 = $db->Execute("SELECT link_dest FROM {$db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($sector));

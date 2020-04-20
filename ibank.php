@@ -77,28 +77,18 @@ if ($dplanet_id === 0)
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-$minimum = null;
 $minimum = (int) filter_input(INPUT_POST, 'minimum', FILTER_SANITIZE_NUMBER_INT);
 
 if ($minimum === 0)
 {
     $minimum = 0;
 }
-else
-{
-    $minimum = preg_replace("/[^0-9]/", '', $minimum);
-}
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-$maximum = null;
 $maximum = (int) filter_input(INPUT_POST, 'maximum', FILTER_SANITIZE_NUMBER_INT);
 if ($maximum === 0)
 {
     $maximum = 0;
-}
-else
-{
-    $maximum = preg_replace("/[^0-9]/", '', $maximum);
 }
 
 if ($command == 'login') // Main menu

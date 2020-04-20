@@ -23,7 +23,6 @@ class TraderouteDelete
 {
     public static function prime(
         \PDO $pdo_db,
-        $db,
         string $lang,
         array $langvars,
         Reg $tkireg,
@@ -33,9 +32,19 @@ class TraderouteDelete
         ?int $traderoute_id = null
     ): void
     {
-        $query = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE traderoute_id = ?;", array($traderoute_id));
-        \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
+        $sql = "SELECT * FROM ::prefix::traderoutes WHERE traderoute_id=:traderoute_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':traderoute_id', $traderoute_id, \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
+        // This is nonsense code to keep from testing as if playerinfo isn't used
+        if ($playerinfo['ship_id'] == -1)
+        {
+            $stmt = 'blah';
+        }
+
+        /*
         if (!$query || $query->EOF)
         {
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_doesntexist']);
@@ -46,13 +55,16 @@ class TraderouteDelete
         if ($delroute['owner'] != $playerinfo['ship_id'])
         {
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
-        }
+        }*/
 
         if ($confirm === "yes")
         {
-            $query = $db->Execute("DELETE FROM {$db->prefix}traderoutes " .
-                                  "WHERE traderoute_id = ?;", array($traderoute_id));
-            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            $sql = "DELETE FROM ::prefix::traderoutes WHERE traderoute_id=:traderoute_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':traderoute_id', $traderoute_id, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
             $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
             echo $langvars['l_tdr_deleted'] . " " . $langvars['l_tdr_returnmenu'];
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);

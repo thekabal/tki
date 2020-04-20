@@ -159,15 +159,14 @@ if (($port_id2 === null) || (strlen(trim($port_id2)) === 0))
     $port_id2 = false;
 }
 
-$team_planet_id1 = null;
-$team_planet_id1 = filter_input(INPUT_POST, 'team_planet_id1', FILTER_SANITIZE_STRING);
+
+$team_planet_id1 = filter_input(INPUT_POST, 'team_planet_id1', FILTER_SANITIZE_NUMBER_INT);
 if (($team_planet_id1 === null) || (strlen(trim($team_planet_id1)) === 0))
 {
     $team_planet_id1 = false;
 }
 
-$team_planet_id2 = null;
-$team_planet_id2 = filter_input(INPUT_POST, 'team_planet_id2', FILTER_SANITIZE_STRING);
+$team_planet_id2 = filter_input(INPUT_POST, 'team_planet_id2', FILTER_SANITIZE_NUMBER_INT);
 if (($team_planet_id2 === null) || (strlen(trim($team_planet_id2)) === 0))
 {
     $team_planet_id2 = false;
@@ -240,7 +239,7 @@ elseif ($command == 'create')
 elseif ($command == 'delete')
 {
     // Displays delete info
-    \Tki\TraderouteDelete::prime($pdo_db, $db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
+    \Tki\TraderouteDelete::prime($pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
 }
 elseif ($command == 'settings')
 {
