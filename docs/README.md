@@ -40,7 +40,7 @@ The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/proje
 ### Server (generally, the most recent/current version of each is our recommendation, but these should suffice):
 - A Linux server. Our primary development platform is Fedora, but most Linux distributions should work, and potentially even OpenBSD.
 - A webserver capable of TLS such as `apache v2.4+` (we have not determined a required minimum).
-- `php v7.3.16+` (needed for void return types).
+- `php v7.4.5+` (needed for type-hinting property types).
 - `mariadb v5.5+ or v10.0+` (needed for utf8mb4 schemas).
 - `pdo` PHP extension.
 
