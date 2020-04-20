@@ -25,7 +25,6 @@ $variables = array();
 $variables['goodpass'] = '';
 $variables['templateset'] = $tkireg->default_template;
 $variables['body_class'] = 'create_universe';
-$variables['title'] = $langvars['l_cu_title'];
 $variables['steps'] = $create_universe_info['steps'];
 $variables['current_step'] = $create_universe_info['current_step'];
 $variables['next_step'] = $create_universe_info['next_step'];
@@ -96,7 +95,7 @@ $variables['lang_list']['size'] = $i - 1;
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'options', 'news'));
-
+$variables['title'] = $langvars['l_cu_title'];
 
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);

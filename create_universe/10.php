@@ -38,7 +38,6 @@ if (is_array($ini_keys))
 $variables = array();
 $variables['templateset'] = $tkireg->default_template;
 $variables['body_class'] = 'create_universe';
-$variables['title'] = $langvars['l_cu_title'];
 $variables['swordfish']  = filter_input(INPUT_POST, 'swordfish', FILTER_SANITIZE_URL);
 $variables['steps'] = $create_universe_info['steps'];
 $variables['current_step'] = $create_universe_info['current_step'];
@@ -47,6 +46,7 @@ $variables['max_sectors'] = $tkireg->max_sectors;
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
+$variables['title'] = $langvars['l_cu_title'];
 
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);

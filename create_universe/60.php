@@ -24,7 +24,6 @@ $create_universe_info = $step_finder->findStep(__FILE__);
 $variables = array();
 $variables['templateset']            = $tkireg->default_template;
 $variables['body_class']             = 'create_universe';
-$variables['title']                  = $langvars['l_cu_title'];
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
 $variables['next_step']              = $create_universe_info['next_step'];
@@ -45,6 +44,7 @@ $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTE
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
+$variables['title'] = $langvars['l_cu_title'];
 
 $catch_results = array();
 $z = 0;
