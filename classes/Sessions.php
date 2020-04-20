@@ -21,25 +21,13 @@ namespace Tki;
 
 class Sessions
 {
-    /**
-     * @var int
-     */
-    private $maxlifetime = 1800; // 30 mins
+    private int $maxlifetime = 1800; // 30 mins
 
-    /**
-     * @var \PDO|null
-     */
-    private $pdo_db = null;
+    private ?\PDO $pdo_db = null;
 
-    /*
-     * @var string|null
-     */
-    private $expiry = null;
+    private ?string $expiry = null;
 
-    /**
-     * @var string|null
-     */
-    private $currenttime = null;
+    private ?string $currenttime = null;
 
     public function __construct(\PDO $pdo_db)
     {
@@ -95,9 +83,16 @@ class Sessions
             $stmt->bindParam(':expiry', $this->currenttime, \PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            // PHP7 change requires return to be string:
-            // https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
-            return (string) $result['sessdata'];
+            if (!is_bool($result))
+            {
+                // PHP7 change requires return to be string:
+                // https://github.com/Inchoo/Inchoo_PHP7/issues/4#issuecomment-165618172
+                return (string) $result['sessdata'];
+            }
+            else
+            {
+                return '';
+            }
         }
         else
         {
@@ -105,10 +100,7 @@ class Sessions
         }
     }
 
-    /**
-     * @return boolean
-     */
-    public function write(string $sesskey, string $sessdata)
+    public function write(string $sesskey, string $sessdata): bool
     {
         if (($this->pdo_db !== null) && (Db::isActive($this->pdo_db)))
         {

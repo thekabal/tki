@@ -21,10 +21,7 @@ namespace Tki\Sectors; // Domain Entity organization pattern, Sectors objects
 
 class SectorsGateway // Gateway for SQL calls related to Sectors
 {
-    /**
-     * @var \PDO
-     */
-    protected $pdo_db; // This will hold a protected version of the pdo_db variable
+    protected \PDO $pdo_db; // This will hold a protected version of the pdo_db variable
 
     public function __construct(\PDO $pdo_db) // Create the this->pdo_db object
     {

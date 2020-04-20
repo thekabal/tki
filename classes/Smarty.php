@@ -21,10 +21,7 @@ namespace Tki;
 
 class Smarty
 {
-    /**
-     * @var \Smarty|null
-     */
-    protected $smarty = null;
+    protected ?\Smarty $smarty = null;
 
     public function __construct()
     {
@@ -121,9 +118,6 @@ class Smarty
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function getVariables(string $nodeName)
     {
         if ($this->smarty !== null)

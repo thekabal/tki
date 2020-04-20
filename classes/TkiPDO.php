@@ -23,10 +23,7 @@ namespace Tki;
 
 class TkiPDO extends \PDO
 {
-    /**
-     * @var string|null
-     */
-    public $tablePrefix;
+    public ?string $tablePrefix;
 
     public function __construct(
         string $dsn,
@@ -41,7 +38,7 @@ class TkiPDO extends \PDO
     }
 
     /**
-     * @return int
+     *  @return mixed
      */
     public function exec($query)
     {

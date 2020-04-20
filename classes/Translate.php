@@ -23,10 +23,7 @@ use PDO;
 
 class Translate
 {
-    /**
-     * @var Array
-     */
-    protected static $langvars = array();
+    protected static array $langvars = array();
 
     public static function load(\PDO $pdo_db, ?string $language = null, ?array $categories = null): array
     {
@@ -41,11 +38,14 @@ class Translate
             // Slurp in language variables from the ini file directly
             $ini_file = './languages/' . $language . '.ini';
             $ini_keys = parse_ini_file($ini_file, true);
-            foreach ($ini_keys as $config_line)
+            if (is_array($ini_keys))
             {
-                foreach ($config_line as $config_key => $config_value)
+                foreach ($ini_keys as $config_line)
                 {
-                    self::$langvars[$config_key] = $config_value;
+                    foreach ($config_line as $config_key => $config_value)
+                    {
+                        self::$langvars[$config_key] = $config_value;
+                    }
                 }
             }
 
@@ -69,9 +69,12 @@ class Translate
                 Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
                 $lang_entries = $result->fetchAll();
-                foreach ($lang_entries as $row)
+                if (is_array($lang_entries))
                 {
-                    self::$langvars[$row['name']] = $row['value'];
+                    foreach ($lang_entries as $row)
+                    {
+                        self::$langvars[$row['name']] = $row['value'];
+                    }
                 }
             }
 

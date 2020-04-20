@@ -32,12 +32,20 @@ class Realspace
         $stmt->bindParam(':playersector', $playerinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         $start = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if (!is_array($start))
+        {
+            $start = array();
+        }
 
         $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:destination";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':destination', $destination, \PDO::PARAM_INT);
         $stmt->execute();
         $finish = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if (!is_array($finish))
+        {
+            $finish = array();
+        }
 
         $deg = pi() / 180;
         $sa1 = $start['angle1'] * $deg;
@@ -123,6 +131,10 @@ class Realspace
                 $stmt->bindParam(':ship_id', $defenses_present['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 $nsfighters = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                if (!is_array($nsfighters))
+                {
+                    $nsfighters = array();
+                }
 
                 if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
