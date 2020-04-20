@@ -88,7 +88,7 @@ class Smarty
     {
     }
 
-    public function setTheme($themeName = null): void
+    public function setTheme(string $themeName): void
     {
         if ($this->smarty !== null)
         {
@@ -124,7 +124,7 @@ class Smarty
     /**
      * @return mixed
      */
-    public function getVariables($nodeName)
+    public function getVariables(string $nodeName)
     {
         if ($this->smarty !== null)
         {
@@ -141,7 +141,7 @@ class Smarty
         }
     }
 
-    public function display($template_file): void
+    public function display(string $template_file): void
     {
         // Process template and return the output in a
         // varable so that we can compress it or not.
