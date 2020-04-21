@@ -219,11 +219,8 @@ class Traderoute
         if (!$result99->EOF)
         {
             $fighters_owner = $result99->fields;
-            $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $fighters_owner['ship_id'], \PDO::PARAM_INT);
-            $stmt->execute();
-            $nsfighters = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $nsfighters = $players_gateway->selectPlayerInfoById($fighters_owner['ship_id']);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -236,12 +233,8 @@ class Traderoute
         if (!$result98->EOF)
         {
             $fighters_owner = $result98->fields;
-
-            $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $fighters_owner['ship_id'], \PDO::PARAM_INT);
-            $stmt->execute();
-            $nsfighters = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $nsfighters = $players_gateway->selectPlayerInfoById($fighters_owner['ship_id']);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {

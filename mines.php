@@ -150,11 +150,8 @@ else
         {
             $defense_owner = $defenses[0]['ship_id'];
 
-            $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $defense_owner, PDO::PARAM_INT);
-            $stmt->execute();
-            $fighters_owner = $stmt->fetch(PDO::FETCH_ASSOC);
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $fighters_owner = $players_gateway->selectPlayerInfoById($defense_owner);
 
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -169,11 +166,8 @@ else
     {
         $zone_owner = $zoneinfo['owner'];
 
-        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $zone_owner, PDO::PARAM_INT);
-        $stmt->execute();
-        $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $zoneowner_info = $players_gateway->selectPlayerInfoById($zone_owner);
 
         if ($zone_owner != $playerinfo['ship_id'])
         {

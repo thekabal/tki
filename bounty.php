@@ -112,11 +112,8 @@ switch ($response) {
             $color = $tkireg->color_line1;
             for ($j = 0; $j < $num_details; $j++)
             {
-                $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $bounty_details[$j]['placed_by'], PDO::PARAM_INT);
-                $stmt->execute();
-                $details = $stmt->fetch(PDO::FETCH_ASSOC);
+                $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+                $details = $players_gateway->selectPlayerInfoById($bounty_details[$j]['placed_by']);
 
                 echo "<tr bgcolor=\"$color\">";
                 echo "<td>" . $bounty_details[$j]['amount'] . "</td>";
@@ -370,11 +367,10 @@ switch ($response) {
             $color = $tkireg->color_line1;
             for ($i = 0; $i < $num_bounties; $i++)
             {
-                $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $bounties[$i]['bounty_on'], PDO::PARAM_INT);
-                $stmt->execute();
-                $details = $stmt->fetch(PDO::FETCH_ASSOC);
+                $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+                $tmp_return = $players_gateway->selectPlayerInfoById($bounties[$i]['bounty_on']);
+                $details = $tmp_return['character_name'];
+
                 echo "<tr bgcolor=\"$color\">";
                 echo "<td><a href=bounty.php?bounty_on=" . $bounties[$i]['bounty_on'] . "&response=display>" . $details['character_name'] . "</a></td>";
                 echo "<td>" . $bounties[$i]['total_bounty'] . "</td>";

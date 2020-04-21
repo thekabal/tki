@@ -80,11 +80,8 @@ else
 
         if ($zoneinfo['team_zone'] == 'N')
         {
-            $sql = "SELECT ship_id, character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $zoneinfo['owner'], PDO::PARAM_INT);
-            $stmt->execute();
-            $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $ownerinfo = $players_gateway->selectPlayerInfoById($zoneinfo['owner']);
             $ownername = $ownerinfo['character_name'];
         }
         else

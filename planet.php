@@ -124,11 +124,8 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
     $ownerinfo = null;
     if ($planetinfo['owner'] != 0)
     {
-        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $planetinfo['owner'], PDO::PARAM_INT);
-        $stmt->execute();
-        $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $ownerinfo = $players_gateway->selectPlayerInfoById($planetinfo['owner']);
     }
 
     if (empty($command))
@@ -915,11 +912,8 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
 
             if ($planetinfo['owner'] != 0)
             {
-                $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $planetinfo['owner'], PDO::PARAM_INT);
-                $stmt->execute();
-                $planetowner = $stmt->fetch(PDO::FETCH_ASSOC);
+                $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+                $planetowner = $players_gateway->selectPlayerInfoById($planetinfo['owner']);
             }
             else
             {

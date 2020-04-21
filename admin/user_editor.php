@@ -44,11 +44,8 @@ else
 {
     if ($_POST['operation'] === null)
     {
-        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $_POST['user'], \PDO::PARAM_INT);
-        $stmt->execute();
-        $userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $userinfo = $players_gateway->selectPlayerInfoById($_POST['user']);
 
         $variables['operation'] = $_POST['operation'];
         $variables['user'] = $_POST['user'];

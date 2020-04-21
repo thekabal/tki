@@ -28,6 +28,11 @@ class Combat
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $targetinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        // FUTURE: Better handling of database failure here
+        if ($targetinfo === false)
+        {
+            die("shipToShip failure in line 33");
+        }
 
         echo "<br><br>-=-=-=-=-=-=-=--<br>
         " . $langvars['l_cmb_startingstats'] . ":<br>

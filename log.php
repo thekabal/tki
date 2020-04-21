@@ -65,11 +65,8 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS) // Check if called by admin scr
     else
     {
         // Get playerinfo from database
-        $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $player, PDO::PARAM_INT);
-        $stmt->execute();
-        $tmp_playerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $tmp_playerinfo = $players_gateway->selectPlayerInfoById($player);
         $playerinfo['character_name'] = $tmp_playerinfo['character_name'];
     }
 }
