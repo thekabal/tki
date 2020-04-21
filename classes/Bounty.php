@@ -69,11 +69,9 @@ class Bounty
                 }
                 else
                 {
-                    $sql = "SELECT character_name FROM ::prefix::ships WHERE ship_id=:ship_id LIMIT 1";
-                    $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':ship_id', $tmp_bounty['placed_by'], \PDO::PARAM_INT);
-                    $stmt->execute();
-                    $placed = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+                    $tmp_return = $players_gateway->selectPlayerInfoById($tmp_bounty['placed_by']);
+                    $placed = $tmp_return['character_name'];
                 }
 
                 $sql = "UPDATE ::prefix::ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
