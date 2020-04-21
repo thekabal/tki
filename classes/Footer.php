@@ -47,12 +47,7 @@ class Footer
             $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $cur_time_stamp);
         }
 
-        $elapsed = 999; // Default value for elapsed, overridden with an actual value if its available
-        if (is_object($tkireg->tkitimer))
-        {
-            $tkireg->tkitimer->stop();
-            $elapsed = $tkireg->tkitimer->elapsed();
-        }
+        $tkireg->tkitimer->stop();
 
         // Suppress the news ticker on the IBANK and index pages
         $news_ticker_active = ((bool) preg_match("/index.php/i", (string) $request->server->get('SCRIPT_NAME')) || (bool) preg_match("/ibank.php/i", (string) $request->server->get('SCRIPT_NAME')) || (bool) preg_match("/new.php/i", (string) $request->server->get('SCRIPT_NAME')));
@@ -153,7 +148,7 @@ class Footer
                                             "seconds_left" => $seconds_left,
                                             "sched_ticks" => $tkireg->sched_ticks);
         $variables['players_online'] = $online;
-        $variables['elapsed'] = $elapsed;
+        $variables['elapsed'] = $tkireg->tkitimer->elapsed();
         $variables['mem_peak_usage'] = $mem_peak_usage;
         $variables['footer_show_debug'] = $tkireg->footer_show_debug;
         $variables['cur_year'] = date('Y');
