@@ -28,22 +28,24 @@ class TraderouteDistance
         $retvalue['scooped1'] = 0;
         $retvalue['scooped2'] = 0;
         $retvalue['scooped'] = 0;
+        $start_traderoute = array();
+        $dest_traderoute = array();
 
         if ($type1 == 'L')
         {
             // Get sectorinfo from database
             $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
-            $start = $sectors_gateway->selectSectorInfo($start);
+            $start_traderoute = $sectors_gateway->selectSectorInfo($start);
         }
 
         if ($type2 == 'L')
         {
             // Get sectorinfo from database
             $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
-            $dest = $sectors_gateway->selectSectorInfo($dest);
+            $dest_traderoute = $sectors_gateway->selectSectorInfo($dest);
         }
 
-        if ($start['sector_id'] == $dest['sector_id'])
+        if ($start_traderoute['sector_id'] == $dest_traderoute['sector_id'])
         {
             if ($circuit == '1')
             {
@@ -59,18 +61,18 @@ class TraderouteDistance
 
         $deg = pi() / 180;
 
-        $sa1 = $start['angle1'] * $deg;
-        $sa2 = $start['angle2'] * $deg;
-        $fa1 = $dest['angle1'] * $deg;
-        $fa2 = $dest['angle2'] * $deg;
-        $pos_x = $start['distance'] * sin($sa1) * cos($sa2) - $dest['distance'] * sin($fa1) * cos($fa2);
-        $pos_y = $start['distance'] * sin($sa1) * sin($sa2) - $dest['distance'] * sin($fa1) * sin($fa2);
-        $pos_z = $start['distance'] * cos($sa1) - $dest['distance'] * cos($fa1);
+        $sa1 = $start_traderoute['angle1'] * $deg;
+        $sa2 = $start_traderoute['angle2'] * $deg;
+        $fa1 = $dest_traderoute['angle1'] * $deg;
+        $fa2 = $dest_traderoute['angle2'] * $deg;
+        $pos_x = $start_traderoute['distance'] * sin($sa1) * cos($sa2) - $dest_traderoute['distance'] * sin($fa1) * cos($fa2);
+        $pos_y = $start_traderoute['distance'] * sin($sa1) * sin($sa2) - $dest_traderoute['distance'] * sin($fa1) * sin($fa2);
+        $pos_z = $start_traderoute['distance'] * cos($sa1) - $dest_traderoute['distance'] * cos($fa1);
         $distance = round(sqrt(pow($pos_x, 2) + pow($pos_y, 2) + pow($pos_z, 2)));
         $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);
         $triptime = round($distance / $shipspeed);
 
-        if (($triptime > 0) && ($dest['sector_id'] != $playerinfo['sector']))
+        if (($triptime > 0) && ($dest_traderoute['sector_id'] != $playerinfo['sector']))
         {
             $triptime = 1;
         }
@@ -105,7 +107,7 @@ class TraderouteDistance
 
         if ($circuit == '2')
         {
-            if ($sells == 'Y' && $playerinfo['dev_fuelscoop'] == 'Y' && $type2 == 'P' && $dest['port_type'] != 'energy')
+            if ($sells == 'Y' && $playerinfo['dev_fuelscoop'] == 'Y' && $type2 == 'P' && $dest_traderoute['port_type'] != 'energy')
             {
                 $energyscooped = $distance * 100;
                 $free_power = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg);
