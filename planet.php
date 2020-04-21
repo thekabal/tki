@@ -121,12 +121,8 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
         die();
     }
 
-    $ownerinfo = null;
-    if ($planetinfo['owner'] != 0)
-    {
-        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
-        $ownerinfo = $players_gateway->selectPlayerInfoById($planetinfo['owner']);
-    }
+    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+    $ownerinfo = $players_gateway->selectPlayerInfoById($planetinfo['owner']);
 
     if (empty($command))
     {
