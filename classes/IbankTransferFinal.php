@@ -21,8 +21,14 @@ namespace Tki;
 
 class IbankTransferFinal
 {
-    public static function final(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, array $account, int $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Smarty $template): void
+    public static function final(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Smarty $template): void
     {
+        $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id");
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+        $account = $stmt->fetch(\PDO::FETCH_ASSOC);
+
         $amount = preg_replace("/[^0-9]/", '', (string) $amount);
         $amount = (int) $amount;
         $source = null;
