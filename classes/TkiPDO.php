@@ -38,7 +38,7 @@ class TkiPDO extends \PDO
     }
 
     /**
-     *  @return mixed
+     *  @return int
      */
     public function exec($query)
     {
