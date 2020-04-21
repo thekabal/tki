@@ -26,7 +26,7 @@ class News
     public static function previousDay(string $day): string
     {
         // Convert the formatted date into a timestamp
-        $day = strtotime($day);
+        $day = (int) strtotime($day);
 
         // Subtract one day in seconds from the timestamp
         $day = $day - 86400;
@@ -39,7 +39,7 @@ class News
     public static function nextDay(string $day): string
     {
         // Convert the formatted date into a timestamp
-        $day = strtotime($day);
+        $day = (int) strtotime($day);
 
         // Add one day in seconds to the timestamp
         $day = $day + 86400;
