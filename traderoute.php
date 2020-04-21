@@ -256,9 +256,9 @@ elseif ($engage !== null)
     // Perform trade route
     while ($tr_repeat > 0)
     {
-        $result = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE email = ?;", array($_SESSION['username']));
-        Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-        $playerinfo = $result->fields;
+        // Get playerinfo from database
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
         \Tki\Traderoute::engage($pdo_db, $db, $lang, $tr_repeat, $langvars, $tkireg, $playerinfo, $engage, $traderoutes, $portfull, $template);
         $tr_repeat--;
     }
@@ -350,9 +350,9 @@ else
         echo "<td align='center'><font size=2 color=white>";
         if ($traderoutes[$i]['source_type'] == 'P')
         {
-            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['source_id']));
-            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-            $port1 = $result->fields;
+            // Get sectorinfo from database
+            $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+            $port1 = $sectors_gateway->selectSectorInfo($traderoutes[$i]['source_id']);
             echo "&nbsp;" . Tki\Ports::getType($port1['port_type'], $langvars) . "</font></td>";
         }
         else
@@ -391,9 +391,9 @@ else
         echo "<td align='center'><font size=2 color=white>";
         if ($traderoutes[$i]['dest_type'] == 'P')
         {
-            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoutes[$i]['dest_id']));
-            Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-            $port2 = $result->fields;
+            // Get sectorinfo from database
+            $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+            $port2 = $sectors_gateway->selectSectorInfo($traderoutes[$i]['dest_id']);
             echo "&nbsp;" . Tki\Ports::getType($port2['port_type'], $langvars) . "</font></td>";
         }
         else

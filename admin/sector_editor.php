@@ -48,13 +48,9 @@ else
 {
     if ($_POST['operation'] === null)
     {
-        // Get playerinfo from database
-        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $_POST['sector'], \PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        // Get sectorinfo from database
+        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+        $row = $sectors_gateway->selectSectorInfo($_POST['sector']);
         $variables['sector_name'] = $row['sector_name'];
 
         $zones = array();

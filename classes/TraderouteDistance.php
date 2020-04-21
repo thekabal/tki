@@ -31,20 +31,16 @@ class TraderouteDistance
 
         if ($type1 == 'L')
         {
-            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $start, \PDO::PARAM_INT);
-            $stmt->execute();
-            $start = $stmt->fetch(\PDO::FETCH_ASSOC);
+            // Get sectorinfo from database
+            $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+            $start = $sectors_gateway->selectSectorInfo($start);
         }
 
         if ($type2 == 'L')
         {
-            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':dest', $dest, \PDO::PARAM_INT);
-            $stmt->execute();
-            $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
+            // Get sectorinfo from database
+            $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+            $dest = $sectors_gateway->selectSectorInfo($dest);
         }
 
         if ($start['sector_id'] == $dest['sector_id'])
