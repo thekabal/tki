@@ -58,11 +58,11 @@ class PlayersGateway // Gateway for SQL calls related to Players
         return $playerinfo; // FUTURE: Eventually we want this to return a player object instead, for now, playerinfo array or false for no user found.
     }
 
-    public function selectPlayerInfoById(?int $user_id): array
+    public function selectPlayerInfoById(?int $ship_id): array
     {
-        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :user_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);
-        $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_STR);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_STR);
         $stmt->execute();
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 
