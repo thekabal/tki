@@ -66,11 +66,11 @@ if (strlen(trim((string) $bid)) === 0)
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right
-$amount = null;
+$amount = 0;
 $amount = (int) filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_INT);
 if (strlen(trim((string) $amount)) === 0)
 {
-    $amount = false;
+    $amount = 0;
 }
 
 // Get playerinfo from database
