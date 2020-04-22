@@ -96,7 +96,10 @@ class Ports
         return $tempval;
     }
 
-    public static function phpChangeDelta(int $desired_value, int $current_value, int $upgrade_cost): int
+    /**
+     * @return float|int
+     */
+    public static function phpChangeDelta(int $desired_value, int $current_value, int $upgrade_cost)
     {
         $delta_cost = 0;
         $delta = $desired_value - $current_value;

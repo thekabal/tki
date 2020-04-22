@@ -94,6 +94,9 @@ class Smarty
         }
     }
 
+    /**
+     * @param ((bool|int|mixed|null|string)[]|mixed|null|scalar)[]|string $variables
+     */
     public function addVariables(string $nodeName, $variables): void
     {
         if ($this->smarty !== null)
