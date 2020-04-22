@@ -21,7 +21,16 @@ namespace Tki;
 
 class IbankTransferSpecific
 {
-    public static function specific(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, array $playerinfo, int $ship_id, int $splanet_id, int $dplanet_id, Smarty $template): void
+    public static function specific(
+    \PDO $pdo_db,
+    string $lang,
+    array $langvars,
+    Reg $tkireg,
+    array $playerinfo,
+    int $ship_id,
+    int $splanet_id,
+    int $dplanet_id,
+    Smarty $template): void
     {
         $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id");
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
