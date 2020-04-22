@@ -87,10 +87,8 @@ class TraderouteSettings
         \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
     }
 
-    public static function after(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $colonists, int $fighters, int $torps, int $energy): void
+    public static function after(\PDO $pdo_db, array $playerinfo, int $colonists, int $fighters, int $torps, int $energy): void
     {
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
-
         empty($colonists) ? $colonists = 'N' : $colonists = 'Y';
         empty($fighters) ? $fighters = 'N' : $fighters = 'Y';
         empty($torps) ? $torps = 'N' : $torps = 'Y';
@@ -104,7 +102,11 @@ class TraderouteSettings
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $resa = $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
+    }
 
+    public static function afterOutput(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template): void
+    {
+        $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" .
                                         $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_globalsetsaved'] . " " . $langvars['l_tdr_returnmenu'];

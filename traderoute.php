@@ -249,7 +249,10 @@ elseif ($command == 'settings')
 elseif ($command == 'setsettings')
 {
     // Enters settings in db
-    \Tki\TraderouteSettings::after($pdo_db, $lang, $tkireg, $template, $playerinfo, $colonists, $fighters, $torps, $energy);
+    \Tki\TraderouteSettings::after($pdo_db, $playerinfo, $colonists, $fighters, $torps, $energy);
+
+    // Display outcome
+    \Tki\TraderouteSettings::afterOutput($pdo_db, $lang, $tkireg, $template);
 }
 elseif ($engage !== null)
 {
