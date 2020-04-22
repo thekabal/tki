@@ -77,17 +77,12 @@ for ($i = 0; $i < $destroy_array_size; $i++)
 if ($variables['drop_seq_results'] !== null)
 {
     $destroy_array_size = count($variables['drop_seq_results']);
-}
-else
-{
-    $destroy_array_size = 0;
-}
-
-for ($loop = 0; $loop < $destroy_array_size; $loop++)
-{
-    if ($variables['drop_seq_results'][$loop]['result'] !== true)
+    for ($loop = 0; $loop < $destroy_array_size; $loop++)
     {
-        $variables['autorun'] = false; // We disable autorun if any errors occur in processing
+        if ($variables['drop_seq_results'][$loop]['result'] !== true)
+        {
+            $variables['autorun'] = false; // We disable autorun if any errors occur in processing
+        }
     }
 }
 
