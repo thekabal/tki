@@ -86,11 +86,8 @@ class Score
         $stmt->execute();
         $ship_score = $stmt->fetch(\PDO::FETCH_COLUMN);
 
-        $sql = "SELECT (balance-loan) AS bank_score FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
-        $stmt->execute();
-        $bank_score = $stmt->fetch(\PDO::FETCH_COLUMN);
+        $ibank_gateway = new Ibank\IbankGateway($pdo_db);
+        $bank_score = $ibank_gateway->selectIbankScore($playerinfo['ship_id']);
 
         $score = $ship_score + $planet_score + $bank_score;
         if ($score < 0)

@@ -39,7 +39,7 @@ $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player g
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
-$ibank_gateway = new Ibank\IbankGateway($pdo_db);
+$ibank_gateway = new Tki\Ibank\IbankGateway($pdo_db);
 $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
 
 echo "<body class='" . $body_class . "'>";

@@ -33,6 +33,17 @@ class IbankGateway // Gateway for SQL calls related to Ibank objects
         $this->pdo_db = $pdo_db;
     }
 
+    public function selectIbankScore(int $ship_id): int
+    {
+        $sql = "SELECT (balance-loan) AS bank_score FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
+        $stmt = $this->pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__);
+        $bank_score = $stmt->fetch(\PDO::FETCH_COLUMN);
+        return $bank_score;
+    }
+
     public function selectIbankAccount(int $ship_id): array
     {
         $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
@@ -44,7 +55,7 @@ class IbankGateway // Gateway for SQL calls related to Ibank objects
         return $ibank_account;
     }
 
-    public function selectIbankLoanTime(int $ship_id): array
+    public function selectIbankLoanTime(int $ship_id): int
     {
         $sql = "SELECT UNIX_TIMESTAMP(loantime) as loan_time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
         $stmt = $this->pdo_db->prepare($sql);

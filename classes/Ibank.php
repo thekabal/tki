@@ -119,7 +119,7 @@ class Ibank
 
             // Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
             $ibank_gateway = new Ibank\IbankGateway($pdo_db);
-            $bank_loan_time = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
+            $bank_loan_time = $ibank_gateway->selectIbankLoanTime($playerinfo['ship_id']);
             $difftime = ($curtime - $bank_loan_time) / 60;
 
             echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_loantimeleft'] . " :</td>";
