@@ -117,14 +117,10 @@ class Ibank
         {
             $curtime = time();
 
-            $sql = "SELECT UNIX_TIMESTAMP(loantime) as time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-            $stmt->execute();
-            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            $time = $stmt->fetch(\PDO::FETCH_COLUMN);
-
-            $difftime = ($curtime - $time) / 60;
+            // Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
+            $ibank_gateway = new Ibank\IbankGateway($pdo_db);
+            $bank_loan_time = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
+            $difftime = ($curtime - $bank_loan_time) / 60;
 
             echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_loantimeleft'] . " :</td>";
 

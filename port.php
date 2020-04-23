@@ -339,12 +339,6 @@ elseif ($sectorinfo['port_type'] == "special")
         $bty = $res2->fields;
         if ($bty['total_bounty'] > 0)
         {
-            $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-            $stmt->execute();
-            $bank_row = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $pay = (int) filter_input(INPUT_POST, 'pay', FILTER_SANITIZE_NUMBER_INT);
             if ($pay === 1)
             {
@@ -370,18 +364,16 @@ elseif ($sectorinfo['port_type'] == "special")
             }
             elseif ($pay === 2)
             {
-                $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-                $stmt->execute();
-                $bank_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                // Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
+                $ibank_gateway = new Ibank\IbankGateway($pdo_db);
+                $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
 
-                $bounty_payment = $bank_row['balance'];
+                $bounty_payment = $bank_account['balance'];
                 if ($bounty_payment > 1000)
                 {
                     $bounty_payment -= 1000;
 
-                    if ($bank_row['balance'] >= $bty['total_bounty'])
+                    if ($bank_account['balance'] >= $bty['total_bounty'])
                     {
                         // Translation needed
                         echo "Full Payment Mode<br>\n";

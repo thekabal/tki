@@ -32,17 +32,13 @@ class Loan
         $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-        $sql = "SELECT loan, UNIX_TIMESTAMP(loantime) AS time FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        $account = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $ibank_gateway = new Ibank\IbankGateway($pdo_db);
+        $loan_and_time = $ibank_gateway->selectIbankLoanandTime($playerinfo['ship_id']);
 
-        if ($account['loan'] > 0)
+        if ($loan_and_time['loan'] > 0)
         {
             $curtime = time();
-            $difftime = ($curtime - $account['time']) / 60;
+            $difftime = ($curtime - $loan_and_time['time']) / 60;
             if ($difftime > $tkireg->ibank_lrate)
             {
                 return true;

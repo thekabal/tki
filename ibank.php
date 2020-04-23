@@ -38,11 +38,9 @@ $header->display($pdo_db, $lang, $template, $title, $body_class);
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id");
-$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-$result = $stmt->execute();
-Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-$account = $stmt->fetch(PDO::FETCH_ASSOC);
+// Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
+$ibank_gateway = new Ibank\IbankGateway($pdo_db);
+$bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
 
 echo "<body class='" . $body_class . "'>";
 echo "<center>";
@@ -98,23 +96,23 @@ if ($maximum === 0)
 
 if ($command == 'login') // Main menu
 {
-    Tki\Ibank::ibankLogin($langvars, $playerinfo, $account);
+    Tki\Ibank::ibankLogin($langvars, $playerinfo, $bank_account);
 }
 elseif ($command == 'withdraw') // Withdraw menu
 {
-    Tki\IbankWithdraw::before($langvars, $account);
+    Tki\IbankWithdraw::before($langvars, $bank_account);
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Tki\IbankWithdraw::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\IbankWithdraw::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $bank_account, $tkireg, $template);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
-    Tki\IbankDeposit::before($pdo_db, $lang, $account, $playerinfo);
+    Tki\IbankDeposit::before($pdo_db, $lang, $bank_account, $playerinfo);
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Tki\IbankDeposit::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $account, $tkireg, $template);
+    Tki\IbankDeposit::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $bank_account, $tkireg, $template);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
@@ -130,15 +128,15 @@ elseif ($command == 'transfer3') // Transfer operation
 }
 elseif ($command == 'loans') // Loans menu
 {
-    Tki\Ibank::ibankLoans($pdo_db, $langvars, $tkireg, $playerinfo, $account);
+    Tki\Ibank::ibankLoans($pdo_db, $langvars, $tkireg, $playerinfo, $bank_account);
 }
 elseif ($command == 'borrow') // Borrow operation
 {
-    Tki\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $account, $amount, $template);
+    Tki\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $bank_account, $amount, $template);
 }
 elseif ($command == 'repay') // Repay operation
 {
-    Tki\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $account, $amount, $tkireg, $template);
+    Tki\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $bank_account, $amount, $tkireg, $template);
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {

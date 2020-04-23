@@ -28,11 +28,9 @@ class IbankTransferFinal
 {
     public static function final(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Smarty $template): void
     {
-        $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id");
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-        $account = $stmt->fetch(\PDO::FETCH_ASSOC);
+        // Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
+        $ibank_gateway = new Ibank\IbankGateway($pdo_db);
+        $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
 
         $amount = preg_replace("/[^0-9]/", '', (string) $amount);
         $amount = (int) $amount;
@@ -108,7 +106,7 @@ class IbankTransferFinal
                 \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_nozeroamount'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
 
-            if ($amount > $account['balance'])
+            if ($amount > $bank_account['balance'])
             {
                 \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
@@ -124,7 +122,7 @@ class IbankTransferFinal
                 }
             }
 
-            $account['balance'] -= $amount;
+            $bank_account['balance'] -= $amount;
             $amount2 = $amount * $tkireg->ibank_paymentfee;
             $transfer = $amount - $amount2;
 
@@ -137,7 +135,7 @@ class IbankTransferFinal
                  "<tr valign=top>" .
                  "<td>" . $langvars['l_ibank_amounttransferred'] . " :</td><td align=right>" . number_format($transfer, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=top>" .
-                 "<td>" . $langvars['l_ibank_ibankaccount'] . " :</td><td align=right>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
+                 "<td>" . $langvars['l_ibank_ibankaccount'] . " :</td><td align=right>" . number_format($bank_account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C<br>" .
                  "<tr valign=bottom>" .
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";

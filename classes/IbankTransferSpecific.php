@@ -37,12 +37,6 @@ class IbankTransferSpecific
         int $dplanet_id,
         Smarty $template): void
     {
-        $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id");
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $result = $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-        $account = $stmt->fetch(\PDO::FETCH_ASSOC);
-
         if ($ship_id !== null) // Ship transfer
         {
             if ($playerinfo['ship_id'] == $ship_id)
@@ -93,6 +87,10 @@ class IbankTransferSpecific
                     \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_mustwait'], "ibank.php?command=transfer", $lang, $tkireg, $template);
                 }
             }
+
+            // Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
+            $ibank_gateway = new Ibank\IbankGateway($pdo_db);
+            $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
 
             echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_shiptransfer'] . "<br>---------------------------------</td></tr>" .
                  "<tr valign=top><td>" . $langvars['l_ibank_ibankaccount'] . " :</td><td align=right>" . number_format($account['balance'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
