@@ -27,13 +27,13 @@ require_once './common.php';
 $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
+// Database driven language entries
+$langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'port', 'ibank', 'main', 'planet', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'combat', 'regional'));
+
 $title = $langvars['l_planet_title'];
 
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
-
-// Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'port', 'ibank', 'main', 'planet', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'combat', 'regional'));
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $destroy = null;
