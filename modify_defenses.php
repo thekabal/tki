@@ -139,7 +139,8 @@ switch ($response)
             $ttl = $countres->fields;
             $total_sector_fighters = $ttl['totalfighters'];
             $calledfrom = "modify_defenses.php";
-            include_once './sector_fighters.php';
+            $energyscooped = 0;
+            Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, $energyscooped);
         }
         else
         {
