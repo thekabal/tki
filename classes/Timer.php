@@ -26,11 +26,9 @@ namespace Tki;
 
 class Timer
 {
-    public float $t_start = 0.0;
-
-    public float $t_stop = 0.0;
-
-    public float $t_elapsed = 0.0;
+    private float $t_start = 0.0;
+    private float $t_stop = 0.0;
+    private float $t_elapsed = 0.0;
 
     public function start(): void
     {
@@ -45,7 +43,7 @@ class Timer
     public function elapsed(): float
     {
         $this->t_elapsed = $this->t_stop - $this->t_start;
-        $rounded = round($this->t_elapsed, 3); // Round it down to three significant digits
-        return $rounded;
+        $rounded_elapsed_time = round($this->t_elapsed, 3); // Round it down to three significant digits
+        return $rounded_elapsed_time;
     }
 }
