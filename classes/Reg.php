@@ -183,7 +183,7 @@ namespace Tki;
 
 class Reg
 {
-    public array $vars = array();
+    private array $vars = array();
 
     public function __construct(\PDO $pdo_db)
     {
