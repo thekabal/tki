@@ -28,7 +28,7 @@ namespace Tki;
 
 class TkiPDO extends \PDO
 {
-    public ?string $tablePrefix;
+    private ?string $tablePrefix;
 
     public function __construct(
         string $dsn,
