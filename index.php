@@ -27,12 +27,7 @@ require_once './common.php';
 
 $link = null;
 
-if (!Tki\Db::isActive($pdo_db))
-{
-    // If DB is not active, redirect to create universe to run install
-    header('Location: create_universe.php');
-}
-else
+if (Tki\Db::isActive($pdo_db))
 {
     // Database driven language entries
     $langvars = Tki\Translate::load(
@@ -69,4 +64,10 @@ else
 
     $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
+}
+else
+{
+    // If DB is not active, redirect to create universe to run install
+    header('Location: create_universe.php');
+    exit;
 }
