@@ -75,11 +75,10 @@ if ($planet_id <= 0)
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
-$sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
-$stmt->execute();
-$planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get planetinfo from database
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+$planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
+$num_planets = count($planetinfo);
 
 if (!$planetinfo)
 {
@@ -441,11 +440,8 @@ if ($planetinfo)  // If there is a planet in the sector show appropriate menu
                     Tki\Db::logDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
 
                     // Refresh Planet Info
-                    $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
-                    $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
-                    $stmt->execute();
-                    $planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+                    $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
                     // Notify User Of Base Results
                     echo $langvars['l_planet_bbuild'] . "<br><br>";

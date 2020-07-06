@@ -28,11 +28,9 @@ class KabalToPlanet
 {
     public static function planet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars): void
     {
-        $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id"; // Get target planet information
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
-        $stmt->execute();
-        $planetinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
+        // Get planetinfo from database
+        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+        $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);

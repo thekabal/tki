@@ -40,7 +40,7 @@ if (array_key_exists('preptype', $_GET))
     $preptype = $_GET['preptype'];
 }
 
-$sort = null;
+$sort = '';
 if (array_key_exists('sort', $_GET))
 {
     $sort = $_GET['sort'];

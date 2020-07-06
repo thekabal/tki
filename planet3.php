@@ -76,11 +76,9 @@ if ($planet_id <= 0)
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
-$stmt->execute();
-$planetinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get planetinfo from database
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+$planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
 // Check to see if it returned valid planet info.
 if ($planetinfo === false)

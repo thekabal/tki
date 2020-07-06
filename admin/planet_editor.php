@@ -24,7 +24,7 @@
 
 echo "<h2>" . $langvars['l_admin_planet_editor'] . "</h2>";
 echo "<form accept-charset='utf-8' action='admin.php' method='post'>";
-if (empty($planet))
+if (empty($planet_id))
 {
     echo "<select size='15' name='planet'>";
     $res = $db->Execute("SELECT planet_id, name, sector_id FROM {$db->prefix}planets ORDER BY sector_id");
@@ -48,15 +48,12 @@ else
 {
     if (empty($operation))
     {
-        // Get planet info from database
-        $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planet, \PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Get planetinfo from database
+        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+        $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
         echo "<table border='0' cellspacing='2' cellpadding='2'>";
-        echo "<tr><td><tt>" . $langvars['l_admin_planet_id'] . "</tt></td><td><font color='#6f0'>" . $planet . "</font></td>";
+        echo "<tr><td><tt>" . $langvars['l_admin_planet_id'] . "</tt></td><td><font color='#6f0'>" . $planet_id . "</font></td>";
         echo "<td align='right'><tt>" . $langvars['l_admin_sector_id'] . "</tt><input type='text' size='5' name='sector_id' value=\"" . $row['sector_id'] . "\"></td>";
         echo "<td align='right'><tt>" . $langvars['l_admin_defeated'] . "</tt><input type='checkbox' name='defeated' value='ON' " . \Tki\Checked::check($row['defeated']) . "></td></tr>";
         echo "<tr><td><tt>" . $langvars['l_admin_planet_name'] . "</tt></td><td><input type='text' size='15' name='name' value=\"" . $row['name'] . "\"></td>";
@@ -108,7 +105,7 @@ else
         echo "</table>";
 
         echo "<br>";
-        echo "<input type='hidden' name='planet' value='" . $planet . "'>";
+        echo "<input type='hidden' name='planet' value='" . $planet_id . "'>";
         echo "<input type='hidden' name='operation' value='save'>";
         echo "<input type='submit' size='1' value='" . $langvars['l_save'] . "'>";
     }
@@ -118,7 +115,7 @@ else
         $_defeated = empty($defeated) ? "N" : "Y";
         $_base = empty($base) ? "N" : "Y";
         $_sells = empty($sells) ? "N" : "Y";
-        $planupdate = $db->Execute("UPDATE {$db->prefix}planets SET sector_id = ?, defeated = ?, name = ?, base = ?, sells = ?, owner = ?, organics = ?, ore = ?, goods = ?, energy = ?, team = ?, colonists = ?,credits = ? ,fighters = ?, torps = ?, prod_organics= ? , prod_ore = ?, prod_goods = ?, prod_energy = ?, prod_fighters = ?, prod_torp = ? WHERE planet_id = ?", array($sector_id, $_defeated, $name, $_base, $_sells, $owner, $organics, $ore, $goods, $energy, $team, $colonists, $credits, $fighters, $torps, $prod_organics, $prod_ore, $prod_goods, $prod_energy, $prod_fighters, $prod_torp, $planet));
+        $planupdate = $db->Execute("UPDATE {$db->prefix}planets SET sector_id = ?, defeated = ?, name = ?, base = ?, sells = ?, owner = ?, organics = ?, ore = ?, goods = ?, energy = ?, team = ?, colonists = ?,credits = ? ,fighters = ?, torps = ?, prod_organics= ? , prod_ore = ?, prod_goods = ?, prod_energy = ?, prod_fighters = ?, prod_torp = ? WHERE planet_id = ?", array($sector_id, $_defeated, $name, $_base, $_sells, $owner, $organics, $ore, $goods, $energy, $team, $colonists, $credits, $fighters, $torps, $prod_organics, $prod_ore, $prod_goods, $prod_energy, $prod_fighters, $prod_torp, $planet_id));
         Tki\Db::logDbErrors($pdo_db, $planupdate, __LINE__, __FILE__);
         if (!$planupdate)
         {

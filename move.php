@@ -27,16 +27,16 @@ require_once './common.php';
 $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
+// Database driven language entries
+$langvars = Tki\Translate::load($pdo_db, $lang, array('move', 'common',
+            'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
+
 $title = $langvars['l_move_title'];
 
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 $sector = (int) filter_input(INPUT_GET, 'sector', FILTER_SANITIZE_NUMBER_INT);
-
-// Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('move', 'common',
-            'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
 
 // Get playerinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
