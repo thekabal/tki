@@ -117,12 +117,9 @@ if (empty($startdate))
     $startdate = date("Y-m-d");
 }
 
-$sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-$stmt->bindValue(':start_date', $startdate . '%');
-$stmt->execute();
-$logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Get logsinfo from database
+$logs_gateway = new \Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
+$logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $startdate);
 
 $langvars['l_log_months_temp'] = "l_log_months_" . (int) (substr($startdate, 5, 2));
 $entry = $langvars[$langvars['l_log_months_temp']] . " " . substr($startdate, 8, 2) . " " . substr($startdate, 0, 4);
@@ -194,12 +191,9 @@ if ($mode != 'compat')
     $entry = $$log_months_temp . " " . substr($yesterday, 8, 2) . " " . substr($yesterday, 0, 4);
 
     unset($logs);
-    $sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
-    $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-    $stmt->bindParam(':start_date', $yesterday, PDO::PARAM_STR);
-    $stmt->execute();
-    $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Get logsinfo from database
+    $logs_gateway = new \Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
+    $logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $yesterday);
 
     echo "<div id=\"dynPage1\" class=\"dynPage\">" .
          "<center>" .
@@ -238,12 +232,10 @@ if ($mode != 'compat')
     $entry = $$log_months_temp . " " . substr($tomorrow, 8, 2) . " " . substr($tomorrow, 0, 4);
 
     unset($logs);
-    $sql = "SELECT * FROM ::prefix::logs WHERE ship_id=:ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
-    $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-    $stmt->bindParam(':start_date', $tomorrow, PDO::PARAM_STR);
-    $stmt->execute();
-    $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Get logsinfo from database
+    $logs_gateway = new \Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
+    $logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $tomorrow);
 
     echo "<div id=\"dynPage2\" class=\"dynPage\">" .
          "<center>" .
