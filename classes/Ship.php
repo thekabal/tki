@@ -108,9 +108,5 @@ class Ship
                 }
             }
         }
-        else
-        {
-            // FUTURE: Correctly handle a "false" return from planetinfo
-        }
     }
 }
