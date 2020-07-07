@@ -261,11 +261,9 @@ class Traderoute
         // Check if zone allows trading  SRC
         if ($traderoute['source_type'] == 'P')
         {
-            $sql = "SELECT * FROM ::prefix::zones,::prefix::universe WHERE ::prefix::universe.sector_id=:sector_id AND ::prefix::zones.zone_id=::prefix::universe.zone_id";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':sector_id', $traderoute['source_id'], \PDO::PARAM_INT);
-            $stmt->execute();
-            $zoneinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
+            // Get zoneinfo from database
+            $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+            $zoneinfo = $zones_gateway->selectMatchingZoneInfo($traderoute['source_id']);
 
             if ($zoneinfo['allow_trade'] == 'N')
             {
@@ -275,7 +273,7 @@ class Traderoute
             {
                 if ($zoneinfo['team_zone'] == 'N')
                 {
-                    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
+                    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $zoneinfo['owner'], \PDO::PARAM_INT);
                     $stmt->execute();
@@ -299,11 +297,9 @@ class Traderoute
         // Check if zone allows trading  DEST
         if ($traderoute['dest_type'] == 'P')
         {
-            $sql = "SELECT * FROM ::prefix::zones,::prefix::universe WHERE ::prefix::universe.sector_id=:sector_id AND ::prefix::zones.zone_id=::prefix::universe.zone_id";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':zone_id', $traderoute['dest_id'], \PDO::PARAM_INT);
-            $stmt->execute();
-            $zoneinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
+            // Get zoneinfo from database
+            $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+            $zoneinfo = $zones_gateway->selectMatchingZoneInfo($traderoute['dest_id']);
 
             if ($zoneinfo['allow_trade'] == 'N')
             {
@@ -313,7 +309,7 @@ class Traderoute
             {
                 if ($zoneinfo['team_zone'] == 'N')
                 {
-                    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
+                    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $zoneinfo['owner'], \PDO::PARAM_INT);
                     $stmt->execute();
@@ -444,7 +440,7 @@ class Traderoute
 
                 if ($traderoute['circuit'] == '1')
                 {
-                    $sql = "UPDATE ::prefix::ships SET ship_colonists = ship_colonists + :colonists_buy, ship_fighters = ship_fighters + :fighters_buy, torps = torps + :torps_buy, ship_energy = ship_energy + :dist_scooped WHERE ship_id=:ship_id";
+                    $sql = "UPDATE ::prefix::ships SET ship_colonists = ship_colonists + :colonists_buy, ship_fighters = ship_fighters + :fighters_buy, torps = torps + :torps_buy, ship_energy = ship_energy + :dist_scooped WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':colonists_buy', $colonists_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':fighters_buy', $fighters_buy, \PDO::PARAM_INT);

@@ -136,6 +136,7 @@ if ($defense_present !== null)
 $shiptypes = array();
 $planettypes = array();
 $num_defenses = $i;
+
 // Grab zoneinfo from database
 $sql = "SELECT zone_id,zone_name FROM ::prefix::zones WHERE zone_id=:zone_id";
 $stmt = $pdo_db->prepare($sql);
