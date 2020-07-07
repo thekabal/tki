@@ -80,7 +80,7 @@ if ($playerinfo['dev_warpedit'] < 1)
     die();
 }
 
-$sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM  FROM ::prefix::zones, ::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id ";
+$sql = "SELECT allow_warpedit, ::prefix::universe.zone_id FROM  FROM ::prefix::zones, ::prefix::universe WHERE sector_id = :sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id ";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $playerinfo['sector'], PDO::PARAM_STR);
 $stmt->execute();
@@ -110,7 +110,7 @@ if (count($sectorinfo) === 0)
     die();
 }
 
-$sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones, ::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id";
+$sql = "SELECT allow_warpedit, ::prefix::universe.zone_id FROM ::prefix::zones, ::prefix::universe WHERE sector_id = :sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();

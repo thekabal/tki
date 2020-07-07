@@ -87,7 +87,7 @@ if ($target_sector === false)
     die();
 }
 
-$sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
+$sql = "SELECT allow_warpedit, ::prefix::universe.zone_id FROM ::prefix::zones, ::prefix::universe WHERE sector_id = :sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
@@ -108,7 +108,7 @@ $target_sector = (int) $target_sector;
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$sql = "SELECT allow_warpedit,::prefix::universe.zone_id FROM ::prefix::zones,::prefix::universe WHERE sector_id=:sector_id AND ::prefix::universe.zone_id=::prefix::zones.zone_id;";
+$sql = "SELECT allow_warpedit, ::prefix::universe.zone_id FROM ::prefix::zones, ::prefix::universe WHERE sector_id = :sector_id AND ::prefix::universe.zone_id = ::prefix::zones.zone_id;";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $target_sector, PDO::PARAM_INT);
 $stmt->execute();
