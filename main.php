@@ -103,14 +103,12 @@ $num_links = $i;
 $i = 0;
 $planets = array();
 
-$sql = "SELECT * FROM ::prefix::planets WHERE sector_id=:sector_id";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
-$stmt->execute();
-$planet_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if ($planet_present !== null)
+// Get planetinfo from database
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+$planetinfo = $planets_gateway->selectAllPlanetInfoByPlanet($playerinfo['sector']);
+if ($planetinfo !== false)
 {
-    foreach ($planet_present as $tmp_planet)
+    foreach ($planetinfo as $tmp_planet)
     {
         $planets[$i] = $tmp_planet;
         $i++;
