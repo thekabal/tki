@@ -64,12 +64,9 @@ if ($playerinfo['dev_warpedit'] < 1)
     die();
 }
 
-// Get playerinfo from database
-$sql = "SELECT allow_warpedit FROM ::prefix::zones WHERE zone_id=:zone_id";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
-$stmt->execute();
-$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get zoneinfo from database
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
 if ($zoneinfo['allow_warpedit'] == 'N')
 {
@@ -84,20 +81,13 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 if ($zoneinfo['allow_warpedit'] == 'L')
 {
     // Get playerinfo from database
-    $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
-    $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
-    $stmt->execute();
-    $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Get playerinfo from database
     $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector_id', $zoneowner_info['owner'], PDO::PARAM_INT);
+    $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
     $stmt->execute();
     $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($zoneowner_info['owner'] != $playerinfo['ship_id'])
+    if ($zoneinfo['owner'] != $playerinfo['ship_id'])
     {
         if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0))
         {

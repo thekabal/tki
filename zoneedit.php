@@ -108,13 +108,11 @@ if (strlen(trim($trades)) === 0)
     $trades = false;
 }
 
-$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
-$stmt->execute();
-$curzone = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get zoneinfo from database
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zoneinfo = $zones_gateway->selectZoneInfo($zone);
 
-if (!$curzone)
+if (!$zoneinfo)
 {
     echo "<p>" . $langvars['l_zi_nexist'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -125,9 +123,9 @@ if (!$curzone)
 }
 
 // Sanitize ZoneName.
-$curzone['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $curzone['zone_name']);
+$zoneinfo['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $zoneinfo['zone_name']);
 
-if ($curzone['team_zone'] == 'N')
+if ($zoneinfo['team_zone'] == 'N')
 {
     $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
     $ownerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
@@ -136,12 +134,12 @@ else
 {
     $sql = "SELECT creator, id FROM ::prefix::teams WHERE creator=:creator LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':creator', $curzone['owner'], PDO::PARAM_INT);
+    $stmt->bindParam(':creator', $zoneinfo['owner'], PDO::PARAM_INT);
     $stmt->execute();
     $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-if (($curzone['team_zone'] == 'N' && $curzone['owner'] != $ownerinfo['ship_id']) || ($curzone['team_zone'] == 'Y' && $curzone['owner'] != $ownerinfo['id'] && $row['owner'] == $ownerinfo['creator']))
+if (($zoneinfo['team_zone'] == 'N' && $zoneinfo['owner'] != $ownerinfo['ship_id']) || ($zoneinfo['team_zone'] == 'Y' && $zoneinfo['owner'] != $ownerinfo['id'] && $row['owner'] == $ownerinfo['creator']))
 {
     echo "<p>" . $langvars['l_ze_notowner'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -180,11 +178,11 @@ if ($command == 'change')
 $ybeacon = null;
 $nbeacon = null;
 $lbeacon = null;
-if ($curzone['allow_beacon'] == 'Y')
+if ($zoneinfo['allow_beacon'] == 'Y')
 {
     $ybeacon = "checked";
 }
-elseif ($curzone['allow_beacon'] == 'N')
+elseif ($zoneinfo['allow_beacon'] == 'N')
 {
     $nbeacon = "checked";
 }
@@ -195,7 +193,7 @@ else
 
 $yattack = null;
 $nattack = null;
-if ($curzone['allow_attack'] == 'Y')
+if ($zoneinfo['allow_attack'] == 'Y')
 {
     $yattack = "checked";
 }
@@ -207,11 +205,11 @@ else
 $ywarpedit = null;
 $nwarpedit = null;
 $lwarpedit = null;
-if ($curzone['allow_warpedit'] == 'Y')
+if ($zoneinfo['allow_warpedit'] == 'Y')
 {
     $ywarpedit = "checked";
 }
-elseif ($curzone['allow_warpedit'] == 'N')
+elseif ($zoneinfo['allow_warpedit'] == 'N')
 {
     $nwarpedit = "checked";
 }
@@ -223,11 +221,11 @@ else
 $yplanet = null;
 $nplanet = null;
 $lplanet = null;
-if ($curzone['allow_planet'] == 'Y')
+if ($zoneinfo['allow_planet'] == 'Y')
 {
     $yplanet = "checked";
 }
-elseif ($curzone['allow_planet'] == 'N')
+elseif ($zoneinfo['allow_planet'] == 'N')
 {
     $nplanet = "checked";
 }
@@ -239,11 +237,11 @@ else
 $ytrade = null;
 $ntrade = null;
 $ltrade = null;
-if ($curzone['allow_trade'] == 'Y')
+if ($zoneinfo['allow_trade'] == 'Y')
 {
     $ytrade = "checked";
 }
-elseif ($curzone['allow_trade'] == 'N')
+elseif ($zoneinfo['allow_trade'] == 'N')
 {
     $ntrade = "checked";
 }
@@ -255,11 +253,11 @@ else
 $ydefense = null;
 $ndefense = null;
 $ldefense = null;
-if ($curzone['allow_defenses'] == 'Y')
+if ($zoneinfo['allow_defenses'] == 'Y')
 {
     $ydefense = "checked";
 }
-elseif ($curzone['allow_defenses'] == 'N')
+elseif ($zoneinfo['allow_defenses'] == 'N')
 {
     $ndefense = "checked";
 }
@@ -271,7 +269,7 @@ else
 echo "<form accept-charset='utf-8' action=zoneedit.php?command=change&zone=$zone method=post>" .
      "<table border=0><tr>" .
      "<td align=right><font size=2><strong>" . $langvars['l_ze_name'] . " : &nbsp;</strong></font></td>" .
-     "<td><input type=text name=name size=30 maxlength=30 value=\"$curzone[zone_name]\"></td>" .
+     "<td><input type=text name=name size=30 maxlength=30 value=\"$zoneinfo[zone_name]\"></td>" .
      "</tr><tr>" .
      "<td align=right><font size=2><strong>" . $langvars['l_ze_allow'] . " " . $langvars['l_beacons'] . " : &nbsp;</strong></font></td>" .
      "<td><input type=radio name=beacons value=Y $ybeacon>&nbsp;" . $langvars['l_yes'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=radio name=beacons value=N $nbeacon>&nbsp;" . $langvars['l_no'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=radio name=beacons value=L $lbeacon>&nbsp;" . $langvars['l_zi_limit'] . "</td>" .

@@ -58,12 +58,9 @@ if ($beacon_text === 0)
 
 if ($playerinfo['dev_beacon'] > 0)
 {
-    // Get playerinfo from database
-    $sql = "SELECT allow_beacon FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
-    $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
-    $stmt->execute();
-    $zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Get zoneinfo from database
+    $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+    $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
     if ($zoneinfo['allow_beacon'] == 'N')
     {

@@ -50,41 +50,39 @@ else
     $variables['zone'] = null;
     if ($_POST['operation'] == "edit")
     {
-        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':zone_id', $_POST['zone'], \PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Get zoneinfo from database
+        $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+        $zoneinfo = $zones_gateway->selectZoneInfo($_POST['zone']);
 
         $variables['operation'] = "edit";
-        $variables['zone_id'] = $row['zone_id'];
-        $variables['zone_name'] = $row['zone_name'];
-        $variables['allow_attack'] = $row['allow_attack'];
-        $variables['allow_warpedit'] = $row['allow_warpedit'];
-        $variables['allow_planet'] = $row['allow_planet'];
-        $variables['max_hull'] = $row['max_hull'];
+        $variables['zone_id'] = $zoneinfo['zone_id'];
+        $variables['zone_name'] = $zoneinfo['zone_name'];
+        $variables['allow_attack'] = $zoneinfo['allow_attack'];
+        $variables['allow_warpedit'] = $zoneinfo['allow_warpedit'];
+        $variables['allow_planet'] = $zoneinfo['allow_planet'];
+        $variables['max_hull'] = $zoneinfo['max_hull'];
         $variables['zone'] = $_POST['zone'];
 
         $variables['allow_beacon'] = null;
-        if ($row['allow_beacon'] == 'Y')
+        if ($zoneinfo['allow_beacon'] == 'Y')
         {
             $variables['allow_beacon'] = 'checked="checked"';
         }
 
         $variables['allow_attack'] = null;
-        if ($row['allow_attack'] == 'Y')
+        if ($zoneinfo['allow_attack'] == 'Y')
         {
             $variables['allow_attack'] = 'checked="checked"';
         }
 
         $variables['allow_warpedit'] = null;
-        if ($row['allow_warpedit'] == 'Y')
+        if ($zoneinfo['allow_warpedit'] == 'Y')
         {
             $variables['allow_warpedit'] = 'checked="checked"';
         }
 
         $variables['allow_planet'] = null;
-        if ($row['allow_planet'] == 'Y')
+        if ($zoneinfo['allow_planet'] == 'Y')
         {
             $variables['allow_planet'] = 'checked="checked"';
         }

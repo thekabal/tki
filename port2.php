@@ -43,11 +43,9 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
-$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
-$stmt->execute();
-$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get zoneinfo from database
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
 if ($zoneinfo['allow_trade'] == 'N')
 {
