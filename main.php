@@ -85,12 +85,12 @@ if ($playerinfo['on_planet'] == "Y")
 
 $i = 0;
 $links = array();
-$sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start ORDER BY link_dest ASC";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
-$stmt->execute();
-$link_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if ($link_present !== null)
+
+// Get linksinfo from database
+$links_gateway = new \Tki\Links\LinksGateway($pdo_db); // Build a links gateway object to handle the SQL calls
+$link_present = $links_gateway->selectAllLinkInfoByLinkStart($playerinfo['sector']);
+
+if ($link_present !== false)
 {
     foreach ($link_present as $tmp_link)
     {
