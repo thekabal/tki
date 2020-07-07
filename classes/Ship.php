@@ -80,15 +80,13 @@ class Ship
     // FUTURE: Reduce the number of SQL calls needed to accomplish this. Maybe do the update without two selects?
     public static function leavePlanet(\PDO $pdo_db, int $ship_id): void
     {
-        $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
-        $stmt->execute();
-        $planets_owned = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        // Get planetinfo from database
+        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+        $planetinfo = $planets_gateway->selectAllPlanetInfoByOwner($ship_id);
 
-        if (is_array($planets_owned))
+        if (is_array($planetinfo))
         {
-            foreach ($planets_owned as $tmp_planet)
+            foreach ($planetinfo as $tmp_planet)
             {
                 $sql = "SELECT * FROM ::prefix::ships WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
                 $stmt = $pdo_db->prepare($sql);
@@ -109,6 +107,10 @@ class Ship
                     }
                 }
             }
+        }
+        else
+        {
+            // FUTURE: Correctly handle a "false" return from planetinfo
         }
     }
 }

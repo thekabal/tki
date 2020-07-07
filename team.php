@@ -38,16 +38,10 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('team', 'common', 'global_
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
+// Get planetinfo from database
 $planet_id = preg_replace('/[^0-9]/', '', $planet_id);
-
-$result2 = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?", array($planet_id));
-Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-$planetinfo = array();
-
-if ($result2)
-{
-    $planetinfo = $result2->fields;
-}
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+$planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
 if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $playerinfo['team'] && $playerinfo['team'] > 0))
 {
