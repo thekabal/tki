@@ -55,12 +55,12 @@ $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 $links = array();
 $i = 0;
-$sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
-$stmt->execute();
-$defense_present = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if ($defense_present !== null)
+
+// Pull sector info from database
+$defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db); // Build a defense gateway object to handle the SQL calls
+$defenses_present = $defenses_gateway->selectDefenses($playerinfo['sector']);
+
+if ($defenses_present !== false)
 {
     foreach ($link_present as $tmp_link)
     {
@@ -83,9 +83,9 @@ $set_toll = null;
 $defenses = array();
 
 // Do we have a valid recordset?
-if ($defense_present)
+if ($defenses_present)
 {
-    foreach ($defense_present as $tmp_defense)
+    foreach ($defenses_present as $tmp_defense)
     {
         $defenses[$i] = $tmp_defense;
         if ($defenses[$i]['defense_type'] == 'F')

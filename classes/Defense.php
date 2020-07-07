@@ -28,15 +28,13 @@ class Defense
 {
     public static function defenseVsDefense(\PDO $pdo_db, int $ship_id, array $langvars): void
     {
-        $sql = "SELECT * FROM ::prefix::sector_defense WHERE ship_id=:ship_d";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
-        $stmt->execute();
-        $secdef_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        // Pull defense info from database
+        $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db); // Build a defense gateway object to handle the SQL calls
+        $defenses_present = $defenses_gateway->selectDefenses($ship_id);
 
-        if ($secdef_present !== false)
+        if ($defenses_present !== false)
         {
-            foreach ($secdef_present as $tmp_defense)
+            foreach ($defenses_present as $tmp_defense)
             {
                 $deftype = $tmp_defense['defense_type'] == 'F' ? 'Fighters' : 'Mines';
                 $qty = $tmp_defense['quantity'];
