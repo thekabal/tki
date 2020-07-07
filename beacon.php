@@ -68,19 +68,13 @@ if ($playerinfo['dev_beacon'] > 0)
     }
     elseif ($zoneinfo['allow_beacon'] == 'L')
     {
-        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
-        $stmt->execute();
-        $zoneowner_info = $stmt->fetch(PDO::FETCH_ASSOC);
-
         $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $zoneowner_info['owner'], PDO::PARAM_INT);
+        $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
         $stmt->execute();
         $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($zoneowner_info['owner'] != $playerinfo['ship_id'])
+        if ($zoneinfo['owner'] != $playerinfo['ship_id'])
         {
             if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0))
             {
