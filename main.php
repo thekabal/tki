@@ -74,7 +74,7 @@ if ($playerinfo['on_planet'] == "Y")
     }
     else
     {
-        $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
@@ -104,8 +104,8 @@ $i = 0;
 $planets = array();
 
 // Get planetinfo from database
-$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
-$planetinfo = $planets_gateway->selectAllPlanetInfoByPlanet($playerinfo['sector']);
+$planets_gateway = new Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+$planetinfo = $planets_gateway->selectAllPlanetInfo($playerinfo['sector']);
 if ($planetinfo !== false)
 {
     foreach ($planetinfo as $tmp_planet)
@@ -117,7 +117,7 @@ if ($planetinfo !== false)
 
 $num_planets = $i;
 $i = 0;
-$sql = "SELECT * FROM ::prefix::sector_defense, ::prefix::ships WHERE ::prefix::sector_defense.sector_id=:sector_id AND ::prefix::ships.ship_id = ::prefix::sector_defense.ship_id";
+$sql = "SELECT * FROM ::prefix::sector_defense, ::prefix::ships WHERE ::prefix::sector_defense.sector_id = :sector_id AND ::prefix::ships.ship_id = ::prefix::sector_defense.ship_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
@@ -138,7 +138,7 @@ $planettypes = array();
 $num_defenses = $i;
 
 // Grab zoneinfo from database
-$sql = "SELECT zone_id,zone_name FROM ::prefix::zones WHERE zone_id=:zone_id";
+$sql = "SELECT zone_id,zone_name FROM ::prefix::zones WHERE zone_id = :zone_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':zone_id', $sectorinfo['zone_id'], PDO::PARAM_INT);
 $stmt->execute();
@@ -163,7 +163,7 @@ echo "{$signame} <span style='color:#fff; font-weight:bold;'>{$playerinfo['chara
 echo "</div>\n";
 
 $num_messages = 0;
-$sql = "SELECT COUNT(*) FROM ::prefix::messages WHERE recp_id=:recp_id AND notified='N'";
+$sql = "SELECT COUNT(*) FROM ::prefix::messages WHERE recp_id = :recp_id AND notified = 'N'";
 $stmt = $pdo_db->prepare($sql);
 $sql_test = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
@@ -184,7 +184,7 @@ if ($num_messages > 0)
     echo "  alert('{$alert_message}');\n";
     echo "</script>\n";
 
-    $sql = "UPDATE ::prefix::messages SET notified='Y' WHERE recp_id=:ship_id";
+    $sql = "UPDATE ::prefix::messages SET notified = 'Y' WHERE recp_id = :ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':sectors', $playerinfo['ship_id'], \PDO::PARAM_INT);
     $result = $stmt->execute();
