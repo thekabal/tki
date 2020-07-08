@@ -43,11 +43,9 @@ $zone = (int) filter_input(INPUT_GET, 'zone', FILTER_SANITIZE_NUMBER_INT);
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
-$stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_id', $zone, PDO::PARAM_INT);
-$stmt->execute();
-$zoneinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get zoneinfo from database
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zoneinfo = $zones_gateway->selectZoneInfoByZone($zone);
 $ownerinfo = array();
 
 if (!$zoneinfo)

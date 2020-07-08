@@ -46,6 +46,19 @@ class ZonesGateway // Gateway for SQL calls related to Zones
         return $zoneinfo; // FUTURE: Eventually we want this to return a zone object instead, for now, zoneinfo array or false for no zone found.
     }
 
+    public function selectZoneInfoByZone(int $zone)
+    {
+        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
+        $stmt = $this->pdo_db->prepare($sql);
+        $stmt->bindParam(':zone_id', $zone, \PDO::PARAM_INT);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
+
+        // A little magic here. If it couldn't select a zone in the sector, the following call will return false - which is what we want for "no zone found".
+        $zoneinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $zoneinfo; // FUTURE: Eventually we want this to return a zone object instead, for now, zoneinfo array or false for no zone found.
+    }
+
     public function selectMatchingZoneInfo(int $sector_id)
     {
         $sql = "SELECT * FROM ::prefix::zones, ::prefix::universe WHERE ::prefix::universe.sector_id = :sector_id AND ::prefix::zones.zone_id = ::prefix::universe.zone_id";
