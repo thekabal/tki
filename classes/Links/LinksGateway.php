@@ -36,7 +36,7 @@ class LinksGateway // Gateway for SQL calls related to Links
     public function selectAllLinkInfoByLinkStart(int $sector_id)
     {
         $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start ORDER BY link_dest ASC";
-        $stmt = $pdo_db->prepare($sql);
+        $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $sector_id, \PDO::PARAM_INT);
         $stmt->execute();
 
