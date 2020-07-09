@@ -81,7 +81,7 @@ if ($zoneinfo['allow_warpedit'] == 'N')
 if ($zoneinfo['allow_warpedit'] == 'L')
 {
     // Get playerinfo from database
-    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
+    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
     $stmt->execute();
@@ -101,7 +101,7 @@ if ($zoneinfo['allow_warpedit'] == 'L')
     }
 }
 
-$sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start ORDER BY link_dest ASC";
+$sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start ORDER BY link_dest ASC";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();

@@ -592,7 +592,7 @@ class Traderoute
                     $playerinfo['ship_ore'] += $ore_buy;
                     $sourcecost -= $ore_buy * $tkireg->ore_price;
 
-                    $sql = "UPDATE ::prefix::universe SET port_ore=port_ore-:ore_buy, port_energy=port_energy-:energy_buy, port_goods=port_goods-:goods_buy, port_organics=port_organics-:organics_buy WHERE sector_id =:sector_id";
+                    $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':energy_buy', $energy_buy, \PDO::PARAM_INT);
@@ -629,7 +629,7 @@ class Traderoute
                     $playerinfo['ship_goods'] += $goods_buy;
                     $sourcecost -= $goods_buy * $tkireg->goods_price;
 
-                    $sql = "UPDATE ::prefix::universe SET port_ore=port_ore-:ore_buy, port_energy=port_energy-:energy_buy, port_goods=port_goods-:goods_buy, port_organics=port_organics-:organics_buy WHERE sector_id =:sector_id";
+                    $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':energy_buy', $energy_buy, \PDO::PARAM_INT);
@@ -667,7 +667,7 @@ class Traderoute
                     $playerinfo['ship_organics'] += $organics_buy;
                     $sourcecost -= $organics_buy * $tkireg->organics_price;
 
-                    $sql = "UPDATE ::prefix::universe SET port_ore=port_ore-:ore_buy, port_energy=port_energy-:energy_buy, port_goods=port_goods-:goods_buy, port_organics=port_organics-:organics_buy WHERE sector_id =:sector_id";
+                    $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':energy_buy', $energy_buy, \PDO::PARAM_INT);
@@ -705,7 +705,7 @@ class Traderoute
                     $playerinfo['ship_energy'] += $energy_buy;
                     $sourcecost -= $energy_buy * $tkireg->energy_price;
 
-                    $sql = "UPDATE ::prefix::universe SET port_ore=port_ore-:ore_buy, port_energy=port_energy-:energy_buy, port_goods=port_goods-:goods_buy, port_organics=port_organics-:organics_buy WHERE sector_id =:sector_id";
+                    $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':energy_buy', $energy_buy, \PDO::PARAM_INT);
@@ -732,7 +732,7 @@ class Traderoute
 
                 if ($traderoute['circuit'] == '1')
                 {
-                    $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore, ship_goods = :ship_goods, ship_organics = :ship_organics, ship_energy = :ship_energy  WHERE ship_id=:ship_id";
+                    $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore, ship_goods = :ship_goods, ship_organics = :ship_organics, ship_energy = :ship_energy  WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_ore', $playerinfo['ship_ore'], \PDO::PARAM_INT);
                     $stmt->bindParam(':ship_goods', $playerinfo['ship_goods'], \PDO::PARAM_INT);
@@ -811,7 +811,7 @@ class Traderoute
 
                     if ($traderoute['circuit'] == '1')
                     {
-                        $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore, ship_goods = :ship_goods, ship_organics = :ship_organics WHERE ship_id=:ship_id";
+                        $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore, ship_goods = :ship_goods, ship_organics = :ship_organics WHERE ship_id = :ship_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':colonists_buy', $playerinfo['ship_ore'], \PDO::PARAM_INT);
                         $stmt->bindParam(':fighters_buy', $playerinfo['ship_goods'], \PDO::PARAM_INT);
@@ -822,7 +822,7 @@ class Traderoute
                     }
                 }
 
-                $sql = "UPDATE ::prefix::planets SET ore=ore-:ore_buy, goods=goods-:goods_buy, organics=organics-:organics_buy WHERE planet_id=:planet_id";
+                $sql = "UPDATE ::prefix::planets SET ore = ore - :ore_buy, goods = goods - :goods_buy, organics = organics - :organics_buy WHERE planet_id = :planet_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
                 $stmt->bindParam(':goods_buy', $goods_buy, \PDO::PARAM_INT);
@@ -1109,7 +1109,7 @@ class Traderoute
                         $destcost -= $goods_buy * $tkireg->goods_price;
                     }
 
-                    $sql = "UPDATE ::prefix::universe SET port_ore=port_ore-:ore_buy, port_energy=port_energy-:energy_buy, port_goods=port_goods-:goods_buy, port_organics=port_organics-:organics_buy WHERE sector_id =:sector_id";
+                    $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':energy_buy', $energy_buy, \PDO::PARAM_INT);
@@ -1315,7 +1315,7 @@ class Traderoute
 
                 if ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')
                 {
-                    $sql = "UPDATE ::prefix::ships SET ship_colonists = :col_dump, ship_fighters = :fight_dump, torps = :torps_dump, ship_energy = ship_energy + :dist_scooped WHERE ship_id=:ship_id";
+                    $sql = "UPDATE ::prefix::ships SET ship_colonists = :col_dump, ship_fighters = :fight_dump, torps = :torps_dump, ship_energy = ship_energy + :dist_scooped WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':col_dump', $col_dump, \PDO::PARAM_INT);
                     $stmt->bindParam(':fight_dump', $fight_dump, \PDO::PARAM_INT);
@@ -1329,7 +1329,7 @@ class Traderoute
                 {
                     if ($setcol == 1)
                     {
-                        $sql = "UPDATE ::prefix::ships SET ship_colonists = :col_dump, ship_fighters = ship_fighters - :fight_dump, torps = torps - :torps_dump, ship_energy = ship_energy + :dist_scooped WHERE ship_id=:ship_id";
+                        $sql = "UPDATE ::prefix::ships SET ship_colonists = :col_dump, ship_fighters = ship_fighters - :fight_dump, torps = torps - :torps_dump, ship_energy = ship_energy + :dist_scooped WHERE ship_id = :ship_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':col_dump', $col_dump, \PDO::PARAM_INT);
                         $stmt->bindParam(':fight_dump', $fight_dump, \PDO::PARAM_INT);
@@ -1341,7 +1341,7 @@ class Traderoute
                     }
                     else
                     {
-                        $sql = "UPDATE ::prefix::ships SET ship_colonists = ship_colonists - :col_dump, ship_fighters = ship_fighters - :fight_dump, torps = torps - :torps_dump, ship_energy = ship_energy + :dist_scooped WHERE ship_id=:ship_id";
+                        $sql = "UPDATE ::prefix::ships SET ship_colonists = ship_colonists - :col_dump, ship_fighters = ship_fighters - :fight_dump, torps = torps - :torps_dump, ship_energy = ship_energy + :dist_scooped WHERE ship_id = :ship_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':col_dump', $col_dump, \PDO::PARAM_INT);
                         $stmt->bindParam(':fight_dump', $fight_dump, \PDO::PARAM_INT);

@@ -405,11 +405,11 @@ class PlanetCombat
             if ($playerinfo['dev_escapepod'] == "Y")
             {
                 echo "<center><font color='white'>" . $langvars['l_cmb_escapepod'] . "</font></center><br><br>";
-                $sql = "UPDATE ::prefix::ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0," .
-                       "torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=1,ship_organics=0," .
-                       "ship_ore=0,ship_goods=0,ship_energy=100,ship_colonists=0,ship_fighters=100,dev_warpedit=0," .
-                       "dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N'," .
-                       "dev_minedeflector=0,on_planet='N',dev_lssd='N' WHERE ship_id=:ship_id";
+                $sql = "UPDATE ::prefix::ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0," .
+                       "torp_launchers = 0, torps = 0,armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 1, ship_organics = 0," .
+                       "ship_ore = 0, ship_goods = 0, ship_energy = 100, ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0," .
+                       "dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', dev_fuelscoop = 'N'," .
+                       "dev_minedeflector = 0, on_planet = 'N', dev_lssd = 'N' WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
@@ -453,8 +453,8 @@ class PlanetCombat
             $langvars['l_cmb_energyused'] = str_replace("[cmb_playerinfo_ship_energy]", "100", $langvars['l_cmb_energyused']);
             echo $langvars['l_cmb_energyused'] . "<br></center>";
 
-            $sql = "UPDATE ::prefix::ships SET ship_energy=:ship_energy, ship_fighters=ship_fighters-:lost_fighters, " .
-                   "torps=torps-:attacker_torps, armor_pts=armor_pts-:armor_lost, rating=rating-:rating_change WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET ship_energy = :ship_energy, ship_fighters = ship_fighters - :lost_fighters, " .
+                   "torps = torps - :attacker_torps, armor_pts = armor_pts - :armor_lost, rating = rating - :rating_change WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_energy', $energy, \PDO::PARAM_INT);
             $stmt->bindParam(':lost_fighters', $fighters_lost, \PDO::PARAM_INT);
@@ -549,7 +549,7 @@ class PlanetCombat
             \Tki\Db::logDbErrors($pdo_db, $update7b, __LINE__, __FILE__);
         }
 
-        $sql = "UPDATE ::prefix::ships SET turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();

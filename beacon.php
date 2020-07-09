@@ -68,7 +68,7 @@ if ($playerinfo['dev_beacon'] > 0)
     }
     elseif ($zoneinfo['allow_beacon'] == 'L')
     {
-        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
+        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
         $stmt->execute();
@@ -122,13 +122,13 @@ if ($playerinfo['dev_beacon'] > 0)
             $beacon_text = trim(htmlentities($beacon_text, ENT_HTML5, 'UTF-8'));
             echo $langvars['l_beacon_nowreads'] . ": " . $beacon_text . ".<br><br>";
 
-            $sql = "UPDATE ::prefix::universe SET beacon=:beacon WHERE sector_id=:sector_id";
+            $sql = "UPDATE ::prefix::universe SET beacon = :beacon WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':beacon', $beacon_text, PDO::PARAM_STR);
             $stmt->bindParam(':sector_id', $sectorinfo['sector_id'], PDO::PARAM_INT);
             $stmt->execute();
 
-            $sql = "UPDATE ::prefix::ships SET dev_beacon=dev_beacon-1 WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET dev_beacon = dev_beacon - 1 WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_STR);
             $stmt->execute();

@@ -162,7 +162,7 @@ if ($linkinfo !== false)
     }
     else
     {
-        $sql = "DELETE FROM ::prefix::links WHERE link_start=:link_start AND link_dest=:link_dest";
+        $sql = "DELETE FROM ::prefix::links WHERE link_start = :link_start AND link_dest = :link_dest";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
         $stmt->bindParam(':link_dest', $target_sector, PDO::PARAM_INT);

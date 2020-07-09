@@ -33,7 +33,7 @@ class KabalToShip
         $character_object = new Character();
 
         // Lookup target details
-        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -48,13 +48,13 @@ class KabalToShip
         }
 
         // Verify sector allows attack
-        $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id=:sector_id";
+        $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id = :sector_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $targetinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         $sectrow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id=:zone_id";
+        $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id = :zone_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sectrow['zone_id'], \PDO::PARAM_INT);
         $stmt->execute();
@@ -74,7 +74,7 @@ class KabalToShip
             $dest_sector = random_int(1, (int) $tkireg->max_sectors);
 
             $sql = "UPDATE ::prefix::ships SET sector = :sector, dev_emerwarp = dev_emerwarp - 1 " .
-                   "WHERE ship_id=:ship_id";
+                   "WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector', $dest_sector, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $targetinfo['ship_id'], \PDO::PARAM_INT);
@@ -423,7 +423,7 @@ class KabalToShip
                 $sql = "UPDATE ::prefix::ships SET  ship_ore = ship_ore + :salv_ore, " .
                        "ship_organics = ship_organics + :salv_organics, ship_goods = ship_goods + :salv_goods, " .
                        "credits = credits + :ship_salvage WHERE " .
-                       "WHERE ship_id=:ship_id";
+                       "WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':salv_ore', $salv_ore, \PDO::PARAM_INT);
                 $stmt->bindParam(':salv_organics', $salv_organics, \PDO::PARAM_INT);
@@ -439,7 +439,7 @@ class KabalToShip
 
                 $sql = "UPDATE ::prefix::ships SET ship_energy = :energy, " .
                        "ship_fighters = ship_fighters - :fighters_lost, torps = torps - :attackertorps, armor_pts = armor_pts - :armor_lost, " .
-                       "rating = rating - :rating_change WHERE ship_id=:ship_id";
+                       "rating = rating - :rating_change WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':energy', $energy, \PDO::PARAM_INT);
                 $stmt->bindParam(':fighters_lost', $fighters_lost, \PDO::PARAM_INT);
@@ -471,7 +471,7 @@ class KabalToShip
                    "torps = torps - :attackertorps, " .
                    "armor_pts = armor_pts - :armor_lost, " .
                    "rating = rating - :rating_change " .
-                   "WHERE ship_id=:ship_id";
+                   "WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':energy', $energy, \PDO::PARAM_INT);
             $stmt->bindParam(':fighters_lost', $fighters_lost, \PDO::PARAM_INT);
@@ -487,7 +487,7 @@ class KabalToShip
                    "armor_pts = armor_pts - :target_armor_lost, " .
                    "torps = torps - :targettorpnum, " .
                    "rating = :target_rating_change " .
-                   "WHERE ship_id=:ship_id";
+                   "WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':target_energy', $target_energy, \PDO::PARAM_INT);
             $stmt->bindParam(':target_fighters_lost', $target_fighters_lost, \PDO::PARAM_INT);
@@ -554,7 +554,7 @@ class KabalToShip
 
                 $sql = "UPDATE ::prefix::ships SET ship_ore = ship_ore + :salv_ore , " .
                        "ship_organics = ship_organics + :salv_organics, ship_goods = ship_goods + :salv_goods, credits = credits + :ship_salvage " .
-                       "WHERE ship_id=:ship_id";
+                       "WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':salv_ore', $salv_ore, \PDO::PARAM_INT);
                 $stmt->bindParam(':salv_organics', $salv_organics, \PDO::PARAM_INT);
@@ -573,7 +573,7 @@ class KabalToShip
                        "torps = torps - :targettorpnum, " .
                        "armor_pts = armor_pts - :armor_lost, " .
                        "rating=rating - :rating_change " .
-                       "WHERE ship_id=:ship_id";
+                       "WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':energy', $energy, \PDO::PARAM_INT);
                 $stmt->bindParam(':fighters_lost', $fighters_lost, \PDO::PARAM_INT);

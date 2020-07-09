@@ -41,7 +41,7 @@ class KabalTrade
         $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
         // Obtain zone information
-        $sql = "SELECT zone_id, allow_attack, allow_trade FROM ::prefix::zones WHERE zone_id=:zone_id";
+        $sql = "SELECT zone_id, allow_attack, allow_trade FROM ::prefix::zones WHERE zone_id = :zone_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sectorinfo['zone_id'], \PDO::PARAM_INT);
         $stmt->execute();
@@ -170,7 +170,7 @@ class KabalTrade
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
             $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
 
-            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating = rating + 1, credits = :credits, ship_ore = :ship_ore, ship_organics = :ship_organics, ship_goods = :ship_goods WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_ore', $newore, \PDO::PARAM_INT);
@@ -179,7 +179,7 @@ class KabalTrade
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
-            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore, \PDO::PARAM_INT);
             $stmt->bindParam(':port_organics', $amount_organics, \PDO::PARAM_INT);
@@ -217,7 +217,7 @@ class KabalTrade
             $neworganics = $playerinfo['ship_organics'] + $amount_organics;
             $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
 
-            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits = :credits, ship_ore = :ship_ore, ship_organics = :ship_organics, ship_goods = :ship_goods WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_ore', $newore, \PDO::PARAM_INT);
@@ -226,7 +226,7 @@ class KabalTrade
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
-            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore - :port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore, \PDO::PARAM_INT);
             $stmt->bindParam(':port_organics', $amount_organics, \PDO::PARAM_INT);
@@ -264,7 +264,7 @@ class KabalTrade
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
             $newgoods = $playerinfo['ship_goods'] + $amount_goods;
 
-            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits=:credits, ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET rating=rating+1, credits = :credits, ship_ore = :ship_ore, ship_organics = :ship_organics, ship_goods = :ship_goods WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':credits', $newcredits, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_ore', $newore, \PDO::PARAM_INT);
@@ -273,7 +273,7 @@ class KabalTrade
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
 
-            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore -:port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
+            $sql = "UPDATE ::prefix::universe SET port_ore=port_ore - :port_ore, port_organics = port_organics + :port_organics, port_goods = port_goods + :port_goods WHERE sector_id = :sector_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':port_ore', $amount_ore, \PDO::PARAM_INT);
             $stmt->bindParam(':port_organics', $amount_organics, \PDO::PARAM_INT);

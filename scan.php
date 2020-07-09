@@ -467,7 +467,7 @@ else
             Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::SHIP_SCAN, "$playerinfo[character_name]");
         }
 
-        $sql = "UPDATE ::prefix::ships SET turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();

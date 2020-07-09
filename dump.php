@@ -61,7 +61,7 @@ if ($playerinfo['ship_colonists'] == 0)
 }
 elseif ($sectorinfo['port_type'] == "special")
 {
-    $sql = "UPDATE ::prefix::ships SET ship_colonists=0, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+    $sql = "UPDATE ::prefix::ships SET ship_colonists = 0, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
     $stmt->execute();

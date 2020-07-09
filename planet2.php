@@ -626,7 +626,7 @@ else
                     $transfer_credits = 0;
                 }
 
-                $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:ship_ore, ship_organics=ship_organics+:ship_organics, ship_goods=ship_goods+:ship_goods, ship_energy=ship_energy+:ship_energy, ship_colonists=ship_colonists+:ship_colonists, torps=torps+:torps, ship_fighters=ship_fighters+:ship_fighters, credits=credits+:credits, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=:ship_id";
+                $sql = "UPDATE ::prefix::ships SET ship_ore = ship_ore + :ship_ore, ship_organics = ship_organics + :ship_organics, ship_goods = ship_goods + :ship_goods, ship_energy = ship_energy + :ship_energy, ship_colonists = ship_colonists + :ship_colonists, torps = torps + :torps, ship_fighters = ship_fighters + :ship_fighters, credits = credits + :credits, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_ore', $transfer_ore, PDO::PARAM_INT);
                 $stmt->bindParam(':ship_organics', $transfer_organics, PDO::PARAM_INT);
@@ -639,7 +639,7 @@ else
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
                 $stmt->execute();
 
-                $sql = "UPDATE ::prefix::planets SET ore=ore-:ore, organics=organics-:organics, goods=goods-:goods, energy=energy-:energy, colonists=colonists-:colonists, torps=torps-:torps, fighters=fighters-:fighters, credits=credits-:credits WHERE planet_id=:planet_id";
+                $sql = "UPDATE ::prefix::planets SET ore = ore - :ore, organics = organics - :organics, goods = goods - :goods, energy =energy - :energy, colonists = colonists - :colonists, torps = torps - :torps, fighters = fighters - :fighters, credits = credits - :credits WHERE planet_id = :planet_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ore', $transfer_ore, PDO::PARAM_INT);
                 $stmt->bindParam(':organics', $transfer_organics, PDO::PARAM_INT);

@@ -112,14 +112,14 @@ class IbankDeposit
              "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance + :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance + :amount WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);

@@ -44,7 +44,7 @@ class IbankTransferSpecific
                 \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_sendyourself'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
 
-            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
+            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
             $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
             $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -132,7 +132,7 @@ class IbankTransferSpecific
                 \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errplanetsrcanddest'], "ibank.php?command=transfer", $lang, $tkireg, $template);
             }
 
-            $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
+            $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
             $stmt->execute();
@@ -148,7 +148,7 @@ class IbankTransferSpecific
                 $source['name'] = $langvars['l_ibank_unnamed'];
             }
 
-            $sql = "SELECT name, credits, owner, sector_id, base FROM ::prefix::planets WHERE planet_id=:planet_id";
+            $sql = "SELECT name, credits, owner, sector_id, base FROM ::prefix::planets WHERE planet_id = :planet_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
             $stmt->execute();

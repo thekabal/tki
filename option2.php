@@ -49,7 +49,7 @@ if (array_key_exists('newlang', $_POST) === true)
                 $lang = $lang_file;
 
                 // Update the ship record to the requested language
-                $sql = "UPDATE ::prefix::ships SET lang=:lang WHERE email=:email LIMIT 1";
+                $sql = "UPDATE ::prefix::ships SET lang = :lang WHERE email = :email LIMIT 1";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':lang', $lang, PDO::PARAM_STR);
                 $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
@@ -107,7 +107,7 @@ else
         $new_hashed_pass = password_hash($newpass1, PASSWORD_DEFAULT);
 
         // Now update the players password.
-        $sql = "UPDATE ::prefix::ships SET password=:pass WHERE ship_id=:ship_id LIMIT 1";
+        $sql = "UPDATE ::prefix::ships SET password = :pass WHERE ship_id = :ship_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':pass', $new_hashed_pass, PDO::PARAM_STR);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);

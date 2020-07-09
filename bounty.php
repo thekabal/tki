@@ -195,7 +195,7 @@ switch ($response) {
         $cur_time_stamp = date("Y-m-d H:i:s");
         $refund = $bty['amount'];
 
-        $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, turns_used=turns_used+1, credits=credits+:refund WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET last_login = :stamp, turns = turns - 1, turns_used = turns_used + 1, credits = credits + :refund WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':stamp', $cur_time_stamp, \PDO::PARAM_INT);
         $stmt->bindParam(':refund', $refund, \PDO::PARAM_INT);
@@ -301,7 +301,7 @@ switch ($response) {
         Tki\Db::logDbErrors($pdo_db, $insert, __LINE__, __FILE__);
         $cur_time_stamp = date("Y-m-d H:i:s");
 
-        $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, turns_used=turns_used+1, credits=credits-:amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET last_login = :stamp, turns = turns - 1, turns_used = turns_used + 1, credits = credits - :amount WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':stamp', $cur_time_stamp, \PDO::PARAM_INT);
         $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);

@@ -49,7 +49,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
     if ($action == "planetteam")
     {
         echo $langvars['l_teamm_toteam'] . "<br>";
-        $sql = "UPDATE ::prefix::planets SET team=:team, owner=:owner  WHERE planet_id=:planet_id";
+        $sql = "UPDATE ::prefix::planets SET team = :team, owner = :owner  WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':team', $playerinfo['team'], \PDO::PARAM_INT);
         $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
@@ -63,7 +63,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
     if ($action == "planetpersonal")
     {
         echo $langvars['l_teamm_topersonal'] . "<br>";
-        $sql = "UPDATE ::prefix::planets SET team='0', owner=:owner  WHERE planet_id=:planet_id";
+        $sql = "UPDATE ::prefix::planets SET team='0', owner = :owner  WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
@@ -72,7 +72,7 @@ if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $p
         $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
 
         // Kick other players off the planet
-        $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE on_planet='Y' AND planet_id=:planet_id AND ship_id <>:ship_id";
+        $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);

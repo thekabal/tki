@@ -58,7 +58,7 @@ if ($destination === false || $engage === false)
     // Invalid destination
 
     echo $langvars['l_rs_invalid'] . ".<br><br>";
-    $sql = "UPDATE ::prefix::ships SET cleared_defenses=' ' WHERE ship_id=:ship_id";
+    $sql = "UPDATE ::prefix::ships SET cleared_defenses=' ' WHERE ship_id = :ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
     $result = $stmt->execute();
@@ -174,7 +174,7 @@ else
                 echo $langvars['l_rs_movetime'] . "<br><br>";
                 echo $langvars['l_rs_noturns'] . "<br><br>";
 
-                $sql = "UPDATE ::prefix::ships SET cleared_defenses=' ' WHERE ship_id=:ship_id";
+                $sql = "UPDATE ::prefix::ships SET cleared_defenses=' ' WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $result = $stmt->execute();

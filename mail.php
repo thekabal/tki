@@ -74,7 +74,7 @@ if (!$result->EOF)
 
         // Recovery time is a timestamp at the time of recovery attempt, which is valid for 30 minutes
         // After 30 minutes, it will be cleared to null by scheduler. If it is used, it will also be cleared.
-        $sql = "UPDATE ::prefix::ships SET recovery_time=:time WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET recovery_time = :time WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':time', time(), \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);

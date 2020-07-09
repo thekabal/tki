@@ -35,7 +35,7 @@ class SectorsGateway // Gateway for SQL calls related to Sectors
 
     public function selectSectorInfo(int $sector_id): array
     {
-        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id=:sector_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :sector_id LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector_id, \PDO::PARAM_INT);
         $stmt->execute();

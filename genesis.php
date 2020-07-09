@@ -114,7 +114,7 @@ else
                     $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(null, $playerinfo['sector'], $planetname, 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
                     Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
 
-                    $sql = "UPDATE ::prefix::ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=:ship_id";
+                    $sql = "UPDATE ::prefix::ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                     $result = $stmt->execute();
@@ -132,7 +132,7 @@ else
             $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(null, $playerinfo['sector'], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
             Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
 
-            $sql = "UPDATE ::prefix::ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $result = $stmt->execute();
@@ -145,7 +145,7 @@ else
         $update1 = $db->Execute("INSERT INTO {$db->prefix}planets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", array(null, $playerinfo['sector'], $planetname, 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo['ship_id'], 0, 'N', 'N', $tkireg->default_prod_organics, $tkireg->default_prod_ore, $tkireg->default_prod_goods, $tkireg->default_prod_energy, $tkireg->default_prod_fighters, $tkireg->default_prod_torp, 'N'));
         Tki\Db::logDbErrors($pdo_db, $update1, __LINE__, __FILE__);
 
-        $sql = "UPDATE ::prefix::ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();

@@ -65,14 +65,14 @@ class KabalHunt
         }
 
         // Jump to target sector
-        $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id=:sector_id";
+        $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id = :sector_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $targetinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
         Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
         $sectrow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id=:zone_id";
+        $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id = :zone_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':zone_id', $sectrow['zone_id'], \PDO::PARAM_INT);
         $stmt->execute();
@@ -84,7 +84,7 @@ class KabalHunt
         {
             $cur_time_stamp = date("Y-m-d H:i:s");
 
-            $sql = "UPDATE ::prefix::ships SET last_login = :time_stamp, turns_used = turns_used + 1, sector=:new_sector WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET last_login = :time_stamp, turns_used = turns_used + 1, sector = :new_sector WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':time_stamp', $cur_time_stamp, \PDO::PARAM_STR);
             $stmt->bindParam(':new_sector', $targetinfo['sector'], \PDO::PARAM_INT);

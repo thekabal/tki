@@ -57,7 +57,7 @@ $local_table_timer = new Tki\Timer();
 $local_table_timer->start(); // Start benchmarking
 
 // Get the sector id for any sector that allows planets
-$sth = $pdo_db->prepare("SELECT ::prefix::universe.sector_id FROM ::prefix::universe, ::prefix::zones WHERE ::prefix::zones.zone_id=::prefix::universe.zone_id AND ::prefix::zones.allow_planet='Y'");
+$sth = $pdo_db->prepare("SELECT ::prefix::universe.sector_id FROM ::prefix::universe, ::prefix::zones WHERE ::prefix::zones.zone_id = ::prefix::universe.zone_id AND ::prefix::zones.allow_planet = 'Y'");
 $sth->execute();
 
 // Place those id's into an array.

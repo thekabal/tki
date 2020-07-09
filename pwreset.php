@@ -102,7 +102,7 @@ else
 //mail ($playerinfo['email'], $langvars['l_mail_topic'], $langvars['l_mail_message'], "From: {$tkireg->admin_mail}\r\nReply-To: {$tkireg->admin_mail}\r\nX-Mailer: PHP/" . phpversion());
 
 /// Reset recovery_time to zero
-// $sql = "UPDATE ::prefix::ships SET recovery_time=NULL  WHERE ship_id=:ship_id";
+// $sql = "UPDATE ::prefix::ships SET recovery_time=NULL  WHERE ship_id = :ship_id";
 // $stmt = $pdo_db->prepare($sql);
 // $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
 // $result = $stmt->execute();

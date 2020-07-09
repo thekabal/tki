@@ -41,7 +41,7 @@ class Ship
                                "ship_fighters=100, ship_damage=0, on_planet='N', dev_warpedit=0, " .
                                "dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', " .
                                "dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', " .
-                               "dev_lssd='N' WHERE email=:email";
+                               "dev_lssd='N' WHERE email = :email";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
                 $stmt->execute();

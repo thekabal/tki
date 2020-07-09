@@ -262,7 +262,7 @@ else
         {
             if ($fighter_id != 0)
             {
-                $sql = "UPDATE ::prefix::sector_defense SET quantity=quantity+:numfits, fm_setting=:mode WHERE defense_id=:fighter_id";
+                $sql = "UPDATE ::prefix::sector_defense SET quantity = quantity + :numfits, fm_setting = :mode WHERE defense_id = :fighter_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':numfits', $numfighters, \PDO::PARAM_INT);
                 $stmt->bindParam(':mode', $mode, \PDO::PARAM_INT);
@@ -282,7 +282,7 @@ else
         {
             if ($mine_id != 0)
             {
-                $sql = "UPDATE ::prefix::sector_defense SET quantity=quantity+:nummines fm_setting=:mode WHERE defense_id=:defense_id";
+                $sql = "UPDATE ::prefix::sector_defense SET quantity = quantity + :nummines, fm_setting = :mode WHERE defense_id = :defense_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':nummines', $nummines, \PDO::PARAM_INT);
                 $stmt->bindParam(':mode', $mode, \PDO::PARAM_INT);
@@ -297,8 +297,8 @@ else
             }
         }
 
-        $sql = "UPDATE ::prefix::ships SET last_login=:stamp, turns=turns-1, " .
-               "turns_used=turns_used+1, ship_fighters=ship_fighters-:numfighters, torps=torps-:nummines WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET last_login = :stamp, turns = turns - 1, " .
+               "turns_used = turns_used + 1, ship_fighters = ship_fighters - :numfighters, torps = torps - :nummines WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':stamp', $cur_time_stamp, \PDO::PARAM_STR);
         $stmt->bindParam(':numfighters', $numfighters, \PDO::PARAM_INT);

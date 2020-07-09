@@ -39,8 +39,8 @@ class Defense
                 $deftype = $tmp_defense['defense_type'] == 'F' ? 'Fighters' : 'Mines';
                 $qty = $tmp_defense['quantity'];
 
-                $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id " .
-                       "AND ship_id<>:ship_d ORDER BY quantity DESC";
+                $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id " .
+                       "AND ship_id <> :ship_d ORDER BY quantity DESC";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':sector_id', $tmp_defense['sector_id'], \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);

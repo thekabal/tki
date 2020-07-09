@@ -72,7 +72,7 @@ class Score
         $calc_planet_credits    = "SUM(::prefix::planets.credits)";
 
         $sql = "SELECT IF(COUNT(*)>0, $calc_planet_goods + $calc_planet_cols + $calc_planet_defense + $calc_planet_credits, 0) AS planet_score " .
-                                     "FROM ::prefix::planets WHERE owner=:ship_id GROUP BY planet_id";
+                                     "FROM ::prefix::planets WHERE owner = :ship_id GROUP BY planet_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -96,7 +96,7 @@ class Score
         }
 
         $score = (int) round(sqrt($score));
-        $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET score = :score WHERE ship_id=:ship_id");
+        $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET score = :score WHERE ship_id = :ship_id");
         $stmt->bindParam(':score', $score, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();

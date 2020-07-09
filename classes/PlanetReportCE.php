@@ -101,7 +101,7 @@ class PlanetReportCE
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
         // Get planetinfo from database
-        $sql = "SELECT * FROM ::prefix::planets WHERE planet_id=:planet_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         if ($sql_test === true)

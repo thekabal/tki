@@ -458,7 +458,7 @@ switch ($teamwhat)
             $result = $stmt->execute();
             $debug2 = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "UPDATE ::prefix::ships SET team=:team_id WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET team = :team_id WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':team_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
@@ -624,7 +624,7 @@ switch ($teamwhat)
                 break;
             }
 
-            $sql = "SELECT * FROM ::prefix::teams WHERE id=:player_team";
+            $sql = "SELECT * FROM ::prefix::teams WHERE id = :player_team";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':player_team', $playerinfo['team'], PDO::PARAM_INT);
             $stmt->execute();

@@ -132,7 +132,7 @@ if ($zoneinfo['team_zone'] == 'N')
 }
 else
 {
-    $sql = "SELECT creator, id FROM ::prefix::teams WHERE creator=:creator LIMIT 1";
+    $sql = "SELECT creator, id FROM ::prefix::teams WHERE creator = :creator LIMIT 1";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':creator', $zoneinfo['owner'], PDO::PARAM_INT);
     $stmt->execute();
@@ -154,7 +154,7 @@ if ($command == 'change')
     // Sanitize zone name.
     $name = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $name);
 
-    $sql = "UPDATE ::prefix::zones SET zone_name=:zone_name, allow_beacon=:allow_beacon, allow_attack=:allow_attack, allow_warpedit=:allow_warpedit, allow_planet=:allow_planet, allow_trade=:allow_trade, allow_defenses=:allow_defenses WHERE zone_id=:zone_id";
+    $sql = "UPDATE ::prefix::zones SET zone_name = :zone_name, allow_beacon = :allow_beacon, allow_attack = :allow_attack, allow_warpedit = :allow_warpedit, allow_planet = :allow_planet, allow_trade = :allow_trade, allow_defenses = :allow_defenses WHERE zone_id = :zone_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':zone_name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':allow_beacon', $beacons, \PDO::PARAM_STR);

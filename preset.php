@@ -45,7 +45,7 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Pull the presets for the player from the db.
 $preset_list = array();
-$sql = "SELECT * FROM ::prefix::presets WHERE ship_id=:ship_id";
+$sql = "SELECT * FROM ::prefix::presets WHERE ship_id = :ship_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
 $stmt->execute();
@@ -105,7 +105,7 @@ else
         if ($key < $tkireg->max_presets)
         {
             $new_id = $key + 1;
-            $sql = "UPDATE ::prefix::presets SET preset=:preset WHERE preset_id=:preset_id";
+            $sql = "UPDATE ::prefix::presets SET preset = :preset WHERE preset_id = :preset_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':preset', $value, PDO::PARAM_INT);
             $stmt->bindParam(':preset_id', $new_id, PDO::PARAM_INT);

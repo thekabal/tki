@@ -45,7 +45,7 @@ class CalcLevels
         $planetbeams = self::abstractLevels($ownerinfo['beams'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
-        $sql = "SELECT beams FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
+        $sql = "SELECT beams FROM ::prefix::ships WHERE planet_id = :planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
@@ -74,7 +74,7 @@ class CalcLevels
         $planetshields = self::abstractLevels($ownerinfo['shields'] + $base_factor, $tkireg->level_factor);
         $energy_available = $planetinfo['energy'];
 
-        $sql = "SELECT shields FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
+        $sql = "SELECT shields FROM ::prefix::ships WHERE planet_id = :planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();
@@ -103,7 +103,7 @@ class CalcLevels
         $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;
         $torps = $planetinfo['torps'];
 
-        $sql = "SELECT torp_launchers FROM ::prefix::ships WHERE planet_id=:planet_id AND on_planet = 'Y'";
+        $sql = "SELECT torp_launchers FROM ::prefix::ships WHERE planet_id = :planet_id AND on_planet = 'Y'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
         $stmt->execute();

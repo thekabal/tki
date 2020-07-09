@@ -73,7 +73,7 @@ class PlanetReport
             echo "<br><strong><a href=team_planets.php>" . $langvars['l_pr_teamlink'] . "</a></strong><br> <br>";
         }
 
-        $sql = "SELECT * FROM ::prefix::planets WHERE owner=:owner";
+        $sql = "SELECT * FROM ::prefix::planets WHERE owner = :owner";
 
         $sql .= " ORDER BY";
         if ($sort == "name")

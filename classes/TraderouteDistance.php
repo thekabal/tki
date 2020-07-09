@@ -157,7 +157,7 @@ class TraderouteDistance
     public static function warpCalc(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $traderoute, array $source, array $dest): array
     {
         $dist = array();
-        $sql = "SELECT link_id FROM ::prefix::links WHERE link_start=:link_start AND link_dest=:link_dest";
+        $sql = "SELECT link_id FROM ::prefix::links WHERE link_start = :link_start AND link_dest = :link_dest";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $source['sector_id'], \PDO::PARAM_INT);
         $stmt->bindParam(':link_dest', $dest['sector_id'], \PDO::PARAM_INT);
@@ -172,7 +172,7 @@ class TraderouteDistance
 
         if ($traderoute['circuit'] == '2')
         {
-            $sql = "SELECT link_id FROM ::prefix::links WHERE link_start=:link_start AND link_dest=:link_dest";
+            $sql = "SELECT link_id FROM ::prefix::links WHERE link_start = :link_start AND link_dest = :link_dest";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':link_start', $dest['sector_id'], \PDO::PARAM_INT);
             $stmt->bindParam(':link_dest', $source['sector_id'], \PDO::PARAM_INT);

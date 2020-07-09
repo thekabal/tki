@@ -62,7 +62,7 @@ class Player
                 if ($timestamp['now'] >= ($timestamp['last'] + 60))
                 {
                     $remote_ip = $request->server->get('REMOTE_ADDR');
-                    $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id=:ship_id";
+                    $sql = "UPDATE ::prefix::ships SET last_login = :last_login, ip_address = :ip_address WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':last_login', $cur_time_stamp, \PDO::PARAM_STR);
                     $stmt->bindParam(':ip_address', $remote_ip, \PDO::PARAM_STR);

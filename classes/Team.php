@@ -81,7 +81,7 @@ class Team
 
         // Just a test to see if an team with a name of $name exists.
         // This is just a temp fix until we find a better one.
-        $sql = "SELECT COUNT(*) as found FROM ::prefix::teams WHERE team_name=:team_name AND creator <>:creator";
+        $sql = "SELECT COUNT(*) as found FROM ::prefix::teams WHERE team_name = :team_name AND creator <> :creator";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':team_name', $name, \PDO::PARAM_STR);
         $stmt->bindParam(':creator', $creator, \PDO::PARAM_INT);

@@ -69,7 +69,7 @@ elseif ($sure == 2)
     $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
 
     // Delete planets - this used to be part of "kill", but that violated the single responsibility principle
-    $sql = "DELETE FROM ::prefix::planets WHERE owner=:owner";
+    $sql = "DELETE FROM ::prefix::planets WHERE owner = :owner";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
     $stmt->execute();

@@ -55,7 +55,7 @@ class IbankConsolidate
 
     public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, Smarty $template): void
     {
-        $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
+        $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -137,7 +137,7 @@ class IbankConsolidate
 
     public static function third(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, string $lang, Smarty $template): void
     {
-        $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id=:planet_id";
+        $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
         $stmt->execute();

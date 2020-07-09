@@ -32,7 +32,7 @@ class Realspace
         $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-        $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:playersector";
+        $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id = :playersector";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':playersector', $playerinfo['sector'], \PDO::PARAM_INT);
         $stmt->execute();
@@ -42,7 +42,7 @@ class Realspace
             $start = array();
         }
 
-        $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id=:destination";
+        $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id = :destination";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':destination', $destination, \PDO::PARAM_INT);
         $stmt->execute();
@@ -123,7 +123,7 @@ class Realspace
             // Modified from traderoute.php - sector defense check
             $hostile = 0;
 
-            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND ship_id <> :ship_id";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND ship_id <> :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $destination, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
@@ -131,7 +131,7 @@ class Realspace
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if ($defenses_present !== false)
             {
-                $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
+                $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $defenses_present['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();

@@ -97,7 +97,7 @@ if ($playerinfo['ship_colonists'] < 0 || $playerinfo['ship_ore'] < 0 || $playeri
         $freeholds = 0;
     }
 
-    $sql = "UPDATE ::prefix::ships SET ship_ore=:ship_ore, ship_organics=:ship_organics, ship_goods=:ship_goods, ship_energy=:ship_energy, ship_colonists=:ship_colonists WHERE ship_id=:ship_id";
+    $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore, ship_organics = :ship_organics, ship_goods = :ship_goods, ship_energy = :ship_energy, ship_colonists = :ship_colonists WHERE ship_id = :ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':ship_ore', $playerinfo['ship_ore'], \PDO::PARAM_INT);
     $stmt->bindParam(':ship_organics', $playerinfo['ship_organics'], \PDO::PARAM_INT);

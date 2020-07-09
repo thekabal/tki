@@ -70,7 +70,7 @@ if ($playerinfo['turns'] < 1)
     die();
 }
 
-$sql = "SELECT * FROM ::prefix::sector_defense WHERE defense_id=:defense_id";
+$sql = "SELECT * FROM ::prefix::sector_defense WHERE defense_id = :defense_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':defense_id', $defense_id, PDO::PARAM_INT);
 $stmt->execute();

@@ -544,7 +544,7 @@ else
                 // $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
                 // $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
                 // Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-                $sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email=:email OR character_name=:character_name OR ship_name=:ship_name";
+                $sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email = :email OR character_name = :character_name OR ship_name = :ship_name";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':email', $emailname, PDO::PARAM_STR);
                 $stmt->bindParam(':character_name', $character, PDO::PARAM_STR);

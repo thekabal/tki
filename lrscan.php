@@ -83,7 +83,7 @@ if ($sector == "*")
     echo $langvars['l_lrs_used'] . " " . number_format($tkireg->fullscan_cost, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_lrs_turns'] . " " . number_format($playerinfo['turns'] - $tkireg->fullscan_cost, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " " . $langvars['l_lrs_left'] . ".<br><br>";
 
     // Deduct the appropriate number of turns
-    $sql = "UPDATE ::prefix::ships SET turns=turns-:turns_used, turns_used=turns_used+:turns_used WHERE ship_id=:ship_id";
+    $sql = "UPDATE ::prefix::ships SET turns = turns - :turns_used, turns_used = turns_used + :turns_used WHERE ship_id = :ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':turns_used', $tkireg->fullscan_cost, \PDO::PARAM_INT);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);

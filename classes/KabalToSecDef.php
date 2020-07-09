@@ -54,7 +54,7 @@ class KabalToSecDef
 
             $counter = 0;
             $total_sector_mines = 0;
-            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id=:sector_id AND defense_type = 'M'";
+            $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type = 'M'";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':sector_id', $targetlink, \PDO::PARAM_INT);
             $stmt->execute();
@@ -185,7 +185,7 @@ class KabalToSecDef
                 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
                 $energy = $playerinfo['ship_energy'];
 
-                $sql = "UPDATE ::prefix::ships SET ship_energy = :energy, ship_fighters = ship_fighters - :fighters_lost, armor_pts = armor_pts - :armor_lost,torps = torps - :ship_torps WHERE ship_id=:ship_id";
+                $sql = "UPDATE ::prefix::ships SET ship_energy = :energy, ship_fighters = ship_fighters - :fighters_lost, armor_pts = armor_pts - :armor_lost,torps = torps - :ship_torps WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':energy', $energy, \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_fighters', $fighters_lost, \PDO::PARAM_INT);
@@ -222,7 +222,7 @@ class KabalToSecDef
                     // Shields v. mines
                     if ($playershields >= $mines_left)
                     {
-                        $sql = "UPDATE ::prefix::ships SET ship_energy = ship_energy - :mines_left WHERE ship_id=:ship_id";
+                        $sql = "UPDATE ::prefix::ships SET ship_energy = ship_energy - :mines_left WHERE ship_id = :ship_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':mines_left', $mines_left, \PDO::PARAM_INT);
                         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
@@ -236,7 +236,7 @@ class KabalToSecDef
                         // Armor v. mines
                         if ($playerarmor >= $mines_left)
                         {
-                            $sql = "UPDATE ::prefix::ships SET armor_pts = armor_pts - :mines_left, ship_energy=0 WHERE ship_id=:ship_id";
+                            $sql = "UPDATE ::prefix::ships SET armor_pts = armor_pts - :mines_left, ship_energy=0 WHERE ship_id = :ship_id";
                             $stmt = $pdo_db->prepare($sql);
                             $stmt->bindParam(':mines_left', $mines_left, \PDO::PARAM_INT);
                             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);

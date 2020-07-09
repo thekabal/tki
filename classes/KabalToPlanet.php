@@ -32,7 +32,7 @@ class KabalToPlanet
         $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
         $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
-        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id"; // Get target player information
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $planetinfo['owner'], \PDO::PARAM_INT);
         $stmt->execute();

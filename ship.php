@@ -42,7 +42,7 @@ $ship_id = $_GET['ship_id'] ?? null;
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$sql = "SELECT team, ship_name, character_name, sector FROM ::prefix::ships WHERE ship_id=:ship_id";
+$sql = "SELECT team, ship_name, character_name, sector FROM ::prefix::ships WHERE ship_id = :ship_id";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':ship_id', $ship_id, PDO::PARAM_INT);
 $stmt->execute();

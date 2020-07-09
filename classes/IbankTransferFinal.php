@@ -50,7 +50,7 @@ class IbankTransferFinal
             }
 
             // Need to check again to prevent cheating by manual posts
-            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
+            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
             $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
             $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -140,14 +140,14 @@ class IbankTransferFinal
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
 
-            $sql = "UPDATE ::prefix::ibank_accounts SET balance=balance-:amount WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance - :amount WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "UPDATE ::prefix::ibank_accounts SET balance=balance+:amount WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance + :amount WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
             $stmt->bindParam(':ship_id', $target['ship_id'], \PDO::PARAM_INT);
@@ -241,14 +241,14 @@ class IbankTransferFinal
                  "<td><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td align=right>&nbsp;<br><a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
                  "</tr>";
 
-            $sql = "UPDATE ::prefix::planets SET credits=credits-:amount  WHERE planet_id=:planet_id";
+            $sql = "UPDATE ::prefix::planets SET credits = credits - :amount WHERE planet_id = :planet_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
             $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
             $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-            $sql = "UPDATE ::prefix::planets SET credits=credits+:amount  WHERE planet_id=:planet_id";
+            $sql = "UPDATE ::prefix::planets SET credits = credits + :amount WHERE planet_id = :planet_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':amount', $transfer, \PDO::PARAM_INT);
             $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);

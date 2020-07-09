@@ -147,7 +147,7 @@ class KabalMove
         if ($targetlink > 0) // Move to target link
         {
             $cur_time_stamp = date("Y-m-d H:i:s");
-            $sql = "UPDATE ::prefix::ships SET last_login = :stamp, turns_used = turns_used + 1, sector = :targetlink WHERE ship_id=:ship_id";
+            $sql = "UPDATE ::prefix::ships SET last_login = :stamp, turns_used = turns_used + 1, sector = :targetlink WHERE ship_id = :ship_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':stamp', $cur_time_stamp, \PDO::PARAM_STR);
             $stmt->bindParam(':targetlink', $targetlink, \PDO::PARAM_INT);

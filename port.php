@@ -135,7 +135,7 @@ elseif ($zoneinfo['allow_trade'] == 'L')
     if ($zoneinfo['team_zone'] == 'N')
     {
         // Get playerinfo from database
-        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id=:ship_id";
+        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $zoneinfo['owner'], PDO::PARAM_INT);
         $stmt->execute();

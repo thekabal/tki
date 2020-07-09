@@ -28,8 +28,8 @@ class Bounty
 {
     public function cancel(\PDO $pdo_db, int $bounty_on): void
     {
-        // $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on=:bounty_on AND bounty_on=ship_id";
-        $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on=:bounty_on";
+        // $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on = :bounty_on AND bounty_on = ship_id";
+        $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on = :bounty_on";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
         $stmt->execute();
@@ -40,7 +40,7 @@ class Bounty
             {
                 if ($tmp_bounty['placed_by'] != 0)
                 {
-                    $sql = "UPDATE ::prefix::ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
+                    $sql = "UPDATE ::prefix::ships SET credits = credits + :bounty_amount WHERE ship_id = :ship_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':bounty_amount', $tmp_bounty['amount'], \PDO::PARAM_INT);
                     $stmt->bindParam(':ship_id', $tmp_bounty['placed_by'], \PDO::PARAM_INT);
@@ -58,8 +58,8 @@ class Bounty
 
     public static function collect(\PDO $pdo_db, array $langvars, int $attacker, int $bounty_on): void
     {
-        $sql = "SELECT * FROM ::prefix::bounty,::prefix::ships WHERE " .
-               "bounty_on=:bounty_on AND bounty_on=ship_id AND planced_by <> 0";
+        $sql = "SELECT * FROM ::prefix::bounty, ::prefix::ships WHERE " .
+               "bounty_on = :bounty_on AND bounty_on = ship_id AND planced_by <> 0";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
         $stmt->execute();
@@ -79,7 +79,7 @@ class Bounty
                     $placed = $tmp_return['character_name'];
                 }
 
-                $sql = "UPDATE ::prefix::ships SET credits=credits+:bounty_amount WHERE ship_id = :ship_id";
+                $sql = "UPDATE ::prefix::ships SET credits = credits + :bounty_amount WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':bounty_amount', $tmp_bounty['amount'], \PDO::PARAM_INT);
                 $stmt->bindParam(':ship_id', $attacker, \PDO::PARAM_INT);

@@ -138,7 +138,7 @@ else
                 }
                 else
                 {
-                    $sql = "UPDATE ::prefix::scheduler SET ticks_left=:ticks_left, spawn=spawn-:multiplier WHERE sched_id=:sched_id";
+                    $sql = "UPDATE ::prefix::scheduler SET ticks_left = :ticks_left, spawn = spawn - :multiplier WHERE sched_id = :sched_id";
                     $stmt = $pdo_db->prepare($sql);
                     $stmt->bindParam(':ticks_left', $ticks_left, \PDO::PARAM_INT);
                     $stmt->bindParam(':multiplier', $multiplier, \PDO::PARAM_INT);
@@ -149,7 +149,7 @@ else
             }
             else
             {
-                $sql = "UPDATE ::prefix::scheduler SET ticks_left=:ticks_left WHERE sched_id=:sched_id";
+                $sql = "UPDATE ::prefix::scheduler SET ticks_left = :ticks_left WHERE sched_id = :sched_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ticks_left', $ticks_left, \PDO::PARAM_INT);
                 $stmt->bindParam(':sched_id', $event['sched_id'], \PDO::PARAM_INT);
@@ -185,7 +185,7 @@ else
     $runtime = time() - $starttime;
     echo "<p>The scheduler took $runtime seconds to execute.<p>";
 
-    $sql = "UPDATE ::prefix::scheduler SET last_run=:time";
+    $sql = "UPDATE ::prefix::scheduler SET last_run = :time";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':time', time(), \PDO::PARAM_INT);
     $result = $stmt->execute();

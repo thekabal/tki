@@ -89,7 +89,7 @@ else
         }
         else
         {
-            $sql = "SELECT team_name, creator, id FROM ::prefix::teams WHERE id=:id LIMIT 1";
+            $sql = "SELECT team_name, creator, id FROM ::prefix::teams WHERE id = :id LIMIT 1";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':id', $zoneinfo['owner'], PDO::PARAM_INT);
             $stmt->execute();

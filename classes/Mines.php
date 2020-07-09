@@ -29,7 +29,7 @@ class Mines
     public static function explode(\PDO $pdo_db, int $sector, int $num_mines): void
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE " .
-               "sector_id=:sector_id AND defense_type ='M' ORDER BY QUANTITY ASC";
+               "sector_id = :sector_id AND defense_type ='M' ORDER BY QUANTITY ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
         $stmt->execute();
@@ -44,7 +44,7 @@ class Mines
                     if ($tmp_defense['quantity'] > $num_mines)
                     {
                         $sql = "UPDATE ::prefix::sector_defense SET " .
-                               "quantity = quantity - :num_mines WHERE defense_id=:defense_id";
+                               "quantity = quantity - :num_mines WHERE defense_id = :defense_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':num_mines', $num_mines, \PDO::PARAM_INT);
                         $stmt->bindParam(':defense_id', $tmp_defense['defense_id'], \PDO::PARAM_INT);
@@ -53,7 +53,7 @@ class Mines
                     }
                     else
                     {
-                        $sql = "DELETE FROM ::prefix::sector_defense WHERE defense_id=:defense_id";
+                        $sql = "DELETE FROM ::prefix::sector_defense WHERE defense_id = :defense_id";
                         $stmt = $pdo_db->prepare($sql);
                         $stmt->bindParam(':defense_id', $tmp_defense['defense_id'], \PDO::PARAM_INT);
                         $stmt->execute();

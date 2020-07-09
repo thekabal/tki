@@ -126,7 +126,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && !$oneway)
     die();
 }
 
-$sql = "SELECT COUNT(*) as count FROM ::prefix::links WHERE link_start=:link_start";
+$sql = "SELECT COUNT(*) as count FROM ::prefix::links WHERE link_start = :link_start";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();
@@ -144,7 +144,7 @@ if ($numlink_start >= $max_links)
     die();
 }
 
-$sql = "SELECT * FROM ::prefix::links WHERE link_start=:sector LIMIT 1";
+$sql = "SELECT * FROM ::prefix::links WHERE link_start = :sector LIMIT 1";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':email', $playerinfo['sector'], PDO::PARAM_STR);
 $stmt->execute();
@@ -173,7 +173,7 @@ if ($linkinfo)
     }
     else
     {
-        $sql = "INSERT INTO ::prefix::links SET link_start=:link_start, link_dest=:link_dest";
+        $sql = "INSERT INTO ::prefix::links SET link_start = :link_start, link_dest = :link_dest";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
         $stmt->bindParam(':link_dest', $target_sector, PDO::PARAM_INT);
@@ -190,7 +190,7 @@ if ($linkinfo)
         }
         else
         {
-            $sql = "SELECT * FROM ::prefix::links WHERE link_start=:link_start";
+            $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':link_start', $target_sector, PDO::PARAM_INT);
             $stmt->execute();
@@ -209,7 +209,7 @@ if ($linkinfo)
 
             if ($flag2 != 1)
             {
-                $sql = "INSERT INTO ::prefix::links SET link_start=:link_start, link_dest=:link_dest";
+                $sql = "INSERT INTO ::prefix::links SET link_start = :link_start, link_dest = :link_dest";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':link_start', $target_sector, PDO::PARAM_INT);
                 $stmt->bindParam(':link_dest', $playerinfo['sector'], PDO::PARAM_INT);

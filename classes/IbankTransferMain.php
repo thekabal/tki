@@ -35,7 +35,7 @@ class IbankTransferMain
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $sql = "SELECT name, planet_id, sector_id FROM ::prefix::planets WHERE owner=:owner ORDER BY sector_id ASC";
+        $sql = "SELECT name, planet_id, sector_id FROM ::prefix::planets WHERE owner = :owner ORDER BY sector_id ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();

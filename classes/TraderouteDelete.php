@@ -37,7 +37,7 @@ class TraderouteDelete
         ?int $traderoute_id = null
     ): void
     {
-        $sql = "SELECT * FROM ::prefix::traderoutes WHERE traderoute_id=:traderoute_id";
+        $sql = "SELECT * FROM ::prefix::traderoutes WHERE traderoute_id = :traderoute_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':traderoute_id', $traderoute_id, \PDO::PARAM_INT);
         $result = $stmt->execute();
@@ -64,7 +64,7 @@ class TraderouteDelete
 
         if ($confirm === "yes")
         {
-            $sql = "DELETE FROM ::prefix::traderoutes WHERE traderoute_id=:traderoute_id";
+            $sql = "DELETE FROM ::prefix::traderoutes WHERE traderoute_id = :traderoute_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':traderoute_id', $traderoute_id, \PDO::PARAM_INT);
             $result = $stmt->execute();

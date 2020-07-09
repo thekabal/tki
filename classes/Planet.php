@@ -142,7 +142,7 @@ class Planet
         $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, " .
                                  "turns_used = turns_used + 1, " .
                                  "ship_fighters = ship_fighters - :ship_fighters WHERE " .
-                                 "ship_id=:ship_id");
+                                 "ship_id = :ship_id");
         $stmt->bindParam(':ship_fighters', $attackerfighters, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $result = $stmt->execute();
@@ -150,7 +150,7 @@ class Planet
 
         $stmt = $pdo_db->prepare("UPDATE ::prefix::planets SET energy = energy - " .
                                  ":energy, fighters = fighters - :fighters, " .
-                                 "torps = torps - :torps WHERE planet_id=:planet_id");
+                                 "torps = torps - :torps WHERE planet_id = :planet_id");
         $stmt->bindParam(':energy', $beamsused, \PDO::PARAM_INT);
         $stmt->bindParam(':fighters', $planetfighterslost, \PDO::PARAM_INT);
         $stmt->bindParam(':torps', $planettorps, \PDO::PARAM_INT);

@@ -78,14 +78,14 @@ class Ibank
              "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $sql = "UPDATE ::prefix::ibank_accounts SET loan = :amount, loantime=NOW() WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ibank_accounts SET loan = :amount, loantime=NOW() WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount3, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $sql = "UPDATE ::prefix::ships SET credits = credits + :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET credits = credits + :amount WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
@@ -230,7 +230,7 @@ class Ibank
              "<td nowrap><a href='ibank.php?command=login'>" . $langvars['l_ibank_back'] . "</a></td><td nowrap align=right>&nbsp;<a href=\"main.php\">" . $langvars['l_ibank_logout'] . "</a></td>" .
              "</tr>";
 
-        $sql = "UPDATE ::prefix::ibank_accounts SET loan = loan - :loanamount, loantime=:loantime WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ibank_accounts SET loan = loan - :loanamount, loantime = :loantime WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':loanamount', $amount, \PDO::PARAM_INT);
         $stmt->bindParam(':loantime', $account['loantime'], \PDO::PARAM_INT);
@@ -238,7 +238,7 @@ class Ibank
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-        $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id=:ship_id";
+        $sql = "UPDATE ::prefix::ships SET credits = credits - :amount WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':amount', $amount, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);

@@ -35,7 +35,7 @@ class TraderouteBuildNew
 
         if ($traderoute_id !== null)
         {
-            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::traderoutes WHERE traderoute_id=:traderoute_id");
+            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::traderoutes WHERE traderoute_id = :traderoute_id");
             $stmt->bindParam(':traderoute_id', $traderoute_id, \PDO::PARAM_INT);
             $editroute = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -68,7 +68,7 @@ class TraderouteBuildNew
 
         // Get Planet info Team and Personal
         $planet_loop = 0;
-        $sql = "SELECT * FROM ::prefix::planets WHERE owner=:ship_id ORDER BY sector_id";
+        $sql = "SELECT * FROM ::prefix::planets WHERE owner = :ship_id ORDER BY sector_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
         $stmt->execute();

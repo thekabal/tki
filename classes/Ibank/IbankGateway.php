@@ -46,7 +46,7 @@ class IbankGateway // Gateway for SQL calls related to Ibank objects
 
     public function selectIbankAccount(int $ship_id): array
     {
-        $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id=:ship_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();

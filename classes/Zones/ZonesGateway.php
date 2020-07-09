@@ -48,7 +48,7 @@ class ZonesGateway // Gateway for SQL calls related to Zones
 
     public function selectZoneInfoByZone(int $zone)
     {
-        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id=:zone_id LIMIT 1";
+        $sql = "SELECT * FROM ::prefix::zones WHERE zone_id = :zone_id LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':zone_id', $zone, \PDO::PARAM_INT);
         $stmt->execute();

@@ -28,7 +28,7 @@ class Combat
 {
     public static function shipToShip(\PDO $pdo_db, array $langvars, int $ship_id, Reg $tkireg, array $playerinfo, int $attackerbeams, int $attackerfighters, int $attackershields, int $attackertorps, int $attackerarmor, int $attackertorpdamage): void
     {
-        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id=:ship_id";
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -475,7 +475,7 @@ class Combat
                 $langvars['l_cmb_yousalvaged2'] = str_replace("[cmb_number_rating_change]", number_format(abs($rating_change), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_cmb_yousalvaged2']);
                 echo $langvars['l_cmb_yousalvaged'] . "<br>" . $langvars['l_cmb_yousalvaged2'];
 
-                $sql = "UPDATE ::prefix::ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods WHERE ship_id = :ship_id";
+                $sql = "UPDATE ::prefix::ships SET ship_ore = ship_ore + :salv_ore, ship_organics = ship_organics + :salv_organics, ship_goods = ship_goods + :salv_goods WHERE ship_id = :ship_id";
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':salv_ore', $salv_ore, \PDO::PARAM_INT);
                 $stmt->bindParam(':salv_organics', $salv_organics, \PDO::PARAM_INT);
