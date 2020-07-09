@@ -184,7 +184,7 @@ else
             {
                 $sector = $destination;
                 $calledfrom = "rsmove.php";
-                Tki\CheckDefenses::fighters($pdo_db, $lang, $sector);
+                Tki\CheckDefenses::fighters($pdo_db, $db, $lang, $sector);
 
                 // Output:
                 // You are now in sector X. You used Y turns, and gained Z energy units.
@@ -200,7 +200,7 @@ else
                 $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                 $langvars['l_rs_ready'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                 echo $langvars['l_rs_ready'] . "<br><br>";
-                Tki\CheckDefenses::mines($pdo_db, $lang, $sector, $title);
+                Tki\CheckDefenses::mines($pdo_db, $db, $lang, $sector, $title);
             }
         }
     }

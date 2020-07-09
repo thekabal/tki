@@ -37,7 +37,7 @@ class LogsGateway // Gateway for SQL calls related to Logs
     {
         $sql = "SELECT * FROM ::prefix::logs WHERE ship_id = :ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
         $stmt = $this->pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $ship_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->bindValue(':start_date', $startdate . '%');
         $stmt->execute();
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any

@@ -234,7 +234,7 @@ class CheckDefenses
         }
     }
 
-    public static function fighters(\PDO $pdo_db, string $lang, int $sector): void
+    public static function fighters(\PDO $pdo_db, $db, string $lang, int $sector): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
@@ -422,7 +422,7 @@ class CheckDefenses
         }
     }
 
-    public static function mines(\PDO $pdo_db, string $lang, int $sector, string $title): void
+    public static function mines(\PDO $pdo_db, $db, string $lang, int $sector, string $title): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'combat', 'footer', 'news'));

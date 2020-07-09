@@ -81,7 +81,7 @@ while (!$result3->EOF)
 if ($flag == 1)
 {
     $calledfrom = "move.php";
-    Tki\CheckDefenses::fighters($pdo_db, $lang, $sector);
+    Tki\CheckDefenses::fighters($pdo_db, $db, $lang, $sector);
 
     $cur_time_stamp = date("Y-m-d H:i:s");
     Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $sector);
@@ -99,7 +99,7 @@ if ($flag == 1)
     }
 
     // Enter code for checking dangers in new sector
-    Tki\CheckDefenses::mines($pdo_db, $lang, $sector, $title);
+    Tki\CheckDefenses::mines($pdo_db, $db, $lang, $sector, $title);
     header("Location: main.php");
 }
 else

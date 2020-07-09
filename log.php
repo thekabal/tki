@@ -47,7 +47,7 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 $startdate = null;
@@ -60,7 +60,7 @@ if (strlen(trim($swordfish)) === 0)
     $swordfish = false;
 }
 
-if ($swordfish == \Tki\SecureConfig::ADMIN_PASS) // Check if called by admin script
+if ($swordfish == Tki\SecureConfig::ADMIN_PASS) // Check if called by admin script
 {
     $playerinfo['ship_id'] = $player;
     if ($player == 0)
@@ -70,7 +70,7 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS) // Check if called by admin scr
     else
     {
         // Get playerinfo from database
-        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $players_gateway = new Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
         $tmp_playerinfo = $players_gateway->selectPlayerInfoById($player);
         $playerinfo['character_name'] = $tmp_playerinfo['character_name'];
     }
@@ -118,7 +118,7 @@ if (empty($startdate))
 }
 
 // Get logsinfo from database
-$logs_gateway = new \Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
+$logs_gateway = new Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
 $logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $startdate);
 
 $langvars['l_log_months_temp'] = "l_log_months_" . (int) (substr($startdate, 5, 2));
@@ -137,7 +137,7 @@ if ($logs !== null)
 {
     foreach ($logs as $log)
     {
-        $event = \Tki\Log::logParse($langvars, $log);
+        $event = Tki\Log::logParse($langvars, $log);
         $log_months_temp = "l_log_months_" . (int) (substr($log['time'], 5, 2));
         $time = $langvars[$log_months_temp] . " " . substr($log['time'], 8, 2) . " " . substr($log['time'], 0, 4) . " " . substr($log['time'], 11);
 
@@ -192,7 +192,7 @@ if ($mode != 'compat')
 
     unset($logs);
     // Get logsinfo from database
-    $logs_gateway = new \Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
+    $logs_gateway = new Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
     $logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $yesterday);
 
     echo "<div id=\"dynPage1\" class=\"dynPage\">" .
@@ -207,7 +207,7 @@ if ($mode != 'compat')
     {
         foreach ($logs as $log)
         {
-            $event = \Tki\Log::logParse($langvars, $log);
+            $event = Tki\Log::logParse($langvars, $log);
             $log_months_temp = "l_log_months_" . (int) (substr($log['time'], 5, 2));
             $time = $$log_months_temp . " " . substr($log['time'], 8, 2) . " " . substr($log['time'], 0, 4) . " " . substr($log['time'], 11);
 
@@ -234,7 +234,7 @@ if ($mode != 'compat')
     unset($logs);
 
     // Get logsinfo from database
-    $logs_gateway = new \Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
+    $logs_gateway = new Tki\Logs\LogsGateway($pdo_db); // Build a log gateway object to handle the SQL calls
     $logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $tomorrow);
 
     echo "<div id=\"dynPage2\" class=\"dynPage\">" .
@@ -249,7 +249,7 @@ if ($mode != 'compat')
     {
         foreach ($logs as $log)
         {
-            $event = \Tki\Log::logParse($langvars, $log);
+            $event = Tki\Log::logParse($langvars, $log);
             $log_months_temp = "l_log_months_" . (int) (substr($log['time'], 5, 2));
             $time = $$log_months_temp . " " . substr($log['time'], 8, 2) . " " . substr($log['time'], 0, 4) . " " . substr($log['time'], 11);
 
@@ -312,7 +312,7 @@ $nonext = 0;
 //    $nonext = 0;
 //}
 
-if ($swordfish == \Tki\SecureConfig::ADMIN_PASS) // Fix for admin log view
+if ($swordfish == Tki\SecureConfig::ADMIN_PASS) // Fix for admin log view
 {
     $postlink = "&swordfish=" . urlencode($swordfish) . "&player=" . urlencode($player);
 }
@@ -361,7 +361,7 @@ else
     echo "&nbsp;&nbsp;&nbsp;";
 }
 
-if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
+if ($swordfish == Tki\SecureConfig::ADMIN_PASS)
 {
     echo "<tr><td><td>" .
          "<form accept-charset='utf-8' action=admin.php method=post>" .

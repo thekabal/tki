@@ -37,6 +37,11 @@ class Login
         $game_closed = new Game();
         $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $template);
 
+        if (empty($playerinfo))
+        {
+            return false;
+        }
+
         // Establish timestamp for interval in checking bans
         $cur_time_stamp = date('Y-m-d H:i:s');
         $timestamp = array();
