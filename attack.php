@@ -49,7 +49,7 @@ else
 // Kami multi-browser window attack fix
 if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_selected'] != $ship_id)
 {
-    echo "You need to click on the ship first.<br><br>";
+    echo $langvars['l_att_click_first'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
@@ -451,7 +451,7 @@ else
 
             if ($bcs_stats_info === false)
             {
-                echo "No information available.<br>\n";
+                echo $langvars['l_att_no_info'] . "<br>\n";
             }
 
             echo "  </div>\n";
@@ -532,7 +532,7 @@ else
 
             if ($bcs_stats_info === false)
             {
-                echo "No information available.<br>\n";
+                echo $langvars['l_att_no_info'] . "<br>\n";
             }
 
             echo "  </div>\n";
@@ -603,7 +603,7 @@ else
 
             if ($bcs_stats_info === false)
             {
-                echo "No information available.<br>\n";
+                echo $langvars['l_att_no_info'] . "<br>\n";
             }
 
             echo "  </div>\n";
