@@ -115,7 +115,7 @@ else
     echo "<td><strong><a href=team_planets.php?sort=fighters>" . $langvars['l_fighters'] . "</a></strong></td>";
     echo "<td><strong><a href=team_planets.php?sort=torp>" . $langvars['l_torps'] . "</a></strong></td>";
     echo "<td><strong>" . $langvars['l_base'] . "?</strong></td><td><strong>" . $langvars['l_selling'] . "?</strong></td>";
-    echo "<td><strong>Player</strong></td>";
+    echo "<td><strong>" . $langvars['l_player'] . "</strong></td>";
     echo "</tr>";
     $total_organics = 0;
     $total_ore = 0;

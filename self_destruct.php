@@ -48,14 +48,14 @@ if (array_key_exists('sure', $_GET))
 if (!isset($sure))
 {
     echo "<font color=red><strong>" . $langvars['l_die_rusure'] . "</strong></font><br><br>";
-    echo "Please Note: You will loose all your Planets if you Self-Destruct!.<br>\n";
+    echo $langvars['l_die_lose_planets'] . "<br>\n";
     echo "<a href='main.php'>" . $langvars['l_die_nonono'] . "</a> " . $langvars['l_die_what'] . "<br><br>";
     echo "<a href=self_destruct.php?sure=1>" . $langvars['l_yes'] . "!</a> " . $langvars['l_die_goodbye'] . "<br><br>";
 }
 elseif ($sure == 1)
 {
     echo "<font color=red><strong>" . $langvars['l_die_check'] . "</strong></font><br><br>";
-    echo "Please Note: You will loose all your Planets if you Self-Destruct!.<br>\n";
+    echo $langvars['l_die_lose_planets'] . "<br>\n";
     echo "<a href='main.php'>" . $langvars['l_die_nonono'] . "</a> " . $langvars['l_die_what'] . "<br><br>";
     echo "<a href=self_destruct.php?sure=2>" . $langvars['l_yes'] . "!</a> " . $langvars['l_die_goodbye'] . "<br><br>";
 }
@@ -80,7 +80,7 @@ elseif ($sure == 2)
     $admin_log = new Tki\AdminLog();
     $admin_log->writeLog($pdo_db, \Tki\LogEnums::ADMIN_HARAKIRI, "$playerinfo[character_name]|" . $request->server->get('REMOTE_ADDR') . "");
     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::HARAKIRI, $request->server->get('REMOTE_ADDR'));
-    echo "Due to nobody looking after your Planets, all your Planets have reduced into dust and ruble. Your Planets are no more.<br>\n";
+    echo $langvars['l_die_lost_planets'] . "<br>\n";
 }
 else
 {
