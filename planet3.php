@@ -1,3 +1,4 @@
+
 <?php declare(strict_types = 1);
 /**
  * planet3.php from The Kabal Invasion.
@@ -33,7 +34,7 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('planet', 'main', 'port', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('planet', 'planet2', 'planet3', 'main', 'port', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
 
 // Fixed The Phantom Planet Transfer Bug
 // Needs to be validated and type cast into their correct types.
@@ -64,7 +65,7 @@ echo "<h1>" . $title . "</h1>\n";
 // Check if planet_id is valid.
 if ($planet_id <= 0)
 {
-    echo "Invalid Planet<br><br>";
+    echo $langvars['l_planet2_invalid_planet'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
@@ -83,7 +84,7 @@ $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 // Check to see if it returned valid planet info.
 if ($planetinfo === false)
 {
-    echo "Invalid Planet<br><br>";
+    echo $langvars['l_planet2_invalid_planet'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }

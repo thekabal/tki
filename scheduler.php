@@ -183,7 +183,8 @@ else
     }
 
     $runtime = time() - $starttime;
-    echo "<p>The scheduler took $runtime seconds to execute.<p>";
+    $langvars['l_sched_time'] = str_replace("[seconds]", $runtime, $langvars['l_sched_time']);
+    echo "<p>" . $langvars['l_sched_time'] . ".<p>";
 
     $sql = "UPDATE ::prefix::scheduler SET last_run = :time";
     $stmt = $pdo_db->prepare($sql);

@@ -33,7 +33,7 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'port2', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
 
 // Get playerinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
@@ -113,9 +113,9 @@ else
         if (array_key_exists('port_shopping', $_SESSION) === false || $_SESSION['port_shopping'] !== true)
         {
             echo "<META HTTP-EQUIV='Refresh' CONTENT='2; URL=main.php'>";
-            echo "<div style='color:#f00; font-size:18px;'>Your last Sales Transaction has already been delivered, Please enter the Special Port and select your order.</div>\n";
+            echo "<div style='color:#f00; font-size:18px;'>" . $langvars['l_port2_already'] . "</div>\n";
             echo "<br>\n";
-            echo "<div style='color:#fff; font-size:12px;'>Auto redirecting in 2 seconds.</div>\n";
+            echo "<div style='color:#fff; font-size:12px;'>" . $langvars['l_port2_redirect'] . "</div>\n";
             echo "<br>\n";
 
             Tki\Text::gotoMain($pdo_db, $lang);
@@ -348,7 +348,9 @@ else
         $total_cost = $hull_upgrade_cost + $engine_upgrade_cost + $power_upgrade_cost + $computer_upgrade_cost + $sensors_upgrade_cost + $beams_upgrade_cost + $armor_upgrade_cost + $cloak_upgrade_cost + $torp_launchers_upgrade_cost + $fighter_cost + $torpedo_cost + $armor_cost + $colonist_cost + $dev_genesis_cost + $dev_beacon_cost + $dev_emerwarp_cost + $dev_warpedit_cost + $dev_minedeflector_cost + $dev_escapepod_cost + $dev_fuelscoop_cost + $dev_lssd_cost + $shields_upgrade_cost;
         if ($total_cost > $playerinfo['credits'])
         {
-            echo "You do not have enough credits for this transaction.  The total cost is " . number_format($total_cost, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits and you only have " . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits.<br><br>Click <a href=port.php>here</a> to return to the supply depot.<br><br>";
+            echo "You do not have enough credits for this transaction.  The total cost is " . number_format($total_cost, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits and you only have " . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits.<br><br>";
+            $langvars['l_port2_return'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port2_return']);
+            echo $langvars['l_port2_return'] . "<br>";
         }
         else
         {
@@ -522,23 +524,17 @@ else
             $hull_upgrade = 0;
             echo "</table>";
 
-            echo "<div style='font-size:16px; color:#fff;'><br>[<span style='color:#0f0;'>Border Patrol</span>]<br>\n";
-            echo "Halt, while we scan your cargo...<br>\n";
-
             if ((Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists']) < 0)
             {
                 // Tki\Ports::buildTwoCol("<span style='color:#f00;'>Detected Illegal Cargo</span>", "<span style='color:#0f0;'>Fixed</span>", "left", "right");
-                echo "<span style='color:#f00; font-weight:bold;'>Detected illegal cargo, as a penalty, we are confiscating all of your cargo, you may now continue.</span>\n";
+                echo "<div style='font-size:16px; color:#fff;'><br>[<span style='color:#0f0;'>" . $langvars['l_port2_border_patrol'] . "</span>]<br>\n";
+                echo $langvars['l_port2_halt_scan'] . "<br>\n";
+                echo "<span style='color:#f00; font-weight:bold;'>" . $langvars['l_port2_detected_illegal'] . "</span>\n";
+                echo "</div>\n";
                 $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore=0, ship_organics=0, ship_goods=0, ship_energy=0, ship_colonists =0 WHERE ship_id = ? LIMIT 1;", array($playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 $admin_log->writeLog($pdo_db, 5001, "Detected illegal cargo on shipID: {$playerinfo['ship_id']}");
             }
-            else
-            {
-                echo "<span style='color:#0f0;'>Detected no illegal cargo, you may continue.</span>\n";
-            }
-
-            echo "</div>\n";
         }
     }
     elseif ($sectorinfo['port_type'] != "none")
@@ -712,7 +708,8 @@ Tki\Text::gotoMain($pdo_db, $lang);
 
 if ($sectorinfo['port_type'] == "special")
 {
-    echo "<br><br>Click <a href=port.php>here</a> to return to the supply depot.";
+    $langvars['l_port2_return'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port2_return']);
+    echo $langvars['l_port2_return'] . "<br>";
 }
 
 $footer = new Tki\Footer();

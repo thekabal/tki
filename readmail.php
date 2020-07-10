@@ -79,7 +79,7 @@ Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
                     <tr>
                       <td width="75%" align="left"><font color="white" size="2"><strong><?php echo $langvars['l_readm_center']; ?> (<span style='color:#00C0C0;'>Subspace</span>)</strong></font></td>
                       <td width="21%" align="center" nowrap><font color="white" size="2"><?php echo "$cur_D"; ?>&nbsp;<?php echo "$cur_T"; ?></font></td>
-                      <td width="4%" align="center" bordercolorlight="black" bordercolordark="gray"><a href="main.php"><img alt="Click here to return to the main menu" src="<?php echo $template->getVariables('template_dir'); ?>/images/close.png" width="16" height="14" border="0"></a></td>
+                      <td width="4%" align="center" bordercolorlight="black" bordercolordark="gray"><a href="main.php"><img alt="<?php echo $langvars['l_readm_return_main']; ?>" src="<?php echo $template->getVariables('template_dir'); ?>/images/close.png" width="16" height="14" border="0"></a></td>
                     </tr>
                   </table>
                 </div>

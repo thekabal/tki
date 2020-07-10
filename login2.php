@@ -172,12 +172,17 @@ if ($playerfound)
                 }
                 else
                 {
-                    echo "You have died in a horrible incident, <a href=log.php>here</a> is the blackbox information that was retrieved from your ships wreckage.<br><br>";
+                    $langvars['l_login2_died'] = str_replace("[here]", "<a href='log.php'>" . $langvars['l_here'] . "</a>", $langvars['l_login2_died']);
+                    echo $langvars['l_login2_died'] . "<br><br>";
 
                     // Check if $newbie_nice is set, if so, verify ship limits
                     if ($tkireg->newbie_nice)
                     {
-                        $newbie_info = $db->Execute("SELECT hull, engines, power, computer, sensors, armor, shields, beams, torp_launchers, cloak FROM {$db->prefix}ships WHERE ship_id = ? AND hull <= ? AND engines <= ? AND power <= ? AND computer <= ? AND sensors <= ? AND armor <= ? AND shields <= ? AND beams <= ? AND torp_launchers <= ? AND cloak <= ?;", array($playerinfo['ship_id'], $tkireg->newbie_hull, $tkireg->newbie_engines, $tkireg->newbie_power, $tkireg->newbie_computer, $tkireg->newbie_sensors, $tkireg->newbie_armor, $tkireg->newbie_shields, $tkireg->newbie_beams, $tkireg->newbie_torp_launchers, $tkireg->newbie_cloak));
+                        $sql = "SELECT hull, engines, power, computer, sensors, armor, shields, beams, torp_launchers, cloak " .
+                               "FROM {$db->prefix}ships WHERE ship_id = ? AND hull <= ? AND engines <= ? " .
+                               "AND power <= ? AND computer <= ? AND sensors <= ? AND armor <= ? " .
+                               "AND shields <= ? AND beams <= ? AND torp_launchers <= ? AND cloak <= ?;";
+                        $newbie_info = $db->Execute($sql, array($playerinfo['ship_id'], $tkireg->newbie_hull, $tkireg->newbie_engines, $tkireg->newbie_power, $tkireg->newbie_computer, $tkireg->newbie_sensors, $tkireg->newbie_armor, $tkireg->newbie_shields, $tkireg->newbie_beams, $tkireg->newbie_torp_launchers, $tkireg->newbie_cloak));
                         Tki\Db::logDbErrors($pdo_db, $newbie_info, __LINE__, __FILE__);
                         $num_rows = $newbie_info->RecordCount();
 
@@ -222,19 +227,19 @@ if ($playerfound)
             echo "<div style='font-size:18px; color:#FF0000;'>\n";
             if (array_key_exists('ban_type', $ban_result))
             {
-                echo "Your account has been Banned";
+                echo $langvars['l_login2_banned'];
             }
 
             if (array_key_exists('public_info', $ban_result) && strlen(trim($ban_result['public_info'])) > 0)
             {
-                echo " for the following:<br>\n";
+                echo " " . $langvars['l_login2_why'] . "<br>\n";
                 echo "<br>\n";
                 echo "<div style='font-size:16px; color:#FFFF00;'>{$ban_result['public_info']}</div>\n";
             }
 
             echo "</div>\n";
             echo "<br>\n";
-            echo "<div style='color:#FF0000;'>Maybe you will behave yourself next time.</div>\n";
+            echo "<div style='color:#FF0000;'>" . $langvars['l_login2_behave'] . "</div>\n";
             echo "<br>\n";
             echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
         }

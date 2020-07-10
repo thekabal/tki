@@ -177,7 +177,7 @@ if ($sector == "*")
             Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
             if (!$resx)
             {
-                echo "<td>None</td>";
+                echo "<td>" . $langvars['l_none'] . "</td>";
             }
             else
             {
@@ -191,7 +191,7 @@ if ($sector == "*")
                 }
                 else
                 {
-                    $character_name = "Unknown";
+                    $character_name = $langvars['l_unknown'];
                 }
 
                 echo "<td>" . $character_name . "</td>";
@@ -441,7 +441,7 @@ else
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         if (!$resx)
         {
-            echo "None";
+            echo $langvars['l_none'];
         }
         else
         {
@@ -457,7 +457,7 @@ else
             }
             else
             {
-                echo "Unknown";
+                echo $langvars['l_unknown'];
             }
         }
     }

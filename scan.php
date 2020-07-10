@@ -65,7 +65,7 @@ echo "<h1>" . $title . "</h1>\n";
 // Kami Multi Browser Window Attack Fix
 if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_selected'] != $_GET['ship_id'])
 {
-    echo "You need to Click on the ship first.<br><br>";
+    echo $langvars['l_global_click_first'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
@@ -318,7 +318,7 @@ else
             echo "</table><br>";
             echo "<strong>" . $langvars['l_scan_carry'] . "</strong><br><br>";
             echo "<table  width=\"\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
-            echo "<tr><td>Credits:</td>";
+            echo "<tr><td>" . $langvars['l_credits'] . ":</td>";
             $roll = random_int(1, 100);
             if ($roll < $success)
             {

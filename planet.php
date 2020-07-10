@@ -63,7 +63,7 @@ $planetinfo = null;
 // Check if planet_id is valid.
 if ($planet_id <= 0)
 {
-    echo 'Invalid Planet<br><br>';
+    echo $langvars['l_planet2_invalid_planet'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
@@ -82,7 +82,7 @@ $num_planets = count($planetinfo);
 
 if (!$planetinfo)
 {
-    echo "Invalid Planet<br><br>";
+    echo $langvars['l_planet2_invalid_planet'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }

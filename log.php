@@ -371,8 +371,8 @@ if ($swordfish == Tki\SecureConfig::ADMIN_PASS)
 }
 else
 {
-    $langvars['l_log_click'] = str_replace("[here]", "<a href=main.php><font color=#00ff00>" . $langvars['l_here'] . "</font></a>", $langvars['l_log_click']);
-    echo "<tr><td><td style='text-align:left;'><p style='font-size:2;'>" . $langvars['l_log_click'] . "</p></td></tr>";
+    $langvars['l_global_mmenu'] = str_replace("[here]", "<a href=main.php><font color=#00ff00>" . $langvars['l_here'] . "</font></a>", $langvars['l_global_mmenu']);
+    echo "<tr><td><td style='text-align:left;'><p style='font-size:2;'>" . $langvars['l_global_mmenu'] . "</p></td></tr>";
 }
 
 if ($mode != 'compat')
