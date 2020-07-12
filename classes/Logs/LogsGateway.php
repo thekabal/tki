@@ -35,6 +35,7 @@ class LogsGateway // Gateway for SQL calls related to Logs
 
     public function selectLogsInfo(int $ship_id, string $startdate): array
     {
+        $logsinfo = Array();
         $sql = "SELECT * FROM ::prefix::logs WHERE ship_id = :ship_id AND time LIKE ':start_date%' ORDER BY time DESC, type DESC";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
@@ -43,7 +44,14 @@ class LogsGateway // Gateway for SQL calls related to Logs
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
 
         // A little magic here. If it couldn't select a log, the following call will return false - which is what we want for "no logs found".
-        $logsinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        return $logsinfo; // FUTURE: Eventually we want this to return a log object instead, for now, logsinfo array or false for no user found.
+        $logs_select = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($logs_select !== false)
+        {
+            return $logs_select;
+        }
+        else
+        {
+            return $logsinfo; // Note: Returns empty Array if select found no logs
+        }
     }
 }
