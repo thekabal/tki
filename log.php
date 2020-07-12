@@ -133,7 +133,7 @@ echo "<div id=\"divScroller1\">" .
      "<hr width=80% size=1 noshade style=\"color: #040658\">" .
      "</center>\n";
 
-if ($logs !== null)
+if (!empty($logs))
 {
     foreach ($logs as $log)
     {
@@ -203,7 +203,7 @@ if ($mode != 'compat')
          "</center>" .
          "<hr width=80% size=1 noshade style=\"color: #040658\">";
 
-    if ($logs !== null)
+    if (!empty($logs))
     {
         foreach ($logs as $log)
         {
@@ -245,7 +245,7 @@ if ($mode != 'compat')
          "</center>" .
          "<hr width=80% size=1 noshade style=\"color: #040658\">";
 
-    if ($logs !== null)
+    if (!empty($logs))
     {
         foreach ($logs as $log)
         {

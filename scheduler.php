@@ -183,7 +183,7 @@ else
     }
 
     $runtime = time() - $starttime;
-    $langvars['l_sched_time'] = str_replace("[seconds]", $runtime, $langvars['l_sched_time']);
+    $langvars['l_sched_time'] = str_replace("[seconds]", (string) $runtime, $langvars['l_sched_time']);
     echo "<p>" . $langvars['l_sched_time'] . ".<p>";
 
     $sql = "UPDATE ::prefix::scheduler SET last_run = :time";

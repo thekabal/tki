@@ -32,7 +32,7 @@ class IbankTransferSpecific
         array $langvars,
         Reg $tkireg,
         array $playerinfo,
-        int $ship_id,
+        $ship_id,
         int $splanet_id,
         int $dplanet_id,
         Smarty $template): void

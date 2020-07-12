@@ -530,7 +530,7 @@ else
                 // Update database
                 $_active = empty($active) ? "N" : "Y";
                 $errflag = 0;
-                if ($character === null || $shipname === null)
+                if ($_POST['character'] === null || $_POST['shipname'] === null)
                 {
                     echo "Ship name, and character name may not be blank.<br>";
                     $errflag = 1;

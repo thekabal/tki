@@ -180,7 +180,7 @@ class CheckDefenses
             echo $langvars['l_sf_shipdestroyed'] . "<br><br>";
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::DEFS_KABOOM, "$sector|$playerinfo[dev_escapepod]");
             $langvars['l_sf_sendlog2'] = str_replace("[player]", $playerinfo['character_name'], $langvars['l_sf_sendlog2']);
-            $langvars['l_sf_sendlog2'] = str_replace("[sector]", $sector, $langvars['l_sf_sendlog2']);
+            $langvars['l_sf_sendlog2'] = str_replace("[sector]", (string) $sector, $langvars['l_sf_sendlog2']);
             \Tki\SectorDefense::messageDefenseOwner($pdo_db, $sector, $langvars['l_sf_sendlog2']);
             if ($playerinfo['dev_escapepod'] == 'Y')
             {
