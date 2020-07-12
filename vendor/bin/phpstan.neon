@@ -19,8 +19,10 @@ parameters:
     ignoreErrors:
         - '#Access to an undefined property Tki#'
         - '#Variable property access#' #// In (class) Reg, File, and in create_universe/10, this flags an error during the config variable/value import code.
-        - '#Undefined variable#' #// 4200! Lots of work to do, real errors too.
-#        - '#has parameter \$db with no typehint#'
+        - '#Undefined variable#' #// ~86 errors
+        - '# might not be defined#' #// 4100+ errors - lots of work to do, real errors too.
+        - '# with no typehint #' # At error level 5-6, this comes back
+        - '# has no return typehint specified#' # At error level 5-6, this comes back
 
 rules:
     - PHPStan\Rules\BooleansInConditions\BooleanInBooleanAndRule
