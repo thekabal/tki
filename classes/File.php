@@ -51,7 +51,8 @@ class File
         {
             foreach ($config_line as $config_key => $type_n_value)
             {
-                if (strpos($ini_file, '_config'))
+                $pos = strpos($ini_file, '_config');
+                if ($pos !== false)
                 {
                     // Import all the variables into the registry
                     settype($type_n_value['value'], $type_n_value['type']);
@@ -126,80 +127,81 @@ class File
     // This defaults to the equivalent of "true" for the second param of parse_ini, ie, process sections
     public static function betterParseIni(string $file): array
     {
-        $ini = file($file, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
-
-        $container = null;
         $out = array();
-        foreach ($ini as $line)
+        $ini = file($file, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+        if ($ini !== false)
         {
-            if (substr(trim($line), 0, 1) === '[' && substr(trim($line), -1, 1) === ']')
+            $container = null;
+            foreach ($ini as $line)
             {
-                $container = trim(substr($line, 1, -1));
-                continue;
-            }
-            elseif (substr(trim($line), 0, 1) !== ';' && substr(trim($line), 0, 2) !== '//')
-            {
-                list($name, $data) = explode('=', $line, 2);
-                $name = trim($name);
-                $data = trim($data);
-                $comment = null;
-                if (strpos($data, '//') != 0)
+                if (substr(trim($line), 0, 1) === '[' && substr(trim($line), -1, 1) === ']')
                 {
-                    list($value, $comment) = explode('//', $data, 2);
+                    $container = trim(substr($line, 1, -1));
+                    continue;
                 }
-                else
+                elseif (substr(trim($line), 0, 1) !== ';' && substr(trim($line), 0, 2) !== '//')
                 {
-                    $value = trim($data);
-                }
+                    list($name, $data) = explode('=', $line, 2);
+                    $name = trim($name);
+                    $data = trim($data);
+                    $comment = null;
+                    if (strpos($data, '//') != 0)
+                    {
+                        list($value, $comment) = explode('//', $data, 2);
+                    }
+                    else
+                    {
+                        $value = trim($data);
+                    }
 
-                // Remove any semicolons from the end of the value.
-                if (substr(trim($value), -1, 1) === ';')
-                {
-                    $value = substr(trim($value), 0, -1);
-                }
+                    // Remove any semicolons from the end of the value.
+                    if (substr(trim($value), -1, 1) === ';')
+                    {
+                        $value = substr(trim($value), 0, -1);
+                    }
 
-                // Remove Quote Tags from the start and end.
-                if (substr(trim($value), 0, 1) === '\'' || substr(trim($value), 0, 1) === '"')
-                {
-                    $value = substr(trim($value), 1);
-                }
+                    // Remove Quote Tags from the start and end.
+                    if (substr(trim($value), 0, 1) === '\'' || substr(trim($value), 0, 1) === '"')
+                    {
+                        $value = substr(trim($value), 1);
+                    }
 
-                if (substr(trim($value), -1, 1) === '\'' || substr(trim($value), -1, 1) === '"')
-                {
-                    $value = substr(trim($value), 0, -1);
-                }
+                    if (substr(trim($value), -1, 1) === '\'' || substr(trim($value), -1, 1) === '"')
+                    {
+                        $value = substr(trim($value), 0, -1);
+                    }
 
-                $value = trim($value);
-                if ($comment !== null)
-                {
-                    $comment = trim($comment);
-                }
+                    $value = trim($value);
+                    if ($comment !== null)
+                    {
+                        $comment = trim($comment);
+                    }
 
-                // Check for Numeric types (int/long, double/float)
-                if (is_numeric($value))
-                {
-                    $value = (int) $value;
-                    $value += 0;
-                }
-                elseif (strtolower($value) === 'true' || strtolower($value) === 'false')
-                {
-                    $value = (strtolower($value) == 'true' ? true : false);
-                    settype($value, 'bool');
-                }
-                elseif (strlen(trim($value)) == 0)
-                {
-                        $value = null;
-                }
+                    // Check for Numeric types (int/long, double/float)
+                    if (is_numeric($value))
+                    {
+                        $value = (int) $value;
+                        $value += 0;
+                    }
+                    elseif (strtolower($value) === 'true' || strtolower($value) === 'false')
+                    {
+                        $value = (strtolower($value) == 'true' ? true : false);
+                        settype($value, 'bool');
+                    }
+                    elseif (strlen(trim($value)) == 0)
+                    {
+                            $value = null;
+                    }
 
-                if ($container !== null)
-                {
-                    $out[$container][$name] = array('value' => $value,
-                                                    'type' => gettype($value),
-                                                    'comment' => $comment);
+                    if ($container !== null)
+                    {
+                        $out[$container][$name] = array('value' => $value,
+                                                        'type' => gettype($value),
+                                                        'comment' => $comment);
+                    }
                 }
             }
         }
-
         return $out;
     }
 }
