@@ -1,4 +1,3 @@
-
 <?php declare(strict_types = 1);
 /**
  * planet3.php from The Kabal Invasion.
