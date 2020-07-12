@@ -78,9 +78,8 @@ $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 // Get planetinfo from database
 $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
-$num_planets = count($planetinfo);
 
-if (!$planetinfo)
+if (!empty($planetinfo))
 {
     echo $langvars['l_planet2_invalid_planet'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -89,7 +88,7 @@ if (!$planetinfo)
 
 $admin_log = new Tki\AdminLog();
 
-if ($planetinfo)  // If there is a planet in the sector show appropriate menu
+if (!empty($planetinfo))  // If there is a planet in the sector show appropriate menu
 {
     if ($playerinfo['sector'] != $planetinfo['sector_id'])
     {

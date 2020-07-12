@@ -126,12 +126,16 @@ class Smarty
         }
     }
 
-    public function getVariables(string $nodeName)
+    public function getVariables(string $nodeName): ?mixed
     {
         if ($this->smarty !== null)
         {
             $temp_variable = $this->smarty->getTemplateVars($nodeName);
             return $temp_variable;
+        }
+        else
+        {
+            return null;
         }
     }
 

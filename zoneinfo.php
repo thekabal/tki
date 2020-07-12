@@ -48,7 +48,7 @@ $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway o
 $zoneinfo = $zones_gateway->selectZoneInfoByZone($zone);
 $ownerinfo = array();
 
-if (!$zoneinfo)
+if (!empty($zoneinfo))
 {
     echo $langvars['l_zi_nexist'];
 }

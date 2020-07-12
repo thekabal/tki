@@ -40,15 +40,17 @@ class SchedulerGateway // Gateway for SQL calls related to the Scheduler
         {
             // SQL call that selects the last run of the scheduler, and only one record
             $sql = "SELECT last_run FROM ::prefix::scheduler LIMIT 1";
-            $stmt = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
+            $result = $this->pdo_db->query($sql); // Query the pdo DB using this SQL call
 
-            // Future: Handle a bad return (aka false) as it is causing problems for the fetchObject call
-            $row = $stmt->fetchObject();
-            \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
-
-            if (is_object($row) && (property_exists($row, 'last_run')))
+            if ($result !== false)
             {
-                return (int) $row->last_run; // Return the int value of the last scheduler run
+                $row = $result->fetchObject();
+                \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
+
+                if (is_object($row) && (property_exists($row, 'last_run')))
+                {
+                    return (int) $row->last_run; // Return the int value of the last scheduler run
+                }
             }
         }
 

@@ -160,9 +160,12 @@ class PlanetProduction
 
                 if ($planet['prod_ore'] + $planet['prod_organics'] + $planet['prod_goods'] + $planet['prod_energy'] + $planet['prod_fighters'] + $planet['prod_torp'] > 100)
                 {
-                    $temp1 = str_replace("[planet_name]", $planet['name'], $langvars['l_pr_value_reset']);
-                    $temp2 = str_replace("[sector_id]", $planet['sector_id'], $temp1);
-                    echo $temp2 . "<br>";
+                    if (!empty($planet['name']) && !empty($planet['sector_id']))
+                    {
+                        $temp1 = str_replace("[planet_name]", (string) $planet['name'], (string) $langvars['l_pr_value_reset']);
+                        $temp2 = str_replace("[sector_id]", (string) $planet['sector_id'], $temp1);
+                        echo $temp2 . "<br>";
+                    }
 
                     $resa = $db->Execute("UPDATE {$db->prefix}planets SET prod_ore = ? WHERE planet_id = ?;", array($tkireg->default_prod_ore, $planet['planet_id']));
                     \Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);

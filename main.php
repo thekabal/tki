@@ -90,7 +90,7 @@ $links = array();
 $links_gateway = new \Tki\Links\LinksGateway($pdo_db); // Build a links gateway object to handle the SQL calls
 $link_present = $links_gateway->selectAllLinkInfoByLinkStart($playerinfo['sector']);
 
-if ($link_present !== false)
+if (!empty($link_present))
 {
     foreach ($link_present as $tmp_link)
     {
@@ -106,7 +106,7 @@ $planets = array();
 // Get planetinfo from database
 $planets_gateway = new Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
 $planetinfo = $planets_gateway->selectAllPlanetInfo($playerinfo['sector']);
-if ($planetinfo !== false)
+if (!empty($planetinfo))
 {
     foreach ($planetinfo as $tmp_planet)
     {

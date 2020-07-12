@@ -152,11 +152,11 @@ class PlanetReportCE
                     $update = $stmt->execute();
                     \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
 
-                    $tempa1 = str_replace("[credits_taken]", number_format($CreditsTaken, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_pr_took_credits']);
-                    $tempa2 = str_replace("[planet_name]", $planetinfo['name'], $tempa1);
+                    $tempa1 = str_replace("[credits_taken]", number_format($CreditsTaken, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), (string) $langvars['l_pr_took_credits']);
+                    $tempa2 = str_replace("[planet_name]", (string) $planetinfo['name'], $tempa1);
                     echo $tempa2 . "<br>";
 
-                    $tempb1 = str_replace("[ship_name]", $playerinfo['ship_name'], $langvars['l_pr_have_credits_onboard']);
+                    $tempb1 = str_replace("[ship_name]", (string) $playerinfo['ship_name'], (string) $langvars['l_pr_have_credits_onboard']);
                     $tempb2 = str_replace("[new_ship_credits]", number_format($NewShipCredits, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $tempb1);
                     echo $tempb2 . "<br>";
                     $retval = "GO";
@@ -169,7 +169,7 @@ class PlanetReportCE
             }
             else
             {
-                $tempc1 = str_replace("[planet_name]", $planetinfo['name'], $langvars['l_pr_not_enough_turns']);
+                $tempc1 = str_replace("[planet_name]", (string) $planetinfo['name'], (string) $langvars['l_pr_not_enough_turns']);
                 $tempc2 = str_replace("[sector_id]", $planetinfo['sector_id'], $tempc1);
                 echo "<br><br>" . $tempc2 . "<br><br>";
                 $retval = "BREAK-TURNS";

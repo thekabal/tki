@@ -49,7 +49,7 @@ class Footer
             $players_gateway = new Players\PlayersGateway($pdo_db);
 
             // Online is the (int) count of the numbers of players currently logged in via SQL select
-            $online = $players_gateway->selectPlayersLoggedIn($since_stamp, $cur_time_stamp);
+            $online = (int) $players_gateway->selectPlayersLoggedIn($since_stamp, $cur_time_stamp);
         }
 
         $tkireg->tkitimer->stop();

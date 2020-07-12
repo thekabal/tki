@@ -32,7 +32,7 @@ class Defense
         $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db); // Build a defense gateway object to handle the SQL calls
         $defenses_present = $defenses_gateway->selectDefenses($ship_id);
 
-        if ($defenses_present !== false)
+        if (!empty($defenses_present))
         {
             foreach ($defenses_present as $tmp_defense)
             {

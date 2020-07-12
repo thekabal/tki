@@ -140,7 +140,7 @@ switch ($response)
             $total_sector_fighters = $ttl['totalfighters'];
             $calledfrom = "modify_defenses.php";
             $energyscooped = 0;
-            Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, $energyscooped);
+            Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, $energyscooped, $playerinfo, $tkireg, $title);
         }
         else
         {
@@ -183,7 +183,7 @@ switch ($response)
              die();
         }
 
-        $quantity = (int) preg_replace('/[^0-9]/', '', $quantity);
+        $quantity = (string) preg_replace('/[^0-9]/', '', (string) $quantity);
         if ($quantity < 0)
         {
             $quantity = 0;

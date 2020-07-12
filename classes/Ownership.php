@@ -37,7 +37,7 @@ class Ownership
         $bases = array();
         if ($bases_present === false)
         {
-            return "Sector ownership didn't change";
+            return $langvars['l_global_sector_owner_nochange'];
         }
 
         foreach ($bases_present as $tmp_base)

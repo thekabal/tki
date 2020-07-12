@@ -33,7 +33,7 @@ class ZonesGateway // Gateway for SQL calls related to Zones
         $this->pdo_db = $pdo_db;
     }
 
-    public function selectZoneInfo(int $sector_id)
+    public function selectZoneInfo(int $sector_id): ?array
     {
         $sql = "SELECT * FROM ::prefix::zones WHERE sector_id = :sector_id";
         $stmt = $this->pdo_db->prepare($sql);
@@ -46,7 +46,7 @@ class ZonesGateway // Gateway for SQL calls related to Zones
         return $zoneinfo; // FUTURE: Eventually we want this to return a zone object instead, for now, zoneinfo array or false for no zone found.
     }
 
-    public function selectZoneInfoByZone(int $zone)
+    public function selectZoneInfoByZone(int $zone): ?array
     {
         $sql = "SELECT * FROM ::prefix::zones WHERE zone_id = :zone_id LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);
@@ -59,7 +59,7 @@ class ZonesGateway // Gateway for SQL calls related to Zones
         return $zoneinfo; // FUTURE: Eventually we want this to return a zone object instead, for now, zoneinfo array or false for no zone found.
     }
 
-    public function selectMatchingZoneInfo(int $sector_id)
+    public function selectMatchingZoneInfo(int $sector_id): ?array
     {
         $sql = "SELECT * FROM ::prefix::zones, ::prefix::universe WHERE ::prefix::universe.sector_id = :sector_id AND ::prefix::zones.zone_id = ::prefix::universe.zone_id";
         $stmt = $this->pdo_db->prepare($sql);

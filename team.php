@@ -38,7 +38,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('team', 'common', 'global_
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$planet_id = (int) preg_replace('/[^0-9]/', '', $_GET['planet_id']);
+$planet_id = (int) preg_replace('/[^0-9]/', '', (string) $_GET['planet_id']);
 
 // Get planetinfo from database
 $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls

@@ -77,8 +77,8 @@ foreach ($preset_list as $index => $preset)
     if ($preset === false)
     {
         $change = 0;
-        $result = str_replace("[preset]", $_POST['preset'][$index], $langvars['l_pre_exceed']);
-        $result = str_replace("[max_sectors]", $tkireg->max_sectors, $result);
+        $result = str_replace("[preset]", (string) $_POST['preset'][$index], (string) $langvars['l_pre_exceed']);
+        $result = str_replace("[max_sectors]", (string) $tkireg->max_sectors, $result);
         $result = htmlentities($result, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         echo $result . "<br>\n";
     }
@@ -111,7 +111,7 @@ else
             $stmt->bindParam(':preset_id', $new_id, PDO::PARAM_INT);
             $stmt->execute();
 
-            $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", $langvars['l_pre_set_loop']);
+            $preset_result_echo = str_replace("[preset]", "<a href=rsmove.php?engage=1&destination=$preset_list[$key]>$preset_list[$key]</a>", (string) $langvars['l_pre_set_loop']);
             $preset_result_echo = str_replace("[num]", (string) ($key + 1), $preset_result_echo);
             echo $preset_result_echo . "<br>";
         }

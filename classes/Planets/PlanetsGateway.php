@@ -33,7 +33,7 @@ class PlanetsGateway // Gateway for SQL calls related to Planets
         $this->pdo_db = $pdo_db;
     }
 
-    public function selectPlanetInfo(int $sector_id)
+    public function selectPlanetInfo(int $sector_id): ?array
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE sector_id = :sector_id";
         $stmt = $this->pdo_db->prepare($sql);
@@ -46,20 +46,26 @@ class PlanetsGateway // Gateway for SQL calls related to Planets
         return $planetinfo; // FUTURE: Eventually we want this to return a planet object instead, for now, planetinfo array or false for no planet found.
     }
 
-    public function selectAllPlanetInfo(int $sector_id)
+    public function selectAllPlanetInfo(int $sector_id): ?array
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE sector_id = :sector_id";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector_id, \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
-
         // A little magic here. If it couldn't select a planet in the sector, the following call will return false - which is what we want for "no planet found".
         $planetinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        return $planetinfo; // FUTURE: Eventually we want this to return a planet object instead, for now, planetinfo array or false for no planet found.
+        if ($planetinfo !== false)
+        {
+            return $planetinfo; // FUTURE: Eventually we want this to return a planet object instead, for now, planetinfo array or false for no planet found.
+        }
+        else
+        {
+            return null;
+        }
     }
 
-    public function selectPlanetInfoByPlanet(int $planet_id)
+    public function selectPlanetInfoByPlanet(int $planet_id): ?array
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :planet_id";
         $stmt = $this->pdo_db->prepare($sql);
@@ -72,16 +78,23 @@ class PlanetsGateway // Gateway for SQL calls related to Planets
         return $planetinfo; // FUTURE: Eventually we want this to return a planet object instead, for now, planetinfo array or false for no planet found.
     }
 
-    public function selectAllPlanetInfoByOwner(int $ship_id)
+    public function selectAllPlanetInfoByOwner(int $ship_id): ?array
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE owner = :owner";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
-
         // A little magic here. If it couldn't select a planet in the sector, the following call will return false - which is what we want for "no planet found".
         $planetinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        return $planetinfo; // FUTURE: Eventually we want this to return a planet object instead, for now, planetinfo array or false for no planet found.
+
+        if ($planetinfo !== false)
+        {
+            return $planetinfo; // FUTURE: Eventually we want this to return a planet object instead, for now, planetinfo array or false for no planet found.
+        }
+        else
+        {
+            return null;
+        }
     }
 }

@@ -26,8 +26,10 @@ namespace Tki;
 
 class CheckDefenses
 {
-    public static function sectorFighters(\PDO $pdo_db, string $lang, int $sector, string $calledfrom, int $energyscooped): void
+    public static function sectorFighters(\PDO $pdo_db, string $lang, int $sector, string $calledfrom, int $energyscooped, array $playerinfo, Reg $tkireg, string $title): void
     {
+        $total_sec_fighters = 0;
+
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('sector_fighters', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
         echo $langvars['l_sf_attacking'] . "<br>";
         $targetfighters = $total_sec_fighters;
@@ -125,7 +127,7 @@ class CheckDefenses
             }
             else
             {
-                 $langvars['l_sf_lostfight2'] = str_replace("[lost]", (string) $targetfighters, $langvars['l_sf_lostfight2']);
+                 $langvars['l_sf_lostfight2'] = str_replace("[lost]", $targetfighters, $langvars['l_sf_lostfight2']);
                  echo $langvars['l_sf_lostfight2'] . "<br>";
                  $tempplayfighters = $playerfighters - $targetfighters;
             }
@@ -144,7 +146,7 @@ class CheckDefenses
             else
             {
                 $playerarmor = $playerarmor - $targetfighters;
-                $langvars['l_sf_armorbreach2'] = str_replace("[lost]", (string) $targetfighters, $langvars['l_sf_armorbreach2']);
+                $langvars['l_sf_armorbreach2'] = str_replace("[lost]", $targetfighters, $langvars['l_sf_armorbreach2']);
                 echo $langvars['l_sf_armorbreach2'] . "<br>";
             }
         }
@@ -234,7 +236,7 @@ class CheckDefenses
         }
     }
 
-    public static function fighters(\PDO $pdo_db, $db, string $lang, int $sector): void
+    public static function fighters(\PDO $pdo_db, $db, string $lang, int $sector, $playerinfo, $tkireg, $title, $calledfrom): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
@@ -305,7 +307,7 @@ class CheckDefenses
                         $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         echo "<h1>" . $title . "</h1>\n";
-                        \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0);
+                        \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0, $playerinfo, $tkireg, $title);
                         break;
 
                     case "retreat":
@@ -322,7 +324,7 @@ class CheckDefenses
                     case "pay":
                         $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        $fighterstoll = (int) round($total_sec_fighters * $fighter_price * 0.6);
+                        $fighterstoll = (int) round($total_sec_fighters * $tkireg->fighter_price * 0.6);
                         if ($playerinfo['credits'] < $fighterstoll)
                         {
                             echo $langvars['l_chf_notenoughcreditstoll'] . "<br>";
@@ -366,7 +368,7 @@ class CheckDefenses
                             // Sector defenses detect incoming ship
                             echo "<h1>" . $title . "</h1>\n";
                             echo $langvars['l_chf_thefightersdetectyou'] . "<br>";
-                            \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0);
+                            \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0, $playerinfo, $tkireg, $title);
                             break;
                         }
                         else
@@ -380,7 +382,7 @@ class CheckDefenses
                         $interface_string = $calledfrom . '?sector=' . $sector . '&destination=' . $destination . '&engage=' . $engage;
                         $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ? WHERE ship_id = ?;", array($interface_string, $playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        $fighterstoll = (int) round($total_sec_fighters * $fighter_price * 0.6);
+                        $fighterstoll = (int) round($total_sec_fighters * $tkireg->fighter_price * 0.6);
                         echo "<h1>" . $title . "</h1>\n";
                         echo "<form accept-charset='utf-8' action='{$calledfrom}' method='post'>";
                         $langvars['l_chf_therearetotalfightersindest'] = str_replace("[chf_total_sec_fighters]", (string) $total_sec_fighters, $langvars['l_chf_therearetotalfightersindest']);
@@ -422,7 +424,7 @@ class CheckDefenses
         }
     }
 
-    public static function mines(\PDO $pdo_db, $db, string $lang, int $sector, string $title): void
+    public static function mines(\PDO $pdo_db, $db, string $lang, int $sector, string $title, array $playerinfo, $tkireg): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'combat', 'footer', 'news'));

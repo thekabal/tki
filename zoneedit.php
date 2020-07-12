@@ -112,7 +112,7 @@ if (strlen(trim($trades)) === 0)
 $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
 $zoneinfo = $zones_gateway->selectZoneInfo($zone);
 
-if (!$zoneinfo)
+if (!empty($zoneinfo))
 {
     echo "<p>" . $langvars['l_zi_nexist'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);

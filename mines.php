@@ -60,7 +60,7 @@ $i = 0;
 $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db); // Build a defense gateway object to handle the SQL calls
 $defenses_present = $defenses_gateway->selectDefenses($playerinfo['sector']);
 
-if ($defenses_present !== false)
+if (!empty($defenses_present))
 {
     foreach ($link_present as $tmp_link)
     {
@@ -83,7 +83,7 @@ $set_toll = null;
 $defenses = array();
 
 // Do we have a valid recordset?
-if ($defenses_present)
+if (!empty($defenses_present))
 {
     foreach ($defenses_present as $tmp_defense)
     {
