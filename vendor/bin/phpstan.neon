@@ -23,6 +23,7 @@ parameters:
         - '# might not be defined#' #// 4100+ errors - lots of work to do, real errors too.
         - '# with no typehint #' # At error level 5-6, this comes back
         - '# has no return typehint specified#' # At error level 5-6, this comes back
+        - '# only iterables are supported#' # Level 8
 
 rules:
     - PHPStan\Rules\BooleansInConditions\BooleanInBooleanAndRule
