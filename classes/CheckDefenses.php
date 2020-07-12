@@ -26,7 +26,7 @@ namespace Tki;
 
 class CheckDefenses
 {
-    public static function sectorFighters(\PDO $pdo_db, string $lang, int $sector, string $calledfrom, int $energyscooped, array $playerinfo, Reg $tkireg, string $title): void
+    public static function sectorFighters(\PDO $pdo_db, string $lang, int $sector, string $calledfrom, int $energyscooped, array $playerinfo, Reg $tkireg): void
     {
         $total_sec_fighters = 0;
 

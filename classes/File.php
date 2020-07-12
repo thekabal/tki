@@ -202,6 +202,7 @@ class File
                 }
             }
         }
+
         return $out;
     }
 }
