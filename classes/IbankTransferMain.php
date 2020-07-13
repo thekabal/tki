@@ -48,9 +48,12 @@ class IbankTransferMain
              "<td>" . $langvars['l_ibank_toanothership'] . " :<br><br>" .
              "<select class=term name=ship_id style='width:200px;'>";
 
-        foreach ($ships as $ship)
+        if (!empty($ships))
         {
-            echo "<option value='" . $ship['ship_id'] . "'>" . $ship['character_name'] . "</option>";
+            foreach ($ships as $ship)
+            {
+                echo "<option value='" . $ship['ship_id'] . "'>" . $ship['character_name'] . "</option>";
+            }
         }
 
         echo "</select></td><td valign=center align=right>" .

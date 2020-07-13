@@ -31,6 +31,10 @@ class KabalToPlanet
         // Get planetinfo from database
         $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
         $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
+        if (empty($planetinfo))
+        {
+            die("No valid planet info");
+        }
 
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id"; // Get target player information
         $stmt = $pdo_db->prepare($sql);

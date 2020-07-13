@@ -35,7 +35,7 @@ class Ownership
         $bases_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $count = 0;
         $bases = array();
-        if ($bases_present === false)
+        if (empty($bases_present))
         {
             return $langvars['l_global_sector_owner_nochange'];
         }
@@ -48,12 +48,15 @@ class Ownership
 
         $owner_num = 0;
         $owners = array();
+        $loop = 0;
+        $owners[$loop]['id'] = null;
+        $owners[$loop]['type'] = null;
+        $owners[$loop]['num'] = 0;
 
         foreach ($bases as $curbase)
         {
             $curteam = -1;
             $curship = -1;
-            $loop = 0;
             while ($loop < $owner_num)
             {
                 if (($curbase['team'] != 0) && ($owners[$loop]['type'] == 'C') && ($owners[$loop]['id'] == $curbase['team']))

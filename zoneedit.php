@@ -112,7 +112,7 @@ if (strlen(trim($trades)) === 0)
 $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
 $zoneinfo = $zones_gateway->selectZoneInfo($zone);
 
-if (!empty($zoneinfo))
+if (empty($zoneinfo))
 {
     echo "<p>" . $langvars['l_zi_nexist'] . "<p>";
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -122,8 +122,11 @@ if (!empty($zoneinfo))
     die();
 }
 
-// Sanitize ZoneName.
-$zoneinfo['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $zoneinfo['zone_name']);
+if (array_key_exists('zone_name', $zoneinfo))
+{
+    // Sanitize ZoneName.
+    $zoneinfo['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $zoneinfo['zone_name']);
+}
 
 if ($zoneinfo['team_zone'] == 'N')
 {

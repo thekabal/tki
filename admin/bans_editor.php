@@ -176,16 +176,19 @@ elseif ($command == 'showips')
             $res->MoveNext();
         }
 
-        foreach ($players as $player)
+        if (!empty($players))
         {
-            echo "<strong>" . $player['character_name'] . "</strong><br>";
-        }
+            foreach ($players as $player)
+            {
+                echo "<strong>" . $player['character_name'] . "</strong><br>";
+            }
 
-        echo "<td align=center><font size=2 color=white>";
+            echo "<td align=center><font size=2 color=white>";
 
-        foreach ($players as $player)
-        {
-            echo $player['email'] . "<br>";
+            foreach ($players as $player)
+            {
+                echo $player['email'] . "<br>";
+            }
         }
 
         echo "<td align=center nowrap valign=center><font size=2 color=white>" .

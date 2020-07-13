@@ -177,7 +177,7 @@ $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet g
 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
 // Check to see if it returned valid planet info.
-if (!empty($planetinfo))
+if (empty($planetinfo))
 {
     echo $langvars['l_planet2_invalid_planet'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -519,149 +519,142 @@ else
     }
     else
     {
-        if ($planetinfo !== null)
+        if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $playerinfo['team'] && $playerinfo['team'] != 0))
         {
-            if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $playerinfo['team'] && $playerinfo['team'] != 0))
+            if ($transfer_ore < 0 && $playerinfo['ship_ore'] < abs($transfer_ore))
             {
-                if ($transfer_ore < 0 && $playerinfo['ship_ore'] < abs($transfer_ore))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_ore'] . " " . $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_ore = 0;
-                }
-                elseif ($transfer_ore > 0 && $planetinfo['ore'] < abs($transfer_ore))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_ore'] . " " . $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_ore = 0;
-                }
-
-                if ($transfer_organics < 0 && $playerinfo['ship_organics'] < abs($transfer_organics))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_organics'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_organics = 0;
-                }
-                elseif ($transfer_organics > 0 && $planetinfo['organics'] < abs($transfer_organics))
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_organics'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_organics = 0;
-                }
-
-                if ($transfer_goods < 0 && $playerinfo['ship_goods'] < abs($transfer_goods))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_goods'] . " " . $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_goods = 0;
-                }
-                elseif ($transfer_goods > 0 && $planetinfo['goods'] < abs($transfer_goods))
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_goods'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_goods = 0;
-                }
-
-                if ($transfer_energy < 0 && $playerinfo['ship_energy'] < abs($transfer_energy))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_energy'] . " " . $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_energy = 0;
-                }
-                elseif ($transfer_energy > 0 && $planetinfo['energy'] < abs($transfer_energy))
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_energy'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_energy = 0;
-                }
-                elseif ($transfer_energy > 0 && abs($transfer_energy) > $free_power)
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_planet2_power'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_energy = 0;
-                }
-
-                if ($transfer_colonists < 0 && $playerinfo['ship_colonists'] < abs($transfer_colonists))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_colonists'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_colonists = 0;
-                }
-                elseif ($transfer_colonists > 0 && $planetinfo['colonists'] < abs($transfer_colonists))
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_colonists'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_colonists = 0;
-                }
-
-                if ($transfer_fighters < 0 && $playerinfo['ship_fighters'] < abs($transfer_fighters))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_fighters'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_fighters = 0;
-                }
-                elseif ($transfer_fighters > 0 && $planetinfo['fighters'] < abs($transfer_fighters))
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_fighters'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_fighters = 0;
-                }
-                elseif ($transfer_fighters > 0 && abs($transfer_fighters) > $fighter_max)
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_planet2_comp'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_fighters = 0;
-                }
-
-                if ($transfer_torps < 0 && $playerinfo['torps'] < abs($transfer_torps))
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_torps'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_torps = 0;
-                }
-                elseif ($transfer_torps > 0 && $planetinfo['torps'] < abs($transfer_torps))
-                {
-                    echo $langvars['l_planet2_noten'] . " " .  $langvars['l_torps'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_torps = 0;
-                }
-                elseif ($transfer_torps > 0 && abs($transfer_torps) > $torpedo_max)
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_planet2_laun'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_torps = 0;
-                }
-
-                if ($transfer_credits < 0 && $playerinfo['credits'] < abs($transfer_credits))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_credits'] . " " . $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_credits = 0;
-                }
-                elseif ($transfer_credits > 0 && $planetinfo['credits'] < abs($transfer_credits))
-                {
-                    echo $langvars['l_planet2_noten'] . " " . $langvars['l_credits'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
-                    $transfer_credits = 0;
-                }
-
-                $sql = "UPDATE ::prefix::ships SET ship_ore = ship_ore + :ship_ore, ship_organics = ship_organics + :ship_organics, ship_goods = ship_goods + :ship_goods, ship_energy = ship_energy + :ship_energy, ship_colonists = ship_colonists + :ship_colonists, torps = torps + :torps, ship_fighters = ship_fighters + :ship_fighters, credits = credits + :credits, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ship_ore', $transfer_ore, PDO::PARAM_INT);
-                $stmt->bindParam(':ship_organics', $transfer_organics, PDO::PARAM_INT);
-                $stmt->bindParam(':ship_goods', $transfer_goods, PDO::PARAM_INT);
-                $stmt->bindParam(':ship_energy', $transfer_energy, PDO::PARAM_INT);
-                $stmt->bindParam(':ship_colonists', $transfer_colonists, PDO::PARAM_INT);
-                $stmt->bindParam(':torps', $transfer_torps, PDO::PARAM_INT);
-                $stmt->bindParam(':ship_fighters', $transfer_fighters, PDO::PARAM_INT);
-                $stmt->bindParam(':credits', $transfer_credits, PDO::PARAM_INT);
-                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-                $stmt->execute();
-
-                $sql = "UPDATE ::prefix::planets SET ore = ore - :ore, organics = organics - :organics, goods = goods - :goods, energy =energy - :energy, colonists = colonists - :colonists, torps = torps - :torps, fighters = fighters - :fighters, credits = credits - :credits WHERE planet_id = :planet_id";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':ore', $transfer_ore, PDO::PARAM_INT);
-                $stmt->bindParam(':organics', $transfer_organics, PDO::PARAM_INT);
-                $stmt->bindParam(':goods', $transfer_goods, PDO::PARAM_INT);
-                $stmt->bindParam(':energy', $transfer_energy, PDO::PARAM_INT);
-                $stmt->bindParam(':colonists', $transfer_colonists, PDO::PARAM_INT);
-                $stmt->bindParam(':torps', $transfer_torps, PDO::PARAM_INT);
-                $stmt->bindParam(':fighters', $transfer_fighters, PDO::PARAM_INT);
-                $stmt->bindParam(':credits', $transfer_credits, PDO::PARAM_INT);
-                $stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
-                $stmt->execute();
-
-                echo $langvars['l_planet2_compl'] . "<br><a href=planet.php?planet_id=$planet_id>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "<br><br>";
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_ore'] . " " . $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_ore = 0;
             }
-            else
+            elseif ($transfer_ore > 0 && $planetinfo['ore'] < abs($transfer_ore))
             {
-                echo $langvars['l_planet2_notowner'] . "<br><br>";
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_ore'] . " " . $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_ore = 0;
             }
+
+            if ($transfer_organics < 0 && $playerinfo['ship_organics'] < abs($transfer_organics))
+            {
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_organics'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_organics = 0;
+            }
+            elseif ($transfer_organics > 0 && $planetinfo['organics'] < abs($transfer_organics))
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_organics'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_organics = 0;
+            }
+
+            if ($transfer_goods < 0 && $playerinfo['ship_goods'] < abs($transfer_goods))
+            {
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_goods'] . " " . $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_goods = 0;
+            }
+            elseif ($transfer_goods > 0 && $planetinfo['goods'] < abs($transfer_goods))
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_goods'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_goods = 0;
+            }
+
+            if ($transfer_energy < 0 && $playerinfo['ship_energy'] < abs($transfer_energy))
+            {
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_energy'] . " " . $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_energy = 0;
+            }
+            elseif ($transfer_energy > 0 && $planetinfo['energy'] < abs($transfer_energy))
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_energy'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_energy = 0;
+            }
+            elseif ($transfer_energy > 0 && abs($transfer_energy) > $free_power)
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_planet2_power'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_energy = 0;
+            }
+
+            if ($transfer_colonists < 0 && $playerinfo['ship_colonists'] < abs($transfer_colonists))
+            {
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_colonists'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_colonists = 0;
+            }
+            elseif ($transfer_colonists > 0 && $planetinfo['colonists'] < abs($transfer_colonists))
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_colonists'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_colonists = 0;
+            }
+
+            if ($transfer_fighters < 0 && $playerinfo['ship_fighters'] < abs($transfer_fighters))
+            {
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_fighters'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_fighters = 0;
+            }
+            elseif ($transfer_fighters > 0 && $planetinfo['fighters'] < abs($transfer_fighters))
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_fighters'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_fighters = 0;
+            }
+            elseif ($transfer_fighters > 0 && abs($transfer_fighters) > $fighter_max)
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_planet2_comp'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_fighters = 0;
+            }
+
+            if ($transfer_torps < 0 && $playerinfo['torps'] < abs($transfer_torps))
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_torps'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_torps = 0;
+            }
+            elseif ($transfer_torps > 0 && $planetinfo['torps'] < abs($transfer_torps))
+            {
+                echo $langvars['l_planet2_noten'] . " " .  $langvars['l_torps'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_torps = 0;
+            }
+            elseif ($transfer_torps > 0 && abs($transfer_torps) > $torpedo_max)
+            {
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_planet2_laun'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_torps = 0;
+            }
+
+            if ($transfer_credits < 0 && $playerinfo['credits'] < abs($transfer_credits))
+            {
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_credits'] . " " . $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_credits = 0;
+            }
+            elseif ($transfer_credits > 0 && $planetinfo['credits'] < abs($transfer_credits))
+            {
+                echo $langvars['l_planet2_noten'] . " " . $langvars['l_credits'] . " " .  $langvars['l_planet2_fortr'] . "<br>";
+                $transfer_credits = 0;
+            }
+
+            $sql = "UPDATE ::prefix::ships SET ship_ore = ship_ore + :ship_ore, ship_organics = ship_organics + :ship_organics, ship_goods = ship_goods + :ship_goods, ship_energy = ship_energy + :ship_energy, ship_colonists = ship_colonists + :ship_colonists, torps = torps + :torps, ship_fighters = ship_fighters + :ship_fighters, credits = credits + :credits, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_ore', $transfer_ore, PDO::PARAM_INT);
+            $stmt->bindParam(':ship_organics', $transfer_organics, PDO::PARAM_INT);
+            $stmt->bindParam(':ship_goods', $transfer_goods, PDO::PARAM_INT);
+            $stmt->bindParam(':ship_energy', $transfer_energy, PDO::PARAM_INT);
+            $stmt->bindParam(':ship_colonists', $transfer_colonists, PDO::PARAM_INT);
+            $stmt->bindParam(':torps', $transfer_torps, PDO::PARAM_INT);
+            $stmt->bindParam(':ship_fighters', $transfer_fighters, PDO::PARAM_INT);
+            $stmt->bindParam(':credits', $transfer_credits, PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            $sql = "UPDATE ::prefix::planets SET ore = ore - :ore, organics = organics - :organics, goods = goods - :goods, energy =energy - :energy, colonists = colonists - :colonists, torps = torps - :torps, fighters = fighters - :fighters, credits = credits - :credits WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ore', $transfer_ore, PDO::PARAM_INT);
+            $stmt->bindParam(':organics', $transfer_organics, PDO::PARAM_INT);
+            $stmt->bindParam(':goods', $transfer_goods, PDO::PARAM_INT);
+            $stmt->bindParam(':energy', $transfer_energy, PDO::PARAM_INT);
+            $stmt->bindParam(':colonists', $transfer_colonists, PDO::PARAM_INT);
+            $stmt->bindParam(':torps', $transfer_torps, PDO::PARAM_INT);
+            $stmt->bindParam(':fighters', $transfer_fighters, PDO::PARAM_INT);
+            $stmt->bindParam(':credits', $transfer_credits, PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $planet_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            echo $langvars['l_planet2_compl'] . "<br><a href=planet.php?planet_id=$planet_id>" . $langvars['l_clickme'] . "</a> " . $langvars['l_toplanetmenu'] . "<br><br>";
         }
         else
         {
-            echo $langvars['l_planet_none'] . "<br><br>";
+            echo $langvars['l_planet2_notowner'] . "<br><br>";
         }
     }
 }

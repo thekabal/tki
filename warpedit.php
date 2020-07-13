@@ -68,35 +68,38 @@ if ($playerinfo['dev_warpedit'] < 1)
 $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
 $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
-if ($zoneinfo['allow_warpedit'] == 'N')
+if (!empty($zoneinfo))
 {
-    echo $langvars['l_warp_forbid'] . "<br><br>";
-    Tki\Text::gotoMain($pdo_db, $lang);
-
-    $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
-    die();
-}
-
-if ($zoneinfo['allow_warpedit'] == 'L')
-{
-    // Get playerinfo from database
-    $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
-    $stmt = $pdo_db->prepare($sql);
-    $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
-    $stmt->execute();
-    $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($zoneinfo['owner'] != $playerinfo['ship_id'])
+    if ($zoneinfo['allow_warpedit'] == 'N')
     {
-        if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0))
-        {
-            echo $langvars['l_warp_forbid'] . "<br><br>";
-            Tki\Text::gotoMain($pdo_db, $lang);
+        echo $langvars['l_warp_forbid'] . "<br><br>";
+        Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer();
-            $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
+        $footer = new Tki\Footer();
+        $footer->display($pdo_db, $lang, $tkireg, $template);
+        die();
+    }
+
+    if ($zoneinfo['allow_warpedit'] == 'L')
+    {
+        // Get playerinfo from database
+        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
+        $stmt->execute();
+        $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($zoneinfo['owner'] != $playerinfo['ship_id'])
+        {
+            if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0))
+            {
+                echo $langvars['l_warp_forbid'] . "<br><br>";
+                Tki\Text::gotoMain($pdo_db, $lang);
+
+                $footer = new Tki\Footer();
+                $footer->display($pdo_db, $lang, $tkireg, $template);
+                die();
+            }
         }
     }
 }

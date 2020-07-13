@@ -265,6 +265,11 @@ class Traderoute
             $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
             $zoneinfo = $zones_gateway->selectMatchingZoneInfo($traderoute['source_id']);
 
+            if (empty($zoneinfo))
+            {
+                die("Empty zone info");
+            }
+
             if ($zoneinfo['allow_trade'] == 'N')
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nosrcporttrade']);
@@ -300,6 +305,11 @@ class Traderoute
             // Get zoneinfo from database
             $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
             $zoneinfo = $zones_gateway->selectMatchingZoneInfo($traderoute['dest_id']);
+
+            if (empty($zoneinfo))
+            {
+                die("Empty zone info");
+            }
 
             if ($zoneinfo['allow_trade'] == 'N')
             {

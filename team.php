@@ -44,50 +44,53 @@ $planet_id = (int) preg_replace('/[^0-9]/', '', (string) $_GET['planet_id']);
 $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
-if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $playerinfo['team'] && $playerinfo['team'] > 0))
+if (!empty($planetinfo))
 {
-    echo "<h1>" . $title . "</h1>\n";
-    if ($action == "planetteam")
+    if ($planetinfo['owner'] == $playerinfo['ship_id'] || ($planetinfo['team'] == $playerinfo['team'] && $playerinfo['team'] > 0))
     {
-        echo $langvars['l_teamm_toteam'] . "<br>";
-        $sql = "UPDATE ::prefix::planets SET team = :team, owner = :owner  WHERE planet_id = :planet_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':team', $playerinfo['team'], \PDO::PARAM_INT);
-        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
-        $result = $stmt->execute();
-        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
-        echo '<p>' . $ownership . '<p>';
-    }
+        echo "<h1>" . $title . "</h1>\n";
+        if ($action == "planetteam")
+        {
+            echo $langvars['l_teamm_toteam'] . "<br>";
+            $sql = "UPDATE ::prefix::planets SET team = :team, owner = :owner  WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':team', $playerinfo['team'], \PDO::PARAM_INT);
+            $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+            echo '<p>' . $ownership . '<p>';
+        }
 
-    if ($action == "planetpersonal")
+        if ($action == "planetpersonal")
+        {
+            echo $langvars['l_teamm_topersonal'] . "<br>";
+            $sql = "UPDATE ::prefix::planets SET team='0', owner = :owner  WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+
+            // Kick other players off the planet
+            $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $result = $stmt->execute();
+            Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+            echo '<p>' . $ownership . '<p>';
+        }
+
+        Tki\Text::gotoMain($pdo_db, $lang);
+    }
+    else
     {
-        echo $langvars['l_teamm_topersonal'] . "<br>";
-        $sql = "UPDATE ::prefix::planets SET team='0', owner = :owner  WHERE planet_id = :planet_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
-        $result = $stmt->execute();
-        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
-
-        // Kick other players off the planet
-        $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $result = $stmt->execute();
-        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        echo '<p>' . $ownership . '<p>';
+        echo "<br>" . $langvars['l_team_exploit'] . "<br>";
+        Tki\Text::gotoMain($pdo_db, $lang);
     }
-
-    Tki\Text::gotoMain($pdo_db, $lang);
-}
-else
-{
-    echo "<br>" . $langvars['l_team_exploit'] . "<br>";
-    Tki\Text::gotoMain($pdo_db, $lang);
 }
 
 $footer = new Tki\Footer();

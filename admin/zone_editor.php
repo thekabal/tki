@@ -53,6 +53,10 @@ else
         // Get zoneinfo from database
         $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
         $zoneinfo = $zones_gateway->selectZoneInfo($_POST['zone']);
+        if (empty($zoneinfo))
+        {
+            die("Empty zone info");
+        }
 
         $variables['operation'] = "edit";
         $variables['zone_id'] = $zoneinfo['zone_id'];

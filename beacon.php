@@ -56,29 +56,36 @@ if ($beacon_text === 0)
     $beacon_text = false;
 }
 
-if ($playerinfo['dev_beacon'] > 0)
+// Get zoneinfo from database
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
+
+if (!empty($zoneinfo))
 {
-    // Get zoneinfo from database
-    $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
-    $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
-
-    if ($zoneinfo['allow_beacon'] == 'N')
+    if ($playerinfo['dev_beacon'] > 0)
     {
-        echo $langvars['l_beacon_notpermitted'] . "<br><br>";
-    }
-    elseif ($zoneinfo['allow_beacon'] == 'L')
-    {
-        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
-        $stmt->execute();
-        $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($zoneinfo['owner'] != $playerinfo['ship_id'])
+        if ($zoneinfo['allow_beacon'] == 'N')
         {
-            if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0))
+            echo $langvars['l_beacon_notpermitted'] . "<br><br>";
+        }
+        elseif ($zoneinfo['allow_beacon'] == 'L')
+        {
+            $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
+            $stmt->execute();
+            $zoneteam = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($zoneinfo['owner'] != $playerinfo['ship_id'])
             {
-                echo $langvars['l_beacon_notpermitted'] . "<br><br>";
+                if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0))
+                {
+                    echo $langvars['l_beacon_notpermitted'] . "<br><br>";
+                }
+                else
+                {
+                    $allowed_rsw = "Y";
+                }
             }
             else
             {
@@ -89,55 +96,51 @@ if ($playerinfo['dev_beacon'] > 0)
         {
             $allowed_rsw = "Y";
         }
-    }
-    else
-    {
-        $allowed_rsw = "Y";
-    }
 
-    if ($allowed_rsw == "Y")
-    {
-        if ($beacon_text === null)
+        if ($allowed_rsw == "Y")
         {
-            if ($sectorinfo['beacon'] !== null)
+            if ($beacon_text === null)
             {
-                echo $langvars['l_beacon_reads'] . ": " . $sectorinfo['beacon'] . "<br><br>";
+                if ($sectorinfo['beacon'] !== null)
+                {
+                    echo $langvars['l_beacon_reads'] . ": " . $sectorinfo['beacon'] . "<br><br>";
+                }
+                else
+                {
+                    echo $langvars['l_beacon_none'] . "<br><br>";
+                }
+
+                echo "<form accept-charset='utf-8' action=beacon.php method=post>";
+                echo "<table>";
+                echo "<tr><td>" . $langvars['l_beacon_enter'];
+                echo ":</td><td><input type=text name=beacon_text size=40 maxlength=80></td></tr>";
+                echo "</table>";
+                echo "<input type=submit value=" . $langvars['l_submit'] . ">";
+                echo "<input type=reset value=" . $langvars['l_reset'] . ">";
+                echo "</form>";
             }
             else
             {
-                echo $langvars['l_beacon_none'] . "<br><br>";
+                $beacon_text = trim(htmlentities($beacon_text, ENT_HTML5, 'UTF-8'));
+                echo $langvars['l_beacon_nowreads'] . ": " . $beacon_text . ".<br><br>";
+
+                $sql = "UPDATE ::prefix::universe SET beacon = :beacon WHERE sector_id = :sector_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':beacon', $beacon_text, PDO::PARAM_STR);
+                $stmt->bindParam(':sector_id', $sectorinfo['sector_id'], PDO::PARAM_INT);
+                $stmt->execute();
+
+                $sql = "UPDATE ::prefix::ships SET dev_beacon = dev_beacon - 1 WHERE ship_id = :ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_STR);
+                $stmt->execute();
             }
-
-            echo "<form accept-charset='utf-8' action=beacon.php method=post>";
-            echo "<table>";
-            echo "<tr><td>" . $langvars['l_beacon_enter'];
-            echo ":</td><td><input type=text name=beacon_text size=40 maxlength=80></td></tr>";
-            echo "</table>";
-            echo "<input type=submit value=" . $langvars['l_submit'] . ">";
-            echo "<input type=reset value=" . $langvars['l_reset'] . ">";
-            echo "</form>";
-        }
-        else
-        {
-            $beacon_text = trim(htmlentities($beacon_text, ENT_HTML5, 'UTF-8'));
-            echo $langvars['l_beacon_nowreads'] . ": " . $beacon_text . ".<br><br>";
-
-            $sql = "UPDATE ::prefix::universe SET beacon = :beacon WHERE sector_id = :sector_id";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':beacon', $beacon_text, PDO::PARAM_STR);
-            $stmt->bindParam(':sector_id', $sectorinfo['sector_id'], PDO::PARAM_INT);
-            $stmt->execute();
-
-            $sql = "UPDATE ::prefix::ships SET dev_beacon = dev_beacon - 1 WHERE ship_id = :ship_id";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_STR);
-            $stmt->execute();
         }
     }
-}
-else
-{
-    echo $langvars['l_beacon_donthave'] . "<br><br>";
+    else
+    {
+        echo $langvars['l_beacon_donthave'] . "<br><br>";
+    }
 }
 
 Tki\Text::gotoMain($pdo_db, $lang);

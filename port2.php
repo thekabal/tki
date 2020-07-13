@@ -47,48 +47,51 @@ $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
 $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
-if ($zoneinfo['allow_trade'] == 'N')
+if (!empty($zoneinfo))
 {
-    $title = $langvars['l_no_trade'];
-    echo "<h1>" . $title . "</h1>\n";
-    echo $langvars['l_no_trade_info'] . "<p>";
-    Tki\Text::gotoMain($pdo_db, $lang);
-
-    $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
-    die();
-}
-elseif ($zoneinfo['allow_trade'] == 'L')
-{
-    if ($zoneinfo['team_zone'] == 'N')
+    if ($zoneinfo['allow_trade'] == 'N')
     {
-        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
-        $ownerinfo = $players_gateway->selectPlayerInfoById($zoneinfo['owner']);
+        $title = $langvars['l_no_trade'];
+        echo "<h1>" . $title . "</h1>\n";
+        echo $langvars['l_no_trade_info'] . "<p>";
+        Tki\Text::gotoMain($pdo_db, $lang);
 
-        if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
-        {
-            $title = $langvars['l_no_trade'];
-            echo "<h1>" . $title . "</h1>\n";
-            echo $langvars['l_no_trade_out'] . "<p>";
-            Tki\Text::gotoMain($pdo_db, $lang);
-
-            $footer = new Tki\Footer();
-            $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
-        }
+        $footer = new Tki\Footer();
+        $footer->display($pdo_db, $lang, $tkireg, $template);
+        die();
     }
-    else
+    elseif ($zoneinfo['allow_trade'] == 'L')
     {
-        if ($playerinfo['team'] != $zoneinfo['owner'])
+        if ($zoneinfo['team_zone'] == 'N')
         {
-            $title = $langvars['l_no_trade'];
-            echo "<h1>" . $title . "</h1>\n";
-            echo $langvars['l_no_trade_out'] . "<p>";
-            Tki\Text::gotoMain($pdo_db, $lang);
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $ownerinfo = $players_gateway->selectPlayerInfoById($zoneinfo['owner']);
 
-            $footer = new Tki\Footer();
-            $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
+            if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
+            {
+                $title = $langvars['l_no_trade'];
+                echo "<h1>" . $title . "</h1>\n";
+                echo $langvars['l_no_trade_out'] . "<p>";
+                Tki\Text::gotoMain($pdo_db, $lang);
+
+                $footer = new Tki\Footer();
+                $footer->display($pdo_db, $lang, $tkireg, $template);
+                die();
+            }
+        }
+        else
+        {
+            if ($playerinfo['team'] != $zoneinfo['owner'])
+            {
+                $title = $langvars['l_no_trade'];
+                echo "<h1>" . $title . "</h1>\n";
+                echo $langvars['l_no_trade_out'] . "<p>";
+                Tki\Text::gotoMain($pdo_db, $lang);
+
+                $footer = new Tki\Footer();
+                $footer->display($pdo_db, $lang, $tkireg, $template);
+                die();
+            }
         }
     }
 }

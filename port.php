@@ -107,65 +107,68 @@ if ($sectorinfo['port_energy'] < 0)
 $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
 $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
-if ($zoneinfo['zone_id'] == 4)
+if (!empty($zoneinfo))
 {
-    $title = $langvars['l_sector_war'];
-    echo "<h1>" . $title . "</h1>\n";
-    echo $langvars['l_war_info'] . "<p>";
-    Tki\Text::gotoMain($pdo_db, $lang);
-
-    $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
-    die();
-}
-elseif ($zoneinfo['allow_trade'] == 'N')
-{
-    // Translation needed
-    $title = "Trade forbidden";
-    echo "<h1>" . $title . "</h1>\n";
-    echo $langvars['l_no_trade_info'] . "<p>";
-    Tki\Text::gotoMain($pdo_db, $lang);
-
-    $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
-    die();
-}
-elseif ($zoneinfo['allow_trade'] == 'L')
-{
-    if ($zoneinfo['team_zone'] == 'N')
+    if ($zoneinfo['zone_id'] == 4)
     {
-        // Get playerinfo from database
-        $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $zoneinfo['owner'], PDO::PARAM_INT);
-        $stmt->execute();
-        $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $title = $langvars['l_sector_war'];
+        echo "<h1>" . $title . "</h1>\n";
+        echo $langvars['l_war_info'] . "<p>";
+        Tki\Text::gotoMain($pdo_db, $lang);
 
-        if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
-        {
-            // Translation needed
-            $title = "Trade forbidden";
-            echo "<h1>" . $title . "</h1>\n";
-            echo "Trading at this port is not allowed for outsiders<p>";
-            Tki\Text::gotoMain($pdo_db, $lang);
-
-            $footer = new Tki\Footer();
-            $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
-        }
+        $footer = new Tki\Footer();
+        $footer->display($pdo_db, $lang, $tkireg, $template);
+        die();
     }
-    else
+    elseif ($zoneinfo['allow_trade'] == 'N')
     {
-        if ($playerinfo['team'] != $zoneinfo['owner'])
-        {
-            $title = $langvars['l_no_trade'];
-            echo "<h1>" . $title . "</h1>\n";
-            echo $langvars['l_no_trade_out'] . "<p>";
-            Tki\Text::gotoMain($pdo_db, $lang);
+        // Translation needed
+        $title = "Trade forbidden";
+        echo "<h1>" . $title . "</h1>\n";
+        echo $langvars['l_no_trade_info'] . "<p>";
+        Tki\Text::gotoMain($pdo_db, $lang);
 
-            $footer = new Tki\Footer();
-            $footer->display($pdo_db, $lang, $tkireg, $template);
-            die();
+        $footer = new Tki\Footer();
+        $footer->display($pdo_db, $lang, $tkireg, $template);
+        die();
+    }
+    elseif ($zoneinfo['allow_trade'] == 'L')
+    {
+        if ($zoneinfo['team_zone'] == 'N')
+        {
+            // Get playerinfo from database
+            $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_id', $zoneinfo['owner'], PDO::PARAM_INT);
+            $stmt->execute();
+            $ownerinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
+            {
+                // Translation needed
+                $title = "Trade forbidden";
+                echo "<h1>" . $title . "</h1>\n";
+                echo "Trading at this port is not allowed for outsiders<p>";
+                Tki\Text::gotoMain($pdo_db, $lang);
+
+                $footer = new Tki\Footer();
+                $footer->display($pdo_db, $lang, $tkireg, $template);
+                die();
+            }
+        }
+        else
+        {
+            if ($playerinfo['team'] != $zoneinfo['owner'])
+            {
+                $title = $langvars['l_no_trade'];
+                echo "<h1>" . $title . "</h1>\n";
+                echo $langvars['l_no_trade_out'] . "<p>";
+                Tki\Text::gotoMain($pdo_db, $lang);
+
+                $footer = new Tki\Footer();
+                $footer->display($pdo_db, $lang, $tkireg, $template);
+                die();
+            }
         }
     }
 }

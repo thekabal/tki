@@ -81,7 +81,7 @@ $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet g
 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
 // Check to see if it returned valid planet info.
-if (!empty($planetinfo))
+if (empty($planetinfo))
 {
     echo $langvars['l_planet2_invalid_planet'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);

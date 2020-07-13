@@ -111,11 +111,14 @@ class Smarty
             if ($tmpNode !== null)
             {
                 // Now we make sure we don't want dupes which causes them to become an array.
-                foreach ($variables as $key => $value)
+                if (is_array($variables))
                 {
-                    if (array_key_exists($key, $tmpNode) && $tmpNode[$key] == $value)
+                    foreach ($variables as $key => $value)
                     {
-                        unset($variables[$key]);
+                        if (array_key_exists($key, $tmpNode) && $tmpNode[$key] == $value)
+                        {
+                            unset($variables[$key]);
+                        }
                     }
                 }
 
