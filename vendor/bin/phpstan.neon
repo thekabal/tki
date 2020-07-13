@@ -18,13 +18,10 @@ parameters:
         - %rootDir%/../../../../tki/classes/Db.php
         - %rootDir%/../../../../tki/classes/CheckDefenses.php   # Bunch of intractable errors - maybe in the future
     ignoreErrors:
-#        - '# might not be defined#'                        # Level 1 to 8 - 4100+ errors - lots of work to do, real errors too.
+        - '# might not be defined#'                        # Level 1 to 8 - 4100+ errors - lots of work to do, real errors too.
         - '#Variable property access#'                     # Level 1 - In (class) Reg, File, and in create_universe/10, this flags an error during the config variable/value import code.
         - '#Access to an undefined property Tki#'          # Level 2 - 357 errors - All of these will not go away unless we switch away from tkireg being dynamic-only.
-        - '# with no typehint #'                           # Level 6 - 16 errors - Mostly related to $db (non-pdo), but a few that are not.
-        - '# only iterables are supported#'                # Level 7 - 5 errors in 4 files, all should be replaced with pdo/db migration
-        - '# does not exist on array#'                     # Level 7 - 16 errors - All in classes/Ownership.php for id/type
-        - '#function array_merge_recursive expects array#' # Level 7 - 1 error - in classes/Smarty.php
+        - '# with no typehint #'                           # Level 6 - 11 errors - Mostly related to $db (non-pdo), but a few others.
 
 rules:
     - PHPStan\Rules\BooleansInConditions\BooleanInBooleanAndRule
