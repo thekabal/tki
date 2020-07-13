@@ -46,11 +46,13 @@ class PlanetReportCE
             $stmt->bindParam(':planet_id', $planetarray[$i], \PDO::PARAM_INT);
             $stmt->execute();
             $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            // Only add to array if the player owns the planet.
-            if ($planets['owner'] == $playerinfo['ship_id'] && $planets['sector_id'] < $tkireg->max_sectors)
+            if (!empty($planets))
             {
-                $s_p_pair[$i] = array($planets['sector_id'], $planetarray[$i]);
+                // Only add to array if the player owns the planet.
+                if ($planets['owner'] == $playerinfo['ship_id'] && $planets['sector_id'] < $tkireg->max_sectors)
+                {
+                    $s_p_pair[$i] = array($planets['sector_id'], $planetarray[$i]);
+                }
             }
         }
 
