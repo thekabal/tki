@@ -100,11 +100,11 @@ class Db
             {
                 // We need to display the error message onto the screen.
                 $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                           ' Database. <br>Database Error: ' . $db->ErrorNo();
+                           ' Database. <br>Database Error: ' . $old_db->ErrorNo();
                 throw new \Exception($err_msg);
             }
 
-            $db->prefix = $db_prefix;
+            $old_db->prefix = $db_prefix;
             // End of database work
             return $old_db;
         }

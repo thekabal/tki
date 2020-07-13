@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetReportCE
 {
-    public static function collectCredits(\PDO $pdo_db, $old_db, array $langvars, array $planetarray, Reg $tkireg): void
+    public static function collectCredits(\PDO $pdo_db, array $langvars, array $planetarray, Reg $tkireg): void
     {
         $current_state = "GO"; // Current State
         $playerinfo = array();
@@ -41,13 +41,16 @@ class PlanetReportCE
         $temp_count = count($planetarray);
         for ($i = 0; $i < $temp_count; $i++)
         {
-            $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($planetarray[$i]));
-            \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
+            $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_id', $planetarray[$i], \PDO::PARAM_INT);
+            $stmt->execute();
+            $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             // Only add to array if the player owns the planet.
-            if ($res->fields['owner'] == $playerinfo['ship_id'] && $res->fields['sector_id'] < $tkireg->max_sectors)
+            if ($planets['owner'] == $playerinfo['ship_id'] && $planets['sector_id'] < $tkireg->max_sectors)
             {
-                $s_p_pair[$i] = array($res->fields['sector_id'], $planetarray[$i]);
+                $s_p_pair[$i] = array($planets['sector_id'], $planetarray[$i]);
             }
         }
 
