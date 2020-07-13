@@ -133,9 +133,9 @@ $stmt->execute();
 $tmp_link_info = $stmt->fetch(PDO::FETCH_ASSOC);
 $numlink_start = $tmp_link_info['count'];
 
-if ($numlink_start >= $max_links)
+if ($numlink_start >= $tkireg->max_links)
 {
-    $langvars['l_warp_sectex'] = str_replace("[link_max]", $max_links, $langvars['l_warp_sectex']);
+    $langvars['l_warp_sectex'] = str_replace("[link_max]", $tkireg->max_links, $langvars['l_warp_sectex']);
     echo $langvars['l_warp_sectex'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
 
