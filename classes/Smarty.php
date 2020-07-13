@@ -119,14 +119,17 @@ class Smarty
                     }
                 }
 
-                $variables = array_merge_recursive($tmpNode, $variables);
+                if (is_array($variables))
+                {
+                    $variables = array_merge_recursive($tmpNode, $variables);
+                }
             }
 
             $this->smarty->assign($nodeName, $variables);
         }
     }
 
-    public function getVariables(string $nodeName)
+    public function getVariables(string $nodeName): ?string
     {
         if ($this->smarty !== null)
         {
