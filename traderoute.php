@@ -42,7 +42,7 @@ $portfull = null; // This fixes an error of undefined variables on 1518
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE owner = ?;", array($playerinfo['ship_id']));
+$result = $old_db->Execute("SELECT * FROM {$old_db->prefix}traderoutes WHERE owner = ?;", array($playerinfo['ship_id']));
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 $num_traderoutes = $result->RecordCount();
 
@@ -239,7 +239,7 @@ elseif ($command == 'edit')
 elseif ($command == 'create')
 {
     // Enters new route in db
-    \Tki\TraderouteBuildCreate::create($pdo_db, $db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $planet_id1, $planet_id2);
+    \Tki\TraderouteBuildCreate::create($pdo_db, $old_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $planet_id1, $planet_id2);
 }
 elseif ($command == 'delete')
 {
@@ -267,7 +267,7 @@ elseif ($engage !== null)
         // Get playerinfo from database
         $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
-        \Tki\Traderoute::engage($pdo_db, $db, $lang, $tr_repeat, $langvars, $tkireg, $playerinfo, $engage, $traderoutes, $portfull, $template);
+        \Tki\Traderoute::engage($pdo_db, $old_db, $lang, $tr_repeat, $langvars, $tkireg, $playerinfo, $engage, $traderoutes, $portfull, $template);
         $tr_repeat--;
     }
 }
@@ -342,7 +342,7 @@ else
         }
         else
         {
-            $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['source_id']));
+            $result = $old_db->Execute("SELECT name, sector_id FROM {$old_db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['source_id']));
             Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if ($result)
             {
@@ -383,7 +383,7 @@ else
         }
         else
         {
-            $result = $db->Execute("SELECT name, sector_id FROM {$db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['dest_id']));
+            $result = $old_db->Execute("SELECT name, sector_id FROM {$old_db->prefix}planets WHERE planet_id=?;", array($traderoutes[$i]['dest_id']));
             Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if ($result)
             {

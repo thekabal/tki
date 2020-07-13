@@ -26,7 +26,7 @@ namespace Tki;
 
 class TraderouteCheck
 {
-    public static function isCompatible(\PDO $pdo_db, $db, string $lang, string $type1, string $type2, string $move, int $circuit, array $src, array $dest, array $playerinfo, Reg $tkireg, Smarty $template): void
+    public static function isCompatible(\PDO $pdo_db, $old_db, string $lang, string $type1, string $type2, string $move, int $circuit, array $src, array $dest, array $playerinfo, Reg $tkireg, Smarty $template): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
         $admin_log = new AdminLog();
@@ -41,7 +41,7 @@ class TraderouteCheck
         // Check warp links compatibility
         if ($move == 'warp')
         {
-            $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($src['sector_id'], $dest['sector_id']));
+            $query = $old_db->Execute("SELECT link_id FROM {$old_db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($src['sector_id'], $dest['sector_id']));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if ($query->EOF)
             {
@@ -52,7 +52,7 @@ class TraderouteCheck
 
             if ($circuit == '2')
             {
-                $query = $db->Execute("SELECT link_id FROM {$db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($dest['sector_id'], $src['sector_id']));
+                $query = $old_db->Execute("SELECT link_id FROM {$old_db->prefix}links WHERE link_start = ? AND link_dest = ?;", array($dest['sector_id'], $src['sector_id']));
                 \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
                 if ($query->EOF)
                 {

@@ -29,12 +29,12 @@ $radius  = filter_input(INPUT_POST, 'radius', FILTER_SANITIZE_NUMBER_INT);
 
 if ($action == "doexpand")
 {
-    $result = $db->Execute("SELECT sector_id FROM {$db->prefix}universe ORDER BY sector_id ASC");
+    $result = $old_db->Execute("SELECT sector_id FROM {$old_db->prefix}universe ORDER BY sector_id ASC");
     Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
     if (!$result->EOF)
     {
-        $resa = $db->StartTrans(); // We enclose the updates in a transaction as it is faster
+        $resa = $old_db->StartTrans(); // We enclose the updates in a transaction as it is faster
         Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
 
         // Begin transaction
@@ -42,7 +42,7 @@ if ($action == "doexpand")
         {
             $row = $result->fields;
             $distance = random_int(1, (int) $radius);
-            $resx = $db->Execute("UPDATE {$db->prefix}universe SET distance = ? WHERE sector_id = ?", array($distance, $row['sector_id']));
+            $resx = $old_db->Execute("UPDATE {$old_db->prefix}universe SET distance = ? WHERE sector_id = ?", array($distance, $row['sector_id']));
             Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
             $changed_sectors[$i] = str_replace("[sector]", $row['sector_id'], $langvars['l_admin_updated_distance']);
@@ -52,7 +52,7 @@ if ($action == "doexpand")
         }
 
         // End transaction
-        $trans_status = $db->CompleteTrans(); // Complete the transaction
+        $trans_status = $old_db->CompleteTrans(); // Complete the transaction
         Tki\Db::logDbErrors($pdo_db, $trans_status, __LINE__, __FILE__);
     }
 }

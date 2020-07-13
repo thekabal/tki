@@ -34,7 +34,7 @@ if (!array_key_exists('operation', $_POST))
 if (empty($_POST['user']))
 {
     $players = array();
-    $res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships ORDER BY character_name");
+    $res = $old_db->Execute("SELECT ship_id, character_name FROM {$old_db->prefix}ships ORDER BY character_name");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
@@ -112,7 +112,7 @@ else
         $_dev_fuelscoop = empty($_POST['dev_fuelscoop']) ? "N" : "Y";
         $variables['debug'] = $_dev_escapepod;
         // FUTURE: Needs password updating as well
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET character_name=?, email=?, ship_name=?, ship_destroyed=?, hull=?, engines=?, power=?, computer=?, sensors=?, armor=?, shields=?, beams=?, torp_launchers=?, cloak=?, credits=?, turns=?, dev_warpedit=?, dev_genesis=?, dev_beacon=?, dev_emerwarp=?, dev_escapepod=?, dev_fuelscoop=?, dev_minedeflector=?, sector=?, ship_ore=?, ship_organics=?, ship_goods=?, ship_energy=?, ship_colonists=?, ship_fighters=?, torps=?, armor_pts=? WHERE ship_id=?", array($_POST['character_name'], $_POST['email'], $_POST['ship_name'], $_ship_destroyed, $_POST['hull'], $_POST['engines'], $_POST['power'], $_POST['computer'], $_POST['sensors'], $_POST['armor'], $_POST['shields'], $_POST['beams'], $_POST['torp_launchers'], $_POST['cloak'], $_POST['credits'], $_POST['turns'], $_POST['dev_warpedit'], $_POST['dev_genesis'], $_POST['dev_beacon'], $_POST['dev_emerwarp'], $_dev_escapepod, $_dev_fuelscoop, $_POST['dev_minedeflector'], $_POST['sector'], $_POST['ship_ore'], $_POST['ship_organics'], $_POST['ship_goods'], $_POST['ship_energy'], $_POST['ship_colonists'], $_POST['ship_fighters'], $_POST['torps'], $_POST['armor_pts'], $_POST['user']));
+        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET character_name=?, email=?, ship_name=?, ship_destroyed=?, hull=?, engines=?, power=?, computer=?, sensors=?, armor=?, shields=?, beams=?, torp_launchers=?, cloak=?, credits=?, turns=?, dev_warpedit=?, dev_genesis=?, dev_beacon=?, dev_emerwarp=?, dev_escapepod=?, dev_fuelscoop=?, dev_minedeflector=?, sector=?, ship_ore=?, ship_organics=?, ship_goods=?, ship_energy=?, ship_colonists=?, ship_fighters=?, torps=?, armor_pts=? WHERE ship_id=?", array($_POST['character_name'], $_POST['email'], $_POST['ship_name'], $_ship_destroyed, $_POST['hull'], $_POST['engines'], $_POST['power'], $_POST['computer'], $_POST['sensors'], $_POST['armor'], $_POST['shields'], $_POST['beams'], $_POST['torp_launchers'], $_POST['cloak'], $_POST['credits'], $_POST['turns'], $_POST['dev_warpedit'], $_POST['dev_genesis'], $_POST['dev_beacon'], $_POST['dev_emerwarp'], $_dev_escapepod, $_dev_fuelscoop, $_POST['dev_minedeflector'], $_POST['sector'], $_POST['ship_ore'], $_POST['ship_organics'], $_POST['ship_goods'], $_POST['ship_energy'], $_POST['ship_colonists'], $_POST['ship_fighters'], $_POST['torps'], $_POST['armor_pts'], $_POST['user']));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $button_main = false;
         $variables['user'] = '';

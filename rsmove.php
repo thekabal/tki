@@ -89,12 +89,12 @@ else
     {
         // Ok, we have been given the destination value.
         // Get the players current sector information.
-        $result2 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
+        $result2 = $old_db->Execute("SELECT angle1, angle2, distance FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($playerinfo['sector']));
         Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $start = $result2->fields;
 
         // Get the destination sector information.
-        $result3 = $db->Execute("SELECT angle1, angle2, distance FROM {$db->prefix}universe WHERE sector_id = ?;", array($destination));
+        $result3 = $old_db->Execute("SELECT angle1, angle2, distance FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($destination));
         Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
         $finish = $result3->fields;
 
@@ -184,13 +184,13 @@ else
             {
                 $sector = $destination;
                 $calledfrom = "rsmove.php";
-                Tki\CheckDefenses::fighters($pdo_db, $db, $lang, $sector, $playerinfo, $tkireg, $title, $calledfrom);
+                Tki\CheckDefenses::fighters($pdo_db, $old_db, $lang, $sector, $playerinfo, $tkireg, $title, $calledfrom);
 
                 // Output:
                 // You are now in sector X. You used Y turns, and gained Z energy units.
                 $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
                 $cur_time_stamp = date("Y-m-d H:i:s");
-                $update = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($cur_time_stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
+                $update = $old_db->Execute("UPDATE {$old_db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($cur_time_stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
                 // Future: Determine where $destination gets changed to something other than int. In the meantime, make it correct here.
                 $destination = (int) $destination;
@@ -200,7 +200,7 @@ else
                 $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                 $langvars['l_rs_ready'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                 echo $langvars['l_rs_ready'] . "<br><br>";
-                Tki\CheckDefenses::mines($pdo_db, $db, $lang, $sector, $title, $playerinfo, $tkireg);
+                Tki\CheckDefenses::mines($pdo_db, $old_db, $lang, $sector, $title, $playerinfo, $tkireg);
             }
         }
     }

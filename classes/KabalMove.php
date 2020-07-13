@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalMove
 {
-    public static function move(\PDO $pdo_db, $db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
+    public static function move(\PDO $pdo_db, $old_db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -44,11 +44,11 @@ class KabalMove
             foreach ($links_present as $row)
             {
                 // Obtain sector information
-                $sectres = $db->Execute("SELECT sector_id,zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($row['link_dest']));
+                $sectres = $old_db->Execute("SELECT sector_id,zone_id FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($row['link_dest']));
                 \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
                 $sectrow = $sectres->fields;
 
-                $zoneres = $db->Execute("SELECT zone_id,allow_attack FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
+                $zoneres = $old_db->Execute("SELECT zone_id,allow_attack FROM {$old_db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
                 \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
                 $zonerow = $zoneres->fields;
                 if ($zonerow['allow_attack'] == "Y") // Dest link must allow attacking
@@ -69,11 +69,11 @@ class KabalMove
             while (!$targetlink > 0 && $limitloop < 15)
             {
                 // Obtain sector information
-                $sectres = $db->Execute("SELECT sector_id,zone_id FROM {$db->prefix}universe WHERE sector_id = ?;", array($wormto));
+                $sectres = $old_db->Execute("SELECT sector_id,zone_id FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($wormto));
                 \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
                 $sectrow = $sectres->fields;
 
-                $zoneres = $db->Execute("SELECT zone_id,allow_attack FROM {$db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
+                $zoneres = $old_db->Execute("SELECT zone_id,allow_attack FROM {$old_db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
                 \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
                 $zonerow = $zoneres->fields;
                 if ($zonerow['allow_attack'] == "Y")
@@ -158,7 +158,7 @@ class KabalMove
 
             if (!$result)
             {
-                $error = $db->ErrorMsg();
+                $error = $old_db->ErrorMsg();
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");
             }
         }

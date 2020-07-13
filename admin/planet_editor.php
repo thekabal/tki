@@ -27,7 +27,7 @@ echo "<form accept-charset='utf-8' action='admin.php' method='post'>";
 if (empty($planet_id))
 {
     echo "<select size='15' name='planet'>";
-    $res = $db->Execute("SELECT planet_id, name, sector_id FROM {$db->prefix}planets ORDER BY sector_id");
+    $res = $old_db->Execute("SELECT planet_id, name, sector_id FROM {$old_db->prefix}planets ORDER BY sector_id");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
@@ -65,7 +65,7 @@ else
         echo "<table border='0' cellspacing='2' cellpadding='2'>";
         echo "<tr><td><tt>" . $langvars['l_admin_planet_owner'] . "</tt></td><td>";
         echo "<select size='1' name='owner'>";
-        $ressuba = $db->Execute("SELECT ship_id,character_name FROM {$db->prefix}ships ORDER BY character_name");
+        $ressuba = $old_db->Execute("SELECT ship_id,character_name FROM {$old_db->prefix}ships ORDER BY character_name");
         Tki\Db::logDbErrors($pdo_db, $ressuba, __LINE__, __FILE__);
         echo "<option value='0'>" . $langvars['l_admin_no_one'] . "</option>";
         while (!$ressuba->EOF)
@@ -115,12 +115,12 @@ else
         $_defeated = empty($defeated) ? "N" : "Y";
         $_base = empty($base) ? "N" : "Y";
         $_sells = empty($sells) ? "N" : "Y";
-        $planupdate = $db->Execute("UPDATE {$db->prefix}planets SET sector_id = ?, defeated = ?, name = ?, base = ?, sells = ?, owner = ?, organics = ?, ore = ?, goods = ?, energy = ?, team = ?, colonists = ?,credits = ? ,fighters = ?, torps = ?, prod_organics= ? , prod_ore = ?, prod_goods = ?, prod_energy = ?, prod_fighters = ?, prod_torp = ? WHERE planet_id = ?", array($sector_id, $_defeated, $name, $_base, $_sells, $owner, $organics, $ore, $goods, $energy, $team, $colonists, $credits, $fighters, $torps, $prod_organics, $prod_ore, $prod_goods, $prod_energy, $prod_fighters, $prod_torp, $planet_id));
+        $planupdate = $old_db->Execute("UPDATE {$old_db->prefix}planets SET sector_id = ?, defeated = ?, name = ?, base = ?, sells = ?, owner = ?, organics = ?, ore = ?, goods = ?, energy = ?, team = ?, colonists = ?,credits = ? ,fighters = ?, torps = ?, prod_organics= ? , prod_ore = ?, prod_goods = ?, prod_energy = ?, prod_fighters = ?, prod_torp = ? WHERE planet_id = ?", array($sector_id, $_defeated, $name, $_base, $_sells, $owner, $organics, $ore, $goods, $energy, $team, $colonists, $credits, $fighters, $torps, $prod_organics, $prod_ore, $prod_goods, $prod_energy, $prod_fighters, $prod_torp, $planet_id));
         Tki\Db::logDbErrors($pdo_db, $planupdate, __LINE__, __FILE__);
         if (!$planupdate)
         {
             echo $langvars['l_admin_changes_failed'] . "<br><br>";
-            echo $db->ErrorMsg() . "<br>";
+            echo $old_db->ErrorMsg() . "<br>";
         }
         else
         {

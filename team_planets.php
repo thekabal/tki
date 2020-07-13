@@ -50,7 +50,7 @@ if ($playerinfo['team'] == 0)
     return;
 }
 
-$query = "SELECT * FROM {$db->prefix}planets WHERE team = " . $playerinfo['team'];
+$query = "SELECT * FROM {$old_db->prefix}planets WHERE team = " . $playerinfo['team'];
 if ($sort !== null)
 {
     $query .= " ORDER BY";
@@ -72,7 +72,7 @@ if ($sort !== null)
     }
 }
 
-$res = $db->Execute($query);
+$res = $old_db->Execute($query);
 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 echo "<h1>" . $title . "</h1>\n";
 
@@ -154,7 +154,7 @@ else
         }
 
         $owner = $planet[$i]['owner'];
-        $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = " . $owner);
+        $res = $old_db->Execute("SELECT character_name FROM {$old_db->prefix}ships WHERE ship_id = " . $owner);
         Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $player = $res->fields['character_name'];
 

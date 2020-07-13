@@ -159,7 +159,7 @@ else
             if (empty($user))
             {
                 echo "<select size=20 name=user>";
-                $res = $db->Execute("SELECT email, character_name, ship_destroyed, active, sector FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email = kabal_id ORDER BY sector;");
+                $res = $old_db->Execute("SELECT email, character_name, ship_destroyed, active, sector FROM {$old_db->prefix}ships JOIN {$old_db->prefix}kabal WHERE email = kabal_id ORDER BY sector;");
                 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 while (!$res->EOF)
                 {
@@ -196,7 +196,7 @@ else
             {
                 if (empty($operation))
                 {
-                    $res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email=kabal_id AND email = ?;", array($user));
+                    $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships JOIN {$old_db->prefix}kabal WHERE email=kabal_id AND email = ?;", array($user));
                     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
                     $row = $res->fields;
                     echo "<table border=0 cellspacing=0 cellpadding=5>";
@@ -310,7 +310,7 @@ else
                     echo "<hr>";
                     echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #0f0;\">Log Data For This kabal</span><br>";
 
-                    $logres = $db->Execute("SELECT * FROM {$db->prefix}logs WHERE ship_id = ? ORDER BY time DESC, type DESC;", array($row['ship_id']));
+                    $logres = $old_db->Execute("SELECT * FROM {$old_db->prefix}logs WHERE ship_id = ? ORDER BY time DESC, type DESC;", array($row['ship_id']));
                     Tki\Db::logDbErrors($pdo_db, $logres, __LINE__, __FILE__);
                     while (!$logres->EOF)
                     {
@@ -342,22 +342,22 @@ else
                     $_dev_escapepod = empty($dev_escapepod) ? "N" : "Y";
                     $_dev_fuelscoop = empty($dev_fuelscoop) ? "N" : "Y";
                     $_active = empty($active) ? "N" : "Y";
-                    $result = $db->Execute("UPDATE {$db->prefix}ships SET character_name = ?, ship_name = ?, ship_destroyed = ?, hull = ?, engines = ?, power = ?, computer = ?, sensors = ?, armor = ?, shields = ?, beams = ?, torp_launchers = ?, cloak = ?, credits = ?, turns = ?, dev_warpedit = ?, dev_genesis = ?, dev_beacon = ?, dev_emerwarp = ?, dev_escapepod = ?, dev_fuelscoop = ?, dev_minedeflector = ?, sector = ?, ship_ore = ?, ship_organics = ?, ship_goods = ?, ship_energy = ?, ship_colonists = ?, ship_fighters = ?, torps = ?, armor_pts = ? WHERE email = ?;", array($character, $ship_name, $_ship_destroyed, $hull, $engines, $power, $computer, $sensors, $armor, $shields, $beams, $torp_launchers, $cloak, $credits, $turns, $dev_warpedit, $dev_genesis, $dev_beacon, $dev_emerwarp, $_dev_escapepod, $_dev_fuelscoop, $dev_minedeflector, $sector, $ship_ore, $ship_organics, $ship_goods, $ship_energy, $ship_colonists, $ship_fighters, $torps, $armor_pts, $user));
+                    $result = $old_db->Execute("UPDATE {$old_db->prefix}ships SET character_name = ?, ship_name = ?, ship_destroyed = ?, hull = ?, engines = ?, power = ?, computer = ?, sensors = ?, armor = ?, shields = ?, beams = ?, torp_launchers = ?, cloak = ?, credits = ?, turns = ?, dev_warpedit = ?, dev_genesis = ?, dev_beacon = ?, dev_emerwarp = ?, dev_escapepod = ?, dev_fuelscoop = ?, dev_minedeflector = ?, sector = ?, ship_ore = ?, ship_organics = ?, ship_goods = ?, ship_energy = ?, ship_colonists = ?, ship_fighters = ?, torps = ?, armor_pts = ? WHERE email = ?;", array($character, $ship_name, $_ship_destroyed, $hull, $engines, $power, $computer, $sensors, $armor, $shields, $beams, $torp_launchers, $cloak, $credits, $turns, $dev_warpedit, $dev_genesis, $dev_beacon, $dev_emerwarp, $_dev_escapepod, $_dev_fuelscoop, $dev_minedeflector, $sector, $ship_ore, $ship_organics, $ship_goods, $ship_energy, $ship_colonists, $ship_fighters, $torps, $armor_pts, $user));
                     Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
                     if (!$result)
                     {
                         echo "Changes to kabal ship record have FAILED Due to the following Error:<br><br>";
-                        echo $db->ErrorMsg() . "<br>";
+                        echo $old_db->ErrorMsg() . "<br>";
                     }
                     else
                     {
                         echo "Changes to kabal ship record have been saved.<br><br>";
-                        $result2 = $db->Execute("UPDATE {$db->prefix}kabal SET active = ?, orders = ?, aggression = ? WHERE kabal_id = ?;", array($_active, $orders, $aggression, $user));
+                        $result2 = $old_db->Execute("UPDATE {$old_db->prefix}kabal SET active = ?, orders = ?, aggression = ? WHERE kabal_id = ?;", array($_active, $orders, $aggression, $user));
                         Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                         if (!$result2)
                         {
                             echo "Changes to kabal activity record have FAILED Due to the following Error:<br><br>";
-                            echo $db->ErrorMsg() . "<br>";
+                            echo $old_db->ErrorMsg() . "<br>";
                         }
                         else
                         {
@@ -394,17 +394,17 @@ else
             {
                 // Delete all kabal in the ships table
                 echo "Deleting kabal records in the ships table...<br>";
-                $resx = $db->Execute("DELETE FROM {$db->prefix}ships WHERE email LIKE '%@kabal'");
+                $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}ships WHERE email LIKE '%@kabal'");
                 Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 echo "deleted.<br>";
                 // Drop kabal table
                 echo "Dropping kabal table...<br>";
-                $resy = $db->Execute("DROP TABLE IF EXISTS {$db->prefix}kabal");
+                $resy = $old_db->Execute("DROP TABLE IF EXISTS {$old_db->prefix}kabal");
                 Tki\Db::logDbErrors($pdo_db, $resy, __LINE__, __FILE__);
                 echo "dropped.<br>";
                 // Create kabal table
                 echo "Re-Creating table: kabal...<br>";
-                $resz = $db->Execute("CREATE table {$db->prefix}kabal(" .
+                $resz = $old_db->Execute("CREATE table {$old_db->prefix}kabal(" .
                                      "kabal_id char(40) NOT NULL," .
                                      "active enum('Y','N') DEFAULT 'Y' NOT NULL," .
                                      "aggression smallint(5) DEFAULT '0' NOT NULL," .
@@ -438,12 +438,12 @@ else
             }
             elseif ($operation == "clearkaballog")
             {
-                $res = $db->Execute("SELECT email,ship_id FROM {$db->prefix}ships WHERE email LIKE '%@kabal'");
+                $res = $old_db->Execute("SELECT email,ship_id FROM {$old_db->prefix}ships WHERE email LIKE '%@kabal'");
                 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 while (!$res->EOF)
                 {
                     $row = $res->fields;
-                    $resx = $db->Execute("DELETE FROM {$db->prefix}logs WHERE ship_id = ?;", array($row['ship_id']));
+                    $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}logs WHERE ship_id = ?;", array($row['ship_id']));
                     Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                     echo "Log for ship_id $row[ship_id] cleared.<br>";
                     $res->MoveNext();
@@ -474,7 +474,7 @@ else
                 $sy3roll = random_int(0, 19);
                 $character = $Sylable1[$sy1roll] . $Sylable2[$sy2roll] . $Sylable3[$sy3roll];
                 $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-                $resultnm = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE character_name = ?;", array($character));
+                $resultnm = $old_db->Execute("SELECT character_name FROM {$old_db->prefix}ships WHERE character_name = ?;", array($character));
                 Tki\Db::logDbErrors($pdo_db, $resultnm, __LINE__, __FILE__);
                 $namecheck = $resultnm->fields;
                 $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
@@ -487,7 +487,7 @@ else
                     $sy3roll = random_int(0, 19);
                     $character = $Sylable1[$sy1roll] . $Sylable2[$sy2roll] . $Sylable3[$sy3roll];
                     $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-                    $resultnm = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE character_name = ?;", array($character));
+                    $resultnm = $old_db->Execute("SELECT character_name FROM {$old_db->prefix}ships WHERE character_name = ?;", array($character));
                     Tki\Db::logDbErrors($pdo_db, $resultnm, __LINE__, __FILE__);
                     $namecheck = $resultnm->fields;
                     $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
@@ -542,7 +542,7 @@ else
                 // Create emailname from character
                 $emailname = str_replace(" ", "_", (string) $character) . "@kabal";
                 // $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-                // $result = $db->Execute("SELECT email, character_name, ship_name FROM {$db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
+                // $result = $old_db->Execute("SELECT email, character_name, ship_name FROM {$old_db->prefix}ships WHERE email = ? OR character_name = ? OR ship_name = ?;", array($emailname, $character, $shipname));
                 // Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
                 $sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email = :email OR character_name = :character_name OR ship_name = :ship_name";
                 $stmt = $pdo_db->prepare($sql);
@@ -606,13 +606,13 @@ else
                     $cur_time_stamp = date("Y-m-d H:i:s");
 
                     // Add kabal record to ships table ... modify if the ships schema changes
-                    $thesql = "INSERT INTO {$db->prefix}ships ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `last_login` , `rating` , `score` , `team` , `team_invite` , `interface` , `ip_address` , `planet_id` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defenses` , `lang` , `dev_lssd` )
+                    $thesql = "INSERT INTO {$old_db->prefix}ships ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `last_login` , `rating` , `score` , `team` , `team_invite` , `interface` , `ip_address` , `planet_id` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defenses` , `lang` , `dev_lssd` )
                                VALUES (NULL,'$shipname','N','$character','$makepass','$emailname',$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$kaballevel,$maxtorps,$kaballevel,$kaballevel,$maxarmor,$kaballevel,1000,$sector,0,0,0,$maxenergy,0,$maxfighters,0,1200,'N',0,0,0,0,'N','N',0,0, '$cur_time_stamp',0,0,0,0,'N','127.0.0.1',0,'Y','N','N','Y',NULL,'$default_lang','Y')";
-                    $result2 = $db->Execute($thesql);
+                    $result2 = $old_db->Execute($thesql);
                     Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                     if (!$result2)
                     {
-                        echo $db->ErrorMsg() . "<br>";
+                        echo $old_db->ErrorMsg() . "<br>";
                     }
                     else
                     {
@@ -621,11 +621,11 @@ else
                         echo "Ship Records have been updated.<br><br>";
                     }
 
-                    $result3 = $db->Execute("INSERT INTO {$db->prefix}kabal (kabal_id, active, aggression, orders) values(?,?,?,?)", array($emailname, $_active, $aggression, $orders));
+                    $result3 = $old_db->Execute("INSERT INTO {$old_db->prefix}kabal (kabal_id, active, aggression, orders) values(?,?,?,?)", array($emailname, $_active, $aggression, $orders));
                     Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
                     if (!$result3)
                     {
-                        echo $db->ErrorMsg() . "<br>";
+                        echo $old_db->ErrorMsg() . "<br>";
                     }
                     else
                     {

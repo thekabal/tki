@@ -23,7 +23,7 @@
  */
 
 $players = array();
-$res = $db->Execute("SELECT ship_id, character_name FROM {$db->prefix}ships ORDER BY character_name ASC");
+$res = $old_db->Execute("SELECT ship_id, character_name FROM {$old_db->prefix}ships ORDER BY character_name ASC");
 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 while (!$res->EOF)
 {

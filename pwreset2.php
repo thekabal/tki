@@ -45,7 +45,7 @@ $newpass2  = filter_input(INPUT_POST, 'newpass2', FILTER_SANITIZE_STRING);
 // We chose 8 characters of uniqueness because its reasonable if you have to type it in, and
 // because 8 characters is 4,294,967,296 combinations, and that should be sufficiently secure
 
-$result = $db->SelectLimit("SELECT ship_id, email, recovery_time FROM {$db->prefix}ships WHERE substr(MD5(password),6,8) = ?", 1, -1, array('password' => $reset_code));
+$result = $old_db->SelectLimit("SELECT ship_id, email, recovery_time FROM {$old_db->prefix}ships WHERE substr(MD5(password),6,8) = ?", 1, -1, array('password' => $reset_code));
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF && $result !== false)
@@ -99,7 +99,7 @@ if (!$result->EOF && $result !== false)
             Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             // Now check to see if we have a valid update and have ONLY 1 changed record.
-            if ((is_bool($rs) && $rs === false) || $db->Affected_Rows() != 1)
+            if ((is_bool($rs) && $rs === false) || $old_db->Affected_Rows() != 1)
             {
                 // Either we got an error in the SQL Query or <> 1 records was changed.
                 echo $langvars['l_opt2_passchangeerr'] . "<br><br>";

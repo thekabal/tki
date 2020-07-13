@@ -66,20 +66,20 @@ class Db
                 $db_host .= ":$db_port";
             }
 
-            $db = null;
+            $old_db = null;
             // Attempt to connect to the database
             try
             {
                 if (SecureConfig::DB_TYPE === 'postgres9')
                 {
-                    $db = \ADONewConnection('postgres9');
+                    $old_db = \ADONewConnection('postgres9');
                 }
                 else
                 {
-                    $db = \ADONewConnection('mysqli');
+                    $old_db = \ADONewConnection('mysqli');
                 }
 
-                $db_init_result = $db->Connect($db_host, $db_user, $db_pwd, $db_name);
+                $db_init_result = $old_db->Connect($db_host, $db_user, $db_pwd, $db_name);
 
                 // Returns Bool true or false.
                 // However ADOdb's postgres driver returns null if postgres insn't installed.
@@ -90,10 +90,10 @@ class Db
                 else
                 {
                     // We have connected successfully. Now set our character set to utf-8
-                    $db->Execute("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
+                    $old_db->Execute("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
 
                     // Set the fetch mode for database calls to be associative by default
-                    $db->SetFetchMode(ADODB_FETCH_ASSOC);
+                    $old_db->SetFetchMode(ADODB_FETCH_ASSOC);
                 }
             }
             catch (\Exception $e)
@@ -106,7 +106,7 @@ class Db
 
             $db->prefix = $db_prefix;
             // End of database work
-            return $db;
+            return $old_db;
         }
         else
         {

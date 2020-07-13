@@ -100,7 +100,7 @@ if ($defenseinfo['ship_id'] == $playerinfo['ship_id'])
 else
 {
     $defense_ship_id = $defenseinfo['ship_id'];
-    $resulta = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($defense_ship_id));
+    $resulta = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($defense_ship_id));
     $ownerinfo = $resulta->fields;
     $defense_owner = $ownerinfo['character_name'];
 }
@@ -135,7 +135,7 @@ switch ($response)
         $sector = $playerinfo['sector'];
         if ($defenseinfo['defense_type'] == 'F')
         {
-            $countres = $db->Execute("SELECT SUM(quantity) AS totalfighters FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'F';", array($sector));
+            $countres = $old_db->Execute("SELECT SUM(quantity) AS totalfighters FROM {$old_db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'F';", array($sector));
             $ttl = $countres->fields;
             $total_sector_fighters = $ttl['totalfighters'];
             $calledfrom = "modify_defenses.php";
@@ -145,7 +145,7 @@ switch ($response)
         else
         {
             // Attack mines goes here
-            $countres = $db->Execute("SELECT SUM(quantity) AS totalmines FROM {$db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'M';", array($sector));
+            $countres = $old_db->Execute("SELECT SUM(quantity) AS totalmines FROM {$old_db->prefix}sector_defense WHERE sector_id = ? AND defense_type = 'M';", array($sector));
             $ttl = $countres->fields;
             $total_sector_mines = $ttl['totalmines'];
             $playerbeams = Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
@@ -160,7 +160,7 @@ switch ($response)
             }
 
             echo $langvars['l_md_bmines'] . " " . $playerbeams . " " . $langvars['l_mines'] . "<br>";
-            $update4b = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ship_energy - ? WHERE ship_id = ?;", array($playerbeams, $playerinfo['ship_id']));
+            $update4b = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_energy = ship_energy - ? WHERE ship_id = ?;", array($playerbeams, $playerinfo['ship_id']));
             Tki\Mines::explode($pdo_db, $sector, $playerbeams);
             $char_name = $playerinfo['character_name'];
             $langvars['l_md_msgdownerb'] = str_replace("[sector]", $sector, $langvars['l_md_msgdownerb']);
@@ -214,22 +214,22 @@ switch ($response)
 
         if ($quantity > 0)
         {
-            $db->Execute("UPDATE {$db->prefix}sector_defense SET quantity=quantity - ? WHERE defense_id = ?", array($quantity, $defense_id));
+            $old_db->Execute("UPDATE {$old_db->prefix}sector_defense SET quantity=quantity - ? WHERE defense_id = ?", array($quantity, $defense_id));
             if ($defenseinfo['defense_type'] == 'M')
             {
-                $db->Execute("UPDATE {$db->prefix}ships SET torps=torps + ? WHERE ship_id = ?", array($quantity, $playerinfo['ship_id']));
+                $old_db->Execute("UPDATE {$old_db->prefix}ships SET torps=torps + ? WHERE ship_id = ?", array($quantity, $playerinfo['ship_id']));
             }
             else
             {
-                $db->Execute("UPDATE {$db->prefix}ships SET ship_fighters = ship_fighters + ? WHERE ship_id = ?", array($quantity, $playerinfo['ship_id']));
+                $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_fighters = ship_fighters + ? WHERE ship_id = ?", array($quantity, $playerinfo['ship_id']));
             }
 
-            $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0");
+            $old_db->Execute("DELETE FROM {$old_db->prefix}sector_defense WHERE quantity <= 0");
         }
 
         $cur_time_stamp = date("Y-m-d H:i:s");
 
-        $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $playerinfo['sector'], $playerinfo['ship_id']));
+        $old_db->Execute("UPDATE {$old_db->prefix}ships SET last_login = ?,turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $playerinfo['sector'], $playerinfo['ship_id']));
         echo "<h1>" . $title . "</h1>\n";
         echo $langvars['l_md_retr'] . " " . $quantity . " " . $defense_type . ".<br>";
         Tki\Text::gotoMain($pdo_db, $lang);
@@ -247,9 +247,9 @@ switch ($response)
             die();
         }
 
-        $db->Execute("UPDATE {$db->prefix}sector_defense SET fm_setting = ? WHERE defense_id = ?", array($mode, $defense_id));
+        $old_db->Execute("UPDATE {$old_db->prefix}sector_defense SET fm_setting = ? WHERE defense_id = ?", array($mode, $defense_id));
         $cur_time_stamp = date("Y-m-d H:i:s");
-        $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $playerinfo['sector'], $playerinfo['ship_id']));
+        $old_db->Execute("UPDATE {$old_db->prefix}ships SET last_login = ?, turns = turns - 1, turns_used = turns_used + 1, sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $playerinfo['sector'], $playerinfo['ship_id']));
         if ($mode == 'attack')
         {
             $mode = $langvars['l_md_attack'];
@@ -294,7 +294,7 @@ switch ($response)
         }
         else
         {
-            $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($defenseinfo['ship_id']));
+            $result2 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($defenseinfo['ship_id']));
             $fighters_owner = $result2->fields;
 
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)

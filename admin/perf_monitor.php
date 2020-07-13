@@ -22,8 +22,8 @@
  *
  */
 
-//adodb_perf::table("{$db->prefix}adodb_logsql");
-$perf = NewPerfMonitor($db);
+//adodb_perf::table("{$old_db->prefix}adodb_logsql");
+$perf = NewPerfMonitor($old_db);
 $pollsecs = 5;
 $perf->UI($pollsecs);
 

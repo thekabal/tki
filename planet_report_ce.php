@@ -50,7 +50,7 @@ if (strlen(trim($tpcreds)) === 0)
 
 if ($tpcreds !== null && $tpcreds !== false)
 {
-    Tki\PlanetReportCE::collectCredits($pdo_db, $db, $langvars, $tpcreds, $tkireg);
+    Tki\PlanetReportCE::collectCredits($pdo_db, $old_db, $langvars, $tpcreds, $tkireg);
 }
 elseif ($buildp !== null && $builds !== null)
 {
@@ -59,7 +59,7 @@ elseif ($buildp !== null && $builds !== null)
 }
 else
 {
-    Tki\PlanetProduction::productionChange($pdo_db, $db, $langvars, $_POST, $tkireg);
+    Tki\PlanetProduction::productionChange($pdo_db, $old_db, $langvars, $_POST, $tkireg);
 }
 
 echo '<br><br>';

@@ -114,11 +114,11 @@ elseif ($state == 1)
             $search_query = $search_query . " ,a" . $i . ".link_dest ";
         }
 
-        $search_query = $search_query . "FROM     {$db->prefix}links AS a1 ";
+        $search_query = $search_query . "FROM     {$old_db->prefix}links AS a1 ";
 
         for ($i = 2; $i <= $search_depth; $i++)
         {
-            $search_query = $search_query . "    ,{$db->prefix}links AS a" . $i . " ";
+            $search_query = $search_query . "    ,{$old_db->prefix}links AS a" . $i . " ";
         }
 
         $search_query = $search_query . "WHERE         a1.link_start = $current_sector ";
@@ -153,9 +153,9 @@ elseif ($state == 1)
         $search_query = $search_query . " LIMIT 1";
         //echo "$search_query\n\n";
 
-        $db->SetFetchMode(ADODB_FETCH_NUM);
+        $old_db->SetFetchMode(ADODB_FETCH_NUM);
 
-        $search_result = $db->Execute($search_query);
+        $search_result = $old_db->Execute($search_query);
         if ($search_result === false)
         {
             die('Invalid query');
@@ -181,7 +181,7 @@ elseif ($state == 1)
             echo " >> " . $links[$i];
         }
 
-        $db->SetFetchMode(ADODB_FETCH_ASSOC);
+        $old_db->SetFetchMode(ADODB_FETCH_ASSOC);
 
         echo "<br><br>";
         echo $langvars['l_nav_answ1'] . " " . $search_depth . " " . $langvars['l_nav_answ2'] . "<br><br>";
@@ -192,7 +192,7 @@ elseif ($state == 1)
     }
 }
 
-$db->SetFetchMode(ADODB_FETCH_ASSOC);
+$old_db->SetFetchMode(ADODB_FETCH_ASSOC);
 
 Tki\Text::gotoMain($pdo_db, $lang);
 

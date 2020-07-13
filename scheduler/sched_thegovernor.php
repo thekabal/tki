@@ -31,7 +31,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
 echo "<strong>" . $langvars['l_sched_gov_title'] . "</strong><br><br>";
 
 echo $langvars['l_sched_gov_valid_fits'];
-$tdres = $db->Execute("SELECT * FROM {$db->prefix}ships");
+$tdres = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships");
 Tki\Db::logDbErrors($pdo_db, $tdres, __LINE__, __FILE__);
 
 $detected = false;
@@ -48,12 +48,12 @@ while (!$tdres->EOF)
     if ($playerinfo['ship_fighters'] > $ship_fighters_max)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_detect_fits_ships'] . $playerinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resx = $db->Execute("UPDATE {$db->prefix}ships SET ship_fighters = ? WHERE ship_id = ? LIMIT 1;", array($ship_fighters_max, $playerinfo['ship_id']));
+        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_fighters = ? WHERE ship_id = ? LIMIT 1;", array($ship_fighters_max, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -63,12 +63,12 @@ while (!$tdres->EOF)
     {
         echo $langvars['l_sched_gov_detect_fits_ships'];
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_fit_flip'] . $playerinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resy = $db->Execute("UPDATE {$db->prefix}ships SET ship_fighters = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
+        $resy = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_fighters = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -79,12 +79,12 @@ while (!$tdres->EOF)
     if ($playerinfo['torps'] > $torps_max)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_torp_over'] . $playerinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resz = $db->Execute("UPDATE {$db->prefix}ships SET torps = ? WHERE ship_id = ? LIMIT 1;", array($torps_max, $playerinfo['ship_id']));
+        $resz = $old_db->Execute("UPDATE {$old_db->prefix}ships SET torps = ? WHERE ship_id = ? LIMIT 1;", array($torps_max, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resz, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -93,11 +93,11 @@ while (!$tdres->EOF)
     elseif ($playerinfo['torps'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_torp_flip'] . $playerinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resa = $db->Execute("UPDATE {$db->prefix}ships SET torps = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
+        $resa = $old_db->Execute("UPDATE {$old_db->prefix}ships SET torps = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -108,12 +108,12 @@ while (!$tdres->EOF)
     if ($playerinfo['armor_pts'] > $armor_pts_max)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_armor_over'] . $playerinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resb = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts = ? WHERE ship_id = ? LIMIT 1;", array($armor_pts_max, $playerinfo['ship_id']));
+        $resb = $old_db->Execute("UPDATE {$old_db->prefix}ships SET armor_pts = ? WHERE ship_id = ? LIMIT 1;", array($armor_pts_max, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resb, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -122,12 +122,12 @@ while (!$tdres->EOF)
     elseif ($playerinfo['armor_pts'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_armor_flip'] . $playerinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resc = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
+        $resc = $old_db->Execute("UPDATE {$old_db->prefix}ships SET armor_pts = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -138,12 +138,12 @@ while (!$tdres->EOF)
     if ($playerinfo['credits'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_credits_flip'] . $playerinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resd = $db->Execute("UPDATE {$db->prefix}ships SET credits = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
+        $resd = $old_db->Execute("UPDATE {$old_db->prefix}ships SET credits = ? WHERE ship_id = ? LIMIT 1;", array(0, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resd, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -153,12 +153,12 @@ while (!$tdres->EOF)
     if ($playerinfo['credits'] > 100000000000000000000)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_credits_over'] . $playerinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $rese = $db->Execute("UPDATE {$db->prefix}ships SET credits = ? WHERE ship_id = ? LIMIT 1;", array(100000000000000000000, $playerinfo['ship_id']));
+        $rese = $old_db->Execute("UPDATE {$old_db->prefix}ships SET credits = ? WHERE ship_id = ? LIMIT 1;", array(100000000000000000000, $playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $rese, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -169,7 +169,7 @@ while (!$tdres->EOF)
 }
 
 echo $langvars['l_sched_gov_valid_planets'] . "<br>";
-$tdres = $db->Execute("SELECT planet_id, credits, fighters, torps, owner FROM {$db->prefix}planets");
+$tdres = $old_db->Execute("SELECT planet_id, credits, fighters, torps, owner FROM {$old_db->prefix}planets");
 Tki\Db::logDbErrors($pdo_db, $tdres, __LINE__, __FILE__);
 
 while (!$tdres->EOF)
@@ -180,12 +180,12 @@ while (!$tdres->EOF)
     if ($planetinfo['credits'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_credits_flip'] . $planetinfo['planet_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $rese = $db->Execute("UPDATE {$db->prefix}planets SET credits = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
+        $rese = $old_db->Execute("UPDATE {$old_db->prefix}planets SET credits = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $rese, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -195,12 +195,12 @@ while (!$tdres->EOF)
     if ($planetinfo['credits'] > 100000000000000000000)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_credits_over'] . $planetinfo['planet_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resf = $db->Execute("UPDATE {$db->prefix}planets SET credits = ? WHERE planet_id = ? LIMIT 1;", array(100000000000000000000, $planetinfo['planet_id']));
+        $resf = $old_db->Execute("UPDATE {$old_db->prefix}planets SET credits = ? WHERE planet_id = ? LIMIT 1;", array(100000000000000000000, $planetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resf, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -211,12 +211,12 @@ while (!$tdres->EOF)
     if ($planetinfo['fighters'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_fighters_flip'] . $planetinfo['planet_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resg = $db->Execute("UPDATE {$db->prefix}planets SET fighters = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
+        $resg = $old_db->Execute("UPDATE {$old_db->prefix}planets SET fighters = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resg, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -227,12 +227,12 @@ while (!$tdres->EOF)
     if ($planetinfo['torps'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_torp_flip'] . $planetinfo['planet_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resh = $db->Execute("UPDATE {$db->prefix}planets SET torps = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
+        $resh = $old_db->Execute("UPDATE {$old_db->prefix}planets SET torps = ? WHERE planet_id = ? LIMIT 1;", array(0, $planetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resh, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -243,7 +243,7 @@ while (!$tdres->EOF)
 }
 
 echo $langvars['l_sched_gov_valid_ibank'] . "<br>";
-$tdres = $db->Execute("SELECT ship_id, balance, loan FROM {$db->prefix}ibank_accounts");
+$tdres = $old_db->Execute("SELECT ship_id, balance, loan FROM {$old_db->prefix}ibank_accounts");
 Tki\Db::logDbErrors($pdo_db, $tdres, __LINE__, __FILE__);
 
 while (!$tdres->EOF)
@@ -254,12 +254,12 @@ while (!$tdres->EOF)
     if ($bankinfo['balance'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_balance_flip'] . $bankinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resi = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = ? WHERE ship_id = ? LIMIT 1;", array(0, $bankinfo['ship_id']));
+        $resi = $old_db->Execute("UPDATE {$old_db->prefix}ibank_accounts SET balance = ? WHERE ship_id = ? LIMIT 1;", array(0, $bankinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -269,12 +269,12 @@ while (!$tdres->EOF)
     if ($bankinfo['balance'] > 100000000000000000000)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_balance_overflow'] . $bankinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resj = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET balance = ? WHERE ship_id = ? LIMIT 1;", array(100000000000000000000, $bankinfo['ship_id']));
+        $resj = $old_db->Execute("UPDATE {$old_db->prefix}ibank_accounts SET balance = ? WHERE ship_id = ? LIMIT 1;", array(100000000000000000000, $bankinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resj, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -285,12 +285,12 @@ while (!$tdres->EOF)
     if ($bankinfo['loan'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_loan_flip'] . $bankinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $resk = $db->Execute("UPDATE {$db->prefix}ibank_accounts SET loan = ? WHERE ship_id = ? LIMIT 1;", array(0, $bankinfo['ship_id']));
+        $resk = $old_db->Execute("UPDATE {$old_db->prefix}ibank_accounts SET loan = ? WHERE ship_id = ? LIMIT 1;", array(0, $bankinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $resk, __LINE__, __FILE__);
 
-        if ($db->ErrorNo() > 0)
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
 
         $detected = true;
@@ -301,7 +301,7 @@ while (!$tdres->EOF)
 }
 
 echo $langvars['l_sched_gov_valid_ibank_trans'] . "<br>";
-$tdres = $db->Execute("SELECT transfer_id, source_id, dest_id, amount FROM {$db->prefix}ibank_transfers");
+$tdres = $old_db->Execute("SELECT transfer_id, source_id, dest_id, amount FROM {$old_db->prefix}ibank_transfers");
 Tki\Db::logDbErrors($pdo_db, $tdres, __LINE__, __FILE__);
 
 /*
@@ -313,10 +313,10 @@ while (!$tdres->EOF)
     if ($transferinfo['amount'] < 0)
     {
         echo "'-> <span style='color:#f00;'>" . $langvars['l_sched_gov_detected_ibank_flip'] . $transferinfo['ship_id'] . "</span> <span style='color:#0f0;'>*** " . $langvars['l_sched_fixed'] . "***</span><br>";
-        $db->Execute ("UPDATE {$db->prefix}ibank_transfers SET amount = ? WHERE transfer_id = ? LIMIT 1;", array(0, $transferinfo['transfer_id']));
-        if ($db->ErrorNo() > 0)
+        $old_db->Execute ("UPDATE {$old_db->prefix}ibank_transfers SET amount = ? WHERE transfer_id = ? LIMIT 1;", array(0, $transferinfo['transfer_id']));
+        if ($old_db->ErrorNo() > 0)
         {
-            echo $langvars['l_sched_database_error'] . $db->ErrorMsg() . "<br>";
+            echo $langvars['l_sched_database_error'] . $old_db->ErrorMsg() . "<br>";
         }
         $detected = true;
         $admin_log->writeLog ($pdo_db, 960, "22|{$transferinfo['transfer_id']}|{$transferinfo['amount']}|{$transferinfo['source_id']}|{$transferinfo['dest_id']}");
@@ -344,12 +344,12 @@ echo $langvars['l_sched_gov_opt_sessions'] . "<br>";
 if (\Tki\SecureConfig::DB_TYPE == 'postgres9')
 {
     // Postgresql and SQLite (but SQLite its more like rebuild the whole database!)
-    $resn = $db->Execute("VACUUM {$db->prefix}sessions;");
+    $resn = $old_db->Execute("VACUUM {$old_db->prefix}sessions;");
 }
 else
 {
     // Oracle, and mysql
-    $resn = $db->Execute("OPTIMIZE TABLE {$db->prefix}sessions;");
+    $resn = $old_db->Execute("OPTIMIZE TABLE {$old_db->prefix}sessions;");
 }
 
 echo $langvars['l_sched_gov_done'] . "<br>";

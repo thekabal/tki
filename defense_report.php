@@ -41,7 +41,7 @@ $sector = array();
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-$query = "SELECT * FROM {$db->prefix}sector_defense WHERE ship_id = ?";
+$query = "SELECT * FROM {$old_db->prefix}sector_defense WHERE ship_id = ?";
 if (isset($sort))
 {
     $query .= " ORDER BY";
@@ -63,7 +63,7 @@ if (isset($sort))
     }
 }
 
-$res = $db->Execute($query, array($playerinfo['ship_id']));
+$res = $old_db->Execute($query, array($playerinfo['ship_id']));
 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
 $i = 0;

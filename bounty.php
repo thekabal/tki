@@ -87,7 +87,7 @@ $bounties = array();
 switch ($response) {
     case 'display':
         echo "<h1>" . $title . "</h1>\n";
-        $res5 = $db->Execute("SELECT * FROM {$db->prefix}ships, {$db->prefix}bounty WHERE bounty_on = ship_id AND bounty_on = ?;", array($bounty_on));
+        $res5 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships, {$old_db->prefix}bounty WHERE bounty_on = ship_id AND bounty_on = ?;", array($bounty_on));
         Tki\Db::logDbErrors($pdo_db, $res5, __LINE__, __FILE__);
         $j = 0;
         if ($res5)
@@ -167,7 +167,7 @@ switch ($response) {
             die();
         }
 
-        $res = $db->Execute("SELECT * FROM {$db->prefix}bounty WHERE bounty_id = ?;", array($bid));
+        $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}bounty WHERE bounty_id = ?;", array($bid));
         Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         if (!$res || $res->RowCount() == 0)
         {
@@ -190,7 +190,7 @@ switch ($response) {
             die();
         }
 
-        $del = $db->Execute("DELETE FROM {$db->prefix}bounty WHERE bounty_id = ?;", array($bid));
+        $del = $old_db->Execute("DELETE FROM {$old_db->prefix}bounty WHERE bounty_id = ?;", array($bid));
         Tki\Db::logDbErrors($pdo_db, $del, __LINE__, __FILE__);
         $cur_time_stamp = date("Y-m-d H:i:s");
         $refund = $bty['amount'];
@@ -207,7 +207,7 @@ switch ($response) {
         die();
     case 'place':
         echo "<h1>" . $title . "</h1>\n";
-        $ex = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($bounty_on));
+        $ex = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($bounty_on));
         Tki\Db::logDbErrors($pdo_db, $ex, __LINE__, __FILE__);
         if (!$ex)
         {
@@ -277,7 +277,7 @@ switch ($response) {
             $score = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
             $maxtrans = $score * $score * $tkireg->max_bountyvalue;
             $previous_bounty = 0;
-            $pb = $db->Execute("SELECT SUM(amount) AS totalbounty FROM {$db->prefix}bounty WHERE bounty_on = ? AND placed_by = ?;", array($bounty_on, $playerinfo['ship_id']));
+            $pb = $old_db->Execute("SELECT SUM(amount) AS totalbounty FROM {$old_db->prefix}bounty WHERE bounty_on = ? AND placed_by = ?;", array($bounty_on, $playerinfo['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $pb, __LINE__, __FILE__);
             if ($pb)
             {
@@ -297,7 +297,7 @@ switch ($response) {
             }
         }
 
-        $insert = $db->Execute("INSERT INTO {$db->prefix}bounty (bounty_on, placed_by, amount) values (?, ?, ?);", array($bounty_on, $playerinfo['ship_id'], $amount));
+        $insert = $old_db->Execute("INSERT INTO {$old_db->prefix}bounty (bounty_on, placed_by, amount) values (?, ?, ?);", array($bounty_on, $playerinfo['ship_id'], $amount));
         Tki\Db::logDbErrors($pdo_db, $insert, __LINE__, __FILE__);
         $cur_time_stamp = date("Y-m-d H:i:s");
 
@@ -313,7 +313,7 @@ switch ($response) {
         die();
     default:
         echo "<h1>" . $title . "</h1>\n";
-        $res = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_destroyed = 'N' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
+        $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE ship_destroyed = 'N' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
         Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         echo "<form accept-charset='utf-8' action=bounty.php method=post>";
         echo "<table>";
@@ -342,7 +342,7 @@ switch ($response) {
         echo "<input type=hidden name=response value=place>";
         echo "</form>";
 
-        $result3 = $db->Execute("SELECT bounty_on, SUM(amount) as total_bounty FROM {$db->prefix}bounty GROUP BY bounty_on;");
+        $result3 = $old_db->Execute("SELECT bounty_on, SUM(amount) as total_bounty FROM {$old_db->prefix}bounty GROUP BY bounty_on;");
         Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
         $i = 0;

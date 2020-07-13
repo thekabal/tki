@@ -31,13 +31,13 @@ echo $langvars['l_sched_tow_note'];
 $num_to_tow = 0;
 do
 {
-    $res = $db->Execute("SELECT ship_id, character_name, hull, sector, {$db->prefix}universe.zone_id, max_hull FROM " .
-                        "{$db->prefix}ships, {$db->prefix}universe, {$db->prefix}zones WHERE " .
-                        "sector = sector_id AND {$db->prefix}universe.zone_id = {$db->prefix}zones.zone_id AND " .
-                        "max_hull <> 0 AND (({$db->prefix}ships.hull + {$db->prefix}ships.engines + " .
-                        "{$db->prefix}ships.computer + {$db->prefix}ships.beams + " .
-                        "{$db->prefix}ships.torp_launchers + {$db->prefix}ships.shields + " .
-                        "{$db->prefix}ships.armor)/7) >max_hull AND ship_destroyed='N'");
+    $res = $old_db->Execute("SELECT ship_id, character_name, hull, sector, {$old_db->prefix}universe.zone_id, max_hull FROM " .
+                        "{$old_db->prefix}ships, {$old_db->prefix}universe, {$old_db->prefix}zones WHERE " .
+                        "sector = sector_id AND {$old_db->prefix}universe.zone_id = {$old_db->prefix}zones.zone_id AND " .
+                        "max_hull <> 0 AND (({$old_db->prefix}ships.hull + {$old_db->prefix}ships.engines + " .
+                        "{$old_db->prefix}ships.computer + {$old_db->prefix}ships.beams + " .
+                        "{$old_db->prefix}ships.torp_launchers + {$old_db->prefix}ships.shields + " .
+                        "{$old_db->prefix}ships.armor)/7) >max_hull AND ship_destroyed='N'");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     if ($res)
     {
@@ -55,7 +55,7 @@ do
             $langvars['l_sched_tow_where'] = str_replace("[sector]", (string) $newsector, $langvars['l_sched_tow_where']);
             echo $langvars['l_sched_tow_where'] . ".<br>";
 
-            $query = $db->Execute("UPDATE {$db->prefix}ships SET sector = ?, cleared_defenses=' ' WHERE ship_id=?", array($newsector, $row['ship_id']));
+            $query = $old_db->Execute("UPDATE {$old_db->prefix}ships SET sector = ?, cleared_defenses=' ' WHERE ship_id=?", array($newsector, $row['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             Tki\PlayerLog::writeLog($pdo_db, $row['ship_id'], \Tki\LogEnums::TOW, "$row[sector]|$newsector|$row[max_hull]");
             Tki\LogMove::writeLog($pdo_db, $row['ship_id'], $newsector);

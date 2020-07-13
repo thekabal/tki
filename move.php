@@ -59,7 +59,7 @@ $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector g
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 // Retrive all the warp links out of the current sector
-$result3 = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
+$result3 = $old_db->Execute("SELECT * FROM {$old_db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
 Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 $i = 0;
 $flag = 0;
@@ -81,31 +81,31 @@ while (!$result3->EOF)
 if ($flag == 1)
 {
     $calledfrom = "move.php";
-    Tki\CheckDefenses::fighters($pdo_db, $db, $lang, $sector, $playerinfo, $tkireg, $title, $calledfrom);
+    Tki\CheckDefenses::fighters($pdo_db, $old_db, $lang, $sector, $playerinfo, $tkireg, $title, $calledfrom);
 
     $cur_time_stamp = date("Y-m-d H:i:s");
     Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $sector);
-    $move_result = $db->Execute("UPDATE {$db->prefix}ships SET last_login = ?," .
+    $move_result = $old_db->Execute("UPDATE {$old_db->prefix}ships SET last_login = ?," .
                                 "turns = turns - 1, turns_used = turns_used + 1," .
                                 "sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $sector, $playerinfo['ship_id']));
     Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
     if (!$move_result)
     {
         // Is this really STILL needed?
-        $error = $db->ErrorMsg();
+        $error = $old_db->ErrorMsg();
         mail($tkireg->admin_mail, "Move Error", "Start Sector: $sectorinfo[sector_id]\n" .
             "End Sector: $sector\nPlayer: $playerinfo[character_name] - " .
             $playerinfo['ship_id'] . "\n\nQuery:  $query\n\nSQL error: $error");
     }
 
     // Enter code for checking dangers in new sector
-    Tki\CheckDefenses::mines($pdo_db, $db, $lang, $sector, $title, $playerinfo, $tkireg);
+    Tki\CheckDefenses::mines($pdo_db, $old_db, $lang, $sector, $title, $playerinfo, $tkireg);
     header("Location: main.php");
 }
 else
 {
     echo $langvars['l_move_failed'] . '<br><br>';
-    $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses=' ' " .
+    $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses=' ' " .
                          "WHERE ship_id = ?;", array($playerinfo['ship_id']));
     Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     Tki\Text::gotoMain($pdo_db, $lang);

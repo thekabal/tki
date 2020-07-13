@@ -64,7 +64,7 @@ $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 if ($playerinfo['on_planet'] == "Y")
 {
-    $res2 = $db->Execute("SELECT planet_id, owner FROM {$db->prefix}planets WHERE planet_id = ?;", array($playerinfo['planet_id']));
+    $res2 = $old_db->Execute("SELECT planet_id, owner FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($playerinfo['planet_id']));
     Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
     if ($res2->RecordCount() != 0)
     {
@@ -337,7 +337,7 @@ $num_traderoutes = 0;
 $traderoutes = array();
 
 // Traderoute query
-$tr_result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE source_type = ? AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array("P", $playerinfo['sector'], $playerinfo['ship_id']));
+$tr_result = $old_db->Execute("SELECT * FROM {$old_db->prefix}traderoutes WHERE source_type = ? AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array("P", $playerinfo['sector'], $playerinfo['ship_id']));
 Tki\Db::logDbErrors($pdo_db, $tr_result, __LINE__, __FILE__);
 while (!$tr_result->EOF)
 {
@@ -348,7 +348,7 @@ while (!$tr_result->EOF)
 }
 
 // Sector defense trade route query - this is still under developement
-$sd_tr_result = $db->Execute("SELECT * FROM {$db->prefix}traderoutes WHERE source_type='D' AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array($playerinfo['sector'], $playerinfo['ship_id']));
+$sd_tr_result = $old_db->Execute("SELECT * FROM {$old_db->prefix}traderoutes WHERE source_type='D' AND source_id = ? AND owner = ? ORDER BY dest_id ASC;", array($playerinfo['sector'], $playerinfo['ship_id']));
 Tki\Db::logDbErrors($pdo_db, $sd_tr_result, __LINE__, __FILE__);
 while (!$sd_tr_result->EOF)
 {
@@ -359,7 +359,7 @@ while (!$sd_tr_result->EOF)
 }
 
 // Personal planet traderoute type query
-$ppl_tr_result = $db->Execute("SELECT * FROM {$db->prefix}planets, {$db->prefix}traderoutes WHERE source_type = 'L' AND source_id = {$db->prefix}planets.planet_id AND {$db->prefix}planets.sector_id = ? AND {$db->prefix}traderoutes.owner = ?;", array($playerinfo['sector'], $playerinfo['ship_id']));
+$ppl_tr_result = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets, {$old_db->prefix}traderoutes WHERE source_type = 'L' AND source_id = {$old_db->prefix}planets.planet_id AND {$old_db->prefix}planets.sector_id = ? AND {$old_db->prefix}traderoutes.owner = ?;", array($playerinfo['sector'], $playerinfo['ship_id']));
 Tki\Db::logDbErrors($pdo_db, $ppl_tr_result, __LINE__, __FILE__);
 while (!$ppl_tr_result->EOF)
 {
@@ -370,7 +370,7 @@ while (!$ppl_tr_result->EOF)
 }
 
 // Team planet traderoute type query
-$tmpl_tr_result = $db->Execute("SELECT * FROM {$db->prefix}planets, {$db->prefix}traderoutes WHERE source_type = 'C' AND source_id = {$db->prefix}planets.planet_id AND {$db->prefix}planets.sector_id = ? AND {$db->prefix}traderoutes.owner = ?;", array($playerinfo['sector'], $playerinfo['ship_id']));
+$tmpl_tr_result = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets, {$old_db->prefix}traderoutes WHERE source_type = 'C' AND source_id = {$old_db->prefix}planets.planet_id AND {$old_db->prefix}planets.sector_id = ? AND {$old_db->prefix}traderoutes.owner = ?;", array($playerinfo['sector'], $playerinfo['ship_id']));
 Tki\Db::logDbErrors($pdo_db, $tmpl_tr_result, __LINE__, __FILE__);
 while (!$tmpl_tr_result->EOF)
 {
@@ -403,7 +403,7 @@ else
         }
         else
         {
-            $pl_result = $db->Execute("SELECT name FROM {$db->prefix}planets WHERE planet_id = ?;", array($traderoutes[$i]['source_id']));
+            $pl_result = $old_db->Execute("SELECT name FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($traderoutes[$i]['source_id']));
             Tki\Db::logDbErrors($pdo_db, $pl_result, __LINE__, __FILE__);
             if (!$pl_result || $pl_result->RecordCount() == 0)
             {
@@ -442,7 +442,7 @@ else
         }
         else
         {
-            $pl_dest_result = $db->Execute("SELECT name FROM {$db->prefix}planets WHERE planet_id = ?;", array($traderoutes[$i]['dest_id']));
+            $pl_dest_result = $old_db->Execute("SELECT name FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($traderoutes[$i]['dest_id']));
             Tki\Db::logDbErrors($pdo_db, $pl_dest_result, __LINE__, __FILE__);
 
             if (!$pl_dest_result || $pl_dest_result->RecordCount() == 0)
@@ -619,7 +619,7 @@ if ($playerinfo['sector'] !== 1)
     {
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
         $stmt->bindParam(':sector', $playerinfo['sector'], PDO::PARAM_INT);
-        $stmt->bindParam(':rand', $db->random, PDO::PARAM_STR);
+        $stmt->bindParam(':rand', $old_db->random, PDO::PARAM_STR);
         $stmt->execute();
         $result4 = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -859,7 +859,7 @@ echo '<table style="width:100%;">';
 $i = 0;
 $presetinfo = array();
 
-$debug_query = $db->Execute("SELECT * FROM {$db->prefix}presets WHERE ship_id = ?;", array($playerinfo['ship_id']));
+$debug_query = $old_db->Execute("SELECT * FROM {$old_db->prefix}presets WHERE ship_id = ?;", array($playerinfo['ship_id']));
 Tki\Db::logDbErrors($pdo_db, $debug_query, __LINE__, __FILE__);
 while (!$debug_query->EOF)
 {

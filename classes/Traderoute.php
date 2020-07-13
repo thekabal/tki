@@ -26,7 +26,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function engage(\PDO $pdo_db, $db, string $lang, int $tr_repeat, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
+    public static function engage(\PDO $pdo_db, $old_db, string $lang, int $tr_repeat, array $langvars, Reg $tkireg, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
     {
         $traderoute = array();
         $source = array();
@@ -66,7 +66,7 @@ class Traderoute
         if ($traderoute['source_type'] == 'P')
         {
             // Retrieve port info here, we'll need it later anyway
-            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoute['source_id']));
+            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($traderoute['source_id']));
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
@@ -84,7 +84,7 @@ class Traderoute
         }
         elseif ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')  // Get data from planet table
         {
-            $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['source_id'], $playerinfo['ship_id'], $playerinfo['team']));
+            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['source_id'], $playerinfo['ship_id'], $playerinfo['team']));
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if (!$result || $result->EOF)
             {
@@ -124,7 +124,7 @@ class Traderoute
             }
 
             // Store starting port info, we'll need it later
-            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($source['sector_id']));
+            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($source['sector_id']));
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
@@ -138,7 +138,7 @@ class Traderoute
         // Destination Check
         if ($traderoute['dest_type'] == 'P')
         {
-            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($traderoute['dest_id']));
+            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($traderoute['dest_id']));
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
@@ -152,7 +152,7 @@ class Traderoute
         {
             // Check for valid owned source planet
             // This now only returns planets that the player owns or planets that belong to the team and set as team planets..
-            $result = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['dest_id'], $playerinfo['ship_id'], $playerinfo['team']));
+            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['dest_id'], $playerinfo['ship_id'], $playerinfo['team']));
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
             if (!$result || $result->EOF)
@@ -181,7 +181,7 @@ class Traderoute
                 }
             }
 
-            $result = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($dest['sector_id']));
+            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($dest['sector_id']));
             \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
             if (!$result || $result->EOF)
             {
@@ -219,7 +219,7 @@ class Traderoute
         // Sector defense check
         $hostile = 0;
 
-        $result99 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($source['sector_id'], $playerinfo['ship_id']));
+        $result99 = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($source['sector_id'], $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $result99, __LINE__, __FILE__);
         if (!$result99->EOF)
         {
@@ -233,7 +233,7 @@ class Traderoute
             }
         }
 
-        $result98 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($dest['sector_id'], $playerinfo['ship_id']));
+        $result98 = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($dest['sector_id'], $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $result98, __LINE__, __FILE__);
         if (!$result98->EOF)
         {
@@ -894,11 +894,11 @@ class Traderoute
 
                 if ($traderoute['circuit'] == '1')
                 {
-                    $resi = $db->Execute("UPDATE {$db->prefix}ships SET torps = ?, ship_fighters = ?, ship_colonists = ? WHERE ship_id = ?;", array($playerinfo['torps'], $playerinfo['ship_fighters'], $playerinfo['ship_colonists'], $playerinfo['ship_id']));
+                    $resi = $old_db->Execute("UPDATE {$old_db->prefix}ships SET torps = ?, ship_fighters = ?, ship_colonists = ? WHERE ship_id = ?;", array($playerinfo['torps'], $playerinfo['ship_fighters'], $playerinfo['ship_colonists'], $playerinfo['ship_id']));
                     \Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
                 }
 
-                $resj = $db->Execute("UPDATE {$db->prefix}planets SET colonists = colonists - ?, torps = torps - ?, fighters = fighters - ? WHERE planet_id = ?;", array($colonists_buy, $torps_buy, $fighters_buy, $source['planet_id']));
+                $resj = $old_db->Execute("UPDATE {$old_db->prefix}planets SET colonists = colonists - ?, torps = torps - ?, fighters = fighters - ? WHERE planet_id = ?;", array($colonists_buy, $torps_buy, $fighters_buy, $source['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resj, __LINE__, __FILE__);
             }
         }
@@ -1072,7 +1072,7 @@ class Traderoute
                         $destcost -= $ore_buy * $tkireg->ore_price;
                     }
 
-                    $resk = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
+                    $resk = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
                     \Tki\Db::logDbErrors($pdo_db, $resk, __LINE__, __FILE__);
                 }
 
@@ -1154,7 +1154,7 @@ class Traderoute
                         $destcost -= $organics_buy * $tkireg->organics_price;
                     }
 
-                    $resm = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
+                    $resm = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
                     \Tki\Db::logDbErrors($pdo_db, $resm, __LINE__, __FILE__);
                 }
 
@@ -1196,7 +1196,7 @@ class Traderoute
                         echo $langvars['l_tdr_nothingtotrade'] . "<br>";
                     }
 
-                    $resn = $db->Execute("UPDATE {$db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
+                    $resn = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
                     \Tki\Db::logDbErrors($pdo_db, $resn, __LINE__, __FILE__);
                 }
 
@@ -1210,7 +1210,7 @@ class Traderoute
                     }
                 }
 
-                $reso = $db->Execute("UPDATE {$db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ?, ship_energy = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_energy'], $playerinfo['ship_id']));
+                $reso = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ?, ship_energy = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_energy'], $playerinfo['ship_id']));
                 \Tki\Db::logDbErrors($pdo_db, $reso, __LINE__, __FILE__);
             }
             else // Dest is planet
@@ -1310,7 +1310,7 @@ class Traderoute
                     }
                 }
 
-                $resp = $db->Execute("UPDATE {$db->prefix}planets SET colonists = colonists + ?, fighters = fighters + ?, torps = torps + ? WHERE planet_id = ?;", array($colonists_buy, $fighters_buy, $torps_buy, $traderoute['dest_id']));
+                $resp = $old_db->Execute("UPDATE {$old_db->prefix}planets SET colonists = colonists + ?, fighters = fighters + ?, torps = torps + ? WHERE planet_id = ?;", array($colonists_buy, $fighters_buy, $torps_buy, $traderoute['dest_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resp, __LINE__, __FILE__);
 
                 if ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')
@@ -1398,7 +1398,7 @@ class Traderoute
             $newsec = $destport['sector_id'];
         }
 
-        $rest = $db->Execute("UPDATE {$db->prefix}ships SET turns = turns - ?, credits = credits + ?, turns_used = turns_used + ?, sector = ? WHERE ship_id = ?;", array($dist['triptime'], $total_profit, $dist['triptime'], $newsec, $playerinfo['ship_id']));
+        $rest = $old_db->Execute("UPDATE {$old_db->prefix}ships SET turns = turns - ?, credits = credits + ?, turns_used = turns_used + ?, sector = ? WHERE ship_id = ?;", array($dist['triptime'], $total_profit, $dist['triptime'], $newsec, $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $rest, __LINE__, __FILE__);
         $playerinfo['credits'] += $total_profit - $sourcecost;
         $playerinfo['turns'] -= $dist['triptime'];

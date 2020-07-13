@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetReportCE
 {
-    public static function collectCredits(\PDO $pdo_db, $db, array $langvars, array $planetarray, Reg $tkireg): void
+    public static function collectCredits(\PDO $pdo_db, $old_db, array $langvars, array $planetarray, Reg $tkireg): void
     {
         $current_state = "GO"; // Current State
         $playerinfo = array();
@@ -41,7 +41,7 @@ class PlanetReportCE
         $temp_count = count($planetarray);
         for ($i = 0; $i < $temp_count; $i++)
         {
-            $res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planetarray[$i]));
+            $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($planetarray[$i]));
             \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
             // Only add to array if the player owns the planet.

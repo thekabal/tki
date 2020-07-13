@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetCombat
 {
-    public static function prime(\PDO $pdo_db, $db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): bool
+    public static function prime(\PDO $pdo_db, $old_db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): bool
     {
         if ($playerinfo['turns'] < 1)
         {
@@ -346,7 +346,7 @@ class PlanetCombat
 
         echo "</table></center>\n";
         // Send each docked ship in sequence to attack agressor
-        $result4 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
+        $result4 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
         \Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
         $shipsonplanet = $result4->RecordCount();
 
@@ -466,7 +466,7 @@ class PlanetCombat
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
-        $result4 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
+        $result4 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
         \Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
         $shipsonplanet = $result4->RecordCount();
 
@@ -482,10 +482,10 @@ class PlanetCombat
             if ($roll > $self_tech)
             {
                 // Reset Planet Assets.
-                $sql  = "UPDATE {$db->prefix}planets ";
+                $sql  = "UPDATE {$old_db->prefix}planets ";
                 $sql .= "SET organics = '0', ore = '0', goods = '0', energy = '0', colonists = '2', credits = '0', fighters = '0', torps = '0', team = '0', base = 'N', sells = 'N', prod_organics = '20', prod_ore = '20', prod_goods = '20', prod_energy = '20', prod_fighters = '10', prod_torp = '10' ";
                 $sql .= "WHERE planet_id = ? LIMIT 1;";
-                $resx = $db->Execute($sql, array($planetinfo['planet_id']));
+                $resx = $old_db->Execute($sql, array($planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 echo "<div style='text-align:center; font-size:18px; color:#f00;'>The planet become unstable due to not being looked after, and all life and assets have been destroyed.</div>\n";
             }
@@ -501,7 +501,7 @@ class PlanetCombat
                 if ($playerscore < $planetscore)
                 {
                     echo "<center>" . $langvars['l_cmb_citizenswanttodie'] . "</center><br><br>";
-                    $resx = $db->Execute("DELETE FROM {$db->prefix}planets WHERE planet_id = ?;", array($planetinfo['planet_id']));
+                    $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($planetinfo['planet_id']));
                     \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                     \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                     $admin_log = new AdminLog();
@@ -514,7 +514,7 @@ class PlanetCombat
                     echo "<center><font color=red>" . $langvars['l_cmb_youmaycapture'] . "</font></center><br><br>";
                     \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                     \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-                    $update7a = $db->Execute("UPDATE {$db->prefix}planets SET owner=0, fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id = ?;", array($planettorps, $planetinfo['planet_id']));
+                    $update7a = $old_db->Execute("UPDATE {$old_db->prefix}planets SET owner=0, fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id = ?;", array($planettorps, $planetinfo['planet_id']));
                     \Tki\Db::logDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
                 }
             }
@@ -524,7 +524,7 @@ class PlanetCombat
                 echo "<center>" . $langvars['l_cmb_youmaycapture'] . "</center><br><br>";
                 \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                 \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-                $update7a = $db->Execute("UPDATE {$db->prefix}planets SET owner=0,fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id = ?;", array($planettorps, $planetinfo['planet_id']));
+                $update7a = $old_db->Execute("UPDATE {$old_db->prefix}planets SET owner=0,fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id = ?;", array($planettorps, $planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
             }
 
@@ -540,8 +540,8 @@ class PlanetCombat
             $energy = $planetinfo['energy'];
             \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
             \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-            $update7b = $db->Execute(
-                "UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, " .
+            $update7b = $old_db->Execute(
+                "UPDATE {$old_db->prefix}planets SET energy = ?, fighters = fighters - ?, " .
                 "torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, " .
                 "credits = credits + ? WHERE planet_id = ?;",
             array($energy, $fighters_lost, $planettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id'])

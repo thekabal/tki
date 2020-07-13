@@ -39,7 +39,7 @@ $variables['sector'] = $_POST['sector'];
 if ($_POST['sector'] === null)
 {
     $sectors = array();
-    $res = $db->Execute("SELECT sector_id FROM {$db->prefix}universe ORDER BY sector_id");
+    $res = $old_db->Execute("SELECT sector_id FROM {$old_db->prefix}universe ORDER BY sector_id");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
     {
@@ -59,7 +59,7 @@ else
         $variables['sector_name'] = $row['sector_name'];
 
         $zones = array();
-        $ressubb = $db->Execute("SELECT zone_id,zone_name FROM {$db->prefix}zones ORDER BY zone_name");
+        $ressubb = $old_db->Execute("SELECT zone_id,zone_name FROM {$old_db->prefix}zones ORDER BY zone_name");
         Tki\Db::logDbErrors($pdo_db, $ressubb, __LINE__, __FILE__);
         while (!$ressubb->EOF)
         {
@@ -101,13 +101,13 @@ else
     elseif ($_POST['operation'] == "save")
     {
         // Update database
-        $secupdate = $db->Execute("UPDATE {$db->prefix}universe SET sector_name=?, zone_id=?, beacon=?, port_type=?, port_organics=?, port_ore=?, port_goods=?, port_energy=?, distance=?, angle1=?, angle2=? WHERE sector_id=?;", array($_POST['sector_name'], $_POST['zone_id'], $_POST['beacon'], $_POST['port_type'], $_POST['port_organics'], $_POST['port_ore'], $_POST['port_goods'], $_POST['port_energy'], $_POST['distance'], $_POST['angle1'], $_POST['angle2'], $_POST['sector']));
+        $secupdate = $old_db->Execute("UPDATE {$old_db->prefix}universe SET sector_name=?, zone_id=?, beacon=?, port_type=?, port_organics=?, port_ore=?, port_goods=?, port_energy=?, distance=?, angle1=?, angle2=? WHERE sector_id=?;", array($_POST['sector_name'], $_POST['zone_id'], $_POST['beacon'], $_POST['port_type'], $_POST['port_organics'], $_POST['port_ore'], $_POST['port_goods'], $_POST['port_energy'], $_POST['distance'], $_POST['angle1'], $_POST['angle2'], $_POST['sector']));
         Tki\Db::logDbErrors($pdo_db, $secupdate, __LINE__, __FILE__);
 
         if (!$secupdate)
         {
             $variables['secupdate'] = false;
-            $variables['db_error_msg'] = $db->ErrorMsg();
+            $variables['db_error_msg'] = $old_db->ErrorMsg();
         }
         else
         {

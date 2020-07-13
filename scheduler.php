@@ -108,7 +108,7 @@ else
     $lastRun = 0;
     $schedCount = 0;
     $lastrunList = null;
-    $sched_res = $db->Execute("SELECT * FROM {$db->prefix}scheduler");
+    $sched_res = $old_db->Execute("SELECT * FROM {$old_db->prefix}scheduler");
     Tki\Db::logDbErrors($pdo_db, $sched_res, __LINE__, __FILE__);
     if ($sched_res)
     {
@@ -133,7 +133,7 @@ else
 
                 if ($event['spawn'] - $multiplier == 0)
                 {
-                    $resx = $db->Execute("DELETE FROM {$db->prefix}scheduler WHERE sched_id = ?", array($event['sched_id']));
+                    $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}scheduler WHERE sched_id = ?", array($event['sched_id']));
                     Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                 }
                 else

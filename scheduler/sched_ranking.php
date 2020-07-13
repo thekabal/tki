@@ -26,7 +26,7 @@
 $langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
 
 echo "<strong>" . $langvars['l_sched_ranking_title'] . "</strong><br><br>";
-$res = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE ship_destroyed='N'");
+$res = $old_db->Execute("SELECT ship_id FROM {$old_db->prefix}ships WHERE ship_destroyed='N'");
 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 while (!$res->EOF)
 {

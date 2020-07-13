@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalToPlanet
 {
-    public static function planet(\PDO $pdo_db, $db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars): void
+    public static function planet(\PDO $pdo_db, $old_db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars): void
     {
         // Get planetinfo from database
         $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
@@ -279,7 +279,7 @@ class KabalToPlanet
             \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LogEnums::PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Kabal $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
 
             // Update planet
-            $resi = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($planetinfo['energy'], $fighters_lost, $targettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
+            $resi = $old_db->Execute("UPDATE {$old_db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($planetinfo['energy'], $fighters_lost, $targettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
             \Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
         }
         else  // Must have made it past planet defenses
@@ -289,20 +289,20 @@ class KabalToPlanet
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Made it past defenses on planet $planetinfo[name]");
 
             // Update attackers
-            $resj = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ? WHERE ship_id = ?;", array($playerinfo['ship_energy'], $fighters_lost, $attackertorps, $armor_lost, $playerinfo['ship_id']));
+            $resj = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ? WHERE ship_id = ?;", array($playerinfo['ship_energy'], $fighters_lost, $attackertorps, $armor_lost, $playerinfo['ship_id']));
             \Tki\Db::logDbErrors($pdo_db, $resj, __LINE__, __FILE__);
             $playerinfo['ship_fighters'] = $attackerfighters;
             $playerinfo['torps'] = $attackertorps;
             $playerinfo['armor_pts'] = $attackerarmor;
 
             // Update planet
-            $resk = $db->Execute("UPDATE {$db->prefix}planets SET energy = ?, fighters = ?, torps = torps - ? WHERE planet_id = ?", array($planetinfo['energy'], $targetfighters, $targettorps, $planetinfo['planet_id']));
+            $resk = $old_db->Execute("UPDATE {$old_db->prefix}planets SET energy = ?, fighters = ?, torps = torps - ? WHERE planet_id = ?", array($planetinfo['energy'], $targetfighters, $targettorps, $planetinfo['planet_id']));
             \Tki\Db::logDbErrors($pdo_db, $resk, __LINE__, __FILE__);
             $planetinfo['fighters'] = $targetfighters;
             $planetinfo['torps'] = $targettorps;
 
             // Now we must attack all ships on the planet one by one
-            $resultps = $db->Execute("SELECT ship_id,ship_name FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
+            $resultps = $old_db->Execute("SELECT ship_id,ship_name FROM {$old_db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
             \Tki\Db::logDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
             $shipsonplanet = $resultps->RecordCount();
             if ($shipsonplanet > 0)
@@ -315,7 +315,7 @@ class KabalToPlanet
                 }
             }
 
-            $resultps = $db->Execute("SELECT ship_id,ship_name FROM {$db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
+            $resultps = $old_db->Execute("SELECT ship_id,ship_name FROM {$old_db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
             \Tki\Db::logDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
             $shipsonplanet = $resultps->RecordCount();
             if ($shipsonplanet == 0)
@@ -327,7 +327,7 @@ class KabalToPlanet
                 \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
                 // Update planet
-                $resl = $db->Execute("UPDATE {$db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
+                $resl = $old_db->Execute("UPDATE {$old_db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resl, __LINE__, __FILE__);
 
                 \Tki\Ownership::calc($pdo_db, $planetinfo['sector_id'], $tkireg->min_bases_to_own, $langvars);

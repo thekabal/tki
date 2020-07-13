@@ -26,10 +26,10 @@ namespace Tki;
 
 class KabalHunt
 {
-    public static function hunt(\PDO $pdo_db, $db, array $playerinfo, int $kabalisdead, array $langvars, Reg $tkireg): void
+    public static function hunt(\PDO $pdo_db, $old_db, array $playerinfo, int $kabalisdead, array $langvars, Reg $tkireg): void
     {
         $targetinfo = array();
-        $rescount = $db->Execute("SELECT COUNT(*) AS num_players FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");
+        $rescount = $old_db->Execute("SELECT COUNT(*) AS num_players FROM {$old_db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");
         \Tki\Db::logDbErrors($pdo_db, $rescount, __LINE__, __FILE__);
         $rowcount = $rescount->fields;
         $topnum = min(10, $rowcount['num_players']);
@@ -40,7 +40,7 @@ class KabalHunt
             return;
         }
 
-        $res = $db->SelectLimit("SELECT * FROM {$db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1 ORDER BY score DESC", $topnum);
+        $res = $old_db->SelectLimit("SELECT * FROM {$old_db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1 ORDER BY score DESC", $topnum);
         \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
         // Choose a target from the top player list
@@ -96,7 +96,7 @@ class KabalHunt
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
             if (!$result)
             {
-                $error = $db->ErrorMsg();
+                $error = $old_db->ErrorMsg();
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");
 
                 return;
@@ -156,7 +156,7 @@ class KabalHunt
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                \Tki\KabalToPlanet::planet($pdo_db, $db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
+                \Tki\KabalToPlanet::planet($pdo_db, $old_db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
             }
             else
             {

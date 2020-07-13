@@ -43,7 +43,7 @@ $furcount3h = 0;
 
 /*
 //Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-$res = $db->Execute("SELECT * FROM {$db->prefix}ships JOIN {$db->prefix}kabal WHERE email=kabal_id and active='Y' and ship_destroyed='N' ORDER BY ship_id");
+$res = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships JOIN {$old_db->prefix}kabal WHERE email=kabal_id and active='Y' and ship_destroyed='N' ORDER BY ship_id");
 while (($res instanceof ADORecordSet) && ($res != false))
 //while (!$res->EOF)
 {
@@ -62,7 +62,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount0++;
             // Find a target in my sector, not myself, not on a planet
 
-            $reso0 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? AND email! = ? AND email NOT LIKE '%@kabal' AND planet_id = 0 AND ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
+            $reso0 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE sector = ? AND email! = ? AND email NOT LIKE '%@kabal' AND planet_id = 0 AND ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
             Tki\Db::logDbErrors($pdo_db, $res0, __LINE__, __FILE__);
             if (!$reso0->EOF)
             {
@@ -104,14 +104,14 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Tki\KabalMove::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\KabalMove::move($pdo_db, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
                 continue;
             }
             // Find a target in my sector, not myself
-            $reso1 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
+            $reso1 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
             Tki\Db::logDbErrors($pdo_db, $reso1, __LINE__, __FILE__);
             if (!$reso1->EOF)
             {
@@ -162,7 +162,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Tki\KabalMove::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\KabalMove::move($pdo_db, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -173,7 +173,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             Tki\KabalTrade::trade($pdo_db, $playerinfo, $tkireg);
             // FIND A TARGET
             // IN MY SECTOR, NOT MYSELF
-            $reso2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
+            $reso2 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($targetlink, $playerinfo['email']));
             Tki\Db::logDbErrors($pdo_db, $reso2, __LINE__, __FILE__);
             if (!$reso2->EOF)
             {
@@ -203,7 +203,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo2[character_name]");
                     if (!$rowo2['planet_id'] == 0)
                     {              // IS ON PLANET
-                        Tki\KabalToPlanet::planet($pdo_db, $db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalToPlanet::planet($pdo_db, $old_db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
                     }
                     else
                     {
@@ -229,7 +229,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             if ($hunt == 0)
             {
                 $furcount3h++;
-                Tki\KabalHunt::Hunt($pdo_db, $db, $playerinfo, $kabalisdead, $langvars, $tkireg);
+                Tki\KabalHunt::Hunt($pdo_db, $old_db, $playerinfo, $kabalisdead, $langvars, $tkireg);
                 if ($kabalisdead > 0)
                 {
                     $res->MoveNext();
@@ -239,7 +239,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Tki\KabalMove::move($pdo_db, $db, $playerinfo, $targetlink, $langvars, $tkireg);
+                Tki\KabalMove::move($pdo_db, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
                 if ($kabalisdead > 0)
                 {
                     $res->MoveNext();
@@ -248,7 +248,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
 
                 // FIND A TARGET
                 // IN MY SECTOR, NOT MYSELF
-                $reso3 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
+                $reso3 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE sector = ? and email! = ? and ship_id > 1", array($playerinfo['sector'], $playerinfo['email']));
                 Tki\Db::logDbErrors($pdo_db, $reso3, __LINE__, __FILE__);
                 if (!$reso3->EOF)
                 {
@@ -278,7 +278,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo3[character_name]");
                         if (!$rowo3['planet_id'] == 0)
                         {              // IS ON PLANET
-                            Tki\KabalToPlanet::planet($pdo_db, $db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
+                            Tki\KabalToPlanet::planet($pdo_db, $old_db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
                         }
                         else
                         {

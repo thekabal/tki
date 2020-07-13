@@ -96,9 +96,9 @@ echo "<h1>" . $title . "</h1>\n";
 
 if (empty($content))
 {
-    $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE email NOT LIKE '%@Kabal' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
+    $res = $old_db->Execute("SELECT character_name FROM {$old_db->prefix}ships WHERE email NOT LIKE '%@Kabal' AND ship_id <> ? ORDER BY character_name ASC;", array($playerinfo['ship_id']));
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-    $res2 = $db->Execute("SELECT team_name FROM {$db->prefix}teams WHERE admin ='N' ORDER BY team_name ASC;");
+    $res2 = $old_db->Execute("SELECT team_name FROM {$old_db->prefix}teams WHERE admin ='N' ORDER BY team_name ASC;");
     Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
     echo "<form accept-charset='utf-8' action=mailto.php method=post>\n";
     echo "  <table>\n";
@@ -161,14 +161,14 @@ else
     if (strpos($to, $langvars['l_sendm_ally']) === false)
     {
         $timestamp = date("Y\-m\-d H\:i\:s");
-        $res = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE character_name = ?;", array($to));
+        $res = $old_db->Execute("SELECT ship_id FROM {$old_db->prefix}ships WHERE character_name = ?;", array($to));
         Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $target_info = $res->fields;
-        $resx = $db->Execute("INSERT INTO {$db->prefix}messages (sender_id, recp_id, sent, subject, message) VALUES (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $target_info['ship_id'], $timestamp, $subject, $content));
+        $resx = $old_db->Execute("INSERT INTO {$old_db->prefix}messages (sender_id, recp_id, sent, subject, message) VALUES (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $target_info['ship_id'], $timestamp, $subject, $content));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-        if ($db->ErrorNo() != 0)
+        if ($old_db->ErrorNo() != 0)
         {
-            echo "Message failed to send: " . $db->ErrorMsg() . "<br>\n";
+            echo "Message failed to send: " . $old_db->ErrorMsg() . "<br>\n";
         }
         else
         {
@@ -181,17 +181,17 @@ else
         $to = str_replace($langvars['l_sendm_ally'], "", $to);
         $to = trim($to);
         $to = addslashes($to);
-        $res = $db->Execute("SELECT id FROM {$db->prefix}teams WHERE team_name = ?;", array($to));
+        $res = $old_db->Execute("SELECT id FROM {$old_db->prefix}teams WHERE team_name = ?;", array($to));
         Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
         $row = $res->fields;
 
-        $res2 = $db->Execute("SELECT ship_id FROM {$db->prefix}ships WHERE team = ?;", array($row['id']));
+        $res2 = $old_db->Execute("SELECT ship_id FROM {$old_db->prefix}ships WHERE team = ?;", array($row['id']));
         Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
 
         while (!$res2->EOF)
         {
             $row2 = $res2->fields;
-            $resx = $db->Execute("INSERT INTO {$db->prefix}messages (sender_id, recp_id, sent, subject, message) VALUES (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $row2['ship_id'], $timestamp, $subject, $content));
+            $resx = $old_db->Execute("INSERT INTO {$old_db->prefix}messages (sender_id, recp_id, sent, subject, message) VALUES (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $row2['ship_id'], $timestamp, $subject, $content));
             Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
             $res2->MoveNext();
         }

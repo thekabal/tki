@@ -236,7 +236,7 @@ class CheckDefenses
         }
     }
 
-    public static function fighters(\PDO $pdo_db, $db, string $lang, int $sector, $playerinfo, $tkireg, $title, $calledfrom): void
+    public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, $playerinfo, $tkireg, $title, $calledfrom): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
@@ -247,7 +247,7 @@ class CheckDefenses
         $sectorinfo = $sectors_gateway->selectSectorInfo($sector);
         */
 
-        $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type ='F' ORDER BY quantity DESC;", array($sector));
+        $result3 = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE sector_id = ? and defense_type ='F' ORDER BY quantity DESC;", array($sector));
         \Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
         // Put the defense information into the array defenses
@@ -296,7 +296,7 @@ class CheckDefenses
             // Find out if the fighter owner and player are on the same team
             // All sector defenses must be owned by members of the same team
             $fm_owner = $defenses[0]['ship_id'];
-            $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
+            $result2 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
             \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
             $fighters_owner = $result2->fields;
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
@@ -304,17 +304,17 @@ class CheckDefenses
                 switch ($response)
                 {
                     case "fight":
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         echo "<h1>" . $title . "</h1>\n";
                         \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0, $playerinfo, $tkireg, $title);
                         break;
 
                     case "retreat":
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         $cur_time_stamp = date("Y-m-d H:i:s");
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET last_login='$cur_time_stamp', turns = turns - 2, turns_used = turns_used + 2, sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
+                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET last_login='$cur_time_stamp', turns = turns - 2, turns_used = turns_used + 2, sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         echo "<h1>" . $title . "</h1>\n";
                         echo $langvars['l_chf_youretreatback'] . "<br>";
@@ -322,7 +322,7 @@ class CheckDefenses
                         die();
 
                     case "pay":
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         $fighterstoll = (int) round($total_sec_fighters * $tkireg->fighter_price * 0.6);
                         if ($playerinfo['credits'] < $fighterstoll)
@@ -331,7 +331,7 @@ class CheckDefenses
                             echo $langvars['l_chf_movefailed'] . "<br>";
 
                             // Undo the move
-                            $resx = $db->Execute("UPDATE {$db->prefix}ships SET sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
+                            $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
                             \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                             $ok = 0;
                         }
@@ -340,7 +340,7 @@ class CheckDefenses
                             $tollstring = number_format($fighterstoll, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
                             $langvars['l_chf_youpaidsometoll'] = str_replace("[chf_tollstring]", $tollstring, $langvars['l_chf_youpaidsometoll']);
                             echo $langvars['l_chf_youpaidsometoll'] . "<br>";
-                            $resx = $db->Execute("UPDATE {$db->prefix}ships SET credits=credits - $fighterstoll WHERE ship_id = ?;", array($playerinfo['ship_id']));
+                            $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET credits=credits - $fighterstoll WHERE ship_id = ?;", array($playerinfo['ship_id']));
                             \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                             \Tki\Toll::distribute($pdo_db, $sector, $fighterstoll, (int) $total_sec_fighters);
                             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::TOLL_PAID, "$tollstring|$sector");
@@ -349,7 +349,7 @@ class CheckDefenses
                         break;
 
                     case "sneak":
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
+                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         $success = \Tki\Scan::success($fighters_owner['sensors'], $playerinfo['cloak']);
                         if ($success < 5)
@@ -380,7 +380,7 @@ class CheckDefenses
 
                     default:
                         $interface_string = $calledfrom . '?sector=' . $sector . '&destination=' . $destination . '&engage=' . $engage;
-                        $resx = $db->Execute("UPDATE {$db->prefix}ships SET cleared_defenses = ? WHERE ship_id = ?;", array($interface_string, $playerinfo['ship_id']));
+                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ? WHERE ship_id = ?;", array($interface_string, $playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         $fighterstoll = (int) round($total_sec_fighters * $tkireg->fighter_price * 0.6);
                         echo "<h1>" . $title . "</h1>\n";
@@ -418,13 +418,13 @@ class CheckDefenses
                 }
 
                 // Clean up any sectors that have used up all mines or fighters
-                $resx = $db->Execute("DELETE FROM {$db->prefix}sector_defense WHERE quantity <= 0 ");
+                $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}sector_defense WHERE quantity <= 0 ");
                 \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
             }
         }
     }
 
-    public static function mines(\PDO $pdo_db, $db, string $lang, int $sector, string $title, array $playerinfo, $tkireg): void
+    public static function mines(\PDO $pdo_db, $old_db, string $lang, int $sector, string $title, array $playerinfo, $tkireg): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'combat', 'footer', 'news'));
@@ -434,7 +434,7 @@ class CheckDefenses
         //$sectorinfo = $sectors_gateway->selectSectorInfo($sector);
 
         // Put the defense information into the array defenseinfo
-        $result3 = $db->Execute("SELECT * FROM {$db->prefix}sector_defense WHERE sector_id = ? and defense_type ='M'", array($sector));
+        $result3 = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE sector_id = ? and defense_type ='M'", array($sector));
         \Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
         // Correct the targetship bug to reflect the player info
@@ -471,7 +471,7 @@ class CheckDefenses
         {
             // Find out if the mine owner and player are on the same team
             $fm_owner = $defenses[0]['ship_id'];
-            $result2 = $db->Execute("SELECT * FROM {$db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
+            $result2 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
             \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
             $mine_owner = $result2->fields;
@@ -504,7 +504,7 @@ class CheckDefenses
                 {
                     $langvars['l_chm_youlostminedeflectors'] = str_replace("[chm_roll]", (string) $roll, $langvars['l_chm_youlostminedeflectors']);
                     echo $langvars['l_chm_youlostminedeflectors'] . "<br>";
-                    $result2 = $db->Execute("UPDATE {$db->prefix}ships SET dev_minedeflector = dev_minedeflector - ? WHERE ship_id = ?", array($roll, $playerinfo['ship_id']));
+                    $result2 = $old_db->Execute("UPDATE {$old_db->prefix}ships SET dev_minedeflector = dev_minedeflector - ? WHERE ship_id = ?", array($roll, $playerinfo['ship_id']));
                     \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                 }
                 else
@@ -531,7 +531,7 @@ class CheckDefenses
                         $langvars['l_chm_yourshieldshitforminesdmg'] = str_replace("[chm_mines_left]", (string) $mines_left, $langvars['l_chm_yourshieldshitforminesdmg']);
                         echo $langvars['l_chm_yourshieldshitforminesdmg'] . "<br>";
 
-                        $result2 = $db->Execute("UPDATE {$db->prefix}ships SET ship_energy = ship_energy - ?, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
+                        $result2 = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_energy = ship_energy - ?, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                         if ($playershields == $mines_left)
                         {
@@ -547,7 +547,7 @@ class CheckDefenses
                         {
                             $langvars['l_chm_yourarmorhitforminesdmg'] = str_replace("[chm_mines_left]", (string) $mines_left, $langvars['l_chm_yourarmorhitforminesdmg']);
                             echo $langvars['l_chm_yourarmorhitforminesdmg'] . "<br>";
-                            $result2 = $db->Execute("UPDATE {$db->prefix}ships SET armor_pts = armor_pts - ?, ship_energy = 0, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
+                            $result2 = $old_db->Execute("UPDATE {$old_db->prefix}ships SET armor_pts = armor_pts - ?, ship_energy = 0, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
                             \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
                             if ($playerinfo['armor_pts'] == $mines_left)
                             {
@@ -569,7 +569,7 @@ class CheckDefenses
                             {
                                 $rating = round($playerinfo['rating'] / 2);
                                 echo $langvars['l_chm_luckescapepod'] . "<br><br>";
-                                $resx = $db->Execute("UPDATE {$db->prefix}ships SET hull=0, engines=0, power=0, sensors=0, computer=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=1, ship_organics=0, ship_ore=0, ship_goods=0, ship_energy=?, ship_colonists=0, ship_fighters=100, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, on_planet='N', rating=?, cleared_defenses=' ', dev_lssd='N' WHERE ship_id=?", array(100, $rating, $playerinfo['ship_id']));
+                                $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET hull=0, engines=0, power=0, sensors=0, computer=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=1, ship_organics=0, ship_ore=0, ship_goods=0, ship_energy=?, ship_colonists=0, ship_fighters=100, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, on_planet='N', rating=?, cleared_defenses=' ', dev_lssd='N' WHERE ship_id=?", array(100, $rating, $playerinfo['ship_id']));
                                 \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
                                 $bounty = new \Tki\Bounty();

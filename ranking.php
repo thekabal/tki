@@ -79,13 +79,13 @@ switch ($sort)
 
 $variables['num_players'] = 0;
 
-$sql = "SELECT {$db->prefix}ships.ship_id, {$db->prefix}ships.email, {$db->prefix}ships.ip_address, " .
-"{$db->prefix}ships.score, {$db->prefix}ships.character_name, {$db->prefix}ships.turns_used, " .
-"{$db->prefix}ships.last_login, UNIX_TIMESTAMP({$db->prefix}ships.last_login) as online, " .
-"{$db->prefix}ships.rating, {$db->prefix}teams.team_name, {$db->prefix}teams.admin AS team_admin, " .
-"if ({$db->prefix}ships.turns_used < 150, 0, ROUND({$db->prefix}ships.score/{$db->prefix}ships.turns_used)) " .
-"AS efficiency FROM {$db->prefix}ships LEFT JOIN {$db->prefix}teams ON " .
-"{$db->prefix}ships.team = {$db->prefix}teams.id WHERE ship_destroyed='N' and email NOT LIKE '%@kabal' " .
+$sql = "SELECT {$old_db->prefix}ships.ship_id, {$old_db->prefix}ships.email, {$old_db->prefix}ships.ip_address, " .
+"{$old_db->prefix}ships.score, {$old_db->prefix}ships.character_name, {$old_db->prefix}ships.turns_used, " .
+"{$old_db->prefix}ships.last_login, UNIX_TIMESTAMP({$old_db->prefix}ships.last_login) as online, " .
+"{$old_db->prefix}ships.rating, {$old_db->prefix}teams.team_name, {$old_db->prefix}teams.admin AS team_admin, " .
+"if ({$old_db->prefix}ships.turns_used < 150, 0, ROUND({$old_db->prefix}ships.score/{$old_db->prefix}ships.turns_used)) " .
+"AS efficiency FROM {$old_db->prefix}ships LEFT JOIN {$old_db->prefix}teams ON " .
+"{$old_db->prefix}ships.team = {$old_db->prefix}teams.id WHERE ship_destroyed='N' and email NOT LIKE '%@kabal' " .
 "AND turns_used > 0 ORDER BY :order_by LIMIT :limit";
 
 $stmt = $pdo_db->prepare($sql);

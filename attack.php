@@ -114,10 +114,10 @@ else
     $roll = random_int(1, 100);
     $roll2 = random_int(1, 100);
 
-    $res = $db->Execute(
-        "SELECT allow_attack, {$db->prefix}universe.zone_id FROM {$db->prefix}zones, " .
-        "{$db->prefix}universe WHERE sector_id = ? AND {$db->prefix}zones.zone_id = " .
-        "{$db->prefix}universe.zone_id;",
+    $res = $old_db->Execute(
+        "SELECT allow_attack, {$old_db->prefix}universe.zone_id FROM {$old_db->prefix}zones, " .
+        "{$old_db->prefix}universe WHERE sector_id = ? AND {$old_db->prefix}zones.zone_id = " .
+        "{$old_db->prefix}universe.zone_id;",
         array($targetinfo['sector'])
     );
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
@@ -130,8 +130,8 @@ else
     elseif ($flee < $roll2)
     {
         echo $langvars['l_att_flee'] . "<br><br>";
-        $resx = $db->Execute(
-            "UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE " .
+        $resx = $old_db->Execute(
+            "UPDATE {$old_db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE " .
             "ship_id = ?;",
             array($playerinfo['ship_id'])
         );
@@ -142,8 +142,8 @@ else
     {
         // If scan fails - inform both player and target.
         echo $langvars['l_planet_noscan'] . "<br><br>";
-        $resx = $db->Execute(
-            "UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE " .
+        $resx = $old_db->Execute(
+            "UPDATE {$old_db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE " .
             "ship_id = ?;",
             array($playerinfo['ship_id'])
         );
@@ -171,16 +171,16 @@ else
             // Need to change warp destination to random sector in universe
             $rating_change = round($targetinfo['rating'] * .1);
             $dest_sector = random_int(1, (int) $tkireg->max_sectors - 1);
-            $resx = $db->Execute(
-                "UPDATE {$db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, " .
+            $resx = $old_db->Execute(
+                "UPDATE {$old_db->prefix}ships SET turns = turns - 1, turns_used = turns_used + 1, " .
                 "rating = rating - ? " .
                 "WHERE ship_id = ?;",
                 array($rating_change, $playerinfo['ship_id'])
             );
             Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
             Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::ATTACK_EWD, "$playerinfo[character_name]");
-            $result_warp = $db->Execute(
-                "UPDATE {$db->prefix}ships SET sector = $dest_sector, " .
+            $result_warp = $old_db->Execute(
+                "UPDATE {$old_db->prefix}ships SET sector = $dest_sector, " .
                 "dev_emerwarp = dev_emerwarp - 1, cleared_defenses = ' ' " .
                 "WHERE ship_id = ?;",
                 array($targetinfo['ship_id'])
@@ -202,8 +202,8 @@ else
                 // Check to see if there is Federation bounty on the player.
                 // If there is, people can attack regardless.
                 $btyamount = 0;
-                $hasbounty = $db->Execute(
-                    "SELECT SUM(amount) AS btytotal FROM {$db->prefix}bounty WHERE " .
+                $hasbounty = $old_db->Execute(
+                    "SELECT SUM(amount) AS btytotal FROM {$old_db->prefix}bounty WHERE " .
                     "bounty_on = ? AND placed_by = 0;",
                     array($targetinfo['ship_id'])
                 );
@@ -217,8 +217,8 @@ else
                 if ($btyamount <= 0)
                 {
                     $bounty = round($playerscore * $max_bountyvalue);
-                    $insert = $db->Execute(
-                        "INSERT INTO {$db->prefix}bounty (bounty_on,placed_by,amount) values " .
+                    $insert = $old_db->Execute(
+                        "INSERT INTO {$old_db->prefix}bounty (bounty_on,placed_by,amount) values " .
                         "(?,?,?);",
                         array($playerinfo['ship_id'], 0 ,$bounty)
                     );
@@ -619,8 +619,8 @@ else
                 {
                     $rating = round($targetinfo['rating'] / 2);
                     echo $langvars['l_att_espod'] . " (<span style='color:#ff0;'>You destroyed their ship but they got away in their Escape Pod</span>)<br>";
-                    $resx = $db->Execute(
-                        "UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0, torp_launchers = 0, " .
+                    $resx = $old_db->Execute(
+                        "UPDATE {$old_db->prefix}ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0, torp_launchers = 0, " .
                         "torps = 0, armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 1, ship_organics = 0, ship_ore = 0, ship_goods = 0, " .
                         "ship_energy = ?, ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, " .
                         "dev_escapepod = 'N', dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', rating = ?, cleared_defenses = ' ', " .
@@ -655,7 +655,7 @@ else
                     // He is a Kabal
                     if (preg_match("/(\@kabal)$/", $targetinfo['email']) !== 0)
                     {
-                        $resx = $db->Execute("UPDATE {$db->prefix}kabal SET active= N WHERE kabal_id = ?;", array($targetinfo['email']));
+                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}kabal SET active= N WHERE kabal_id = ?;", array($targetinfo['email']));
                         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         $admin_log = new Tki\AdminLog();
                         $admin_log->writeLog($pdo_db, \Tki\LogEnums::ATTACK_DEBUG, "*|{$playerinfo['ship_id']}|{$targetinfo['ship_id']}|Detected as AI.");
@@ -734,8 +734,8 @@ else
                     $langvars['l_att_ysalv2'] = str_replace("[rating_change]", number_format(abs($rating_change), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_att_ysalv2']);
 
                     echo $langvars['l_att_ysalv'] . "<br>" . $langvars['l_att_ysalv2'] . "<br>\n";
-                    $update3 = $db->Execute(
-                        "UPDATE {$db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, " .
+                    $update3 = $old_db->Execute(
+                        "UPDATE {$old_db->prefix}ships SET ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, ship_goods = ship_goods + ?, " .
                         "credits = credits + ? WHERE ship_id = ?;",
                         array($salv_ore, $salv_organics, $salv_goods, $ship_salvage, $playerinfo['ship_id'])
                     );
@@ -743,8 +743,8 @@ else
                     $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
                     $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
                     $energy = $playerinfo['ship_energy'];
-                    $update3b = $db->Execute(
-                        "UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, torps = torps - ?, " .
+                    $update3b = $old_db->Execute(
+                        "UPDATE {$old_db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, torps = torps - ?, " .
                         "turns = turns - 1, turns_used = turns_used + 1, rating = rating - ? " .
                         "WHERE ship_id = ?;",
                         array($energy, $fighters_lost, $armor_lost, $playertorpnum, $rating_change, $playerinfo['ship_id'])
@@ -764,8 +764,8 @@ else
                 $energy = $targetinfo['ship_energy'];
 
                 Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], \Tki\LogEnums::ATTACKED_WIN, "$playerinfo[character_name]|$armor_lost|$fighters_lost");
-                $update4 = $db->Execute(
-                    "UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, " .
+                $update4 = $old_db->Execute(
+                    "UPDATE {$old_db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, " .
                     "torps = torps - ? WHERE ship_id = ?;",
                     array($energy, $fighters_lost, $armor_lost, $targettorpnum, $targetinfo['ship_id'])
                 );
@@ -775,8 +775,8 @@ else
                 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
                 $energy = $playerinfo['ship_energy'];
 
-                $update4b = $db->Execute(
-                    "UPDATE {$db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, torps = torps - ?, " .
+                $update4b = $old_db->Execute(
+                    "UPDATE {$old_db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, torps = torps - ?, " .
                     "turns = turns - 1, turns_used = turns_used + 1, rating = rating - ? " .
                     "WHERE ship_id = ?;",
                     array($energy, $fighters_lost, $armor_lost, $playertorpnum, $rating_change, $playerinfo['ship_id'])
@@ -792,8 +792,8 @@ else
                 {
                     $rating = round($playerinfo['rating'] / 2);
                     echo $langvars['l_att_loosepod'] . "<br><br>";
-                    $resx = $db->Execute(
-                        "UPDATE {$db->prefix}ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0, torp_launchers = 0, torps = 0, " .
+                    $resx = $old_db->Execute(
+                        "UPDATE {$old_db->prefix}ships SET hull = 0, engines = 0, power = 0, sensors = 0, computer = 0, beams = 0, torp_launchers = 0, torps = 0, " .
                         "armor = 0, armor_pts = 100, cloak = 0, shields = 0, sector = 1, ship_organics = 0, ship_ore = 0, ship_goods = 0, ship_energy = ?, " .
                         "ship_colonists = 0, ship_fighters = 100, dev_warpedit = 0, dev_genesis = 0, dev_beacon = 0, dev_emerwarp = 0, dev_escapepod = 'N', " .
                         "dev_fuelscoop = 'N', dev_minedeflector = 0, on_planet = 'N', rating = ?, dev_lssd = 'N' " .
@@ -875,8 +875,8 @@ else
                     $langvars['l_att_salv'] = str_replace("[name]", $targetinfo['character_name'], $langvars['l_att_salv']);
 
                     echo $langvars['l_att_salv'] . "<br>";
-                    $update6 = $db->Execute(
-                        "UPDATE {$db->prefix}ships SET credits = credits + ?," .
+                    $update6 = $old_db->Execute(
+                        "UPDATE {$old_db->prefix}ships SET credits = credits + ?," .
                         "ship_ore = ship_ore + ?, ship_organics = ship_organics + ?, " .
                         "ship_goods = ship_goods + ? WHERE ship_id = ?;",
                         array($ship_salvage, $salv_ore, $salv_organics, $salv_goods, $targetinfo['ship_id'])
@@ -885,8 +885,8 @@ else
                     $armor_lost = $targetinfo['armor_pts'] - $targetarmor;
                     $fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
                     $energy = $targetinfo['ship_energy'];
-                    $update6b = $db->Execute(
-                        "UPDATE {$db->prefix}ships SET ship_energy = ?, " .
+                    $update6b = $old_db->Execute(
+                        "UPDATE {$old_db->prefix}ships SET ship_energy = ?, " .
                         "ship_fighters = ship_fighters - ?, armor_pts = armor_pts - ?, " .
                         "torps = torps - ? WHERE ship_id = ?;",
                         array($energy, $fighters_lost, $armor_lost, $targettorpnum, $targetinfo['ship_id'])

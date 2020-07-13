@@ -35,7 +35,7 @@ echo "<h1>" . $title . "</h1>\n";
 
 $mail = filter_input(INPUT_GET, 'mail', FILTER_SANITIZE_EMAIL);
 
-$result = $db->SelectLimit("SELECT character_name, email, password, ship_id FROM {$db->prefix}ships WHERE email = ?", 1, -1, array('email' => $mail));
+$result = $old_db->SelectLimit("SELECT character_name, email, password, ship_id FROM {$old_db->prefix}ships WHERE email = ?", 1, -1, array('email' => $mail));
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
 if (!$result->EOF)

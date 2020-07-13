@@ -28,7 +28,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
 echo "<strong>" . $langvars['l_apoc_title'] . "</strong><br><br>";
 echo $langvars['l_apoc_begins'] . "..<br>";
 
-$doomsday = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE colonists > ?;", array($tkireg->doomsday_value));
+$doomsday = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE colonists > ?;", array($tkireg->doomsday_value));
 Tki\Db::logDbErrors($pdo_db, $doomsday, __LINE__, __FILE__);
 $chance = 9;
 $reccount = $doomsday->RecordCount();
@@ -59,7 +59,7 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
     if ($affliction == 1) // Space Plague
     {
         echo $langvars['l_apoc_plague'] . "<br>.";
-        $resx = $db->Execute("UPDATE {$db->prefix}planets SET colonists = ROUND (colonists - colonists * ?) WHERE planet_id = ?;", array($space_plague_kills, $targetinfo['planet_id']));
+        $resx = $old_db->Execute("UPDATE {$old_db->prefix}planets SET colonists = ROUND (colonists - colonists * ?) WHERE planet_id = ?;", array($space_plague_kills, $targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $logpercent = round($space_plague_kills * 100);
         Tki\PlayerLog::writeLog($pdo_db, $targetinfo['owner'], \Tki\LogEnums::SPACE_PLAGUE, "$targetinfo[name]|$targetinfo[sector_id]|$logpercent");
@@ -67,7 +67,7 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
     else
     {
         echo $langvars['l_apoc_plasma'] . "<br>.";
-        $resy = $db->Execute("UPDATE {$db->prefix}planets SET energy = 0 WHERE planet_id = ?;", array($targetinfo['planet_id']));
+        $resy = $old_db->Execute("UPDATE {$old_db->prefix}planets SET energy = 0 WHERE planet_id = ?;", array($targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resy, __LINE__, __FILE__);
         Tki\PlayerLog::writeLog($pdo_db, $targetinfo['owner'], \Tki\LogEnums::PLASMA_STORM, "$targetinfo[name]|$targetinfo[sector_id]");
     }

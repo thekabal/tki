@@ -28,11 +28,11 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
 
 echo "<strong>" . $langvars['l_sched_planets_title'] . "</strong><p>";
 
-$res = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE owner > 0");
+$res = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE owner > 0");
 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 // We are now using transactions to off load the SQL stuff in full to the Database Server.
 
-$result = $db->Execute("START TRANSACTION");
+$result = $old_db->Execute("START TRANSACTION");
 Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 while (!$res->EOF)
 {
@@ -80,16 +80,16 @@ while (!$res->EOF)
     }
 
     $credits_production = floor($production * $credits_prate * (100.0 - $total_percent) / 100.0);
-    $ret = $db->Execute("UPDATE {$db->prefix}planets SET organics = organics + ?, ore = ore + ?, goods = goods + ?, energy = energy + ?, colonists = colonists + ? - ?, torps = torps + ?, fighters = fighters + ?, credits = credits * ? + ? WHERE planet_id = ? LIMIT 1; ", array($organics_production, $ore_production, $goods_production, $energy_production, $reproduction, $starvation, $torp_production, $fighter_production, $interest_rate, $credits_production, $row['planet_id']));
+    $ret = $old_db->Execute("UPDATE {$old_db->prefix}planets SET organics = organics + ?, ore = ore + ?, goods = goods + ?, energy = energy + ?, colonists = colonists + ? - ?, torps = torps + ?, fighters = fighters + ?, credits = credits * ? + ? WHERE planet_id = ? LIMIT 1; ", array($organics_production, $ore_production, $goods_production, $energy_production, $reproduction, $starvation, $torp_production, $fighter_production, $interest_rate, $credits_production, $row['planet_id']));
     Tki\Db::logDbErrors($pdo_db, $ret, __LINE__, __FILE__);
     $res->MoveNext();
 }
 
-$ret = $db->Execute("COMMIT");
+$ret = $old_db->Execute("COMMIT");
 Tki\Db::logDbErrors($pdo_db, $ret, __LINE__, __FILE__);
 if ($tkireg->sched_planet_valid_credits)
 {
-    $ret = $db->Execute("UPDATE {$db->prefix}planets SET credits = ? WHERE credits > ? AND base = 'N';", array($tkireg->max_credits_without_base, $tkireg->max_credits_without_base));
+    $ret = $old_db->Execute("UPDATE {$old_db->prefix}planets SET credits = ? WHERE credits > ? AND base = 'N';", array($tkireg->max_credits_without_base, $tkireg->max_credits_without_base));
     Tki\Db::logDbErrors($pdo_db, $ret, __LINE__, __FILE__);
 }
 

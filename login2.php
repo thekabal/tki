@@ -104,7 +104,7 @@ $banned = 0;
 
 if (!empty($playerinfo) && $playerfound !== false)
 {
-    $res = $db->Execute("SELECT * FROM {$db->prefix}ip_bans WHERE ? LIKE ban_mask OR ? LIKE ban_mask;", array($request->server->get('REMOTE_ADDR'), $playerinfo['ip_address']));
+    $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}ip_bans WHERE ? LIKE ban_mask OR ? LIKE ban_mask;", array($request->server->get('REMOTE_ADDR'), $playerinfo['ip_address']));
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     if ($res->RecordCount() != 0)
     {
@@ -179,10 +179,10 @@ if ($playerfound)
                     if ($tkireg->newbie_nice)
                     {
                         $sql = "SELECT hull, engines, power, computer, sensors, armor, shields, beams, torp_launchers, cloak " .
-                               "FROM {$db->prefix}ships WHERE ship_id = ? AND hull <= ? AND engines <= ? " .
+                               "FROM {$old_db->prefix}ships WHERE ship_id = ? AND hull <= ? AND engines <= ? " .
                                "AND power <= ? AND computer <= ? AND sensors <= ? AND armor <= ? " .
                                "AND shields <= ? AND beams <= ? AND torp_launchers <= ? AND cloak <= ?;";
-                        $newbie_info = $db->Execute($sql, array($playerinfo['ship_id'], $tkireg->newbie_hull, $tkireg->newbie_engines, $tkireg->newbie_power, $tkireg->newbie_computer, $tkireg->newbie_sensors, $tkireg->newbie_armor, $tkireg->newbie_shields, $tkireg->newbie_beams, $tkireg->newbie_torp_launchers, $tkireg->newbie_cloak));
+                        $newbie_info = $old_db->Execute($sql, array($playerinfo['ship_id'], $tkireg->newbie_hull, $tkireg->newbie_engines, $tkireg->newbie_power, $tkireg->newbie_computer, $tkireg->newbie_sensors, $tkireg->newbie_armor, $tkireg->newbie_shields, $tkireg->newbie_beams, $tkireg->newbie_torp_launchers, $tkireg->newbie_cloak));
                         Tki\Db::logDbErrors($pdo_db, $newbie_info, __LINE__, __FILE__);
                         $num_rows = $newbie_info->RecordCount();
 

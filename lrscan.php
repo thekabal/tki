@@ -95,7 +95,7 @@ if ($sector == "*")
     echo $langvars['l_lrs_reach'] . "<br><br>";
 
     // Get sectors which can be reached from the player's current sector
-    $result = $db->Execute("SELECT * FROM {$db->prefix}links WHERE link_start = ? ORDER BY link_dest;", array($playerinfo['sector']));
+    $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}links WHERE link_start = ? ORDER BY link_dest;", array($playerinfo['sector']));
     Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     echo "<table border=0 cellspacing=0 cellpadding=0 width=\"100%\">";
     echo "  <tr bgcolor=\"$tkireg->color_header\">\n";
@@ -119,13 +119,13 @@ if ($sector == "*")
     {
         $row = $result->fields;
         // Get number of sectors which can be reached from scanned sector
-        $result2 = $db->Execute("SELECT COUNT(*) AS count FROM {$db->prefix}links WHERE link_start = ?;", array($row['link_dest']));
+        $result2 = $old_db->Execute("SELECT COUNT(*) AS count FROM {$old_db->prefix}links WHERE link_start = ?;", array($row['link_dest']));
         Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $row2 = $result2->fields;
         $num_links = $row2['count'];
 
         // Get number of ships in scanned sector
-        $result2 = $db->Execute("SELECT COUNT(*) AS count FROM {$db->prefix}ships WHERE sector = ? AND on_planet = 'N' and ship_destroyed = 'N';", array($row['link_dest']));
+        $result2 = $old_db->Execute("SELECT COUNT(*) AS count FROM {$old_db->prefix}ships WHERE sector = ? AND on_planet = 'N' and ship_destroyed = 'N';", array($row['link_dest']));
         Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
         $row2 = $result2->fields;
         $num_ships = $row2['count'];
@@ -135,11 +135,11 @@ if ($sector == "*")
         $sectorinfo = $sectors_gateway->selectSectorInfo($row['link_dest']);
 
         // Get port type and discover the presence of a planet in scanned sector
-        $result3 = $db->Execute("SELECT planet_id FROM {$db->prefix}planets WHERE sector_id = ?;", array($row['link_dest']));
+        $result3 = $old_db->Execute("SELECT planet_id FROM {$old_db->prefix}planets WHERE sector_id = ?;", array($row['link_dest']));
         Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
-        $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M';", array($row['link_dest']));
+        $resultSDa = $old_db->Execute("SELECT SUM(quantity) as mines from {$old_db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M';", array($row['link_dest']));
         Tki\Db::logDbErrors($pdo_db, $resultSDa, __LINE__, __FILE__);
-        $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F';", array($row['link_dest']));
+        $resultSDb = $old_db->Execute("SELECT SUM(quantity) as fighters from {$old_db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F';", array($row['link_dest']));
         Tki\Db::logDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
 
         $defM = $resultSDa->fields;
@@ -173,7 +173,7 @@ if ($sector == "*")
         echo "<tr bgcolor=\"$tkireg->color\"><td><a href='move.php?sector=" . $row['link_dest'] . "'>" . $row['link_dest'] . "</a></td><td><a href='lrscan.php?sector=" . $row['link_dest'] . "'>Scan</a></td><td>$num_links</td><td>$num_ships</td><td width=12>$image_string</td><td>" . Tki\Ports::getType($port_type, $langvars) . "</td><td>$has_planet</td><td>$has_mines</td><td>$has_fighters</td>";
         if ($playerinfo['dev_lssd'] == 'Y')
         {
-            $resx = $db->SelectLimit("SELECT * from {$db->prefix}movement_log WHERE ship_id <> ? AND sector_id = ? ORDER BY time DESC", 1, -1, array('ship_id' => $playerinfo['ship_id'], 'sector_id' => $row['link_dest']));
+            $resx = $old_db->SelectLimit("SELECT * from {$old_db->prefix}movement_log WHERE ship_id <> ? AND sector_id = ? ORDER BY time DESC", 1, -1, array('ship_id' => $playerinfo['ship_id'], 'sector_id' => $row['link_dest']));
             Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
             if (!$resx)
             {
@@ -182,7 +182,7 @@ if ($sector == "*")
             else
             {
                 $myrow = $resx->fields;
-                $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($myrow['ship_id']));
+                $res = $old_db->Execute("SELECT character_name FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($myrow['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
                 if ($res)
                 {
@@ -232,7 +232,7 @@ else
     $sectorinfo = $sectors_gateway->selectSectorInfo((int) $sector);
 
     // Get sectors which can be reached through scanned sector
-    $result3 = $db->Execute("SELECT link_dest FROM {$db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($sector));
+    $result3 = $old_db->Execute("SELECT link_dest FROM {$old_db->prefix}links WHERE link_start = ? ORDER BY link_dest ASC;", array($sector));
     Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
     $i = 0;
 
@@ -246,7 +246,7 @@ else
     $num_links = $i;
 
     // Get sectors which can be reached from the player's current sector
-    $result3a = $db->Execute("SELECT link_dest FROM {$db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
+    $result3a = $old_db->Execute("SELECT link_dest FROM {$old_db->prefix}links WHERE link_start = ?;", array($playerinfo['sector']));
     Tki\Db::logDbErrors($pdo_db, $result3a, __LINE__, __FILE__);
     $i = 0;
     $flag = 0;
@@ -304,7 +304,7 @@ else
     if ($sector != 1)
     {
         // Get ships located in the scanned sector
-        $result4 = $db->Execute("SELECT ship_id, ship_name, character_name, cloak FROM {$db->prefix}ships WHERE sector = ? AND on_planet = 'N';", array($sector));
+        $result4 = $old_db->Execute("SELECT ship_id, ship_name, character_name, cloak FROM {$old_db->prefix}ships WHERE sector = ? AND on_planet = 'N';", array($sector));
         Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
         if ($result4->EOF)
         {
@@ -372,7 +372,7 @@ else
     echo "</td></tr>";
     echo "<tr bgcolor=\"$tkireg->color_line2\"><td><strong>" . $langvars['l_planets'] . "</strong></td></tr>";
     echo "<tr><td>";
-    $query = $db->Execute("SELECT name, owner FROM {$db->prefix}planets WHERE sector_id = ?;", array($sectorinfo['sector_id']));
+    $query = $old_db->Execute("SELECT name, owner FROM {$old_db->prefix}planets WHERE sector_id = ?;", array($sectorinfo['sector_id']));
     Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
 
     if ($query->EOF)
@@ -398,7 +398,7 @@ else
         }
         else
         {
-            $result5 = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($planet['owner']));
+            $result5 = $old_db->Execute("SELECT character_name FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($planet['owner']));
             Tki\Db::logDbErrors($pdo_db, $result5, __LINE__, __FILE__);
             $planet_owner_name = $result5->fields;
             echo " ($planet_owner_name[character_name])";
@@ -407,9 +407,9 @@ else
         $query->MoveNext();
     }
 
-    $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M';", array($sector));
+    $resultSDa = $old_db->Execute("SELECT SUM(quantity) as mines from {$old_db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'M';", array($sector));
     Tki\Db::logDbErrors($pdo_db, $resultSDa, __LINE__, __FILE__);
-    $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from {$db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F';", array($sector));
+    $resultSDb = $old_db->Execute("SELECT SUM(quantity) as fighters from {$old_db->prefix}sector_defense WHERE sector_id = ? and defense_type = 'F';", array($sector));
     Tki\Db::logDbErrors($pdo_db, $resultSDb, __LINE__, __FILE__);
     $defM = $resultSDa->fields;
 
@@ -437,7 +437,7 @@ else
     {
         echo "<tr bgcolor=\"$tkireg->color_line2\"><td><strong>" . $langvars['l_lss'] . "</strong></td></tr>";
         echo "<tr><td>";
-        $resx = $db->SelectLimit("SELECT * FROM {$db->prefix}movement_log WHERE ship_id <> ? AND sector_id = ? ORDER BY time DESC", 1, -1, array('ship_id' => $playerinfo['ship_id'], 'sector_id' => $sector));
+        $resx = $old_db->SelectLimit("SELECT * FROM {$old_db->prefix}movement_log WHERE ship_id <> ? AND sector_id = ? ORDER BY time DESC", 1, -1, array('ship_id' => $playerinfo['ship_id'], 'sector_id' => $sector));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         if (!$resx)
         {
@@ -446,7 +446,7 @@ else
         else
         {
             $myrow = $resx->fields;
-            $res = $db->Execute("SELECT character_name FROM {$db->prefix}ships WHERE ship_id = ?;", array($myrow['ship_id']));
+            $res = $old_db->Execute("SELECT character_name FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($myrow['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
             if ($res)
             {

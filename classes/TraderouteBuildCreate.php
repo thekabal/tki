@@ -26,7 +26,7 @@ namespace Tki;
 
 class TraderouteBuildCreate
 {
-    public static function create(\PDO $pdo_db, $db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $num_traderoutes, string $ptype1, string $ptype2, int $port_id1, int $port_id2, int $team_planet_id1, int $team_planet_id2, string $move_type, int $circuit_type, int $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
+    public static function create(\PDO $pdo_db, $old_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $num_traderoutes, string $ptype1, string $ptype2, int $port_id1, int $port_id2, int $team_planet_id1, int $team_planet_id2, string $move_type, int $circuit_type, int $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('traderoutes', 'common', 'global_includes', 'global_funcs', 'footer', 'regional'));
         $admin_log = new AdminLog();
@@ -50,7 +50,7 @@ class TraderouteBuildCreate
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invalidspoint']);
             }
 
-            $query = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($port_id1));
+            $query = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($port_id1));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if (!$query || $query->EOF)
             {
@@ -68,7 +68,7 @@ class TraderouteBuildCreate
         }
         else
         {
-            $query = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id1));
+            $query = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($planet_id1));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $source = $query->fields;
             if (!$query || $query->EOF)
@@ -100,7 +100,7 @@ class TraderouteBuildCreate
         // OK we have $source, *probably* now lets see if we have ever been there
         // Attempting to fix the map the universe via traderoute bug
 
-        $pl1query = $db->Execute("SELECT * FROM {$db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($source['sector_id'], $playerinfo['ship_id']));
+        $pl1query = $old_db->Execute("SELECT * FROM {$old_db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($source['sector_id'], $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $pl1query, __LINE__, __FILE__);
         $num_res1 = $pl1query->numRows();
         if ($num_res1 == 0)
@@ -118,7 +118,7 @@ class TraderouteBuildCreate
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_invaliddport']);
             }
 
-            $query = $db->Execute("SELECT * FROM {$db->prefix}universe WHERE sector_id = ?;", array($port_id2));
+            $query = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($port_id2));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             if (!$query || $query->EOF)
             {
@@ -136,7 +136,7 @@ class TraderouteBuildCreate
         }
         else
         {
-            $query = $db->Execute("SELECT * FROM {$db->prefix}planets WHERE planet_id = ?;", array($planet_id2));
+            $query = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($planet_id2));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             $destination = $query->fields;
             if (!$query || $query->EOF)
@@ -163,7 +163,7 @@ class TraderouteBuildCreate
         }
 
         // OK now we have $destination lets see if we've been there.
-        $pl2query = $db->Execute("SELECT * FROM {$db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($destination['sector_id'], $playerinfo['ship_id']));
+        $pl2query = $old_db->Execute("SELECT * FROM {$old_db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($destination['sector_id'], $playerinfo['ship_id']));
         \Tki\Db::logDbErrors($pdo_db, $pl2query, __LINE__, __FILE__);
         $num_res2 = $pl2query->numRows();
         if ($num_res2 == 0)
@@ -178,7 +178,7 @@ class TraderouteBuildCreate
         }
 
         // Check traderoute for src => dest
-        \Tki\TraderouteCheck::isCompatible($pdo_db, $db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
+        \Tki\TraderouteCheck::isCompatible($pdo_db, $old_db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
 
         if ($ptype1 == 'port')
         {
@@ -240,13 +240,13 @@ class TraderouteBuildCreate
 
         if (empty($editing))
         {
-            $query = $db->Execute("INSERT INTO {$db->prefix}traderoutes VALUES(null, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
+            $query = $old_db->Execute("INSERT INTO {$old_db->prefix}traderoutes VALUES(null, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             echo "<p>" . $langvars['l_tdr_newtdrcreated'];
         }
         else
         {
-            $query = $db->Execute("UPDATE {$db->prefix}traderoutes SET source_id = ?, dest_id = ?, source_type = ?, dest_type = ?, move_type = ?, owner = ?, circuit = ? WHERE traderoute_id = ?;", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type, $editing));
+            $query = $old_db->Execute("UPDATE {$old_db->prefix}traderoutes SET source_id = ?, dest_id = ?, source_type = ?, dest_type = ?, move_type = ?, owner = ?, circuit = ? WHERE traderoute_id = ?;", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type, $editing));
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             echo "<p>" . $langvars['l_tdr_modified'];
         }

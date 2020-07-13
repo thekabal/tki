@@ -139,7 +139,7 @@ if ($playerinfo['turns'] < 1)
     die();
 }
 
-$res = $db->Execute("SELECT allow_defenses, {$db->prefix}universe.zone_id, owner FROM {$db->prefix}zones, {$db->prefix}universe WHERE sector_id = ? AND {$db->prefix}zones.zone_id = {$db->prefix}universe.zone_id", array($playerinfo['sector']));
+$res = $old_db->Execute("SELECT allow_defenses, {$old_db->prefix}universe.zone_id, owner FROM {$old_db->prefix}zones, {$old_db->prefix}universe WHERE sector_id = ? AND {$old_db->prefix}zones.zone_id = {$old_db->prefix}universe.zone_id", array($playerinfo['sector']));
 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 $zoneinfo = $res->fields;
 
@@ -272,9 +272,9 @@ else
             }
             else
             {
-                $update = $db->Execute("INSERT INTO {$db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'F', $numfighters, $mode));
+                $update = $old_db->Execute("INSERT INTO {$old_db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'F', $numfighters, $mode));
                 Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
-                echo $db->ErrorMsg();
+                echo $old_db->ErrorMsg();
             }
         }
 
@@ -292,7 +292,7 @@ else
             }
             else
             {
-                $update = $db->Execute("INSERT INTO {$db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'M', $nummines, $mode));
+                $update = $old_db->Execute("INSERT INTO {$old_db->prefix}sector_defense (ship_id, sector_id, defense_type, quantity, fm_setting) values (?, ?, ?, ?, ?);", array($playerinfo['ship_id'], $playerinfo['sector'], 'M', $nummines, $mode));
                 Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
             }
         }

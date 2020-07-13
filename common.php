@@ -76,10 +76,10 @@ catch (Exception $e)
     die($e . "</pre></html>");
 }
 
-$db = new Tki\Db();
+$old_db = new Tki\Db();
 try
 {
-    $db = $db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
+    $old_db = $old_db->initDb('adodb');                        // Connect to db using adodb also - for now - to be eliminated!
 }
 catch (Exception $e)
 {
