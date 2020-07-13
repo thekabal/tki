@@ -210,7 +210,7 @@ class CheckDefenses
                 $bounty = new \Tki\Bounty();
                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);
 
-                $ok = 0;
+                $is_ok = 0;
                 \Tki\Text::gotoMain($pdo_db, $lang);
                 die();
             }
@@ -220,7 +220,7 @@ class CheckDefenses
                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);
                 $character_object = new \Tki\Character();
                 $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
-                $ok = 0;
+                $is_ok = 0;
                 \Tki\Text::gotoMain($pdo_db, $lang);
                 die();
             }
@@ -228,11 +228,11 @@ class CheckDefenses
 
         if ($targetfighters > 0)
         {
-            $ok = 0;
+            $is_ok = 0;
         }
         else
         {
-            $ok = 2;
+            $is_ok = 2;
         }
     }
 
@@ -333,7 +333,7 @@ class CheckDefenses
                             // Undo the move
                             $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
                             \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                            $ok = 0;
+                            $is_ok = 0;
                         }
                         else
                         {
@@ -344,7 +344,7 @@ class CheckDefenses
                             \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                             \Tki\Toll::distribute($pdo_db, $sector, $fighterstoll, (int) $total_sec_fighters);
                             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::TOLL_PAID, "$tollstring|$sector");
-                            $ok = 1;
+                            $is_ok = 1;
                         }
                         break;
 
@@ -374,7 +374,7 @@ class CheckDefenses
                         else
                         {
                             // Sector defenses don't detect incoming ship
-                            $ok = 1;
+                            $is_ok = 1;
                         }
                         break;
 
