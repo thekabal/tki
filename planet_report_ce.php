@@ -50,7 +50,7 @@ if (strlen(trim($tpcreds)) === 0)
 
 if ($tpcreds !== null && $tpcreds !== false)
 {
-    Tki\PlanetReportCE::collectCredits($pdo_db, $old_db, $langvars, $tpcreds, $tkireg);
+    Tki\PlanetReportCE::collectCredits($pdo_db, $langvars, $tpcreds, $tkireg);
 }
 elseif ($buildp !== null && $builds !== null)
 {
