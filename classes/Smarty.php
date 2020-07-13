@@ -126,7 +126,7 @@ class Smarty
         }
     }
 
-    public function getVariables(string $nodeName): ?mixed
+    public function getVariables(string $nodeName)
     {
         if ($this->smarty !== null)
         {
