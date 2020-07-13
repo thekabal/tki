@@ -178,7 +178,7 @@ class TraderouteBuildCreate
         }
 
         // Check traderoute for src => dest
-        \Tki\TraderouteCheck::isCompatible($pdo_db, $old_db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
+        \Tki\TraderouteCheck::isCompatible($pdo_db, $lang, $ptype1, $ptype2, $move_type, $circuit_type, $source, $destination, $playerinfo, $tkireg, $template);
 
         if ($ptype1 == 'port')
         {
