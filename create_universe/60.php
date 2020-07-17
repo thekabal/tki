@@ -33,7 +33,7 @@ $variables['body_class']             = 'create_universe';
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
 $variables['next_step']              = $create_universe_info['next_step'];
-$variables['max_sectors']            = (int) filter_input(INPUT_POST, 'sektors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
+$variables['max_sectors']            = (int) filter_input(INPUT_POST, 'max_sectors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
 $variables['spp']                    = filter_input(INPUT_POST, 'spp', FILTER_SANITIZE_NUMBER_INT);
 $variables['oep']                    = filter_input(INPUT_POST, 'oep', FILTER_SANITIZE_NUMBER_INT);
 $variables['ogp']                    = filter_input(INPUT_POST, 'ogp', FILTER_SANITIZE_NUMBER_INT);
@@ -118,6 +118,7 @@ for ($i = 1; $i <= $loops; $i++)
         }
     }
 
+    $j = 0;
     $result = $pdo_db->exec($insert);
     $variables['insert_sector_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_sector_results'][$i]['result'];
@@ -149,7 +150,7 @@ $local_table_timer->stop();
 $variables['create_unchartered_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
-$max_fed_hull = (string) $tkireg->max_fed_hull;
+$max_fed_hull = (int) $tkireg->max_fed_hull;
 
 $replace = $pdo_db->exec("INSERT INTO ::prefix::zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Federation space', 0, 'N', 'N', 'N', 'N', 'N', 'N',  'Y', 'N', '$max_fed_hull')");
 $variables['create_fedspace_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
@@ -214,6 +215,7 @@ $sql = "SELECT sector_id FROM ::prefix::universe WHERE port_type='none' LIMIT :l
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':limit', $variables['spp'], \PDO::PARAM_INT);
 $stmt->execute();
+
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
@@ -238,6 +240,7 @@ for ($i = 1; $i <= $loops; $i++)
         }
     }
 
+    $j = 0;
     $resx = $pdo_db->exec($update);
     $variables['insert_special_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
     $catch_results[$z] = $variables['insert_special_ports'][$i]['result'];
