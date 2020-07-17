@@ -38,25 +38,20 @@ class Translate
             return self::$langvars;
         }
 
-        if (!Db::isActive($pdo_db))
+        $ini_file = './languages/' . $language . '.ini';
+        $ini_keys = parse_ini_file($ini_file, true);
+        if (is_array($ini_keys))
         {
-            // Slurp in language variables from the ini file directly
-            $ini_file = './languages/' . $language . '.ini';
-            $ini_keys = parse_ini_file($ini_file, true);
-            if (is_array($ini_keys))
+            foreach ($ini_keys as $config_line)
             {
-                foreach ($ini_keys as $config_line)
+                foreach ($config_line as $config_key => $config_value)
                 {
-                    foreach ($config_line as $config_key => $config_value)
-                    {
-                        self::$langvars[$config_key] = $config_value;
-                    }
+                    self::$langvars[$config_key] = $config_value;
                 }
             }
-
-            return self::$langvars;
         }
-        else
+
+        if (Db::isActive($pdo_db))
         {
             // Populate the $langvars array
             foreach ($categories as $category)
@@ -82,8 +77,8 @@ class Translate
                     }
                 }
             }
-
-            return self::$langvars;
         }
+
+        return self::$langvars;
     }
 }
