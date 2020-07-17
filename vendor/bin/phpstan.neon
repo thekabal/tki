@@ -11,7 +11,6 @@ parameters:
     reportStaticMethodSignatures: true
     universalObjectCratesClasses:
         - Tki\Reg
-        - Tki\Db
     checkMissingIterableValueType: false
     excludes_analyse:
         - %rootDir%/../../../../tki/vendor/*
@@ -69,23 +68,16 @@ rules:
     - PHPStan\Rules\Deprecations\UsageOfDeprecatedTraitRule
 
 services:
-    -
-        class: PHPStan\Rules\Deprecations\DeprecatedClassHelper
-    -
-        class: PHPStan\Rules\BooleansInConditions\BooleanRuleHelper
-
-    -
-        class: PHPStan\Rules\Cast\UselessCastRule
-        arguments:
-            treatPhpDocTypesAsCertain: %treatPhpDocTypesAsCertain%
-        tags:
-            - phpstan.rules.rule
-
-    -
-        class: PHPStan\Rules\Operators\OperatorRuleHelper
-    -
-        class: PHPStan\Rules\VariableVariables\VariablePropertyFetchRule
-        arguments:
-            universalObjectCratesClasses: %universalObjectCratesClasses%
-        tags:
-            - phpstan.rules.rule
+    - class: PHPStan\Rules\Deprecations\DeprecatedClassHelper
+    - class: PHPStan\Rules\BooleansInConditions\BooleanRuleHelper
+    - class: PHPStan\Rules\Operators\OperatorRuleHelper
+    - class: PHPStan\Rules\Cast\UselessCastRule
+      arguments:
+          treatPhpDocTypesAsCertain: %treatPhpDocTypesAsCertain%
+      tags:
+          - phpstan.rules.rule
+    - class: PHPStan\Rules\VariableVariables\VariablePropertyFetchRule
+      arguments:
+          universalObjectCratesClasses: %universalObjectCratesClasses%
+      tags:
+          - phpstan.rules.rule
