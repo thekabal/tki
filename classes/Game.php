@@ -34,7 +34,7 @@ class Game
         array $langvars
     ): bool
     {
-        if ($tkireg->game_closed)
+        if ($tkireg->game_closed === true)
         {
             $title = $langvars['l_login_closed_message'];
 
