@@ -85,7 +85,7 @@
  * @property mixed fighter_price
  * @property mixed footer_show_debug
  * @property mixed fullscan_cost
- * @property mixed game_closed
+ * @property bool game_closed
  * @property mixed game_name
  * @property mixed goods_delta
  * @property mixed goods_limit
