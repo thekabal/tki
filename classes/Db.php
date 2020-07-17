@@ -41,8 +41,7 @@ class Db
         }
         else
         {
-            $are_there_results = ($results->rowCount() > 0);
-            return $are_there_results; // Will be either true or false
+            return true;
         }
     }
 
@@ -58,8 +57,6 @@ class Db
 
         if ($db_layer == 'adodb')
         {
-            // Add MD5 encryption for sessions, and then compress it before storing it in the database
-
             // If there is a $db_port variable set, use it in the connection method
             if ($db_port !== null)
             {
