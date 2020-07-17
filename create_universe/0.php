@@ -25,11 +25,12 @@
 // Determine current step, next step, and number of steps
 $step_finder = new Tki\BigBang();
 $create_universe_info = $step_finder->findStep(__FILE__);
+$temp_pass_validation = $variables['goodpass'];
 
 // Set variables
 $variables = array();
-$variables['goodpass'] = '';
 $variables['templateset'] = $tkireg->default_template;
+$variables['goodpass'] = $temp_pass_validation;
 $variables['body_class'] = 'create_universe';
 $variables['steps'] = $create_universe_info['steps'];
 $variables['current_step'] = $create_universe_info['current_step'];
