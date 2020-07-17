@@ -307,7 +307,7 @@ class CheckDefenses
                         $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
                         \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         echo "<h1>" . $title . "</h1>\n";
-                        \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0, $playerinfo, $tkireg, $title);
+                        \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0, $playerinfo, $tkireg);
                         break;
 
                     case "retreat":
@@ -368,7 +368,7 @@ class CheckDefenses
                             // Sector defenses detect incoming ship
                             echo "<h1>" . $title . "</h1>\n";
                             echo $langvars['l_chf_thefightersdetectyou'] . "<br>";
-                            \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0, $playerinfo, $tkireg, $title);
+                            \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0, $playerinfo, $tkireg);
                             break;
                         }
                         else
