@@ -24,6 +24,8 @@
   <body class="{$variables['body_class']}">
 <div class="wrapper">
 
+{$langvars['l_cu_step_title']|replace:'[current]':$variables['current_step']|replace:'[total]':$variables['steps']} - {$langvars['l_cu_welcome']}
+
 <form accept-charset='utf-8' name='create_universe' action='create_universe.php' method='post'><div align="center">
 <center>
 <table border="0" cellpadding="1" width="700" cellspacing="1" bgcolor="#000000">
@@ -123,6 +125,7 @@
     <input type=hidden name=nump value={$variables['nump']}>
     <input type=hidden name=fedsecs value={$variables['fedsecs']}>
     <input type=hidden name=loops value={$variables['loops']}>
+    <input type=hidden name=max_sectors value={$variables['max_sectors']}>
     <input type=hidden name=swordfish value={$variables['swordfish']}>
     <input type="hidden" name="autorun" value="{$variables['autorun']}">
   </table>
