@@ -33,7 +33,7 @@ $variables['body_class']             = 'create_universe';
 $variables['steps']                  = $create_universe_info['steps'];
 $variables['current_step']           = $create_universe_info['current_step'];
 $variables['next_step']              = $create_universe_info['next_step'];
-$variables['max_sectors']            = (int) filter_input(INPUT_POST, 'sektors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
+$variables['max_sectors']            = (int) filter_input(INPUT_POST, 'max_sectors', FILTER_SANITIZE_NUMBER_INT); // Sanitize the input and typecast it to an int
 $variables['spp']                    = filter_input(INPUT_POST, 'spp', FILTER_SANITIZE_NUMBER_INT);
 $variables['oep']                    = filter_input(INPUT_POST, 'oep', FILTER_SANITIZE_NUMBER_INT);
 $variables['ogp']                    = filter_input(INPUT_POST, 'ogp', FILTER_SANITIZE_NUMBER_INT);
@@ -85,6 +85,7 @@ $default_prod_goods = $tkireg->default_prod_goods;
 $default_prod_energy = $tkireg->default_prod_energy;
 $default_prod_fighters = $tkireg->default_prod_fighters;
 $default_prod_torp = $tkireg->default_prod_torp;
+
 $planet_insert_sql = "INSERT INTO ::prefix::planets (colonists, owner, team, prod_ore, prod_organics, prod_goods, prod_energy, prod_fighters, prod_torp, sector_id) VALUES (2, 0, 0, $default_prod_ore, $default_prod_organics, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, $open_sectors_array[$p_add])";
 
 $p_add++;
