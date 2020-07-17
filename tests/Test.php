@@ -28,6 +28,6 @@ class Test extends \PHPUnit\Framework\TestCase
 {
     public function testOnePlusOne(): void
     {
-        $this->assertEquals(1 + 1, 2);
+        $this::assertEquals(1 + 1, 2);
     }
 }
