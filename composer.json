@@ -10,23 +10,23 @@
     "license": "AGPL-3.0-only",
     "minimum-stability": "alpha",
     "require": {
-        "smarty/smarty": "~3.1",
-        "ezyang/htmlpurifier": "^4.12.0",
+        "smarty/smarty": "^3.1",
+        "ezyang/htmlpurifier": "^4.13.0",
         "swiftmailer/swiftmailer": "^6.2.3",
-        "adodb/adodb-php": "^5.20.17",
-        "symfony/http-foundation": "^5.0.7",
+        "adodb/adodb-php": "^5.20.18",
+        "symfony/http-foundation": "^5.1.2",
         "ext-PDO": "*",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5.5"
     },
     "require-dev": {
         "phpmd/phpmd" : "^2.8.2",
         "sebastian/phpcpd": "^5.0.2",
         "friendsofphp/php-cs-fixer": "^2.16.1",
         "phpunit/phpunit": "^9.1.1",
-        "phpmetrics/phpmetrics": "^2.6.2",
-        "phpstan/phpstan": "^0.12.18",
-        "phpstan/phpstan-deprecation-rules": "^0.12.2",
-        "phpstan/phpstan-strict-rules": "^0.12.2"
+        "phpmetrics/phpmetrics": "^2.7.4",
+        "phpstan/phpstan": "^0.12.32",
+        "phpstan/phpstan-deprecation-rules": "^0.12.4",
+        "phpstan/phpstan-strict-rules": "^0.12.3"
     },
     "config": {
         "optimize-autoloader": true
