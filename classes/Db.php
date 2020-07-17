@@ -35,7 +35,7 @@ class Db
     {
         // Get the config_values from the DB
         $results = $pdo_db->query("SELECT * FROM ::prefix::gameconfig LIMIT 1");
-        if (!$results)
+        if ($results === false)
         {
             return false;
         }
@@ -67,7 +67,7 @@ class Db
             // Attempt to connect to the database
             try
             {
-                if (SecureConfig::DB_TYPE === 'postgres9')
+                if ($db_type === 'postgres9')
                 {
                     $old_db = \ADONewConnection('postgres9');
                 }
@@ -147,19 +147,14 @@ class Db
 
         // Convert the content of SCRIPT_NAME (in case it has been tainted) to the correct html entities
         $safe_script_name = htmlentities($request->server->get('SCRIPT_NAME'), ENT_HTML5, 'UTF-8');
-        $db_log = false;
         $error = null;
+        $error = $pdo_db->errorInfo()[1];
         $db_error = null;
-        if ($pdo_db instanceof \PDO)
-        {
-            $error = $pdo_db->errorInfo()[1];
-            $db_error = $pdo_db->errorInfo()[2];
-            $db_log = true; // We need to create a method for disabling db logging on PDO
-        }
+        $db_error = $pdo_db->errorInfo()[2];
 
         if ($error === null || $error == '')
         {
-            return (bool) true;
+            return true;
         }
         else
         {
@@ -170,16 +165,13 @@ class Db
 
             $text_error = 'A Database error occurred in ' . $served_page .
                             ' on line ' . $served_line .
-                            ' (called from: ' . $safe_script_name . ' the error message was: ' . $db_error .
+                            ' (called from: ' . $safe_script_name . ' the error message was: ' . (string) $db_error ;
                             ' and the query was ' . $query;
 
             if (self::isActive($pdo_db))
             {
-                if ($db_log)
-                {
-                    $admin_log = new \Tki\AdminLog();
-                    $admin_log->writeLog($pdo_db, LogEnums::RAW, $text_error);
-                }
+                $admin_log = new \Tki\AdminLog();
+                $admin_log->writeLog($pdo_db, LogEnums::RAW, $text_error);
             }
 
             return (string) $db_error;
