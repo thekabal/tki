@@ -43,7 +43,7 @@ class Timer
     public function elapsed(): float
     {
         $this->t_elapsed = $this->t_stop - $this->t_start;
-        $rounded_elapsed_time = round($this->t_elapsed, 3); // Round it down to three significant digits
+        $rounded_elapsed_time = round($this->t_elapsed, 4); // Round it down to four significant digits - setting max_sector in CU is faster than 3
         return $rounded_elapsed_time;
     }
 }
