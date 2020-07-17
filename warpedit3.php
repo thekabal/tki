@@ -129,7 +129,8 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
 $sectorinfo = $sectors_gateway->selectSectorInfo($target_sector);
 
-/* FUTURE: This is broken
+// FUTURE: This is broken
+/*
 if (!is_array($sectorinfo))
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
