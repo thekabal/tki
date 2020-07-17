@@ -9,7 +9,9 @@ parameters:
     checkMissingClosureNativeReturnTypehintRule: true
     reportMaybesInMethodSignatures: true
     reportStaticMethodSignatures: true
-
+    universalObjectCratesClasses:
+        - Tki\Reg
+        - Tki\Db
     checkMissingIterableValueType: false
     excludes_analyse:
         - %rootDir%/../../../../tki/tests/*
@@ -19,8 +21,6 @@ parameters:
         - %rootDir%/../../../../tki/classes/CheckDefenses.php   # Bunch of intractable errors - maybe in the future
     ignoreErrors:
         - '# might not be defined#'                        # Level 1 to 8 - 4100+ errors - lots of work to do, real errors too.
-        - '#Variable property access#'                     # Level 1 - In (class) Reg, and File, this flags an error during the config variable/value import code.
-        - '#Access to an undefined property Tki#'          # Level 2 - 356 errors - Most of these will not go away unless we switch away from tkireg being dynamic-only or find an alternative implementation of reg.
         - '# with no typehint #'                           # Level 6 - 11 errors - Mostly related to $db (non-pdo), but a few others.
 
 rules:
