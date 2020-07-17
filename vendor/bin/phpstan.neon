@@ -14,7 +14,6 @@ parameters:
         - Tki\Db
     checkMissingIterableValueType: false
     excludes_analyse:
-        - %rootDir%/../../../../tki/tests/*
         - %rootDir%/../../../../tki/vendor/*
         - %rootDir%/../../../../tki/templates/*
         - %rootDir%/../../../../tki/classes/Db.php
