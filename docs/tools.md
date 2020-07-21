@@ -28,10 +28,6 @@ found in the `/vendor/bin` directory.
 
   `php vendor/phpstan/phpstan/phpstan analyze --no-progress --no-ansi -l 8 -vvv -c vendor/bin/phpstan.neon .`
 
-- [`tki-code-check.sh`] is a short bash script which is located in vendor/bin.
-  It runs phpmd, phpcs, and phpstan with our project coding standards defined.
-  **We now test all code against these three tools.**
-
 - [`php-cs-fixer`](http://cs.sensiolabs.org/) strives to automatically correct
   code for specific items in the PSR standard. We do not currently use it, but
   may in the future use it as a pre-commit hook.
