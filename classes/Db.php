@@ -165,7 +165,7 @@ class Db
 
             $text_error = 'A Database error occurred in ' . $served_page .
                             ' on line ' . $served_line .
-                            ' (called from: ' . $safe_script_name . ' the error message was: ' . (string) $db_error ;
+                            ' (called from: ' . $safe_script_name . ' the error message was: ' . (string) $db_error .
                             ' and the query was ' . $query;
 
             if (self::isActive($pdo_db))
