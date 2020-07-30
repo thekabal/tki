@@ -79,6 +79,15 @@ class PlayersGateway // Gateway for SQL calls related to Players
 
         // A little magic here. If it couldn't select a user, the following call will return false - which is what we want for "no user found".
         $playerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return $playerinfo; // FUTURE: Eventually we want this to return a player object instead, for now, playerinfo array or false for no user found.
+
+        if ($playerinfo !== false)
+        {
+            return $playerinfo; // FUTURE: Eventually we want this to return a player object instead, for now, playerinfo array or false for no user found.
+        }
+        else
+        {
+            $playerinfo = array();
+            return $playerinfo;
+        }
     }
 }
