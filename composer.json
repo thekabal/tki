@@ -26,7 +26,8 @@
         "phpmetrics/phpmetrics": "^2.7.4",
         "phpstan/phpstan": "^0.12.33",
         "phpstan/phpstan-deprecation-rules": "^0.12.4",
-        "phpstan/phpstan-strict-rules": "^0.12.3"
+        "phpstan/phpstan-strict-rules": "^0.12.3",
+        "vimeo/psalm": "^3.12"
     },
     "config": {
         "optimize-autoloader": true

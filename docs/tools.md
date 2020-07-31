@@ -32,6 +32,14 @@ found in the `/vendor/bin` directory.
   code for specific items in the PSR standard. We do not currently use it, but
   may in the future use it as a pre-commit hook.
 
+- [`psalm`](https://psalm.dev/) Psalm is an open-source static analysis tool 
+  for PHP that helps identify both obvious and hard-to-spot bugs in our code.
+  Currently we have many exceptions setup in the config so that it will run cleanly.
+  This is acceptable as a starting point for it's use.
+  We use it like this:
+
+  `psalm -c vendor/bin/psalm.xml`
+
 There are other command-line options for these tools (try them!), with varying
 levels of usefulness to our project. We have bundled phpcbf - do NOT run phpcbf,
 as it will reformat the entire codebase. We also have included phpunit, which we
