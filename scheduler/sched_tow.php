@@ -51,7 +51,7 @@ do
             $langvars['l_sched_tow_who'] = str_replace("[sector]", $row['sector'], $langvars['l_sched_tow_who']);
             echo $langvars['l_sched_tow_who'];
 
-            $newsector = random_int(0, (int) $max_sectors - 1);
+            $newsector = random_int(0, (int) $tkireg->max_sectors - 1);
             $langvars['l_sched_tow_where'] = str_replace("[sector]", (string) $newsector, $langvars['l_sched_tow_where']);
             echo $langvars['l_sched_tow_where'] . ".<br>";
 

@@ -59,9 +59,9 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
     if ($affliction == 1) // Space Plague
     {
         echo $langvars['l_apoc_plague'] . "<br>.";
-        $resx = $old_db->Execute("UPDATE {$old_db->prefix}planets SET colonists = ROUND (colonists - colonists * ?) WHERE planet_id = ?;", array($space_plague_kills, $targetinfo['planet_id']));
+        $resx = $old_db->Execute("UPDATE {$old_db->prefix}planets SET colonists = ROUND (colonists - colonists * ?) WHERE planet_id = ?;", array($tkireg->space_plague_kills, $targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-        $logpercent = round($space_plague_kills * 100);
+        $logpercent = round($tkireg->space_plague_kills * 100);
         Tki\PlayerLog::writeLog($pdo_db, $targetinfo['owner'], \Tki\LogEnums::SPACE_PLAGUE, "$targetinfo[name]|$targetinfo[sector_id]|$logpercent");
     }
     else

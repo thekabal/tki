@@ -37,9 +37,9 @@ Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 while (!$res->EOF)
 {
     $row = $res->fields;
-    $production = floor(min($row['colonists'], $colonist_limit) * $colonist_production_rate);
-    $organics_production = floor($production * $organics_prate * $row['prod_organics'] / 100.0);// - ($production * $organics_consumption);
-    $organics_production -= floor($production * $organics_consumption);
+    $production = floor(min($row['colonists'], $tkireg->colonist_limit) * $tkireg->colonist_production_rate);
+    $organics_production = floor($production * $tkireg->organics_prate * $row['prod_organics'] / 100.0);// - ($production * $tkireg->organics_consumption);
+    $organics_production -= floor($production * $tkireg->organics_consumption);
 
     if ($row['organics'] + $organics_production < 0)
     {
@@ -58,11 +58,11 @@ while (!$res->EOF)
     $ore_production = floor($production * $ore_prate * $row['prod_ore'] / 100.0);
     $goods_production = floor($production * $goods_prate * $row['prod_goods'] / 100.0);
     $energy_production = floor($production * $energy_prate * $row['prod_energy'] / 100.0);
-    $reproduction = floor(($row['colonists'] - $starvation) * $colonist_reproduction_rate);
+    $reproduction = floor(($row['colonists'] - $starvation) * $tkireg->colonist_reproduction_rate);
 
-    if (($row['colonists'] + $reproduction - $starvation) > $colonist_limit)
+    if (($row['colonists'] + $reproduction - $starvation) > $tkireg->colonist_limit)
     {
-        $reproduction = $colonist_limit - $row['colonists'];
+        $reproduction = $tkireg->colonist_limit - $row['colonists'];
     }
 
     $total_percent = $row['prod_organics'] + $row['prod_ore'] + $row['prod_goods'] + $row['prod_energy'];

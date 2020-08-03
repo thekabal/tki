@@ -39,14 +39,14 @@ while (!$res->EOF)
     Tki\Db::logDbErrors($pdo_db, $res2, __LINE__, __FILE__);
     if ($res2->EOF)
     {
-        $resa = $old_db->Execute("UPDATE {$old_db->prefix}sector_defense SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defense_id = ? AND quantity > 0;", array($defense_degrade_rate, $row['defense_id']));
+        $resa = $old_db->Execute("UPDATE {$old_db->prefix}sector_defense SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defense_id = ? AND quantity > 0;", array($tkireg->defense_degrade_rate, $row['defense_id']));
         Tki\Db::logDbErrors($pdo_db, $resa, __LINE__, __FILE__);
-        $degrade_rate = $defense_degrade_rate * 100;
+        $degrade_rate = $tkireg->defense_degrade_rate * 100;
         Tki\PlayerLog::writeLog($pdo_db, $row['ship_id'], \Tki\LogEnums::DEFENSE_DEGRADE, $row['sector_id'] . "|" . $degrade_rate);
     }
     else
     {
-        $energy_required = round($row['quantity'] * $energy_per_fighter);
+        $energy_required = round($row['quantity'] * $tkireg->energy_per_fighter);
         $res4 = $old_db->Execute("SELECT IFNULL(SUM(energy),0) AS energy_available FROM {$old_db->prefix}planets WHERE (owner = ? OR (team = ? AND ? <> 0)) AND sector_id = ?", array($row['ship_id'], $sched_playerinfo['team'], $sched_playerinfo['team'], $row['sector_id']));
         Tki\Db::logDbErrors($pdo_db, $res4, __LINE__, __FILE__);
         $planet_energy = $res4->fields;
@@ -66,9 +66,9 @@ while (!$res->EOF)
         }
         else
         {
-            $resc = $old_db->Execute("UPDATE {$old_db->prefix}sector_defense SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defense_id = ?;", array($defense_degrade_rate, $row['defense_id']));
+            $resc = $old_db->Execute("UPDATE {$old_db->prefix}sector_defense SET quantity = quantity - GREATEST(ROUND(quantity * ?),1) WHERE defense_id = ?;", array($tkireg->defense_degrade_rate, $row['defense_id']));
             Tki\Db::logDbErrors($pdo_db, $resc, __LINE__, __FILE__);
-            $degrade_rate = $defense_degrade_rate * 100;
+            $degrade_rate = $tkireg->defense_degrade_rate * 100;
             Tki\PlayerLog::writeLog($pdo_db, $row['ship_id'], \Tki\LogEnums::DEFENSE_DEGRADE, $row['sector_id'] . "|" . $degrade_rate);
         }
     }
