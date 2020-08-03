@@ -28,14 +28,13 @@ namespace Tki;
 
 class SecureConfig
 {
-    // NOTES: The Adodb db module is currently required to run TKI. You can find it at http://php.weblogs.com/ADODB.
+    // NOTES: The Adodb db module is currently required to run TKI.
     // Adodb is automatically configured to be run from vendor/adodb.
     // We are migrating away from adodb, switching to pure PDO instead.
 
     // Port to connect to database on.
     // If you do not know the port, set this to null for default.
     // The default for MySQL is 3306, The default for PgSQL is 5432
-
     public const DB_PORT = null;
 
     // Hostname of the database server.
