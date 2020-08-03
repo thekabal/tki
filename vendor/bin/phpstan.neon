@@ -16,7 +16,7 @@ parameters:
         - %rootDir%/../../../../tki/vendor/*
         - %rootDir%/../../../../tki/templates/*
         - %rootDir%/../../../../tki/classes/Db.php
-        - %rootDir%/../../../../tki/classes/CheckDefenses.php   # Bunch of intractable errors - maybe in the future
+        - %rootDir%/../../../../tki/classes/CheckDefenses.php   # 8 errors relating to targetfighters being set to 0 and never changing because conditionals are blocking it.
     ignoreErrors:
         - '# might not be defined#'                        # Level 1 to 8 - 4100+ errors - lots of work to do, real errors too.
         - '# with no typehint #'                           # Level 6 - 11 errors - Mostly related to $db (non-pdo), but a few others.
