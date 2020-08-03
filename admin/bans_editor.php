@@ -253,11 +253,11 @@ elseif ($command == 'banip2')
     $ip = $_POST['ip'];
     $ipparts = explode(".", $ip);
 
-    if ($class == 'A')
+    if ($_POST['class'] == 'A')
     {
         $banmask = "$ipparts[0].$ipparts[1].$ipparts[2].%";
     }
-    elseif ($class == 'B')
+    elseif ($_POST['class'] == 'B')
     {
         $banmask = "$ipparts[0].$ipparts[1].%";
     }

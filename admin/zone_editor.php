@@ -96,11 +96,11 @@ else
         $variables['operation'] = "save";
         $variables['zone'] = $_POST['zone'];
         // Update database
-        $_zone_beacon = empty($zone_beacon) ? "N" : "Y";
-        $_zone_attack = empty($zone_attack) ? "N" : "Y";
-        $_zone_warpedit = empty($zone_warpedit) ? "N" : "Y";
-        $_zone_planet = empty($zone_planet) ? "N" : "Y";
-        $resx = $old_db->Execute("UPDATE {$old_db->prefix}zones SET zone_name = ?, allow_beacon = ? , allow_attack= ?  , allow_warpedit = ? , allow_planet = ?, max_hull = ? WHERE zone_id = ?;", array($zone_name, $_zone_beacon, $_zone_attack, $_zone_warpedit, $_zone_planet, $zone_hull, $_POST['zone']));
+        $_zone_beacon = empty($_POST['zone_beacon']) ? "N" : "Y";
+        $_zone_attack = empty($_POST['zone_attack']) ? "N" : "Y";
+        $_zone_warpedit = empty($_POST['zone_warpedit']) ? "N" : "Y";
+        $_zone_planet = empty($_POST['zone_planet']) ? "N" : "Y";
+        $resx = $old_db->Execute("UPDATE {$old_db->prefix}zones SET zone_name = ?, allow_beacon = ? , allow_attack= ?  , allow_warpedit = ? , allow_planet = ?, max_hull = ? WHERE zone_id = ?;", array($_POST['zone_name'], $_zone_beacon, $_zone_attack, $_zone_warpedit, $_zone_planet, $_POST['zone_hull'], $_POST['zone']));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $button_main = false;
     }
