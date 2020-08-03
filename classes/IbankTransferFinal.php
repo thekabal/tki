@@ -173,7 +173,7 @@ class IbankTransferFinal
 
             $stmt = $pdo_db->prepare($sql);
             $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            if ($sql_test === true)
+            if (empty($sql_test))
             {
                 $stmt->bindParam(':planet_id', $splanet_id, \PDO::PARAM_INT);
                 $stmt->execute();
@@ -193,7 +193,7 @@ class IbankTransferFinal
             $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
             $stmt = $pdo_db->prepare($sql);
             $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            if ($sql_test === true)
+            if (empty($sql_test))
             {
                 $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);
                 $stmt->execute();

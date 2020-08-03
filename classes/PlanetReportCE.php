@@ -109,7 +109,7 @@ class PlanetReportCE
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        if ($sql_test === true)
+        if (empty($sql_test))
         {
             $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_STR);
             $stmt->execute();

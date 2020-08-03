@@ -141,7 +141,7 @@ class Db
     /**
      * @param \PDOStatement|bool|string $query
      */
-    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
+    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page): ?string
     {
         $request = Request::createFromGlobals();
 
@@ -154,7 +154,7 @@ class Db
 
         if ($error === null || $error == '')
         {
-            return true;
+            return null;
         }
         else
         {
@@ -166,7 +166,7 @@ class Db
             $text_error = 'A Database error occurred in ' . $served_page .
                             ' on line ' . $served_line .
                             ' (called from: ' . $safe_script_name . ' the error message was: ' . (string) $db_error .
-                            ' and the query was ' . $query;
+                            ' and the query was ' . var_export($query, true);
 
             if (self::isActive($pdo_db))
             {
