@@ -24,7 +24,7 @@
   <body class="{$variables['body_class']}">
 <div class="wrapper">
 
-<div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$variables['template']}/images/header1.png" alt="{$langvars['l_tki']}"></div>
+<header><div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$variables['template']}/images/header1.png" alt="{$langvars['l_tki']}"></div></header>
 
 <div class="index-header-text">{$langvars['l_tki']}</div>
 <br>
