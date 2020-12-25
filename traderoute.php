@@ -115,10 +115,10 @@ $tr_repeat = 1;
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
 $tr_repeat = null;
-$tr_repeat = (int) filter_input(INPUT_POST, 'tr_repeat', FILTER_VALIDATE_INT);
-if ($tr_repeat === 0)
+$tr_repeat = filter_input(INPUT_POST, 'tr_repeat', FILTER_VALIDATE_INT);
+if (($tr_repeat === null) || (strlen(trim($tr_repeat)) === 0))
 {
-    $tr_repeat = 0;
+    $tr_repeat = 1;
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.

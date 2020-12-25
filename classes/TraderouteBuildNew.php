@@ -77,11 +77,14 @@ class TraderouteBuildNew
         {
             foreach ($personal_planet_list as $tmp_planet)
             {
-                $planets[$planet_loop] = $tmp_planet['link_dest'];
-
-                if ($planets[$planet_loop]['name'] === null)
+                if (!empty($tmp_planet['link_dest']))
                 {
-                    $planets[$planet_loop]['name'] = $langvars['l_tdr_unnamed'];
+                    $planets[$planet_loop] = $tmp_planet['link_dest'];
+
+                    if ($planets[$planet_loop]['name'] === null)
+                    {
+                        $planets[$planet_loop]['name'] = $langvars['l_tdr_unnamed'];
+                    }
                 }
 
                 $planet_loop++;
