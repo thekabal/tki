@@ -167,7 +167,7 @@ $sql = "SELECT COUNT(*) FROM ::prefix::messages WHERE recp_id = :recp_id AND not
 $stmt = $pdo_db->prepare($sql);
 $sql_test = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-if (empty($sql_test))
+if ($sql_test === true)
 {
     $stmt->bindParam(':recp_id', $playerinfo['ship_id'], PDO::PARAM_INT);
     $result = $stmt->execute();
@@ -615,7 +615,7 @@ if ($playerinfo['sector'] !== 1)
 
     $stmt = $pdo_db->prepare($sql);
     $sql_test = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-    if (empty($sql_test))
+    if ($sql_test === true)
     {
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
         $stmt->bindParam(':sector', $playerinfo['sector'], PDO::PARAM_INT);

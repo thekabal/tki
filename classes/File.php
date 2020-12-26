@@ -99,7 +99,7 @@ class File
             // Status array will continue the results of individual executes.
             // It should be === true unless something went horribly wrong.
             $final_result = true;
-            if (!empty($status_array[$k]))
+            if ($status_array[$k] !== true)
             {
                 $final_result = false;
             }
