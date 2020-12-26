@@ -35,11 +35,12 @@ class TkiPDO extends \PDO
         ?string $user = null,
         ?string $password = null,
         ?string $prefix = null,
-        array $driver_options = [ \PDO::ATTR_EMULATE_PREPARES   => false ]
+        array $driver_options = [ \PDO::ATTR_EMULATE_PREPARES => false ]
     )
     {
         $this->tablePrefix = $prefix;
         parent::__construct($dsn, $user, $password, $driver_options);
+        parent::setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
     }
 
     /**
@@ -62,7 +63,7 @@ class TkiPDO extends \PDO
     /**
      * @return \PDOStatement|false
      */
-    public function query(string $statement)
+    public function query(string $statement, ?int $fetchMode = null, mixed ...$fetchModeArgs)
     {
         $statement = $this->tablePrefix($statement);
         $args = func_get_args();
