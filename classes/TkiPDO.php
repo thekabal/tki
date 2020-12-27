@@ -43,10 +43,7 @@ class TkiPDO extends \PDO
         parent::setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
     }
 
-    /**
-     *  @return int|false
-     */
-    public function exec($query): int | bool
+    public function exec($query): int | false
     {
         $query = $this->tablePrefix($query);
         $rows_affected = parent::exec($query);
@@ -60,9 +57,6 @@ class TkiPDO extends \PDO
         return $replaced_statement;
     }
 
-    /**
-     * @return \PDOStatement|false
-     */
     public function query(string $statement, ?int $fetchMode = null, mixed ...$fetchModeArgs): \PDOStatement | false
     {
         $statement = $this->tablePrefix($statement);
