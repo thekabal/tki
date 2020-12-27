@@ -54,15 +54,11 @@ if (news.initTicker("news_ticker") == true)
 </script>
 
 {/if}
-<br>
-
-{* Items to the left (SF logo) and to the right (mem, copyright, news) *}
-<br>
 
 {* Items to the left (SF logo) and to the right (mem, copyright, news) *}
     <p style='font-size:smaller; float:left; text-align:left'><a class="new_link" href='https://github.com/thekabal/tki'>Github project page for The Kabal Invasion</a>
     <br><a class="new_link" href="copyright.php">&copy; {$variables['cur_year']} The TKI development team</a></p>
-    <p style="font-size:smaller; float:right; text-align:right"><a class="new_link" href="news.php{$variables['sf_logo_link']}">{$langvars['l_local_news']}</a>
+    <p style="font-size:smaller; float:right; text-align:right"><a class="new_link" href="news.php">{$langvars['l_local_news']}</a>
 
     <br>{$variables['elapsed']} {$langvars['l_seconds']} {$langvars['l_time_gen_page']} / {$variables['mem_peak_usage']}{$langvars['l_peak_mem']}
 </p>
