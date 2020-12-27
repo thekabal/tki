@@ -78,7 +78,7 @@ else
 
 $variables['create_tables_results']  = $tki_schema->createTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
 $variables['create_tables_count']    = count($variables['create_tables_results']) - 1;
-$variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+$variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
 
 for ($i = 0; $i < $create_array_size; $i++)
 {

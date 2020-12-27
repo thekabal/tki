@@ -162,19 +162,19 @@ else
         $dev_warpedit_number        = (int) filter_input(INPUT_POST, 'dev_warpedit_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
         $dev_minedeflector_number   = (int) filter_input(INPUT_POST, 'dev_minedeflector_number', FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_THOUSAND);
 
-        $escapepod_purchase         = filter_input(INPUT_POST, 'escapepod_purchase', FILTER_VALIDATE_BOOLEAN);
+        $escapepod_purchase         = filter_input(INPUT_POST, 'escapepod_purchase', FILTER_VALIDATE_BOOL);
         if ($escapepod_purchase !== true)
         {
             $escapepod_purchase = false;
         }
 
-        $fuelscoop_purchase         = filter_input(INPUT_POST, 'fuelscoop_purchase', FILTER_VALIDATE_BOOLEAN);
+        $fuelscoop_purchase         = filter_input(INPUT_POST, 'fuelscoop_purchase', FILTER_VALIDATE_BOOL);
         if ($fuelscoop_purchase !== true)
         {
             $fuelscoop_purchase = false;
         }
 
-        $lssd_purchase              = filter_input(INPUT_POST, 'lssd_purchase', FILTER_VALIDATE_BOOLEAN);
+        $lssd_purchase              = filter_input(INPUT_POST, 'lssd_purchase', FILTER_VALIDATE_BOOL);
         if ($lssd_purchase !== true)
         {
             $lssd_purchase = false;
