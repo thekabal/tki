@@ -24,7 +24,7 @@ parameters:
         - %rootDir%/../../../../tki/log.php                     # 4 errors relating to mktime calls
     ignoreErrors:
         - '# might not be defined#'                             # Level 1 to 8 - 4100+ errors - lots of work to do, real errors too.
-        - '# with no typehint #'                                # Level 6 - 11 errors - Mostly related to $db (non-pdo), but a few others.
+        - '# with no typehint #'                                # Level 6 - 10 errors - 8 related to $db (non-pdo), but 2 for ship_id that are tricky.
 
 rules:
     - PHPStan\Rules\BooleansInConditions\BooleanInBooleanAndRule
