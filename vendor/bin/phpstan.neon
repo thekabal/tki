@@ -15,7 +15,7 @@ parameters:
     excludes_analyse:
         - %rootDir%/../../../../tki/vendor/*
         - %rootDir%/../../../../tki/templates/*
-        - %rootDir%/../../../../tki/classes/Db.php
+        - %rootDir%/../../../../tki/classes/Db.php              # 10 errors relating to Adodb & having the postgres/mysql switch hardcoded at phpstan run time in SecureConfig
         - %rootDir%/../../../../tki/classes/CheckDefenses.php   # 8 errors relating to targetfighters being set to 0 and never changing because conditionals are blocking it.
         - %rootDir%/../../../../tki/admin/universe_editor.php   # 3 errors relating to ADOdb calls
         - %rootDir%/../../../../tki/lrscan.php                  # 3 errors relating to ADOdb calls

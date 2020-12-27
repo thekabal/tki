@@ -68,7 +68,7 @@ ob_start(array('Tki\Compress', 'compress'));        // Start a buffer, and when 
 $pdo_db = new Tki\Db();
 try
 {
-    $pdo_db = $pdo_db->initDb('pdo');               // Connect to db using pdo
+    $pdo_db = $pdo_db->initPDODb();               // Connect to db using pdo
 }
 catch (Exception $e)
 {
@@ -79,7 +79,7 @@ catch (Exception $e)
 $old_db = new Tki\Db();
 try
 {
-    $old_db = $old_db->initDb('adodb');             // Connect to db using adodb also - for now - to be eliminated!
+    $old_db = $old_db->initADODb();             // Connect to db using adodb also - for now - to be eliminated!
 }
 catch (Exception $e)
 {
@@ -105,7 +105,7 @@ catch (Exception $e)
 
 $template->setTheme('classic');
 
-if ($pdo_db !== null && Tki\Db::isActive($pdo_db))
+if (Tki\Db::isActive($pdo_db))
 {
     $tki_session = new Tki\Sessions($pdo_db);
     session_start();
