@@ -37,9 +37,11 @@
     },
     "scripts": {
         "tests": [
-            "phpmd . text /var/www/html/tki/vendor/bin/phpmd.xml --exclude vendor/,templates/",
             "phpcs --standard=/var/www/html/tki/vendor/bin/phpcs.xml . --ignore=templates,vendor",
             "phpstan analyze --no-progress --no-ansi -l 8 -c vendor/bin/phpstan.neon ."
+            ],
+        "disabled-due-to-php8-problems-tests": [
+            "phpmd . text /var/www/html/tki/vendor/bin/phpmd.xml --exclude vendor/,templates/"
             ],
         "post-update-cmd": [
             "rm -rf vendor/ezyang/htmlpurifier/docs/",
