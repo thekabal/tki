@@ -133,7 +133,7 @@ else
 // Attempt to connect to the database via adodb
 $test_db = new Tki\Db();
 $variables['adodb_conn_err'] = "Error message";
-$variables['adodb_conn_test'] = $test_db->initADODb();
+$variables['adodb_conn_test'] = $test_db->initAdodb();
 
 // Attempt to connect to the database via PDO
 try

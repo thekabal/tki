@@ -46,7 +46,7 @@ class TkiPDO extends \PDO
     /**
      *  @return int|false
      */
-    public function exec($query)
+    public function exec($query): int | bool
     {
         $query = $this->tablePrefix($query);
         $rows_affected = parent::exec($query);
@@ -63,7 +63,7 @@ class TkiPDO extends \PDO
     /**
      * @return \PDOStatement|false
      */
-    public function query(string $statement, ?int $fetchMode = null, mixed ...$fetchModeArgs)
+    public function query(string $statement, ?int $fetchMode = null, mixed ...$fetchModeArgs): \PDOStatement | false
     {
         $statement = $this->tablePrefix($statement);
         $args = func_get_args();

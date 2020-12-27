@@ -45,7 +45,7 @@ class Db
         }
     }
 
-    public function initADODb(): object
+    public function initAdodb(): object
     {
         $db_port = \Tki\SecureConfig::DB_PORT;
         $db_host = \Tki\SecureConfig::DB_HOST;
@@ -104,7 +104,7 @@ class Db
         return $old_db;
     }
 
-    public function initPDODb(): \PDO
+    public function initPdodb(): \PDO
     {
         $db_port = \Tki\SecureConfig::DB_PORT;
         $db_host = \Tki\SecureConfig::DB_HOST;
@@ -147,7 +147,7 @@ class Db
     /**
      * @param \PDOStatement|bool|string $query
      */
-    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page): bool|string
+    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page): bool | string
     {
         $request = Request::createFromGlobals();
 
