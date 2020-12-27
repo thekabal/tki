@@ -12,20 +12,21 @@
     "require": {
         "smarty/smarty": "^3.1.36",
         "ezyang/htmlpurifier": "^4.13.0",
-        "swiftmailer/swiftmailer": "^6.2.3",
-        "adodb/adodb-php": "^5.20.18",
-        "symfony/http-foundation": "^5.1.2",
-        "ext-PDO": "*",
-        "squizlabs/php_codesniffer": "^3.5.5"
+        "swiftmailer/swiftmailer": "^6.2.4",
+        "adodb/adodb-php": "^5.20.19",
+        "symfony/http-foundation": "^5.2.1",
+        "ext-PDO": "*"
     },
     "require-dev": {
-        "phpmd/phpmd" : "^2.8.2",
-        "friendsofphp/php-cs-fixer": "^2.16.1",
-        "phpunit/phpunit": "^9.1.1",
+        "phpmd/phpmd" : "^2.9.1",
+        "friendsofphp/php-cs-fixer": "^2.17.3",
+        "phpunit/phpunit": "^9.5.0",
         "phpmetrics/phpmetrics": "^2.7.4",
-        "phpstan/phpstan": "^0.12.33",
-        "phpstan/phpstan-deprecation-rules": "^0.12.4",
-        "phpstan/phpstan-strict-rules": "^0.12.3",
+        "phpstan/phpstan": "^0.12.64",
+        "phpstan/phpstan-deprecation-rules": "^0.12.6",
+        "phpstan/phpstan-strict-rules": "^0.12.7",
+        "sebastian/phpcpd": "^6.0.3",
+        "squizlabs/php_codesniffer": "^3.5.8",
         "vimeo/psalm": "^4.3.1"
     },
     "config": {
