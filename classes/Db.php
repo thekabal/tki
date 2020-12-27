@@ -45,7 +45,7 @@ class Db
         }
     }
 
-    public function initDb(string $db_layer)
+    public function initADODb(): object
     {
         $db_port = \Tki\SecureConfig::DB_PORT;
         $db_host = \Tki\SecureConfig::DB_HOST;
@@ -55,93 +55,99 @@ class Db
         $db_type = \Tki\SecureConfig::DB_TYPE;
         $db_prefix = \Tki\SecureConfig::DB_TABLE_PREFIX;
 
-        if ($db_layer == 'adodb')
+        // If there is a $db_port variable set, use it in the connection method
+        if ($db_port !== null)
         {
-            // If there is a $db_port variable set, use it in the connection method
-            if ($db_port !== null)
-            {
-                $db_host .= ":$db_port";
-            }
-
-            $old_db = null;
-            // Attempt to connect to the database
-            try
-            {
-                if ($db_type === 'postgres9')
-                {
-                    $old_db = \ADONewConnection('postgres9');
-                }
-                else
-                {
-                    $old_db = \ADONewConnection('mysqli');
-                }
-
-                $db_init_result = $old_db->Connect($db_host, $db_user, $db_pwd, $db_name);
-
-                // Returns Bool true or false.
-                // However ADOdb's postgres driver returns null if postgres insn't installed.
-                if ($db_init_result === false || $db_init_result === 0)
-                {
-                    throw new \Exception();
-                }
-                else
-                {
-                    // We have connected successfully. Now set our character set to utf-8
-                    $old_db->Execute("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
-
-                    // Set the fetch mode for database calls to be associative by default
-                    $old_db->SetFetchMode(ADODB_FETCH_ASSOC);
-                }
-            }
-            catch (\Exception $e)
-            {
-                // We need to display the error message onto the screen.
-                $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                           ' Database. <br>Database Error: ' . $old_db->ErrorNo();
-                throw new \Exception($err_msg);
-            }
-
-            $old_db->prefix = $db_prefix;
-            // End of database work
-            return $old_db;
+            $db_host .= ":$db_port";
         }
-        else
+
+        $old_db = null;
+        // Attempt to connect to the database
+        try
         {
-            // Connect to database with pdo
-            try
+            if ($db_type === 'postgres9')
             {
-                $charset = "charset=utf8mb4";
-                if ($db_type === 'postgres9')
-                {
-                    $charset = null;
-                    if ($db_port === null)
-                    {
-                        $db_port = '5432';
-                    }
-                }
-
-                // Include the charset when connecting
-                $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; " . $charset,
-                                          $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
+                $old_db = \ADONewConnection('postgres9');
             }
-            catch (\PDOException $e)
+            else
             {
-                $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
-                           ' Database. <br>Database Error: ' . $e->getMessage();
-                throw new \Exception($err_msg);
+                $old_db = \ADONewConnection('mysqli');
             }
 
-            // Disable emulated prepares so that we get true prepared statements
-            // These are slightly slower, but also far safer in a number of cases that matter
-            $pdo_db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            return $pdo_db;
+            $db_init_result = $old_db->Connect($db_host, $db_user, $db_pwd, $db_name);
+
+            // Returns Bool true or false.
+            // However ADOdb's postgres driver returns null if postgres insn't installed.
+            if ($db_init_result === false || $db_init_result === 0)
+            {
+                throw new \Exception();
+            }
+            else
+            {
+                // We have connected successfully. Now set our character set to utf-8
+                $old_db->Execute("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
+
+                // Set the fetch mode for database calls to be associative by default
+                $old_db->SetFetchMode(ADODB_FETCH_ASSOC);
+            }
         }
+        catch (\Exception $e)
+        {
+            // We need to display the error message onto the screen.
+            $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
+                       ' Database. <br>Database Error: ' . $old_db->ErrorNo();
+            throw new \Exception($err_msg);
+        }
+
+        $old_db->prefix = $db_prefix;
+        // End of database work
+        return $old_db;
+    }
+
+    public function initPDODb(): \PDO
+    {
+        $db_port = \Tki\SecureConfig::DB_PORT;
+        $db_host = \Tki\SecureConfig::DB_HOST;
+        $db_user = \Tki\SecureConfig::DB_USER;
+        $db_pwd = \Tki\SecureConfig::DB_PASS;
+        $db_name = \Tki\SecureConfig::DB_NAME;
+        $db_type = \Tki\SecureConfig::DB_TYPE;
+        $db_prefix = \Tki\SecureConfig::DB_TABLE_PREFIX;
+
+        // Connect to database with pdo
+        try
+        {
+            $charset = "charset=utf8mb4";
+            if ($db_type === 'postgres9')
+            {
+                $charset = null;
+                if ($db_port === null)
+                {
+                    $db_port = '5432';
+                }
+            }
+
+            // Include the charset when connecting
+            $pdo_db = new \Tki\TkiPDO("mysql:host=$db_host; port=$db_port; dbname=$db_name; " . $charset,
+                                      $db_user, $db_pwd, \Tki\SecureConfig::DB_TABLE_PREFIX);
+        }
+        catch (\PDOException $e)
+        {
+            $err_msg = 'The Kabal Invasion - General error: Unable to connect to the ' . $db_type .
+                       ' Database. <br>Database Error: ' . $e->getMessage();
+            throw new \Exception($err_msg);
+        }
+
+        // Disable emulated prepares so that we get true prepared statements
+        // These are slightly slower, but also far safer in a number of cases that matter
+        $pdo_db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        return $pdo_db;
     }
 
     /**
      * @param \PDOStatement|bool|string $query
      */
-    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page)
+    public static function logDbErrors(\PDO $pdo_db, $query, int $served_line, string $served_page): bool|string
     {
         $request = Request::createFromGlobals();
 
