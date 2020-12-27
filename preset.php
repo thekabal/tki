@@ -51,10 +51,6 @@ $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
 $stmt->execute();
 $preset_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Filter the array of presets from the form submission - first pass
-filter_var_array($_POST['preset'], FILTER_VALIDATE_INT);
-
-/*
 // Filter the array of presets from the form submission
 if (array_key_exists('preset', $_POST))
 {
@@ -67,9 +63,6 @@ if (array_key_exists('preset', $_POST))
         $preset_list[$key] = filter_var($_POST['preset'][$key], FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => $tkireg->max_sectors)));
     }
 }
-*/
-
-filter_var_array($preset_list, FILTER_VALIDATE_INT);
 
 $change = filter_input(INPUT_POST, 'change', FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 1)));
 foreach ($preset_list as $index => $preset)
