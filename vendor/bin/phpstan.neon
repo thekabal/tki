@@ -1,4 +1,5 @@
 parameters:
+    reportUnmatchedIgnoredErrors: false
     polluteScopeWithLoopInitialAssignments: false
     polluteScopeWithAlwaysIterableForeach: false
     checkAlwaysTrueCheckTypeFunctionCall: true
