@@ -65,28 +65,21 @@ class BigBang
         if ($current_file === '')
         {
             // If current file is set to null string, just return the search from 0.
-            $bigbang_info['current_step'] = array_search('0.php', $bigbang_files, true);
+            $bigbang_info['current_step'] = (int) array_search('0.php', $bigbang_files, true);
         }
         else
         {
             // Usual search, from the current step
-            $bigbang_info['current_step'] = array_search(basename($current_file), $bigbang_files, true);
+            $bigbang_info['current_step'] = (int) array_search(basename($current_file), $bigbang_files, true);
         }
 
-        if (is_int($bigbang_info['current_step']))
+        if (($bigbang_info['current_step'] + 1) > $num_files)
         {
-            if (($bigbang_info['current_step'] + 1) > $num_files)
-            {
-                $new_current_file = $num_files;
-            }
-            else
-            {
-                $new_current_file = $bigbang_info['current_step'] + 1;
-            }
+            $new_current_file = $num_files;
         }
         else
         {
-            $new_current_file = '';
+            $new_current_file = $bigbang_info['current_step'] + 1;
         }
 
         $bigbang_info['next_step'] = array_search($bigbang_files[$new_current_file], $bigbang_files, true);
