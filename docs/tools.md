@@ -17,6 +17,7 @@ found in the `/vendor/bin` directory.
 
 - [`phpmd`](https://phpmd.org/) is PHP Mess Detector. It takes a given PHP
   source code base and looks for several potential problems within that source.
+  It is currently BROKEN on PHP8: https://github.com/phpmd/phpmd/issues/853
   We use it like this:
 
   `php vendor/bin/phpmd . text vendor/bin/phpmd.xml --exclude vendor/,templates/`

@@ -2,7 +2,7 @@
 
 The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
 
-![PHP7 ready](https://img.shields.io/badge/PHP7-ready-green.svg)
+![PHP8 ready](https://img.shields.io/badge/PHP8-ready-green.svg)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3c726484ea8845da8b11399d26792dcb)](https://www.codacy.com/app/thekabal/tki?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekabal/tki&amp;utm_campaign=Badge_Grade)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/124/badge)](https://bestpractices.coreinfrastructure.org/projects/124)
@@ -40,18 +40,17 @@ The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/proje
 ### Server (generally, the most recent/current version of each is our recommendation, but these should suffice):
 - A Linux server. Our primary development platform is Fedora, but most Linux distributions should work, and potentially even OpenBSD.
 - A webserver capable of TLS such as `apache v2.4+` (we have not determined a required minimum).
-- `php v7.4.5+` (needed for type-hinting property types).
+- `php v8`.
 - `mariadb v5.5+ or v10.0+` (needed for utf8mb4 schemas).
 - `pdo` PHP extension.
 
 ### Web:
 - Chrome v50+ or Firefox v40+ (recommended).
 - Safari `v9.1.2+`.
-- IE `v11`.
 
 ### Notes:
 - TKI will likely run on `lighttpd` and `nginix`, however htaccess will not work out of the box - potentially causing security risks. It has not been tested on either. 
-- **IIS and/or Windows is NOT supported, please do not ask!** (But we welcome code to make it work on IIS)
+- **IIS and Windows is NOT supported, please do not ask!** (But we welcome code to make it work on either)
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc).
 - We make use of [Smarty templates](http://www.smarty.net/), [HTML Purifier](http://htmlpurifier.org/), [Swiftmailer](http://swiftmailer.org/), and [Adodb](http://adodb.org/dokuwiki/doku.php) (although we are working to replace adodb with PDO).
 
@@ -62,7 +61,7 @@ Please see the `/docs/install.md` file.
 As is typical with our releases, we highly recommend a fresh install. Upgrades are not supported at this time.
 
 ## Code quality:
-The project began in the early PHP4 era, and as a result, is less than ideal. Substantial progress has been made towards modernization, and we are continuing that process. As a general guideline, we follow PSR-1,2,4, and the upcoming 12, with the major exceptions that we use BSD/Allman brace/brackets and do not yet follow line length limits. **Feedback and PR's are welcome and appreciated**.
+The project began in the pre-PHP4 era, and as a result, is less than ideal. Substantial progress has been made towards modernization, and we are continuing that process. As a general guideline, we follow PSR-1,2,4, and the upcoming 12, with the major exceptions that we use BSD/Allman brace/brackets and do not yet follow line length limits. **Feedback and PR's are welcome and appreciated**.
 
 ## Critical needs:
 The two areas we need the most focus in would be the documentation, and testing. Both can be done with little or no knowledge of PHP, and would help us dramatically.
