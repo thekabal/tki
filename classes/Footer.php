@@ -80,7 +80,6 @@ class Footer
             $seconds_left = 0;
             $show_update_ticker = false;
         }
-
         // End update counter
 
         if ($news_ticker_active === true)
@@ -127,10 +126,8 @@ class Footer
                 array_push($news_ticker, array('url' => null, 'text' => "End of News", 'type' => null, 'delay' => 5));
             }
 
-            $news_ticker['container'] = "article";
             $template->addVariables("news", $news_ticker);
         }
-
         $mem_peak_usage = floor(memory_get_peak_usage() / 1024);
         $public_pages = array('ranking.php', 'new.php', 'faq.php', 'settings.php', 'news.php', 'index.php');
         $slash_position = strrpos($request->server->get('SCRIPT_NAME'), '/');
