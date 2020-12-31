@@ -16,6 +16,10 @@
         <ignoreFiles>
             <file name="../../classes/Db.php" />
             <file name="../../classes/Log.php" />
+            <file name="../../classes/Sectors/SectorsGateway.php" />
+            <file name="../../classes/Planets/PlanetsGateway.php" />
+            <file name="../../classes/Players/PlayersGateway.php" />
+            <file name="../../classes/Ibank/IbankGateway.php" />
             <directory name="../../templates" />
             <directory name="../../vendor" />
         </ignoreFiles>
