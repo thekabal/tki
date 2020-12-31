@@ -236,7 +236,7 @@ class CheckDefenses
         }
     }
 
-    public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, array $playerinfo, $tkireg, string $title, $calledfrom): void
+    public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, array $playerinfo, \Tki\Reg $tkireg, string $title, $calledfrom): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
@@ -424,7 +424,7 @@ class CheckDefenses
         }
     }
 
-    public static function mines(\PDO $pdo_db, $old_db, string $lang, int $sector, string $title, array $playerinfo, $tkireg): void
+    public static function mines(\PDO $pdo_db, $old_db, string $lang, int $sector, string $title, array $playerinfo, \Tki\Reg $tkireg): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'combat', 'footer', 'news'));
