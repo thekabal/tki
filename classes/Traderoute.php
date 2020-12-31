@@ -37,9 +37,9 @@ class Traderoute
         $goods_buy = 0;
         $organics_buy = 0;
         $energy_buy = 0;
-        $colonists_buy = null;
-        $fighters_buy = null;
-        $torps_buy = null;
+        $colonists_buy = 0;
+        $fighters_buy = 0;
+        $torps_buy = 0;
 
         foreach ($traderoutes as $testroute)
         {
