@@ -56,7 +56,7 @@ class PlayersGateway // Gateway for SQL calls related to Players
         }
     }
 
-    public function selectPlayerInfo(?string $email): array|bool
+    public function selectPlayerInfo(?string $email): array | bool
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE email = :email LIMIT 1";
         $stmt = $this->pdo_db->prepare($sql);
