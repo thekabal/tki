@@ -30,7 +30,10 @@ class CheckDefenses
     {
         $total_sec_fighters = 0;
 
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('sector_fighters', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+        $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
+                                         'footer', 'global_funcs',
+                                         'global_includes', 'news',
+                                         'sector_fighters'));
         echo $langvars['l_sf_attacking'] . "<br>";
         $targetfighters = $total_sec_fighters;
         $playerbeams = \Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
@@ -239,8 +242,10 @@ class CheckDefenses
     public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, array $playerinfo, \Tki\Reg $tkireg, string $title, $calledfrom): void
     {
         // Database driven language entries
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'regional'));
-
+        $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses',
+                                         'combat', 'common', 'footer',
+                                         'global_funcs', 'global_includes',
+                                         'news', 'regional'));
         /*
         // Get sectorinfo from database
         $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
@@ -427,8 +432,9 @@ class CheckDefenses
     public static function mines(\PDO $pdo_db, $old_db, string $lang, int $sector, string $title, array $playerinfo, \Tki\Reg $tkireg): void
     {
         // Database driven language entries
-        $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses', 'common', 'global_includes', 'combat', 'footer', 'news'));
-
+        $langvars = \Tki\Translate::load($pdo_db, $lang, array('check_defenses',
+                                         'common', 'global_includes',
+                                         'combat', 'footer', 'news'));
         // Get sectorinfo from database
         //$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
         //$sectorinfo = $sectors_gateway->selectSectorInfo($sector);

@@ -86,12 +86,9 @@ class Footer
         if ($news_ticker_active === true)
         {
             // Database driven language entries
-            $langvars_temp = Translate::load($pdo_db, $lang, array('news',
-                                                                   'common',
-                                                                   'footer',
-                                                                   'global_includes',
-                                                                   'logout'));
-
+            $langvars_temp = Translate::load($pdo_db, $lang, array('common',
+                                             'footer', 'global_includes',
+                                             'logout', 'news'));
             // Use array merge so that we do not clobber the langvars array,
             // and only add to it the items needed for footer
             $langvars = array_merge($langvars, $langvars_temp);
