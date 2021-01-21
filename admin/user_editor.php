@@ -34,13 +34,12 @@ if (!array_key_exists('operation', $_POST))
 if (empty($_POST['user']))
 {
     $players = array();
-    $res = $old_db->Execute("SELECT ship_id, character_name FROM {$old_db->prefix}ships ORDER BY character_name");
-    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-    while (!$res->EOF)
-    {
-        $players[] = $res->fields;
-        $res->MoveNext();
-    }
+    $sql = "SELECT ship_id, character_name FROM ::prefix::ships ORDER BY character_name";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->execute();
+    $players[] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $catch_errors = $players;
+    Tki\Db::logDbErrors($pdo_db, $catch_errors, __LINE__, __FILE__);
 
     $variables['user'] = null;
     $variables['players'] = $players;
