@@ -28,7 +28,7 @@ require_once './common.php';
 $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
                                 'global_includes', 'global_funcs', 'combat',
                                 'footer', 'news', 'report', 'main', 'zoneedit',
-                                'planet'));
+                                'planet', 'admin'));
 $title = $langvars['l_admin_title'];
 
 // We only want menu values that come from $_POST, and only want string values
@@ -80,13 +80,18 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
                 if ($menu == $filename[$i]['file'])
                 {
                     $button_main = true;
-                    $module_name = substr($filename[$i]['file'], 0, -4);
+                    $variables['module_name'] = substr($filename[$i]['file'], 0, -4);
                     include_once './admin/' . $filename[$i]['file'];
                 }
             }
         }
     }
 }
+
+$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
+                                'global_includes', 'global_funcs', 'combat',
+                                'footer', 'news', 'report', 'main', 'zoneedit',
+                                'planet', 'admin'));
 
 $variables['body_class'] = 'admin';
 $variables['lang'] = $lang;
@@ -96,11 +101,6 @@ $variables['menu'] = $menu;
 $variables['filename'] = $filename;
 $variables['menu_location'] = $menu_location;
 $variables['button_main'] = $button_main;
-
-$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
-                                'global_includes', 'global_funcs', 'combat',
-                                'footer', 'news', 'report', 'main', 'zoneedit',
-                                'planet'));
 
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
