@@ -57,14 +57,14 @@ if ($action == "doexpand")
     }
 }
 
-$title = $langvars['l_change_uni_title'];
 
 // Set array with all used variables in page
 $variables = array();
 $variables['lang'] = $lang;
+$variables['title'] = $langvars['l_change_uni_title'];
 $variables['changed_sectors'] = $changed_sectors;
 $variables['swordfish'] = $swordfish;
-$variables['universe_size'] = $universe_size;
+$variables['universe_size'] = $tkireg->universe_size;
 $variables['action'] = $action;
 $variables['radius'] = $radius;
 
