@@ -33,8 +33,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('planet', 'planet2', 'planet3', 'main', 'port', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'main', 'news', 'planet',
+                                'planet2', 'planet3', 'port', 'universal'));
 // Fixed The Phantom Planet Transfer Bug
 // Needs to be validated and type cast into their correct types.
 // [GET]

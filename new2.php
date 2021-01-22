@@ -30,7 +30,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
+                                'footer', 'insignias', 'login', 'new',
+                                'news'));
 echo '<h1>' . $title . '</h1>';
 
 if ($tkireg->account_creation_closed)

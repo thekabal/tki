@@ -28,9 +28,8 @@ $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('move', 'common',
-            'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'footer',
+                                'insignias', 'move', 'news', 'universal'));
 $title = $langvars['l_move_title'];
 
 $header = new Tki\Header();

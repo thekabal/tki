@@ -29,8 +29,8 @@ class TraderouteBuildNew
     public static function new(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
-                                         'footer', 'global_funcs',
-                                         'global_includes', 'traderoutes'));
+                                         'footer', 'insignias', 'traderoutes',
+                                         'universal'));
         $editroute = null;
         $planets = array();
         $num_planets = 0;

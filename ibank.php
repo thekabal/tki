@@ -27,8 +27,9 @@ $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('ibank', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'ibank', 'insignias', 'news', 'regional',
+                                'universal'));
 $title = $langvars['l_ibank_title'];
 $body_class = 'ibank';
 

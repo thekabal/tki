@@ -28,7 +28,10 @@ $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'report', 'device', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'bounty', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'combat',
+                                'common', 'device', 'footer', 'insignias',
+                                'news', 'port', 'regional', 'report',
+                                'universal'));
 $title = $langvars['l_title_port'];
 $body_class = 'port';
 

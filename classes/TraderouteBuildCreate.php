@@ -29,9 +29,8 @@ class TraderouteBuildCreate
     public static function create(\PDO $pdo_db, $old_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo, int $num_traderoutes, string $ptype1, string $ptype2, int $port_id1, int $port_id2, int $team_planet_id1, int $team_planet_id2, string $move_type, int $circuit_type, int $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
-                                         'footer', 'global_funcs',
-                                         'global_includes', 'regional',
-                                         'traderoutes'));
+                                         'footer', 'insignias', 'regional',
+                                         'traderoutes', 'universal'));
         $admin_log = new AdminLog();
         $src_id = null;
         $dest_id = null;

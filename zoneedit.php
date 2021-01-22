@@ -33,7 +33,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('zoneedit', 'report', 'port', 'main', 'zoneinfo', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'main', 'news', 'port', 'report',
+                                'universal', 'zoneedit', 'zoneinfo'));
 echo "<h1>" . $title . "</h1>\n";
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.

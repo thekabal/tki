@@ -28,7 +28,9 @@ $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('readmail', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'planet_report', 'readmail',
+                                'universal'));
 $title = $langvars['l_readm_title'];
 
 $header = new Tki\Header();

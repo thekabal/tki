@@ -31,9 +31,8 @@ $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 $variables = null;
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('emerwarp', 'common', 'global_includes',
-                                'global_funcs', 'footer', 'news'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'emerwarp',
+                                'footer', 'insignias', 'news', 'universal'));
 // Get playerinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);

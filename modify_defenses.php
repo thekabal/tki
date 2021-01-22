@@ -32,8 +32,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('modify_defenses', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'modify_defenses', 'news',
+                                'universal'));
 if ($defense_id === null)
 {
     echo $langvars['l_md_invalid'] . "<br><br>";

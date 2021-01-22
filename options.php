@@ -30,7 +30,8 @@ $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 $body_class = 'options';
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('options', 'common', 'global_includes', 'global_funcs', 'footer'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'options', 'universal'));
 $title = $langvars['l_opt_title'];
 
 $header = new Tki\Header();

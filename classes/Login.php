@@ -30,7 +30,7 @@ class Login
     {
         // Database driven language entries
         $langvars = Translate::load($pdo_db, $lang, array('common', 'footer',
-                                    'global_funcs', 'login', 'self_destruct'));
+                                    'login', 'self_destruct', 'universal'));
         $game_closed = new Game();
         $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $template);
 

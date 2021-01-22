@@ -31,7 +31,9 @@ $body_class = 'tki';
 $include_ckeditor = "include";
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('mailto', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'mailto', 'planet_report',
+                                'universal'));
 $title = $langvars['l_sendm_title'];
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class, $include_ckeditor);

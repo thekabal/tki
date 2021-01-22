@@ -31,7 +31,10 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'options', 'pwreset', 'option2'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
+                                'footer', 'insignias', 'mail', 'news',
+                                'options', 'option2', 'pwreset',
+                                'universal'));
 echo "<h1>" . $title . "</h1>\n";
 
 $reset_code  = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);

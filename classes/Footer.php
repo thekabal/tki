@@ -87,7 +87,7 @@ class Footer
         {
             // Database driven language entries
             $langvars_temp = Translate::load($pdo_db, $lang, array('common',
-                                             'footer', 'global_includes',
+                                             'footer', 'insignias',
                                              'logout', 'news'));
             // Use array merge so that we do not clobber the langvars array,
             // and only add to it the items needed for footer

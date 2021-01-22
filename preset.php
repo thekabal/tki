@@ -35,7 +35,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('presets', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
+                                'footer', 'insignias', 'news', 'presets',
+                                'universal'));
 echo "<h1>" . $title . "</h1>\n";
 echo "<body class ='" . $body_class . "'>";
 

@@ -81,8 +81,9 @@ else
 }
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('login2', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'login', 'login2', 'news',
+                                'universal'));
 if ($tkireg->game_closed)
 {
     $title = $langvars['l_login_sclosed'];

@@ -37,7 +37,9 @@ $variables['next_step'] = $create_universe_info['next_step'];
 $variables['max_sectors'] = $tkireg->max_sectors;
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common',
+                                'create_universe', 'footer', 'insignias',
+                                'news', 'regional'));
 $variables['title'] = $langvars['l_cu_title'];
 
 $header = new Tki\Header();

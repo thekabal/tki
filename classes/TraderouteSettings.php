@@ -29,9 +29,8 @@ class TraderouteSettings
     public static function before(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, array $playerinfo): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
-                                         'footer', 'global_funcs',
-                                         'global_includes', 'regional',
-                                         'traderoutes'));
+                                         'footer', 'insignias', 'regional',
+                                         'traderoutes', 'universal'));
         echo "<p><font size=3 color=blue><strong>" . $langvars['l_tdr_globalset'] . "</strong></font><p>";
         echo "<font color=white size=2><strong>" . $langvars['l_tdr_sportsrc'] . " :</strong></font><p>" .
              "<form accept-charset='utf-8' action=traderoute.php?command=setsettings method=post>" .
@@ -114,9 +113,8 @@ class TraderouteSettings
     public static function afterOutput(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
-                                         'footer', 'global_funcs',
-                                         'global_includes', 'regional',
-                                         'traderoutes'));
+                                         'footer', 'insignias', 'regional',
+                                         'traderoutes', 'universal'));
         $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" .
                                         $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
         echo $langvars['l_tdr_globalsetsaved'] . " " . $langvars['l_tdr_returnmenu'];

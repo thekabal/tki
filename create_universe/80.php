@@ -49,7 +49,9 @@ $variables['swordfish']              = filter_input(INPUT_POST, 'swordfish', FIL
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common',
+                                'create_universe', 'footer', 'insignias',
+                                'news', 'regional'));
 $variables['title'] = $langvars['l_cu_title'];
 $variables['update_ticks_results']['sched'] = $tkireg->sched_ticks;
 $local_table_timer = new Tki\Timer();

@@ -31,7 +31,9 @@ $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news', 'regional'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
+                                'footer', 'insignias', 'news', 'regional',
+                                'rsmove', 'universal'));
 $title = $langvars['l_rs_title'];
 
 $header = new Tki\Header();
@@ -188,7 +190,10 @@ else
 
                 // Output:
                 // You are now in sector X. You used Y turns, and gained Z energy units.
-                $langvars = Tki\Translate::load($pdo_db, $lang, array('rsmove', 'common', 'global_funcs', 'global_includes', 'combat', 'footer', 'news'));
+                $langvars = Tki\Translate::load($pdo_db, $lang, array('combat',
+                                                'common', 'footer',
+                                                'insignias', 'news',
+                                                'rsmove', 'universal'));
                 $cur_time_stamp = date("Y-m-d H:i:s");
                 $update = $old_db->Execute("UPDATE {$old_db->prefix}ships SET last_login = ?, sector = ?, ship_energy = ship_energy + ?, turns = turns - ?, turns_used = turns_used + ? WHERE ship_id = ?;", array($cur_time_stamp, $destination, $energyscooped, $triptime, $triptime, $playerinfo['ship_id']));
                 Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);

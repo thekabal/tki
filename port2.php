@@ -33,8 +33,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('port', 'port2', 'device', 'report', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'regional'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'device',
+                                'footer', 'insignias', 'news', 'port',
+                                'port2', 'regional', 'report', 'universal'));
 // Get playerinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);

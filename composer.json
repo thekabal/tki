@@ -38,7 +38,7 @@
     "scripts": {
         "tests": [
             "phpcs --standard=/var/www/html/tki/vendor/bin/phpcs.xml . --ignore=templates,vendor",
-            "phpstan analyze --no-progress --no-ansi -l 8 -c vendor/bin/phpstan.neon .",
+            "phpstan analyze --no-progress --no-ansi -l 2 -c vendor/bin/phpstan.neon .",
             "psalm -c vendor/bin/psalm.xml --no-progress ."
             ],
         "disabled-due-to-php8-problems-tests": [

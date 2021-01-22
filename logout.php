@@ -26,8 +26,9 @@ require_once './common.php';
 $variables = array();
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
+                                'footer', 'insignias', 'logout', 'news',
+                                'universal'));
 if (array_key_exists('username', $_SESSION))
 {
     $current_score = 0;
@@ -37,8 +38,9 @@ if (array_key_exists('username', $_SESSION))
     $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
     $current_score = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
-
-    $langvars = Tki\Translate::load($pdo_db, $lang, array('logout', 'common', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
+    $langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
+                                    'footer', 'insignias', 'logout', 'news',
+                                    'universal'));
     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::LOGOUT, $request->server->get('REMOTE_ADDR'));
     $langvars['l_logout_text'] = str_replace("[name]", $_SESSION['username'], $langvars['l_logout_text']);
     $langvars['l_logout_text'] = str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_logout_text']);

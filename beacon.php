@@ -25,9 +25,9 @@
 require_once './common.php';
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('beacon', 'common',
-                                'global_includes', 'global_funcs', 'combat',
-                                'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('beacon', 'combat',
+                                'common', 'footer', 'insignias', 'news',
+                                'universal'));
 $title = $langvars['l_beacon_title'];
 
 $header = new Tki\Header();

@@ -31,7 +31,8 @@ $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('teams', 'common', 'global_includes', 'global_funcs', 'main', 'footer'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'main', 'teams', 'universal'));
 $title = $langvars['l_team_title'];
 
 $header = new Tki\Header();

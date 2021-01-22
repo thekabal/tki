@@ -32,8 +32,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('main', 'report', 'planet', 'bounty', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'common',
+                                'footer', 'insignias', 'main', 'news',
+                                'planet', 'report', 'universal'));
 // Needs to be validated and type cast into their correct types.
 // [GET]
 // (int) planet_id

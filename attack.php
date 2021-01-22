@@ -32,9 +32,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('attack', 'bounty', 'main',
-                                'planet', 'common', 'global_includes',
-                                'global_funcs', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('attack', 'bounty',
+                                'combat', 'common', 'footer', 'insignias',
+                                'main', 'news', 'planet', 'universal'));
 echo '<h1>' . $title . '</h1>';
 
 if (array_key_exists('ship_id', $_GET))

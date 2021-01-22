@@ -25,10 +25,10 @@
 require_once './common.php';
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
-                                'global_includes', 'global_funcs', 'combat',
-                                'footer', 'news', 'report', 'main', 'zoneedit',
-                                'planet', 'admin'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'combat',
+                                'common', 'footer', 'insignias', 'main',
+                                'news', 'planet', 'report', 'universal',
+                                'zoneedit'));
 $title = $langvars['l_admin_title'];
 
 // We only want menu values that come from $_POST, and only want string values
@@ -88,11 +88,10 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
     }
 }
 
-$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
-                                'global_includes', 'global_funcs', 'combat',
-                                'footer', 'news', 'report', 'main', 'zoneedit',
-                                'planet', 'admin'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'combat',
+                                'common', 'footer', 'insignias', 'main',
+                                'news', 'planet', 'report', 'universal',
+                                'zoneedit'));
 $variables['body_class'] = 'admin';
 $variables['lang'] = $lang;
 $variables['swordfish'] = $swordfish;

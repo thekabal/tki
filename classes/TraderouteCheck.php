@@ -29,9 +29,8 @@ class TraderouteCheck
     public static function isCompatible(\PDO $pdo_db, string $lang, string $type1, string $type2, string $move, int $circuit, array $src, array $dest, array $playerinfo, Reg $tkireg, Smarty $template): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
-                                         'footer', 'global_funcs',
-                                         'global_includes', 'regional',
-                                         'traderoutes'));
+                                         'footer', 'insignias', 'regional',
+                                         'traderoutes', 'universal'));
         $admin_log = new AdminLog();
 
         // Check circuit compatibility (we only use types 1 and 2 so block anything else)

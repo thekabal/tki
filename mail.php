@@ -30,7 +30,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
+                                'footer', 'insignias', 'mail', 'news',
+                                'universal'));
 echo "<h1>" . $title . "</h1>\n";
 
 $mail = filter_input(INPUT_GET, 'mail', FILTER_SANITIZE_EMAIL);

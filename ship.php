@@ -32,7 +32,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('ship', 'planet', 'main', 'common', 'global_includes', 'global_funcs', 'footer', 'news'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'main', 'news', 'planet',
+                                'ship', 'universal'));
 echo "<h1>" . $title . "</h1>\n";
 
 // PHP7 Null coalescing operator - if it is set, great, if not, set to null

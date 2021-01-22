@@ -46,8 +46,9 @@ $db_name = \Tki\SecureConfig::DB_NAME;
 $db_prefix = \Tki\SecureConfig::DB_TABLE_PREFIX;
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('new', 'login', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'index', 'options', 'setup_info'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'index', 'insignias', 'login', 'new', 'news',
+                                'options', 'setup_info', 'universal'));
 $variables = null;
 $variables['lang'] = $lang;
 $variables['link'] = 'https://github.com/thekabal/tki/';

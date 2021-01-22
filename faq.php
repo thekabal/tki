@@ -28,7 +28,8 @@ $lang = $tkireg->default_lang;
 $link = null;
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'faq', 'global_funcs'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'faq',
+                                'universal'));
 
 $variables = null;
 $variables['lang'] = $lang;

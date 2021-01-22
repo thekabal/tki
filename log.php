@@ -27,7 +27,7 @@ require_once './common.php';
 $login = new Tki\Login();
 $login->checkLogin($pdo_db, $lang, $tkireg, $template);
 
-// Hack for log bug issue - this really needs to be fixed
+// Hack for log bug issue - FUTURE: this really needs to be fixed
 $log_list = array(null,
         'LOG_LOGIN', 'LOG_LOGOUT', 'LOG_ATTACK_OUTMAN', 'LOG_ATTACK_OUTSCAN', 'LOG_ATTACK_EWD','LOG_ATTACK_EWDFAIL', 'LOG_ATTACK_LOSE', 'LOG_ATTACKED_WIN', 'LOG_TOLL_PAID', 'LOG_HIT_MINES',
         'LOG_SHIP_DESTROYED_MINES', 'LOG_PLANET_DEFEATED_D', 'LOG_PLANET_DEFEATED', 'LOG_PLANET_NOT_DEFEATED', 'LOG_RAW', 'LOG_TOLL_RECV', 'LOG_DEFS_DESTROYED', 'LOG_PLANET_EJECT', 'LOG_BADLOGIN', 'LOG_PLANET_SCAN',
@@ -38,8 +38,9 @@ $log_list = array(null,
                 );
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('log', 'common', 'global_includes', 'global_funcs', 'footer', 'planet_report'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'log', 'planet_report',
+                                'universal'));
 $title = $langvars['l_log_titlet'];
 $body_class = 'log';
 

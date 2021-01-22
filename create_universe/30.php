@@ -93,14 +93,14 @@ if ($variables['drop_seq_results'] !== null)
 }
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'regional', 'footer', 'global_includes', 'create_universe', 'news'));
-$variables['title']                  = $langvars['l_cu_title'];
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common',
+                                'create_universe', 'footer', 'insignias',
+                                'news', 'regional'));
+$variables['title'] = $langvars['l_cu_title'];
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/30.tpl');
-
 $footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $template);

@@ -25,8 +25,8 @@
 require_once './common.php';
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('global_funcs', 'new_player_guide'));
-
+$langvars = Tki\Translate::load($pdo_db, $lang, array('new_player_guide',
+                                'universal'));
 $variables = array();
 if (array_key_exists('username', $_SESSION))
 {

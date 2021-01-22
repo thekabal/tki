@@ -30,18 +30,8 @@ $link = null;
 if (Tki\Db::isActive($pdo_db))
 {
     // Database driven language entries
-    $langvars = Tki\Translate::load(
-        $pdo_db,
-        $lang,
-        array(
-            'footer',
-            'global_includes',
-            'index',
-            'login',
-            'logout',
-            'main'
-            ));
-
+    $langvars = Tki\Translate::load($pdo_db, $lang, array('footer', 'index',
+                                    'insignias', 'login', 'logout', 'main'));
     $variables = null;
     $variables['lang'] = $lang;
     $variables['link'] = $link;

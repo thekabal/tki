@@ -29,9 +29,8 @@ class TraderouteResults
     public static function tableTop(\PDO $pdo_db, string $lang, Reg $tkireg): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
-                                         'footer', 'global_funcs',
-                                         'global_includes', 'regional',
-                                         'traderoutes'));
+                                         'footer', 'insignias', 'regional',
+                                         'traderoutes', 'universal'));
         echo "<table border='1' cellspacing='1' cellpadding='2' width='65%' align='center'>\n";
         echo "  <tr bgcolor='" . $tkireg->color_line2 . "'>\n";
         echo "    <td align='center' colspan='7'><strong><font color='white'>" . $langvars['l_tdr_res'] . "</font></strong></td>\n";
@@ -85,9 +84,8 @@ class TraderouteResults
     public static function displayTotals(\PDO $pdo_db, string $lang, int $total_profit): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
-                                         'footer', 'global_funcs',
-                                         'global_includes', 'regional',
-                                         'traderoutes'));
+                                         'footer', 'insignias', 'regional',
+                                         'traderoutes', 'universal'));
         if ($total_profit > 0)
         {
             echo "<p><center><font size=3 color=white><strong>" . $langvars['l_tdr_totalprofit'] . " : <font style='color:#0f0;'><strong>" . number_format(abs($total_profit), 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</strong></font><br>\n";
@@ -101,9 +99,8 @@ class TraderouteResults
     public static function displaySummary(\PDO $pdo_db, string $lang, string $tdr_display_creds, array $dist, array $playerinfo): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
-                                         'footer', 'global_funcs',
-                                         'global_includes', 'regional',
-                                         'traderoutes'));
+                                         'footer', 'insignias', 'regional',
+                                         'traderoutes', 'universal'));
         echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_turnsused'] . " : <font style='color:#f00;'>$dist[triptime]</font></strong></font><br>";
         echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_turnsleft'] . " : <font style='color:#0f0;'>$playerinfo[turns]</font></strong></font><br>";
         echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_credits'] . " : <font style='color:#0f0;'> $tdr_display_creds\n</font></strong></font><br> </strong></font></center>\n";

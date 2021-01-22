@@ -75,7 +75,9 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common', 'global_includes', 'global_funcs', 'footer', 'news', 'scheduler'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'common',
+                                'footer', 'insignias', 'news', 'scheduler',
+                                'universal'));
 echo "<h1>" . $title . "</h1>\n";
 
 // FUTURE: Add filtering to swordfish

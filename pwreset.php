@@ -25,7 +25,9 @@
 require_once './common.php';
 
 // Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('mail', 'common', 'global_funcs', 'global_includes', 'global_funcs', 'combat', 'footer', 'news', 'options', 'pwreset'));
+$langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
+                                'footer', 'insigniass', 'mail', 'news',
+                                'options', 'pwreset', 'universal'));
 $title = $langvars['l_pwr_title'];
 $body_class = 'options';
 
