@@ -346,17 +346,20 @@ class PlanetCombat
 
         echo "</table></center>\n";
         // Send each docked ship in sequence to attack agressor
-        $result4 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
-        $shipsonplanet = $result4->RecordCount();
+        $sql = "SELECT * FROM ::prefix::ships WHERE planet_id = :planet_id AND on_planet = 'Y'";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        $shipsOnPlanet = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $shipsOnPlanetCount = $stmt->rowCount();
 
-        if ($shipsonplanet > 0)
+        if ($shipsOnPlanet === true || is_array($shipsOnPlanet))
         {
-            $langvars['l_cmb_shipdock'] = str_replace("[cmb_shipsonplanet]", $shipsonplanet, $langvars['l_cmb_shipdock']);
+            $langvars['l_cmb_shipdock'] = str_replace("[cmb_shipsonplanet]", $shipsOnPlanet, $langvars['l_cmb_shipdock']);
             echo "<br><br><center>" . $langvars['l_cmb_shipdock'] . "<br>" . $langvars['l_cmb_engshiptoshipcombat'] . "</center><br><br>\n";
-            while (!$result4->EOF)
+            while ($shipsOnPlanetCount > 0)
             {
-                $onplanet = $result4->fields;
+                $onplanet = $shipsOnPlanet[$shipsOnPlanetCount];
 
                 if ($attackerfighters < 0)
                 {
@@ -385,7 +388,7 @@ class PlanetCombat
 
                 echo "<br>-" . $onplanet['ship_name'] . " " . $langvars['l_cmb_approachattackvector'] . "-<br>";
                 \Tki\Combat::shipToShip($pdo_db, $langvars, $onplanet['ship_id'], $tkireg, $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage);
-                $result4->MoveNext();
+                $shipsOnPlanetCount--;
             }
         }
         else
