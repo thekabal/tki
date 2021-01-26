@@ -26,7 +26,6 @@ require_once './common.php';
 
 // Set headers
 header('Content-type: text/html; charset=utf-8');  // Set character set to utf-8, and using HTML as our content type
-header('X-UA-Compatible: IE=Edge, chrome=1');      // Tell IE to use the latest version of the rendering engine, and to use chrome if it is available. This is not needed after IE11.
 header('Cache-Control: public');                   // Tell the browser (and any caches) that this information can be stored in public caches.
 header('Connection: Keep-Alive');                  // Tell the browser to keep going until it gets all data, please.
 header('Vary: Accept-Encoding, Accept-Language');  // Tell CDN's or proxies to keep a separate version of the page in various encodings - compressed or not, in english or french for example.
