@@ -101,7 +101,7 @@ do
             $add_more = $variables['nump'] - $p_add; // Lower the number to add to the amount that is left
         }
 
-        for ($q = 1; $q <= $add_more; $q++)
+        for ($quantity_total = 1; $quantity_total <= $add_more; $quantity_total++)
         {
             // Add a line of values for every iteration
             $planet_insert_sql .= ", (2, 0, 0, $default_prod_ore, $default_prod_organics, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, $open_sectors_array[$p_add])";
@@ -154,8 +154,8 @@ for ($i = 1; $i <= $loops; $i++)
     $update = "INSERT INTO ::prefix::links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $k = $j + 1;
-        $update .= "($j,$k), ($k,$j)";
+        $temp = $j + 1;
+        $update .= "($j,$temp), ($temp,$j)";
         if ($j <= ($finish - 1))
         {
             $update .= ", ";
@@ -311,9 +311,9 @@ $result_count++;
 $local_table_timer->stop();
 $variables['remove_links_results']['elapsed'] = $local_table_timer->elapsed();
 
-for ($t = 0; $t < $result_count; $t++)
+for ($total_results = 0; $total_results < $result_count; $total_results++)
 {
-    if ($catch_results[$t] !== true)
+    if ($catch_results[$total_results] !== true)
     {
         $variables['autorun'] = false; // We disable autorun if any errors occur in processing
     }

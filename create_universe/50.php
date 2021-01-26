@@ -98,7 +98,7 @@ else
 $catch_results[$result_count] = $gameconfig_result;
 $result_count++;
 
-for ($t = 0; $t < $result_count; $t++)
+for ($total_results = 0; $total_results < $result_count; $total_results++)
 {
     if ($catch_results[$t] !== true)
     {

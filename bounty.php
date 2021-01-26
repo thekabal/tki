@@ -89,18 +89,18 @@ switch ($response) {
         echo "<h1>" . $title . "</h1>\n";
         $res5 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships, {$old_db->prefix}bounty WHERE bounty_on = ship_id AND bounty_on = ?;", array($bounty_on));
         Tki\Db::logDbErrors($pdo_db, $res5, __LINE__, __FILE__);
-        $j = 0;
+        $bount_details_count = 0;
         if ($res5)
         {
             while (!$res5->EOF)
             {
-                $bounty_details[$j] = $res5->fields;
-                $j++;
+                $bounty_details[$bount_details_count] = $res5->fields;
+                $bount_details_count++;
                 $res5->MoveNext();
             }
         }
 
-        $num_details = $j;
+        $num_details = $bount_details_count;
         if ($num_details < 1)
         {
             echo $langvars['l_by_nobounties'] . "<br>";
@@ -115,14 +115,14 @@ switch ($response) {
             echo "<td><strong>" . $langvars['l_by_action'] . "</td>";
             echo "</tr>";
             $color = $tkireg->color_line1;
-            for ($j = 0; $j < $num_details; $j++)
+            for ($bount_details_count = 0; $bount_details_count < $num_details; $bount_details_count++)
             {
                 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
-                $details = $players_gateway->selectPlayerInfoById($bounty_details[$j]['placed_by']);
+                $details = $players_gateway->selectPlayerInfoById($bounty_details[$bount_details_count]['placed_by']);
 
                 echo "<tr bgcolor=\"$color\">";
-                echo "<td>" . $bounty_details[$j]['amount'] . "</td>";
-                if ($bounty_details[$j]['placed_by'] == 0)
+                echo "<td>" . $bounty_details[$bount_details_count]['amount'] . "</td>";
+                if ($bounty_details[$bount_details_count]['placed_by'] == 0)
                 {
                     echo "<td>" . $langvars['l_by_thefeds'] . "</td>";
                 }
@@ -131,9 +131,9 @@ switch ($response) {
                     echo "<td>" . $details['character_name'] . "</td>";
                 }
 
-                if ($bounty_details[$j]['placed_by'] == $playerinfo['ship_id'])
+                if ($bounty_details[$bount_details_count]['placed_by'] == $playerinfo['ship_id'])
                 {
-                    echo "<td><a href=bounty.php?bid=" . $bounty_details[$j]['bounty_id'] . "&response=cancel>" . $langvars['l_by_cancel'] . "</a></td>";
+                    echo "<td><a href=bounty.php?bid=" . $bounty_details[$bount_details_count]['bounty_id'] . "&response=cancel>" . $langvars['l_by_cancel'] . "</a></td>";
                 }
                 else
                 {

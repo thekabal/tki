@@ -58,7 +58,7 @@ $tile['goods'] = "port-goods.png";
 $tile['none'] = "space.png";
 $tile['unknown'] = "uspace.png";
 
-$cur_sector = 1; // Clear this before iterating through the sectors
+$current_sector = 1; // Clear this before iterating through the sectors
 
 // Display sectors as imgs, and each class in css in header.php; then match the width and height here
 $div_w = 20; // Only this width to match the included images
@@ -70,13 +70,13 @@ $map_width = ($div_w + $div_border) * $div_xmax;  // Define the containing div t
 
 // Setup containing div to hold the width of the images
 echo "\n<div id='map' style='position:relative;background-color:#0000ff;width:" . $map_width . "px'>\n";
-for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
+for ($rows = 0; $rows < $div_ymax; $rows++) // Loop the rows
 {
-    for ($c = 0; $c < $div_xmax; $c++) // Loop the columns
+    for ($columns = 0; $columns < $div_xmax; $columns++) // Loop the columns
     {
-        if ((count($discovered_sectors) > $discovered_count) && ($discovered_sectors[$discovered_count]['sector_id'] !== null && ($discovered_sectors[$discovered_count]['sector_id'] === $cur_sector)))
+        if ((count($discovered_sectors) > $discovered_count) && ($discovered_sectors[$discovered_count]['sector_id'] !== null && ($discovered_sectors[$discovered_count]['sector_id'] === $current_sector)))
         {
-            $p = $discovered_sectors[$discovered_count]['port_type'];
+            $port_type_title = $discovered_sectors[$discovered_count]['port_type'];
             // Build the alt text for each image
             $alt = $langvars['l_sector'] . ": {$discovered_sectors[$discovered_count]['sector_id']} Port: {$discovered_sectors[$discovered_count]['port_type']} ";
 
@@ -86,7 +86,7 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
             }
 
             echo "\n<a href=\"rsmove.php?engage=1&amp;destination=" . $discovered_sectors[$discovered_count]['sector_id'] . "\">";
-            echo "<img class='map " . $discovered_sectors[$discovered_count]['port_type'] . "' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$p] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
+            echo "<img class='map " . $discovered_sectors[$discovered_count]['port_type'] . "' src='" . $template->getVariables('template_dir') . "/images/" . $tile[$port_type_title] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
 
             // Move to next explored sector in database results
             if ($discovered_count < count($discovered_sectors))
@@ -94,23 +94,23 @@ for ($r = 0; $r < $div_ymax; $r++) // Loop the rows
                 $discovered_count++;
             }
 
-            $cur_sector++;
+            $current_sector++;
         }
         else
         {
             // Build the alt text for each image
-            $alt = $cur_sector . " - " . $langvars['l_unknown'] . " ";
-            echo "<a href=\"rsmove.php?engage=1&amp;destination=" . $cur_sector . "\">";
+            $alt = $current_sector . " - " . $langvars['l_unknown'] . " ";
+            echo "<a href=\"rsmove.php?engage=1&amp;destination=" . $current_sector . "\">";
             echo "<img class='map un' src='" . $template->getVariables('template_dir') . "/images/" . $tile['unknown'] . "' alt='" . $alt . "' style='width:20px; height:20px'></a> ";
-            $cur_sector++;
+            $current_sector++;
         }
     }
 }
 
 // These are the row numbers on the side of the map
-for ($a = 1; $a <= ($tkireg->max_sectors / 50); $a++)
+for ($row_number = 1; $row_number <= ($tkireg->max_sectors / 50); $row_number++)
 {
-    echo "\n<div style='position:absolute;left:" . ($map_width + 10) . "px;top:" . (($a - 1) * ($div_h + $div_border)) . "px;'>" . ($a * 50) . "</div>";
+    echo "\n<div style='position:absolute;left:" . ($map_width + 10) . "px;top:" . (($row_number - 1) * ($div_h + $div_border)) . "px;'>" . ($row_number * 50) . "</div>";
 }
 
 echo "</div><div style='clear:both'></div><br>";

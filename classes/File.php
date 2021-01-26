@@ -94,12 +94,12 @@ class File
             }
         }
 
-        for ($k = 1; $k < $array_item; $k++)
+        for ($status_count = 1; $status_count < $array_item; $status_count++)
         {
             // Status array will continue the results of individual executes.
             // It should be === true unless something went horribly wrong.
             $final_result = true;
-            if ($status_array[$k] !== true)
+            if ($status_array[$status_count] !== true)
             {
                 $final_result = false;
             }

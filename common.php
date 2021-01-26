@@ -70,10 +70,10 @@ try
 {
     $pdo_db = $pdo_db->initPdodb();               // Connect to db using pdo
 }
-catch (Exception $e)
+catch (Exception $tki_exception)
 {
     echo "<html><pre>";
-    die($e . "</pre></html>");
+    die($tki_exception . "</pre></html>");
 }
 
 $old_db = new Tki\Db();
@@ -81,10 +81,10 @@ try
 {
     $old_db = $old_db->initAdodb();             // Connect to db using adodb also - for now - to be eliminated!
 }
-catch (Exception $e)
+catch (Exception $tki_exception)
 {
     echo "<html><pre>";
-    die($e . "</pre></html>");
+    die($tki_exception . "</pre></html>");
 }
 
 $tkireg = null;
@@ -97,10 +97,10 @@ try
 {
     $template = new \Tki\Smarty();
 }
-catch (Exception $e)
+catch (Exception $tki_exception)
 {
     echo "<html><pre>";
-    die($e . "</pre></html>");
+    die($tki_exception . "</pre></html>");
 }
 
 $template->setTheme('classic');

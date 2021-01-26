@@ -535,14 +535,14 @@ for ($i = 1; $i <= $loops; $i++)
     }
 }
 
-for ($t = 0; $t < $result_count; $t++)
+for ($total_results = 0; $total_results < $result_count; $total_results++)
 {
-    if (!isset($catch_results[$t])) // Several sectors are not being changed, and thus do not have a success set. FUTURE: Investigate why
+    if (!isset($catch_results[$total_results])) // Several sectors are not being changed, and thus do not have a success set. FUTURE: Investigate why
     {
-        $catch_results[$t] = true;
+        $catch_results[$total_results] = true;
     }
 
-    if ($catch_results[$t] !== true)
+    if ($catch_results[$total_results] !== true)
     {
         $variables['autorun'] = false; // We disable autorun if any errors occur in processing
     }
