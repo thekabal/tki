@@ -872,7 +872,7 @@ while (!$debug_query->EOF)
 
 if ($i == 0)
 {
-    for ($x = 0; $x < $tkireg->max_presets; $x++)
+    for ($preset_count = 0; $preset_count < $tkireg->max_presets; $preset_count++)
     {
         $i++;
         echo "<tr>\n";
@@ -884,7 +884,7 @@ if ($i == 0)
 }
 else
 {
-    for ($z = 0; $z < $i; $z++)
+    for ($preset_count = 0; $preset_count < $i; $preset_count++)
     {
         echo "<tr>\n";
         echo '<td style="text-align:left;"><a class=mnu href="rsmove.php?engage=1&amp;destination=' . $presetinfo[$z]['preset'] . '">=&gt;&nbsp;' . $presetinfo[$z]['preset'] . '</a></td>';

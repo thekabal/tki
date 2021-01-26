@@ -107,11 +107,11 @@ else
         $fa1 = $finish['angle1'] * $deg;
         $fa2 = $finish['angle2'] * $deg;
 
-        $x = ($start['distance'] * sin($sa1) * cos($sa2)) - ($finish['distance'] * sin($fa1) * cos($fa2));
-        $y = ($start['distance'] * sin($sa1) * sin($sa2)) - ($finish['distance'] * sin($fa1) * sin($fa2));
-        $z = ($start['distance'] * cos($sa1)) - ($finish['distance'] * cos($fa1));
+        $xx = ($start['distance'] * sin($sa1) * cos($sa2)) - ($finish['distance'] * sin($fa1) * cos($fa2));
+        $yy = ($start['distance'] * sin($sa1) * sin($sa2)) - ($finish['distance'] * sin($fa1) * sin($fa2));
+        $zz = ($start['distance'] * cos($sa1)) - ($finish['distance'] * cos($fa1));
 
-        $distance = (int) round(sqrt(pow($x, 2) + pow($y, 2) + pow($z, 2)));
+        $distance = (int) round(sqrt(pow($xx, 2) + pow($yy, 2) + pow($zz, 2)));
 
         // Calculate the speed of the ship.
         $shipspeed = pow($tkireg->level_factor, $playerinfo['engines']);

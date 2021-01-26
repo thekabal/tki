@@ -55,8 +55,8 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common',
 $variables['title'] = $langvars['l_cu_title'];
 
 $local_table_timer = new Tki\Timer();
-$z = 0;
-$i = 0;
+$result_count = 0;
+$language_count = 0;
 $language_files = new DirectoryIterator("languages/");
 $lang_file_import_results = array();
 
@@ -71,16 +71,16 @@ foreach ($language_files as $language_filename)
         $local_table_timer->start(); // Start benchmarking
         $lang_result = Tki\File::iniToDb($pdo_db, "languages/" . $language_filename->getFilename(), "languages", $lang_name, $tkireg);
         $local_table_timer->stop();
-        $variables['import_lang_results'][$i]['time'] = $local_table_timer->elapsed();
-        $variables['import_lang_results'][$i]['name'] = ucwords($lang_name);
-        $variables['import_lang_results'][$i]['result'] = $lang_result;
-        $catch_results[$z] = $lang_result;
-        $z++;
-        $i++;
+        $variables['import_lang_results'][$language_count]['time'] = $local_table_timer->elapsed();
+        $variables['import_lang_results'][$language_count]['name'] = ucwords($lang_name);
+        $variables['import_lang_results'][$language_count]['result'] = $lang_result;
+        $catch_results[$result_count] = $lang_result;
+        $result_count++;
+        $language_count++;
     }
 }
 
-$variables['language_count'] = ($i - 1);
+$variables['language_count'] = ($language_count - 1);
 $local_table_timer->start(); // Start benchmarking
 $gameconfig_result = Tki\File::iniToDb($pdo_db, "config/classic_config.ini", "gameconfig", "game", $tkireg);
 $local_table_timer->stop();
@@ -95,10 +95,10 @@ else
     $variables['import_config_results']['time'] = $local_table_timer->elapsed();
 }
 
-$catch_results[$z] = $gameconfig_result;
-$z++;
+$catch_results[$result_count] = $gameconfig_result;
+$result_count++;
 
-for ($t = 0; $t < $z; $t++)
+for ($t = 0; $t < $result_count; $t++)
 {
     if ($catch_results[$t] !== true)
     {

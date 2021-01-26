@@ -55,7 +55,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common',
 $variables['title'] = $langvars['l_cu_title'];
 
 $catch_results = array();
-$z = 0;
+$result_count = 0;
 $initsore = $tkireg->ore_limit * $variables['initscommod'] / 100.0;
 $initsorganics = $tkireg->organics_limit * $variables['initscommod'] / 100.0;
 $initsgoods = $tkireg->goods_limit * $variables['initscommod'] / 100.0;
@@ -68,16 +68,16 @@ $local_table_timer = new Tki\Timer();
 $local_table_timer->start(); // Start benchmarking
 $insert = $pdo_db->exec("INSERT INTO ::prefix::universe (sector_id, sector_name, zone_id, port_type, port_organics, port_ore, port_goods, port_energy, beacon, angle1, angle2, distance) VALUES ('1', 'Sol', '1', 'special', '0', '0', '0', '0', 'Sol: Hub of the Universe', '0', '0', '0')");
 $variables['create_sol_results']['result'] = Tki\Db::logDbErrors($pdo_db, $insert, __LINE__, __FILE__);
-$catch_results[$z] = $variables['create_sol_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['create_sol_results']['result'];
+$result_count++;
 $local_table_timer->stop();
 $variables['create_sol_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
 $insert = $pdo_db->exec("INSERT INTO ::prefix::universe (sector_id, sector_name, zone_id, port_type, port_organics, port_ore, port_goods, port_energy, beacon, angle1, angle2, distance) VALUES ('2', 'Alpha Centauri', '1', 'energy',  '0', '0', '0', '0', 'Alpha Centauri: Gateway to the Galaxy', '0', '0', '1')");
 $variables['create_ac_results']['result'] = Tki\Db::logDbErrors($pdo_db, $insert, __LINE__, __FILE__);
-$catch_results[$z] = $variables['create_ac_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['create_ac_results']['result'];
+$result_count++;
 $local_table_timer->stop();
 $variables['create_ac_results']['time'] = $local_table_timer->elapsed();
 
@@ -123,8 +123,8 @@ for ($i = 1; $i <= $loops; $i++)
     $j = 0;
     $result = $pdo_db->exec($insert);
     $variables['insert_sector_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_sector_results'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_sector_results'][$i]['result'];
+    $result_count++;
 
     $local_table_timer->stop();
     $variables['insert_sector_results'][$i]['elapsed'] = $local_table_timer->elapsed();
@@ -146,8 +146,8 @@ for ($i = 1; $i <= $loops; $i++)
 $local_table_timer->start(); // Start benchmarking
 $replace = $pdo_db->exec("INSERT INTO ::prefix::zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Unchartered space', 0, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '0' )");
 $variables['create_unchartered_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
-$catch_results[$z] = $variables['create_unchartered_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['create_unchartered_results']['result'];
+$result_count++;
 $local_table_timer->stop();
 $variables['create_unchartered_results']['time'] = $local_table_timer->elapsed();
 
@@ -156,24 +156,24 @@ $max_fed_hull = (int) $tkireg->max_fed_hull;
 
 $replace = $pdo_db->exec("INSERT INTO ::prefix::zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Federation space', 0, 'N', 'N', 'N', 'N', 'N', 'N',  'Y', 'N', '$max_fed_hull')");
 $variables['create_fedspace_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
-$catch_results[$z] = $variables['create_fedspace_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['create_fedspace_results']['result'];
+$result_count++;
 $local_table_timer->stop();
 $variables['create_fedspace_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
 $replace = $pdo_db->exec("INSERT INTO ::prefix::zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('Free-Trade space', 0, 'N', 'N', 'Y', 'N', 'N', 'N','Y', 'N', '0')");
 $variables['create_free_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
-$catch_results[$z] = $variables['create_free_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['create_free_results']['result'];
+$result_count++;
 $local_table_timer->stop();
 $variables['create_free_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
 $replace = $pdo_db->exec("INSERT INTO ::prefix::zones (zone_name, owner, team_zone, allow_beacon, allow_attack, allow_planetattack, allow_warpedit, allow_planet, allow_trade, allow_defenses, max_hull) VALUES ('War Zone', 0, 'N', 'Y', 'Y', 'Y', 'Y', 'Y','N', 'Y', '0')");
 $variables['create_warzone_results']['result'] = Tki\Db::logDbErrors($pdo_db, $replace, __LINE__, __FILE__);
-$catch_results[$z] = $variables['create_warzone_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['create_warzone_results']['result'];
+$result_count++;
 $local_table_timer->stop();
 $variables['create_warzone_results']['time'] = $local_table_timer->elapsed();
 
@@ -186,8 +186,8 @@ $stmt->bindParam(':fedsecs', $variables['fedsecs'], \PDO::PARAM_INT);
 $update = $stmt->execute();
 
 $variables['create_fed_sectors_results']['result'] = Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
-$catch_results[$z] = $variables['create_fed_sectors_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['create_fed_sectors_results']['result'];
+$result_count++;
 $local_table_timer->stop();
 $variables['create_fed_sectors_results']['time'] = $local_table_timer->elapsed();
 
@@ -222,8 +222,8 @@ $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
 // FUTURE: This select should have an error check that is reflected in the template
-$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-$z++;
+$catch_results[$result_count] = Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+$result_count++;
 
 for ($i = 1; $i <= $loops; $i++)
 {
@@ -245,8 +245,8 @@ for ($i = 1; $i <= $loops; $i++)
     $j = 0;
     $resx = $pdo_db->exec($update);
     $variables['insert_special_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_special_ports'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_special_ports'][$i]['result'];
+    $result_count++;
     $local_table_timer->stop();
     $variables['insert_special_ports'][$i]['elapsed'] = $local_table_timer->elapsed();
     $variables['insert_special_ports'][$i]['loop'] = $i;
@@ -291,8 +291,8 @@ $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
-// FUTURE: This select should have an error check that is reflected in the template, like catch_results[$z] = logdberrors
-$z++;
+// FUTURE: This select should have an error check that is reflected in the template, like catch_results[$result_count] = logdberrors
+$result_count++;
 $update = "UPDATE ::prefix::universe SET port_type='ore',port_ore=$initsore,port_organics=$initborganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
 
 for ($i = 1; $i <= $loops; $i++)
@@ -313,8 +313,8 @@ for ($i = 1; $i <= $loops; $i++)
 
     $resx = $pdo_db->exec($update);
     $variables['insert_ore_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_ore_ports'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_ore_ports'][$i]['result'];
+    $result_count++;
     $local_table_timer->stop();
     $variables['insert_ore_ports'][$i]['elapsed'] = $local_table_timer->elapsed();
     $variables['insert_ore_ports'][$i]['loop'] = $i;
@@ -359,8 +359,8 @@ $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
-// FUTURE: This select should have an error check that is reflected in the template like $catch_results[$z] = logDbErrors
-$z++;
+// FUTURE: This select should have an error check that is reflected in the template like $catch_results[$result_count] = logDbErrors
+$result_count++;
 $update = "UPDATE ::prefix::universe SET port_type='organics',port_ore=$initsore,port_organics=$initborganics,port_goods=$initbgoods,port_energy=$initbenergy WHERE ";
 
 for ($i = 1; $i <= $loops; $i++)
@@ -381,8 +381,8 @@ for ($i = 1; $i <= $loops; $i++)
 
     $resx = $pdo_db->exec($update);
     $variables['insert_organics_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_organics_ports'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_organics_ports'][$i]['result'];
+    $result_count++;
     $local_table_timer->stop();
     $variables['insert_organics_ports'][$i]['elapsed'] = $local_table_timer->elapsed();
     $variables['insert_organics_ports'][$i]['loop'] = $i;
@@ -427,8 +427,8 @@ $stmt->execute();
 $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
-// FUTURE: This select should have an error check that is reflected in the template like $catch_results[$z] = logDbErrors
-$z++;
+// FUTURE: This select should have an error check that is reflected in the template like $catch_results[$result_count] = logDbErrors
+$result_count++;
 $update = "UPDATE ::prefix::universe SET port_type='goods',port_ore=$initbore,port_organics=$initborganics,port_goods=$initsgoods,port_energy=$initbenergy WHERE ";
 
 for ($i = 1; $i <= $loops; $i++)
@@ -449,8 +449,8 @@ for ($i = 1; $i <= $loops; $i++)
 
     $resx = $pdo_db->exec($update);
     $variables['insert_goods_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_goods_ports'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_goods_ports'][$i]['result'];
+    $result_count++;
     $local_table_timer->stop();
     $variables['insert_goods_ports'][$i]['elapsed'] = $local_table_timer->elapsed();
     $variables['insert_goods_ports'][$i]['loop'] = $i;
@@ -497,8 +497,8 @@ $sql_query = $stmt->fetchAll(PDO::FETCH_COLUMN);
 shuffle($sql_query);
 
 // FUTURE: This select should have an error check that is reflected in the template
-//$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
-$z++;
+//$catch_results[$result_count] = Tki\Db::logDbErrors($pdo_db, $sql_query, __LINE__, __FILE__);
+$result_count++;
 
 for ($i = 1; $i <= $loops; $i++)
 {
@@ -518,8 +518,8 @@ for ($i = 1; $i <= $loops; $i++)
 
     $resx = $pdo_db->exec($update);
     $variables['insert_energy_ports'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_energy_ports'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_energy_ports'][$i]['result'];
+    $result_count++;
     $local_table_timer->stop();
     $variables['insert_energy_ports'][$i]['elapsed'] = $local_table_timer->elapsed();
     $variables['insert_energy_ports'][$i]['loop'] = $i;
@@ -535,7 +535,7 @@ for ($i = 1; $i <= $loops; $i++)
     }
 }
 
-for ($t = 0; $t < $z; $t++)
+for ($t = 0; $t < $result_count; $t++)
 {
     if (!isset($catch_results[$t])) // Several sectors are not being changed, and thus do not have a success set. FUTURE: Investigate why
     {

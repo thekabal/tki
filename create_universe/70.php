@@ -54,7 +54,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common',
                                 'news', 'regional'));
 $variables['title'] = $langvars['l_cu_title'];
 
-$z = 0;
+$result_count = 0;
 $local_table_timer = new Tki\Timer();
 $local_table_timer->start(); // Start benchmarking
 
@@ -65,8 +65,8 @@ $sth->execute();
 // Place those id's into an array.
 $catch_results = array();
 $open_sectors_result = $sth->fetchAll();
-$catch_results[$z] = Tki\Db::logDbErrors($pdo_db, $open_sectors_result, __LINE__, __FILE__);
-$z++;
+$catch_results[$result_count] = Tki\Db::logDbErrors($pdo_db, $open_sectors_result, __LINE__, __FILE__);
+$result_count++;
 
 $i = 0;
 $open_sectors_array = array();
@@ -123,8 +123,8 @@ while ($p_add < $variables['nump']); // Only add as many planets as requested
 // Insert all of the planets in one mega sql shot
 $insert = $pdo_db->exec($planet_insert_sql);
 $variables['setup_unowned_results']['result'] = Tki\Db::logDbErrors($pdo_db, $insert, __LINE__, __FILE__);
-$catch_results[$z] = $variables['setup_unowned_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['setup_unowned_results']['result'];
+$result_count++;
 
 $local_table_timer->stop();
 $variables['setup_unowned_results']['elapsed'] = $local_table_timer->elapsed();
@@ -168,8 +168,8 @@ for ($i = 1; $i <= $loops; $i++)
 
     $resx = $pdo_db->exec($update);
     $variables['insert_loop_sectors_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_loop_sectors_results'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_loop_sectors_results'][$i]['result'];
+    $result_count++;
 
     $local_table_timer->stop();
     $variables['insert_loop_sectors_result'][$i]['elapsed'] = $local_table_timer->elapsed();
@@ -223,8 +223,8 @@ for ($i = 1; $i <= $loops; $i++)
 
     $resx = $pdo_db->exec($insert);
     $variables['insert_random_oneway_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_random_oneway_results'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_random_oneway_results'][$i]['result'];
+    $result_count++;
 
     $local_table_timer->stop();
 
@@ -279,8 +279,8 @@ for ($i = 1; $i <= $loops; $i++)
 
     $resx = $pdo_db->exec($insert);
     $variables['insert_random_twoway_results'][$i]['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-    $catch_results[$z] = $variables['insert_random_twoway_results'][$i]['result'];
-    $z++;
+    $catch_results[$result_count] = $variables['insert_random_twoway_results'][$i]['result'];
+    $result_count++;
 
     $local_table_timer->stop();
     $variables['insert_random_twoway_result'][$i]['elapsed'] = $local_table_timer->elapsed();
@@ -305,13 +305,13 @@ $stmt->bindParam(':linkdest', $tkireg->max_sectors, \PDO::PARAM_INT);
 $resx = $stmt->execute();
 
 $variables['remove_links_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-$catch_results[$z] = $variables['remove_links_results']['result'];
-$z++;
+$catch_results[$result_count] = $variables['remove_links_results']['result'];
+$result_count++;
 
 $local_table_timer->stop();
 $variables['remove_links_results']['elapsed'] = $local_table_timer->elapsed();
 
-for ($t = 0; $t < $z; $t++)
+for ($t = 0; $t < $result_count; $t++)
 {
     if ($catch_results[$t] !== true)
     {

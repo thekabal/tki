@@ -83,9 +83,9 @@ echo "<br>\n";
 if ($change !== 1)
 {
     echo "<form accept-charset='utf-8' action='preset.php' method='post'>";
-    for ($x = 0; $x < $tkireg->max_presets; $x++)
+    for ($preset_count = 0; $preset_count < $tkireg->max_presets; $preset_count++)
     {
-        echo "<div style='padding:2px;'>Preset " . ($x + 1) . ": <input type='text' name='preset[$x]' size='6' maxlength='6' value='" . $preset_list[$x]['preset'] . "'></div>";
+        echo "<div style='padding:2px;'>Preset " . ($preset_count + 1) . ": <input type='text' name='preset[$preset_count]' size='6' maxlength='6' value='" . $preset_list[$preset_count]['preset'] . "'></div>";
     }
 
     echo "<input type='hidden' name='change' value='1'>";
