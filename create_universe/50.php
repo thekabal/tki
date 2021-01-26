@@ -100,7 +100,7 @@ $result_count++;
 
 for ($total_results = 0; $total_results < $result_count; $total_results++)
 {
-    if ($catch_results[$t] !== true)
+    if ($catch_results[$total_results] !== true)
     {
         $variables['autorun'] = false; // We disable autorun if any errors occur in processing
     }
