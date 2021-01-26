@@ -170,7 +170,7 @@ else
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         if ($old_db->ErrorNo() != 0)
         {
-            echo "Message failed to send: " . $old_db->ErrorMsg() . "<br>\n";
+            echo $langvars['l_sendm_failed'] . $old_db->ErrorMsg() . "<br>\n";
         }
         else
         {

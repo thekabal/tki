@@ -27,10 +27,15 @@ require_once './common.php';
 // Test to see if server is closed to logins
 $playerfound = false;
 
+// Database driven language entries
+$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
+                                'insignias', 'login', 'login2', 'news',
+                                'universal'));
+
 // Detect if the server is configured using HTTP only - HTTPS is required for TKI to work correctly.
 if(!isset($_SERVER['HTTPS']))
 {
-    die("This game is not currently configured to use HTTPS, please notify the admin(s) that HTTPS is required.");
+    die($lanvars['l_login2_tls']);
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -80,10 +85,6 @@ else
     $link = null;
 }
 
-// Database driven language entries
-$langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
-                                'insignias', 'login', 'login2', 'news',
-                                'universal'));
 if ($tkireg->game_closed)
 {
     $title = $langvars['l_login_sclosed'];

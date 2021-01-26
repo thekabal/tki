@@ -40,7 +40,7 @@ $header->display($pdo_db, $lang, $template, $title);
 
 echo "<h1>" . $title . "</h1>\n";
 
-$testing = false; // set to false to get rid of password when creating new team
+$testing = false; // Set to false to get rid of password when creating new team
 
 // Typecast into ints (this also removes all non numbers)
 $whichteam = 0;
@@ -111,7 +111,7 @@ if (array_key_exists('type', $_POST) === true)
 }
 
 // Setting up some recordsets.
-// I noticed before the rewriting of this page that in some case recordset may be fetched more thant once, which is NOT optimized.
+// I noticed before the rewriting of this page that in some cases the recordset may be fetched more than once, which is not optimized.
 
 // Get user info.
 $result = $old_db->Execute("SELECT {$old_db->prefix}ships.*, {$old_db->prefix}teams.team_name, {$old_db->prefix}teams.description, {$old_db->prefix}teams.creator, {$old_db->prefix}teams.id
@@ -140,7 +140,7 @@ else
 
 $sectors = null;
 
-// Get Team Info
+// Get team Info
 if ($whichteam !== 0)
 {
     $result_team = $old_db->Execute("SELECT * FROM {$old_db->prefix}teams WHERE id = ?;", array($whichteam));
@@ -164,7 +164,7 @@ switch ($teamwhat)
     case 2: // Leave the team
         if (!Tki\Team::isTeamMember($team, $playerinfo))
         {
-            echo "<strong><font color=red>An error occured</font></strong><br>You are not a member of this Team.";
+            echo "<strong><font color=red>" . $langvars['l_team_error_occurred'] . "</font></strong><br>" . $langvars['l_team_not_team'];
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
         }
@@ -179,7 +179,7 @@ switch ($teamwhat)
             {
                 if (!Tki\Team::isTeamOwner($team, $playerinfo))
                 {
-                    $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
+                    $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>" . $langvars['l_team_error_occurred'] . "</font></strong><br>", $langvars['l_team_error']);
                     echo $langvars['l_team_error'];
                     echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
                     break;
@@ -358,18 +358,18 @@ switch ($teamwhat)
         break;
 
     case 4: // Not implemented yet
-        echo "Not implemented yet. Sorry! :)<br><br>";
+        echo $langvars['l_team_not_yet'] . " :)<br><br>";
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         break;
 
     case 5: // Eject member
-            // Check if Co-ordinator of team.
-            // If not display "An error occured, You are not the leader of this Team." message.
+            // Check if the player is the co-ordinator of team
+            // If not display "An error occurred, you are not the leader of this team." message
             // Then show link back and break;
 
         if (Tki\Team::isTeamOwner($team, $playerinfo) === false)
         {
-            $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
+            $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>" . $langvars['l_team_error_occurred'] . "</font></strong><br>", $langvars['l_team_error']);
             echo $langvars['l_team_error'];
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;
@@ -386,8 +386,8 @@ switch ($teamwhat)
             }
             else
             {
-                // Check whether the player we are ejecting might have already left in the meantime
-                // should go here if ($whotoexpel[team] ==
+                // Check whether the player that we are ejecting might have already left in the meantime
+                // Should go here if ($whotoexpel[team] == ??
 
                 $resx = $old_db->Execute("UPDATE {$old_db->prefix}planets SET team = '0' WHERE owner = ?;", array($who));
                 Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
@@ -395,7 +395,7 @@ switch ($teamwhat)
                 $resy = $old_db->Execute("UPDATE {$old_db->prefix}ships SET team = '0' WHERE ship_id = ?;", array($who));
                 Tki\Db::logDbErrors($pdo_db, $resy, __LINE__, __FILE__);
 
-                // No more necessary due to COUNT(*) in previous SQL statement
+                // No longer necessary due to COUNT(*) in the previous SQL statement
                 $old_db->Execute("UPDATE {$old_db->prefix}teams SET number_of_members = number_of_members - 1 WHERE id = ?;", array($whotoexpel['team']));
 
                 Tki\PlayerLog::writeLog($pdo_db, $who, \Tki\LogEnums::TEAM_KICK, $team['team_name']);
@@ -549,13 +549,13 @@ switch ($teamwhat)
         break;
 
     case 9: // Edit Team
-            // Check if Co-ordinator of team.
-            // If not display "An error occured, You are not the leader of this Team." message.
-            // Then show link back and break;
+            // Check if the player is the co-ordinator of the team
+            // If not display "An error occurred, you are not the leader of this team." message
+            // Then show link back and break
 
         if (Tki\Team::isTeamOwner($team, $playerinfo) === false)
         {
-            $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>An error occured</font></strong><br>", $langvars['l_team_error']);
+            $langvars['l_team_error'] = str_replace("[error]", "<strong><font color=red>" . $langvars['l_team_error_occurred'] . "</font></strong><br>", $langvars['l_team_error']);
             echo $langvars['l_team_error'];
             echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
             break;

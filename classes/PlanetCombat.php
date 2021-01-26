@@ -28,6 +28,7 @@ class PlanetCombat
 {
     public static function prime(\PDO $pdo_db, $old_db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): bool
     {
+        $langvars = \Tki\Translate::load($pdo_db, $lang, array('planet_cmb'));
         if ($playerinfo['turns'] < 1)
         {
             echo $langvars['l_cmb_atleastoneturn'] . "<br><br>";
@@ -214,7 +215,7 @@ class PlanetCombat
             }
         }
 
-        echo "<tr align='center'><td><font color='YELLOW'><strong>" . $langvars['l_cmb_torpedoexchangephase'] . "</strong></font></td><td><strong><font color='YELLOW'>" . $langvars['l_cmb_torpedoexchangephase'] . "</strong></font></td><br>";
+        echo "<tr align='center'><td><font color='yellow'><strong>" . $langvars['l_cmb_torpedoexchangephase'] . "</strong></font></td><td><strong><font color='yellow'>" . $langvars['l_cmb_torpedoexchangephase'] . "</strong></font></td><br>";
         if ($planetfighters > 0 && $attackertorpdamage > 0)
         {
             if ($attackertorpdamage > $planetfighters)
@@ -283,7 +284,7 @@ class PlanetCombat
             }
         }
 
-        echo "<tr align='center'><td><font color='YELLOW'><strong>" . $langvars['l_cmb_fightercombatphase'] . "</strong></font></td><td><strong><font color='YELLOW'>" . $langvars['l_cmb_fightercombatphase'] . "</strong></font></td><br>";
+        echo "<tr align='center'><td><font color='yellow'><strong>" . $langvars['l_cmb_fightercombatphase'] . "</strong></font></td><td><strong><font color='yellow'>" . $langvars['l_cmb_fightercombatphase'] . "</strong></font></td><br>";
         if ($attackerfighters > 0 && $planetfighters > 0)
         {
             if ($attackerfighters > $planetfighters)
@@ -404,7 +405,7 @@ class PlanetCombat
             $ship_value = $tkireg->upgrade_cost * (round(pow($tkireg->upgrade_factor, $playerinfo['hull'])) + round(pow($tkireg->upgrade_factor, $playerinfo['engines'])) + round(pow($tkireg->upgrade_factor, $playerinfo['power'])) + round(pow($tkireg->upgrade_factor, $playerinfo['computer'])) + round(pow($tkireg->upgrade_factor, $playerinfo['sensors'])) + round(pow($tkireg->upgrade_factor, $playerinfo['beams'])) + round(pow($tkireg->upgrade_factor, $playerinfo['torp_launchers'])) + round(pow($tkireg->upgrade_factor, $playerinfo['shields'])) + round(pow($tkireg->upgrade_factor, $playerinfo['armor'])) + round(pow($tkireg->upgrade_factor, $playerinfo['cloak'])));
             $ship_salvage_rate = random_int(0, 10);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-            echo "<br><center><font size='+2' COLOR='red'><strong>" . $langvars['l_cmb_yourshipdestroyed'] . "</font></strong></center><br>";
+            echo "<br><center><font size='+2' color='red'><strong>" . $langvars['l_cmb_yourshipdestroyed'] . "</font></strong></center><br>";
             if ($playerinfo['dev_escapepod'] == "Y")
             {
                 echo "<center><font color='white'>" . $langvars['l_cmb_escapepod'] . "</font></center><br><br>";
@@ -475,7 +476,7 @@ class PlanetCombat
 
         if ($planetshields < 1 && $planetfighters < 1 && $attackerarmor > 0 && $shipsonplanet == 0)
         {
-            echo "<br><br><center><font color='GREEN'><strong>" . $langvars['l_cmb_planetdefeated'] . "</strong></font></center><br><br>";
+            echo "<br><br><center><font color='green'><strong>" . $langvars['l_cmb_planetdefeated'] . "</strong></font></center><br><br>";
 
             // Patch to stop players dumping credits for other players.
             $self_tech = \Tki\CalcLevels::avgTech($playerinfo);
@@ -490,7 +491,7 @@ class PlanetCombat
                 $sql .= "WHERE planet_id = ? LIMIT 1;";
                 $resx = $old_db->Execute($sql, array($planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                echo "<div style='text-align:center; font-size:18px; color:#f00;'>The planet become unstable due to not being looked after, and all life and assets have been destroyed.</div>\n";
+                echo "<div style='text-align:center; font-size:18px; color:#f00;'>" . $langvars['l_planet_cmb_unstable'] . "</div>\n";
             }
 
             if ($tkireg->min_value_capture != 0)

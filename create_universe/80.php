@@ -202,7 +202,7 @@ $variables['update_gov_results']['elapsed'] = $local_table_timer->elapsed();
 // This adds a news item into the newly created news table
 $local_table_timer->start(); // Start benchmarking for big bang news event
 $headline = 'Big Bang';
-$newstext = 'Scientists have just discovered the Universe exists!';
+$newstext = $langvars['l_cu_bigbang'];
 $news_type = 'col25';
 $sql = "INSERT INTO ::prefix::news (headline, newstext, date, news_type) VALUES (:headline, :newstext, :date, :news_type)";
 $stmt = $pdo_db->prepare($sql);

@@ -157,7 +157,7 @@ if ($rankings !== null && ($variables['num_players'] > 0))
         {
             $row['banned'] = true;
             $row['ban_info'] = array('type' => $ban_result['ban_type'],
-                'public_info' => "Player banned/locked for the following:\n{$ban_result['public_info']}");
+                'public_info' => $langvars['l_ranks_ban_reason'] . "\n" . $ban_result['public_info']);
         }
 
         array_push($player_list, $row);

@@ -151,7 +151,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
         {
             if ($destroy == 1 && $tkireg->allow_genesis_destroy)
             {
-                echo "<font color=red>" . $langvars['l_planet_confirm'] . "</font><br><a href=planet.php?planet_id=$planet_id&destroy=2>yes</a><br>";
+                echo "<font color=red>" . $langvars['l_planet_confirm'] . "</font><br><a href=planet.php?planet_id=$planet_id&destroy=2>" . $langvars['l_yes'] . "</a><br>";
                 echo "<a href=planet.php?planet_id=$planet_id>no!</a><br><br>";
             }
             elseif ($destroy == 2 && $tkireg->allow_genesis_destroy)
@@ -311,7 +311,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
-                    echo "<div style='color:#ff0;'>Sorry, no Options available for Friendly Owned Private Planets.</div>\n";
+                    echo "<div style='color:#ff0;'>" . $langvars['l_planet_no_options'] . "</div>\n";
                 }
                 else
                 {
@@ -412,7 +412,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             // Kami Multi Browser Window Attack Fix
             if ($_SESSION['planet_selected'] !== $planet_id && $_SESSION['planet_selected'] !== null)
             {
-                echo "You need to Click on the planet first.<br><br>";
+                echo $langvars['l_planet_click_first'] . ".<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
@@ -541,7 +541,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                echo "You need to Click on the planet first.<br><br>";
+                echo $langvars['l_planet_click_first'] . ".<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
@@ -567,7 +567,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
-                    echo "<div style='color:#ff0;'>Sorry, You cannot attack a Friendly Owned Private Planet.</div>\n";
+                    echo "<div style='color:#ff0;'>" . $langvars['l_planet_cannot_attack'] . ".</div>\n";
                 }
                 else
                 {
@@ -589,7 +589,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                echo "You need to Click on the planet first.<br><br>";
+                echo $langvars['l_planet_click_first'] . ".<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
@@ -604,7 +604,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             {
                 if ($retOwnerInfo['team'] == $playerinfo['team'] && ($playerinfo['team'] != 0 || $retOwnerInfo['team'] != 0))
                 {
-                    echo "<div style='color:#f00;'>Look we have told you, You cannot attack a Friendly Owned Private Planet!</div>\n";
+                    echo "<div style='color:#f00;'>" . $langvars['l_planet_cannot_attack'] . "!</div>\n";
                 }
                 else
                 {
@@ -653,7 +653,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             // Kami Multi Browser Window Attack Fix
             if (array_key_exists('planet_selected', $_SESSION) === false || $_SESSION['planet_selected'] != $planet_id)
             {
-                echo "You need to Click on the planet first.<br><br>";
+                echo $langvars['l_planet_click_first'] . ".<br><br>";
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();

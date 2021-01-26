@@ -388,7 +388,7 @@ else
             if (empty($operation))
             {
                 echo "<br>";
-                echo "<h2><font COLOR=Red>Are You Sure?</font></h2><br>";
+                echo "<h2><font color=red>" . $langvars['l_ai_confirm'] . "</font></h2><br>";
                 echo "<input type=hidden name=operation value=dropkabal>";
                 echo "<input type=submit value=Drop>";
             }
@@ -434,7 +434,7 @@ else
             if (empty($operation))
             {
                 echo "<br>";
-                echo "<h2><font COLOR=Red>Are You Sure?</font></h2><br>";
+                echo "<h2><font color=red>" . $langvars['l_ai_confirm'] . "</font></h2><br>";
                 echo "<input type=hidden name=operation value=clearkaballog>";
                 echo "<input type=submit value=Clear>";
             }

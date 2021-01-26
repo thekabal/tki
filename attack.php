@@ -301,7 +301,7 @@ else
 
             echo "<div style='width:800px; margin:auto; text-align:center; color:#fff;'>\n";
 
-            echo "  <div style='text-align:center; font-size:24px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>The Kabal Invasion Combat System. " .
+            echo "  <div style='text-align:center; font-size:24px; font-weight:bold; padding:4px; background-color:{$tkireg->color_header}; border:#FFCC00 1px solid;'>" . $langvars['l_att_tkics'] . ". " .
                  "(<span style='color:#0f0;'>BETA</span>)</div>\n";
             echo "  <div style='height:1px;'></div>\n";
 

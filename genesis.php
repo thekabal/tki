@@ -82,7 +82,7 @@ elseif ($num_planets >= $tkireg->max_planets_sector)
 }
 elseif ($sectorinfo['sector_id'] >= $tkireg->max_sectors)
 {
-    echo "Invalid sector<br>\n";
+    echo $langvars['l_gns_invalid_sector'] . "<br>\n";
 }
 elseif ($playerinfo['dev_genesis'] < 1)
 {

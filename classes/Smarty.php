@@ -56,8 +56,8 @@ class Smarty
         $smarty_errors = null;
         if (!is_dir('templates'))
         {
-            $smarty_errors .= 'The Kabal Invasion smarty error: The ' .
-                              'templates/ subdirectory under the main TKI ' .
+            $smarty_errors .= 'The Kabal Invasion smarty error: ' .
+                              'The templates/ subdirectory under the main TKI ' .
                               'directory does not exist. Please create it.<br>';
         }
 
@@ -66,8 +66,8 @@ class Smarty
 
         if (!$cache_perms)
         {
-            $smarty_errors .= '<br><br>The Kabal Invasion smarty error: The ' .
-                              'templates/_cache directory needs to have its ' .
+            $smarty_errors .= '<br><br>The Kabal Invasion smarty error: ' .
+                              'The templates/_cache directory needs to have its ' .
                               'permissions set to be writable by the web server ' .
                               'user, OR 777, or ugo+rwx.<br>';
         }

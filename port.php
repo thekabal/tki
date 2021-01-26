@@ -409,7 +409,7 @@ elseif ($sectorinfo['port_type'] == "special")
                         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                         $resx = $old_db->Execute("UPDATE {$old_db->prefix}bounty SET amount = amount - ?  WHERE bounty_on = ? AND placed_by = 0;", array($bounty_payment, $playerinfo['ship_id']));
                         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        echo "You have paid part of the bounty.<br>\n";
+                        echo $langvars['l_port_part_bounty'] . ".<br>\n";
                         echo "<br>\n";
 
                         $bounty_left = $bty['total_bounty'] - $bounty_payment;
@@ -420,7 +420,7 @@ elseif ($sectorinfo['port_type'] == "special")
                 else
                 {
                     // Translation needed
-                    echo "Sorry you don't have enough funds in the bank.<br>\n";
+                    echo $langvars['l_port_funds_bank'] . ".<br>\n";
                     echo "Try doing some trading then transfer your funds over to the <a href='ibank.php'>Intergalactic Bank</a><br>\n";
                     echo "<br>\n";
 
@@ -433,13 +433,13 @@ elseif ($sectorinfo['port_type'] == "special")
                 echo $langvars['l_port_bounty'] . "<br>";
                 echo "<br>\n";
 
-                echo "Option Plan 1: Payment from Ship<br>\n";
+                echo $langvars['l_port_pay_from_ship'] . "<br>\n";
                 $langvars['l_port_bounty2'] = str_replace("[amount]", number_format($bty['total_bounty'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_port_bounty2']);
                 $langvars['l_port_bounty2'] = str_replace("[here]", "<a href='port.php?pay=1'>" . $langvars['l_here'] . "</a>", $langvars['l_port_bounty2']);
                 echo $langvars['l_port_bounty2'] . "<br>";
                 echo "<br>\n";
 
-                echo "Option Plan 2: Payment from Intergalactic Bank [Full/Partial Payments]<br>\n";
+                echo $langvars['l_port_pay_from_bank'] . "<br>\n";
                 $langvars['l_port_bounty3'] = "Click <a href='port.php?pay=2'>here</a> to pay the bounty of [amount] Credits from your Intergalactic Bank Account.";
                 $langvars['l_port_bounty3'] = str_replace("[amount]", number_format($bty['total_bounty'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_port_bounty3']);
                 echo $langvars['l_port_bounty3'] . "<br>\n";
