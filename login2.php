@@ -91,7 +91,7 @@ if ($tkireg->game_closed)
     $header = new Tki\Header();
     $header->display($pdo_db, $lang, $template, $title);
     echo "<div style='text-align:center; color:#ff0; font-size:20px;'><br>" . $langvars['l_login_closed_message'] . "</div><br>\n";
-    echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
+    echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_login']);
 
     $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $template);
@@ -242,7 +242,7 @@ if ($playerfound)
             echo "<br>\n";
             echo "<div style='color:#FF0000;'>" . $langvars['l_login2_behave'] . "</div>\n";
             echo "<br>\n";
-            echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
+            echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_login']);
         }
     }
     else

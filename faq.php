@@ -39,11 +39,11 @@ $variables['title'] = $langvars['l_faq_title'];
 
 if (empty($_SESSION['username']))
 {
-    $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
+    $variables['linkback'] = array("fulltext" => $langvars['l_universal_main_login'], "link" => "index.php");
 }
 else
 {
-    $variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link" => "index.php");
+    $variables['linkback'] = array("fulltext" => $langvars['l_universal_main_menu'], "link" => "index.php");
 }
 
 $header = new Tki\Header();

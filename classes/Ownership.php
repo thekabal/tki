@@ -37,7 +37,7 @@ class Ownership
         $bases = array();
         if (empty($bases_present))
         {
-            return $langvars['l_global_sector_owner_nochange'];
+            return $langvars['l_universal_sector_owner_nochange'];
         }
 
         foreach ($bases_present as $tmp_base)
@@ -132,7 +132,7 @@ class Ownership
             $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
-            return (string) $langvars['l_global_warzone'];
+            return (string) $langvars['l_universal_warzone'];
         }
 
         // More than one unallied ship, war
@@ -152,7 +152,7 @@ class Ownership
             $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
-            return (string) $langvars['l_global_warzone'];
+            return (string) $langvars['l_universal_warzone'];
         }
 
         // Unallied ship, another team present, war
@@ -163,7 +163,7 @@ class Ownership
             $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
-            return (string) $langvars['l_global_warzone'];
+            return (string) $langvars['l_universal_warzone'];
         }
 
         // Unallied ship, another ship in a team, war
@@ -181,7 +181,7 @@ class Ownership
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
                 $stmt->execute();
-                return (string) $langvars['l_global_warzone'];
+                return (string) $langvars['l_universal_warzone'];
             }
         }
 
@@ -209,7 +209,7 @@ class Ownership
             $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
-            return (string) $langvars['l_global_nzone'];
+            return (string) $langvars['l_universal_nzone'];
         }
 
         if ($owners[$winner]['type'] == 'C')
@@ -232,7 +232,7 @@ class Ownership
             $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
             $stmt->execute();
 
-            return (string) $langvars['l_global_team'] . ' ' . $team['team_name'] . '!';
+            return (string) $langvars['l_universal_team'] . ' ' . $team['team_name'] . '!';
         }
         else
         {
@@ -254,7 +254,7 @@ class Ownership
                 $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
                 $stmt->execute();
 
-                return (string) $langvars['l_global_nzone'];
+                return (string) $langvars['l_universal_nzone'];
             }
             else
             {
@@ -276,7 +276,7 @@ class Ownership
                 $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
                 $stmt->execute();
 
-                return (string) $langvars['l_global_player'] . ' ' . $ship['character_name'] . '!';
+                return (string) $langvars['l_universal_player'] . ' ' . $ship['character_name'] . '!';
             }
         }
     }

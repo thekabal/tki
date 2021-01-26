@@ -95,7 +95,7 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('admin', 'combat',
 $variables['body_class'] = 'admin';
 $variables['lang'] = $lang;
 $variables['swordfish'] = $swordfish;
-$variables['linkback'] = array('fulltext' => $langvars['l_global_mmenu'], 'link' => 'main.php');
+$variables['linkback'] = array('fulltext' => $langvars['l_universal_main_menu'], 'link' => 'main.php');
 $variables['menu'] = $menu;
 $variables['filename'] = $filename;
 $variables['menu_location'] = $menu_location;

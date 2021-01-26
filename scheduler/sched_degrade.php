@@ -25,7 +25,7 @@
 // FUTURE: Better debugging and output for all paths
 $langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
 
-echo "<strong>" . $langvars['l_degrade_title'] . "</strong><br><br>";
+echo "<strong>" . $langvars['l_sched_degrade_title'] . "</strong><br><br>";
 $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE defense_type = 'F'");
 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
 
@@ -51,9 +51,9 @@ while (!$res->EOF)
         Tki\Db::logDbErrors($pdo_db, $res4, __LINE__, __FILE__);
         $planet_energy = $res4->fields;
         $energy_available = $planet_energy['energy_available'];
-        $langvars['l_degrade_note'] = str_replace("[energy_avail]", (string) $energy_available, $langvars['l_degrade_note']);
-        $langvars['l_degrade_note'] = str_replace("[energy_required]", (string) $energy_required, $langvars['l_degrade_note']);
-        echo $langvars['l_degrade_note'];
+        $langvars['l_sched_degrade_note'] = str_replace("[energy_avail]", (string) $energy_available, $langvars['l_sched_degrade_note']);
+        $langvars['l_sched_degrade_note'] = str_replace("[energy_required]", (string) $energy_required, $langvars['l_sched_degrade_note']);
+        echo $langvars['l_sched_degrade_note'];
         if ($energy_available > $energy_required)
         {
             while (!$res2->EOF)

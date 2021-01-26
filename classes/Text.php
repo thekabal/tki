@@ -30,6 +30,6 @@ class Text
     {
         $langvars = Translate::load($pdo_db, $lang, array('common',
                                     'universal'));
-        echo str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mmenu']);
+        echo str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_universal_main_menu']);
     }
 }

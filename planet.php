@@ -505,8 +505,8 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             echo $langvars['l_planet_left'] . "<br><br>";
             $update = $old_db->Execute("UPDATE {$old_db->prefix}ships SET on_planet = 'N', planet_id = 0 WHERE ship_id = ?;", array($playerinfo['ship_id']));
             Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
-            $langvars['l_global_mmenu'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
-            echo $langvars['l_global_mmenu'] . "<br>\n";
+            $langvars['l_universal_main_menu'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_menu']);
+            echo $langvars['l_universal_main_menu'] . "<br>\n";
             header("Location: main.php");
         }
     }

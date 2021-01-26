@@ -169,12 +169,12 @@ if ($rankings !== null && ($variables['num_players'] > 0))
 if (empty($_SESSION['username']))
 {
     $variables['loggedin'] = true;
-    $variables['linkback'] = array('caption' => $langvars['l_global_mlogin'], 'link' => 'index.php');
+    $variables['linkback'] = array('caption' => $langvars['l_universal_main_login'], 'link' => 'index.php');
 }
 else
 {
     $variables['loggedin'] = false;
-    $variables['linkback'] = array('caption' => $langvars['l_global_mmenu'], 'link' => 'main.php');
+    $variables['linkback'] = array('caption' => $langvars['l_universal_main_menu'], 'link' => 'main.php');
 }
 
 $header = new Tki\Header();

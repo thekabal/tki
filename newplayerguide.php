@@ -39,7 +39,7 @@ else
 
 $variables['body_class'] = 'faq';
 $variables['lang'] = $lang;
-$variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
+$variables['linkback'] = array("fulltext" => $langvars['l_universal_main_login'], "link" => "index.php");
 $variables['title'] = $langvars['l_npg_title'];
 
 $header = new Tki\Header();

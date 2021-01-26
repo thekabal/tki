@@ -55,7 +55,7 @@ $variables['body_class'] = 'tki'; // No special css used for this page yet
 $variables['playerinfo_dev_emerwarp'] = $playerinfo['dev_emerwarp'];
 $variables['title'] = $langvars['l_ewd_title'];
 
-$variables['linkback'] = array("fulltext" => $langvars['l_global_mmenu'], "link" => "main.php");
+$variables['linkback'] = array("fulltext" => $langvars['l_universal_main_menu'], "link" => "main.php");
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 

@@ -25,8 +25,8 @@
 // FUTURE: Rewrite to use PDO, better handling ("break?!") of logic, substantial output management
 $langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
 
-echo "<strong>" . $langvars['l_apoc_title'] . "</strong><br><br>";
-echo $langvars['l_apoc_begins'] . "..<br>";
+echo "<strong>" . $langvars['l_sched_apoc_title'] . "</strong><br><br>";
+echo $langvars['l_sched_apoc_begins'] . "..<br>";
 
 $doomsday = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE colonists > ?;", array($tkireg->doomsday_value));
 Tki\Db::logDbErrors($pdo_db, $doomsday, __LINE__, __FILE__);
@@ -58,7 +58,7 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
 
     if ($affliction == 1) // Space Plague
     {
-        echo $langvars['l_apoc_plague'] . "<br>.";
+        echo $langvars['l_sched_apoc_plague'] . "<br>.";
         $resx = $old_db->Execute("UPDATE {$old_db->prefix}planets SET colonists = ROUND (colonists - colonists * ?) WHERE planet_id = ?;", array($tkireg->space_plague_kills, $targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
         $logpercent = round($tkireg->space_plague_kills * 100);
@@ -66,7 +66,7 @@ if ($doomsday && $affliction < 3 && $reccount > 0)
     }
     else
     {
-        echo $langvars['l_apoc_plasma'] . "<br>.";
+        echo $langvars['l_sched_apoc_plasma'] . "<br>.";
         $resy = $old_db->Execute("UPDATE {$old_db->prefix}planets SET energy = 0 WHERE planet_id = ?;", array($targetinfo['planet_id']));
         Tki\Db::logDbErrors($pdo_db, $resy, __LINE__, __FILE__);
         Tki\PlayerLog::writeLog($pdo_db, $targetinfo['owner'], \Tki\LogEnums::PLASMA_STORM, "$targetinfo[name]|$targetinfo[sector_id]");

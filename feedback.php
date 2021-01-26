@@ -73,7 +73,7 @@ else
 echo "<br>\n";
 if (empty($_SESSION['username']))
 {
-    echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
+    echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_login']);
 }
 else
 {

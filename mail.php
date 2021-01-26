@@ -50,11 +50,11 @@ if (!$result->EOF)
 
         if (array_key_exists('logged_in', $_SESSION) === true)
         {
-            echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
+            echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_menu']);
         }
         else
         {
-            echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
+            echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_login']);
         }
     }
     else
@@ -101,11 +101,11 @@ else
     echo "<br>\n";
     if ($_SESSION['logged_in'] !== null && $_SESSION['logged_in'] === true)
     {
-        echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mmenu']);
+        echo str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_menu']);
     }
     else
     {
-        echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_global_mlogin']);
+        echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_login']);
     }
 }
 

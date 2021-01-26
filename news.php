@@ -95,11 +95,11 @@ echo "<div style=\"height:16px;\"></div>\n";
 
 if (empty($_SESSION['username']))
 {
-    echo str_replace('[here]', "<a href='index.php" . $link . "'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mlogin']);
+    echo str_replace('[here]', "<a href='index.php" . $link . "'>" . $langvars['l_here'] . '</a>', $langvars['l_universal_main_login']);
 }
 else
 {
-    echo str_replace('[here]', "<a href='main.php" . $link . "'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mmenu']);
+    echo str_replace('[here]', "<a href='main.php" . $link . "'>" . $langvars['l_here'] . '</a>', $langvars['l_universal_main_menu']);
 }
 
 $footer = new Tki\Footer();

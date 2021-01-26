@@ -55,7 +55,7 @@ if (array_key_exists('username', $_SESSION))
 else
 {
     $variables['session_username'] = null;
-    $variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
+    $variables['linkback'] = array("fulltext" => $langvars['l_universal_main_login'], "link" => "index.php");
 }
 
 // Set login status to false, then clear the session array, and finally clear the session cookie
@@ -68,7 +68,7 @@ session_destroy();
 
 $variables['body_class'] = 'tki'; // No special CSS for this page yet, so use standard tki-prime CSS
 $variables['lang'] = $lang;
-$variables['linkback'] = array("fulltext" => $langvars['l_global_mlogin'], "link" => "index.php");
+$variables['linkback'] = array("fulltext" => $langvars['l_universal_main_login'], "link" => "index.php");
 $variables['title'] = $langvars['l_logout_title'];
 
 $header = new Tki\Header();

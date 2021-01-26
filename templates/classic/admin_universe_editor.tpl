@@ -18,24 +18,24 @@
     File: admin_universe_editor.tpl
 *}
 
-<strong>{$langvars['l_universe_editor']}</strong>
-<br>{$langvars['l_expand_or_contract']}<br>
+<strong>{$langvars['l_admin_universe_editor']}</strong>
+<br>{$langvars['l_admin_expand_or_contract']}<br>
 
 {if $variables['action'] == ''}
     <form accept-charset="utf-8" action="admin.php" method="post">
-    {$langvars['l_universe_size']}: <input type="text" name="radius" value="{$variables['universe_size']}">
+    {$langvars['l_admin_universe_size']}: <input type="text" name="radius" value="{$variables['universe_size']}">
     <input type="hidden" name="swordfish" value="{$variables['swordfish']}">
     <input type="hidden" name="menu" value="universe_editor.php">
     <input type="hidden" name="action" value="doexpand">
-{*    <input type="submit" value="{$langvars['l_change_uni_title']}">*}
+{*    <input type="submit" value="{$langvars['l_admin_change_universe_size']}">*}
     <br>
     <input type="submit" value="Submit">
     <br><br>
-    {$langvars['l_universe_resize_slow']}
+    {$langvars['l_admin_universe_resize_slow']}
 
     </form>
 {elseif $variables['action'] == "doexpand"}
-    <br><font size='+2'>{$langvars['l_universe_update']}</font><br><br>
+    <br><font size='+2'>{$langvars['l_admin_universe_update']}</font><br><br>
     {foreach $variables['changed_sectors'] as $changed_sector}
     {$changed_sector}<br>
     {/foreach}

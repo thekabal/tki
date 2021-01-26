@@ -69,7 +69,7 @@
 $index_page = true; // Ensure that we do not set sessions
 require_once './common.php';
 
-$title = $langvars['l_sys_update'];
+$title = $langvars['l_sched_sys_update'];
 
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);

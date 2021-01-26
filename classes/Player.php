@@ -79,7 +79,7 @@ class Player
             }
             else
             {
-                $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_needlogin']);
+                $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_universal_need_login']);
                 $title = $langvars['l_error'];
 
                 $header = new \Tki\Header();
@@ -136,7 +136,7 @@ class Player
                 $error_status .= "<br>\n";
                 $error_status .= "<div style='color:#FF0000;'>Maybe you will behave yourself next time.</div>\n";
                 $error_status .= "<br />\n";
-                $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_global_mlogin']);
+                $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_universal_main_login']);
 
                 $title = $langvars['l_error'];
 

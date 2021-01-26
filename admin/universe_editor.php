@@ -61,7 +61,7 @@ if ($action == "doexpand")
 // Set array with all used variables in page
 $variables = array();
 $variables['lang'] = $lang;
-$variables['title'] = $langvars['l_change_uni_title'];
+$variables['title'] = $langvars['l_admin_change_universe_size'];
 $variables['changed_sectors'] = $changed_sectors;
 $variables['swordfish'] = $swordfish;
 $variables['universe_size'] = $tkireg->universe_size;
