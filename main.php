@@ -887,7 +887,7 @@ else
     for ($preset_count = 0; $preset_count < $i; $preset_count++)
     {
         echo "<tr>\n";
-        echo '<td style="text-align:left;"><a class=mnu href="rsmove.php?engage=1&amp;destination=' . $presetinfo[$z]['preset'] . '">=&gt;&nbsp;' . $presetinfo[$z]['preset'] . '</a></td>';
+        echo '<td style="text-align:left;"><a class=mnu href="rsmove.php?engage=1&amp;destination=' . $presetinfo[$preset_count]['preset'] . '">=&gt;&nbsp;' . $presetinfo[$preset_count]['preset'] . '</a></td>';
         echo '<td style="text-align:right;">[<a class=mnu href=preset.php>' . ucwords($langvars['l_set']) . '</a>]</td>';
         echo "</tr>\n";
         $debug_query->MoveNext();
