@@ -47,7 +47,7 @@ $variables['title'] = $langvars['l_admin_title'];
 
 if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
 {
-    $i = 0;
+    $file_count = 0;
     $variables['is_admin'] = true;
     $option_title = array();
     $admin_dir = new DirectoryIterator('admin/');
@@ -57,31 +57,31 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
         // If it is a PHP file, add it to the list of accepted admin files
         if ($file_info->isFile() && $file_info->getExtension() == 'php')
         {
-            $i++; // Increment counter so we know how many files there are
+            $file_count++; // Increment counter so we know how many files there are
             // Actual file name
-            $filename[$i]['file'] = $file_info->getFilename();
+            $filename[$file_count]['file'] = $file_info->getFilename();
 
             // Set option title to lang string of the form l_admin + file name
-            $option_title = 'l_admin_' . substr($filename[$i]['file'], 0, -4);
+            $option_title = 'l_admin_' . substr($filename[$file_count]['file'], 0, -4);
 
             if ($langvars[$option_title] !== null)
             {
                 // The language translated title for option
-                $filename[$i]['option_title'] = $langvars[$option_title];
+                $filename[$file_count]['option_title'] = $langvars[$option_title];
             }
             else
             {
                 // The placeholder text for a not translated module
-                $filename[$i]['option_title'] = $langvars['l_admin_new_module'] . $filename[$i]['file'];
+                $filename[$file_count]['option_title'] = $langvars['l_admin_new_module'] . $filename[$file_count]['file'];
             }
 
             if ($menu !== null)
             {
-                if ($menu == $filename[$i]['file'])
+                if ($menu == $filename[$file_count]['file'])
                 {
                     $button_main = true;
-                    $variables['module_name'] = substr($filename[$i]['file'], 0, -4);
-                    include_once './admin/' . $filename[$i]['file'];
+                    $variables['module_name'] = substr($filename[$file_count]['file'], 0, -4);
+                    include_once './admin/' . $filename[$file_count]['file'];
                 }
             }
         }

@@ -22,7 +22,7 @@
  *
  */
 
-$i = 0;
+$current_sector = 0;
 $changed_sectors = null;
 $action  = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 $radius  = filter_input(INPUT_POST, 'radius', FILTER_SANITIZE_NUMBER_INT);
@@ -45,9 +45,9 @@ if ($action == "doexpand")
             $resx = $old_db->Execute("UPDATE {$old_db->prefix}universe SET distance = ? WHERE sector_id = ?", array($distance, $row['sector_id']));
             Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
 
-            $changed_sectors[$i] = str_replace("[sector]", $row['sector_id'], $langvars['l_admin_updated_distance']);
-            $changed_sectors[$i] = str_replace("[distance]", (string) $distance, $changed_sectors[$i]);
-            $i++;
+            $changed_sectors[$current_sector] = str_replace("[sector]", $row['sector_id'], $langvars['l_admin_updated_distance']);
+            $changed_sectors[$current_sector] = str_replace("[distance]", (string) $distance, $changed_sectors[$current_sector]);
+            $current_sector++;
             $result->MoveNext();
         }
 

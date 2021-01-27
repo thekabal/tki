@@ -322,9 +322,9 @@ elseif ($command == 'unbanip')
     }
 
     $query_string = "ip_address LIKE '" . $bans[0]['ban_mask'] . "'";
-    for ($i = 1; $i < $nbbans; $i++)
+    for ($ban_count = 1; $i < $nbbans; $ban_count++)
     {
-        $query_string = $query_string . " OR ip_address LIKE '" . $bans[$i]['ban_mask'] . "'";
+        $query_string = $query_string . " OR ip_address LIKE '" . $bans[$ban_count]['ban_mask'] . "'";
     }
 
     $res = $old_db->Execute("SELECT DISTINCT character_name FROM {$old_db->prefix}ships WHERE ?;", array($query_string));

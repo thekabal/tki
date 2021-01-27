@@ -98,14 +98,14 @@ class Character
         $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
         $playerinfo = $players_gateway->selectPlayerInfo($a_username);
 
-        for ($i = 0; $i < 20; $i++)
+        for ($estimated_rank = 0; $estimated_rank < 20; $estimated_rank++)
         {
-            $value = pow(2, $i * 2);
+            $value = pow(2, $estimated_rank * 2);
             $value *= (500 * 2);
             if ($playerinfo['score'] <= $value)
             {
                 // Ok we have found our Insignia, now set and break out of the for loop.
-                $temp_insignia = 'l_insignia_' . $i;
+                $temp_insignia = 'l_insignia_' . $estimated_rank;
                 $player_insignia = $langvars[$temp_insignia];
                 break;
             }
