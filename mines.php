@@ -58,7 +58,7 @@ $links = array();
 $i = 0;
 
 // Pull sector info from database
-$defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db); 
+$defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db);
 $defenses_present = $defenses_gateway->selectDefenses($playerinfo['sector']);
 
 if (!empty($defenses_present))

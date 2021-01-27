@@ -44,8 +44,6 @@ class Footer
         {
             $cur_time_stamp = date("Y-m-d H:i:s", time()); // Now (as seen by PHP)
             $since_stamp = date("Y-m-d H:i:s", time() - 5 * 60); // Five minutes ago
-
-           
             $players_gateway = new Players\PlayersGateway($pdo_db);
 
             // Online is the (int) count of the numbers of players currently logged in via SQL select
@@ -64,7 +62,6 @@ class Footer
         }
 
         // Update counter
-        
         $scheduler_gateway = new Scheduler\SchedulerGateway($pdo_db);
 
         // Last run is the (int) count of the numbers of players currently
@@ -99,7 +96,7 @@ class Footer
             // $langvars = array_unique ($langvars);
 
             // SQL call that selects all of the news items between the start date beginning of day, and the end of day.
-            $news_gateway = new News\NewsGateway($pdo_db); 
+            $news_gateway = new News\NewsGateway($pdo_db);
             $row = $news_gateway->selectNewsByDay(date('Y-m-d'));
             // Future: Handle bad row return, as it's causing issues for count($row)
 

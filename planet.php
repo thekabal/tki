@@ -78,7 +78,7 @@ $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 // Get planetinfo from database
-$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
 if (empty($planetinfo))
@@ -441,7 +441,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                     Tki\Db::logDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
 
                     // Refresh Planet Info
-                    $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+                    $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
                     $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
                     // Notify User Of Base Results

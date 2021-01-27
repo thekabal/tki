@@ -29,7 +29,7 @@ class Defense
     public static function defenseVsDefense(\PDO $pdo_db, int $ship_id, array $langvars): void
     {
         // Pull defense info from database
-        $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db); 
+        $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db);
         $defenses_present = $defenses_gateway->selectDefenses($ship_id);
 
         if (!empty($defenses_present))

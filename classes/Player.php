@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Player
 {
-    public static function auth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template): array
+    public static function auth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template): array|bool
     {
         $request = Request::createFromGlobals();
         $error_status = null;

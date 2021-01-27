@@ -106,7 +106,7 @@ $i = 0;
 $planets = array();
 
 // Get planetinfo from database
-$planets_gateway = new Tki\Planets\PlanetsGateway($pdo_db); 
+$planets_gateway = new Tki\Planets\PlanetsGateway($pdo_db);
 $planetinfo = $planets_gateway->selectAllPlanetInfo($playerinfo['sector']);
 if (!empty($planetinfo))
 {

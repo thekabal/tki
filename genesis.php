@@ -49,7 +49,7 @@ $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 // Get planetinfo from database
-$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
 $planetinfo = $planets_gateway->selectPlanetInfo($playerinfo['sector']);
 $num_planets = 0;
 if (!empty($planetinfo))

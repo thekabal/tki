@@ -368,10 +368,8 @@ elseif ($sectorinfo['port_type'] == "special")
             }
             elseif ($pay === 2)
             {
-                to retreive the iBank account for players
                 $ibank_gateway = new Tki\Ibank\IbankGateway($pdo_db);
                 $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
-
                 $bounty_payment = $bank_account['balance'];
                 if ($bounty_payment > 1000)
                 {

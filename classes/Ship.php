@@ -81,7 +81,7 @@ class Ship
     public static function leavePlanet(\PDO $pdo_db, int $ship_id): void
     {
         // Get planetinfo from database
-        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
         $planetinfo = $planets_gateway->selectAllPlanetInfoByOwner($ship_id);
 
         if (is_array($planetinfo))

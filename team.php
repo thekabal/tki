@@ -42,7 +42,7 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 $planet_id = (int) preg_replace('/[^0-9]/', '', (string) $_GET['planet_id']);
 
 // Get planetinfo from database
-$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
 if (!empty($planetinfo))

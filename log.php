@@ -119,7 +119,7 @@ if (empty($startdate))
 }
 
 // Get logsinfo from database
-$logs_gateway = new Tki\Logs\LogsGateway($pdo_db); 
+$logs_gateway = new Tki\Logs\LogsGateway($pdo_db);
 $logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $startdate);
 
 $langvars['l_log_months_temp'] = "l_log_months_" . (int) (substr($startdate, 5, 2));
@@ -193,7 +193,7 @@ if ($mode != 'compat')
 
     unset($logs);
     // Get logsinfo from database
-    $logs_gateway = new Tki\Logs\LogsGateway($pdo_db); 
+    $logs_gateway = new Tki\Logs\LogsGateway($pdo_db);
     $logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $yesterday);
 
     echo "<div id=\"dynPage1\" class=\"dynPage\">" .
@@ -235,7 +235,7 @@ if ($mode != 'compat')
     unset($logs);
 
     // Get logsinfo from database
-    $logs_gateway = new Tki\Logs\LogsGateway($pdo_db); 
+    $logs_gateway = new Tki\Logs\LogsGateway($pdo_db);
     $logs = $logs_gateway->selectLogsInfo($playerinfo['ship_id'], $tomorrow);
 
     echo "<div id=\"dynPage2\" class=\"dynPage\">" .

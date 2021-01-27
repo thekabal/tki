@@ -49,7 +49,7 @@ else
     if (empty($operation))
     {
         // Get planetinfo from database
-        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
         $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
         echo "<table border='0' cellspacing='2' cellpadding='2'>";

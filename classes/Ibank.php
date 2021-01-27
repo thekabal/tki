@@ -116,8 +116,6 @@ class Ibank
         if ($account['loan'] != 0)
         {
             $curtime = time();
-
-            to retreive the iBank account for players
             $ibank_gateway = new Ibank\IbankGateway($pdo_db);
             $bank_loan_time = $ibank_gateway->selectIbankLoanTime($playerinfo['ship_id']);
             $difftime = ($curtime - $bank_loan_time) / 60;

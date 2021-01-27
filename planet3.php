@@ -78,7 +78,7 @@ $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Get planetinfo from database
-$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
 // Check to see if it returned valid planet info.
