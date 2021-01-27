@@ -41,14 +41,14 @@ $button_main = false;
 // Clear variables array for use with all variables in page
 $variables = array();
 
-$variables['is_admin'] = false;
+$variables['isAdmin'] = false;
 $variables['module'] = null;
 $variables['title'] = $langvars['l_admin_title'];
 
 if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
 {
     $file_count = 0;
-    $variables['is_admin'] = true;
+    $variables['isAdmin'] = true;
     $option_title = array();
     $admin_dir = new DirectoryIterator('admin/');
     // Get a list of the files in the admin directory

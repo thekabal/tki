@@ -212,7 +212,7 @@ class CheckDefenses
                 $bounty = new \Tki\Bounty();
                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);
 
-                $is_ok = 0;
+                $status = 0;
                 \Tki\Text::gotoMain($pdo_db, $lang);
                 die();
             }
@@ -222,7 +222,7 @@ class CheckDefenses
                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);
                 $character_object = new \Tki\Character();
                 $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
-                $is_ok = 0;
+                $status = 0;
                 \Tki\Text::gotoMain($pdo_db, $lang);
                 die();
             }
@@ -230,11 +230,11 @@ class CheckDefenses
 
         if ($targetfighters > 0)
         {
-            $is_ok = 0;
+            $status = 0;
         }
         else
         {
-            $is_ok = 2;
+            $status = 2;
         }
     }
 
@@ -338,7 +338,7 @@ class CheckDefenses
                             // Undo the move
                             $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
                             \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                            $is_ok = 0;
+                            $status = 0;
                         }
                         else
                         {
@@ -349,7 +349,7 @@ class CheckDefenses
                             \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
                             \Tki\Toll::distribute($pdo_db, $sector, $fighterstoll, (int) $total_sec_fighters);
                             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::TOLL_PAID, "$tollstring|$sector");
-                            $is_ok = 1;
+                            $status = 1;
                         }
                         break;
 
@@ -379,7 +379,7 @@ class CheckDefenses
                         else
                         {
                             // Sector defenses don't detect incoming ship
-                            $is_ok = 1;
+                            $status = 1;
                         }
                         break;
 

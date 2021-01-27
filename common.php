@@ -45,7 +45,7 @@ else
     ini_set('display_errors', '0');                 // Do not display errors
 }
 
-session_name('tki_session');                        // Change the default to defend better against session hijacking
+session_name('tkiSession');                         // Change the default to defend better against session hijacking
 date_default_timezone_set('UTC');                   // Set to your server's local time zone - Avoid a PHP notice
                                                     // Since header is now temlate driven, these weren't being passed
                                                     // along except on old crusty pages. Now everthing gets them!
@@ -107,7 +107,7 @@ $template->setTheme('classic');
 
 if (Tki\Db::isActive($pdo_db))
 {
-    $tki_session = new Tki\Sessions($pdo_db);
+    $tkiSession = new Tki\Sessions($pdo_db);
     session_start();
 }
 

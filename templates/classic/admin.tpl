@@ -25,7 +25,7 @@
 <div class="wrapper">
 <h1>{$langvars['l_admin_title']}</h1>
 
-{if $variables['is_admin'] != true}
+{if $variables['isAdmin'] != true}
     <form accept-charset="utf-8" action="admin.php" method="post">
     {$langvars['l_admin_password']}: <input type="password" name="swordfish" size="20" maxlength="20">&nbsp;&nbsp;
     <input type="submit" value="{$langvars['l_submit']}"><input type="reset" value="{$langvars['l_reset']}">

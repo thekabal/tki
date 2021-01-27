@@ -145,7 +145,7 @@ if ($playerfound)
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 // They have logged in successfully, so update their session ID as well
-                $tki_session->regen();
+                $tkiSession->regen();
                 header("Location: main.php"); // This redirect avoids any rendering for the user of login2. Its a direct transition, visually
             }
             else
