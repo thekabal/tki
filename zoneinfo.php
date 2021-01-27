@@ -43,11 +43,11 @@ echo "<body class=" . $body_class . ">";
 $zone = (int) filter_input(INPUT_GET, 'zone', FILTER_SANITIZE_NUMBER_INT);
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Get zoneinfo from database
-$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
 $zoneinfo = $zones_gateway->selectZoneInfoByZone($zone);
 $ownerinfo = array();
 
@@ -86,7 +86,7 @@ else
 
         if ($zoneinfo['team_zone'] == 'N')
         {
-            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
             $ownerinfo = $players_gateway->selectPlayerInfoById($zoneinfo['owner']);
             $ownername = $ownerinfo['character_name'];
         }
@@ -186,13 +186,17 @@ else
 
     if (($zoneinfo['team_zone'] == 'N' && $zoneinfo['owner'] == $playerinfo['ship_id']) || ($zoneinfo['team_zone'] == 'Y' && $zoneinfo['owner'] == $playerinfo['team'] && $playerinfo['ship_id'] == $ownerinfo['creator']))
     {
-        echo "<center>" . $langvars['l_zi_control'] . ". <a href=zoneedit.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $langvars['l_zi_tochange'] . "</center><p>";
+        echo "<center>" . $langvars['l_zi_control'] .
+             ". <a href=zoneedit.php?zone=$zone>" .
+             $langvars['l_clickme'] . "</a> " . $langvars['l_zi_tochange'] .
+             "</center><p>";
     }
 
     echo "<table class=\"top\">\n" .
          "<tr><td class=\"zonename\"><strong>$zoneinfo[zone_name]</strong></td></tr></table>\n" .
          "<table class=\"bottom\">\n" .
-         "<tr><td class=\"name\">&nbsp;" . $langvars['l_zi_owner'] . "</td><td class=\"value\">$ownername&nbsp;</td></tr>\n" .
+         "<tr><td class=\"name\">&nbsp;" . $langvars['l_zi_owner'] .
+         "</td><td class=\"value\">$ownername&nbsp;</td></tr>\n" .
          "<tr><td>&nbsp;" . $langvars['l_beacons'] . "</td><td>$beacon&nbsp;</td></tr>\n" .
          "<tr><td>&nbsp;" . $langvars['l_att_att'] . "</td><td>$attack&nbsp;</td></tr>\n" .
          "<tr><td>&nbsp;" . $langvars['l_md_title'] . "</td><td>$defense&nbsp;</td></tr>\n" .

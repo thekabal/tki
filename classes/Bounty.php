@@ -74,7 +74,7 @@ class Bounty
                 }
                 else
                 {
-                    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+                    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
                     $tmp_return = $players_gateway->selectPlayerInfoById($tmp_bounty['placed_by']);
                     $placed = $tmp_return['character_name'];
                 }

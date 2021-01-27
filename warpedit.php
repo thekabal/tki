@@ -38,12 +38,9 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
                                 'warpedit'));
 echo "<h1>" . $title . "</h1>\n";
 
-// Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
-
-// Get sectorinfo from database
-$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 if ($playerinfo['turns'] < 1)
@@ -66,8 +63,7 @@ if ($playerinfo['dev_warpedit'] < 1)
     die();
 }
 
-// Get zoneinfo from database
-$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
 $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
 if (!empty($zoneinfo))
@@ -84,7 +80,6 @@ if (!empty($zoneinfo))
 
     if ($zoneinfo['allow_warpedit'] == 'L')
     {
-        // Get playerinfo from database
         $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $zoneinfo['owner'], PDO::PARAM_INT);
@@ -106,7 +101,8 @@ if (!empty($zoneinfo))
     }
 }
 
-$sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start ORDER BY link_dest ASC";
+$sql = "SELECT * FROM ::prefix::links WHERE " .
+       "link_start = :link_start ORDER BY link_dest ASC";
 $stmt = $pdo_db->prepare($sql);
 $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
 $stmt->execute();

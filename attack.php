@@ -60,11 +60,11 @@ if (array_key_exists('ship_selected', $_SESSION) === false || $_SESSION['ship_se
 unset($_SESSION['ship_selected']);
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Get targetinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $targetinfo = $players_gateway->selectPlayerInfoById($ship_id);
 
 $playerscore = Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);

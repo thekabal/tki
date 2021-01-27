@@ -37,11 +37,11 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',
                                 'dump', 'footer', 'insignias', 'main',
                                 'news', 'universal'));
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Get sectorinfo from database
-$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 echo "<h1>" . $title . "</h1>\n";

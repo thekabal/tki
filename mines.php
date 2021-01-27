@@ -47,18 +47,18 @@ elseif (array_key_exists('op', $_POST) === true)
 }
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Get sectorinfo from database
-$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 $links = array();
 $i = 0;
 
 // Pull sector info from database
-$defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db); // Build a defense gateway object to handle the SQL calls
+$defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db); 
 $defenses_present = $defenses_gateway->selectDefenses($playerinfo['sector']);
 
 if (!empty($defenses_present))
@@ -156,7 +156,7 @@ else
         {
             $defense_owner = $defenses[0]['ship_id'];
 
-            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
             $fighters_owner = $players_gateway->selectPlayerInfoById($defense_owner);
 
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
@@ -172,7 +172,7 @@ else
     {
         $zone_owner = $zoneinfo['owner'];
 
-        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
         $zoneowner_info = $players_gateway->selectPlayerInfoById($zone_owner);
 
         if ($zone_owner != $playerinfo['ship_id'])

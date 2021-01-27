@@ -247,7 +247,7 @@ class CheckDefenses
                                          'regional', 'universal'));
         /*
         // Get sectorinfo from database
-        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
         $sectorinfo = $sectors_gateway->selectSectorInfo($sector);
         */
 
@@ -435,7 +435,7 @@ class CheckDefenses
                                          'common', 'check_defenses',
                                          'insignias', 'footer', 'news'));
         // Get sectorinfo from database
-        //$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+        //$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
         //$sectorinfo = $sectors_gateway->selectSectorInfo($sector);
 
         // Put the defense information into the array defenseinfo

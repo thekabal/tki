@@ -29,7 +29,7 @@ class Realspace
     public function realSpaceMove(\PDO $pdo_db, array $langvars, int $destination, Reg $tkireg): string
     {
         $energyscooped = 0;
-        $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $players_gateway = new Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
         $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id = :playersector";

@@ -88,7 +88,7 @@ class IbankTransferSpecific
                 }
             }
 
-            // Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
+            to retreive the iBank account for players
             $ibank_gateway = new Ibank\IbankGateway($pdo_db);
             $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
 

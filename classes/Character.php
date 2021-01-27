@@ -95,7 +95,7 @@ class Character
     public function getInsignia(\PDO $pdo_db, string $a_username, array $langvars): string
     {
         // Lookup players score.
-        $players_gateway = new Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $players_gateway = new Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($a_username);
 
         for ($estimated_rank = 0; $estimated_rank < 20; $estimated_rank++)

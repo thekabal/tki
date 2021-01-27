@@ -37,7 +37,7 @@ class KabalTrade
         $shipgoods = null;
 
         // Pull sector info from database
-        $sectors_gateway = new Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+        $sectors_gateway = new Sectors\SectorsGateway($pdo_db);
         $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
         // Obtain zone information

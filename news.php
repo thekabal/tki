@@ -67,7 +67,7 @@ echo "    <td height=\"22\" width=\"73%\" bgcolor=\"#00001A\" align=\"right\"><a
 echo "  </tr>\n";
 
 // SQL call that selects all of the news items between the start date beginning of day, and the end of day.
-$news_gateway = new \Tki\News\NewsGateway($pdo_db); // Build a scheduler gateway object to handle the SQL calls
+$news_gateway = new \Tki\News\NewsGateway($pdo_db); 
 $row = $news_gateway->selectNewsByDay($startdate);
 
 $news_ticker = array();

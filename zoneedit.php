@@ -38,7 +38,8 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
                                 'universal', 'zoneedit', 'zoneinfo'));
 echo "<h1>" . $title . "</h1>\n";
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $command = null;
 $command = filter_input(INPUT_GET, 'command', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($command)) === 0)
@@ -46,7 +47,8 @@ if (strlen(trim($command)) === 0)
     $command = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $zone = null;
 $zone = filter_input(INPUT_GET, 'zone', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($zone)) === 0)
@@ -54,7 +56,8 @@ if (strlen(trim($zone)) === 0)
     $zone = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $name = null;
 $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($name)) === 0)
@@ -62,7 +65,8 @@ if (strlen(trim($name)) === 0)
     $name = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $beacons = null;
 $beacons = filter_input(INPUT_POST, 'beacons', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($beacons)) === 0)
@@ -70,7 +74,8 @@ if (strlen(trim($beacons)) === 0)
     $beacons = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $attacks = null;
 $attacks = filter_input(INPUT_POST, 'attacks', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($attacks)) === 0)
@@ -78,7 +83,8 @@ if (strlen(trim($attacks)) === 0)
     $attacks = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $warpedits = null;
 $warpedits = filter_input(INPUT_POST, 'warpedits', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($warpedits)) === 0)
@@ -86,7 +92,8 @@ if (strlen(trim($warpedits)) === 0)
     $warpedits = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $defenses = null;
 $defenses = filter_input(INPUT_POST, 'defenses', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($defenses)) === 0)
@@ -94,7 +101,8 @@ if (strlen(trim($defenses)) === 0)
     $defenses = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $planets = null;
 $planets = filter_input(INPUT_POST, 'planets', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($planets)) === 0)
@@ -102,7 +110,8 @@ if (strlen(trim($planets)) === 0)
     $planets = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $trades = null;
 $trades = filter_input(INPUT_POST, 'trades', FILTER_SANITIZE_EMAIL);
 if (strlen(trim($trades)) === 0)
@@ -111,7 +120,7 @@ if (strlen(trim($trades)) === 0)
 }
 
 // Get zoneinfo from database
-$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
 $zoneinfo = $zones_gateway->selectZoneInfo($zone);
 
 if (empty($zoneinfo))
@@ -126,13 +135,13 @@ if (empty($zoneinfo))
 
 if (array_key_exists('zone_name', $zoneinfo))
 {
-    // Sanitize ZoneName.
+    // Sanitize zone_name.
     $zoneinfo['zone_name'] = preg_replace('/[^A-Za-z0-9\_\s\-\.\']+/', '', $zoneinfo['zone_name']);
 }
 
 if ($zoneinfo['team_zone'] == 'N')
 {
-    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
     $ownerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 }
 else

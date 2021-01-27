@@ -41,15 +41,15 @@ $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title);
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Get sectorinfo from database
-$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 // Get planetinfo from database
-$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
 $planetinfo = $planets_gateway->selectPlanetInfo($playerinfo['sector']);
 $num_planets = 0;
 if (!empty($planetinfo))

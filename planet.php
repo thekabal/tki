@@ -56,7 +56,7 @@ $planet_id = (int) filter_input(INPUT_GET, 'planet_id', FILTER_SANITIZE_NUMBER_I
 echo '<h1>' . $title . '</h1>';
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Empty out Planet and Ship vars
@@ -74,11 +74,11 @@ if ($planet_id <= 0)
 }
 
 // Get sectorinfo from database
-$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 // Get planetinfo from database
-$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+$planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
 if (empty($planetinfo))
@@ -126,7 +126,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
         die();
     }
 
-    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+    $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
     $ownerinfo = $players_gateway->selectPlayerInfoById($planetinfo['owner']);
 
     if (empty($command))
@@ -441,7 +441,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                     Tki\Db::logDbErrors($pdo_db, $update1b, __LINE__, __FILE__);
 
                     // Refresh Planet Info
-                    $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); // Build a planet gateway object to handle the SQL calls
+                    $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
                     $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
                     // Notify User Of Base Results
@@ -910,7 +910,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
 
             if ($planetinfo['owner'] != 0)
             {
-                $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+                $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
                 $planetowner = $players_gateway->selectPlayerInfoById($planetinfo['owner']);
             }
             else

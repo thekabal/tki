@@ -39,7 +39,7 @@ $header->display($pdo_db, $lang, $template, $title);
 echo "<h1>" . $title . "</h1>\n";
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 $sql = "SELECT distinct ::prefix::movement_log.sector_id, port_type, beacon FROM ::prefix::movement_log, ::prefix::universe WHERE ship_id = :ship_id AND ::prefix::movement_log.sector_id = ::prefix::universe.sector_id order by sector_id ASC";

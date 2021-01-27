@@ -36,10 +36,9 @@ $body_class = 'ibank';
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $title, $body_class);
 
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-// Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
 $ibank_gateway = new Tki\Ibank\IbankGateway($pdo_db);
 $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
 

@@ -48,7 +48,7 @@ else
 {
     if ($_POST['operation'] === null)
     {
-        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+        $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
         $userinfo = $players_gateway->selectPlayerInfoById($_POST['user']);
 
         $variables['operation'] = $_POST['operation'];

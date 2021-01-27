@@ -41,7 +41,7 @@ $header->display($pdo_db, $lang, $template, $title, $body_class);
 echo "<body class=" . $body_class . "><br>";
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 // Fix negative quantities. How do the quantities acutally get negative?
@@ -75,7 +75,7 @@ if ($playerinfo['ship_goods'] < 0)
 }
 
 // Get sectorinfo from database
-$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 if ($sectorinfo['port_ore'] < 0)
@@ -107,7 +107,7 @@ if ($sectorinfo['port_energy'] < 0)
 }
 
 // Get zoneinfo from database
-$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+$zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
 $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
 if (!empty($zoneinfo))
@@ -368,7 +368,7 @@ elseif ($sectorinfo['port_type'] == "special")
             }
             elseif ($pay === 2)
             {
-                // Build an ibank gateway object to handle the SQL calls to retreive the iBank account for players
+                to retreive the iBank account for players
                 $ibank_gateway = new Tki\Ibank\IbankGateway($pdo_db);
                 $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
 

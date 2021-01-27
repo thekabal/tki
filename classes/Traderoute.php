@@ -224,7 +224,7 @@ class Traderoute
         if (!$result99->EOF)
         {
             $fighters_owner = $result99->fields;
-            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
             $nsfighters = $players_gateway->selectPlayerInfoById($fighters_owner['ship_id']);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
@@ -238,7 +238,7 @@ class Traderoute
         if (!$result98->EOF)
         {
             $fighters_owner = $result98->fields;
-            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+            $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
             $nsfighters = $players_gateway->selectPlayerInfoById($fighters_owner['ship_id']);
 
             if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
@@ -262,7 +262,7 @@ class Traderoute
         if ($traderoute['source_type'] == 'P')
         {
             // Get zoneinfo from database
-            $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+            $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
             $zoneinfo = $zones_gateway->selectMatchingZoneInfo($traderoute['source_id']);
 
             if (empty($zoneinfo))
@@ -303,7 +303,7 @@ class Traderoute
         if ($traderoute['dest_type'] == 'P')
         {
             // Get zoneinfo from database
-            $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+            $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
             $zoneinfo = $zones_gateway->selectMatchingZoneInfo($traderoute['dest_id']);
 
             if (empty($zoneinfo))

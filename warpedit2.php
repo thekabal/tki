@@ -39,19 +39,20 @@ $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
 echo "<h1>" . $title . "</h1>\n";
 
 $oneway = false;
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 if (isset($_POST['oneway']) && $_POST['oneway'] == 'oneway')
 {
     $oneway = true;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+// Detect if this variable exists, and filter it.
+// Returns false if anything wasn't right.
 $target_sector = null;
 $target_sector = (int) filter_input(INPUT_POST, 'target_sector', FILTER_SANITIZE_NUMBER_INT);
 if ($target_sector === 0)
 {
     $target_sector = false;
-    // This is the best that I can do without adding a new language variable.
     $langvars['l_warp_twoerror'] = str_replace('[target_sector]', $langvars['l_unknown'], $langvars['l_warp_twoerror']);
     echo $langvars['l_warp_twoerror'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
@@ -59,7 +60,7 @@ if ($target_sector === 0)
 }
 
 // Get playerinfo from database
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 if ($playerinfo['turns'] < 1)
@@ -98,11 +99,9 @@ if ($zoneinfo['allow_warpedit'] == 'N')
     die();
 }
 
-$players_gateway = new \Tki\Players\PlayersGateway($pdo_db); // Build a player gateway object to handle the SQL calls
+$players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
 $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
-
-// Get sectorinfo from database
-$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($target_sector);
 
 if (count($sectorinfo) === 0)

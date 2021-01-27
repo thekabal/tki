@@ -54,7 +54,7 @@ else
     if ($_POST['operation'] === null)
     {
         // Get sectorinfo from database
-        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db); // Build a sector gateway object to handle the SQL calls
+        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
         $row = $sectors_gateway->selectSectorInfo($_POST['sector']);
         $variables['sector_name'] = $row['sector_name'];
 

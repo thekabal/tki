@@ -51,7 +51,7 @@ else
     if ($_POST['operation'] == "edit")
     {
         // Get zoneinfo from database
-        $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db); // Build a zone gateway object to handle the SQL calls
+        $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
         $zoneinfo = $zones_gateway->selectZoneInfo($_POST['zone']);
         if (empty($zoneinfo))
         {
