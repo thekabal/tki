@@ -150,7 +150,7 @@ class KabalTrade
             $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
             $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
 
-            //  Set cargo buy/sell
+            // Set cargo buy/sell
             $amount_organics = $playerinfo['ship_organics'];
             $amount_goods = $playerinfo['ship_goods'];
 
@@ -201,13 +201,13 @@ class KabalTrade
             $amount_ore = $playerinfo['ship_ore'];
             $amount_goods = $playerinfo['ship_goods'];
 
-            // SINCE WE SELL ALL OTHER HOLDS WE SET AMOUNT TO BE OUR TOTAL HOLD LIMIT
+            // Since we sell all other holds we set amount to be our total hold limit
             $amount_organics = \Tki\CalcLevels::abstractLevels($playerinfo['hull'], $tkireg);
 
-            // WE ADJUST THIS TO MAKE SURE IT DOES NOT EXCEED WHAT THE PORT HAS TO SELL
+            // We adjust this to make sure it does not exceed what the port has to sell
             $amount_organics = min($amount_organics, $sectorinfo['port_organics']);
 
-            // WE ADJUST THIS TO MAKE SURE IT DOES NOT EXCEES WHAT WE CAN AFFORD TO BUY
+            // We adjust this to make sure it does not exceed what we can afford to buy
             $amount_organics = min($amount_organics, floor(($playerinfo['credits'] + $amount_ore * $tkireg->ore_price + $amount_goods * $tkireg->goods_price) / $tkireg->organics_price));
 
             // Buy / sell cargo
