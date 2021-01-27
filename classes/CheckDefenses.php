@@ -259,7 +259,8 @@ class CheckDefenses
         $total_sec_fighters = 0;
         $owner = true;
 
-        // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
+        // Detect if this variable exists, and filter it.
+        // Returns false if anything wasn't right.
         $response = null;
         $response = filter_input(INPUT_POST, 'response', FILTER_SANITIZE_STRING);
         if (($response === null) || (strlen(trim($response)) === 0))

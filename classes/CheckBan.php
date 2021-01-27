@@ -52,7 +52,7 @@ class CheckBan
             return (array) $ipbans_res->fields;
         }
 
-        // Check for ID Watch, Ban, Lock, 24H Ban etc linked to the platyers ShipID.
+        // Check for ID watch, ban, lock, 24h ban, etc. Linked to the platyers ShipID.
         $sql = "SELECT * FROM ::prefix::bans WHERE ban_ship = :ban_ship";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ban_ship', $playerinfo['ship_id'], \PDO::PARAM_INT);
@@ -78,7 +78,7 @@ class CheckBan
             return (array) $ban_type;
         }
 
-        // Check for Multi Ban (IP, ID)
+        // Check for multi-ban (IP, ID)
         $remote_ip = $request->server->get('REMOTE_ADDR');
         $sql = "SELECT * FROM ::prefix::bans WHERE " .
                "ban_mask = :ban_mask1 OR ban_mask = :ban_mask2 OR ban_ship = :ban_ship";
@@ -97,7 +97,7 @@ class CheckBan
             return (array) $multiban_res->fields;
         }
 
-        // Well we got here, so we haven't found anything, so we return a Bool false.
+        // Well we got here, and we haven't found any bans, so we return null.
         return null;
     }
 }

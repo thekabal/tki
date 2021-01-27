@@ -33,17 +33,14 @@ class Bases
              $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_status']);
         echo "<br><br>";
 
-        // Get playerinfo from database
         $players_gateway = new Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
-
-        // Get planetinfo from database
-        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
         $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
         if (!empty($planetinfo))
         {
-            // Error out and return if the Player isn't the owner of the Planet
+            // Error out and return if the player isn't the owner of the planet
             // Verify player owns the planet which is to have the base created on.
             if ($planetinfo['owner'] != $playerinfo['ship_id'])
             {
@@ -62,7 +59,7 @@ class Bases
 
             if ($planetinfo['ore'] >= $tkireg->base_ore && $planetinfo['organics'] >= $tkireg->base_organics && $planetinfo['goods'] >= $tkireg->base_goods && $planetinfo['credits'] >= $tkireg->base_credits)
             {
-                // Create The Base
+                // Create the base
                 $stmt = $pdo_db->prepare("UPDATE ::prefix::planets SET base='Y', " .
                         "ore = :planetore - :baseore, organics = :planetorg - :baseorg," .
                         "goods = :planetgoods - :basegoods, " .
@@ -79,21 +76,21 @@ class Bases
                 $result = $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
-                // Update User Turns
+                // Update user turns
                 $stmt = $pdo_db->prepare("UPDATE ::prefix::ships SET turns = turns - 1, " .
                         "turns_used = turns_used + 1 WHERE ship_id = :ship_id");
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $result = $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
-                // Refresh Planet Info
-                $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db); 
+                // Refresh planetinfo
+                $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
                 $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
 
-                // Notify User Of Base Results
+                // Notify user of base building results
                 echo $langvars['l_planet_bbuild'] . "<br><br>";
 
-                // Calc Ownership and Notify User Of Results
+                // Calculate ownership and notify user of results
                 $ownership = \Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
                 echo $ownership . "<p>";
                 return;
