@@ -126,8 +126,8 @@ elseif ($state == 1)
 
         for ($i = 2; $i <= $search_depth; $i++)
         {
-            $k = $i - 1;
-            $search_query = $search_query . "    AND a" . $k . ".link_dest = a" . $i . ".link_start ";
+            $temp1 = $i - 1;
+            $search_query = $search_query . "    AND a" . $temp1 . ".link_dest = a" . $i . ".link_start ";
         }
 
         $search_query = $search_query . "    AND a" . $search_depth . ".link_dest = $stop_sector ";
@@ -137,9 +137,9 @@ elseif ($state == 1)
         {
             $search_query = $search_query . "    AND a" . $i . ".link_dest not in (a1.link_dest, a1.link_start ";
 
-            for ($j = 2; $j < $i; $j++)
+            for ($temp2 = 2; $temp2 < $i; $temp2++)
             {
-                $search_query = $search_query . ",a" . $j . ".link_dest ";
+                $search_query = $search_query . ",a" . $temp2 . ".link_dest ";
             }
 
             $search_query = $search_query . ")";
