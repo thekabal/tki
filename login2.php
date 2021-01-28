@@ -95,7 +95,7 @@ if ($tkireg->game_closed)
     echo str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_login']);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -263,4 +263,4 @@ else
 }
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

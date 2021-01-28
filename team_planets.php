@@ -48,7 +48,7 @@ if ($playerinfo['team'] == 0)
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     return;
 }
 
@@ -208,4 +208,4 @@ echo "<br><br>";
 Tki\Text::gotoMain($pdo_db, $lang);
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

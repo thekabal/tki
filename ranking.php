@@ -195,4 +195,4 @@ $template->addVariables('langvars', $langvars);
 $template->display('ranking.tpl');
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

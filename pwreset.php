@@ -114,4 +114,4 @@ else
 
 /// Redirect to game (like login does)
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

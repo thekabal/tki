@@ -120,7 +120,7 @@ if (!empty($zoneinfo))
         Tki\Text::gotoMain($pdo_db, $lang);
 
         $footer = new Tki\Footer();
-        $footer->display($pdo_db, $lang, $tkireg, $template);
+        $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
         die();
     }
     elseif ($zoneinfo['allow_trade'] == 'N')
@@ -132,7 +132,7 @@ if (!empty($zoneinfo))
         Tki\Text::gotoMain($pdo_db, $lang);
 
         $footer = new Tki\Footer();
-        $footer->display($pdo_db, $lang, $tkireg, $template);
+        $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
         die();
     }
     elseif ($zoneinfo['allow_trade'] == 'L')
@@ -155,7 +155,7 @@ if (!empty($zoneinfo))
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
-                $footer->display($pdo_db, $lang, $tkireg, $template);
+                $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
                 die();
             }
         }
@@ -169,7 +169,7 @@ if (!empty($zoneinfo))
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
-                $footer->display($pdo_db, $lang, $tkireg, $template);
+                $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
                 die();
             }
         }
@@ -323,7 +323,7 @@ elseif ($sectorinfo['port_type'] == "special")
         Tki\Text::gotoMain($pdo_db, $lang);
 
         $footer = new Tki\Footer();
-        $footer->display($pdo_db, $lang, $tkireg, $template);
+        $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
         die();
     }
 
@@ -1014,4 +1014,4 @@ Tki\Text::gotoMain($pdo_db, $lang);
 echo "\n";
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

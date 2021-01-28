@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Footer
 {
-    public function display(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template): void
+    public function display(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $request = Request::createFromGlobals();
 
@@ -50,7 +50,7 @@ class Footer
             $online = (int) $players_gateway->selectPlayersLoggedIn($since_stamp, $cur_time_stamp);
         }
 
-        $tkireg->tkitimer->stop();
+        $tkitimer->stop();
 
         // Suppress the news ticker on the IBANK and index pages
         $news_ticker_active = ((bool) preg_match("/index.php/i", (string) $request->server->get('SCRIPT_NAME')) || (bool) preg_match("/ibank.php/i", (string) $request->server->get('SCRIPT_NAME')) || (bool) preg_match("/new.php/i", (string) $request->server->get('SCRIPT_NAME')));
@@ -146,7 +146,7 @@ class Footer
                                             "seconds_left" => $seconds_left,
                                             "sched_ticks" => $tkireg->sched_ticks);
         $variables['players_online'] = $online;
-        $variables['elapsed'] = $tkireg->tkitimer->elapsed();
+        $variables['elapsed'] = $tkitimer->elapsed();
         $variables['mem_peak_usage'] = $mem_peak_usage;
         $variables['footer_show_debug'] = $tkireg->footer_show_debug;
         $variables['cur_year'] = date('Y');

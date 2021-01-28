@@ -69,7 +69,7 @@ if ($planet_id <= 0)
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -104,7 +104,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
         Tki\Text::gotoMain($pdo_db, $lang);
 
         $footer = new Tki\Footer();
-        $footer->display($pdo_db, $lang, $tkireg, $template);
+        $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
         die();
     }
 
@@ -122,7 +122,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
         Tki\Text::gotoMain($pdo_db, $lang);
 
         $footer = new Tki\Footer();
-        $footer->display($pdo_db, $lang, $tkireg, $template);
+        $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
         die();
     }
 
@@ -416,7 +416,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
-                $footer->display($pdo_db, $lang, $tkireg, $template);
+                $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
                 die();
             }
 
@@ -545,7 +545,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
-                $footer->display($pdo_db, $lang, $tkireg, $template);
+                $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
                 die();
             }
 
@@ -593,7 +593,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
-                $footer->display($pdo_db, $lang, $tkireg, $template);
+                $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
                 die();
             }
 
@@ -657,7 +657,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
-                $footer->display($pdo_db, $lang, $tkireg, $template);
+                $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
                 die();
             }
 
@@ -669,7 +669,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 Tki\Text::gotoMain($pdo_db, $lang);
 
                 $footer = new Tki\Footer();
-                $footer->display($pdo_db, $lang, $tkireg, $template);
+                $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
                 die();
             }
 
@@ -694,7 +694,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], \Tki\LogEnums::PLANET_SCAN_FAIL, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
                 $footer = new Tki\Footer();
-                $footer->display($pdo_db, $lang, $tkireg, $template);
+                $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
                 die();
             }
             else
@@ -952,4 +952,4 @@ echo "<a href =\"bounty.php\">" . $langvars['l_by_placebounty'] . "</a><p>";
 Tki\Text::gotoMain($pdo_db, $lang);
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

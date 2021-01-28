@@ -129,7 +129,7 @@ if (empty($zoneinfo))
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -159,7 +159,7 @@ if (($zoneinfo['team_zone'] == 'N' && $zoneinfo['owner'] != $ownerinfo['ship_id'
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -185,7 +185,7 @@ if ($command == 'change')
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -311,4 +311,4 @@ echo "<a href=zoneinfo.php?zone=$zone>" . $langvars['l_clickme'] . "</a> " . $la
 Tki\Text::gotoMain($pdo_db, $lang);
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

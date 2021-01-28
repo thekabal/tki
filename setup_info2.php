@@ -175,4 +175,4 @@ $template->addVariables('variables', $variables);
 $template->display('templates/classic/setup_info.tpl');
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

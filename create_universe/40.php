@@ -110,4 +110,4 @@ $template->addVariables('variables', $variables);
 $template->display('templates/classic/create_universe/40.tpl');
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

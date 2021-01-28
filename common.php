@@ -89,8 +89,8 @@ catch (Exception $tki_exception)
 
 $tkireg = null;
 $tkireg = new Tki\Reg($pdo_db);                     // TKI Registry object -  passing config variables via classes
-$tkireg->tkitimer = new Tki\Timer();                // Create a benchmark timer to get benchmarking data for everything
-$tkireg->tkitimer->start();                         // Start benchmarking immediately
+$tkitimer = new Tki\Timer();                        // Create a benchmark timer to get benchmarking data for everything
+$tkitimer->start();                                 // Start benchmarking immediately
 
 $langvars = null;                                   // Language variables in every page, set them to a null value first
 try

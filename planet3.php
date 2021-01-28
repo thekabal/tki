@@ -69,7 +69,7 @@ if ($planet_id <= 0)
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -95,7 +95,7 @@ if ($playerinfo['turns'] < 1)
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -105,7 +105,7 @@ if ($planetinfo['sector_id'] != $playerinfo['sector'])
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -115,7 +115,7 @@ if (empty($planetinfo))
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -206,4 +206,4 @@ Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
 Tki\Text::gotoMain($pdo_db, $lang);
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

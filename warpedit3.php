@@ -70,7 +70,7 @@ if ($playerinfo['turns'] < 1)
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -80,7 +80,7 @@ if ($playerinfo['dev_warpedit'] < 1)
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -103,7 +103,7 @@ if ($zoneinfo['allow_warpedit'] == 'N')
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -124,7 +124,7 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
     Tki\Text::gotoMain($pdo_db, $lang);
 
     $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $template);
+    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
     die();
 }
 
@@ -199,4 +199,4 @@ if ($linkinfo !== false)
 Tki\Text::gotoMain($pdo_db, $lang);
 
 $footer = new Tki\Footer();
-$footer->display($pdo_db, $lang, $tkireg, $template);
+$footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
