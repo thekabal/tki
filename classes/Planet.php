@@ -54,6 +54,7 @@ class Planet
         string $lang,
         array $langvars,
         Reg $tkireg,
+        Timer $tkitimer,
         array $playerinfo,
         array $ownerinfo,
         array $planetinfo,

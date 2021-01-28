@@ -26,7 +26,7 @@
 require_once './common.php';
 
 $login = new Tki\Login();
-$login->checkLogin($pdo_db, $lang, $tkireg, $template);
+$login->checkLogin($pdo_db, $lang, $tkireg, $tkitimer, $template);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('combat', 'common',

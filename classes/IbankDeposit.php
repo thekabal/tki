@@ -65,7 +65,7 @@ class IbankDeposit
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $amount, array $account, Reg $tkireg, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $amount, array $account, Reg $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $max_credits_allowed = 18446744073709000000;
 
@@ -74,17 +74,17 @@ class IbankDeposit
 
         if (($amount * 1) != $amount)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_invaliddepositinput'], "ibank.php?command=deposit", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_invaliddepositinput'], "ibank.php?command=deposit", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount == 0)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_nozeroamount2'], "ibank.php?command=deposit", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_nozeroamount2'], "ibank.php?command=deposit", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount > $playerinfo['credits'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=deposit", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=deposit", $lang, $tkireg, $tkitimer, $template);
         }
 
         $tmpcredits = $max_credits_allowed - $account['balance'];
@@ -95,7 +95,7 @@ class IbankDeposit
 
         if ($amount > $tmpcredits)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, "<center>Error You cannot deposit that much into your bank,<br> (Max Credits Reached)</center>", "ibank.php?command=deposit", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, "<center>Error You cannot deposit that much into your bank,<br> (Max Credits Reached)</center>", "ibank.php?command=deposit", $lang, $tkireg, $tkitimer, $template);
         }
 
         $account['balance'] += $amount;

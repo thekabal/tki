@@ -30,6 +30,7 @@ class TraderouteDie
         \PDO $pdo_db,
         string $lang,
         Reg $tkireg,
+        Timer $tkitimer,
         Smarty $template,
         ?string $error_msg = null
     ): void

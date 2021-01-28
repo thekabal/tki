@@ -25,7 +25,7 @@
 require_once './common.php';
 
 $login = new Tki\Login();
-$login->checkLogin($pdo_db, $lang, $tkireg, $template);
+$login->checkLogin($pdo_db, $lang, $tkireg, $tkitimer, $template);
 
 $title = $langvars['l_att_title'];
 $header = new Tki\Header();

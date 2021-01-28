@@ -25,7 +25,7 @@
 require_once './common.php';
 
 $login = new Tki\Login();
-$login->checkLogin($pdo_db, $lang, $tkireg, $template);
+$login->checkLogin($pdo_db, $lang, $tkireg, $tkitimer, $template);
 
 // Always make sure we are using empty vars before use.
 $variables = null;

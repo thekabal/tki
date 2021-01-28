@@ -53,7 +53,7 @@ class IbankConsolidate
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, Reg $tkireg, Timer $tkitimer, int $dplanet_id, int $minimum, int $maximum, Smarty $template): void
     {
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
@@ -63,7 +63,7 @@ class IbankConsolidate
 
         if ($dest === null)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
         }
 
         if (empty($dest['name']))
@@ -73,7 +73,7 @@ class IbankConsolidate
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
         }
 
         $amount = array();
@@ -135,7 +135,7 @@ class IbankConsolidate
              "</tr>";
     }
 
-    public static function third(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg, int $dplanet_id, int $minimum, int $maximum, string $lang, Smarty $template): void
+    public static function third(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg, Timer $tkitimer, int $dplanet_id, int $minimum, int $maximum, string $lang, Smarty $template): void
     {
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
@@ -145,7 +145,7 @@ class IbankConsolidate
 
         if ($dest === null)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
         }
 
         if (empty($dest['name']))
@@ -155,7 +155,7 @@ class IbankConsolidate
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
         }
 
         $amount = array();
@@ -190,7 +190,7 @@ class IbankConsolidate
 
         if ($tcost > $playerinfo['turns'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
         }
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .

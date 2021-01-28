@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetCombat
 {
-    public static function prime(\PDO $pdo_db, $old_db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): bool
+    public static function prime(\PDO $pdo_db, $old_db, string $lang, array $langvars, Reg $tkireg, Timer $tkitimer, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): bool
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('planet_cmb'));
         if ($playerinfo['turns'] < 1)

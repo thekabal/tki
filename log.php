@@ -25,7 +25,7 @@
 require_once './common.php';
 
 $login = new Tki\Login();
-$login->checkLogin($pdo_db, $lang, $tkireg, $template);
+$login->checkLogin($pdo_db, $lang, $tkireg, $tkitimer, $template);
 
 // Hack for log bug issue - FUTURE: this really needs to be fixed
 $log_list = array(null,

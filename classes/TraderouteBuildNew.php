@@ -26,7 +26,7 @@ namespace Tki;
 
 class TraderouteBuildNew
 {
-    public static function new(\PDO $pdo_db, string $lang, Reg $tkireg, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
+    public static function new(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
                                          'footer', 'insignias', 'traderoutes',
@@ -43,18 +43,18 @@ class TraderouteBuildNew
 
             if ($editroute === null)
             {
-                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_editerr']);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_editerr']);
             }
 
             if ($editroute['owner'] != $playerinfo['ship_id'])
             {
-                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowner']);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_notowner']);
             }
         }
 
         if ($num_traderoutes >= $tkireg->max_traderoutes_player && ($editroute === null))
         {
-            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, '<p>' . $langvars['l_tdr_maxtdr'] . '<p>');
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, '<p>' . $langvars['l_tdr_maxtdr'] . '<p>');
         }
 
         echo "<p><font size=3 color=blue><strong>";
@@ -409,6 +409,6 @@ class TraderouteBuildNew
             </form>
             ";
 
-        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
+        \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, null);
     }
 }

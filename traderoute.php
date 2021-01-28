@@ -25,7 +25,7 @@
 
 require_once './common.php';
 $login = new Tki\Login();
-$login->checkLogin($pdo_db, $lang, $tkireg, $template);
+$login->checkLogin($pdo_db, $lang, $tkireg, $tkitimer, $template);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'common',
@@ -231,27 +231,27 @@ if (($confirm === null) || (strlen(trim($confirm)) === 0))
 if ($command == 'new')
 {
     // Displays new trade route form
-    \Tki\TraderouteBuildNew::new($pdo_db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, null);
+    \Tki\TraderouteBuildNew::new($pdo_db, $lang, $tkireg, $tkitimer, $template, $num_traderoutes, $playerinfo, null);
 }
 elseif ($command == 'edit')
 {
     // Displays new trade route form, edit
-    \Tki\TraderouteBuildNew::new($pdo_db, $lang, $tkireg, $template, $num_traderoutes, $playerinfo, $traderoute_id);
+    \Tki\TraderouteBuildNew::new($pdo_db, $lang, $tkireg, $tkitimer, $template, $num_traderoutes, $playerinfo, $traderoute_id);
 }
 elseif ($command == 'create')
 {
     // Enters new route in db
-    \Tki\TraderouteBuildCreate::create($pdo_db, $old_db, $lang, $tkireg, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $planet_id1, $planet_id2);
+    \Tki\TraderouteBuildCreate::create($pdo_db, $old_db, $lang, $tkireg, $tkitimer, $template, $playerinfo, $num_traderoutes, $ptype1, $ptype2, $port_id1, $port_id2, $team_planet_id1, $team_planet_id2, $move_type, $circuit_type, $editing, $planet_id1, $planet_id2);
 }
 elseif ($command == 'delete')
 {
     // Displays delete info
-    \Tki\TraderouteDelete::prime($pdo_db, $lang, $langvars, $tkireg, $template, $playerinfo, $confirm, $traderoute_id);
+    \Tki\TraderouteDelete::prime($pdo_db, $lang, $langvars, $tkireg, $tkitimer, $template, $playerinfo, $confirm, $traderoute_id);
 }
 elseif ($command == 'settings')
 {
     // Global traderoute settings form
-    \Tki\TraderouteSettings::before($pdo_db, $lang, $tkireg, $template, $playerinfo);
+    \Tki\TraderouteSettings::before($pdo_db, $lang, $tkireg, $tkitimer, $template, $playerinfo);
 }
 elseif ($command == 'setsettings')
 {
@@ -259,7 +259,7 @@ elseif ($command == 'setsettings')
     \Tki\TraderouteSettings::after($pdo_db, $playerinfo, $colonists, $fighters, $torps, $energy);
 
     // Display outcome
-    \Tki\TraderouteSettings::afterOutput($pdo_db, $lang, $tkireg, $template);
+    \Tki\TraderouteSettings::afterOutput($pdo_db, $lang, $tkireg, $tkitimer, $template);
 }
 elseif ($engage !== null)
 {
@@ -269,7 +269,7 @@ elseif ($engage !== null)
         // Get playerinfo from database
         $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
-        \Tki\Traderoute::engage($pdo_db, $old_db, $lang, $tr_repeat, $langvars, $tkireg, $playerinfo, $engage, $traderoutes, $portfull, $template);
+        \Tki\Traderoute::engage($pdo_db, $old_db, $lang, $tr_repeat, $langvars, $tkireg, $tkitimer, $playerinfo, $engage, $traderoutes, $portfull, $template);
         $tr_repeat--;
     }
 }

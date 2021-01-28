@@ -43,24 +43,24 @@ class IbankWithdraw
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $amount, array $account, Reg $tkireg, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $amount, array $account, Reg $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $amount = preg_replace("/[^0-9]/", '', (string) $amount);
         $amount = (int) $amount;
 
         if (($amount * 1) != $amount)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidwithdrawinput'], "ibank.php?command=withdraw", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidwithdrawinput'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount == 0)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_nozeroamount3'], "ibank.php?command=withdraw", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_nozeroamount3'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount > $account['balance'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=withdraw", $lang, $tkireg, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
         }
 
         $account['balance'] -= $amount;

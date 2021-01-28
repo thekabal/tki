@@ -31,6 +31,7 @@ class TraderouteDelete
         string $lang,
         array $langvars,
         Reg $tkireg,
+        Timer $tkitimer,
         Smarty $template,
         array $playerinfo,
         string $confirm,
@@ -52,14 +53,14 @@ class TraderouteDelete
         /*
         if (!$query || $query->EOF)
         {
-            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_doesntexist']);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_doesntexist']);
         }
 
         $delroute = $query->fields;
 
         if ($delroute['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_notowntdr']);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_notowntdr']);
         }*/
 
         if ($confirm === "yes")
@@ -72,7 +73,7 @@ class TraderouteDelete
 
             $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
             echo $langvars['l_tdr_deleted'] . " " . $langvars['l_tdr_returnmenu'];
-            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, null);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, null);
         }
     }
 }

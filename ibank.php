@@ -24,7 +24,7 @@
 
 require_once './common.php';
 $login = new Tki\Login();
-$login->checkLogin($pdo_db, $lang, $tkireg, $template);
+$login->checkLogin($pdo_db, $lang, $tkireg, $tkitimer, $template);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
@@ -104,7 +104,7 @@ elseif ($command == 'withdraw') // Withdraw menu
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Tki\IbankWithdraw::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $bank_account, $tkireg, $template);
+    Tki\IbankWithdraw::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $bank_account, $tkireg, $tkitimer, $template);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
@@ -112,7 +112,7 @@ elseif ($command == 'deposit') // Deposit menu
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Tki\IbankDeposit::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $bank_account, $tkireg, $template);
+    Tki\IbankDeposit::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $bank_account, $tkireg, $tkitimer, $template);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
@@ -120,11 +120,11 @@ elseif ($command == 'transfer') // Main transfer menu
 }
 elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 {
-    Tki\IbankTransferSpecific::specific($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $ship_id, $splanet_id, $dplanet_id, $template);
+    Tki\IbankTransferSpecific::specific($pdo_db, $lang, $langvars, $tkireg, $tkitimer, $playerinfo, $ship_id, $splanet_id, $dplanet_id, $template);
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
-    Tki\IbankTransferFinal::final($pdo_db, $lang, $langvars, $playerinfo, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $template);
+    Tki\IbankTransferFinal::final($pdo_db, $lang, $langvars, $playerinfo, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $tkitimer, $template);
 }
 elseif ($command == 'loans') // Loans menu
 {
@@ -132,11 +132,11 @@ elseif ($command == 'loans') // Loans menu
 }
 elseif ($command == 'borrow') // Borrow operation
 {
-    Tki\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $bank_account, $amount, $template);
+    Tki\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $tkitimer, $playerinfo, $bank_account, $amount, $template);
 }
 elseif ($command == 'repay') // Repay operation
 {
-    Tki\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $bank_account, $amount, $tkireg, $template);
+    Tki\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $bank_account, $amount, $tkireg, $tkitimer, $template);
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {
@@ -144,11 +144,11 @@ elseif ($command == 'consolidate') // Consolidate menu
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Tki\IbankConsolidate::after($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $template);
+    Tki\IbankConsolidate::after($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $tkitimer, $dplanet_id, $minimum, $maximum, $template);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Tki\IbankConsolidate::third($pdo_db, $langvars, $playerinfo, $tkireg, $dplanet_id, $minimum, $maximum, $lang, $template);
+    Tki\IbankConsolidate::third($pdo_db, $langvars, $playerinfo, $tkireg, $tkitimer, $dplanet_id, $minimum, $maximum, $lang, $template);
 }
 else
 {

@@ -154,7 +154,7 @@ class TraderouteDistance
         return $retvalue;
     }
 
-    public static function warpCalc(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Smarty $template, array $traderoute, array $source, array $dest): array
+    public static function warpCalc(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Timer $tkitimer, Smarty $template, array $traderoute, array $source, array $dest): array
     {
         $dist = array();
         $sql = "SELECT link_id FROM ::prefix::links WHERE link_start = :link_start AND link_dest = :link_dest";
@@ -167,7 +167,7 @@ class TraderouteDistance
         {
             $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink1']);
             $langvars['l_tdr_nowlink1'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink1']);
-            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink1']);
+            \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_nowlink1']);
         }
 
         if ($traderoute['circuit'] == '2')
@@ -182,7 +182,7 @@ class TraderouteDistance
             {
                 $langvars['l_tdr_nowlink2'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink2']);
                 $langvars['l_tdr_nowlink2'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink2']);
-                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $template, $langvars['l_tdr_nowlink2']);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_nowlink2']);
             }
 
             $dist['triptime'] = 4;

@@ -25,7 +25,7 @@
 require_once './common.php';
 
 $login = new Tki\Login();
-$login->checkLogin($pdo_db, $lang, $tkireg, $template);
+$login->checkLogin($pdo_db, $lang, $tkireg, $tkitimer, $template);
 
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('bounty', 'combat',
@@ -608,7 +608,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 }
                 else
                 {
-                    if (\Tki\PlanetCombat::prime($pdo_db, $old_db, $lang, $langvars, $tkireg, $template, $playerinfo, $ownerinfo, $planetinfo))
+                    if (\Tki\PlanetCombat::prime($pdo_db, $old_db, $lang, $langvars, $tkireg, $tkitimer, $template, $playerinfo, $ownerinfo, $planetinfo))
                     {
                         die();
                     }
@@ -641,7 +641,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
         {
             try
             {
-                \Tki\Planet::bombing($pdo_db, $lang, $langvars, $tkireg, $playerinfo, $ownerinfo, $planetinfo, $template);
+                \Tki\Planet::bombing($pdo_db, $lang, $langvars, $tkireg, $tkitimer, $playerinfo, $ownerinfo, $planetinfo, $template);
             }
             catch (Exception $e)
             {
