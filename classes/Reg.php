@@ -86,7 +86,6 @@
  * @property mixed footer_show_debug
  * @property mixed fullscan_cost
  * @property bool game_closed
- * @property mixed game_name
  * @property mixed goods_delta
  * @property mixed goods_limit
  * @property mixed goods_prate
@@ -176,7 +175,6 @@
  * @property mixed kabal_aggression
  * @property mixed kabal_planets
  * @property mixed kabal_unemployment
- * @object   mixed tkitimer
  */
 
 namespace Tki;
@@ -224,7 +222,7 @@ class Reg
     {
         // Slurp in config variables from the ini file directly
         // This is hard-coded for now, but when we get multiple game support, we may need to change this.
-        $ini_keys = parse_ini_file('config/classic_config.ini', true);
+        $ini_keys = parse_ini_file('config/classic_config.ini', true, INI_SCANNER_TYPED);
         if (is_array($ini_keys))
         {
             foreach ($ini_keys as $config_line)
