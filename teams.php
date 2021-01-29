@@ -99,9 +99,9 @@ if (array_key_exists('who', $_REQUEST) === true)
 }
 
 $order = null;
-if (array_key_exists('order', $_REQUEST) === true)
+if (array_key_exists('order', $_GET) === true)
 {
-    $order = (string) $_REQUEST['order'];
+    $order = (string) $_GET['order'];
 }
 
 $type = '';
