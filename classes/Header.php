@@ -31,7 +31,7 @@ class Header
 {
     public function display(
         \PDO $pdo_db,
-        ?string $lang,
+        string $lang,
         Smarty $template,
         ?string $title = null,
         string $body_class = 'tki',
