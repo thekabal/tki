@@ -72,23 +72,6 @@ if (strlen(trim($filtered_post_password)) === 0)
     $filtered_post_password = false;
 }
 
-// Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-$newlang = null;
-$newlang = filter_input(INPUT_POST, 'newlang', FILTER_SANITIZE_STRING);
-if (($newlang === null) || (strlen(trim($newlang)) === 0))
-{
-    $newlang = false;
-}
-
-if ($newlang !== false)
-{
-    $lang = $newlang;
-}
-else
-{
-    $lang = $tkireg->default_lang;
-}
-
 $flag = 0;
 $sql = "SELECT email, character_name, ship_name FROM ::prefix::ships WHERE email = :email || character_name = :character_name || ship_name = :ship_name";
 $stmt = $pdo_db->prepare($sql);

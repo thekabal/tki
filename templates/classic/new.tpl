@@ -30,7 +30,7 @@
 <br>
 <div class="index-welcome">
 <h1 style='text-align:center'>{$langvars['l_new_title']}</h1>
-<form accept-charset="utf-8" action="new2.php{$variables['link']}" method="post">
+<form accept-charset="utf-8" action="new2.php" method="post">
     <dl class='twocolumn-form'>
         <dt style='padding:3px'><label for='username'>{$langvars['l_login_email']}:</label></dt>
         <dd style='padding:3px'><input type='email' id='username' name='username' size='20' maxlength='40' value='' placeholder='someone@example.com' style='width:200px'></dd>

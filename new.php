@@ -24,15 +24,12 @@
 
 require_once './common.php';
 
-$link = null;
-
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'footer',
                                 'index', 'insignias', 'login', 'new', 'news',
                                 'options', 'universal'));
 $variables = null;
 $variables['lang'] = $lang;
-$variables['link'] = $link;
 $variables['admin_mail'] = $tkireg->admin_mail;
 $variables['body_class'] = 'index';
 $variables['title'] = $langvars['l_new_title'];
