@@ -174,9 +174,7 @@ class Reg
     private bool $enable_gravatars = false;
     private string $default_template = '';
     private int $max_presets = 0;
-    // private string $default_lang = '';
-
-    protected array $vars = array();
+    private string $default_lang = '';
 
     public function __construct(\PDO $pdo_db)
     {
@@ -203,7 +201,7 @@ class Reg
                 foreach ($big_array as $row)
                 {
                     settype($row['value'], $row['type']);
-                    $this->vars[$row['name']] = $row['value'];
+                    $this->{$row['name']} = $row['value'];
                 }
 
                 return null;
@@ -235,7 +233,7 @@ class Reg
      */
     public function __set(string $name, $value): void
     {
-        $this->vars[$name] = $value;
+        $this->$name = $value;
     }
 
     /**
@@ -243,11 +241,11 @@ class Reg
      */
     public function &__get(string $name)
     {
-        if (!array_key_exists($name, $this->vars)) // When the key *does not* exist, return "null".
+        if (!property_exists($this, $name)) // When the key *does not* exist, return "null".
         {
-            $this->vars[$name] = null;
+            $this->$name = null;
         }
 
-        return $this->vars[$name];
+        return $this->$name;
     }
 }
