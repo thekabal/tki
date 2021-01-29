@@ -18,15 +18,15 @@
     File: faq.tpl
 *}
 
-{if !isset($variables['body_class'])}
-{$variables['body_class'] = "tki"}
+{if !isset($body_class)}
+{$body_class = "tki"}
 {/if}
-  <body class="{$variables['body_class']}">
+  <body class="{$body_class}">
 <div class="wrapper">
 
 <table>
   <tbody>
-  <tr><td class="firstbar">{$langvars['l_faq_title']}</td></tr>
+  <tr><td class="firstbar">{$title}</td></tr>
   </tbody></table><br>
 <table>
   <tbody>
@@ -708,4 +708,4 @@
     <td style="width:90%">
       <p> <br><br></p></td>
     <td style="width:5%">&nbsp;</td></tr></tbody></table>
-{$variables['linkback']['fulltext']|replace:"[here]":"<a href='{$variables['linkback']['link']}'>{$langvars['l_here']}</a>"}
+{$linkback}

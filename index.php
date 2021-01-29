@@ -32,24 +32,18 @@ if (Tki\Db::isActive($pdo_db))
     // Database driven language entries
     $langvars = Tki\Translate::load($pdo_db, $lang, array('footer', 'index',
                                     'insignias', 'login', 'logout', 'main'));
-    $variables = null;
-    $variables['lang'] = $lang;
-    $variables['link'] = $link;
-    $variables['title'] = $langvars['l_welcome_tki'];
-    $variables['link_forums'] = $tkireg->link_forums;
-    $variables['admin_mail'] = $tkireg->admin_mail;
-    $variables['body_class'] = 'index';
-
-    // Get list of available languages
-    $variables['list_of_langs'] = Tki\Languages::listAvailable($pdo_db, $lang);
+    $template->assign('lang', $lang);
+    $template->assign('link', $link);
+    $template->assign('title', $langvars['l_welcome_tki']);
+    $template->assign('link_forums', $tkireg->link_forums);
+    $template->assign('admin_mail', $tkireg->admin_mail);
+    $template->assign('body_class', 'index');
+    $template->assign('template', $tkireg->default_template);
 
     // Temporarily set the template to the default template until we have a user option
-    $variables['template'] = $tkireg->default_template;
     $header = new Tki\Header();
-    $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
-
-    $template->addVariables('langvars', $langvars);
-    $template->addVariables('variables', $variables);
+    $header->display($pdo_db, $lang, $template, $langvars['l_welcome_tki'], 'index');
+    $template->assign('langvars', $langvars);
     $template->display('index.tpl');
 
     $footer = new Tki\Footer();

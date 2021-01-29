@@ -30,29 +30,25 @@ $link = null;
 // Database driven language entries
 $langvars = Tki\Translate::load($pdo_db, $lang, array('common', 'faq',
                                 'universal'));
-
 $variables = null;
-$variables['lang'] = $lang;
-$variables['link'] = $link;
-$variables['body_class'] = 'faq';
-$variables['title'] = $langvars['l_faq_title'];
+$template->assign('lang', $lang);
+$template->assign('link', $link);
+$template->assign('body_class', 'faq');
+$template->assign('title', $langvars['l_faq_title']);
 
 if (empty($_SESSION['username']))
 {
-    $variables['linkback'] = array("fulltext" => $langvars['l_universal_main_login'], "link" => "index.php");
+    $langvars['l_universal_main_login'] = str_replace("[here]", "<a href='index.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_login']);
+    $template->assign('linkback', $langvars['l_universal_main_login']);
 }
 else
 {
-    $variables['linkback'] = array("fulltext" => $langvars['l_universal_main_menu'], "link" => "index.php");
+    $langvars['l_universal_main_menu'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_universal_main_menu']);
+    $template->assign('linkback', $langvars['l_universal_main_menu']);
 }
 
 $header = new Tki\Header();
-$header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
-
-$template->addVariables('langvars', $langvars);
-$template->addVariables('variables', $variables);
+$header->display($pdo_db, $lang, $template, $langvars['l_faq_title'], 'faq');
 $template->display('faq.tpl');
-
-
 $footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);

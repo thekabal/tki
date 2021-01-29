@@ -18,31 +18,31 @@
     File: index.tpl
 *}
 
-{if !isset($variables['body_class'])}
-{$variables['body_class'] = "tki"}
+{if !isset($body_class)}
+{$body_class = "tki"}
 {/if}
-  <body class="{$variables['body_class']}">
+  <body class="{$body_class}">
 <div class="wrapper">
 
-<header><div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$variables['template']}/images/header1.png" alt="{$langvars['l_tki']}"></div></header>
+<header><div class="index-header"><img height="150" width="994" style="width:100%" class="index" src="templates/{$template}/images/header1.png" alt="{$langvars['l_tki']}"></div></header>
 
 <div class="index-header-text">{$langvars['l_tki']}</div>
 <br>
 <h2 style="display:none">{$langvars['l_navigation']}</h2>
 <div class="navigation" role="navigation">
 <ul class="navigation">
-<li class="navigation"><a href="new.php{$variables['link']}"><span class="button blue"><span class="shine"></span>{$langvars['l_new_player']}</span></a></li>
-<li class="navigation"><a href="mailto:{$variables['admin_mail']}"><span class="button gray"><span class="shine"></span>{$langvars['l_login_emailus']}</span></a></li>
-<li class="navigation"><a href="ranking.php{$variables['link']}"><span class="button purple"><span class="shine"></span>{$langvars['l_rankings']}</span></a></li>
-<li class="navigation"><a href="faq.php{$variables['link']}"><span class="button brown"><span class="shine"></span>{$langvars['l_faq']}</span></a></li>
-<li class="navigation"><a href="settings.php{$variables['link']}"><span class="button red"><span class="shine"></span>{$langvars['l_settings']}</span></a></li>
-<li class="navigation"><a href="//{$variables['link_forums']}"><span class="button orange"><span class="shine"></span>{$langvars['l_forums']}</span></a></li>
+<li class="navigation"><a href="new.php{$link}"><span class="button blue"><span class="shine"></span>{$langvars['l_new_player']}</span></a></li>
+<li class="navigation"><a href="mailto:{$admin_mail}"><span class="button gray"><span class="shine"></span>{$langvars['l_login_emailus']}</span></a></li>
+<li class="navigation"><a href="ranking.php{$link}"><span class="button purple"><span class="shine"></span>{$langvars['l_rankings']}</span></a></li>
+<li class="navigation"><a href="faq.php{$link}"><span class="button brown"><span class="shine"></span>{$langvars['l_faq']}</span></a></li>
+<li class="navigation"><a href="settings.php{$link}"><span class="button red"><span class="shine"></span>{$langvars['l_settings']}</span></a></li>
+<li class="navigation"><a href="//{$link_forums}"><span class="button orange"><span class="shine"></span>{$langvars['l_forums']}</span></a></li>
 </ul></div><br style="clear:both">
 <div><p></p></div>
 <div class="index-welcome">
 <h1 class="index-h1">{$langvars['l_welcome_tki']}</h1>
 <p>{$langvars['l_tki_description']}<br></p>
-<form accept-charset="utf-8" action="login2.php{$variables['link']}" method="post">
+<form accept-charset="utf-8" action="login2.php{$link}" method="post">
 <dl class="twocolumn-form">
 <dt><label for="email">{$langvars['l_login_email']}</label></dt>
 <dd><input type="email" id="email" name="email" size="20" maxlength="40" placeholder="someone@example.com"></dd>
