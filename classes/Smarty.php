@@ -92,11 +92,8 @@ class Smarty
 
     public function setTheme(string $themeName): void
     {
-        if ($this->smarty !== null)
-        {
-            $this->smarty->setTemplateDir("templates/{$themeName}");
-            $this->addVariables('template_dir', "templates/{$themeName}");
-        }
+        $this->smarty->setTemplateDir("templates/{$themeName}");
+        $this->addVariables('template_dir', "templates/{$themeName}");
     }
 
     /**
@@ -132,17 +129,10 @@ class Smarty
         }
     }
 
-    public function getVariables(string $nodeName): ?string
+    public function getVariables(string $nodeName): string
     {
-        if ($this->smarty !== null)
-        {
-            $temp_variable = $this->smarty->getTemplateVars($nodeName);
-            return $temp_variable;
-        }
-        else
-        {
-            return null;
-        }
+        $temp_variable = $this->smarty->getTemplateVars($nodeName);
+        return $temp_variable;
     }
 
     public function test(): void
