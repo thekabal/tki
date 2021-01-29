@@ -135,12 +135,9 @@ class Smarty
         return $temp_variable;
     }
 
-    public function test(): void
+    public function assign($nodeName, $variables)
     {
-        if ($this->smarty !== null)
-        {
-            $this->smarty->testInstall();
-        }
+        $this->smarty->assign($nodeName, $variables);
     }
 
     public function display(string $template_file): void
@@ -149,14 +146,7 @@ class Smarty
         // varable so that we can compress it or not.
         try
         {
-            if ($this->smarty !== null)
-            {
-                $output = $this->smarty->fetch($template_file);
-            }
-            else
-            {
-                $output = null;
-            }
+            $output = $this->smarty->fetch($template_file);
         }
         catch (\exception $e)
         {
