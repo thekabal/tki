@@ -30,14 +30,8 @@ class Translate
 {
     protected static array $langvars = array();
 
-    public static function load(\PDO $pdo_db, ?string $language = null, array $categories): array
+    public static function load(\PDO $pdo_db, string $language, array $categories): array
     {
-        // Check if all supplied args are valid, if not return an empty array.
-        if ($language === null)
-        {
-            return self::$langvars;
-        }
-
         $ini_file = './languages/' . $language . '.ini';
         $ini_keys = parse_ini_file($ini_file, true, INI_SCANNER_TYPED);
         if (is_array($ini_keys))
