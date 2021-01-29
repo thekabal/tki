@@ -31,7 +31,7 @@ use PDO;
 
 class AdminLog
 {
-    public function writeLog(\PDO $pdo_db, int $log_type, ?string $data = null): void
+    public function writeLog(\PDO $pdo_db, int $log_type, string $data): void
     {
         $query = "INSERT INTO ::prefix::logs VALUES (null, 0, :logtype, NOW(), :data)";
         $prep = $pdo_db->prepare($query);
