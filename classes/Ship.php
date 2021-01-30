@@ -26,7 +26,7 @@ namespace Tki;
 
 class Ship
 {
-    public static function isDestroyed(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, array $langvars, Smarty $template, array $playerinfo): bool
+    public static function isDestroyed(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template, array $playerinfo): bool
     {
         // Check for destroyed ship
         if ($playerinfo['ship_destroyed'] === 'Y')
@@ -52,6 +52,8 @@ class Ship
             }
             else
             {
+                $langvars = Translate::load($pdo_db, $lang, array('common',
+                                            'login', 'self_destruct', 'universal'));
                 // If the player doesn't have an escapepod - they're dead, delete them.
                 // But we can't delete them yet. (This prevents the self-distruct inherit bug)
                 $error_status = str_replace('[here]', "<a href='log.php'>" .
