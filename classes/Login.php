@@ -31,8 +31,9 @@ class Login
         // Database driven language entries
         $langvars = Translate::load($pdo_db, $lang, array('common', 'footer',
                                     'login', 'self_destruct', 'universal'));
+
         $game_closed = new Game();
-        $playerinfo = Player::auth($pdo_db, $lang, $langvars, $tkireg, $tkitimer, $template);
+        $playerinfo = Player::auth($pdo_db, $lang, $tkireg, $tkitimer, $template);
 
         if (empty($playerinfo))
         {
@@ -45,17 +46,17 @@ class Login
         $timestamp['now']  = (int) strtotime($cur_time_stamp);
         $timestamp['last'] = (int) strtotime($playerinfo['last_login']);
 
-        if ($game_closed->isGameClosed($pdo_db, $tkireg, $tkitimer, $lang, $template, $langvars))
+        if ($game_closed->isGameClosed($pdo_db, $tkireg, $tkitimer, $lang, $template))
         {
             return false;
         }
 
-        if (Player::ban($pdo_db, $lang, $timestamp, $template, $playerinfo, $langvars, $tkireg, $tkitimer))
+        if (Player::ban($pdo_db, $lang, $timestamp, $template, $playerinfo, $tkireg, $tkitimer))
         {
             return false;
         }
 
-        $is_ship_destroyed = !\Tki\Ship::isDestroyed($pdo_db, $lang, $tkireg, $tkitimer, $langvars, $template, $playerinfo);
+        $is_ship_destroyed = !\Tki\Ship::isDestroyed($pdo_db, $lang, $tkireg, $tkitimer, $template, $playerinfo);
         return $is_ship_destroyed;
     }
 }

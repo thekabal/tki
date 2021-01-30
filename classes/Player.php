@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Player
 {
-    public static function auth(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Timer $tkitimer, Smarty $template): array | bool
+    public static function auth(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template): array | bool
     {
         $request = Request::createFromGlobals();
         $error_status = null;
@@ -79,6 +79,7 @@ class Player
             }
             else
             {
+                $langvars = Translate::load($pdo_db, $lang, array('universal', 'common'));
                 $error_status .= str_replace('[here]', "<a href='index.php'>" . $langvars['l_here'] . '</a>', $langvars['l_universal_need_login']);
                 $title = $langvars['l_error'];
 
@@ -98,7 +99,7 @@ class Player
         }
     }
 
-    public static function ban(\PDO $pdo_db, string $lang, array $timestamp, Smarty $template, array $playerinfo, array $langvars, Reg $tkireg, Timer $tkitimer): bool
+    public static function ban(\PDO $pdo_db, string $lang, array $timestamp, Smarty $template, array $playerinfo, Reg $tkireg, Timer $tkitimer): bool
     {
         // Check to see if the player is banned every 60 seconds (may need to ajust this).
         if ($timestamp['now'] >= ($timestamp['last'] + 60))
@@ -132,6 +133,7 @@ class Player
                     $error_status .= $ban_result['public_info'] . "</div>\n";
                 }
 
+                $langvars = Translate::load($pdo_db, $lang, array('universal', 'common'));
                 $error_status .= "</div>\n";
                 $error_status .= "<br>\n";
                 $error_status .= "<div style='color:#FF0000;'>Maybe you will behave yourself next time.</div>\n";
