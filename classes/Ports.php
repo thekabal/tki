@@ -26,8 +26,9 @@ namespace Tki;
 
 class Ports
 {
-    public static function getType(string $ptype, array $langvars): string
+    public static function getType(\PDO $pdo_db, string $lang, string $ptype): string
     {
+        $langvars = Translate::load($pdo_db, $lang, array('common'));
         switch ($ptype)
         {
             case 'ore':
@@ -43,7 +44,7 @@ class Ports
             case 'special':
                 return $langvars['l_special'];
             default:
-                return 'unknown';
+                return $langvars['l_unknown'];
         }
     }
 
