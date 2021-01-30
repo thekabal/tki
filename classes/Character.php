@@ -92,11 +92,13 @@ class Character
         $stmt->execute();
     }
 
-    public function getInsignia(\PDO $pdo_db, string $a_username, array $langvars): string
+    public function getInsignia(\PDO $pdo_db, string $language, string $a_username): string
     {
         // Lookup players score.
         $players_gateway = new Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($a_username);
+
+        $langvars = Translate::load($pdo_db, $language, array('insignias'));
 
         for ($estimated_rank = 0; $estimated_rank < 20; $estimated_rank++)
         {
