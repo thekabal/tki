@@ -31,12 +31,12 @@ class Game
         Reg $tkireg,
         Timer $tkitimer,
         string $lang,
-        Smarty $template,
-        array $langvars
+        Smarty $template
     ): bool
     {
         if ($tkireg->game_closed === true)
         {
+            $langvars = Translate::load($pdo_db, $lang, array('login'));
             $title = $langvars['l_login_closed_message'];
 
             $header = new \Tki\Header();
