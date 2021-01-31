@@ -388,7 +388,7 @@ class PlanetCombat
                 }
 
                 echo "<br>-" . $onplanet['ship_name'] . " " . $langvars['l_cmb_approachattackvector'] . "-<br>";
-                \Tki\Combat::shipToShip($pdo_db, $langvars, $onplanet['ship_id'], $tkireg, $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage);
+                \Tki\Combat::shipToShip($pdo_db, $lang, $langvars, $onplanet['ship_id'], $tkireg, $playerinfo, $attackerbeams, $attackerfighters, $attackershields, $attackertorps, $attackerarmor, $attackertorpdamage);
                 $shipsOnPlanetCount--;
             }
         }
@@ -418,13 +418,13 @@ class PlanetCombat
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-                \Tki\Bounty::collect($pdo_db, $planetinfo['owner'], $playerinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $lang, $planetinfo['owner'], $playerinfo['ship_id']);
             }
             else
             {
                 $character_object = new Character();
-                $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
-                \Tki\Bounty::collect($pdo_db, $planetinfo['owner'], $playerinfo['ship_id']);
+                $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
+                \Tki\Bounty::collect($pdo_db, $lang, $planetinfo['owner'], $playerinfo['ship_id']);
             }
         }
         else
@@ -532,7 +532,7 @@ class PlanetCombat
                 \Tki\Db::logDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
             }
 
-            \Tki\Ownership::calc($pdo_db, $planetinfo['sector_id'], $tkireg->min_bases_to_own);
+            \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg->min_bases_to_own);
         }
         else
         {
