@@ -26,8 +26,9 @@ namespace Tki;
 
 class Ownership
 {
-    public static function calc(\PDO $pdo_db, int $sector, Reg $tkireg, array $langvars): string
+    public static function calc(\PDO $pdo_db, int $sector, Reg $tkireg): string
     {
+        $langvars = Translate::load($pdo_db, $lang, array('universal'));
         $sql = "SELECT owner, team FROM ::prefix::planets WHERE sector_id = :sector_id AND base = 'Y'";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector, \PDO::PARAM_INT);
