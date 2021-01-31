@@ -26,8 +26,9 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function baseBuildCheck(array $langvars, Reg $tkireg, array $planet, int $num): string
+    public static function baseBuildCheck(\PDO $pdo_db, string $lang, Reg $tkireg, array $planet, int $num): string
     {
+        $langvars = Translate::load($pdo_db, $lang, array('common'));
         if($planet[$num]['base'] == 'Y')
         {
             return $langvars['l_yes'];
@@ -42,8 +43,9 @@ class PlanetReport
         }
     }
 
-    public static function menu(array $playerinfo, array $langvars): void
+    public static function menu(\PDO $pdo_db, $lang, array $playerinfo): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('planet_report'));
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
         echo "<strong><a href=\"planet_report.php?preptype=1\" name=\"Planet Status\">Planet Status</a></strong><br>" .
              "Displays the number of each Commodity on the planet (Ore, Organics, Goods, Energy, Colonists, Credits, Fighters, and Torpedoes)<br>" .
@@ -61,8 +63,9 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport(\PDO $pdo_db, array $langvars, array $playerinfo, string $sort, Reg $tkireg): void
+    public static function standardReport(\PDO $pdo_db, string $lang, array $playerinfo, string $sort, Reg $tkireg): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('common', 'main', 'planet', 'planet_report', 'regional'));
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";
 
         echo "Planetary report descriptions and <strong><a href=\"planet_report.php?preptype=0\">menu</a></strong><br><br>" .
@@ -198,7 +201,7 @@ class PlanetReport
                 echo "<td align=center><input type=checkbox name=TPCreds[] value=\"" . $planet[$counter]['planet_id'] . "\"></td>";
                 echo "<td align=right>"  . number_format($planet[$counter]['fighters'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
                 echo "<td align=right>"  . number_format($planet[$counter]['torps'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . "</td>";
-                echo "<td align=center>" . self::baseBuildCheck($langvars, $tkireg, $planet, $counter) . "</td>";
+                echo "<td align=center>" . self::baseBuildCheck($pdo_db, $lang, $tkireg, $planet, $counter) . "</td>";
 
                 if ($playerinfo['team'] > 0)
                 {
