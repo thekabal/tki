@@ -157,7 +157,7 @@ else
 switch ($teamwhat)
 {
     case 1: // Info on single team
-        Tki\Team::showInfo($pdo_db, $langvars, $whichteam, true, $playerinfo, $invite_info, $team, $tkireg);
+        Tki\Team::showInfo($pdo_db, $lang, $whichteam, true, $playerinfo, $invite_info, $team, $tkireg);
         echo "<br><br><a href=\"teams.php\">" . $langvars['l_clickme'] . "</a> " . $langvars['l_team_menu'] . ".<br><br>";
         break;
 
@@ -610,7 +610,7 @@ switch ($teamwhat)
         if ($playerinfo['team'] == 0)
         {
             echo $langvars['l_team_notmember'];
-            Tki\Team::displayInviteInfo($langvars, $playerinfo, $invite_info);
+            Tki\Team::displayInviteInfo($pdo_db, $lang, $playerinfo, $invite_info);
         }
         else
         {
@@ -640,7 +640,7 @@ switch ($teamwhat)
             }
 
             $isowner = Tki\Team::isTeamOwner($whichteam, $playerinfo);
-            Tki\Team::showInfo($pdo_db, $langvars, (int) $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
+            Tki\Team::showInfo($pdo_db, $lang, (int) $playerinfo['team'], $isowner, $playerinfo, $invite_info, $team, $tkireg);
         }
 
         $res = $old_db->Execute("SELECT COUNT(*) as total FROM {$old_db->prefix}teams WHERE admin='N'");

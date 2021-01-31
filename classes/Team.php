@@ -170,8 +170,9 @@ class Team
         echo "</table><br>";
     }
 
-    public static function displayInviteInfo(array $langvars, array $playerinfo, array $invite_info): void
+    public static function displayInviteInfo(\PDO $pdo_db, string $lang, array $playerinfo, array $invite_info): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('common', 'teams'));
         if (!$playerinfo['team_invite'])
         {
             echo "<br><br><font color=blue size=2><strong>" . $langvars['l_team_noinvite'] . "</strong></font><br>";
@@ -186,8 +187,9 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, array $langvars, int $whichteam, bool $isowner, array $playerinfo, array $invite_info, array $team, Reg $tkireg): void
+    public static function showInfo(\PDO $pdo_db, string $lang, int $whichteam, bool $isowner, array $playerinfo, array $invite_info, array $team, Reg $tkireg): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('common', 'main', 'teams'));
         // Heading
         echo "<div align=center><h3><font color=white><strong>$team[team_name]</strong>";
         echo "<br><font size=2>\"<i>$team[description]</i>\"</font></h3>";
@@ -211,7 +213,7 @@ class Team
             echo "[<a href=teams.php?teamwhat=7&whichteam=$playerinfo[team]>" . $langvars['l_team_inv'] . "</a>] - [<a href=teams.php?teamwhat=2&whichteam=$playerinfo[team]>" . $langvars['l_team_leave'] . "</a>]</font></font>";
         }
 
-        self::displayInviteInfo($langvars, $playerinfo, $invite_info);
+        self::displayInviteInfo($pdo_db, $lang, $playerinfo, $invite_info);
         echo "</div>";
 
         // Main table
