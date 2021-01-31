@@ -41,7 +41,7 @@ class TraderouteDelete
         $sql = "SELECT * FROM ::prefix::traderoutes WHERE traderoute_id = :traderoute_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':traderoute_id', $traderoute_id, \PDO::PARAM_INT);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         // This is nonsense code to keep from testing as if playerinfo isn't used

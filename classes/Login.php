@@ -28,10 +28,6 @@ class Login
 {
     public function checkLogin(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template): bool
     {
-        // Database driven language entries
-        $langvars = Translate::load($pdo_db, $lang, array('common', 'footer',
-                                    'login', 'self_destruct', 'universal'));
-
         $game_closed = new Game();
         $playerinfo = Player::auth($pdo_db, $lang, $tkireg, $tkitimer, $template);
 

@@ -172,7 +172,7 @@ class CheckDefenses
         $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
         $stmt->bindParam(':playertorps', $playertorpnum, \PDO::PARAM_INT);
         $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         $langvars['l_sf_lreport'] = str_replace("[armor]", (string) $armor_lost, $langvars['l_sf_lreport']);
@@ -211,8 +211,6 @@ class CheckDefenses
 
                 $bounty = new \Tki\Bounty();
                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);
-
-                $status = 0;
                 \Tki\Text::gotoMain($pdo_db, $lang);
                 die();
             }
@@ -255,7 +253,7 @@ class CheckDefenses
         \Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
         // Put the defense information into the array defenses
-        $i = 0;
+        $num_defenses = 0;
         $total_sec_fighters = 0;
         $owner = true;
 
@@ -284,18 +282,17 @@ class CheckDefenses
         while (!$result3->EOF)
         {
             $row = $result3->fields;
-            $defenses[$i] = $row;
-            $total_sec_fighters += $defenses[$i]['quantity'];
-            if ($defenses[$i]['ship_id'] != $playerinfo['ship_id'])
+            $defenses[$num_defenses] = $row;
+            $total_sec_fighters += $defenses[$num_defenses]['quantity'];
+            if ($defenses[$num_defenses]['ship_id'] != $playerinfo['ship_id'])
             {
                 $owner = false;
             }
 
-            $i++;
+            $num_defenses++;
             $result3->MoveNext();
         }
 
-        $num_defenses = $i;
         if ($num_defenses > 0 && $total_sec_fighters > 0 && !$owner)
         {
             // Find out if the fighter owner and player are on the same team
