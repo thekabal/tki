@@ -58,6 +58,9 @@ class Bases
                  $langvars['l_here'] . "</a>", $langvars['l_pr_click_return_planet']);
             echo "<br><br>";
 
+            /**
+            * @property-read int $tkireg->base_goods
+            */
             if ($planetinfo['ore'] >= $tkireg->base_ore && $planetinfo['organics'] >= $tkireg->base_organics && $planetinfo['goods'] >= $tkireg->base_goods && $planetinfo['credits'] >= $tkireg->base_credits)
             {
                 // Create the base
