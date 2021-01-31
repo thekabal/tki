@@ -26,8 +26,9 @@ namespace Tki;
 
 class Combat
 {
-    public static function shipToShip(\PDO $pdo_db, string $lang, array $langvars, int $ship_id, Reg $tkireg, array $playerinfo, int $attackerbeams, int $attackerfighters, int $attackershields, int $attackertorps, int $attackerarmor, int $attackertorpdamage): void
+    public static function shipToShip(\PDO $pdo_db, string $lang, int $ship_id, Reg $tkireg, array $playerinfo, int $attackerbeams, int $attackerfighters, int $attackershields, int $attackertorps, int $attackerarmor, int $attackertorpdamage): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('combat'));
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
