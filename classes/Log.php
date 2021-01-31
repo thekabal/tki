@@ -26,10 +26,11 @@ namespace Tki;
 
 class Log
 {
-    public static function logParse(array $langvars, array $entry): array
+    public static function logParse(\PDO $pdo_db, string $lang, array $entry): array
     {
         $log_list = array();
         $retvalue = array();
+        $langvars = Translate::load($pdo_db, $lang, array('log'));
         $langvars['l_log_nopod'] = "<font color=yellow><strong>" . $langvars['l_log_nopod'] . "</strong></font>"; // This should be done better, but I needed it moved out of the language file.
 
         self::getLogInfo($log_list, $entry['type'], $titletemp, $texttemp);
