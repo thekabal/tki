@@ -56,9 +56,9 @@ class Bounty
         }
     }
 
-    public static function collect(\PDO $pdo_db, int $attacker, int $bounty_on): void
+    public static function collect(\PDO $pdo_db, string $lang, int $attacker, int $bounty_on): void
     {
-        $langvars = Translate::load($pdo_db, $lang, array('bounty');
+        $langvars = Translate::load($pdo_db, $lang, array('bounty'));
         $sql = "SELECT * FROM ::prefix::bounty, ::prefix::ships WHERE " .
                "bounty_on = :bounty_on AND bounty_on = ship_id AND planced_by <> 0";
         $stmt = $pdo_db->prepare($sql);

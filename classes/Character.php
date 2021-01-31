@@ -26,7 +26,7 @@ namespace Tki;
 
 class Character
 {
-    public function kill(\PDO $pdo_db, int $ship_id, array $langvars, Reg $tkireg): void
+    public function kill(\PDO $pdo_db, string $lang, int $ship_id, array $langvars, Reg $tkireg): void
     {
         $sql = "UPDATE ::prefix::ships SET ship_destroyed = 'Y', " .
                "on_planet = 'N', sector = 1, cleared_defenses = ' ' WHERE ship_id = :ship_id";
@@ -54,7 +54,7 @@ class Character
         {
             foreach ($sectors_owned as $tmp_sector)
             {
-                Ownership::calc($pdo_db, $tmp_sector, $tkireg->min_bases_to_own);
+                Ownership::calc($pdo_db, $lang, $tmp_sector, $tkireg->min_bases_to_own);
             }
         }
 

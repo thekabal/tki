@@ -26,7 +26,7 @@ namespace Tki;
 
 class Combat
 {
-    public static function shipToShip(\PDO $pdo_db, array $langvars, int $ship_id, Reg $tkireg, array $playerinfo, int $attackerbeams, int $attackerfighters, int $attackershields, int $attackertorps, int $attackerarmor, int $attackertorpdamage): void
+    public static function shipToShip(\PDO $pdo_db, string $lang, array $langvars, int $ship_id, Reg $tkireg, array $playerinfo, int $attackerbeams, int $attackerfighters, int $attackershields, int $attackertorps, int $attackerarmor, int $attackertorpdamage): void
     {
         $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
@@ -505,14 +505,14 @@ class Combat
                 $update = $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|Y");
-                \Tki\Bounty::collect($pdo_db, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                \Tki\Bounty::collect($pdo_db, $lang, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
             else
             {
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|N");
                 $character_object = new Character();
-                $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg);
-                \Tki\Bounty::collect($pdo_db, $playerinfo['ship_id'], $targetinfo['ship_id']);
+                $character_object->kill($pdo_db, $lang, $targetinfo['ship_id'], $langvars, $tkireg);
+                \Tki\Bounty::collect($pdo_db, $lang, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
         }
         else
