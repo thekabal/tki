@@ -34,17 +34,17 @@ class Ibank
 
         if (($amount * 1) != $amount)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
+            self::ibankError($pdo_db, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount <= 0)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
+            self::ibankError($pdo_db, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($account['loan'] != 0)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notwoloans'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
+            self::ibankError($pdo_db, $langvars['l_ibank_notwoloans'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
         }
 
         $score = \Tki\Score::updateScore($pdo_db, $playerinfo['ship_id'], $tkireg, $playerinfo);
@@ -52,7 +52,7 @@ class Ibank
 
         if ($amount > $maxtrans)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_loantoobig'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
+            self::ibankError($pdo_db, $langvars['l_ibank_loantoobig'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
         }
 
         $amount2 = $amount * $tkireg->ibank_loanfactor;
@@ -185,17 +185,17 @@ class Ibank
 
         if (($amount * 1) != $amount)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
+            self::ibankError($pdo_db, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount <= 0)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
+            self::ibankError($pdo_db, $langvars['l_ibank_invalidamount'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($account['loan'] == 0)
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notrepay'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
+            self::ibankError($pdo_db, $langvars['l_ibank_notrepay'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount > $account['loan'])
@@ -205,7 +205,7 @@ class Ibank
 
         if ($amount > $playerinfo['credits'])
         {
-            self::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughrepay'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
+            self::ibankError($pdo_db, $langvars['l_ibank_notenoughrepay'], "ibank.php?command=loans", $lang, $tkireg, $tkitimer, $template);
         }
 
         $playerinfo['credits'] -= $amount;
@@ -244,8 +244,9 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankError(\PDO $pdo_db, array $langvars, string $errmsg, string $backlink, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template): void
+    public static function ibankError(\PDO $pdo_db, string $errmsg, string $backlink, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('ibank'));
         $title = $langvars['l_ibank_ibankerrreport'];
         echo "<tr><td colspan=2 align=center valign=top>" . $title . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .

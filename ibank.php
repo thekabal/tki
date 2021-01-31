@@ -52,7 +52,7 @@ echo '<table style="width:550px; height:300px;" border="0px">';
 
 if (!$tkireg->allow_ibank)
 {
-    Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_malfunction'], "main.php", $lang, $tkireg, $tkitimer, $template);
+    Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_malfunction'], "main.php", $lang, $tkireg, $tkitimer, $template);
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
@@ -140,7 +140,7 @@ elseif ($command == 'repay') // Repay operation
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {
-    Tki\IbankConsolidate::before($langvars, $tkireg, $dplanet_id);
+    Tki\IbankConsolidate::before($pdo_db, $lang, $tkireg, $dplanet_id);
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {

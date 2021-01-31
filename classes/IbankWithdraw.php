@@ -50,17 +50,17 @@ class IbankWithdraw
 
         if (($amount * 1) != $amount)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_invalidwithdrawinput'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_invalidwithdrawinput'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount == 0)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_nozeroamount3'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_nozeroamount3'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
         }
 
         if ($amount > $account['balance'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_notenoughcredits'], "ibank.php?command=withdraw", $lang, $tkireg, $tkitimer, $template);
         }
 
         $account['balance'] -= $amount;
