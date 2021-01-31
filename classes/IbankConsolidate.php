@@ -136,8 +136,9 @@ class IbankConsolidate
              "</tr>";
     }
 
-    public static function third(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg, Timer $tkitimer, int $dplanet_id, int $minimum, int $maximum, string $lang, Smarty $template): void
+    public static function third(\PDO $pdo_db, string $lang, array $playerinfo, Reg $tkireg, Timer $tkitimer, int $dplanet_id, int $minimum, int $maximum, Smarty $template): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':planet_id', $dplanet_id, \PDO::PARAM_INT);

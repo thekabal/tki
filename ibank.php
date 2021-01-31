@@ -104,7 +104,7 @@ elseif ($command == 'withdraw') // Withdraw menu
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
-    Tki\IbankWithdraw::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $bank_account, $tkireg, $tkitimer, $template);
+    Tki\IbankWithdraw::after($pdo_db, $lang, $playerinfo, $amount, $bank_account, $tkireg, $tkitimer, $template);
 }
 elseif ($command == 'deposit') // Deposit menu
 {
@@ -148,7 +148,7 @@ elseif ($command == 'consolidate2') // Consolidate compute
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {
-    Tki\IbankConsolidate::third($pdo_db, $langvars, $playerinfo, $tkireg, $tkitimer, $dplanet_id, $minimum, $maximum, $lang, $template);
+    Tki\IbankConsolidate::third($pdo_db, $lang, $playerinfo, $tkireg, $tkitimer, $dplanet_id, $minimum, $maximum, $template);
 }
 else
 {
