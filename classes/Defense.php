@@ -26,11 +26,12 @@ namespace Tki;
 
 class Defense
 {
-    public static function defenseVsDefense(\PDO $pdo_db, int $ship_id, array $langvars): void
+    public static function defenseVsDefense(\PDO $pdo_db, string $lang, int $ship_id): void
     {
         // Pull defense info from database
         $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db);
         $defenses_present = $defenses_gateway->selectDefenses($ship_id);
+        $langvars = Translate::load($pdo_db, $lang, array('common'));
 
         if (!empty($defenses_present))
         {
