@@ -26,8 +26,9 @@ namespace Tki;
 
 class Realspace
 {
-    public function realSpaceMove(\PDO $pdo_db, array $langvars, int $destination, Reg $tkireg): string
+    public function realSpaceMove(\PDO $pdo_db, string $lang, int $destination, Reg $tkireg): string
     {
+        $langvars = Translate::load($pdo_db, $lang, array('planet_report', 'regional', 'rsmove'));
         $energyscooped = 0;
         $players_gateway = new Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);

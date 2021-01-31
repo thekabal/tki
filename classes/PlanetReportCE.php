@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetReportCE
 {
-    public static function collectCredits(\PDO $pdo_db, array $langvars, array $planetarray, Reg $tkireg): void
+    public static function collectCredits(\PDO $pdo_db, string $lang, array $langvars, array $planetarray, Reg $tkireg): void
     {
         $current_state = "GO"; // Current State
         $playerinfo = array();
@@ -68,7 +68,7 @@ class PlanetReportCE
         {
             echo "<br>";
             $rs_move = new \Tki\Realspace();
-            $current_state = $rs_move->realSpaceMove($pdo_db, $langvars, $s_p_pair[$i][0], $tkireg);
+            $current_state = $rs_move->realSpaceMove($pdo_db, $lang, $s_p_pair[$i][0], $tkireg);
 
             if ($current_state == "HOSTILE")
             {
