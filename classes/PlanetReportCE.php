@@ -26,8 +26,9 @@ namespace Tki;
 
 class PlanetReportCE
 {
-    public static function collectCredits(\PDO $pdo_db, string $lang, array $langvars, array $planetarray, Reg $tkireg): void
+    public static function collectCredits(\PDO $pdo_db, string $lang, array $planetarray, Reg $tkireg): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('common', 'planet_report'));
         $current_state = "GO"; // Current State
         $playerinfo = array();
 
@@ -76,7 +77,7 @@ class PlanetReportCE
             }
             elseif ($current_state == "GO")
             {
-                $current_state = self::takeCredits($pdo_db, $langvars, $s_p_pair[$i][1]);
+                $current_state = self::takeCredits($pdo_db, $lang, $s_p_pair[$i][1]);
             }
             else
             {
@@ -96,8 +97,9 @@ class PlanetReportCE
         echo "<br><br>";
     }
 
-    public static function takeCredits(\PDO $pdo_db, array $langvars, int $planet_id): string
+    public static function takeCredits(\PDO $pdo_db, string $lang, int $planet_id): string
     {
+        $langvars = Translate::load($pdo_db, $lang, array('common', 'planet_report', 'regional'));
         $playerinfo = array();
         $planetinfo = array();
 
