@@ -65,7 +65,7 @@ class IbankConsolidate
 
         if ($dest === null)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
         }
 
         if (empty($dest['name']))
@@ -75,7 +75,7 @@ class IbankConsolidate
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
         }
 
         $amount = array();
@@ -148,7 +148,7 @@ class IbankConsolidate
 
         if ($dest === null)
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_errunknownplanet'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
         }
 
         if (empty($dest['name']))
@@ -158,7 +158,7 @@ class IbankConsolidate
 
         if ($dest['owner'] != $playerinfo['ship_id'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_errnotyourplanet'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
         }
 
         $amount = array();
@@ -193,7 +193,7 @@ class IbankConsolidate
 
         if ($tcost > $playerinfo['turns'])
         {
-            \Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_notenturns'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
         }
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfersuccessful'] . "<br>---------------------------------</td></tr>" .

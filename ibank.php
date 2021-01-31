@@ -52,7 +52,7 @@ echo '<table style="width:550px; height:300px;" border="0px">';
 
 if (!$tkireg->allow_ibank)
 {
-    Tki\Ibank::ibankError($pdo_db, $langvars['l_ibank_malfunction'], "main.php", $lang, $tkireg, $tkitimer, $template);
+    Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_malfunction'], "main.php", $tkireg, $tkitimer, $template);
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
