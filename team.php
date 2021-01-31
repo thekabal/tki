@@ -60,7 +60,7 @@ if (!empty($planetinfo))
             $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
             $result = $stmt->execute();
             Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            $ownership = Tki\Ownership::calc($pdo_db, $lang, $playerinfo['sector'], $tkireg->min_bases_to_own);
+            $ownership = Tki\Ownership::calc($pdo_db, $lang, $playerinfo['sector'], $tkireg);
             echo '<p>' . $ownership . '<p>';
         }
 
@@ -73,7 +73,7 @@ if (!empty($planetinfo))
             $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
             $result = $stmt->execute();
             Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-            $ownership = Tki\Ownership::calc($pdo_db, $lang, $playerinfo['sector'], $tkireg->min_bases_to_own);
+            $ownership = Tki\Ownership::calc($pdo_db, $lang, $playerinfo['sector'], $tkireg);
 
             // Kick other players off the planet
             $sql = "UPDATE ::prefix::ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = :planet_id AND ship_id <> :ship_id";

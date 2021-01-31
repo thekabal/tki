@@ -334,7 +334,7 @@ class KabalToPlanet
                 $resl = $old_db->Execute("UPDATE {$old_db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resl, __LINE__, __FILE__);
 
-                \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg->min_bases_to_own);
+                \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg);
             }
             else
             {

@@ -532,7 +532,7 @@ class PlanetCombat
                 \Tki\Db::logDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
             }
 
-            \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg->min_bases_to_own);
+            \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg);
         }
         else
         {

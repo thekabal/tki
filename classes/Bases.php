@@ -92,7 +92,7 @@ class Bases
                 echo $langvars['l_planet_bbuild'] . "<br><br>";
 
                 // Calculate ownership and notify user of results
-                $ownership = \Tki\Ownership::calc($pdo_db, $lang, $playerinfo['sector'], $tkireg->min_bases_to_own);
+                $ownership = \Tki\Ownership::calc($pdo_db, $lang, $playerinfo['sector'], $tkireg);
                 echo $ownership . "<p>";
                 return;
             }
