@@ -649,7 +649,7 @@ switch ($teamwhat)
 
         if ($num_res['total'] > 0)
         {
-            Tki\Team::displayAllTeams($pdo_db, $langvars, $tkireg, $order, $type);
+            Tki\Team::displayAllTeams($pdo_db, $lang, $tkireg, $order, $type);
         }
         else
         {
