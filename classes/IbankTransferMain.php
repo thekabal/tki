@@ -26,8 +26,9 @@ namespace Tki;
 
 class IbankTransferMain
 {
-    public static function main(\PDO $pdo_db, array $langvars, array $playerinfo, Reg $tkireg): void
+    public static function main(\PDO $pdo_db, string $lang, array $playerinfo, Reg $tkireg): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@kabal' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns, \PDO::PARAM_INT);

@@ -96,11 +96,11 @@ if ($maximum === 0)
 
 if ($command == 'login') // Main menu
 {
-    Tki\Ibank::ibankLogin($langvars, $playerinfo, $bank_account);
+    Tki\Ibank::ibankLogin($pdo_db, $tkireg, $playerinfo, $bank_account);
 }
 elseif ($command == 'withdraw') // Withdraw menu
 {
-    Tki\IbankWithdraw::before($langvars, $bank_account);
+    Tki\IbankWithdraw::before($pdo_db, $lang, $bank_account);
 }
 elseif ($command == 'withdraw2') // Withdraw operation
 {
@@ -116,7 +116,7 @@ elseif ($command == 'deposit2') // Deposit operation
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
-    Tki\IbankTransferMain::main($pdo_db, $langvars, $playerinfo, $tkireg);
+    Tki\IbankTransferMain::main($pdo_db, $lang, $playerinfo, $tkireg);
 }
 elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 {
@@ -128,7 +128,7 @@ elseif ($command == 'transfer3') // Transfer operation
 }
 elseif ($command == 'loans') // Loans menu
 {
-    Tki\Ibank::ibankLoans($pdo_db, $langvars, $tkireg, $playerinfo, $bank_account);
+    Tki\Ibank::ibankLoans($pdo_db, $lang, $tkireg, $playerinfo, $bank_account);
 }
 elseif ($command == 'borrow') // Borrow operation
 {

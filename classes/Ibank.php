@@ -94,8 +94,9 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankLogin(array $langvars, array $playerinfo, array $account): void
+    public static function ibankLogin(\PDO $pdo_db, string $lang, array $playerinfo, array $account): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_welcometoibank'] . "<br>---------------------------------</td></tr>" .
             "<tr valign=top>" .
              "<td width=150 align=right>" . $langvars['l_ibank_accountholder'] . " :<br><br>" . $langvars['l_ibank_shipaccount'] . " :<br>" . $langvars['l_ibank_ibankaccount'] . "&nbsp;&nbsp;:</td>" .
@@ -107,8 +108,9 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankLoans(\PDO $pdo_db, array $langvars, Reg $tkireg, array $playerinfo, array $account): void
+    public static function ibankLoans(\PDO $pdo_db, string $lang, Reg $tkireg, array $playerinfo, array $account): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .

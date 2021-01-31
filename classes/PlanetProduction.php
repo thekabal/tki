@@ -26,8 +26,9 @@ namespace Tki;
 
 class PlanetProduction
 {
-    public static function productionChange(\PDO $pdo_db, $old_db, array $langvars, array $prodpercentarray, Reg $tkireg): void
+    public static function productionChange(\PDO $pdo_db, $old_db, string $lang, array $prodpercentarray, Reg $tkireg): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('common', 'planet_report'));
         //  Declare default production values from the config.php file
         //
         //  We need to track what the player_id is and what team they belong to if they belong to a team,

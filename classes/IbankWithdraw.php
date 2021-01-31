@@ -26,8 +26,9 @@ namespace Tki;
 
 class IbankWithdraw
 {
-    public static function before(array $langvars, array $account): void
+    public static function before(\PDO $pdo_db, $lang, array $account): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_withdrawfunds'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
              "<td>" . $langvars['l_ibank_fundsavailable'] . ":</td>" .

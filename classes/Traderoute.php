@@ -26,7 +26,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function engage(\PDO $pdo_db, $old_db, string $lang, int $tr_repeat, array $langvars, Reg $tkireg, Timer $tkitimer, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
+    public static function engage(\PDO $pdo_db, $old_db, string $lang, int $tr_repeat, Reg $tkireg, Timer $tkitimer, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('regional', 'traderoutes'));
         $traderoute = array();
