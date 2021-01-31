@@ -26,7 +26,7 @@ namespace Tki;
 
 class Bases
 {
-    public function buildBase(\PDO $pdo_db, array $langvars, int $planet_id, int $sector_id, Reg $tkireg): void
+    public function buildBase(\PDO $pdo_db, string $lang, array $langvars, int $planet_id, int $sector_id, Reg $tkireg): void
     {
         echo "<br>";
         echo str_replace("[here]", "<a href='planet_report.php?preptype=1'>" .
@@ -91,7 +91,7 @@ class Bases
                 echo $langvars['l_planet_bbuild'] . "<br><br>";
 
                 // Calculate ownership and notify user of results
-                $ownership = \Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own);
+                $ownership = \Tki\Ownership::calc($pdo_db, $lang, $playerinfo['sector'], $tkireg->min_bases_to_own);
                 echo $ownership . "<p>";
                 return;
             }
