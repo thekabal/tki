@@ -164,7 +164,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                     Tki\Db::logDbErrors($pdo_db, $update2, __LINE__, __FILE__);
                     $update3 = $old_db->Execute("UPDATE {$old_db->prefix}ships SET on_planet='N' WHERE planet_id = ?;", array($planet_id));
                     Tki\Db::logDbErrors($pdo_db, $update3, __LINE__, __FILE__);
-                    Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+                    Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own);
                     header("Location: main.php");
                 }
                 else
@@ -448,7 +448,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                     echo $langvars['l_planet_bbuild'] . "<br><br>";
 
                     // Calc Ownership and Notify User Of Results
-                    $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own, $langvars);
+                    $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own);
                     echo $ownership . '<p>';
                 }
             }
@@ -900,7 +900,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
             echo $langvars['l_planet_captured'] . "<br>";
             $update = $old_db->Execute("UPDATE {$old_db->prefix}planets SET team = 0, owner = ?, base = 'N', defeated = 'N' WHERE planet_id = ?;", array($playerinfo['ship_id'], $planet_id));
             Tki\Db::logDbErrors($pdo_db, $update, __LINE__, __FILE__);
-            $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg, $langvars);
+            $ownership = Tki\Ownership::calc($pdo_db, $playerinfo['sector'], $tkireg->min_bases_to_own);
             echo $ownership . '<p>';
 
             if ($planetinfo['owner'] != 0)

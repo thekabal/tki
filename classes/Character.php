@@ -54,7 +54,7 @@ class Character
         {
             foreach ($sectors_owned as $tmp_sector)
             {
-                Ownership::calc($pdo_db, $tmp_sector, $tkireg->min_bases_to_own, $langvars);
+                Ownership::calc($pdo_db, $tmp_sector, $tkireg->min_bases_to_own);
             }
         }
 
