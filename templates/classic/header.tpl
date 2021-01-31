@@ -27,8 +27,8 @@
     <meta name="Rating" content="General">
     <link rel="shortcut icon" href="{$template_dir}/images/tkifavicon.ico">
     <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/tki-prime.css.php">
-{if $variables['body_class'] != 'tki'}
-    <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/{$variables['body_class']}.css.php">
+{if $body_class != 'tki'}
+    <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/{$body_class}.css.php">
 {else}
     <link rel="stylesheet" type="text/css" href="{$template_dir}/styles/main.css.php">
 {/if}
@@ -44,10 +44,10 @@
      var s = document.getElementsByTagName('script')[0];
      s.parentNode.insertBefore(wf, s);})();
     </script>
-{if isset($variables['title'])}
-    <title>{block name=title}{$variables['title']}{/block}</title>
+{if isset($title)}
+    <title>{block name=title}{$title}{/block}</title>
 {/if}
-{if isset($variables['include_ckeditor'])}
+{if isset($include_ckeditor)}
     <script src="{$template_dir}/javascript/ckeditor/ckeditor.js"></script>
 {/if}
     <script async src="{$template_dir}/javascript/framebuster.js.php"></script>

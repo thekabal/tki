@@ -57,20 +57,20 @@ if (news.initTicker("news_ticker") == true)
 
 {* Items to the left (SF logo) and to the right (mem, copyright, news) *}
     <p style='font-size:smaller; float:left; text-align:left'><a class="new_link" href='https://github.com/thekabal/tki'>Github project page for The Kabal Invasion</a>
-    <br><a class="new_link" href="copyright.php">&copy; {$variables['cur_year']} The TKI development team</a></p>
+    <br><a class="new_link" href="copyright.php">&copy; {$cur_year} The TKI development team</a></p>
     <p style="font-size:smaller; float:right; text-align:right"><a class="new_link" href="news.php">{$langvars['l_local_news']}</a>
 
-    <br>{$variables['elapsed']} {$langvars['l_seconds']} {$langvars['l_time_gen_page']} / {$variables['mem_peak_usage']}{$langvars['l_peak_mem']}
+    <br>{$elapsed} {$langvars['l_seconds']} {$langvars['l_time_gen_page']} / {$mem_peak_usage}{$langvars['l_peak_mem']}
 </p>
 <p style="text-align:center;">
 
 {* Handle the Servers Update Ticker here *}
-{if isset($variables['update_ticker']['display']) && $variables['update_ticker']['display'] == true}
+{if isset($update_ticker['display']) && $update_ticker['display'] == true}
     <script type='text/javascript' src='{$template_dir}/javascript/updateticker.js.php'></script>
     <script>
-        var seconds = {$variables['update_ticker']['seconds_left']};
+        var seconds = {$update_ticker['seconds_left']};
         var nextInterval = new Date().getTime();
-        var maxTicks = ({$variables['update_ticker']['sched_ticks']} * 60);
+        var maxTicks = ({$update_ticker['sched_ticks']} * 60);
         var l_running_update = '{$langvars['l_running_update']}';
         var l_footer_until_update = '{$langvars['l_footer_until_update']}';
 
@@ -83,10 +83,10 @@ if (news.initTicker("news_ticker") == true)
 
 <br>
 {* Handle the Online Players Counter *}
-{if isset($variables['players_online']) && $variables['players_online'] == 1}
+{if isset($players_online) && $players_online == 1}
 {$langvars['l_footer_one_player_on']}
 {else}
-{$langvars['l_footer_players_on_1']} {$variables['players_online']} {$langvars['l_footer_players_on_2']}
+{$langvars['l_footer_players_on_1']} {$players_online} {$langvars['l_footer_players_on_2']}
 {/if}
 </p>
 {* End of Online Players Counter *}

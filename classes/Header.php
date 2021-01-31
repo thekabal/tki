@@ -39,27 +39,24 @@ class Header
     ): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common'));
-
-        $variables = null;
-        $variables['lang'] = $lang;
+        $template->assign('lang', $lang);
 
         // Body class defines a css file for a specific page, if one isn't defined, it defaults to tki, which is
         // nulled by the template.
-        $variables['body_class'] = $body_class;
+        $template->assign('body_class', $body_class);
 
         if ($title !== null)
         {
-            $variables['title'] = $title;
+            $template->assign('title', $title);
         }
 
         // Some pages (like mailto) include ckeditor js, check if this is one of those.
         if (isset($include_ckeditor))
         {
-            $variables['include_ckeditor'] = $include_ckeditor;
+            $template->assign('include_ckeditor', $include_ckeditor);
         }
 
         $template->addVariables('langvars', $langvars);
-        $template->addVariables('variables', $variables);
         $template->display('header.tpl');
         // Perhaps this should return the template instead of kicking off display. I'm not sure.
     }

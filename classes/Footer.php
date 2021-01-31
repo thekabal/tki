@@ -34,11 +34,7 @@ class Footer
     public function display(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $request = Request::createFromGlobals();
-
-        // Now set a container for the variables and langvars and send them off to the template system
-        $variables = array();
-        $langvars = array();
-
+        $langvars = Translate::load($pdo_db, $lang, array('footer'));
         $online = 0;
         if (Db::isActive($pdo_db))
         {
@@ -121,7 +117,7 @@ class Footer
                 array_push($news_ticker, array('url' => null, 'text' => "End of News", 'type' => null, 'delay' => 5));
             }
 
-            $template->addVariables("news", $news_ticker);
+            $template->assign('news', $news_ticker);
         }
 
         $mem_peak_usage = floor(memory_get_peak_usage() / 1024);
@@ -133,26 +129,24 @@ class Footer
         {
             // If it is a non-login required page, such as ranking, new, faq,
             // settings, news, and index use the public SF logo, which increases project stats.
-            $variables['suppress_logo'] = false;
+            $template->assign('suppress_logo', false);
         }
         else
         {
             // Else suppress the logo, so it is as fast as possible.
-            $variables['suppress_logo'] = true;
+            $template->assign('suppress_logo', true);
         }
 
         // Set array with all used variables in page
-        $variables['update_ticker'] = array("display" => $show_update_ticker,
-                                            "seconds_left" => $seconds_left,
-                                            "sched_ticks" => $tkireg->sched_ticks);
-        $variables['players_online'] = $online;
-        $variables['elapsed'] = $tkitimer->elapsed();
-        $variables['mem_peak_usage'] = $mem_peak_usage;
-        $variables['footer_show_debug'] = $tkireg->footer_show_debug;
-        $variables['cur_year'] = date('Y');
-
-        $template->addVariables('langvars', $langvars);
-        $template->addVariables('variables', $variables);
+        $template->assign('update_ticker', array("display" => $show_update_ticker,
+                                           "seconds_left" => $seconds_left,
+                                           "sched_ticks" => $tkireg->sched_ticks));
+        $template->assign('players_online', $online);
+        $template->assign('elapsed', $tkitimer->elapsed());
+        $template->assign('mem_peak_usage', $mem_peak_usage);
+        $template->assign('footer_show_debug', $tkireg->footer_show_debug);
+        $template->assign('cur_year', date('Y'));
+        $template->assign('langvars', $langvars);
         $template->display('footer.tpl');
     }
 }
