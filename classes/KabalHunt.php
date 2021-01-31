@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalHunt
 {
-    public static function hunt(\PDO $pdo_db, $old_db, array $playerinfo, int $kabalisdead, array $langvars, Reg $tkireg): void
+    public static function hunt(\PDO $pdo_db, $lang, $old_db, array $playerinfo, int $kabalisdead, array $langvars, Reg $tkireg): void
     {
         $targetinfo = array();
         $rescount = $old_db->Execute("SELECT COUNT(*) AS num_players FROM {$old_db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");
@@ -144,7 +144,7 @@ class KabalHunt
             {
                 // Attack sector defenses
                 $targetlink = $targetinfo['sector'];
-                \Tki\KabalToSecDef::secDef($pdo_db, $langvars, $playerinfo, $targetlink, $tkireg);
+                \Tki\KabalToSecDef::secDef($pdo_db, $lang, $langvars, $playerinfo, $targetlink, $tkireg);
             }
 
             if ($kabalisdead > 0)
@@ -156,11 +156,11 @@ class KabalHunt
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                \Tki\KabalToPlanet::planet($pdo_db, $old_db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
+                \Tki\KabalToPlanet::planet($pdo_db, $lang, $old_db, $targetinfo['planet_id'], $tkireg, $playerinfo, $langvars); // Yes, so move to that planet
             }
             else
             {
-                \Tki\KabalToShip::ship($pdo_db, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
+                \Tki\KabalToShip::ship($pdo_db, $lang, $targetinfo['ship_id'], $tkireg, $playerinfo, $langvars); // Not on a planet, so move to the ship
             }
         }
         else

@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalMove
 {
-    public static function move(\PDO $pdo_db, $old_db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
+    public static function move(\PDO $pdo_db, $lang, $old_db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
     {
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
@@ -131,7 +131,7 @@ class KabalMove
             {
                 if ($playerinfo['aggression'] == 2 || $playerinfo['aggression'] == 1)
                 {
-                    \Tki\KabalToSecDef::secDef($pdo_db, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defenses
+                    \Tki\KabalToSecDef::secDef($pdo_db, $lang, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defenses
 
                     return;
                 }

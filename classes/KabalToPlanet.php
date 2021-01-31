@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalToPlanet
 {
-    public static function planet(\PDO $pdo_db, $old_db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars): void
+    public static function planet(\PDO $pdo_db, $lang, $old_db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars): void
     {
         // Get planetinfo from database
         $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
@@ -269,7 +269,7 @@ class KabalToPlanet
         if (!$attackerarmor > 0) // Check if attackers ship destroyed
         {
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
-            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
+            $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
 
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
@@ -314,7 +314,7 @@ class KabalToPlanet
                 while (!$resultps->EOF)
                 {
                     $onplanet = $resultps->fields;
-                    \Tki\KabalToShip::ship($pdo_db, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
+                    \Tki\KabalToShip::ship($pdo_db, $lang, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
                     $resultps->MoveNext();
                 }
             }
@@ -334,7 +334,7 @@ class KabalToPlanet
                 $resl = $old_db->Execute("UPDATE {$old_db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
                 \Tki\Db::logDbErrors($pdo_db, $resl, __LINE__, __FILE__);
 
-                \Tki\Ownership::calc($pdo_db, $planetinfo['sector_id'], $tkireg->min_bases_to_own);
+                \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg->min_bases_to_own);
             }
             else
             {

@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalToShip
 {
-    public static function ship(\PDO $pdo_db, int $ship_id, Reg $tkireg, array $playerinfo, array $langvars): void
+    public static function ship(\PDO $pdo_db, string $lang, int $ship_id, Reg $tkireg, array $playerinfo, array $langvars): void
     {
         $armor_lost = null;
         $fighters_lost = null;
@@ -372,7 +372,7 @@ class KabalToShip
             // Target had no pod
             {
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "Kabal $playerinfo[character_name]|N");
-                $character_object->kill($pdo_db, $targetinfo['ship_id'], $langvars, $tkireg);
+                $character_object->kill($pdo_db, $lang, $targetinfo['ship_id'], $langvars, $tkireg);
             }
 
             if ($attackerarmor > 0)
@@ -503,7 +503,7 @@ class KabalToShip
         if (!$attackerarmor > 0)
         {
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "$targetinfo[character_name] destroyed your ship!");
-            $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
+            $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
             if ($targetarmor > 0)
             {
                 // Target still alive to salvage attacker
