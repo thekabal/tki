@@ -135,7 +135,10 @@ class Smarty
         return $temp_variable;
     }
 
-    public function assign($nodeName, $variables)
+    /**
+     * @param ((int|mixed|null|string)[]|bool|int|mixed)[]|scalar $variables
+     */
+    public function assign(string $nodeName, $variables): void
     {
         $this->smarty->assign($nodeName, $variables);
     }
