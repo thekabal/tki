@@ -206,7 +206,7 @@ class CheckDefenses
                 $stmt = $pdo_db->prepare($sql);
                 $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->bindParam(':rating', $rating, \PDO::PARAM_INT);
-                $result = $stmt->execute();
+                $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 $bounty = new \Tki\Bounty();
@@ -220,7 +220,6 @@ class CheckDefenses
                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);
                 $character_object = new \Tki\Character();
                 $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $tkireg);
-                $status = 0;
                 \Tki\Text::gotoMain($pdo_db, $lang);
                 die();
             }

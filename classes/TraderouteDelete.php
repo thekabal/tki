@@ -68,7 +68,7 @@ class TraderouteDelete
             $sql = "DELETE FROM ::prefix::traderoutes WHERE traderoute_id = :traderoute_id";
             $stmt = $pdo_db->prepare($sql);
             $stmt->bindParam(':traderoute_id', $traderoute_id, \PDO::PARAM_INT);
-            $result = $stmt->execute();
+            $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
             $langvars['l_tdr_returnmenu'] = str_replace("[here]", "<a href='traderoute.php'>" . $langvars['l_here'] . "</a>", $langvars['l_tdr_returnmenu']);
