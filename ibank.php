@@ -112,7 +112,7 @@ elseif ($command == 'deposit') // Deposit menu
 }
 elseif ($command == 'deposit2') // Deposit operation
 {
-    Tki\IbankDeposit::after($pdo_db, $lang, $langvars, $playerinfo, $amount, $bank_account, $tkireg, $tkitimer, $template);
+    Tki\IbankDeposit::after($pdo_db, $lang, $playerinfo, $amount, $bank_account, $tkireg, $tkitimer, $template);
 }
 elseif ($command == 'transfer') // Main transfer menu
 {
@@ -124,7 +124,7 @@ elseif ($command == 'transfer2') // Specific transfer menu (ship or planet)
 }
 elseif ($command == 'transfer3') // Transfer operation
 {
-    Tki\IbankTransferFinal::final($pdo_db, $lang, $langvars, $playerinfo, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $tkitimer, $template);
+    Tki\IbankTransferFinal::final($pdo_db, $lang, $playerinfo, $ship_id, $splanet_id, $dplanet_id, $amount, $tkireg, $tkitimer, $template);
 }
 elseif ($command == 'loans') // Loans menu
 {
