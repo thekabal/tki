@@ -95,7 +95,7 @@ class IbankDeposit
 
         if ($amount > $tmpcredits)
         {
-            \Tki\Ibank::ibankError($pdo_db, "<center>Error You cannot deposit that much into your bank,<br> (Max Credits Reached)</center>", "ibank.php?command=deposit", $lang, $tkireg, $tkitimer, $template);
+            \Tki\Ibank::ibankError($pdo_db, "<center>" . $langvars['l_ibank_deposit_max'] . "</center>", "ibank.php?command=deposit", $lang, $tkireg, $tkitimer, $template);
         }
 
         $account['balance'] += $amount;
