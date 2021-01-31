@@ -132,11 +132,11 @@ elseif ($command == 'loans') // Loans menu
 }
 elseif ($command == 'borrow') // Borrow operation
 {
-    Tki\Ibank::ibankBorrow($pdo_db, $lang, $langvars, $tkireg, $tkitimer, $playerinfo, $bank_account, $amount, $template);
+    Tki\Ibank::ibankBorrow($pdo_db, $lang, $tkireg, $tkitimer, $playerinfo, $bank_account, $amount, $template);
 }
 elseif ($command == 'repay') // Repay operation
 {
-    Tki\Ibank::ibankRepay($pdo_db, $lang, $langvars, $playerinfo, $bank_account, $amount, $tkireg, $tkitimer, $template);
+    Tki\Ibank::ibankRepay($pdo_db, $lang, $playerinfo, $bank_account, $amount, $tkireg, $tkitimer, $template);
 }
 elseif ($command == 'consolidate') // Consolidate menu
 {

@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalToPlanet
 {
-    public static function planet(\PDO $pdo_db, $lang, $old_db, int $planet_id, Reg $tkireg, array $playerinfo, array $langvars): void
+    public static function planet(\PDO $pdo_db, $lang, $old_db, int $planet_id, Reg $tkireg, array $playerinfo): void
     {
         // Get planetinfo from database
         $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
@@ -314,7 +314,7 @@ class KabalToPlanet
                 while (!$resultps->EOF)
                 {
                     $onplanet = $resultps->fields;
-                    \Tki\KabalToShip::ship($pdo_db, $lang, $onplanet['ship_id'], $tkireg, $playerinfo, $langvars);
+                    \Tki\KabalToShip::ship($pdo_db, $lang, $onplanet['ship_id'], $tkireg, $playerinfo);
                     $resultps->MoveNext();
                 }
             }

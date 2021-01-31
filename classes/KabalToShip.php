@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalToShip
 {
-    public static function ship(\PDO $pdo_db, string $lang, int $ship_id, Reg $tkireg, array $playerinfo, array $langvars): void
+    public static function ship(\PDO $pdo_db, string $lang, int $ship_id, Reg $tkireg, array $playerinfo): void
     {
         $armor_lost = null;
         $fighters_lost = null;

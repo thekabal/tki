@@ -26,8 +26,9 @@ namespace Tki;
 
 class KabalToSecDef
 {
-    public static function secDef(\PDO $pdo_db, string $lang, array $langvars, array $playerinfo, int $targetlink, Reg $tkireg): void
+    public static function secDef(\PDO $pdo_db, string $lang, array $playerinfo, int $targetlink, Reg $tkireg): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('check_defenses', 'sector_fighters'));
         $character_object = new Character();
 
         // Check for sector defenses

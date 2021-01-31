@@ -131,7 +131,7 @@ class KabalMove
             {
                 if ($playerinfo['aggression'] == 2 || $playerinfo['aggression'] == 1)
                 {
-                    \Tki\KabalToSecDef::secDef($pdo_db, $lang, $langvars, $playerinfo, $targetlink, $tkireg); // Attack sector defenses
+                    \Tki\KabalToSecDef::secDef($pdo_db, $lang, $playerinfo, $targetlink, $tkireg); // Attack sector defenses
 
                     return;
                 }
