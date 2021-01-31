@@ -511,7 +511,7 @@ class Combat
             {
                 \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_LOSE, "$playerinfo[character_name]|N");
                 $character_object = new Character();
-                $character_object->kill($pdo_db, $lang, $targetinfo['ship_id'], $langvars, $tkireg);
+                $character_object->kill($pdo_db, $lang, $targetinfo['ship_id'], $tkireg);
                 \Tki\Bounty::collect($pdo_db, $lang, $playerinfo['ship_id'], $targetinfo['ship_id']);
             }
         }

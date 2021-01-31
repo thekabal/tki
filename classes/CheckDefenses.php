@@ -221,7 +221,7 @@ class CheckDefenses
                 $bounty = new \Tki\Bounty();
                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);
                 $character_object = new \Tki\Character();
-                $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
+                $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $tkireg);
                 $status = 0;
                 \Tki\Text::gotoMain($pdo_db, $lang);
                 die();
@@ -588,7 +588,7 @@ class CheckDefenses
                                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);
 
                                 $character_object = new \Tki\Character();
-                                $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
+                                $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $tkireg);
                             }
                         }
                     }

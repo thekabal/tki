@@ -204,7 +204,7 @@ class KabalToSecDef
 
                     $bounty = new \Tki\Bounty();
                     $bounty->cancel($pdo_db, $playerinfo['ship_id']);
-                    $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
+                    $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $tkireg);
                     return;
                 }
 
@@ -253,7 +253,7 @@ class KabalToSecDef
                             // Actually kill the Kabal now
                             $bounty = new \Tki\Bounty();
                             $bounty->cancel($pdo_db, $playerinfo['ship_id']);
-                            $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
+                            $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $tkireg);
 
                             // Lets get rid of the mines now and return
                             \Tki\Mines::explode($pdo_db, $targetlink, $roll);

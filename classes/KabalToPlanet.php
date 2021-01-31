@@ -269,7 +269,7 @@ class KabalToPlanet
         if (!$attackerarmor > 0) // Check if attackers ship destroyed
         {
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
-            $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
+            $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $tkireg);
 
             $free_ore = round($playerinfo['ship_ore'] / 2);
             $free_organics = round($playerinfo['ship_organics'] / 2);
