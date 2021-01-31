@@ -68,7 +68,7 @@ elseif ($sure == 2)
     $langvars['l_die_please'] = str_replace("[logout]", "<a href='logout.php'>" . $langvars['l_logout'] . "</a>", $langvars['l_die_please']);
     echo $langvars['l_die_please'] . "<br>";
     $character_object = new Tki\Character();
-    $character_object->kill($pdo_db, $playerinfo['ship_id'], $langvars, $tkireg);
+    $character_object->kill($pdo_db, $lang, $playerinfo['ship_id'], $langvars, $tkireg);
 
     // Delete planets - this used to be part of "kill", but that violated the single responsibility principle
     $sql = "DELETE FROM ::prefix::planets WHERE owner = :owner";

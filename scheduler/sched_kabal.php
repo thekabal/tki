@@ -78,7 +78,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     {
                         $furcount0a++;
                         Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo0[character_name]");
-                        Tki\KabalToShip::ship($pdo_db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalToShip::ship($pdo_db, $lang, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($kabalisdead > 0)
                         {
                             $res->MoveNext();
@@ -90,7 +90,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                 {
                     $furcount0a++;
                     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo0[character_name]");
-                    Tki\KabalToShip::ship($pdo_db, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
+                    Tki\KabalToShip::ship($pdo_db, $lang, $rowo0['ship_id'], $tkireg, $playerinfo, $langvars);
                     if ($kabalisdead > 0)
                     {
                         $res->MoveNext();
@@ -104,7 +104,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Tki\KabalMove::move($pdo_db, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -127,7 +127,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     {
                         $furcount1a++;
                         Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo1[character_name]");
-                        Tki\KabalToShip::ship($pdo_db, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalToShip::ship($pdo_db, $lang, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($kabalisdead > 0)
                         {
                             $res->MoveNext();
@@ -145,7 +145,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     }
                     else
                     {
-                        Tki\KabalToShip::ship($pdo_db, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalToShip::ship($pdo_db, $lang, $rowo1['ship_id'], $tkireg, $playerinfo, $langvars);
                     }
 
                     if ($kabalisdead > 0)
@@ -162,7 +162,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Tki\KabalMove::move($pdo_db, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -189,7 +189,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     {
                         $furcount2a++;
                         Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo2[character_name]");
-                        Tki\KabalToShip::ship($pdo_db, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalToShip::ship($pdo_db, $lang, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
                         if ($kabalisdead > 0)
                         {
                             $res->MoveNext();
@@ -203,11 +203,11 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo2[character_name]");
                     if (!$rowo2['planet_id'] == 0)
                     {              // IS ON PLANET
-                        Tki\KabalToPlanet::planet($pdo_db, $old_db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalToPlanet::planet($pdo_db, $lang, $old_db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
                     }
                     else
                     {
-                        Tki\KabalToShip::ship($pdo_db, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalToShip::ship($pdo_db, $lang, $rowo2['ship_id'], $tkireg, $playerinfo, $langvars);
                     }
 
                     if ($kabalisdead > 0)
@@ -239,7 +239,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Tki\KabalMove::move($pdo_db, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
+                Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
                 if ($kabalisdead > 0)
                 {
                     $res->MoveNext();
@@ -264,7 +264,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         {
                             $furcount3a++;
                             Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo3[character_name]");
-                            Tki\KabalToShip::ship($pdo_db, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
+                            Tki\KabalToShip::ship($pdo_db, $lang, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
                             if ($kabalisdead > 0)
                             {
                                 $res->MoveNext();
@@ -278,11 +278,11 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo3[character_name]");
                         if (!$rowo3['planet_id'] == 0)
                         {              // IS ON PLANET
-                            Tki\KabalToPlanet::planet($pdo_db, $old_db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
+                            Tki\KabalToPlanet::planet($pdo_db, $lang, $old_db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
                         }
                         else
                         {
-                            Tki\KabalToShip::ship($pdo_db, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
+                            Tki\KabalToShip::ship($pdo_db, $lang, $rowo3['ship_id'], $tkireg, $playerinfo, $langvars);
                         }
 
                         if ($kabalisdead > 0)
