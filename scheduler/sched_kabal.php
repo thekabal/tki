@@ -104,7 +104,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount1++;
             // Roam to a new sector before doing anything else
             $targetlink = $playerinfo['sector'];
-            Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -162,7 +162,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             $furcount2++;
             // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
             $targetlink = $playerinfo['sector'];
-            Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
+            Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $tkireg);
             if ($kabalisdead > 0)
             {
                 $res->MoveNext();
@@ -239,7 +239,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
             else
             {
                 // ROAM TO A NEW SECTOR BEFORE DOING ANYTHING ELSE
-                Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $langvars, $tkireg);
+                Tki\KabalMove::move($pdo_db, $lang, $old_db, $playerinfo, $targetlink, $tkireg);
                 if ($kabalisdead > 0)
                 {
                     $res->MoveNext();

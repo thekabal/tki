@@ -28,6 +28,7 @@ class Traderoute
 {
     public static function engage(\PDO $pdo_db, $old_db, string $lang, int $tr_repeat, array $langvars, Reg $tkireg, Timer $tkitimer, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('regional', 'traderoutes'));
         $traderoute = array();
         $source = array();
         $dest = array();
@@ -205,7 +206,7 @@ class Traderoute
         $dist = \Tki\TraderouteDistance::calc($pdo_db, 'P', 'P', $sourceport, $destport, $traderoute['circuit'], $playerinfo, $tkireg);
         if ($traderoute['move_type'] == 'W')
         {
-            $dist = \Tki\TraderouteDistance::warpCalc($pdo_db, $lang, $langvars, $tkireg, $tkitimer, $template, $traderoute, $source, $dest);
+            $dist = \Tki\TraderouteDistance::warpCalc($pdo_db, $lang, $tkireg, $tkitimer, $template, $traderoute, $source, $dest);
         }
 
         // Check if player has enough turns

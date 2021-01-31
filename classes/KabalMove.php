@@ -26,8 +26,9 @@ namespace Tki;
 
 class KabalMove
 {
-    public static function move(\PDO $pdo_db, $lang, $old_db, array $playerinfo, int $targetlink, array $langvars, Reg $tkireg): void
+    public static function move(\PDO $pdo_db, $lang, $old_db, array $playerinfo, int $targetlink, Reg $tkireg): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('main'));
         // Obtain a target link
         if ($targetlink == $playerinfo['sector'])
         {

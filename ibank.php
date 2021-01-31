@@ -144,7 +144,7 @@ elseif ($command == 'consolidate') // Consolidate menu
 }
 elseif ($command == 'consolidate2') // Consolidate compute
 {
-    Tki\IbankConsolidate::after($pdo_db, $lang, $langvars, $playerinfo, $tkireg, $tkitimer, $dplanet_id, $minimum, $maximum, $template);
+    Tki\IbankConsolidate::after($pdo_db, $lang, $playerinfo, $tkireg, $tkitimer, $dplanet_id, $minimum, $maximum, $template);
 }
 elseif ($command == 'consolidate3') // Consolidate operation
 {

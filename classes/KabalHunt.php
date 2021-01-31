@@ -26,8 +26,9 @@ namespace Tki;
 
 class KabalHunt
 {
-    public static function hunt(\PDO $pdo_db, $lang, $old_db, array $playerinfo, int $kabalisdead, array $langvars, Reg $tkireg): void
+    public static function hunt(\PDO $pdo_db, $lang, $old_db, array $playerinfo, int $kabalisdead, Reg $tkireg): void
     {
+        $langvars = Translate::load($pdo_db, $lang, array('main'));
         $targetinfo = array();
         $rescount = $old_db->Execute("SELECT COUNT(*) AS num_players FROM {$old_db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");
         \Tki\Db::logDbErrors($pdo_db, $rescount, __LINE__, __FILE__);

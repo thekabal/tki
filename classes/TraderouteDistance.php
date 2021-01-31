@@ -154,8 +154,9 @@ class TraderouteDistance
         return $retvalue;
     }
 
-    public static function warpCalc(\PDO $pdo_db, string $lang, array $langvars, Reg $tkireg, Timer $tkitimer, Smarty $template, array $traderoute, array $source, array $dest): array
+    public static function warpCalc(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template, array $traderoute, array $source, array $dest): array
     {
+        $langvars = Translate::load($pdo_db, $lang, array('traderoutes'));
         $dist = array();
         $sql = "SELECT link_id FROM ::prefix::links WHERE link_start = :link_start AND link_dest = :link_dest";
         $stmt = $pdo_db->prepare($sql);
