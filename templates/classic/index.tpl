@@ -31,18 +31,18 @@
 <h2 style="display:none">{$langvars['l_navigation']}</h2>
 <div class="navigation" role="navigation">
 <ul class="navigation">
-<li class="navigation"><a href="new.php{$link}"><span class="button blue"><span class="shine"></span>{$langvars['l_new_player']}</span></a></li>
+<li class="navigation"><a href="new.php"><span class="button blue"><span class="shine"></span>{$langvars['l_new_player']}</span></a></li>
 <li class="navigation"><a href="mailto:{$admin_mail}"><span class="button gray"><span class="shine"></span>{$langvars['l_login_emailus']}</span></a></li>
-<li class="navigation"><a href="ranking.php{$link}"><span class="button purple"><span class="shine"></span>{$langvars['l_rankings']}</span></a></li>
-<li class="navigation"><a href="faq.php{$link}"><span class="button brown"><span class="shine"></span>{$langvars['l_faq']}</span></a></li>
-<li class="navigation"><a href="settings.php{$link}"><span class="button red"><span class="shine"></span>{$langvars['l_settings']}</span></a></li>
+<li class="navigation"><a href="ranking.php"><span class="button purple"><span class="shine"></span>{$langvars['l_rankings']}</span></a></li>
+<li class="navigation"><a href="faq.php"><span class="button brown"><span class="shine"></span>{$langvars['l_faq']}</span></a></li>
+<li class="navigation"><a href="settings.php"><span class="button red"><span class="shine"></span>{$langvars['l_settings']}</span></a></li>
 <li class="navigation"><a href="//{$link_forums}"><span class="button orange"><span class="shine"></span>{$langvars['l_forums']}</span></a></li>
 </ul></div><br style="clear:both">
 <div><p></p></div>
 <div class="index-welcome">
 <h1 class="index-h1">{$langvars['l_welcome_tki']}</h1>
 <p>{$langvars['l_tki_description']}<br></p>
-<form accept-charset="utf-8" action="login2.php{$link}" method="post">
+<form accept-charset="utf-8" action="login2.php" method="post">
 <dl class="twocolumn-form">
 <dt><label for="email">{$langvars['l_login_email']}</label></dt>
 <dd><input type="email" id="email" name="email" size="20" maxlength="40" placeholder="someone@example.com"></dd>

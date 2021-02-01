@@ -25,15 +25,12 @@
 $index_page = true;
 require_once './common.php';
 
-$link = null;
-
 if (Tki\Db::isActive($pdo_db))
 {
     // Database driven language entries
     $langvars = Tki\Translate::load($pdo_db, $lang, array('footer', 'index',
                                     'insignias', 'login', 'logout', 'main'));
     $template->assign('lang', $lang);
-    $template->assign('link', $link);
     $template->assign('title', $langvars['l_welcome_tki']);
     $template->assign('link_forums', $tkireg->link_forums);
     $template->assign('admin_mail', $tkireg->admin_mail);
