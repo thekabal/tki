@@ -28,6 +28,12 @@ class Traderoute
 {
     public static function engage(\PDO $pdo_db, $old_db, string $lang, int $tr_repeat, Reg $tkireg, Timer $tkitimer, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
     {
+        // Registry values can't be directly updated
+        $ore_price = $tkireg->ore_price;
+        $organics_price = $tkireg->organics_price;
+        $goods_price = $tkireg->goods_price;
+        $energy_price = $tkireg->energy_price;
+
         $langvars = Translate::load($pdo_db, $lang, array('regional', 'traderoutes'));
         $traderoute = array();
         $source = array();
@@ -469,7 +475,7 @@ class Traderoute
 
                 if ($source['port_type'] != 'ore')
                 {
-                    $tkireg->ore_price = $tkireg->ore_price + $$tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_price = $ore_price + $$tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
                     $ore_buy = $playerinfo['ship_ore'];
                     if ($source['port_ore'] - $playerinfo['ship_ore'] < 0)
                     {
@@ -477,7 +483,7 @@ class Traderoute
                         $portfull = 1;
                     }
 
-                    $sourcecost += $ore_buy * $tkireg->ore_price;
+                    $sourcecost += $ore_buy * $ore_price;
                     if ($ore_buy != 0)
                     {
                         if ($portfull == 1)
@@ -496,7 +502,7 @@ class Traderoute
                 $portfull = 0;
                 if ($source['port_type'] != 'goods')
                 {
-                    $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $source['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+                    $goods_price = $goods_price + $tkireg->goods_delta * $source['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
                     $goods_buy = $playerinfo['ship_goods'];
                     if ($source['port_goods'] - $playerinfo['ship_goods'] < 0)
                     {
@@ -504,7 +510,7 @@ class Traderoute
                         $portfull = 1;
                     }
 
-                    $sourcecost += $goods_buy * $tkireg->goods_price;
+                    $sourcecost += $goods_buy * $goods_price;
                     if ($goods_buy != 0)
                     {
                         if ($portfull == 1)
@@ -523,7 +529,7 @@ class Traderoute
                 $portfull = 0;
                 if ($source['port_type'] != 'organics')
                 {
-                    $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $source['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+                    $organics_price = $organics_price + $tkireg->organics_delta * $source['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
                     $organics_buy = $playerinfo['ship_organics'];
                     if ($source['port_organics'] - $playerinfo['ship_organics'] < 0)
                     {
@@ -531,7 +537,7 @@ class Traderoute
                         $portfull = 1;
                     }
 
-                    $sourcecost += $organics_buy * $tkireg->organics_price;
+                    $sourcecost += $organics_buy * $organics_price;
                     if ($organics_buy != 0)
                     {
                         if ($portfull == 1)
@@ -550,7 +556,7 @@ class Traderoute
                 $portfull = 0;
                 if ($source['port_type'] != 'energy' && $playerinfo['trade_energy'] == 'Y')
                 {
-                    $tkireg->energy_price = $tkireg->energy_price + $tkireg->energy_delta * $source['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
+                    $energy_price = $energy_price + $tkireg->energy_delta * $source['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
                     $energy_buy = $playerinfo['ship_energy'];
                     if ($source['port_energy'] - $playerinfo['ship_energy'] < 0)
                     {
@@ -558,7 +564,7 @@ class Traderoute
                         $portfull = 1;
                     }
 
-                    $sourcecost += $energy_buy * $tkireg->energy_price;
+                    $sourcecost += $energy_buy * $energy_price;
                     if ($energy_buy != 0)
                     {
                         if ($portfull == 1)
@@ -579,11 +585,11 @@ class Traderoute
                 // Time to buy
                 if ($source['port_type'] == 'ore')
                 {
-                    $tkireg->ore_price = $tkireg->ore_price - $$tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_price = $ore_price - $$tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
                     $ore_buy = $free_holds;
-                    if ($playerinfo['credits'] + $sourcecost < $ore_buy * $tkireg->ore_price)
+                    if ($playerinfo['credits'] + $sourcecost < $ore_buy * $ore_price)
                     {
-                        $ore_buy = ($playerinfo['credits'] + $sourcecost) / $tkireg->ore_price;
+                        $ore_buy = ($playerinfo['credits'] + $sourcecost) / $ore_price;
                     }
 
                     if ($source['port_ore'] < $ore_buy)
@@ -601,7 +607,7 @@ class Traderoute
                     }
 
                     $playerinfo['ship_ore'] += $ore_buy;
-                    $sourcecost -= $ore_buy * $tkireg->ore_price;
+                    $sourcecost -= $ore_buy * $ore_price;
 
                     $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
@@ -616,11 +622,11 @@ class Traderoute
 
                 if ($source['port_type'] == 'goods')
                 {
-                    $tkireg->goods_price = $tkireg->goods_price - $tkireg->goods_delta * $source['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+                    $goods_price = $goods_price - $tkireg->goods_delta * $source['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
                     $goods_buy = $free_holds;
-                    if ($playerinfo['credits'] + $sourcecost < $goods_buy * $tkireg->goods_price)
+                    if ($playerinfo['credits'] + $sourcecost < $goods_buy * $goods_price)
                     {
-                        $goods_buy = ($playerinfo['credits'] + $sourcecost) / $tkireg->goods_price;
+                        $goods_buy = ($playerinfo['credits'] + $sourcecost) / $goods_price;
                     }
 
                     if ($source['port_goods'] < $goods_buy)
@@ -638,7 +644,7 @@ class Traderoute
                     }
 
                     $playerinfo['ship_goods'] += $goods_buy;
-                    $sourcecost -= $goods_buy * $tkireg->goods_price;
+                    $sourcecost -= $goods_buy * $goods_price;
 
                     $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
@@ -653,12 +659,12 @@ class Traderoute
 
                 if ($source['port_type'] == 'organics')
                 {
-                    $tkireg->organics_price = $tkireg->organics_price - $tkireg->organics_delta * $source['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+                    $organics_price = $organics_price - $tkireg->organics_delta * $source['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
                     $organics_buy = $free_holds;
 
-                    if ($playerinfo['credits'] + $sourcecost < $organics_buy * $tkireg->organics_price)
+                    if ($playerinfo['credits'] + $sourcecost < $organics_buy * $organics_price)
                     {
-                        $organics_buy = ($playerinfo['credits'] + $sourcecost) / $tkireg->organics_price;
+                        $organics_buy = ($playerinfo['credits'] + $sourcecost) / $organics_price;
                     }
 
                     if ($source['port_organics'] < $organics_buy)
@@ -676,7 +682,7 @@ class Traderoute
                     }
 
                     $playerinfo['ship_organics'] += $organics_buy;
-                    $sourcecost -= $organics_buy * $tkireg->organics_price;
+                    $sourcecost -= $organics_buy * $organics_price;
 
                     $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
@@ -691,12 +697,12 @@ class Traderoute
 
                 if ($source['port_type'] == 'energy')
                 {
-                    $tkireg->energy_price = $tkireg->energy_price - $tkireg->energy_delta * $source['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
+                    $energy_price = $energy_price - $tkireg->energy_delta * $source['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
                     $energy_buy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg) - $playerinfo['ship_energy'] - $dist['scooped1'];
 
-                    if ($playerinfo['credits'] + $sourcecost < $energy_buy * $tkireg->energy_price)
+                    if ($playerinfo['credits'] + $sourcecost < $energy_buy * $energy_price)
                     {
-                        $energy_buy = ($playerinfo['credits'] + $sourcecost) / $tkireg->energy_price;
+                        $energy_buy = ($playerinfo['credits'] + $sourcecost) / $energy_price;
                     }
 
                     if ($source['port_energy'] < $energy_buy)
@@ -714,7 +720,7 @@ class Traderoute
                     }
 
                     $playerinfo['ship_energy'] += $energy_buy;
-                    $sourcecost -= $energy_buy * $tkireg->energy_price;
+                    $sourcecost -= $energy_buy * $energy_price;
 
                     $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
                     $stmt = $pdo_db->prepare($sql);
@@ -937,7 +943,7 @@ class Traderoute
                 $portfull = 0;
                 if ($dest['port_type'] != 'ore')
                 {
-                    $tkireg->ore_price = $tkireg->ore_price + $$tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_price = $ore_price + $$tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
                     $ore_buy = $playerinfo['ship_ore'];
                     if ($dest['port_ore'] - $playerinfo['ship_ore'] < 0)
                     {
@@ -945,7 +951,7 @@ class Traderoute
                         $portfull = 1;
                     }
 
-                    $destcost += $ore_buy * $tkireg->ore_price;
+                    $destcost += $ore_buy * $ore_price;
 
                     if ($ore_buy != 0)
                     {
@@ -965,7 +971,7 @@ class Traderoute
                 $portfull = 0;
                 if ($dest['port_type'] != 'goods')
                 {
-                    $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $dest['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+                    $goods_price = $goods_price + $tkireg->goods_delta * $dest['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
                     $goods_buy = $playerinfo['ship_goods'];
                     if ($dest['port_goods'] - $playerinfo['ship_goods'] < 0)
                     {
@@ -973,7 +979,7 @@ class Traderoute
                         $portfull = 1;
                     }
 
-                    $destcost += $goods_buy * $tkireg->goods_price;
+                    $destcost += $goods_buy * $goods_price;
                     if ($goods_buy != 0)
                     {
                         if ($portfull == 1)
@@ -992,7 +998,7 @@ class Traderoute
                 $portfull = 0;
                 if ($dest['port_type'] != 'organics')
                 {
-                    $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $dest['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+                    $organics_price = $organics_price + $tkireg->organics_delta * $dest['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
                     $organics_buy = $playerinfo['ship_organics'];
                     if ($dest['port_organics'] - $playerinfo['ship_organics'] < 0)
                     {
@@ -1000,7 +1006,7 @@ class Traderoute
                         $portfull = 1;
                     }
 
-                    $destcost += $organics_buy * $tkireg->organics_price;
+                    $destcost += $organics_buy * $organics_price;
                     if ($organics_buy != 0)
                     {
                         if ($portfull == 1)
@@ -1019,7 +1025,7 @@ class Traderoute
                 $portfull = 0;
                 if ($dest['port_type'] != 'energy' && $playerinfo['trade_energy'] == 'Y')
                 {
-                    $tkireg->energy_price = $tkireg->energy_price + $tkireg->energy_delta * $dest['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
+                    $energy_price = $energy_price + $tkireg->energy_delta * $dest['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
                     $energy_buy = $playerinfo['ship_energy'];
                     if ($dest['port_energy'] - $playerinfo['ship_energy'] < 0)
                     {
@@ -1027,7 +1033,7 @@ class Traderoute
                         $portfull = 1;
                     }
 
-                    $destcost += $energy_buy * $tkireg->energy_price;
+                    $destcost += $energy_buy * $energy_price;
                     if ($energy_buy != 0)
                     {
                         if ($portfull == 1)
@@ -1052,7 +1058,7 @@ class Traderoute
                 // Time to buy
                 if ($dest['port_type'] == 'ore')
                 {
-                    $tkireg->ore_price = $tkireg->ore_price - $$tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_price = $ore_price - $$tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
                     if ($traderoute['source_type'] == 'L')
                     {
                         $ore_buy = 0;
@@ -1060,9 +1066,9 @@ class Traderoute
                     else
                     {
                         $ore_buy = $free_holds;
-                        if ($playerinfo['credits'] + $destcost < $ore_buy * $tkireg->ore_price)
+                        if ($playerinfo['credits'] + $destcost < $ore_buy * $ore_price)
                         {
-                            $ore_buy = ($playerinfo['credits'] + $destcost) / $tkireg->ore_price;
+                            $ore_buy = ($playerinfo['credits'] + $destcost) / $ore_price;
                         }
 
                         if ($dest['port_ore'] < $ore_buy)
@@ -1080,7 +1086,7 @@ class Traderoute
                         }
 
                         $playerinfo['ship_ore'] += $ore_buy;
-                        $destcost -= $ore_buy * $tkireg->ore_price;
+                        $destcost -= $ore_buy * $ore_price;
                     }
 
                     $resk = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
@@ -1089,7 +1095,7 @@ class Traderoute
 
                 if ($dest['port_type'] == 'goods')
                 {
-                    $tkireg->goods_price = $tkireg->goods_price - $tkireg->goods_delta * $dest['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+                    $goods_price = $goods_price - $tkireg->goods_delta * $dest['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
                     if ($traderoute['source_type'] == 'L')
                     {
                         $goods_buy = 0;
@@ -1097,9 +1103,9 @@ class Traderoute
                     else
                     {
                         $goods_buy = $free_holds;
-                        if ($playerinfo['credits'] + $destcost < $goods_buy * $tkireg->goods_price)
+                        if ($playerinfo['credits'] + $destcost < $goods_buy * $goods_price)
                         {
-                            $goods_buy = ($playerinfo['credits'] + $destcost) / $tkireg->goods_price;
+                            $goods_buy = ($playerinfo['credits'] + $destcost) / $goods_price;
                         }
 
                         if ($dest['port_goods'] < $goods_buy)
@@ -1117,7 +1123,7 @@ class Traderoute
                         }
 
                         $playerinfo['ship_goods'] += $goods_buy;
-                        $destcost -= $goods_buy * $tkireg->goods_price;
+                        $destcost -= $goods_buy * $goods_price;
                     }
 
                     $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
@@ -1133,7 +1139,7 @@ class Traderoute
 
                 if ($dest['port_type'] == 'organics')
                 {
-                    $tkireg->organics_price = $tkireg->organics_price - $tkireg->organics_delta * $dest['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+                    $organics_price = $organics_price - $tkireg->organics_delta * $dest['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
                     if ($traderoute['source_type'] == 'L')
                     {
                         $organics_buy = 0;
@@ -1141,9 +1147,9 @@ class Traderoute
                     else
                     {
                         $organics_buy = $free_holds;
-                        if ($playerinfo['credits'] + $destcost < $organics_buy * $tkireg->organics_price)
+                        if ($playerinfo['credits'] + $destcost < $organics_buy * $organics_price)
                         {
-                            $organics_buy = ($playerinfo['credits'] + $destcost) / $tkireg->organics_price;
+                            $organics_buy = ($playerinfo['credits'] + $destcost) / $organics_price;
                         }
 
                         if ($dest['port_organics'] < $organics_buy)
@@ -1162,7 +1168,7 @@ class Traderoute
                         }
 
                         $playerinfo['ship_organics'] += $organics_buy;
-                        $destcost -= $organics_buy * $tkireg->organics_price;
+                        $destcost -= $organics_buy * $organics_price;
                     }
 
                     $resm = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
@@ -1171,7 +1177,7 @@ class Traderoute
 
                 if ($dest['port_type'] == 'energy')
                 {
-                    $tkireg->energy_price = $tkireg->energy_price - $tkireg->energy_delta * $dest['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
+                    $energy_price = $energy_price - $tkireg->energy_delta * $dest['port_energy'] / $tkireg->energy_limit * $tkireg->inventory_factor;
                     if ($traderoute['source_type'] == 'L')
                     {
                         $energy_buy = 0;
@@ -1179,9 +1185,9 @@ class Traderoute
                     else
                     {
                         $energy_buy = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg) - $playerinfo['ship_energy'] - $dist['scooped1'];
-                        if ($playerinfo['credits'] + $destcost < $energy_buy * $tkireg->energy_price)
+                        if ($playerinfo['credits'] + $destcost < $energy_buy * $energy_price)
                         {
-                            $energy_buy = ($playerinfo['credits'] + $destcost) / $tkireg->energy_price;
+                            $energy_buy = ($playerinfo['credits'] + $destcost) / $energy_price;
                         }
 
                         if ($dest['port_energy'] < $energy_buy)
@@ -1199,7 +1205,7 @@ class Traderoute
                         }
 
                         $playerinfo['ship_energy'] += $energy_buy;
-                        $destcost -= $energy_buy * $tkireg->energy_price;
+                        $destcost -= $energy_buy * $energy_price;
                     }
 
                     if ($ore_buy == 0 && $goods_buy == 0 && $energy_buy == 0 && $organics_buy == 0)

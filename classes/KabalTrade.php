@@ -28,10 +28,6 @@ class KabalTrade
 {
     public static function trade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
     {
-        // FUTURE: We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want working kabal. :)
-        $tkireg->ore_price = 11;
-        $tkireg->organics_price = 5;
-        $tkireg->goods_price = 15;
         $shipore = null;
         $shiporganics = null;
         $shipgoods = null;
@@ -145,10 +141,15 @@ class KabalTrade
         // Lets trade some cargo
         if ($sectorinfo['port_type'] == "ore") // Port ore
         {
+            // Registry values can't be directly updated
+            $ore_price = $tkireg->ore_price;
+            $organics_price = $tkireg->organics_price;
+            $goods_price = $tkireg->goods_price;
+
             // Set the prices
-            $tkireg->ore_price = $tkireg->ore_price - $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
-            $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
-            $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+            $ore_price = $ore_price - $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+            $organics_price = $organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+            $goods_price = $goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
 
             // Set cargo buy/sell
             $amount_organics = $playerinfo['ship_organics'];
@@ -161,10 +162,10 @@ class KabalTrade
             $amount_ore = min($amount_ore, $sectorinfo['port_ore']);
 
             // We adjust this to make sure it does not exceed what we can afford to buy
-            $amount_ore = min($amount_ore, floor(($playerinfo['credits'] + $amount_organics * $tkireg->organics_price + $amount_goods * $tkireg->goods_price) / $tkireg->ore_price));
+            $amount_ore = min($amount_ore, floor(($playerinfo['credits'] + $amount_organics * $organics_price + $amount_goods * $goods_price) / $ore_price));
 
             // Buy / sell cargo
-            $total_cost = round(($amount_ore * $tkireg->ore_price) - ($amount_organics * $tkireg->organics_price + $amount_goods * $tkireg->goods_price));
+            $total_cost = round(($amount_ore * $ore_price) - ($amount_organics * $organics_price + $amount_goods * $goods_price));
             $newcredits = max(0, $playerinfo['credits'] - $total_cost);
             $newore = $playerinfo['ship_ore'] + $amount_ore;
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
@@ -192,10 +193,15 @@ class KabalTrade
 
         if ($sectorinfo['port_type'] == "organics") // Port organics
         {
+            // Registry values can't be directly updated
+            $ore_price = $tkireg->ore_price;
+            $organics_price = $tkireg->organics_price;
+            $goods_price = $tkireg->goods_price;
+
             // Set the prices
-            $tkireg->organics_price = $tkireg->organics_price - $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
-            $tkireg->ore_price = $tkireg->ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
-            $tkireg->goods_price = $tkireg->goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+            $organics_price = $organics_price - $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+            $ore_price = $ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+            $goods_price = $goods_price + $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
 
             // Set cargo buy / sell
             $amount_ore = $playerinfo['ship_ore'];
@@ -208,10 +214,10 @@ class KabalTrade
             $amount_organics = min($amount_organics, $sectorinfo['port_organics']);
 
             // We adjust this to make sure it does not exceed what we can afford to buy
-            $amount_organics = min($amount_organics, floor(($playerinfo['credits'] + $amount_ore * $tkireg->ore_price + $amount_goods * $tkireg->goods_price) / $tkireg->organics_price));
+            $amount_organics = min($amount_organics, floor(($playerinfo['credits'] + $amount_ore * $ore_price + $amount_goods * $goods_price) / $organics_price));
 
             // Buy / sell cargo
-            $total_cost = round(($amount_organics * $tkireg->organics_price) - ($amount_ore * $tkireg->ore_price + $amount_goods * $tkireg->goods_price));
+            $total_cost = round(($amount_organics * $organics_price) - ($amount_ore * $ore_price + $amount_goods * $goods_price));
             $newcredits = max(0, $playerinfo['credits'] - $total_cost);
             $newore = max(0, $playerinfo['ship_ore'] - $amount_ore);
             $neworganics = $playerinfo['ship_organics'] + $amount_organics;
@@ -239,10 +245,15 @@ class KabalTrade
 
         if ($sectorinfo['port_type'] == "goods") // Port goods
         {
+            // Registry values can't be directly updated
+            $ore_price = $tkireg->ore_price;
+            $organics_price = $tkireg->organics_price;
+            $goods_price = $tkireg->goods_price;
+
             // Set the prices
-            $tkireg->goods_price = $tkireg->goods_price - $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
-            $tkireg->ore_price = $tkireg->ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
-            $tkireg->organics_price = $tkireg->organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
+            $goods_price = $goods_price - $tkireg->goods_delta * $sectorinfo['port_goods'] / $tkireg->goods_limit * $tkireg->inventory_factor;
+            $ore_price = $ore_price + $tkireg->ore_delta * $sectorinfo['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+            $organics_price = $organics_price + $tkireg->organics_delta * $sectorinfo['port_organics'] / $tkireg->organics_limit * $tkireg->inventory_factor;
 
             // Set cargo buy / sell
             $amount_ore = $playerinfo['ship_ore'];
@@ -255,10 +266,10 @@ class KabalTrade
             $amount_goods = min($amount_goods, $sectorinfo['port_goods']);
 
             // We adjust this to make sure it does not exceed what we can afford to buy
-            $amount_goods = min($amount_goods, floor(($playerinfo['credits'] + $amount_ore * $tkireg->ore_price + $amount_organics * $tkireg->organics_price) / $tkireg->goods_price));
+            $amount_goods = min($amount_goods, floor(($playerinfo['credits'] + $amount_ore * $ore_price + $amount_organics * $organics_price) / $goods_price));
 
             // Buy / sell cargo
-            $total_cost = round(($amount_goods * $tkireg->goods_price) - ($amount_organics * $tkireg->organics_price + $amount_ore * $tkireg->ore_price));
+            $total_cost = round(($amount_goods * $goods_price) - ($amount_organics * $organics_price + $amount_ore * $ore_price));
             $newcredits = max(0, $playerinfo['credits'] - $total_cost);
             $newore = max(0, $playerinfo['ship_ore'] - $amount_ore);
             $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);

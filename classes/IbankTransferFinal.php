@@ -48,10 +48,13 @@ class IbankTransferFinal
                 \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_errsendyourself'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
             }
 
+            // Registry values can't be directly used in a PDO bind parameter call
+            $ibank_min_turns = $tkireg->ibank_min_turns;
+
             // Need to check again to prevent cheating by manual posts
-            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id AND ship_destroyed = 'N' AND turns_used > :turns_used");
+            $stmt = $pdo_db->prepare("SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id AND ship_destroyed = 'N' AND turns_used > :ibank_min_turns");
             $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
-            $stmt->bindParam(':turns_used', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
+            $stmt->bindParam(':ibank_min_turns', $ibank_min_turns, \PDO::PARAM_INT);
             $target = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($target === null)

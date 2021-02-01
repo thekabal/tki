@@ -60,19 +60,25 @@ class Bases
 
             if ($planetinfo['ore'] >= $tkireg->base_ore && $planetinfo['organics'] >= $tkireg->base_organics && $planetinfo['goods'] >= $tkireg->base_goods && $planetinfo['credits'] >= $tkireg->base_credits)
             {
+                // Registry values can't be directly used in a PDO bind parameter call
+                $base_ore = $tkireg->base_ore;
+                $base_organics = $tkireg->base_organics;
+                $base_goods = $tkireg->base_goods;
+                $base_credits = $tkireg->base_credits;
+
                 // Create the base
                 $stmt = $pdo_db->prepare("UPDATE ::prefix::planets SET base='Y', " .
                         "ore = :planetore - :baseore, organics = :planetorg - :baseorg," .
                         "goods = :planetgoods - :basegoods, " .
                         "credits = :planetcredits - :basecredits WHERE planet_id = :planet_id");
                 $stmt->bindParam(':planetore', $planetinfo['ore'], \PDO::PARAM_INT);
-                $stmt->bindParam(':baseore', $tkireg->base_ore, \PDO::PARAM_INT);
+                $stmt->bindParam(':baseore', $base_ore, \PDO::PARAM_INT);
                 $stmt->bindParam(':planetorg', $planetinfo['organics'], \PDO::PARAM_INT);
-                $stmt->bindParam(':baseorg', $tkireg->base_organics, \PDO::PARAM_INT);
+                $stmt->bindParam(':baseorg', $base_organics, \PDO::PARAM_INT);
                 $stmt->bindParam(':planetgoods', $planetinfo['goods'], \PDO::PARAM_INT);
-                $stmt->bindParam(':basegoods', $tkireg->base_goods, \PDO::PARAM_INT);
+                $stmt->bindParam(':basegoods', $base_goods, \PDO::PARAM_INT);
                 $stmt->bindParam(':planetcredits', $planetinfo['credits'], \PDO::PARAM_INT);
-                $stmt->bindParam(':basecredits', $tkireg->base_credits, \PDO::PARAM_INT);
+                $stmt->bindParam(':basecredits', $base_credits, \PDO::PARAM_INT);
                 $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
                 $result = $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);

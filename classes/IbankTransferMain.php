@@ -28,10 +28,13 @@ class IbankTransferMain
 {
     public static function main(\PDO $pdo_db, string $lang, array $playerinfo, Reg $tkireg): void
     {
+        // Registry values can't be directly used in a PDO bind parameter call
+        $ibank_min_turns = $tkireg->ibank_min_turns;
+
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $sql = "SELECT * FROM ::prefix::ships WHERE email not like '%@kabal' AND ship_destroyed ='N' AND turns_used > :ibank_min_turns ORDER BY character_name ASC";
         $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ibank_min_turns', $tkireg->ibank_min_turns, \PDO::PARAM_INT);
+        $stmt->bindParam(':ibank_min_turns', $ibank_min_turns, \PDO::PARAM_INT);
         $stmt->execute();
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
