@@ -37,9 +37,9 @@
     },
     "scripts": {
         "tests": [
-            "phpcs --standard=/var/www/html/tki/vendor/bin/phpcs.xml . --ignore=templates,vendor",
-            "phpstan analyze --memory-limit=1G --no-progress --no-ansi -l 2 -c vendor/bin/phpstan.neon .",
-            "psalm -c vendor/bin/psalm.xml --no-progress ."
+            "phpcs --standard=/var/www/html/tki/vendor/bin/phpcs.xml --ignore=templates,vendor .",
+            "psalm --no-progress -c vendor/bin/psalm.xml .",
+            "phpstan analyze --memory-limit=1G --no-progress --no-ansi -l 2 -c vendor/bin/phpstan.neon ."
             ],
         "disabled-due-to-php8-problems-tests": [
             "phpmd . text /var/www/html/tki/vendor/bin/phpmd.xml --exclude vendor/,templates/"
