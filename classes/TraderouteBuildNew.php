@@ -167,25 +167,18 @@ class TraderouteBuildNew
             <td>&nbsp;&nbsp;<select name=planet_id1>
             ';
 
-        if ($num_planets == 0)
+        $counter = 0;
+        while ($counter <= $num_planets)
         {
-            echo "<option value=none>" . $langvars['l_tdr_none'] . "</option>";
-        }
-        else
-        {
-            $counter = 0;
-            while ($counter <= $num_planets)
+            echo "<option ";
+
+            if ($planets[$counter]['planet_id'] == $editroute['source_id'])
             {
-                echo "<option ";
-
-                if ($planets[$counter]['planet_id'] == $editroute['source_id'])
-                {
-                    echo "selected ";
-                }
-
-                echo "value=" . $planets[$counter]['planet_id'] . ">" . $planets[$counter]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$counter]['sector_id'] . "</option>";
-                $counter++;
+                echo "selected ";
             }
+
+            echo "value=" . $planets[$counter]['planet_id'] . ">" . $planets[$counter]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$counter]['sector_id'] . "</option>";
+            $counter++;
         }
 
         // Team Planet
@@ -276,25 +269,18 @@ class TraderouteBuildNew
             <td>&nbsp;&nbsp;<select name=planet_id2>
             ';
 
-        if ($num_planets == 0)
+        $counter = 0;
+        while ($counter <= $num_planets)
         {
-            echo "<option value=none>" . $langvars['l_tdr_none'] . "</option>";
-        }
-        else
-        {
-            $counter = 0;
-            while ($counter <= $num_planets)
+            echo "<option ";
+
+            if ($planets[$counter]['planet_id'] == $editroute['dest_id'])
             {
-                echo "<option ";
-
-                if ($planets[$counter]['planet_id'] == $editroute['dest_id'])
-                {
-                    echo "selected ";
-                }
-
-                echo "value=" . $planets[$counter]['planet_id'] . ">" . $planets[$counter]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$counter]['sector_id'] . "</option>";
-                $counter++;
+                echo "selected ";
             }
+
+            echo "value=" . $planets[$counter]['planet_id'] . ">" . $planets[$counter]['name'] . " " . $langvars['l_tdr_insector'] . " " . $planets[$counter]['sector_id'] . "</option>";
+            $counter++;
         }
 
         // Team Planet

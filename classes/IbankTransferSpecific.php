@@ -81,15 +81,11 @@ class IbankTransferSpecific
                 $stmt->bindParam(':source_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->bindParam(':dest_id', $target['ship_id'], \PDO::PARAM_INT);
                 $time = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-                if ($time !== null)
-                {
-                    $difftime = ($time['time'] - $curtime) / 60;
-                    $langvars['l_ibank_mustwait'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait']);
-                    $langvars['l_ibank_mustwait'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
-                    $langvars['l_ibank_mustwait'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
-                    \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_mustwait'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
-                }
+                $difftime = ($time['time'] - $curtime) / 60;
+                $langvars['l_ibank_mustwait'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait']);
+                $langvars['l_ibank_mustwait'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
+                $langvars['l_ibank_mustwait'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait']);
+                \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_mustwait'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
             }
 
             $ibank_gateway = new Ibank\IbankGateway($pdo_db);

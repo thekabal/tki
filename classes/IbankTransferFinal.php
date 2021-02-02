@@ -79,7 +79,6 @@ class IbankTransferFinal
             {
                 $curtime = time();
                 $curtime -= $tkireg->ibank_trate * 60;
-
                 $sql = "SELECT UNIX_TIMESTAMP(time) as time FROM ::prefix::ibank_transfers WHERE " .
                        "UNIX_TIMESTAMP(time) > :curtime AND source_id = :source_id AND dest_id = :dest_id";
                 $stmt = $pdo_db->prepare($sql);
@@ -87,15 +86,11 @@ class IbankTransferFinal
                 $stmt->bindParam(':source_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
                 $stmt->bindParam(':dest_id', $target['ship_id'], \PDO::PARAM_INT);
                 $time = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-                if ($time !== null)
-                {
-                    $difftime = ($time['time'] - $curtime) / 60;
-                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait2']);
-                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait2']);
-                    $langvars['l_ibank_mustwait2'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait2']);
-                    \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_mustwait2'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
-                }
+                $difftime = ($time['time'] - $curtime) / 60;
+                $langvars['l_ibank_mustwait2'] = str_replace("[ibank_target_char_name]", $target['character_name'], $langvars['l_ibank_mustwait2']);
+                $langvars['l_ibank_mustwait2'] = str_replace("[ibank_trate]", number_format($tkireg->ibank_trate, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait2']);
+                $langvars['l_ibank_mustwait2'] = str_replace("[ibank_difftime]", number_format($difftime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_mustwait2']);
+                \Tki\Ibank::ibankError($pdo_db, $lang, $langvars['l_ibank_mustwait2'], "ibank.php?command=transfer", $tkireg, $tkitimer, $template);
             }
 
             if (($amount * 1) != $amount)
