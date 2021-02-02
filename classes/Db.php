@@ -33,8 +33,16 @@ class Db
 {
     public static function isActive(\PDO $pdo_db): bool
     {
-        // Get the config_values from the DB
-        $results = $pdo_db->query("SELECT * FROM ::prefix::gameconfig LIMIT 1");
+        $qry = "SELECT * FROM ::prefix::gameconfig LIMIT :count";
+        $stmt = $pdo_db->prepare($qry);
+        if (!is_object($stmt))
+        {
+            return false;
+        }
+
+        $stmt->bindValue(':count', 1, \PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($results === false)
         {
             return false;
