@@ -18,14 +18,16 @@ parameters:
     excludes_analyse:
         - %rootDir%/../../../../tki/vendor/*
         - %rootDir%/../../../../tki/templates/*
-        - %rootDir%/../../../../tki/classes/Db.php              # 10 errors relating to Adodb & having the postgres/mysql switch hardcoded at phpstan run time in SecureConfig
-        - %rootDir%/../../../../tki/classes/CheckDefenses.php   # 8 errors relating to targetfighters being set to 0 and never changing because conditionals are blocking it.
-        - %rootDir%/../../../../tki/admin/universe_editor.php   # 3 errors relating to ADOdb calls
-        - %rootDir%/../../../../tki/lrscan.php                  # 3 errors relating to ADOdb calls
-        - %rootDir%/../../../../tki/scheduler/sched_degrade.php # 2 errors relating to ADOdb calls
-        - %rootDir%/../../../../tki/readmail.php                # 2 errors relating to ADOdb calls
-        - %rootDir%/../../../../tki/log.php                     # 4 errors relating to mktime calls
-        - %rootDir%/../../../../tki/planet.php                  # 6 errors relating to retOwnerInfo / class Planet::getOwner
+        - %rootDir%/../../../../tki/classes/Db.php                      # 10 errors relating to Adodb & having the postgres/mysql switch hardcoded at phpstan run time in SecureConfig
+        - %rootDir%/../../../../tki/classes/CheckDefenses.php           # 8 errors relating to targetfighters being set to 0 and never changing because conditionals are blocking it.
+        - %rootDir%/../../../../tki/classes/IbankTransferFinal.php      # 2 errors relating to ship_id - real errors
+        - %rootDir%/../../../../tki/classes/IbankTransferSpecific.php   # 2 errors relating to ship_id - real errors
+        - %rootDir%/../../../../tki/admin/universe_editor.php           # 3 errors relating to ADOdb calls
+        - %rootDir%/../../../../tki/lrscan.php                          # 3 errors relating to ADOdb calls
+        - %rootDir%/../../../../tki/scheduler/sched_degrade.php         # 2 errors relating to ADOdb calls
+        - %rootDir%/../../../../tki/readmail.php                        # 2 errors relating to ADOdb calls
+        - %rootDir%/../../../../tki/log.php                             # 4 errors relating to mktime calls
+        - %rootDir%/../../../../tki/planet.php                          # 6 errors relating to retOwnerInfo / class Planet::getOwner
     ignoreErrors:
         - '# might not be defined#'                             # Level 1 to 8 - 4100+ errors - lots of work to do, real errors too.
         - '# with no typehint #'                                # Level 6 - 10 errors - 8 related to $db (non-pdo), but 2 for ship_id that are tricky.
