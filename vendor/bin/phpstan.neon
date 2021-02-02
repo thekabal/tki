@@ -25,9 +25,13 @@ parameters:
         - %rootDir%/../../../../tki/scheduler/sched_degrade.php # 2 errors relating to ADOdb calls
         - %rootDir%/../../../../tki/readmail.php                # 2 errors relating to ADOdb calls
         - %rootDir%/../../../../tki/log.php                     # 4 errors relating to mktime calls
+        - %rootDir%/../../../../tki/planet.php                  # 6 errors relating to retOwnerInfo / class Planet::getOwner
     ignoreErrors:
         - '# might not be defined#'                             # Level 1 to 8 - 4100+ errors - lots of work to do, real errors too.
         - '# with no typehint #'                                # Level 6 - 10 errors - 8 related to $db (non-pdo), but 2 for ship_id that are tricky.
+        - '#Cannot access#'                                     # Level 7 - 669 errors - Mostly related to $playerinfo
+        - '#does not exist on array#'                           # Level 3 - 53 errors all in attack.php relating to ship_energy (?)
+        - '#of static method Tki#'                              # Level 6-8 - 45 errors related to *info arrays that need to become Objects
 
 rules:
     - PHPStan\Rules\BooleansInConditions\BooleanInBooleanAndRule
