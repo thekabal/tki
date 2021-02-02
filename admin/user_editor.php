@@ -37,9 +37,8 @@ if (empty($_POST['user']))
     $sql = "SELECT ship_id, character_name FROM ::prefix::ships ORDER BY character_name";
     $stmt = $pdo_db->prepare($sql);
     $stmt->execute();
-    $players[] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $catch_errors = $players;
-    Tki\Db::logDbErrors($pdo_db, $catch_errors, __LINE__, __FILE__);
+    $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    Tki\Db::logDbErrors($pdo_db, $players, __LINE__, __FILE__);
 
     $variables['user'] = null;
     $variables['players'] = $players;
