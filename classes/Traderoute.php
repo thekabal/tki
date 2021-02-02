@@ -475,7 +475,7 @@ class Traderoute
 
                 if ($source['port_type'] != 'ore')
                 {
-                    $ore_price = $ore_price + $$tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_price = $ore_price + $tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
                     $ore_buy = $playerinfo['ship_ore'];
                     if ($source['port_ore'] - $playerinfo['ship_ore'] < 0)
                     {
@@ -585,7 +585,7 @@ class Traderoute
                 // Time to buy
                 if ($source['port_type'] == 'ore')
                 {
-                    $ore_price = $ore_price - $$tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_price = $ore_price - $tkireg->ore_delta * $source['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
                     $ore_buy = $free_holds;
                     if ($playerinfo['credits'] + $sourcecost < $ore_buy * $ore_price)
                     {
@@ -943,7 +943,7 @@ class Traderoute
                 $portfull = 0;
                 if ($dest['port_type'] != 'ore')
                 {
-                    $ore_price = $ore_price + $$tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_price = $ore_price + $tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
                     $ore_buy = $playerinfo['ship_ore'];
                     if ($dest['port_ore'] - $playerinfo['ship_ore'] < 0)
                     {
@@ -1058,7 +1058,7 @@ class Traderoute
                 // Time to buy
                 if ($dest['port_type'] == 'ore')
                 {
-                    $ore_price = $ore_price - $$tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
+                    $ore_price = $ore_price - $tkireg->ore_delta * $dest['port_ore'] / $tkireg->ore_limit * $tkireg->inventory_factor;
                     if ($traderoute['source_type'] == 'L')
                     {
                         $ore_buy = 0;
