@@ -56,29 +56,45 @@ $variables['title'] = $langvars['l_cu_title'];
 $variables['update_ticks_results']['sched'] = $tkireg->sched_ticks;
 $local_table_timer = new Tki\Timer();
 
+// Registry values can't be directly used in a PDO bind parameter call
+$sched_turns = $tkireg->sched_turns;
+$sched_ibank = $tkireg->sched_ibank;
+$sched_news = $tkireg->sched_news;
+$sched_planets = $tkireg->sched_planets;
+$sched_ports = $tkireg->sched_ports;
+$sched_ranking = $tkireg->sched_ranking;
+$sched_degrade = $tkireg->sched_degrade;
+$sched_apocalypse = $tkireg->sched_apocalypse;
+$sched_thegovernor = $tkireg->sched_thegovernor;
+$admin_ship_name = $tkireg->admin_ship_name;
+$admin_name = $tkireg->admin_name;
+$admin_mail = $tkireg->admin_mail;
+$default_lang = $tkireg->default_lang;
+$admin_zone_name = $tkireg->admin_zone_name;
+
 $now = time();
 $local_table_timer->start(); // Start benchmarking for turns scheduler
 $sched_file = 'sched_turns.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_turns, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_turns, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_turns_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_turns_results']['sched'] = $tkireg->sched_turns;
+$variables['update_turns_results']['sched'] = $sched_turns;
 $local_table_timer->stop();
 $variables['update_turns_results']['elapsed'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking for Kabal
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_turns, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_turns, \PDO::PARAM_INT);
 $stmt->bindValue(':sched_file', 'sched_kabal.php', \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_kabal_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_kabal_results']['sched'] = $tkireg->sched_turns;
+$variables['update_kabal_results']['sched'] = $sched_turns;
 $local_table_timer->stop();
 $variables['update_kabal_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -86,12 +102,12 @@ $local_table_timer->start(); // Start benchmarking for Ibank scheduler
 $sched_file = 'sched_ibank.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_ibank, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_ibank, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_ibank_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_ibank_results']['sched'] = $tkireg->sched_ibank;
+$variables['update_ibank_results']['sched'] = $sched_ibank;
 $local_table_timer->stop();
 $variables['update_ibank_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -99,12 +115,12 @@ $local_table_timer->start(); // Start benchmarking for news scheduler
 $sched_file = 'sched_news.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_news, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_news, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_news_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_news_results']['sched'] = $tkireg->sched_news;
+$variables['update_news_results']['sched'] = $sched_news;
 $local_table_timer->stop();
 $variables['update_news_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -112,12 +128,12 @@ $local_table_timer->start(); // Start benchmarking for planets scheduler
 $sched_file = 'sched_planets.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_planets, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_planets, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_planets_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_planets_results']['sched'] = $tkireg->sched_planets;
+$variables['update_planets_results']['sched'] = $sched_planets;
 $local_table_timer->stop();
 $variables['update_planets_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -125,12 +141,12 @@ $local_table_timer->start(); // Start benchmarking for ports scheduler
 $sched_file = 'sched_ports.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_ports, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_ports, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_ports_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_ports_results']['sched'] = $tkireg->sched_ports;
+$variables['update_ports_results']['sched'] = $sched_ports;
 $local_table_timer->stop();
 $variables['update_ports_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -138,12 +154,12 @@ $local_table_timer->start(); // Start benchmarking for tow scheduler
 $sched_file = 'sched_tow.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_turns, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_turns, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_tow_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_tow_results']['sched'] = $tkireg->sched_turns; // Towing occurs at the same time as turns
+$variables['update_tow_results']['sched'] = $sched_turns; // Towing occurs at the same time as turns
 $local_table_timer->stop();
 $variables['update_tow_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -151,12 +167,12 @@ $local_table_timer->start(); // Start benchmarking for ranking scheduler
 $sched_file = 'sched_ranking.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_ranking, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_ranking, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_ranking_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_ranking_results']['sched'] = $tkireg->sched_ranking;
+$variables['update_ranking_results']['sched'] = $sched_ranking;
 $local_table_timer->stop();
 $variables['update_ranking_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -164,12 +180,12 @@ $local_table_timer->start(); // Start benchmarking for degrade scheduler
 $sched_file = 'sched_degrade.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_degrade, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_degrade, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_degrade_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_degrade_results']['sched'] = $tkireg->sched_degrade;
+$variables['update_degrade_results']['sched'] = $sched_degrade;
 $local_table_timer->stop();
 $variables['update_degrade_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -177,12 +193,12 @@ $local_table_timer->start(); // Start benchmarking for apocalypse scheduler
 $sched_file = 'sched_apocalypse.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_apocalypse, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_apocalypse, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_apoc_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_apoc_results']['sched'] = $tkireg->sched_apocalypse;
+$variables['update_apoc_results']['sched'] = $sched_apocalypse;
 $local_table_timer->stop();
 $variables['update_apoc_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -190,12 +206,12 @@ $local_table_timer->start(); // Start benchmarking for the governor scheduler
 $sched_file = 'sched_thegovernor.php';
 $sql = "INSERT INTO ::prefix::scheduler (run_once, ticks_full, sched_file, last_run) VALUES ('N', :ticks_full, :sched_file, :last_run)";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':ticks_full', $tkireg->sched_thegovernor, \PDO::PARAM_INT);
+$stmt->bindParam(':ticks_full', $sched_thegovernor, \PDO::PARAM_INT);
 $stmt->bindParam(':sched_file', $sched_file, \PDO::PARAM_STR);
 $stmt->bindParam(':last_run', $now, \PDO::PARAM_INT);
 $resxx = $stmt->execute();
 $variables['update_gov_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
-$variables['update_gov_results']['sched'] = $tkireg->sched_thegovernor;
+$variables['update_gov_results']['sched'] = $sched_thegovernor;
 $local_table_timer->stop();
 $variables['update_gov_results']['elapsed'] = $local_table_timer->elapsed();
 
@@ -245,22 +261,22 @@ $admin_last_login = date("Y-m-d H:i:s");
 $admin_hashed_pw = password_hash(\Tki\SecureConfig::ADMIN_PASS, PASSWORD_DEFAULT);
 $admin_credits = 200000000;
 
-$stmt->bindParam(':ship_name', $tkireg->admin_ship_name, \PDO::PARAM_STR);
+$stmt->bindParam(':ship_name', $admin_ship_name, \PDO::PARAM_STR);
 $stmt->bindParam(':ship_destroyed', $admin_ship_destr, \PDO::PARAM_STR);
-$stmt->bindParam(':character_name', $tkireg->admin_name, \PDO::PARAM_STR);
+$stmt->bindParam(':character_name', $admin_name, \PDO::PARAM_STR);
 $stmt->bindParam(':password', $admin_hashed_pw, \PDO::PARAM_STR);
 $stmt->bindParam(':recovery_time', $admin_recovery_time, \PDO::PARAM_NULL);
-$stmt->bindParam(':email', $tkireg->admin_mail, \PDO::PARAM_STR);
+$stmt->bindParam(':email', $admin_mail, \PDO::PARAM_STR);
 $stmt->bindParam(':credits', $admin_credits, \PDO::PARAM_INT);
 $stmt->bindParam(':sector', $admin_sector, \PDO::PARAM_INT);
 $stmt->bindParam(':last_login', $admin_last_login, \PDO::PARAM_STR);
 $stmt->bindParam(':ip_address', $admin_ip, \PDO::PARAM_INT);
-$stmt->bindParam(':lang', $tkireg->default_lang, \PDO::PARAM_STR);
+$stmt->bindParam(':lang', $default_lang, \PDO::PARAM_STR);
 
 $resxx = $stmt->execute();
 $variables['admin_account_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resxx, __LINE__, __FILE__);
 $variables['admin_mail'] = $tkireg->admin_mail;
-$variables['admin_name'] = $tkireg->admin_name;
+$variables['admin_name'] = $admin_name;
 $variables['admin_pass'] = \Tki\SecureConfig::ADMIN_PASS;
 $local_table_timer->stop();
 $variables['admin_account_results']['elapsed'] = $local_table_timer->elapsed();
@@ -306,7 +322,7 @@ $allow_trade = 'Y';
 $allow_defenses = 'Y';
 $max_hull = '0';
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':zone_name', $tkireg->admin_zone_name, \PDO::PARAM_STR);
+$stmt->bindParam(':zone_name', $admin_zone_name, \PDO::PARAM_STR);
 $stmt->bindValue(':owner', 0, \PDO::PARAM_INT);
 $stmt->bindParam(':team_zone', $team_zone, \PDO::PARAM_STR);
 $stmt->bindParam(':allow_beacon', $allow_beacon, \PDO::PARAM_STR);
