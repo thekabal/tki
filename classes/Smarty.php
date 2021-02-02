@@ -26,7 +26,7 @@ namespace Tki;
 
 class Smarty
 {
-    protected ?\Smarty $smarty = null;
+    protected \Smarty $smarty;
 
     public function __construct()
     {
@@ -101,32 +101,28 @@ class Smarty
      */
     public function addVariables(string $nodeName, $variables): void
     {
-        if ($this->smarty !== null)
+        $tmpNode = $this->smarty->getTemplateVars($nodeName);
+        if ($tmpNode !== null)
         {
-            $tmpNode = $this->smarty->getTemplateVars($nodeName);
-
-            if ($tmpNode !== null)
+            // Now we make sure we don't want dupes which causes them to become an array.
+            if (is_array($variables))
             {
-                // Now we make sure we don't want dupes which causes them to become an array.
-                if (is_array($variables))
+                foreach ($variables as $key => $value)
                 {
-                    foreach ($variables as $key => $value)
+                    if (array_key_exists($key, $tmpNode) && $tmpNode[$key] == $value)
                     {
-                        if (array_key_exists($key, $tmpNode) && $tmpNode[$key] == $value)
-                        {
-                            unset($variables[$key]);
-                        }
+                        unset($variables[$key]);
                     }
-                }
-
-                if (is_array($variables))
-                {
-                    $variables = array_merge_recursive($tmpNode, $variables);
                 }
             }
 
-            $this->smarty->assign($nodeName, $variables);
+            if (is_array($variables))
+            {
+                $variables = array_merge_recursive($tmpNode, $variables);
+            }
         }
+
+        $this->smarty->assign($nodeName, $variables);
     }
 
     public function getVariables(string $nodeName): string
