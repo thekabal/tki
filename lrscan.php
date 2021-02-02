@@ -163,7 +163,7 @@ if ($sector == "*")
 
         if ($port_type != "none")
         {
-            $icon_alt_text = ucfirst(Tki\Ports::getType($port_type, $langvars));
+            $icon_alt_text = ucfirst(Tki\Ports::getType($pdo_db, $port_type, $langvars));
             $icon_port_type_name = $port_type . ".png";
             $image_string = "<img align=absmiddle height=12 width=12 alt=\"$icon_alt_text\" src=\"" . $template->getVariables('template_dir') . "/images/$icon_port_type_name\">&nbsp;";
         }
@@ -172,7 +172,7 @@ if ($sector == "*")
             $image_string = "&nbsp;";
         }
 
-        echo "<tr bgcolor=\"$tkireg->color\"><td><a href='move.php?sector=" . $row['link_dest'] . "'>" . $row['link_dest'] . "</a></td><td><a href='lrscan.php?sector=" . $row['link_dest'] . "'>Scan</a></td><td>$num_links</td><td>$num_ships</td><td width=12>$image_string</td><td>" . Tki\Ports::getType($port_type, $langvars) . "</td><td>$has_planet</td><td>$has_mines</td><td>$has_fighters</td>";
+        echo "<tr bgcolor=\"$tkireg->color\"><td><a href='move.php?sector=" . $row['link_dest'] . "'>" . $row['link_dest'] . "</a></td><td><a href='lrscan.php?sector=" . $row['link_dest'] . "'>Scan</a></td><td>$num_links</td><td>$num_ships</td><td width=12>$image_string</td><td>" . Tki\Ports::getType($pdo_db, $port_type, $langvars) . "</td><td>$has_planet</td><td>$has_mines</td><td>$has_fighters</td>";
         if ($playerinfo['dev_lssd'] == 'Y')
         {
             $resx = $old_db->SelectLimit("SELECT * from {$old_db->prefix}movement_log WHERE ship_id <> ? AND sector_id = ? ORDER BY time DESC", 1, -1, array('ship_id' => $playerinfo['ship_id'], 'sector_id' => $row['link_dest']));
@@ -363,12 +363,12 @@ else
         if ($sectorinfo['port_type'] != "none")
         {
             $port_type = $sectorinfo['port_type'];
-            $icon_alt_text = ucfirst(Tki\Ports::getType($port_type, $langvars));
+            $icon_alt_text = ucfirst(Tki\Ports::getType($pdo_db, $port_type, $langvars));
             $icon_port_type_name = $port_type . ".png";
             $image_string = "<img align=absmiddle height=12 width=12 alt=\"$icon_alt_text\" src=\"images/$icon_port_type_name\">";
         }
 
-        echo "$image_string " . Tki\Ports::getType($sectorinfo['port_type'], $langvars);
+        echo "$image_string " . Tki\Ports::getType($pdo_db, $sectorinfo['port_type'], $langvars);
     }
 
     echo "</td></tr>";
