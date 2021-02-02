@@ -35,7 +35,6 @@ class ZonesGateway // Gateway for SQL calls related to Zones
 
     public function selectZoneInfo(int $sector_id): mixed
     {
-        $zoneinfo = array();
         $sql = "SELECT * FROM ::prefix::zones WHERE sector_id = :sector_id";
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':sector_id', $sector_id, \PDO::PARAM_INT);
