@@ -235,7 +235,7 @@ class CheckDefenses
         }
     }
 
-    public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, array $playerinfo, \Tki\Reg $tkireg, string $title, $calledfrom): void
+    public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, array $playerinfo, \Tki\Reg $tkireg, string $title, string $calledfrom): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array(
