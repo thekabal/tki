@@ -331,7 +331,7 @@ class Reg
     private int $max_presets = 0;
     private string $default_lang = '';
 
-    private $store = array();
+    private array $store = array();
 
     public function __construct(\PDO $pdo_db)
     {
