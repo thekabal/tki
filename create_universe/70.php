@@ -132,7 +132,7 @@ $variables['setup_unowned_results']['nump'] = $variables['nump'];
 
 // Adds Sector Size * 2 amount of links to the links table
 $loopsize = 1000;
-$loops = round($tkireg->max_sectors / $loopsize);
+$loops = round($variables['max_sectors'] / $loopsize);
 if ($loops <= 0)
 {
     $loops = 1;
@@ -141,9 +141,9 @@ if ($loops <= 0)
 $variables['insert_link_loops'] = $loops;
 
 $finish = $loopsize;
-if ($finish > $tkireg->max_sectors)
+if ($finish > $variables['max_sectors'])
 {
-    $finish = ($tkireg->max_sectors);
+    $finish = ($variables['max_sectors']);
 }
 
 $start = 1;
@@ -180,14 +180,14 @@ for ($i = 1; $i <= $loops; $i++)
 
     $start = $finish + 1;
     $finish += $loopsize;
-    if ($finish > $tkireg->max_sectors)
+    if ($finish > $variables['max_sectors'])
     {
-        $finish = $tkireg->max_sectors;
+        $finish = $variables['max_sectors'];
     }
 }
 
 // Adds Sector Size amount of links to the links table
-$loops = round($tkireg->max_sectors / $loopsize);
+$loops = round($variables['max_sectors'] / $loopsize);
 if ($loops <= 0)
 {
     $loops = 1;
@@ -195,9 +195,9 @@ if ($loops <= 0)
 
 $variables['insert_oneway_loops'] = $loops;
 $finish = $loopsize;
-if ($finish > $tkireg->max_sectors)
+if ($finish > $variables['max_sectors'])
 {
-    $finish = ($tkireg->max_sectors);
+    $finish = ($variables['max_sectors']);
 }
 
 $start = 1;
@@ -208,8 +208,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO ::prefix::links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = random_int(1, (int) $tkireg->max_sectors - 1);
-        $link2 = random_int(1, (int) $tkireg->max_sectors - 1);
+        $link1 = random_int(1, (int) $variables['max_sectors'] - 1);
+        $link2 = random_int(1, (int) $variables['max_sectors'] - 1);
         $insert .= "($link1, $link2)";
         if ($j <= ($finish - 1))
         {
@@ -236,14 +236,14 @@ for ($i = 1; $i <= $loops; $i++)
 
     $start = $finish + 1;
     $finish += $loopsize;
-    if ($finish > $tkireg->max_sectors)
+    if ($finish > $variables['max_sectors'])
     {
-        $finish = ($tkireg->max_sectors);
+        $finish = $variables['max_sectors'];
     }
 }
 
 // Adds (sector size * 2) amount of links to the links table ##
-$loops = round($tkireg->max_sectors / $loopsize);
+$loops = round($variables['max_sectors'] / $loopsize);
 if ($loops <= 0)
 {
     $loops = 1;
@@ -251,9 +251,9 @@ if ($loops <= 0)
 
 $variables['insert_twoway_loops'] = $loops;
 $finish = $loopsize;
-if ($finish > $tkireg->max_sectors)
+if ($finish > $variables['max_sectors'])
 {
-    $finish = ($tkireg->max_sectors);
+    $finish = $variables['max_sectors'];
 }
 
 $start = 1;
@@ -264,8 +264,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO ::prefix::links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = random_int(1, (int) $tkireg->max_sectors - 1);
-        $link2 = random_int(1, (int) $tkireg->max_sectors - 1);
+        $link1 = random_int(1, (int) $variables['max_sectors'] - 1);
+        $link2 = random_int(1, (int) $variables['max_sectors'] - 1);
         $insert .= "($link1, $link2), ($link2, $link1)";
         if ($j <= ($finish - 1))
         {
@@ -291,17 +291,17 @@ for ($i = 1; $i <= $loops; $i++)
 
     $start = $finish + 1;
     $finish += $loopsize;
-    if ($finish > $tkireg->max_sectors)
+    if ($finish > $variables['max_sectors'])
     {
-        $finish = ($tkireg->max_sectors);
+        $finish = ($variables['max_sectors']);
     }
 }
 
 $local_table_timer->start(); // Start benchmarking
 $sql = "DELETE FROM ::prefix::links WHERE link_start = :linkstart OR link_dest = :linkdest";
 $stmt = $pdo_db->prepare($sql);
-$stmt->bindParam(':linkstart', $tkireg->max_sectors, \PDO::PARAM_INT);
-$stmt->bindParam(':linkdest', $tkireg->max_sectors, \PDO::PARAM_INT);
+$stmt->bindParam(':linkstart', $variables['max_sectors'], \PDO::PARAM_INT);
+$stmt->bindParam(':linkdest', $variables['max_sectors'], \PDO::PARAM_INT);
 $resx = $stmt->execute();
 
 $variables['remove_links_results']['result'] = Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
