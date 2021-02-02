@@ -80,10 +80,15 @@ class Sessions
 
     public function read(string $sesskey): string
     {
-        if ($this->pdo_db !== null)
+        if (Db::isActive($this->pdo_db))
         {
             $qry = "SELECT sessdata FROM ::prefix::sessions where sesskey = :sesskey and expiry >= :expiry";
             $stmt = $this->pdo_db->prepare($qry);
+            if (!is_object($stmt))
+            {
+                return '';
+            }
+
             $stmt->bindParam(':sesskey', $sesskey, \PDO::PARAM_STR);
             $stmt->bindParam(':expiry', $this->currenttime, \PDO::PARAM_STR);
             $stmt->execute();
