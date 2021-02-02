@@ -43,14 +43,14 @@ class TkiPDO extends \PDO
         parent::setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
     }
 
-    public function exec($query): int | false
+    public function exec(string $query): int | false
     {
         $query = $this->tablePrefix($query);
         $rows_affected = parent::exec($query);
         return $rows_affected;
     }
 
-    public function prepare($statement, $options = array()): \PDOStatement | false
+    public function prepare(string $statement, array $options = array()): \PDOStatement | false
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::prepare($statement, $options);

@@ -43,7 +43,7 @@ class PlanetReport
         }
     }
 
-    public static function menu(\PDO $pdo_db, $lang, array $playerinfo): void
+    public static function menu(\PDO $pdo_db, string $lang, array $playerinfo): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('planet_report'));
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";

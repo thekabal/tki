@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalHunt
 {
-    public static function hunt(\PDO $pdo_db, $lang, $old_db, array $playerinfo, int $kabalisdead, Reg $tkireg): void
+    public static function hunt(\PDO $pdo_db, string $lang, $old_db, array $playerinfo, int $kabalisdead, Reg $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('main'));
         $targetinfo = array();

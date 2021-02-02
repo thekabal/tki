@@ -26,7 +26,7 @@ namespace Tki;
 
 class IbankTransferFinal
 {
-    public static function final(\PDO $pdo_db, string $lang, array $playerinfo, $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Timer $tkitimer, Smarty $template): void
+    public static function final(\PDO $pdo_db, string $lang, array $playerinfo, int $ship_id, int $splanet_id, int $dplanet_id, int $amount, Reg $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $ibank_gateway = new Ibank\IbankGateway($pdo_db);

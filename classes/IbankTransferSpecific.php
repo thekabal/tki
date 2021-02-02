@@ -33,7 +33,7 @@ class IbankTransferSpecific
         Reg $tkireg,
         Timer $tkitimer,
         array $playerinfo,
-        $ship_id,
+        int $ship_id,
         int $splanet_id,
         int $dplanet_id,
         Smarty $template): void
