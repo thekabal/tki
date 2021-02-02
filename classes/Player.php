@@ -32,7 +32,6 @@ class Player
     {
         $request = Request::createFromGlobals();
         $error_status = null;
-        $playerinfo = array();
 
         if (array_key_exists('username', $_SESSION) === false)
         {
