@@ -50,10 +50,15 @@ class TkiPDO extends \PDO
         return $rows_affected;
     }
 
-    public function prepare($statement, $options = array()): \PDOStatement
+    public function prepare($statement, $options = array()): \PDOStatement | false
     {
         $statement = $this->tablePrefix($statement);
         $replaced_statement = parent::prepare($statement, $options);
+        if ($this->errorCode() !== '00000')
+        {
+            return false;
+        }
+
         return $replaced_statement;
     }
 
@@ -64,13 +69,18 @@ class TkiPDO extends \PDO
         if (count($args) > 1)
         {
             $replaced_statement = call_user_func('PDO::query', $args);
-            return $replaced_statement;
         }
         else
         {
             $replaced_statement = parent::query($statement);
-            return $replaced_statement;
         }
+
+        if ($this->errorCode() !== '00000')
+        {
+            return false;
+        }
+
+        return $replaced_statement;
     }
 
     protected function tablePrefix(string $statement): string
