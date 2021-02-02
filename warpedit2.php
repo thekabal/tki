@@ -104,7 +104,7 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($target_sector);
 
-if (count($sectorinfo) === 0)
+if (!is_array($sectorinfo))
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
