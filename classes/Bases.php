@@ -90,10 +90,6 @@ class Bases
                 $result = $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
 
-                // Refresh planetinfo
-                $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
-                $planetinfo = $planets_gateway->selectPlanetInfoByPlanet($planet_id);
-
                 // Notify user of base building results
                 echo $langvars['l_planet_bbuild'] . "<br><br>";
 
