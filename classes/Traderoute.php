@@ -464,7 +464,7 @@ class Traderoute
                     $stmt->bindParam(':torps_buy', $torps_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':dist_scooped', $dist['scooped1'], \PDO::PARAM_INT);
                     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-                    $result = $stmt->execute();
+                    $stmt->execute();
                     \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
             }
