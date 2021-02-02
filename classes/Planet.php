@@ -77,7 +77,7 @@ class Planet
         $ownerfightercapacity = \Tki\CalcLevels::abstractLevels($ownerinfo['computer'], $tkireg);
 
         $planettorps = \Tki\CalcLevels::planetTorps($pdo_db, $ownerinfo, $planetinfo, $tkireg);
-        $planetbeams = \Tki\CalcLevels::planetBeams($pdo_db, $ownerinfo, $tkireg->base_defense, $planetinfo);
+        $planetbeams = \Tki\CalcLevels::planetBeams($pdo_db, $ownerinfo, $tkireg, $planetinfo);
 
         $planetfighters = $planetinfo['fighters'];
         $attackerfighters = $playerinfo['ship_fighters'];
