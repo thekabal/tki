@@ -57,7 +57,7 @@ if ($playerinfo['cleared_defenses'] > ' ')
 {
     echo $langvars['l_incompletemove'] . " <br>";
     echo "<a href=$playerinfo[cleared_defenses]>" . $langvars['l_clicktocontinue'] . "</a>";
-    die();
+    throw new Exception($langvars['l_incompletemove']);
 }
 
 // Pull sector info from database
