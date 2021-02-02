@@ -354,7 +354,7 @@ class PlanetCombat
         $shipsOnPlanet = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $shipsOnPlanetCount = $stmt->rowCount();
 
-        if ($shipsOnPlanet === true || is_array($shipsOnPlanet))
+        if (is_array($shipsOnPlanet))
         {
             $langvars['l_cmb_shipdock'] = str_replace("[cmb_shipsonplanet]", $shipsOnPlanet, $langvars['l_cmb_shipdock']);
             echo "<br><br><center>" . $langvars['l_cmb_shipdock'] . "<br>" . $langvars['l_cmb_engshiptoshipcombat'] . "</center><br><br>\n";
