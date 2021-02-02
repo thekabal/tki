@@ -35,7 +35,7 @@ class Fighters
         $stmt->execute();
         $defense_present = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        if ($defense_present && $num_fighters > 0)
+        if (is_array($defense_present) && $num_fighters > 0)
         {
             foreach ($defense_present as $tmp_defense)
             {
