@@ -26,7 +26,7 @@ namespace Tki;
 
 class Loan
 {
-    public static function isPending(\PDO $pdo_db, Reg $tkireg): bool
+    public static function isPending(\PDO $pdo_db, Registry $tkireg): bool
     {
         // Get playerinfo from database
         $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);

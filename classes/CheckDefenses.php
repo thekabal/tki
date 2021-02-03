@@ -26,7 +26,7 @@ namespace Tki;
 
 class CheckDefenses
 {
-    public static function sectorFighters(\PDO $pdo_db, string $lang, int $sector, string $calledfrom, int $energyscooped, array $playerinfo, Reg $tkireg): void
+    public static function sectorFighters(\PDO $pdo_db, string $lang, int $sector, string $calledfrom, int $energyscooped, array $playerinfo, Registry $tkireg): void
     {
         $total_sec_fighters = 0;
 
@@ -235,7 +235,7 @@ class CheckDefenses
         }
     }
 
-    public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, array $playerinfo, \Tki\Reg $tkireg, string $title, string $calledfrom): void
+    public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, array $playerinfo, \Tki\Registry $tkireg, string $title, string $calledfrom): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array(
@@ -425,7 +425,7 @@ class CheckDefenses
         }
     }
 
-    public static function mines(\PDO $pdo_db, $old_db, string $lang, int $sector, string $title, array $playerinfo, \Tki\Reg $tkireg): void
+    public static function mines(\PDO $pdo_db, $old_db, string $lang, int $sector, string $title, array $playerinfo, \Tki\Registry $tkireg): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('combat',

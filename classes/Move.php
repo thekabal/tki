@@ -26,7 +26,7 @@ namespace Tki;
 
 class Move
 {
-    public static function calcFuelScooped(array $playerinfo, int $distance, int $triptime, Reg $tkireg): int
+    public static function calcFuelScooped(array $playerinfo, int $distance, int $triptime, Registry $tkireg): int
     {
         // Check if we have a fuel scoop
         if ($playerinfo['dev_fuelscoop'] == 'Y')

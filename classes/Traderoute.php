@@ -26,7 +26,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function engage(\PDO $pdo_db, $old_db, string $lang, int $tr_repeat, Reg $tkireg, Timer $tkitimer, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
+    public static function engage(\PDO $pdo_db, $old_db, string $lang, int $tr_repeat, Registry $tkireg, Timer $tkitimer, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
     {
         // Registry values can't be directly updated
         $ore_price = $tkireg->ore_price;

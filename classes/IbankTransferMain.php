@@ -26,7 +26,7 @@ namespace Tki;
 
 class IbankTransferMain
 {
-    public static function main(\PDO $pdo_db, string $lang, array $playerinfo, Reg $tkireg): void
+    public static function main(\PDO $pdo_db, string $lang, array $playerinfo, Registry $tkireg): void
     {
         // Registry values can't be directly used in a PDO bind parameter call
         $ibank_min_turns = $tkireg->ibank_min_turns;

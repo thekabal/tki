@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Footer
 {
-    public function display(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template): void
+    public function display(\PDO $pdo_db, string $lang, Registry $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $request = Request::createFromGlobals();
         $langvars = Translate::load($pdo_db, $lang, array('footer'));

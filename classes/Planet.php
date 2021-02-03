@@ -53,7 +53,7 @@ class Planet
         \PDO $pdo_db,
         string $lang,
         array $langvars,
-        Reg $tkireg,
+        Registry $tkireg,
         Timer $tkitimer,
         array $playerinfo,
         array $ownerinfo,

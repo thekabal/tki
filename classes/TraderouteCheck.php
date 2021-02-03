@@ -26,7 +26,7 @@ namespace Tki;
 
 class TraderouteCheck
 {
-    public static function isCompatible(\PDO $pdo_db, string $lang, string $type1, string $type2, string $move, int $circuit, array $src, array $dest, array $playerinfo, Reg $tkireg, Timer $tkitimer, Smarty $template): void
+    public static function isCompatible(\PDO $pdo_db, string $lang, string $type1, string $type2, string $move, int $circuit, array $src, array $dest, array $playerinfo, Registry $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
                                          'footer', 'insignias', 'regional',

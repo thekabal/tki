@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalRegen
 {
-    public static function regen(\PDO $pdo_db, array $playerinfo, int $kabal_unemployment, Reg $tkireg): void
+    public static function regen(\PDO $pdo_db, array $playerinfo, int $kabal_unemployment, Registry $tkireg): void
     {
         $gena = null;
         $gene = null;

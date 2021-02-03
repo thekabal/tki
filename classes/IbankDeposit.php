@@ -65,7 +65,7 @@ class IbankDeposit
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $playerinfo, int $amount, array $account, Reg $tkireg, Timer $tkitimer, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $playerinfo, int $amount, array $account, Registry $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $max_credits_allowed = 18446744073709000000;

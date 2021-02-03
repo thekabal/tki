@@ -26,7 +26,7 @@ namespace Tki;
 
 class Bases
 {
-    public function buildBase(\PDO $pdo_db, string $lang, int $planet_id, int $sector_id, Reg $tkireg): void
+    public function buildBase(\PDO $pdo_db, string $lang, int $planet_id, int $sector_id, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('planet', 'planet_report', 'common'));
         echo "<br>";

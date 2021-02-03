@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetReportCE
 {
-    public static function collectCredits(\PDO $pdo_db, string $lang, array $planetarray, Reg $tkireg): void
+    public static function collectCredits(\PDO $pdo_db, string $lang, array $planetarray, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common', 'planet_report'));
         $current_state = "GO"; // Current State

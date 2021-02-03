@@ -27,19 +27,19 @@ namespace Tki;
 class CalcLevels
 {
     // This method can be used for armor, holds, shields, torps, beams, and fighters
-    public static function abstractLevels(int $level, Reg $tkireg): int
+    public static function abstractLevels(int $level, Registry $tkireg): int
     {
         $result = round(pow($tkireg->level_factor, $level) * 100);
         return (int) $result;
     }
 
-    public static function energy(int $level_power, Reg $tkireg): float
+    public static function energy(int $level_power, Registry $tkireg): float
     {
         $result = round(pow($tkireg->level_factor, $level_power) * 500);
         return $result;
     }
 
-    public static function planetBeams(\PDO $pdo_db, array $ownerinfo, Reg $tkireg, array $planetinfo): int
+    public static function planetBeams(\PDO $pdo_db, array $ownerinfo, Registry $tkireg, array $planetinfo): int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetbeams = self::abstractLevels($ownerinfo['beams'] + $base_factor, $tkireg);
@@ -68,7 +68,7 @@ class CalcLevels
         return (int) $planetbeams;
     }
 
-    public static function planetShields(\PDO $pdo_db, array $ownerinfo, Reg $tkireg, array $planetinfo): int
+    public static function planetShields(\PDO $pdo_db, array $ownerinfo, Registry $tkireg, array $planetinfo): int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $planetshields = self::abstractLevels($ownerinfo['shields'] + $base_factor, $tkireg);
@@ -97,7 +97,7 @@ class CalcLevels
         return (int) $planetshields;
     }
 
-    public static function planetTorps(\PDO $pdo_db, array $ownerinfo, array $planetinfo, Reg $tkireg): int
+    public static function planetTorps(\PDO $pdo_db, array $ownerinfo, array $planetinfo, Registry $tkireg): int
     {
         $base_factor = ($planetinfo['base'] == 'Y') ? $tkireg->base_defense : 0;
         $torp_launchers = round(pow($tkireg->level_factor, ($ownerinfo['torp_launchers']) + $base_factor)) * 10;

@@ -29,7 +29,7 @@ class TraderouteDie
     public static function die(
         \PDO $pdo_db,
         string $lang,
-        Reg $tkireg,
+        Registry $tkireg,
         Timer $tkitimer,
         Smarty $template,
         ?string $error_msg = null

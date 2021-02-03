@@ -26,7 +26,7 @@ namespace Tki;
 
 class Ibank
 {
-    public static function ibankBorrow(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, array $playerinfo, array $account, int $amount, Smarty $template): void
+    public static function ibankBorrow(\PDO $pdo_db, string $lang, Registry $tkireg, Timer $tkitimer, array $playerinfo, array $account, int $amount, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
@@ -108,7 +108,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankLoans(\PDO $pdo_db, string $lang, Reg $tkireg, array $playerinfo, array $account): void
+    public static function ibankLoans(\PDO $pdo_db, string $lang, Registry $tkireg, array $playerinfo, array $account): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $ibank_loanfactor = $tkireg->ibank_loanfactor;
@@ -183,7 +183,7 @@ class Ibank
              "</tr>";
     }
 
-    public static function ibankRepay(\PDO $pdo_db, string $lang, array $playerinfo, array $account, int $amount, Reg $tkireg, Timer $tkitimer, Smarty $template): void
+    public static function ibankRepay(\PDO $pdo_db, string $lang, array $playerinfo, array $account, int $amount, Registry $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $amount = preg_replace("/[^0-9]/", '', (string) $amount);
@@ -250,7 +250,7 @@ class Ibank
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     }
 
-    public static function ibankError(\PDO $pdo_db, string $lang, string $errmsg, string $backlink, Reg $tkireg, Timer $tkitimer, Smarty $template): void
+    public static function ibankError(\PDO $pdo_db, string $lang, string $errmsg, string $backlink, Registry $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank'));
         $title = $langvars['l_ibank_ibankerrreport'];

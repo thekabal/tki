@@ -29,7 +29,7 @@ namespace Tki;
 
 class File
 {
-    public static function iniToDb(\PDO $pdo_db, string $ini_file, string $ini_table, string $section, Reg $tkireg): bool
+    public static function iniToDb(\PDO $pdo_db, string $ini_file, string $ini_table, string $section, Registry $tkireg): bool
     {
         // This is a loop, that reads an ini file, of the type variable = value.
         // It will loop thru the list of the ini variables, and push them into the db.

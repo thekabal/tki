@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetReport
 {
-    public static function baseBuildCheck(\PDO $pdo_db, string $lang, Reg $tkireg, array $planet, int $num): string
+    public static function baseBuildCheck(\PDO $pdo_db, string $lang, Registry $tkireg, array $planet, int $num): string
     {
         $langvars = Translate::load($pdo_db, $lang, array('common'));
         if($planet[$num]['base'] == 'Y')
@@ -63,7 +63,7 @@ class PlanetReport
         echo "</div>\n";
     }
 
-    public static function standardReport(\PDO $pdo_db, string $lang, array $playerinfo, string $sort, Reg $tkireg): void
+    public static function standardReport(\PDO $pdo_db, string $lang, array $playerinfo, string $sort, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common', 'main', 'planet', 'planet_report', 'regional'));
         echo "<div style='width:90%; margin:auto; font-size:14px;'>\n";

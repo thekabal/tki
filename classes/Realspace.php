@@ -26,7 +26,7 @@ namespace Tki;
 
 class Realspace
 {
-    public function realSpaceMove(\PDO $pdo_db, string $lang, int $destination, Reg $tkireg): string
+    public function realSpaceMove(\PDO $pdo_db, string $lang, int $destination, Registry $tkireg): string
     {
         $langvars = Translate::load($pdo_db, $lang, array('planet_report', 'regional', 'rsmove'));
         $energyscooped = 0;

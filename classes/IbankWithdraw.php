@@ -44,7 +44,7 @@ class IbankWithdraw
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $playerinfo, int $amount, array $account, Reg $tkireg, Timer $tkitimer, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $playerinfo, int $amount, array $account, Registry $tkireg, Timer $tkitimer, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $amount = preg_replace("/[^0-9]/", '', (string) $amount);

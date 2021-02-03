@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 /**
- * classes/Reg.php from The Kabal Invasion.
+ * classes/Registry.php from The Kabal Invasion.
  * The Kabal Invasion is a Free & Opensource (FOSS), web-based 4X space/strategy game.
  *
  * @copyright 2020 The Kabal Invasion development team, Ron Harwood, and the BNT development team
@@ -179,7 +179,7 @@ namespace Tki;
  * @property-read int $max_presets
  * @property-read string $default_lang
  */
-class Reg
+class Registry
 {
     protected static array $store = array();
 

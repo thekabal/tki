@@ -26,7 +26,7 @@ namespace Tki;
 
 class TraderouteResults
 {
-    public static function tableTop(\PDO $pdo_db, string $lang, Reg $tkireg): void
+    public static function tableTop(\PDO $pdo_db, string $lang, Registry $tkireg): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
                                          'footer', 'insignias', 'regional',
@@ -45,7 +45,7 @@ class TraderouteResults
         echo "    <td width='50%'><font size='2' color='white'><strong>";
     }
 
-    public static function destination(Reg $tkireg): void
+    public static function destination(Registry $tkireg): void
     {
         echo "</strong></font></td>\n";
         echo "  </tr>\n";
@@ -59,7 +59,7 @@ class TraderouteResults
         echo "    <td align='center'><font size='2' color='white'>";
     }
 
-    public static function showCost(Reg $tkireg): void
+    public static function showCost(Registry $tkireg): void
     {
         echo "</font></td>\n";
         echo "  </tr>\n";

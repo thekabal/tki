@@ -26,7 +26,7 @@ namespace Tki;
 
 class IbankConsolidate
 {
-    public static function before(\PDO $pdo_db, string $lang, Reg $tkireg, int $dplanet_id): void
+    public static function before(\PDO $pdo_db, string $lang, Registry $tkireg, int $dplanet_id): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $percent = $tkireg->ibank_paymentfee * 100;
@@ -54,7 +54,7 @@ class IbankConsolidate
              "</tr>";
     }
 
-    public static function after(\PDO $pdo_db, string $lang, array $playerinfo, Reg $tkireg, Timer $tkitimer, int $dplanet_id, int $minimum, int $maximum, Smarty $template): void
+    public static function after(\PDO $pdo_db, string $lang, array $playerinfo, Registry $tkireg, Timer $tkitimer, int $dplanet_id, int $minimum, int $maximum, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";
@@ -137,7 +137,7 @@ class IbankConsolidate
              "</tr>";
     }
 
-    public static function third(\PDO $pdo_db, string $lang, array $playerinfo, Reg $tkireg, Timer $tkitimer, int $dplanet_id, int $minimum, int $maximum, Smarty $template): void
+    public static function third(\PDO $pdo_db, string $lang, array $playerinfo, Registry $tkireg, Timer $tkitimer, int $dplanet_id, int $minimum, int $maximum, Smarty $template): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
         $sql = "SELECT name, credits, owner, sector_id FROM ::prefix::planets WHERE planet_id = :planet_id";

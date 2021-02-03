@@ -26,7 +26,7 @@ namespace Tki;
 
 class Login
 {
-    public function checkLogin(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template): bool
+    public function checkLogin(\PDO $pdo_db, string $lang, Registry $tkireg, Timer $tkitimer, Smarty $template): bool
     {
         $game_closed = new Game();
         $playerinfo = Player::auth($pdo_db, $lang, $tkireg, $tkitimer, $template);

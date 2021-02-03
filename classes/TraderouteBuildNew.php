@@ -26,7 +26,7 @@ namespace Tki;
 
 class TraderouteBuildNew
 {
-    public static function new(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
+    public static function new(\PDO $pdo_db, string $lang, Registry $tkireg, Timer $tkitimer, Smarty $template, int $num_traderoutes, array $playerinfo, ?int $traderoute_id = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
                                          'footer', 'insignias', 'traderoutes',

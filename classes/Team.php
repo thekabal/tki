@@ -93,7 +93,7 @@ class Team
     }
 
     // Display list of teams
-    public static function displayAllTeams(\PDO $pdo_db, string $lang, Reg $tkireg, ?string $order, string $type): void
+    public static function displayAllTeams(\PDO $pdo_db, string $lang, Registry $tkireg, ?string $order, string $type): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common', 'main', 'teams'));
         echo "<br><br>" . $langvars['l_team_galax'] . "<br>";
@@ -187,7 +187,7 @@ class Team
         }
     }
 
-    public static function showInfo(\PDO $pdo_db, string $lang, int $whichteam, bool $isowner, array $playerinfo, array $invite_info, array $team, Reg $tkireg): void
+    public static function showInfo(\PDO $pdo_db, string $lang, int $whichteam, bool $isowner, array $playerinfo, array $invite_info, array $team, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common', 'main', 'teams'));
         // Heading

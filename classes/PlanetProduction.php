@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetProduction
 {
-    public static function productionChange(\PDO $pdo_db, $old_db, string $lang, array $prodpercentarray, Reg $tkireg): void
+    public static function productionChange(\PDO $pdo_db, $old_db, string $lang, array $prodpercentarray, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common', 'planet_report'));
         //  Declare default production values from the config.php file

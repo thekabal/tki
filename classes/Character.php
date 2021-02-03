@@ -26,7 +26,7 @@ namespace Tki;
 
 class Character
 {
-    public function kill(\PDO $pdo_db, string $lang, int $ship_id, Reg $tkireg): void
+    public function kill(\PDO $pdo_db, string $lang, int $ship_id, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('news'));
         $sql = "UPDATE ::prefix::ships SET ship_destroyed = 'Y', " .

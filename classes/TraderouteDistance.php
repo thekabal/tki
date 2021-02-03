@@ -26,7 +26,7 @@ namespace Tki;
 
 class TraderouteDistance
 {
-    public static function calc(\PDO $pdo_db, string $type1, string $type2, int $start, int $dest, int $circuit, array $playerinfo, Reg $tkireg, string $sells = 'N'): array
+    public static function calc(\PDO $pdo_db, string $type1, string $type2, int $start, int $dest, int $circuit, array $playerinfo, Registry $tkireg, string $sells = 'N'): array
     {
         $retvalue = array();
         $retvalue['triptime'] = 0;
@@ -154,7 +154,7 @@ class TraderouteDistance
         return $retvalue;
     }
 
-    public static function warpCalc(\PDO $pdo_db, string $lang, Reg $tkireg, Timer $tkitimer, Smarty $template, array $traderoute, array $source, array $dest): array
+    public static function warpCalc(\PDO $pdo_db, string $lang, Registry $tkireg, Timer $tkitimer, Smarty $template, array $traderoute, array $source, array $dest): array
     {
         $langvars = Translate::load($pdo_db, $lang, array('traderoutes'));
         $dist = array();

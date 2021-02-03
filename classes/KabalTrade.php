@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalTrade
 {
-    public static function trade(\PDO $pdo_db, array $playerinfo, Reg $tkireg): void
+    public static function trade(\PDO $pdo_db, array $playerinfo, Registry $tkireg): void
     {
         $shipore = null;
         $shiporganics = null;

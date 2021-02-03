@@ -28,7 +28,7 @@ class Game
 {
     public function isGameClosed(
         \PDO $pdo_db,
-        Reg $tkireg,
+        Registry $tkireg,
         Timer $tkitimer,
         string $lang,
         Smarty $template
