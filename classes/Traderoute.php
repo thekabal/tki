@@ -653,7 +653,7 @@ class Traderoute
                     $stmt->bindParam(':goods_buy', $goods_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':organics_buy', $organics_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':sector_id', $source['sector_id'], \PDO::PARAM_INT);
-                    $result = $stmt->execute();
+                    $stmt->execute();
                     \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
 
