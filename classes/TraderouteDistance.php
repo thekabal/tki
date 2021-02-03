@@ -163,7 +163,7 @@ class TraderouteDistance
         $stmt->bindParam(':link_start', $source['sector_id'], \PDO::PARAM_INT);
         $stmt->bindParam(':link_dest', $dest['sector_id'], \PDO::PARAM_INT);
         $stmt->execute();
-        $link_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $source['sector_id'], $langvars['l_tdr_nowlink1']);
         $langvars['l_tdr_nowlink1'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink1']);
         \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_nowlink1']);
