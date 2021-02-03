@@ -71,7 +71,7 @@ class KabalToShip
         if ($targetinfo['dev_emerwarp'] > 0)
         {
             \Tki\PlayerLog::writeLog($pdo_db, $targetinfo['ship_id'], LogEnums::ATTACK_EWD, "Kabal $playerinfo[character_name]");
-            $dest_sector = random_int(1, (int) $tkireg->max_sectors);
+            $dest_sector = random_int(1, $tkireg->max_sectors);
 
             $sql = "UPDATE ::prefix::ships SET sector = :sector, dev_emerwarp = dev_emerwarp - 1 " .
                    "WHERE ship_id = :ship_id";

@@ -65,7 +65,7 @@ class KabalMove
 
         if (!$targetlink > 0) // If there is no acceptable link, use a worm hole.
         {
-            $wormto = random_int(1, (int) ($tkireg->max_sectors - 15));  // Generate a random sector number
+            $wormto = random_int(1, ($tkireg->max_sectors - 15));  // Generate a random sector number
             $limitloop = 1;                             // Limit the number of loops
             while (!$targetlink > 0 && $limitloop < 15)
             {
