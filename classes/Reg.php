@@ -209,8 +209,9 @@ class Reg
 
     public function loadFromIni(): void
     {
-        // Slurp in config variables from the ini file directly
-        // This is hard-coded for now, but when we get multiple game support, we may need to change this.
+        // Read config variables from the ini file directly
+        // Which ini file is hard-coded for now
+        // FUTURE: When we get multiple game support, we may need to change it
         $ini_keys = parse_ini_file('config/classic_config.ini', true, INI_SCANNER_TYPED);
         if (is_array($ini_keys))
         {
