@@ -111,6 +111,8 @@ class Ibank
     public static function ibankLoans(\PDO $pdo_db, string $lang, Reg $tkireg, array $playerinfo, array $account): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('ibank', 'regional'));
+        $ibank_loanfactor = $tkireg->ibank_loanfactor;
+        $ibank_loaninterest = $tkireg->ibank_loaninterest;
         $playerinfo['ship_id'] = (int) $playerinfo['ship_id'];
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_loanstatus'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top><td>" . $langvars['l_ibank_shipaccount'] . " :</td><td align=right>" . number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>" .
@@ -138,8 +140,8 @@ class Ibank
                 echo "<td align=right>{$hours}h {$mins}m</td></tr>";
             }
 
-            $factor = $tkireg->ibank_loanfactor *= 100;
-            $interest = $tkireg->ibank_loaninterest *= 100;
+            $factor = $ibank_loanfactor *= 100;
+            $interest = $ibank_loaninterest *= 100;
 
             $langvars['l_ibank_loanrates'] = str_replace("[factor]", (string) $factor, $langvars['l_ibank_loanrates']);
             $langvars['l_ibank_loanrates'] = str_replace("[interest]", (string) $interest, $langvars['l_ibank_loanrates']);
@@ -161,8 +163,8 @@ class Ibank
             $langvars['l_ibank_maxloanpercent'] = str_replace("[ibank_percent]", (string) $percent, $langvars['l_ibank_maxloanpercent']);
             echo "<tr valign=top><td nowrap>" . $langvars['l_ibank_maxloanpercent'] . " :</td><td align=right>" . number_format($maxloan, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " C</td></tr>";
 
-            $factor = $tkireg->ibank_loanfactor *= 100;
-            $interest = $tkireg->ibank_loaninterest *= 100;
+            $factor = $ibank_loanfactor *= 100;
+            $interest = $ibank_loaninterest *= 100;
 
             $langvars['l_ibank_loanrates'] = str_replace("[factor]", (string) $factor, $langvars['l_ibank_loanrates']);
             $langvars['l_ibank_loanrates'] = str_replace("[interest]", (string) $interest, $langvars['l_ibank_loanrates']);
