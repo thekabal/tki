@@ -32,8 +32,7 @@ if (empty($command))
     echo "<input type=submit value=\"" . $langvars['l_admin_show_ip'] . "\">";
     echo "</form>";
 
-    $bans = null;
-    $players = null;
+    $bans = array();
     $res = $old_db->Execute("SELECT ban_mask FROM {$old_db->prefix}ip_bans");
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     while (!$res->EOF)
@@ -80,8 +79,7 @@ if (empty($command))
 
             $res = $old_db->Execute("SELECT character_name, ship_id, email FROM {$old_db->prefix}ships WHERE ip_address LIKE ?;", array($ban));
             Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-            unset($players);
-            $players = null;
+            $players = array();
             while (!$res->EOF)
             {
                 $players[] = $res->fields;
@@ -330,7 +328,7 @@ elseif ($command == 'unbanip')
     $res = $old_db->Execute("SELECT DISTINCT character_name FROM {$old_db->prefix}ships WHERE ?;", array($query_string));
     Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
     $nbplayers = $res->RecordCount();
-    $players = null;
+    $players = array();
     while (!$res->EOF)
     {
         $players[] = $res->fields['character_name'];
