@@ -32,7 +32,7 @@ class IbankConsolidate
         $percent = $tkireg->ibank_paymentfee * 100;
 
         $langvars['l_ibank_transferrate3'] = str_replace("[ibank_num_percent]", number_format($percent, 1, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_ibank_transferrate3']);
-        $langvars['l_ibank_transferrate3'] = str_replace("[nbplanets]", $tkireg->ibank_tconsolidate, $langvars['l_ibank_transferrate3']);
+        $langvars['l_ibank_transferrate3'] = str_replace("[nbplanets]", (string) $tkireg->ibank_tconsolidate, $langvars['l_ibank_transferrate3']);
 
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_planetconsolidate'] . "<br>---------------------------------</td></tr>" .
              "<form accept-charset='utf-8' action='ibank.php?command=consolidate2' method=post>" .
