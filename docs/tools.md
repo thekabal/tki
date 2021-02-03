@@ -1,7 +1,13 @@
 # Tools
 
 We use a number of additional tools that are useful to development. These can be
-found in the `/vendor/bin` directory.
+found in the `/vendor/bin` directory. Several of the tools can be run together
+with the single command `composer tests`.
+
+- [`PHPUnit`](https://phpunit.de/index.html) is a programmer-oriented testing
+  framework for PHP. We use it like this:
+
+  `php vendor/bin/phpunit tests`
 
 - [`phpcpd`](https://github.com/sebastianbergmann/phpcpd) is a Copy/Paste
   detector (CPD) for PHP code. We have not resolved all errors it identifies yet
@@ -43,5 +49,4 @@ found in the `/vendor/bin` directory.
 
 There are other command-line options for these tools (try them!), with varying
 levels of usefulness to our project. We have bundled phpcbf - do NOT run phpcbf,
-as it will reformat the entire codebase. We also have included phpunit, which we
-intend to use heavily.
+as it will reformat the entire codebase.
