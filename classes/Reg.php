@@ -207,6 +207,11 @@ class Reg
         self::$store[$key] = $value;
     }
 
+    public function set(string $key, mixed $value): void
+    {
+        self::$store[$key] = $value;
+    }
+
     public function loadFromIni(): void
     {
         // Read config variables from the ini file directly
