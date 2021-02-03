@@ -12,8 +12,6 @@ parameters:
     checkMissingClosureNativeReturnTypehintRule: true
     reportMaybesInMethodSignatures: true
     reportStaticMethodSignatures: true
-    universalObjectCratesClasses:
-        - Tki\Reg
     checkMissingIterableValueType: false
     excludes_analyse:
         - %rootDir%/../../../../tki/vendor/*
