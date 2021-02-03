@@ -56,7 +56,7 @@ class File
                 {
                     // Import all the variables into the registry
                     settype($type_n_value['value'], $type_n_value['type']);
-                    $tkireg->$config_key = $type_n_value['value'];
+                    $tkireg->set($config_key, $type_n_value['value']);
                 }
 
                 $stmt->bindParam(':config_key', $config_key, \PDO::PARAM_STR);
