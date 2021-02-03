@@ -14,6 +14,7 @@ parameters:
     reportStaticMethodSignatures: true
     checkMissingIterableValueType: false
     excludes_analyse:
+        - %rootDir%/../../../../tki/tests/*
         - %rootDir%/../../../../tki/vendor/*
         - %rootDir%/../../../../tki/templates/*
         - %rootDir%/../../../../tki/classes/Db.php                      # 10 errors relating to Adodb & having the postgres/mysql switch hardcoded at phpstan run time in SecureConfig
