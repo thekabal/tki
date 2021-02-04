@@ -171,7 +171,6 @@ if ($linkinfo !== false)
         $stmt->bindParam(':link_start', $playerinfo['sector'], PDO::PARAM_INT);
         $stmt->bindParam(':link_dest', $target_sector, PDO::PARAM_INT);
         $stmt->execute();
-        $linkinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $sql = "UPDATE ::prefix::ships SET dev_warpedit = dev_warpedit - 1, turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";
         $stmt = $pdo_db->prepare($sql);
