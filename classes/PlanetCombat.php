@@ -470,9 +470,16 @@ class PlanetCombat
             \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
-        $result4 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y';", array($planetinfo['planet_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result4, __LINE__, __FILE__);
-        $shipsonplanet = $result4->RecordCount();
+        $sql = "SELECT COUNT(*) as count FROM ::prefix::ships " .
+               "WHERE planet_id = :planet_id AND " .
+               "on_planet = :on_planet";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+        $stmt->bindValue(':on_planet', 'Y', \PDO::PARAM_STR);
+        $stmt->execute();
+        $tmp_ship_count = $stmt->fetch(\PDO::FETCH_COLUMN);
+        $shipsonplanet = $tmp_ship_count['count'];
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
         if ($planetshields < 1 && $planetfighters < 1 && $attackerarmor > 0 && $shipsonplanet == 0)
         {
@@ -486,11 +493,47 @@ class PlanetCombat
             if ($roll > $self_tech)
             {
                 // Reset Planet Assets.
-                $sql  = "UPDATE {$old_db->prefix}planets ";
-                $sql .= "SET organics = '0', ore = '0', goods = '0', energy = '0', colonists = '2', credits = '0', fighters = '0', torps = '0', team = '0', base = 'N', sells = 'N', prod_organics = '20', prod_ore = '20', prod_goods = '20', prod_energy = '20', prod_fighters = '10', prod_torp = '10' ";
-                $sql .= "WHERE planet_id = ? LIMIT 1;";
-                $resx = $old_db->Execute($sql, array($planetinfo['planet_id']));
-                \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                // FUTURE: A lot of these are hard-coded and shouldn't be
+                // FUTURE: Could also be an SQL gateway call
+                $sql = "UPDATE ::prefix::planets SET organics = :organics, " .
+                       "ore = :ore, " .
+                       "goods = :goods, " .
+                       "energy = :energy, " .
+                       "colonists = :colonists, " .
+                       "credits = :credits, " .
+                       "fighters = :fighters, " .
+                       "torps = :torps, " .
+                       "team = :team, " .
+                       "base = :base, " .
+                       "sells = :sells, " .
+                       "prod_organics = :prod_organics, " .
+                       "prod_ore = :prod_ore, " .
+                       "prod_goods = :prod_goods, " .
+                       "prod_energy = :prod_energy, " .
+                       "prod_fighters = :prod_fighters, " .
+                       "prod_torp = :prod_torp " .
+                       " WHERE planet_id = :planet_id LIMIT 1";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindValue(':organics', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':ore', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':goods', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':energy', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':colonists', 2, \PDO::PARAM_INT);
+                $stmt->bindValue(':credits', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':fighters', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':torps', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':team', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
+                $stmt->bindValue(':sells', 'N', \PDO::PARAM_STR);
+                $stmt->bindValue(':prod_organics', 20, \PDO::PARAM_INT);
+                $stmt->bindValue(':prod_ore', 20, \PDO::PARAM_INT);
+                $stmt->bindValue(':prod_goods', 20, \PDO::PARAM_INT);
+                $stmt->bindValue(':prod_energy', 20, \PDO::PARAM_INT);
+                $stmt->bindValue(':prod_fighters', 10, \PDO::PARAM_INT);
+                $stmt->bindValue(':prod_torps', 10, \PDO::PARAM_INT);
+                $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+                $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 echo "<div style='text-align:center; font-size:18px; color:#f00;'>" . $langvars['l_planet_cmb_unstable'] . "</div>\n";
             }
 
