@@ -283,8 +283,25 @@ class KabalToPlanet
             \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LogEnums::PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Kabal $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
 
             // Update planet
-            $resi = $old_db->Execute("UPDATE {$old_db->prefix}planets SET energy = ?, fighters = fighters - ?, torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, credits = credits + ? WHERE planet_id = ?;", array($planetinfo['energy'], $fighters_lost, $targettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id']));
-            \Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::planets SET energy = :planet_energy, " .
+                   "fighters = fighters - :fighters_lost, " .
+                   "torps = torps - :targettorps, " .
+                   "ore = ore + :free_ore, " .
+                   "goods = goods + :free_goods, " .
+                   "organics = organics + :free_organics, " .
+                   "credits = credits + :ship_salvage, " .
+                   "WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_energy', $planetinfo['energy'], \PDO::PARAM_INT);
+            $stmt->bindParam(':fighters_lost', $fighters_lost, \PDO::PARAM_INT);
+            $stmt->bindParam(':targettorps', $targettorps, \PDO::PARAM_INT);
+            $stmt->bindParam(':free_ore', $free_ore, \PDO::PARAM_INT);
+            $stmt->bindParam(':free_goods', $free_goods, \PDO::PARAM_INT);
+            $stmt->bindParam(':free_organics', $free_organics, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_salvage', $ship_salvage, \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
         else  // Must have made it past planet defenses
         {
