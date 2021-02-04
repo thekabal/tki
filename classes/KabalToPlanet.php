@@ -310,15 +310,37 @@ class KabalToPlanet
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Made it past defenses on planet $planetinfo[name]");
 
             // Update attackers
-            $resj = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_energy = ?, ship_fighters = ship_fighters - ?, torps = torps - ?, armor_pts = armor_pts - ? WHERE ship_id = ?;", array($playerinfo['ship_energy'], $fighters_lost, $attackertorps, $armor_lost, $playerinfo['ship_id']));
-            \Tki\Db::logDbErrors($pdo_db, $resj, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::ships SET ship_energy = :ship_energy, " .
+                   "ship_fighters = ship_fighters - :fighters_lost, " .
+                   "torps = torps - :attackertorps, " .
+                   "armor_pts = armor_pts - :armor_lost, " .
+                   "WHERE ship_id = :ship_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':ship_energy', $playerinfo['ship_energy'], \PDO::PARAM_INT);
+            $stmt->bindParam(':fighters_lost', $fighters_lost, \PDO::PARAM_INT);
+            $stmt->bindParam(':attackertorps', $attackertorps, \PDO::PARAM_INT);
+            $stmt->bindParam(':armor_lost', $armor_lost, \PDO::PARAM_INT);
+            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
             $playerinfo['ship_fighters'] = $attackerfighters;
             $playerinfo['torps'] = $attackertorps;
             $playerinfo['armor_pts'] = $attackerarmor;
 
             // Update planet
-            $resk = $old_db->Execute("UPDATE {$old_db->prefix}planets SET energy = ?, fighters = ?, torps = torps - ? WHERE planet_id = ?", array($planetinfo['energy'], $targetfighters, $targettorps, $planetinfo['planet_id']));
-            \Tki\Db::logDbErrors($pdo_db, $resk, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::planets SET energy = :planet_energy, " .
+                   "fighters = fighters - :targetfighters, " .
+                   "torps = torps - :targettorps, " .
+                   "WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_energy', $planetinfo['energy'], \PDO::PARAM_INT);
+            $stmt->bindParam(':targetfighters', $targetfighters, \PDO::PARAM_INT);
+            $stmt->bindParam(':targettorps', $targettorps, \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
             $planetinfo['fighters'] = $targetfighters;
             $planetinfo['torps'] = $targettorps;
 
@@ -348,9 +370,20 @@ class KabalToPlanet
                 \Tki\PlayerLog::writeLog($pdo_db, $planetinfo['owner'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
                 // Update planet
-                $resl = $old_db->Execute("UPDATE {$old_db->prefix}planets SET fighters=0, torps=0, base='N', owner=0, team=0 WHERE planet_id = ?", array($planetinfo['planet_id']));
-                \Tki\Db::logDbErrors($pdo_db, $resl, __LINE__, __FILE__);
-
+                $sql = "UPDATE ::prefix::planets SET fighters = :fighters, " .
+                       "torps = :torps, " .
+                       "base = :base, " .
+                       "owner = :owner, " .
+                       "team = :team " .
+                       "WHERE planet_id = :planet_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindValue(':fighers', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':torps', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
+                $stmt->bindValue(':team', 0, \PDO::PARAM_INT);
+                $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+                $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg);
             }
             else
