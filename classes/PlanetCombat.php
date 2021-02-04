@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetCombat
 {
-    public static function prime(\PDO $pdo_db, $old_db, string $lang, Registry $tkireg, Timer $tkitimer, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): bool
+    public static function prime(\PDO $pdo_db, string $lang, Registry $tkireg, Timer $tkitimer, Smarty $template, array $playerinfo, array $ownerinfo, array $planetinfo): bool
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('combat', 'planet', 'planet_cmb'));
         if ($playerinfo['turns'] < 1)
@@ -548,8 +548,11 @@ class PlanetCombat
                 if ($playerscore < $planetscore)
                 {
                     echo "<center>" . $langvars['l_cmb_citizenswanttodie'] . "</center><br><br>";
-                    $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($planetinfo['planet_id']));
-                    \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    $sql = "DELETE FROM ::prefix::planets WHERE planet_id = :planet_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+                    $stmt->execute();
+
                     \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                     $admin_log = new AdminLog();
                     $admin_log->writeLog($pdo_db, LogEnums::ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
@@ -561,8 +564,21 @@ class PlanetCombat
                     echo "<center><font color=red>" . $langvars['l_cmb_youmaycapture'] . "</font></center><br><br>";
                     \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                     \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-                    $update7a = $old_db->Execute("UPDATE {$old_db->prefix}planets SET owner=0, fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id = ?;", array($planettorps, $planetinfo['planet_id']));
-                    \Tki\Db::logDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::planets SET owner = :owner, " .
+                           "fighters = :fighters, " .
+                           "torps = torps - :planettorps, " .
+                           "base = :base, " .
+                           "defeated = :defeated, " .
+                           "WHERE planet_id = :planet_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindValue(':owner', 0, \PDO::PARAM_INT);
+                    $stmt->bindValue(':fighters', 0, \PDO::PARAM_INT);
+                    $stmt->bindParam(':planettorps', $planettorps, \PDO::PARAM_INT);
+                    $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
+                    $stmt->bindValue(':defeated', 'Y', \PDO::PARAM_STR);
+                    $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+                    $stmt->execute();
+                    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
             }
             else
@@ -571,8 +587,21 @@ class PlanetCombat
                 echo "<center>" . $langvars['l_cmb_youmaycapture'] . "</center><br><br>";
                 \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                 \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-                $update7a = $old_db->Execute("UPDATE {$old_db->prefix}planets SET owner=0,fighters=0, torps=torps-?, base='N', defeated='Y' WHERE planet_id = ?;", array($planettorps, $planetinfo['planet_id']));
-                \Tki\Db::logDbErrors($pdo_db, $update7a, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::planets SET owner = :owner, " .
+                       "fighters = :fighters, " .
+                       "torps = torps - :planettorps, " .
+                       "base = :base, " .
+                       "defeated = :defeated, " .
+                       "WHERE planet_id = :planet_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindValue(':owner', 0, \PDO::PARAM_INT);
+                $stmt->bindValue(':fighters', 0, \PDO::PARAM_INT);
+                $stmt->bindParam(':planettorps', $planettorps, \PDO::PARAM_INT);
+                $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
+                $stmt->bindValue(':defeated', 'Y', \PDO::PARAM_STR);
+                $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+                $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
 
             \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg);
@@ -587,13 +616,26 @@ class PlanetCombat
             $energy = $planetinfo['energy'];
             \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
             \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-            $update7b = $old_db->Execute(
-                "UPDATE {$old_db->prefix}planets SET energy = ?, fighters = fighters - ?, " .
-                "torps = torps - ?, ore = ore + ?, goods = goods + ?, organics = organics + ?, " .
-                "credits = credits + ? WHERE planet_id = ?;",
-            array($energy, $fighters_lost, $planettorps, $free_ore, $free_goods, $free_organics, $ship_salvage, $planetinfo['planet_id'])
-            );
-            \Tki\Db::logDbErrors($pdo_db, $update7b, __LINE__, __FILE__);
+
+            $sql = "UPDATE ::prefix::planets SET energy = :energy, " .
+                   "fighters = fighters - :fighters_lost, " .
+                   "torps = torps - :planettorps, " .
+                   "ore = :ore + :free_ore, " .
+                   "goods = :goods + :free_goods, " .
+                   "organics = organics + :free_organics, " .
+                   "credits = :credits + :credits " .
+                   "WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':energy', $energy, \PDO::PARAM_INT);
+            $stmt->bindParam(':figters_lost', $fighters_lost, \PDO::PARAM_INT);
+            $stmt->bindParam(':planettorps', $planettorps, \PDO::PARAM_INT);
+            $stmt->bindParam(':free_ore', $free_ore, \PDO::PARAM_INT);
+            $stmt->bindParam(':free_goods', $free_goods, \PDO::PARAM_INT);
+            $stmt->bindParam(':free_organics', $free_organics, \PDO::PARAM_INT);
+            $stmt->bindParam(':credits', $ship_salvage, \PDO::PARAM_INT);
+            $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         }
 
         $sql = "UPDATE ::prefix::ships SET turns = turns - 1, turns_used = turns_used + 1 WHERE ship_id = :ship_id";

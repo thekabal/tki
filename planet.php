@@ -608,7 +608,7 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 }
                 else
                 {
-                    if (\Tki\PlanetCombat::prime($pdo_db, $old_db, $lang, $tkireg, $tkitimer, $template, $playerinfo, $ownerinfo, $planetinfo))
+                    if (\Tki\PlanetCombat::prime($pdo_db, $lang, $tkireg, $tkitimer, $template, $playerinfo, $ownerinfo, $planetinfo))
                     {
                         die();
                     }
