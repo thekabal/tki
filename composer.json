@@ -37,7 +37,7 @@
     },
     "scripts": {
         "tests": [
-            "vendor/bin/phpunit tests",
+            "vendor/bin/phpunit --dont-report-useless-tests tests",
             "phpcs --standard=/var/www/html/tki/vendor/bin/phpcs.xml --ignore=templates,vendor .",
             "psalm --no-progress --no-suggestions -c vendor/bin/psalm.xml .",
             "phpstan analyze --memory-limit=1G --no-progress --no-ansi -l 8 -c vendor/bin/phpstan.neon ."
