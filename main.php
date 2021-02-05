@@ -858,40 +858,19 @@ echo "<tr><td  style='white-space:nowrap; border:#fff 1px solid; background-colo
 echo '<table style="width:100%;">';
 
 // Pull the presets for the player from the db.
-$i = 0;
 $presetinfo = array();
+$sql = "SELECT * FROM ::prefix::presets WHERE ship_id = :ship_id";
+$stmt = $pdo_db->prepare($sql);
+$stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+$stmt->execute();
+$presetinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$debug_query = $old_db->Execute("SELECT * FROM {$old_db->prefix}presets WHERE ship_id = ?;", array($playerinfo['ship_id']));
-Tki\Db::logDbErrors($pdo_db, $debug_query, __LINE__, __FILE__);
-while (!$debug_query->EOF)
+for ($preset_count = 0; $preset_count < $tkireg->max_presets; $preset_count++)
 {
-    $presetinfo[$i] = $debug_query->fields;
-    $debug_query->MoveNext();
-    $i++;
-}
-
-if ($i == 0)
-{
-    for ($preset_count = 0; $preset_count < $tkireg->max_presets; $preset_count++)
-    {
-        $i++;
-        echo "<tr>\n";
-        echo '<td style="text-align:left;"><a class=mnu href="rsmove.php?engage=1&amp;destination=1">=&gt;&nbsp;1</a></td>';
-        echo '<td style="text-align:right;">[<a class=mnu href=preset.php>' . ucwords($langvars['l_set']) . '</a>]</td>';
-        echo "</tr>\n";
-        $presetinfo[$i] = '1';
-    }
-}
-else
-{
-    for ($preset_count = 0; $preset_count < $i; $preset_count++)
-    {
-        echo "<tr>\n";
-        echo '<td style="text-align:left;"><a class=mnu href="rsmove.php?engage=1&amp;destination=' . $presetinfo[$preset_count]['preset'] . '">=&gt;&nbsp;' . $presetinfo[$preset_count]['preset'] . '</a></td>';
-        echo '<td style="text-align:right;">[<a class=mnu href=preset.php>' . ucwords($langvars['l_set']) . '</a>]</td>';
-        echo "</tr>\n";
-        $debug_query->MoveNext();
-    }
+    echo "<tr>\n";
+    echo '<td style="text-align:left;"><a class=mnu href="rsmove.php?engage=1&amp;destination=' . $presetinfo[$preset_count]['preset'] . '">=&gt;&nbsp;' . $presetinfo[$preset_count]['preset'] . '</a></td>';
+    echo '<td style="text-align:right;">[<a class=mnu href=preset.php>' . ucwords($langvars['l_set']) . '</a>]</td>';
+    echo "</tr>\n";
 }
 
 echo "</table></td></tr>";
