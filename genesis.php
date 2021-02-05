@@ -90,9 +90,9 @@ elseif ($playerinfo['dev_genesis'] < 1)
 }
 else
 {
-    $res = $old_db->Execute("SELECT allow_planet, team_zone, owner FROM {$old_db->prefix}zones WHERE zone_id = ?;", array($sectorinfo['zone_id']));
-    Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-    $zoneinfo = $res->fields;
+    // Get zoneinfo from database
+    $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
+    $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
     if ($zoneinfo['allow_planet'] == 'N')
     {
         echo $langvars['l_gns_forbid'];
