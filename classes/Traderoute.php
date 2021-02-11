@@ -911,12 +911,24 @@ class Traderoute
 
                 if ($traderoute['circuit'] == '1')
                 {
-                    $resi = $old_db->Execute("UPDATE {$old_db->prefix}ships SET torps = ?, ship_fighters = ?, ship_colonists = ? WHERE ship_id = ?;", array($playerinfo['torps'], $playerinfo['ship_fighters'], $playerinfo['ship_colonists'], $playerinfo['ship_id']));
-                    \Tki\Db::logDbErrors($pdo_db, $resi, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::ships SET torps = :torps, ship_fighters = :ship_fighters, ship_colonists = :ship_colonists WHERE ship_id = :ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':torps', $playerinfo['torps'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_fighters', $playerinfo['ship_fighters'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_colonists', $playerinfo['ship_colonists'], \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                    $stmt->execute();
+                    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
 
-                $resj = $old_db->Execute("UPDATE {$old_db->prefix}planets SET colonists = colonists - ?, torps = torps - ?, fighters = fighters - ? WHERE planet_id = ?;", array($colonists_buy, $torps_buy, $fighters_buy, $source['planet_id']));
-                \Tki\Db::logDbErrors($pdo_db, $resj, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::planets SET colonists = colonists - :colonists, torps = torps - :torps, fighters = fighters - :fighters WHERE planet_id = :planet_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':colonists', $colonists_buy, \PDO::PARAM_INT);
+                $stmt->bindParam(':torps', $torps_buy, \PDO::PARAM_INT);
+                $stmt->bindParam(':fighters', $fighters_buy, \PDO::PARAM_INT);
+                $stmt->bindParam(':planet_id', $source['planet_id'], \PDO::PARAM_INT);
+                $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
         }
 
@@ -1089,8 +1101,15 @@ class Traderoute
                         $destcost -= $ore_buy * $ore_price;
                     }
 
-                    $resk = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
-                    \Tki\Db::logDbErrors($pdo_db, $resk, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':energy_buy', $energy_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':goods_buy', $goods_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':organics_buy', $organics_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':sector_id', $dest['sector_id'], \PDO::PARAM_INT);
+                    $stmt->execute();
+                    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
 
                 if ($dest['port_type'] == 'goods')
@@ -1171,8 +1190,15 @@ class Traderoute
                         $destcost -= $organics_buy * $organics_price;
                     }
 
-                    $resm = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
-                    \Tki\Db::logDbErrors($pdo_db, $resm, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':energy_buy', $energy_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':goods_buy', $goods_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':organics_buy', $organics_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':sector_id', $dest['sector_id'], \PDO::PARAM_INT);
+                    $stmt->execute();
+                    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
 
                 if ($dest['port_type'] == 'energy')
@@ -1213,8 +1239,15 @@ class Traderoute
                         echo $langvars['l_tdr_nothingtotrade'] . "<br>";
                     }
 
-                    $resn = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = port_ore - ?, port_energy = port_energy - ?, port_goods = port_goods - ?, port_organics = port_organics - ? WHERE sector_id = ?;", array($ore_buy, $energy_buy, $goods_buy, $organics_buy, $dest['sector_id']));
-                    \Tki\Db::logDbErrors($pdo_db, $resn, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::universe SET port_ore = port_ore - :ore_buy, port_energy = port_energy - :energy_buy, port_goods = port_goods - :goods_buy, port_organics = port_organics - :organics_buy WHERE sector_id = :sector_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ore_buy', $ore_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':energy_buy', $energy_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':goods_buy', $goods_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':organics_buy', $organics_buy, \PDO::PARAM_INT);
+                    $stmt->bindParam(':sector_id', $dest['sector_id'], \PDO::PARAM_INT);
+                    $stmt->execute();
+                    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
 
                 if ($dist['scooped2'] > 0)
@@ -1227,8 +1260,15 @@ class Traderoute
                     }
                 }
 
-                $reso = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_ore = ?, ship_goods = ?, ship_organics = ?, ship_energy = ? WHERE ship_id = ?;", array($playerinfo['ship_ore'], $playerinfo['ship_goods'], $playerinfo['ship_organics'], $playerinfo['ship_energy'], $playerinfo['ship_id']));
-                \Tki\Db::logDbErrors($pdo_db, $reso, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore, ship_goods = :ship_goods, ship_organics = :ship_organics, ship_energy = :ship_energy WHERE ship_id = :ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_ore', $playerinfo['ship_ore'], \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_goods', $playerinfo['ship_goods'], \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_organics', $playerinfo['ship_organics'], \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_energy', $playerinfo['ship_energy'], \PDO::PARAM_INT);
+                $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             else // Dest is planet
             {
@@ -1327,8 +1367,14 @@ class Traderoute
                     }
                 }
 
-                $resp = $old_db->Execute("UPDATE {$old_db->prefix}planets SET colonists = colonists + ?, fighters = fighters + ?, torps = torps + ? WHERE planet_id = ?;", array($colonists_buy, $fighters_buy, $torps_buy, $traderoute['dest_id']));
-                \Tki\Db::logDbErrors($pdo_db, $resp, __LINE__, __FILE__);
+                $sql = "UPDATE ::prefix::planets SET colonists = colonists + :colonists_buy, fighters = fighters + :fighters_buy, torps = torps + :torps_buy WHERE planet_id = :planet_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':colonists_buy', $colonists_buy, \PDO::PARAM_INT);
+                $stmt->bindParam(':fighters_buy', $fighters_buy, \PDO::PARAM_INT);
+                $stmt->bindParam(':torps_buy', $torps_buy, \PDO::PARAM_INT);
+                $stmt->bindParam(':planet_id', $traderoute['dest_id'], \PDO::PARAM_INT);
+                $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                 if ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')
                 {
@@ -1415,8 +1461,16 @@ class Traderoute
             $newsec = $destport['sector_id'];
         }
 
-        $rest = $old_db->Execute("UPDATE {$old_db->prefix}ships SET turns = turns - ?, credits = credits + ?, turns_used = turns_used + ?, sector = ? WHERE ship_id = ?;", array($dist['triptime'], $total_profit, $dist['triptime'], $newsec, $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $rest, __LINE__, __FILE__);
+        $sql = "UPDATE ::prefix::ships SET turns = turns - :triptime, credits = credits + :profit, turns_used = turns_used + :triptime, sector = :new_sector SET WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':triptime', $dist['triptime'], \PDO::PARAM_INT);
+        $stmt->bindParam(':profit', $total_profit, \PDO::PARAM_INT);
+        $stmt->bindParam(':triptime', $dist['triptime'], \PDO::PARAM_INT);
+        $stmt->bindParam(':new_sector', $newsec, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
         $playerinfo['credits'] += $total_profit - $sourcecost;
         $playerinfo['turns'] -= $dist['triptime'];
 

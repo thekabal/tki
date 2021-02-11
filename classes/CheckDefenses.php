@@ -305,26 +305,49 @@ class CheckDefenses
                 switch ($response)
                 {
                     case "fight":
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ships SET cleared_defenses = ' ' WHERE " .
+                               "ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $stmt->execute();
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
                         echo "<h1>" . $title . "</h1>\n";
                         \Tki\CheckDefenses::sectorFighters($pdo_db, $lang, $sector, $calledfrom, 0, $playerinfo, $tkireg);
                         break;
 
                     case "retreat":
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        $cur_time_stamp = date("Y-m-d H:i:s");
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET last_login='$cur_time_stamp', turns = turns - 2, turns_used = turns_used + 2, sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ships SET cleared_defenses = ' ' WHERE " .
+                               "ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $stmt->execute();
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
+                        $sql = "UPDATE ::prefix::ships SET last_login = ':last_login' " .
+                               " turns = turns -2, turns_used = turns_used + 2, " .
+                               "sector = :sector WHERE " .
+                               "ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':last_login', $cur_time_stamp, \PDO::PARAM_INT);
+                        $stmt->bindParam(':sector', $playerinfo['sector'], \PDO::PARAM_INT);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $stmt->execute();
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
                         echo "<h1>" . $title . "</h1>\n";
                         echo $langvars['l_chf_youretreatback'] . "<br>";
                         \Tki\Text::gotoMain($pdo_db, $lang);
                         die();
 
                     case "pay":
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ships SET cleared_defenses = ' ' WHERE " .
+                               "ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $stmt->execute();
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
                         $fighterstoll = (int) round($total_sec_fighters * $tkireg->fighter_price * 0.6);
                         if ($playerinfo['credits'] < $fighterstoll)
                         {
@@ -332,8 +355,13 @@ class CheckDefenses
                             echo $langvars['l_chf_movefailed'] . "<br>";
 
                             // Undo the move
-                            $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET sector=? WHERE ship_id=?;", array($playerinfo['sector'], $playerinfo['ship_id']));
-                            \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                            $sql = "UPDATE ::prefix::ships SET sector = :sector WHERE " .
+                                   "ship_id = :ship_id";
+                            $stmt = $pdo_db->prepare($sql);
+                            $stmt->bindParam(':sector', $playerinfo['sector'], \PDO::PARAM_INT);
+                            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                            $stmt->execute();
+                            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                             $status = 0;
                         }
                         else
@@ -341,8 +369,13 @@ class CheckDefenses
                             $tollstring = number_format($fighterstoll, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
                             $langvars['l_chf_youpaidsometoll'] = str_replace("[chf_tollstring]", $tollstring, $langvars['l_chf_youpaidsometoll']);
                             echo $langvars['l_chf_youpaidsometoll'] . "<br>";
-                            $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET credits=credits - $fighterstoll WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                            \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                            $sql = "UPDATE ::prefix::ships SET credits = credits - :fighterstoll " .
+                                   "WHERE ship_id = :ship_id";
+                            $stmt = $pdo_db->prepare($sql);
+                            $stmt->bindParam(':fighterstoll', $fighterstoll, \PDO::PARAM_INT);
+                            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                            $stmt->execute();
+                            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                             \Tki\Toll::distribute($pdo_db, $sector, $fighterstoll, (int) $total_sec_fighters);
                             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], \Tki\LogEnums::TOLL_PAID, "$tollstring|$sector");
                             $status = 1;
@@ -350,8 +383,13 @@ class CheckDefenses
                         break;
 
                     case "sneak":
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ' ' WHERE ship_id = ?;", array($playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ships SET cleared_defenses = ' ' " .
+                               "WHERE ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $stmt->execute();
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
                         $success = \Tki\Scan::success($fighters_owner['sensors'], $playerinfo['cloak']);
                         if ($success < 5)
                         {
@@ -381,8 +419,14 @@ class CheckDefenses
 
                     default:
                         $interface_string = $calledfrom . '?sector=' . $sector . '&destination=' . $destination . '&engage=' . $engage;
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET cleared_defenses = ? WHERE ship_id = ?;", array($interface_string, $playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ships SET cleared_defenses = :cleared_defenses " .
+                               "WHERE ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':cleared_defenses', $interface_string, \PDO::PARAM_STR);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $stmt->execute();
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
                         $fighterstoll = (int) round($total_sec_fighters * $tkireg->fighter_price * 0.6);
                         echo "<h1>" . $title . "</h1>\n";
                         echo "<form accept-charset='utf-8' action='{$calledfrom}' method='post'>";
@@ -419,8 +463,12 @@ class CheckDefenses
                 }
 
                 // Clean up any sectors that have used up all mines or fighters
-                $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}sector_defense WHERE quantity <= 0 ");
-                \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                $sql = "DELETE FROM ::prefix::sector_defense " .
+                       "WHERE quantity <= :quantity";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindValue(':quantity', 0, \PDO::PARAM_INT);
+                $stmt->execute();
+                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
         }
     }

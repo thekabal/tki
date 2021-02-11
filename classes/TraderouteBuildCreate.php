@@ -247,8 +247,18 @@ class TraderouteBuildCreate
         }
         else
         {
-            $query = $old_db->Execute("UPDATE {$old_db->prefix}traderoutes SET source_id = ?, dest_id = ?, source_type = ?, dest_type = ?, move_type = ?, owner = ?, circuit = ? WHERE traderoute_id = ?;", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type, $editing));
-            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
+            $sql = "UPDATE ::prefix::traderoutes SET source_id = :source_id, dest_id = :dest_id, source_type = :src_type, dest_type = :dest_type, move_type = :move_type, owner = :owner, circuit = :circuit_type WHERE traderoute_id = :traderoute_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':source_id', $src_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':dest_id', $dest_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':src_type', $src_type, \PDO::PARAM_INT);
+            $stmt->bindParam(':dest_type', $dest_type, \PDO::PARAM_INT);
+            $stmt->bindParam(':move_type', $mtype, \PDO::PARAM_INT);
+            $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':circuit_type', $circuit_type, \PDO::PARAM_INT);
+            $stmt->bindParam(':traderoute_id', $editing, \PDO::PARAM_INT);
+            $stmt->execute();
+            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             echo "<p>" . $langvars['l_tdr_modified'];
         }
 
