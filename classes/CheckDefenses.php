@@ -324,6 +324,7 @@ class CheckDefenses
                         $stmt->execute();
                         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
+                        $cur_time_stamp = date("Y-m-d H:i:s");
                         $sql = "UPDATE ::prefix::ships SET last_login = ':last_login' " .
                                " turns = turns -2, turns_used = turns_used + 2, " .
                                "sector = :sector WHERE " .
