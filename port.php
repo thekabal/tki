@@ -48,29 +48,45 @@ $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
 if ($playerinfo['ship_ore'] < 0)
 {
-    $fixres = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_ore = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET ship_ore = :ship_ore WHERE email = :email";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindValue(':ship_ore', 0, PDO::PARAM_INT);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
+    $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     $playerinfo['ship_ore'] = 0;
 }
 
 if ($playerinfo['ship_organics'] < 0)
 {
-    $fixres = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_organics = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET ship_organics = :ship_organics WHERE email = :email";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindValue(':ship_organics', 0, PDO::PARAM_INT);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
+    $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     $playerinfo['ship_organics'] = 0;
 }
 
 if ($playerinfo['ship_energy'] < 0)
 {
-    $fixres = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_energy = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET ship_energy = :ship_energy WHERE email = :email";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindValue(':ship_energy', 0, PDO::PARAM_INT);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
+    $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     $playerinfo['ship_energy'] = 0;
 }
 
 if ($playerinfo['ship_goods'] < 0)
 {
-    $fixres = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_goods = 0 WHERE email = ?;", array($_SESSION['username']));
-    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET ship_goods = :ship_goods WHERE email = :email";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindValue(':ship_goods', 0, PDO::PARAM_INT);
+    $stmt->bindParam(':email', $_SESSION['username'], PDO::PARAM_STR);
+    $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     $playerinfo['ship_goods'] = 0;
 }
 
