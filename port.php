@@ -96,29 +96,45 @@ $sectorinfo = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
 
 if ($sectorinfo['port_ore'] < 0)
 {
-    $fixres = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_ore = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET port_ore = :port_ore WHERE sector_id = :sector";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindValue(':port_ore', 0, PDO::PARAM_INT);
+    $stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_STR);
+    $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     $sectorinfo['port_ore'] = 0;
 }
 
 if ($sectorinfo['port_goods'] < 0)
 {
-    $fixres = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_goods = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET port_goods = :port_goods WHERE sector_id = :sector";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindValue(':port_goods', 0, PDO::PARAM_INT);
+    $stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_STR);
+    $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     $sectorinfo['port_goods'] = 0;
 }
 
 if ($sectorinfo['port_organics'] < 0)
 {
-    $fixres = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_organics = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET port_organics = :port_organics WHERE sector_id = :sector";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindValue(':port_organics', 0, PDO::PARAM_INT);
+    $stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_STR);
+    $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     $sectorinfo['port_organics'] = 0;
 }
 
 if ($sectorinfo['port_energy'] < 0)
 {
-    $fixres = $old_db->Execute("UPDATE {$old_db->prefix}universe SET port_energy = 0 WHERE sector_id = ?;", array($playerinfo['sector']));
-    Tki\Db::logDbErrors($pdo_db, $fixres, __LINE__, __FILE__);
+    $sql = "UPDATE ::prefix::ships SET port_energy = :port_energy WHERE sector_id = :sector";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindValue(':port_energy', 0, PDO::PARAM_INT);
+    $stmt->bindParam(':sector_id', $playerinfo['sector'], PDO::PARAM_STR);
+    $stmt->execute();
+    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
     $sectorinfo['port_energy'] = 0;
 }
 
@@ -371,11 +387,19 @@ elseif ($sectorinfo['port_type'] == "special")
                 }
                 else
                 {
-                    $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET credits = credits - ? WHERE ship_id = ?;", array($bty['total_bounty'], $playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    $sql = "UPDATE ::prefix::ships SET credits = credits - :credits WHERE ship_id = :ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':credits', $bty['total_bounty'], PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+                    $stmt->execute();
+                    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-                    $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0;", array($playerinfo['ship_id']));
-                    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                    $sql = "DELETE FROM ::prefix::bounty WHERE bounty_on = :ship_id AND placed_by = :placed_by";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_STR);
+                    $stmt->bindValue(':placed_by', 0, PDO::PARAM_INT);
+                    $stmt->execute();
+                    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                     $langvars['l_port_bountypaid'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port_bountypaid']);
                     echo $langvars['l_port_bountypaid'] . "<br>";
@@ -399,12 +423,19 @@ elseif ($sectorinfo['port_type'] == "special")
                         echo "<br>\n";
 
                         $bounty_payment = $bty['total_bounty'];
+                        $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance - :credits WHERE ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':credits', $bounty_payment, PDO::PARAM_INT);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+                        $stmt->execute();
+                        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-
-                        $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}bounty WHERE bounty_on = ? AND placed_by = 0;", array($playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        $sql = "DELETE FROM ::prefix::bounty WHERE bounty_on = :ship_id AND placed_by = :placed_by";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_STR);
+                        $stmt->bindValue(':placed_by', 0, PDO::PARAM_INT);
+                        $stmt->execute();
+                        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
                         $langvars['l_port_bountypaid'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port_bountypaid']);
                         echo $langvars['l_port_bountypaid'] . "<br>";
@@ -419,10 +450,21 @@ elseif ($sectorinfo['port_type'] == "special")
                         echo "And your first instalment will be " . number_format($bounty_payment, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']) . " credits.<br>\n";
                         echo "<br>\n";
 
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}ibank_accounts SET balance = balance - ? WHERE ship_id = ?;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
-                        $resx = $old_db->Execute("UPDATE {$old_db->prefix}bounty SET amount = amount - ?  WHERE bounty_on = ? AND placed_by = 0;", array($bounty_payment, $playerinfo['ship_id']));
-                        Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance - :credits WHERE ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':credits', $bounty_payment, PDO::PARAM_INT);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+                        $stmt->execute();
+                        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
+                        $sql = "UPDATE ::prefix::bounty SET amount = amount - :credits WHERE bounty_on = :ship_id AND placed_by = :placed_by";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':credits', $bounty_payment, PDO::PARAM_INT);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
+                        $stmt->bindValue(':placed_by', 0, PDO::PARAM_INT);
+                        $stmt->execute();
+                        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
                         echo $langvars['l_port_part_bounty'] . ".<br>\n";
                         echo "<br>\n";
 

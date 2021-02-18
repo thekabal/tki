@@ -127,13 +127,17 @@ class PlanetProduction
                     elseif ($commod_type == "team")
                     {
                         // Compare entered team_id and one in the db, if different then use one from db
-                        $res = $old_db->Execute("SELECT {$old_db->prefix}ships.team as owner FROM {$old_db->prefix}ships, {$old_db->prefix}planets WHERE ( {$old_db->prefix}ships.ship_id = {$old_db->prefix}planets.owner ) AND ( {$old_db->prefix}planets.planet_id = ?);", array($prodpercent));
-                        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                        if ($res)
-                        {
-                            $team_id = $res->fields['owner'];
-                        }
-                        else
+                        $sql = "SELECT ::prefix::ships.team as owner FROM " .
+                               "::prefix::ships, ::prefix::planets WHERE" .
+                               "(::prefix::ships.ship_id = ::prefix::planets.owner) AND " .
+                               "(::prefix::planets.planet_id = :planet_id)";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':planet_id', $prodpercent, \PDO::PARAM_INT);
+                        $stmt->execute();
+                        $team_id = $stmt->fetch(\PDO::FETCH_COLUMN);
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
+                        if (!is_int($team_id))
                         {
                             $team_id = 0;
                         }
