@@ -26,7 +26,7 @@ namespace Tki;
 
 class PlanetProduction
 {
-    public static function productionChange(\PDO $pdo_db, $old_db, string $lang, array $prodpercentarray, Registry $tkireg): void
+    public static function productionChange(\PDO $pdo_db, string $lang, array $prodpercentarray, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('common', 'planet_report'));
         //  Declare default production values from the config.php file
@@ -160,19 +160,15 @@ class PlanetProduction
         echo $langvars['l_pr_prod_updated'] . "<br><br>";
         echo $langvars['l_pr_checking_values'] . "<br><br>";
 
-        $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE owner = ? ORDER BY sector_id;", array($ship_id));
-        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-        $counter = 0;
         $planets = array();
-        if ($res)
-        {
-            while (!$res->EOF)
-            {
-                $planets[$counter] = $res->fields;
-                $counter++;
-                $res->MoveNext();
-            }
+        $sql = "SELECT * FROM ::prefix::planets WHERE owner = :owner ORDER BY sector_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':owner', $ship_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
+        if (!empty($planets))
+        {
             foreach ($planets as $planet)
             {
                 if (empty($planet['name']))

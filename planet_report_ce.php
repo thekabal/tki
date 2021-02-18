@@ -60,7 +60,7 @@ elseif ($buildp !== null && $builds !== null)
 }
 else
 {
-    Tki\PlanetProduction::productionChange($pdo_db, $old_db, $lang, $_POST, $tkireg);
+    Tki\PlanetProduction::productionChange($pdo_db, $lang, $_POST, $tkireg);
 }
 
 echo '<br><br>';
