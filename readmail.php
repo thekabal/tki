@@ -52,13 +52,22 @@ $ID = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT, array('options' => arra
 
 if ($_GET['action'] == "delete")
 {
-    $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}messages WHERE ID=? AND recp_id = ?;", array($ID, $playerinfo['ship_id']));
-    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    $sql = "DELETE FROM ::prefix::messages " .
+           "WHERE ID = :msg_id AND recp_id = :recp_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':msg_id', $ID, \PDO::PARAM_INT);
+    $stmt->bindParam(':recp_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+    $stmt->execute();
+    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 elseif ($_GET['action'] == "delete_all")
 {
-    $resx = $old_db->Execute("DELETE FROM {$old_db->prefix}messages WHERE recp_id = ?;", array($playerinfo['ship_id']));
-    Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+    $sql = "DELETE FROM ::prefix::messages " .
+           "WHERE recp_id = :recp_id";
+    $stmt = $pdo_db->prepare($sql);
+    $stmt->bindParam(':recp_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+    $stmt->execute();
+    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 }
 
 $cur_D = date("Y-m-d");
