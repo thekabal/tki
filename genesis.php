@@ -114,9 +114,12 @@ else
             }
             else
             {
-                $res = $old_db->Execute("SELECT team FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($zoneinfo['owner']));
-                Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
-                $ownerinfo = $res->fields;
+                $sql = "SELECT team FROM ::prefix::ships WHERE ship_id = :ship_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':ship_id', $zoneinfo['owner'], PDO::PARAM_INT);
+                $stmt->execute();
+                $ownerinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
                 if ($ownerinfo['team'] != $playerinfo['team'])
                 {
                     echo $langvars['l_gns_bforbid'];
