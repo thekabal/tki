@@ -22,8 +22,9 @@
  *
  */
 
-// FUTURE: PDO, better output feedback, better debugging
 $langvars = Tki\Translate::load($pdo_db, $lang, array('scheduler'));
+
+// FUTURE: PDO, better output feedback, better debugging
 
 echo "<strong>" . $langvars['l_sched_news_title'] . "</strong><br>\n";
 $sql = $old_db->Execute("SELECT IF(COUNT(*)>0, SUM(colonists), 0) AS total_colonists, COUNT(owner) AS total_planets,  owner, character_name FROM {$old_db->prefix}planets, {$old_db->prefix}ships WHERE owner != '0' AND owner=ship_id GROUP BY owner ORDER BY owner ASC;");
