@@ -736,7 +736,7 @@ class Traderoute
                 if ($dist['scooped1'] > 0)
                 {
                     $playerinfo['ship_energy'] += $dist['scooped1'];
-                    if ($playerinfo['ship_energy'] > \Tki\CalcLevels::energy($playerinfo['power'], $tkireg))
+                    if ((int) $playerinfo['ship_energy'] > \Tki\CalcLevels::energy($playerinfo['power'], $tkireg))
                     {
                         $playerinfo['ship_energy'] = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg);
                     }
@@ -1254,7 +1254,7 @@ class Traderoute
                 {
                     $playerinfo['ship_energy'] += $dist['scooped2'];
 
-                    if ($playerinfo['ship_energy'] > \Tki\CalcLevels::energy($playerinfo['power'], $tkireg))
+                    if ((int) $playerinfo['ship_energy'] > \Tki\CalcLevels::energy($playerinfo['power'], $tkireg))
                     {
                         $playerinfo['ship_energy'] = \Tki\CalcLevels::energy($playerinfo['power'], $tkireg);
                     }
