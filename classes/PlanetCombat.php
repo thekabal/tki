@@ -564,21 +564,8 @@ class PlanetCombat
                     echo "<center><font color=red>" . $langvars['l_cmb_youmaycapture'] . "</font></center><br><br>";
                     \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                     \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-                    $sql = "UPDATE ::prefix::planets SET owner = :owner, " .
-                           "fighters = :fighters, " .
-                           "torps = torps - :planettorps, " .
-                           "base = :base, " .
-                           "defeated = :defeated, " .
-                           "WHERE planet_id = :planet_id";
-                    $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindValue(':owner', 0, \PDO::PARAM_INT);
-                    $stmt->bindValue(':fighters', 0, \PDO::PARAM_INT);
-                    $stmt->bindParam(':planettorps', $planettorps, \PDO::PARAM_INT);
-                    $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
-                    $stmt->bindValue(':defeated', 'Y', \PDO::PARAM_STR);
-                    $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
-                    $stmt->execute();
-                    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                    $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
+                    $planets_gateway->updateDefeatedPlanet($pdo_db, $planetinfo, $planettorps);
                 }
             }
             else
@@ -587,21 +574,8 @@ class PlanetCombat
                 echo "<center>" . $langvars['l_cmb_youmaycapture'] . "</center><br><br>";
                 \Tki\PlayerLog::writeLog($pdo_db, $ownerinfo['ship_id'], LogEnums::PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                 \Tki\Score::updateScore($pdo_db, $ownerinfo['ship_id'], $tkireg, $playerinfo);
-                $sql = "UPDATE ::prefix::planets SET owner = :owner, " .
-                       "fighters = :fighters, " .
-                       "torps = torps - :planettorps, " .
-                       "base = :base, " .
-                       "defeated = :defeated, " .
-                       "WHERE planet_id = :planet_id";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindValue(':owner', 0, \PDO::PARAM_INT);
-                $stmt->bindValue(':fighters', 0, \PDO::PARAM_INT);
-                $stmt->bindParam(':planettorps', $planettorps, \PDO::PARAM_INT);
-                $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
-                $stmt->bindValue(':defeated', 'Y', \PDO::PARAM_STR);
-                $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
-                $stmt->execute();
-                \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
+                $planets_gateway->updateDefeatedPlanet($pdo_db, $planetinfo, $planettorps);
             }
 
             \Tki\Ownership::calc($pdo_db, $lang, $planetinfo['sector_id'], $tkireg);

@@ -33,6 +33,25 @@ class PlanetsGateway // Gateway for SQL calls related to Planets
         $this->pdo_db = $pdo_db;
     }
 
+    public function updateDefeatedPlanet(\PDO $pdo_db, array $planetinfo, int $planettorps): void
+    {
+        $sql = "UPDATE ::prefix::planets SET owner = :owner, " .
+               "fighters = :fighters, " .
+               "torps = torps - :planettorps, " .
+               "base = :base, " .
+               "defeated = :defeated, " .
+               "WHERE planet_id = :planet_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindValue(':owner', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':fighters', 0, \PDO::PARAM_INT);
+        $stmt->bindParam(':planettorps', $planettorps, \PDO::PARAM_INT);
+        $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
+        $stmt->bindValue(':defeated', 'Y', \PDO::PARAM_STR);
+        $stmt->bindParam(':planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+    }
+
     public function genesisAddPlanet(\PDO $pdo_db, \Tki\Registry $tkireg, array $playerinfo, string $planetname): void
     {
         $prod_organics = $tkireg->default_prod_organics;
