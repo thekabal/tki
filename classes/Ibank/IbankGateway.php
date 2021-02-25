@@ -33,6 +33,16 @@ class IbankGateway // Gateway for SQL calls related to Ibank objects
         $this->pdo_db = $pdo_db;
     }
 
+    public function reduceIbankCredits(array $playerinfo, int $credits): void
+    {
+        $sql = "UPDATE ::prefix::ships SET credits = credits - :credits WHERE ship_id = :ship_id";
+        $stmt = $this->pdo_db->prepare($sql);
+        $stmt->bindParam(':credits', $credits, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__);
+    }
+
     public function selectIbankScore(int $ship_id): int
     {
         $sql = "SELECT (balance-loan) AS bank_score FROM ::prefix::ibank_accounts WHERE ship_id = :ship_id";

@@ -142,6 +142,9 @@ if ($sectorinfo['port_energy'] < 0)
 $zones_gateway = new \Tki\Zones\ZonesGateway($pdo_db);
 $zoneinfo = $zones_gateway->selectZoneInfo($sectorinfo['zone_id']);
 
+// Create ibank gateway where multiple codepaths can get to it
+$ibank_gateway = new Tki\Ibank\IbankGateway($pdo_db);
+
 if (!empty($zoneinfo))
 {
     if ($zoneinfo['zone_id'] == 4)
@@ -387,12 +390,7 @@ elseif ($sectorinfo['port_type'] == "special")
                 }
                 else
                 {
-                    $sql = "UPDATE ::prefix::ships SET credits = credits - :credits WHERE ship_id = :ship_id";
-                    $stmt = $pdo_db->prepare($sql);
-                    $stmt->bindParam(':credits', $bty['total_bounty'], PDO::PARAM_INT);
-                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-                    $stmt->execute();
-                    Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                    $ibank_gateway->reduceIbankCredits($playerinfo, $bty['total_bounty']);
 
                     $sql = "DELETE FROM ::prefix::bounty WHERE bounty_on = :ship_id AND placed_by = :placed_by";
                     $stmt = $pdo_db->prepare($sql);
@@ -408,7 +406,6 @@ elseif ($sectorinfo['port_type'] == "special")
             }
             elseif ($pay === 2)
             {
-                $ibank_gateway = new Tki\Ibank\IbankGateway($pdo_db);
                 $bank_account = $ibank_gateway->selectIbankAccount($playerinfo['ship_id']);
                 $bounty_payment = $bank_account['balance'];
                 if ($bounty_payment > 1000)
@@ -418,12 +415,7 @@ elseif ($sectorinfo['port_type'] == "special")
                     if ($bank_account['balance'] >= $bty['total_bounty'])
                     {
                         $bounty_payment = $bty['total_bounty'];
-                        $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance - :credits WHERE ship_id = :ship_id";
-                        $stmt = $pdo_db->prepare($sql);
-                        $stmt->bindParam(':credits', $bounty_payment, PDO::PARAM_INT);
-                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
-                        $stmt->execute();
-                        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                        $ibank_gateway->reduceIbankCredits($playerinfo, $bounty_payment);
 
                         $sql = "DELETE FROM ::prefix::bounty WHERE bounty_on = :ship_id AND placed_by = :placed_by";
                         $stmt = $pdo_db->prepare($sql);
