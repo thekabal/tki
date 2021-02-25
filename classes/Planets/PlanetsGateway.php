@@ -33,6 +33,58 @@ class PlanetsGateway // Gateway for SQL calls related to Planets
         $this->pdo_db = $pdo_db;
     }
 
+    public function genesisAddPlanet(\PDO $pdo_db, \Tki\Registry $tkireg, array $playerinfo, string $planetname): void
+    {
+        $prod_organics = $tkireg->default_prod_organics;
+        $prod_ore = $tkireg->default_prod_ore;
+        $prod_goods = $tkireg->default_prod_goods;
+        $prod_energy = $tkireg->default_prod_energy;
+        $prod_fighters = $tkireg->default_prod_fighters;
+        $prod_torp = $tkireg->default_prod_torp;
+
+        $sql = "INSERT INTO ::prefix::planets (" .
+               "planet_id, sector_id, planet_name, organics, ore, goods, " .
+               "energy, colonists, credits, fighters, torps, owner, " .
+               "team, base, sells, prod_organics, prod_ore, prod_goods, " .
+               "prod_energy, prod_fighters, prod_torp, defeated) VALUES" .
+               " (:planet_id, :sector_id, :name, :organics, :ore, " .
+               ":goods, :energy, :colonists, :credits, :fighters, " .
+               ":torps, :owner, :team, :base, :sells, :prod_organics, " .
+               ":prod_ore, :prod_goods, :prod_energy, :prod_fighters, " .
+               ":prod_torp, :defeated)";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindValue(':planet_id', null, \PDO::PARAM_NULL);
+        $stmt->bindParam(':sector_id', $playerinfo['sector'], \PDO::PARAM_INT);
+        $stmt->bindParam(':name', $planetname, \PDO::PARAM_STR);
+        $stmt->bindValue(':organics', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':ore', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':goods', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':energy', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':colonists', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':credits', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':fighters', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':torps', 0, \PDO::PARAM_INT);
+        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->bindValue(':team', 0, \PDO::PARAM_INT);
+        $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
+        $stmt->bindValue(':sells', 'N', \PDO::PARAM_STR);
+        $stmt->bindParam(':organics', $prod_organics, \PDO::PARAM_STR);
+        $stmt->bindParam(':ore', $prod_ore, \PDO::PARAM_STR);
+        $stmt->bindParam(':goods', $prod_goods, \PDO::PARAM_STR);
+        $stmt->bindParam(':energy', $prod_energy, \PDO::PARAM_STR);
+        $stmt->bindParam(':fighters', $prod_fighters, \PDO::PARAM_STR);
+        $stmt->bindParam(':torp', $prod_torp, \PDO::PARAM_STR);
+        $stmt->bindValue(':defeated', 'N', \PDO::PARAM_STR);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+
+        $sql = "UPDATE ::prefix::ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id = :ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $result = $stmt->execute();
+        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+    }
+
     public function selectPlanetInfo(int $sector_id): ?array
     {
         $sql = "SELECT * FROM ::prefix::planets WHERE sector_id = :sector_id";
