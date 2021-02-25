@@ -417,11 +417,6 @@ elseif ($sectorinfo['port_type'] == "special")
 
                     if ($bank_account['balance'] >= $bty['total_bounty'])
                     {
-                        // Translation needed
-                        echo "Full Payment Mode<br>\n";
-                        echo "You have paid your entire bounty<br>\n";
-                        echo "<br>\n";
-
                         $bounty_payment = $bty['total_bounty'];
                         $sql = "UPDATE ::prefix::ibank_accounts SET balance = balance - :credits WHERE ship_id = :ship_id";
                         $stmt = $pdo_db->prepare($sql);
@@ -437,8 +432,8 @@ elseif ($sectorinfo['port_type'] == "special")
                         $stmt->execute();
                         Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
 
-                        $langvars['l_port_bountypaid'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port_bountypaid']);
-                        echo $langvars['l_port_bountypaid'] . "<br>";
+                        $langvars['l_port_fullbountypaid'] = str_replace("[here]", "<a href='port.php'>" . $langvars['l_here'] . "</a>", $langvars['l_port_fullbountypaid']);
+                        echo $langvars['l_port_fullbountypaid'] . "<br>";
                         die();
                     }
                     else
