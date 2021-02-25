@@ -22,7 +22,7 @@
  *
  */
 
-// If anyone who's coded this thing is willing to update it to
+// If there is anyone who coded this file that is willing to update it to
 // support multiple planets, go ahead. I suggest removing this
 // code completely from here and putting it in the planet menu
 // instead. Easier to manage, makes more sense too.
@@ -151,47 +151,11 @@ else
     }
     else
     {
-        $sql = "INSERT INTO ::prefix::planets (" .
-                   "planet_id, sector_id, planet_name, organics, ore, goods, " .
-                   "energy, colonists, credits, fighters, torps, owner, " .
-                   "team, base, sells, prod_organics, prod_ore, prod_goods, " .
-                   "prod_energy, prod_fighters, prod_torp, defeated) VALUES" .
-                   " (:planet_id, :sector_id, :name, :organics, :ore, " .
-                   ":goods, :energy, :colonists, :credits, :fighters, " .
-                   ":torps, :owner, :team, :base, :sells, :prod_organics, " .
-                   ":prod_ore, :prod_goods, :prod_energy, :prod_fighters, " .
-                   ":prod_torp, :defeated)";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindValue(':planet_id', null, \PDO::PARAM_NULL);
-        $stmt->bindParam(':sector_id', $playerinfo['sector'], \PDO::PARAM_INT);
-        $stmt->bindParam(':name', $planetname, \PDO::PARAM_STR);
-        $stmt->bindValue(':organics', 0, \PDO::PARAM_INT);
-        $stmt->bindValue(':ore', 0, \PDO::PARAM_INT);
-        $stmt->bindValue(':goods', 0, \PDO::PARAM_INT);
-        $stmt->bindValue(':energy', 0, \PDO::PARAM_INT);
-        $stmt->bindValue(':colonists', 0, \PDO::PARAM_INT);
-        $stmt->bindValue(':credits', 0, \PDO::PARAM_INT);
-        $stmt->bindValue(':fighters', 0, \PDO::PARAM_INT);
-        $stmt->bindValue(':torps', 0, \PDO::PARAM_INT);
-        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $stmt->bindValue(':team', 0, \PDO::PARAM_INT);
-        $stmt->bindValue(':base', 'N', \PDO::PARAM_STR);
-        $stmt->bindValue(':sells', 'N', \PDO::PARAM_STR);
-        $stmt->bindParam(':organics', $prod_organics, \PDO::PARAM_STR);
-        $stmt->bindParam(':ore', $prod_ore, \PDO::PARAM_STR);
-        $stmt->bindParam(':goods', $prod_goods, \PDO::PARAM_STR);
-        $stmt->bindParam(':energy', $prod_energy, \PDO::PARAM_STR);
-        $stmt->bindParam(':fighters', $prod_fighters, \PDO::PARAM_STR);
-        $stmt->bindParam(':torp', $prod_torp, \PDO::PARAM_STR);
-        $stmt->bindValue(':defeated', 'N', \PDO::PARAM_STR);
-        $stmt->execute();
-        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+        if (is_array($playerinfo))
+        {
+            $planets_gateway->genesisAddPlanet($pdo_db, $tkireg, $playerinfo, $planetname);
+        }
 
-        $sql = "UPDATE ::prefix::ships SET turns_used = turns_used + 1, turns = turns - 1, dev_genesis = dev_genesis - 1 WHERE ship_id = :ship_id";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $result = $stmt->execute();
-        Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         echo $langvars['l_gns_pcreate'];
     }
 }
