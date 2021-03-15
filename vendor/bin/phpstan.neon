@@ -1,3 +1,5 @@
+includes:
+    - %rootDir%/../../../../tki/vendor/phpstan/phpstan/conf/bleedingEdge.neon
 parameters:
     parallel:
         maximumNumberOfProcesses: 1
