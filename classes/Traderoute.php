@@ -103,30 +103,26 @@ class Traderoute
             if ($source['sector_id'] != $playerinfo['sector'])
             {
                 // Check for valid owned source planet
-                // $langvars['l_tdr_inittdrsector'] = str_replace("[tdr_source_sector_id]", $source['sector_id'], $langvars['l_tdr_inittdrsector']);
-                // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_inittdrsector']);
-                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, 'You must be in the starting sector before you initiate a trade route!');
+                $langvars['l_tdr_inittdrsector'] = str_replace("[tdr_source_sector_id]", $source['sector_id'], $langvars['l_tdr_inittdrsector']);
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_inittdrsector']);
             }
 
             if ($traderoute['source_type'] == 'L')
             {
                 if ($source['owner'] != $playerinfo['ship_id'])
                 {
-                    // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $source[name], $langvars['l_tdr_notyourplanet']);
-                    // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $source[sector_id], $langvars['l_tdr_notyourplanet']);
-                    // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_notyourplanet']);
-                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invalidsrc']);
+                    $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $source['name'], $langvars['l_tdr_notyourplanet']);
+                    $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $source['sector_id'], $langvars['l_tdr_notyourplanet']);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_notyourplanet']);
                 }
             }
             elseif ($traderoute['source_type'] == 'C')   // Check to make sure player and planet are in the same team.
             {
                 if ($source['team'] != $playerinfo['team'])
                 {
-                    // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $source[name], $langvars['l_tdr_notyourplanet']);
-                    // $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $source[sector_id], $langvars['l_tdr_notyourplanet']);
-                    // $not_team_planet = "$source[name] in $source[sector_id] not a Copporate Planet";
-                    // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $not_team_planet);
-                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invalidsrc']);
+                    $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_name]", $source['name'], $langvars['l_tdr_notyourplanet']);
+                    $langvars['l_tdr_notyourplanet'] = str_replace("[tdr_source_sector_id]", $source['sector_id'], $langvars['l_tdr_notyourplanet']);
+                    \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_notyourplanet']);
                 }
             }
 
@@ -1491,7 +1487,7 @@ class Traderoute
 
         $tdr_display_creds = number_format($playerinfo['credits'], 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']);
         \Tki\TraderouteResults::displaySummary($pdo_db, $lang, $tdr_display_creds, $dist, $playerinfo);
-        // echo $tr_repeat . " -- ";
+        echo $tr_repeat . " -- ";
         if ($traderoute['circuit'] == 2)
         {
             $langvars['l_tdr_engageagain'] = str_replace("[here]", "<a href=\"traderoute.php?engage=[tdr_engage]\">" . $langvars['l_here'] . "</a>", $langvars['l_tdr_engageagain']);

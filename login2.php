@@ -39,26 +39,10 @@ if(!isset($_SERVER['HTTPS']))
 }
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-
-//$email = null;
 $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-/*
-if (strlen(trim($email)) === 0)
-{
-    $email = false;
-}
-*/
 
 // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-
-//$filtered_post_password = null;
 $filtered_post_password = filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_URL);
-/*
-if (strlen(trim($filtered_post_password)) === 0)
-{
-    $filtered_post_password = false;
-}
-*/
 
 if ($email !== null && $email !== false)
 {
@@ -71,15 +55,7 @@ else
 {
     $playerinfo = array();
     $playerfound = false;
-
-    // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-    //$lang = null;
     $lang = filter_input(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-    /*
-    if (strlen(trim($lang)) === 0)
-    {
-        $lang = false;
-    }*/
 }
 
 if ($lang !== null)

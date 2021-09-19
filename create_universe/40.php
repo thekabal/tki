@@ -70,12 +70,6 @@ else
     $create_array_size               = 0;
 }
 
-//    $destroy_results[0]['result'] = true;
-//    $destroy_results[0]['name'] = NULL;
-//    $destroy_results[0]['time'] = 0;
-//    $variables['drop_seq_results']     = $destroy_results;
-//    $variables['drop_seq_count'] = 0;
-
 $variables['create_tables_results']  = $tki_schema->createTables($pdo_db, \Tki\SecureConfig::DB_TABLE_PREFIX, \Tki\SecureConfig::DB_TYPE); // Create all tables in the database
 $variables['create_tables_count']    = count($variables['create_tables_results']) - 1;
 $variables['autorun']                = filter_input(INPUT_POST, 'autorun', FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);

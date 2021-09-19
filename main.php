@@ -903,8 +903,6 @@ else
     echo "<table style='width:100%;'>\n";
     for ($i = 0; $i < $num_links; $i++)
     {
-        //echo "&nbsp;<a class=\"mnu\" href=\"move.php?sector=$links[$i]\">=&gt;&nbsp;$links[$i]</a>&nbsp;<a class=dis href=\"lrscan.php?sector=$links[$i]\">[" . $langvars['l_scan'] . "]</a>&nbsp;<br>";
-
         echo "<tr>\n";
         echo "  <td style='text-align:left;'><a class='mnu' href='move.php?sector={$links[$i]}'>=&gt;&nbsp;$links[$i]</a></td>\n";
         echo "  <td style='text-align:right;'>[<a class='mnu' href='lrscan.php?sector={$links[$i]}'>" . $langvars['l_scan'] . "</a>]</td>\n";

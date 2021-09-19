@@ -858,11 +858,11 @@ if (!empty($planetinfo))  // If there is a planet in the sector show appropriate
                 }
 
                 echo "</table><br>";
-                // $roll=random_int(1, 100);
-                // if ($ownerinfo[sector] == $playerinfo[sector] && $ownerinfo[on_planet] == 'Y' && $roll < $success)
-                // {
-                       // echo "<strong>" . $ownerinfo['character_name'] . " " . $langvars['l_planet_ison'] . "</strong><br>";
-                // }
+                $roll = random_int(1, 100);
+                if ($ownerinfo['sector'] == $playerinfo['sector'] && $ownerinfo['on_planet'] == 'Y' && $roll < $success)
+                {
+                       echo "<strong>" . $ownerinfo['character_name'] . " " . $langvars['l_planet_ison'] . "</strong><br>";
+                }
 
                 $res = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE on_planet = 'Y' and planet_id = ?;", array($planet_id));
                 Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);

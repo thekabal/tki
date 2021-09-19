@@ -28,10 +28,10 @@ class Bounty
 {
     public function cancel(\PDO $pdo_db, int $bounty_on): void
     {
-        // $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on = :bounty_on AND bounty_on = ship_id";
-        $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on = :bounty_on";
+        $sql = "SELECT * FROM ::prefix::bounty WHERE bounty_on = :bounty_on AND bounty_on = :ship_id";
         $stmt = $pdo_db->prepare($sql);
         $stmt->bindParam(':bounty_on', $bounty_on, \PDO::PARAM_INT);
+        $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->execute();
         $bounty_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($bounty_present !== false)

@@ -598,9 +598,6 @@ else
         $free_power = Tki\CalcLevels::energy($playerinfo['power'], $tkireg) - $playerinfo['ship_energy'];
         $total_cost = $trade_ore * $tkireg->ore_price + $trade_organics * $tkireg->organics_price + $trade_goods * $tkireg->goods_price + $trade_energy * $tkireg->energy_price;
 
-        // Debug info
-        // echo "$trade_ore * $tkireg->ore_price + $trade_organics * $tkireg->organics_price + $trade_goods * $tkireg->goods_price + $trade_energy * $tkireg->energy_price = $total_cost";
-
         if ($free_holds < $cargo_exchanged)
         {
             echo $langvars['l_notenough_cargo'] . " <br><br>";

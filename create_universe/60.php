@@ -178,7 +178,6 @@ $local_table_timer->stop();
 $variables['create_warzone_results']['time'] = $local_table_timer->elapsed();
 
 $local_table_timer->start(); // Start benchmarking
-//$update = $pdo_db->exec("UPDATE ::prefix::universe SET zone_id = '2' WHERE sector_id <= :fedsecs");
 $sql = "UPDATE ::prefix::universe SET zone_id = '2' WHERE sector_id <= :fedsecs";
 
 $stmt = $pdo_db->prepare($sql);

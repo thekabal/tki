@@ -118,15 +118,12 @@ if ($zoneinfo['allow_warpedit'] == 'N' && $bothway)
 $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
 $sectorinfo = $sectors_gateway->selectSectorInfo($target_sector);
 
-// FUTURE: This is broken
-/*
-if (!is_array($sectorinfo))
+if (empty($sectorinfo))
 {
     echo $langvars['l_warp_nosector'] . "<br><br>";
     Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }
-*/
 
 $sql = "SELECT * FROM ::prefix::links WHERE link_start = :link_start";
 $stmt = $pdo_db->prepare($sql);

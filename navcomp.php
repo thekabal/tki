@@ -152,8 +152,6 @@ elseif ($state == 1)
         }
 
         $search_query = $search_query . " LIMIT 1";
-        //echo "$search_query\n\n";
-
         $old_db->SetFetchMode(ADODB_FETCH_NUM);
 
         $search_result = $old_db->Execute($search_query);

@@ -78,7 +78,6 @@ class TraderouteResults
         echo "</font></td>\n";
         echo "  </tr>\n";
         echo "</table>\n";
-        // echo "<p><center><font size=3 color=white><strong>\n";
     }
 
     public static function displayTotals(\PDO $pdo_db, string $lang, int $total_profit): void
@@ -104,7 +103,6 @@ class TraderouteResults
         echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_turnsused'] . " : <font style='color:#f00;'>$dist[triptime]</font></strong></font><br>";
         echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_turnsleft'] . " : <font style='color:#0f0;'>$playerinfo[turns]</font></strong></font><br>";
         echo "\n<font size='3' color='white'><strong>" . $langvars['l_tdr_credits'] . " : <font style='color:#0f0;'> $tdr_display_creds\n</font></strong></font><br> </strong></font></center>\n";
-        //echo "<font size='2'>\n";
     }
 
     public static function showRepeat(int $engage): void
@@ -112,6 +110,5 @@ class TraderouteResults
         echo "<form accept-charset='utf-8' action='traderoute.php?engage=" . $engage . "' method='post'>\n";
         echo "<br>Enter times to repeat <input type='text' name='tr_repeat' value='1' size='5'> <input type='submit' value='submit'>\n";
         echo "</form>\n";
-        // echo "<p>";
     }
 }
