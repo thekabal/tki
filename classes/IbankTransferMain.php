@@ -39,13 +39,8 @@ class IbankTransferMain
         \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
         $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $sql = "SELECT name, planet_id, sector_id FROM ::prefix::planets WHERE owner = :owner ORDER BY sector_id ASC";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
-        $stmt->execute();
-        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
-        $planets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
+        $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
+        $planets = $planets_gateway->selectSomePlanetInfoByOwner($playerinfo['ship_id']);
         echo "<tr><td colspan=2 align=center valign=top>" . $langvars['l_ibank_transfertype'] . "<br>---------------------------------</td></tr>" .
              "<tr valign=top>" .
              "<form accept-charset='utf-8' action='ibank.php?command=transfer2' method=post>" .
@@ -66,7 +61,7 @@ class IbankTransferMain
              "<form accept-charset='utf-8' action='ibank.php?command=transfer2' method=post>" .
              $langvars['l_ibank_source'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class=term name=splanet_id>";
 
-        if ($planets !== false)
+        if (!empty($planets))
         {
             foreach ($planets as $planet)
             {
@@ -85,7 +80,7 @@ class IbankTransferMain
 
         echo "</select><br>" . $langvars['l_ibank_destination'] . "<select class=term name=dplanet_id>";
 
-        if ($planets !== false)
+        if (!empty($planets))
         {
             foreach ($planets as $planet)
             {
@@ -111,7 +106,7 @@ class IbankTransferMain
              "<form accept-charset='utf-8' action='ibank.php?command=consolidate' method=post>" .
              $langvars['l_ibank_destination'] . " <select class=term name=dplanet_id>";
 
-        if ($planets !== false)
+        if (!empty($planets))
         {
             foreach ($planets as $planet)
             {
