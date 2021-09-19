@@ -300,9 +300,9 @@ class CheckDefenses
 
             $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :fm_owner";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':fm_owner', $fm_owner, PDO::PARAM_INT);
+            $stmt->bindParam(':fm_owner', $fm_owner, \PDO::PARAM_INT);
             $stmt->execute();
-            $fighters_owner = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $fighters_owner = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -529,9 +529,9 @@ class CheckDefenses
 
             $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :fm_owner";
             $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':fm_owner', $fm_owner, PDO::PARAM_INT);
+            $stmt->bindParam(':fm_owner', $fm_owner, \PDO::PARAM_INT);
             $stmt->execute();
-            $mine_owner = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $mine_owner = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             if ($mine_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
@@ -645,8 +645,8 @@ class CheckDefenses
                                 $rating = round($playerinfo['rating'] / 2);
                                 echo $langvars['l_chm_luckescapepod'] . "<br><br>";
 
-                                $ships_gateway = new \Tki\Players\ShipsGateway($pdo_db);
-                                $shipinfo = $ships_gateway->updateDestroyedShip($playerinfo['ship_id'], $rating);
+                                $ships_gateway = new \Tki\Ships\ShipsGateway($pdo_db);
+                                $ships_gateway->updateDestroyedShip($playerinfo['ship_id'], $rating);
 
                                 $bounty = new \Tki\Bounty();
                                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);

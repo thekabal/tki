@@ -138,8 +138,8 @@ if ($playerfound)
                 if ($playerinfo['dev_escapepod'] == "Y")
                 {
                     $rating = round($playerinfo['rating'] / 2);
-                    $ships_gateway = new \Tki\Players\ShipsGateway($pdo_db);
-                    $shipinfo = $ships_gateway->updateDestroyedShip($playerinfo['ship_id']);
+                    $ships_gateway = new \Tki\Ships\ShipsGateway($pdo_db);
+                    $ships_gateway->updateDestroyedShip($playerinfo['ship_id']);
                     $langvars['l_login_died'] = str_replace("[here]", "<a href='main.php'>" . $langvars['l_here'] . "</a>", $langvars['l_login_died']);
                     echo $langvars['l_login_died'];
                 }

@@ -34,9 +34,9 @@ class Ship
             // if the player has an escapepod, set the player up with a new ship
             if ($playerinfo['dev_escapepod'] === 'Y')
             {
-                $rating = round($playerinfo['rating'] / 2);
-                $ships_gateway = new \Tki\Players\ShipsGateway($pdo_db);
-                $shipinfo = $ships_gateway->updateDestroyedShip($_SESSION['username'], $rating);
+                $rating = (int) round($playerinfo['rating'] / 2);
+                $ships_gateway = new \Tki\Ships\ShipsGateway($pdo_db);
+                $ships_gateway->updateDestroyedShip($_SESSION['username'], $rating);
                 return true;
 
                 // $error_status = str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_login_died']); Error status is not used anywhere
