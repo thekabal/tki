@@ -109,16 +109,6 @@ if ($planetinfo['sector_id'] != $playerinfo['sector'])
     die();
 }
 
-if (empty($planetinfo))
-{
-    echo $langvars['l_planet_none'] . "<br>";
-    Tki\Text::gotoMain($pdo_db, $lang);
-
-    $footer = new Tki\Footer();
-    $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
-    die();
-}
-
 $trade_ore = round(abs($trade_ore));
 $trade_organics = round(abs($trade_organics));
 $trade_goods = round(abs($trade_goods));
