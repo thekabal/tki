@@ -26,7 +26,7 @@ namespace Tki;
 
 class Traderoute
 {
-    public static function engage(\PDO $pdo_db, $old_db, string $lang, int $tr_repeat, Registry $tkireg, Timer $tkitimer, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
+    public static function engage(\PDO $pdo_db, string $lang, int $tr_repeat, Registry $tkireg, Timer $tkitimer, array $playerinfo, int $engage, array $traderoutes, ?int $portfull, Smarty $template): void
     {
         // Registry values can't be directly updated
         $ore_price = $tkireg->ore_price;
@@ -73,15 +73,16 @@ class Traderoute
         if ($traderoute['source_type'] == 'P')
         {
             // Retrieve port info here, we'll need it later anyway
-            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($traderoute['source_id']));
-            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :traderoute_source_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $traderoute['source_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            $source = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if (!$result || $result->EOF)
+            if (empty($source))
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invalidspoint']);
             }
-
-            $source = $result->fields;
 
             if ($traderoute['source_id'] != $playerinfo['sector'])
             {
@@ -91,21 +92,20 @@ class Traderoute
         }
         elseif ($traderoute['source_type'] == 'L' || $traderoute['source_type'] == 'C')  // Get data from planet table
         {
-            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['source_id'], $playerinfo['ship_id'], $playerinfo['team']));
-            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-            if (!$result || $result->EOF)
-            {
-                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invalidsrc']);
-            }
-
-            $source = $result->fields;
+            $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :traderoute_source_id AND (owner = :playerinfo_ship_id OR (team <> 0 AND team = :playerinfo_team";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':traderoute_source_id', $traderoute['source_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':playerinfo_ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':playerinfo_team', $playerinfo['team'], \PDO::PARAM_INT);
+            $stmt->execute();
+            $source = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if ($source['sector_id'] != $playerinfo['sector'])
             {
                 // Check for valid owned source planet
                 // $langvars['l_tdr_inittdrsector'] = str_replace("[tdr_source_sector_id]", $source['sector_id'], $langvars['l_tdr_inittdrsector']);
                 // \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_inittdrsector']);
-                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, 'You must be in starting sector before you initiate a trade route!');
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, 'You must be in the starting sector before you initiate a trade route!');
             }
 
             if ($traderoute['source_type'] == 'L')
@@ -131,43 +131,48 @@ class Traderoute
             }
 
             // Store starting port info, we'll need it later
-            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($source['sector_id']));
-            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :source_sector_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':source_sector_id', $source['source_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            $sourceport = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if (!$result || $result->EOF)
+            if (empty($sourceport))
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invalidssector']);
             }
-
-            $sourceport = $result->fields;
         }
 
         // Destination Check
         if ($traderoute['dest_type'] == 'P')
         {
-            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($traderoute['dest_id']));
-            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :traderoute_dest_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':traderoute_dest_id', $traderoute['dest_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if (!$result || $result->EOF)
+            if (empty($dest))
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invaliddport']);
             }
-
-            $dest = $result->fields;
         }
         elseif (($traderoute['dest_type'] == 'L') || ($traderoute['dest_type'] == 'C'))  // Get data from planet table
         {
             // Check for valid owned source planet
             // This now only returns planets that the player owns or planets that belong to the team and set as team planets..
-            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ? AND (owner = ? OR (team <> 0 AND team = ?));", array($traderoute['dest_id'], $playerinfo['ship_id'], $playerinfo['team']));
-            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
+            $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :traderoute_dest_id AND (owner = :playerinfo_ship_id OR (team <> 0 AND team = :playerinfo_team))";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':traderoute_dest_id', $traderoute['dest_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':playerinfo_ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':playerinfo_team', $playerinfo['team'], \PDO::PARAM_INT);
+            $stmt->execute();
+            $dest = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if (!$result || $result->EOF)
+            if (empty($dest))
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invaliddplanet']);
             }
-
-            $dest = $result->fields;
 
             if ($traderoute['dest_type'] == 'L')
             {
@@ -188,14 +193,16 @@ class Traderoute
                 }
             }
 
-            $result = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($dest['sector_id']));
-            \Tki\Db::logDbErrors($pdo_db, $result, __LINE__, __FILE__);
-            if (!$result || $result->EOF)
+            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :dest_sector_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':dest_sector_id', $dest['sector_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            $destport = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (empty($destport))
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invaliddsector']);
             }
-
-            $destport = $result->fields;
         }
 
         if (!isset($sourceport))
@@ -226,11 +233,15 @@ class Traderoute
         // Sector defense check
         $hostile = 0;
 
-        $result99 = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($source['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result99, __LINE__, __FILE__);
-        if (!$result99->EOF)
+        $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :source_sector_id AND ship_id <> :playerinfo_ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':source_sector_id', $source['sector_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':playerinfo_ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        $fighters_owner = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!empty($destport))
         {
-            $fighters_owner = $result99->fields;
             $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
             $nsfighters = $players_gateway->selectPlayerInfoById($fighters_owner['ship_id']);
 
@@ -240,11 +251,15 @@ class Traderoute
             }
         }
 
-        $result98 = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE sector_id = ? AND ship_id <> ?", array($dest['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $result98, __LINE__, __FILE__);
-        if (!$result98->EOF)
+        $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :dest_sector_id AND ship_id <> :playerinfo_ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':dest_sector_id', $dest['sector_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':playerinfo_ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        $fighters_owner = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!empty($destport))
         {
-            $fighters_owner = $result98->fields;
             $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
             $nsfighters = $players_gateway->selectPlayerInfoById($fighters_owner['ship_id']);
 

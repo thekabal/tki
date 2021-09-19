@@ -269,7 +269,7 @@ elseif ($engage !== null)
         // Get playerinfo from database
         $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
-        \Tki\Traderoute::engage($pdo_db, $old_db, $lang, $tr_repeat, $tkireg, $tkitimer, $playerinfo, $engage, $traderoutes, $portfull, $template);
+        \Tki\Traderoute::engage($pdo_db, $lang, $tr_repeat, $tkireg, $tkitimer, $playerinfo, $engage, $traderoutes, $portfull, $template);
         $tr_repeat--;
     }
 }
