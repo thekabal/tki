@@ -588,11 +588,15 @@ else
                     {
                         if (random_int(0, mt_getrandmax()) % 10 == 1)
                         {
-                            $makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() % 50) + 1));
+                            $partialrand = abs(mt_getrandmax() % 50);
+                            $makepass .= sprintf("%0.0f", (random_int(0, $partialrand) + 1));
+                            //$makepass .= sprintf("%0.0f", (random_int(0, mt_getrandmax() % 50) + 1));
                         }
                         else
                         {
-                            $makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() % 62)]);
+                            $partialrand2 = abs(mt_getrandmax() % 62);
+                            $makepass .= sprintf("%s", $syllable_array[random_int(0, $partialrand2)]);
+                            //$makepass .= sprintf("%s", $syllable_array[random_int(0, mt_getrandmax() % 62)]);
                         }
                     }
 
