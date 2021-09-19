@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalMove
 {
-    public static function move(\PDO $pdo_db, string $lang, $old_db, array $playerinfo, int $targetlink, Registry $tkireg): void
+    public static function move(\PDO $pdo_db, string $lang, array $playerinfo, int $targetlink, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('main'));
         // Obtain a target link
@@ -75,13 +75,18 @@ class KabalMove
             while (!$targetlink > 0 && $limitloop < 15)
             {
                 // Obtain sector information
-                $sectres = $old_db->Execute("SELECT sector_id,zone_id FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($wormto));
-                \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
-                $sectrow = $sectres->fields;
+                $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id = :wormto";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':wormto', $wormto, \PDO::PARAM_INT);
+                $stmt->execute();
+                $sectrow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                $zoneres = $old_db->Execute("SELECT zone_id,allow_attack FROM {$old_db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
-                \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
-                $zonerow = $zoneres->fields;
+                $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id = :sectrow_zone_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':sectrow_zone_id', $sectrow['zone_id'], \PDO::PARAM_INT);
+                $stmt->execute();
+                $zonerow = $stmt->fetch(\PDO::FETCH_ASSOC);
+
                 if ($zonerow['allow_attack'] == "Y")
                 {
                     $targetlink = $wormto;
@@ -164,7 +169,8 @@ class KabalMove
 
             if (!$result)
             {
-                $error = $old_db->ErrorMsg();
+                //$error = $old_db->ErrorMsg();
+                $error = 'DB Error';
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");
             }
         }
