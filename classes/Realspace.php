@@ -33,21 +33,15 @@ class Realspace
         $players_gateway = new Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
-        $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id = :playersector";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':playersector', $playerinfo['sector'], \PDO::PARAM_INT);
-        $stmt->execute();
-        $start = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
+        $start = $sectors_gateway->selectSectorInfo($playerinfo['sector']);
         if (!is_array($start))
         {
             $start = array();
         }
 
-        $sql = "SELECT angle1, angle2, distance FROM ::prefix::universe WHERE sector_id = :destination";
-        $stmt = $pdo_db->prepare($sql);
-        $stmt->bindParam(':destination', $destination, \PDO::PARAM_INT);
-        $stmt->execute();
-        $finish = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
+        $finish = $sectors_gateway->selectSectorInfo($destination);
         if (!is_array($finish))
         {
             $finish = array();
