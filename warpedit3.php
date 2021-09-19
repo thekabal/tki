@@ -51,14 +51,7 @@ if (isset($_POST['bothway']) && $_POST['bothway'] == 'bothway')
 // Returns false if anything wasn't right.
 $target_sector = null;
 $target_sector = (int) filter_input(INPUT_POST, 'target_sector', FILTER_VALIDATE_INT);
-if (strlen((string) $target_sector) === 0)
-{
-    $target_sector = false;
-}
-else
-{
-    $target_sector = (string) $target_sector;
-}
+$target_sector = (string) $target_sector;
 
 // Get playerinfo from database
 $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
@@ -81,13 +74,6 @@ if ($playerinfo['dev_warpedit'] < 1)
 
     $footer = new Tki\Footer();
     $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
-    die();
-}
-
-if ($target_sector === false)
-{
-    echo $langvars['l_warp_nosector'] . "<br><br>";
-    Tki\Text::gotoMain($pdo_db, $lang);
     die();
 }
 
