@@ -297,9 +297,13 @@ class CheckDefenses
             // Find out if the fighter owner and player are on the same team
             // All sector defenses must be owned by members of the same team
             $fm_owner = $defenses[0]['ship_id'];
-            $result2 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
-            \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
-            $fighters_owner = $result2->fields;
+
+            $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :fm_owner";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':fm_owner', $fm_owner, PDO::PARAM_INT);
+            $stmt->execute();
+            $fighters_owner = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             if ($fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
                 switch ($response)
@@ -522,10 +526,13 @@ class CheckDefenses
         {
             // Find out if the mine owner and player are on the same team
             $fm_owner = $defenses[0]['ship_id'];
-            $result2 = $old_db->Execute("SELECT * FROM {$old_db->prefix}ships WHERE ship_id = ?;", array($fm_owner));
-            \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
 
-            $mine_owner = $result2->fields;
+            $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :fm_owner";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':fm_owner', $fm_owner, PDO::PARAM_INT);
+            $stmt->execute();
+            $mine_owner = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             if ($mine_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
             {
                 // You hit mines
@@ -555,8 +562,14 @@ class CheckDefenses
                 {
                     $langvars['l_chm_youlostminedeflectors'] = str_replace("[chm_roll]", (string) $roll, $langvars['l_chm_youlostminedeflectors']);
                     echo $langvars['l_chm_youlostminedeflectors'] . "<br>";
-                    $result2 = $old_db->Execute("UPDATE {$old_db->prefix}ships SET dev_minedeflector = dev_minedeflector - ? WHERE ship_id = ?", array($roll, $playerinfo['ship_id']));
-                    \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+
+                    $sql = "UPDATE ::prefix::ships SET dev_minedeflector = dev_minedeflector - :roll" .
+                           " WHERE ship_id = :ship_id";
+                    $stmt = $pdo_db->prepare($sql);
+                    $stmt->bindParam(':roll', $roll, \PDO::PARAM_INT);
+                    $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                    $stmt->execute();
+                    \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
                 else
                 {
@@ -582,8 +595,13 @@ class CheckDefenses
                         $langvars['l_chm_yourshieldshitforminesdmg'] = str_replace("[chm_mines_left]", (string) $mines_left, $langvars['l_chm_yourshieldshitforminesdmg']);
                         echo $langvars['l_chm_yourshieldshitforminesdmg'] . "<br>";
 
-                        $result2 = $old_db->Execute("UPDATE {$old_db->prefix}ships SET ship_energy = ship_energy - ?, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
-                        \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+                        $sql = "UPDATE ::prefix::ships SET ship_energy = ship_energy - :mines_left, dev_minedeflector = 0 " .
+                               "WHERE ship_id = :ship_id";
+                        $stmt = $pdo_db->prepare($sql);
+                        $stmt->bindParam(':mines_left', $mines_left, \PDO::PARAM_INT);
+                        $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                        $stmt->execute();
+                        \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                         if ($playershields == $mines_left)
                         {
                             echo $langvars['l_chm_yourshieldsaredown'] . "<br>";
@@ -598,8 +616,14 @@ class CheckDefenses
                         {
                             $langvars['l_chm_yourarmorhitforminesdmg'] = str_replace("[chm_mines_left]", (string) $mines_left, $langvars['l_chm_yourarmorhitforminesdmg']);
                             echo $langvars['l_chm_yourarmorhitforminesdmg'] . "<br>";
-                            $result2 = $old_db->Execute("UPDATE {$old_db->prefix}ships SET armor_pts = armor_pts - ?, ship_energy = 0, dev_minedeflector = 0 WHERE ship_id = ?", array($mines_left, $playerinfo['ship_id']));
-                            \Tki\Db::logDbErrors($pdo_db, $result2, __LINE__, __FILE__);
+
+                            $sql = "UPDATE ::prefix::ships SET armor_pts = armor_pts - :mines_left, ship_energy = 0, dev_minedeflector = 0  " .
+                                   "WHERE ship_id = :ship_id";
+                            $stmt = $pdo_db->prepare($sql);
+                            $stmt->bindParam(':mines_left', $mines_left, \PDO::PARAM_INT);
+                            $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+                            $stmt->execute();
+                            \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                             if ($playerinfo['armor_pts'] == $mines_left)
                             {
                                 echo $langvars['l_chm_yourhullisbreached'] . "<br>";
@@ -620,8 +644,9 @@ class CheckDefenses
                             {
                                 $rating = round($playerinfo['rating'] / 2);
                                 echo $langvars['l_chm_luckescapepod'] . "<br><br>";
-                                $resx = $old_db->Execute("UPDATE {$old_db->prefix}ships SET hull=0, engines=0, power=0, sensors=0, computer=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=1, ship_organics=0, ship_ore=0, ship_goods=0, ship_energy=?, ship_colonists=0, ship_fighters=100, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, on_planet='N', rating=?, cleared_defenses=' ', dev_lssd='N' WHERE ship_id=?", array(100, $rating, $playerinfo['ship_id']));
-                                \Tki\Db::logDbErrors($pdo_db, $resx, __LINE__, __FILE__);
+
+                                $ships_gateway = new \Tki\Players\ShipsGateway($pdo_db);
+                                $shipinfo = $ships_gateway->updateDestroyedShip($playerinfo['ship_id'], $rating);
 
                                 $bounty = new \Tki\Bounty();
                                 $bounty->cancel($pdo_db, $playerinfo['ship_id']);

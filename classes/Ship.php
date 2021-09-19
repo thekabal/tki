@@ -34,18 +34,9 @@ class Ship
             // if the player has an escapepod, set the player up with a new ship
             if ($playerinfo['dev_escapepod'] === 'Y')
             {
-                $sql = "UPDATE ::prefix::ships SET hull=0, engines=0, power=0," .
-                               "computer=0, sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, " .
-                               "armor_pts=100, cloak=0, shields=0, sector=1, ship_ore=0, " .
-                               "ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, " .
-                               "ship_fighters=100, ship_damage=0, on_planet='N', dev_warpedit=0, " .
-                               "dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', " .
-                               "dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', " .
-                               "dev_lssd='N' WHERE email = :email";
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':email', $_SESSION['username'], \PDO::PARAM_STR);
-                $stmt->execute();
-                Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
+                $rating = round($playerinfo['rating'] / 2);
+                $ships_gateway = new \Tki\Players\ShipsGateway($pdo_db);
+                $shipinfo = $ships_gateway->updateDestroyedShip($_SESSION['username'], $rating);
                 return true;
 
                 // $error_status = str_replace('[here]', "<a href='main.php'>" . $langvars['l_here'] . '</a>', $langvars['l_login_died']); Error status is not used anywhere
