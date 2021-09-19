@@ -51,16 +51,19 @@ class TraderouteBuildCreate
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invalidspoint']);
             }
 
-            $query = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($port_id1));
-            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            if (!$query || $query->EOF)
+            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :port_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':port_id', $port_id, \PDO::PARAM_INT);
+            $stmt->execute();
+            $source = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (empty($source))
             {
                 $langvars['l_tdr_errnotvalidport'] = str_replace("[tdr_port_id]", (string) $port_id1, $langvars['l_tdr_errnotvalidport']);
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_errnotvalidport']);
             }
 
             // OK we definitely have a port here
-            $source = $query->fields;
             if ($source['port_type'] == 'none')
             {
                 $langvars['l_tdr_errnoport'] = str_replace("[tdr_port_id]", (string) $port_id1, $langvars['l_tdr_errnoport']);
@@ -69,10 +72,13 @@ class TraderouteBuildCreate
         }
         else
         {
-            $query = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($planet_id1));
-            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            $source = $query->fields;
-            if (!$query || $query->EOF)
+            $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :planet_id";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_id', $planet_id, \PDO::PARAM_INT);
+            $stmt->execute();
+            $source = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (empty($source))
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_errnosrc']);
             }
