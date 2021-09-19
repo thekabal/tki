@@ -358,9 +358,16 @@ class KabalToPlanet
                 }
             }
 
-            $resultps = $old_db->Execute("SELECT ship_id,ship_name FROM {$old_db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
-            \Tki\Db::logDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
-            $shipsonplanet = $resultps->RecordCount();
+            $sql = "SELECT ship_id, ship_name FROM ::prefix::ships WHERE planet_id = :planetinfo_planet_id AND on_planet = 'Y'";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':sector_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            $ships_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            if (is_array($ships_present))
+            {
+                $shipsonplanet = count($ships_present);
+            }
+
             if ($shipsonplanet == 0)
             {
                 // Must have killed all ships on the planet
