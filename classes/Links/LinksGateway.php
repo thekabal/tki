@@ -51,4 +51,24 @@ class LinksGateway // Gateway for SQL calls related to Links
             return null;
         }
     }
+
+    public function selectLinkId(int $src, int $dest): ?array
+    {
+        $sql = "SELECT link_id FROM ::prefix::links WHERE link_start = :link_start AND link_dest = :link_dest";
+        $stmt = $this->pdo_db->prepare($sql);
+        $stmt->bindParam(':link_start', $src, \PDO::PARAM_INT);
+        $stmt->bindParam(':link_dest', $dest, \PDO::PARAM_INT);
+        $stmt->execute();
+        $linksinfo = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if ($linksinfo !== false)
+        {
+            // A little magic here. If it couldn't select a link, the following call will return false - which is what we want for "no link found".
+            return $linksinfo; // FUTURE: Eventually we want this to return a link object instead, for now, linkinfo array or false for no link found.
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

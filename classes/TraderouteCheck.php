@@ -43,14 +43,10 @@ class TraderouteCheck
         // Check warp links compatibility
         if ($move == 'warp')
         {
-            $sql = "SELECT link_id FROM ::prefix::links WHERE link_start = :link_start AND link_dest = :link_dest";
-            $stmt = $pdo_db->prepare($sql);
-            $stmt->bindParam(':link_start', $src['sector_id'], \PDO::PARAM_INT);
-            $stmt->bindParam(':link_dest', $dest['sector_id'], \PDO::PARAM_INT);
-            $stmt->execute();
-            $link_results1 = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $links_gateway = new \Tki\Links\LinksGateway($pdo_db);
+            $link1_results = $links_gateway->selectLinkId($src['sector_id'], $dest['sector_id']);
 
-            if (empty($link_results1))
+            if (empty($link1_results))
             {
                 $langvars['l_tdr_nowlink1'] = str_replace("[tdr_src_sector_id]", $src['sector_id'], $langvars['l_tdr_nowlink1']);
                 $langvars['l_tdr_nowlink1'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink1']);
@@ -59,14 +55,10 @@ class TraderouteCheck
 
             if ($circuit == '2')
             {
-                $sql = "SELECT link_id FROM ::prefix::links WHERE link_start = :link_dest AND link_dest = :link_start"; // Note that the link start/dest is flipped on purpose
-                $stmt = $pdo_db->prepare($sql);
-                $stmt->bindParam(':link_start', $src['sector_id'], \PDO::PARAM_INT);
-                $stmt->bindParam(':link_dest', $dest['sector_id'], \PDO::PARAM_INT);
-                $stmt->execute();
-                $link_results2 = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                $links_gateway = new \Tki\Links\LinksGateway($pdo_db);
+                $link2_results = $links_gateway->selectLinkId($dest['sector_id'], $src['sector_id']); // Note that the link start/dest is flipped on purpose
 
-                if (empty($link_results2))
+                if (empty($link2_results))
                 {
                     $langvars['l_tdr_nowlink2'] = str_replace("[tdr_src_sector_id]", $src['sector_id'], $langvars['l_tdr_nowlink2']);
                     $langvars['l_tdr_nowlink2'] = str_replace("[tdr_dest_sector_id]", $dest['sector_id'], $langvars['l_tdr_nowlink2']);
