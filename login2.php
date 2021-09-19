@@ -73,9 +73,9 @@ else
     $playerfound = false;
 
     // Detect if this variable exists, and filter it. Returns false if anything wasn't right.
-//    $lang = null;
+    //$lang = null;
     $lang = filter_input(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-/*
+    /*
     if (strlen(trim($lang)) === 0)
     {
         $lang = false;
