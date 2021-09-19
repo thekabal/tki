@@ -38,12 +38,12 @@
     "scripts": {
         "tests": [
             "vendor/bin/phpunit --dont-report-useless-tests tests",
-            "phpcs --standard=/var/www/html/tki/vendor/bin/phpcs.xml --ignore=templates,vendor .",
+            "phpcs --standard=/opt/html/tki/vendor/bin/phpcs.xml --ignore=templates,vendor .",
             "psalm --no-progress --no-suggestions -c vendor/bin/psalm.xml .",
             "phpstan analyze --memory-limit=1G --no-progress --no-ansi -l 8 -c vendor/bin/phpstan.neon ."
             ],
         "disabled-due-to-php8-problems-tests": [
-            "phpmd . text /var/www/html/tki/vendor/bin/phpmd.xml --exclude vendor/,templates/"
+            "phpmd . text /opt/html/tki/vendor/bin/phpmd.xml --exclude vendor/,templates/"
             ],
         "post-update-cmd": [
             "rm -rf vendor/ezyang/htmlpurifier/docs/",
