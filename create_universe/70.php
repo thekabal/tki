@@ -208,8 +208,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO ::prefix::links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = random_int(1, (int) $variables['max_sectors'] - 1);
-        $link2 = random_int(1, (int) $variables['max_sectors'] - 1);
+        $link1 = random_int(1, $variables['max_sectors'] - 1);
+        $link2 = random_int(1, $variables['max_sectors'] - 1);
         $insert .= "($link1, $link2)";
         if ($j <= ($finish - 1))
         {
@@ -264,8 +264,8 @@ for ($i = 1; $i <= $loops; $i++)
     $insert = "INSERT INTO ::prefix::links (link_start,link_dest) VALUES ";
     for ($j = $start; $j <= $finish; $j++)
     {
-        $link1 = random_int(1, (int) $variables['max_sectors'] - 1);
-        $link2 = random_int(1, (int) $variables['max_sectors'] - 1);
+        $link1 = random_int(1, $variables['max_sectors'] - 1);
+        $link2 = random_int(1, $variables['max_sectors'] - 1);
         $insert .= "($link1, $link2), ($link2, $link1)";
         if ($j <= ($finish - 1))
         {
