@@ -45,13 +45,18 @@ class KabalMove
             foreach ($links_present as $row)
             {
                 // Obtain sector information
-                $sectres = $old_db->Execute("SELECT sector_id,zone_id FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($row['link_dest']));
-                \Tki\Db::logDbErrors($pdo_db, $sectres, __LINE__, __FILE__);
-                $sectrow = $sectres->fields;
+                $sql = "SELECT sector_id, zone_id FROM ::prefix::universe WHERE sector_id = :row_link_dest";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':row_link_dest', $row['link_dest'], \PDO::PARAM_INT);
+                $stmt->execute();
+                $sectrow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                $zoneres = $old_db->Execute("SELECT zone_id,allow_attack FROM {$old_db->prefix}zones WHERE zone_id = ?;", array($sectrow['zone_id']));
-                \Tki\Db::logDbErrors($pdo_db, $zoneres, __LINE__, __FILE__);
-                $zonerow = $zoneres->fields;
+                $sql = "SELECT zone_id, allow_attack FROM ::prefix::zones WHERE zone_id = :sectrow_zone_id";
+                $stmt = $pdo_db->prepare($sql);
+                $stmt->bindParam(':sectrow_zone_id', $sectrow['zone_id'], \PDO::PARAM_INT);
+                $stmt->execute();
+                $zonerow = $stmt->fetch(\PDO::FETCH_ASSOC);
+
                 if ($zonerow['allow_attack'] == "Y") // Dest link must allow attacking
                 {
                     $setlink = random_int(0, 2);                        // 33% Chance of replacing destination link with this one
