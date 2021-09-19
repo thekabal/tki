@@ -26,7 +26,7 @@ namespace Tki;
 
 class TraderouteBuildCreate
 {
-    public static function create(\PDO $pdo_db, $old_db, string $lang, Registry $tkireg, Timer $tkitimer, Smarty $template, array $playerinfo, int $num_traderoutes, string $ptype1, string $ptype2, int $port_id1, int $port_id2, int $team_planet_id1, int $team_planet_id2, string $move_type, int $circuit_type, int $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
+    public static function create(\PDO $pdo_db, string $lang, Registry $tkireg, Timer $tkitimer, Smarty $template, array $playerinfo, int $num_traderoutes, string $ptype1, string $ptype2, int $port_id1, int $port_id2, int $team_planet_id1, int $team_planet_id2, string $move_type, int $circuit_type, int $editing, ?int $planet_id1 = null, ?int $planet_id2 = null): void
     {
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('common',
                                          'footer', 'insignias', 'regional',
@@ -178,10 +178,14 @@ class TraderouteBuildCreate
         }
 
         // OK now we have $destination lets see if we've been there.
-        $pl2query = $old_db->Execute("SELECT * FROM {$old_db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($destination['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $pl2query, __LINE__, __FILE__);
-        $num_res2 = $pl2query->numRows();
-        if ($num_res2 == 0)
+        $sql = "SELECT * FROM ::prefix::movement_log WHERE sector_id = :dest_sect_id AND ship_id = :playerinfo_ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':dest_sect_id', $destination['sector_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':playerinfo_ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        $movement_logged = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (empty($movement_logged))
         {
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, "You cannot create a traderoute into a sector you have not visited!");
         }
@@ -255,7 +259,16 @@ class TraderouteBuildCreate
 
         if (empty($editing))
         {
-            $query = $old_db->Execute("INSERT INTO {$old_db->prefix}traderoutes VALUES(null, ?, ?, ?, ?, ?, ?, ?);", array($src_id, $dest_id, $src_type, $dest_type, $mtype, $playerinfo['ship_id'], $circuit_type));
+            $sql = "INSERT INTO ::prefix::traderoutes ( source_id, dest_id, source_type, dest_type, move_type, owner, circuit) VALUES (:source_id, :dest_id, :src_type, :dest_type, :mtype, :playerinfo_ship_id, :circuit_type)";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':source_id', $src_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':dest_id', $dest_id, \PDO::PARAM_INT);
+            $stmt->bindParam(':source_type', $src_type, \PDO::PARAM_STR);
+            $stmt->bindParam(':dest_type', $dest_type, \PDO::PARAM_STR);
+            $stmt->bindParam(':move_type', $mtype, \PDO::PARAM_STR);
+            $stmt->bindParam(':owner', $playerinfo['ship_id'], \PDO::PARAM_INT);
+            $stmt->bindParam(':circuit', $circuit_type, \PDO::PARAM_STR);
+            $query = $stmt->execute();
             \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
             echo "<p>" . $langvars['l_tdr_newtdrcreated'];
         }
