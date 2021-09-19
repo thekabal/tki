@@ -106,11 +106,14 @@ class TraderouteBuildCreate
 
         // OK we have $source, *probably* now lets see if we have ever been there
         // Attempting to fix the map the universe via traderoute bug
+        $sql = "SELECT * FROM ::prefix::movement_log WHERE sector_id = :source_sector_id AND ship_id = :playerinfo_ship_id";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':source_sector_id', $source['sector_id'], \PDO::PARAM_INT);
+        $stmt->bindParam(':playerinfo_ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
+        $stmt->execute();
+        $source = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $pl1query = $old_db->Execute("SELECT * FROM {$old_db->prefix}movement_log WHERE sector_id = ? AND ship_id = ?;", array($source['sector_id'], $playerinfo['ship_id']));
-        \Tki\Db::logDbErrors($pdo_db, $pl1query, __LINE__, __FILE__);
-        $num_res1 = $pl1query->numRows();
-        if ($num_res1 == 0)
+        if (empty($source))
         {
             \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, "You cannot create a traderoute from a sector you have not visited!");
         }
@@ -125,15 +128,17 @@ class TraderouteBuildCreate
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_invaliddport']);
             }
 
-            $query = $old_db->Execute("SELECT * FROM {$old_db->prefix}universe WHERE sector_id = ?;", array($port_id2));
-            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            if (!$query || $query->EOF)
+            $sql = "SELECT * FROM ::prefix::universe WHERE sector_id = :port_id2";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':port_id2', $port_id, \PDO::PARAM_INT);
+            $stmt->execute();
+            $destination = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (empty($source))
             {
                 $langvars['l_tdr_errnotvaliddestport'] = str_replace("[tdr_port_id]", (string) $port_id2, $langvars['l_tdr_errnotvaliddestport']);
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_errnotvaliddestport']);
             }
-
-            $destination = $query->fields;
 
             if ($destination['port_type'] == 'none')
             {
@@ -143,10 +148,13 @@ class TraderouteBuildCreate
         }
         else
         {
-            $query = $old_db->Execute("SELECT * FROM {$old_db->prefix}planets WHERE planet_id = ?;", array($planet_id2));
-            \Tki\Db::logDbErrors($pdo_db, $query, __LINE__, __FILE__);
-            $destination = $query->fields;
-            if (!$query || $query->EOF)
+            $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :planet_id2";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planet_id2', $planet_id2, \PDO::PARAM_INT);
+            $stmt->execute();
+            $destination = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (empty($source))
             {
                 \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_errnodestplanet']);
             }
