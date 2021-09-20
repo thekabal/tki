@@ -124,6 +124,7 @@ class Realspace
             $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
             $stmt->execute();
             $defenses_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $nsfighters = array();
             if ($defenses_present !== false)
             {
                 $sql = "SELECT * FROM ::prefix::ships WHERE ship_id = :ship_id";
@@ -131,11 +132,6 @@ class Realspace
                 $stmt->bindParam(':ship_id', $defenses_present['ship_id'], \PDO::PARAM_INT);
                 $stmt->execute();
                 $nsfighters = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-                if (!is_array($nsfighters))
-                {
-                    $nsfighters = array();
-                }
-
                 if ($nsfighters['team'] != $playerinfo['team'] || $playerinfo['team'] == 0)
                 {
                     $hostile = 1;

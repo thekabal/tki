@@ -73,24 +73,14 @@ class SetPaths
 
         if ($gamedomain !== null && strlen($gamedomain) > 0)
         {
-            $pos = strpos($gamedomain, 'https://');
-            if (is_int($pos))
-            {
-                $gamedomain = substr($gamedomain, $pos + 7);
-            }
+            $pos = (int) strpos($gamedomain, 'https://');
+            $gamedomain = substr($gamedomain, $pos);
 
-            $pos = strpos($gamedomain, 'www.');
-            if (is_int($pos))
-            {
-                $gamedomain = substr($gamedomain, $pos + 4);
-            }
+            $pos = (int) strpos($gamedomain, 'www.') + 4;
+            $gamedomain = substr($gamedomain, $pos);
 
-            $pos = strpos($gamedomain, ':');
-
-            if (is_int($pos))
-            {
-                $gamedomain = substr($gamedomain, 0, $pos);
-            }
+            $pos = (int) strpos($gamedomain, ':');
+            $gamedomain = substr($gamedomain, 0, $pos);
 
             if ($gamedomain[0] != '.')
             {
