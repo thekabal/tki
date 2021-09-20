@@ -203,7 +203,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                     Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo2[character_name]");
                     if (!$rowo2['planet_id'] == 0)
                     {              // IS ON PLANET
-                        Tki\KabalToPlanet::planet($pdo_db, $lang, $old_db, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
+                        Tki\KabalToPlanet::planet($pdo_db, $lang, $rowo2['planet_id'], $tkireg, $playerinfo, $langvars);
                     }
                     else
                     {
@@ -278,7 +278,7 @@ while (($res instanceof ADORecordSet) && ($res != false))
                         Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::KABAL_ATTACK, "$rowo3[character_name]");
                         if (!$rowo3['planet_id'] == 0)
                         {              // IS ON PLANET
-                            Tki\KabalToPlanet::planet($pdo_db, $lang, $old_db, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
+                            Tki\KabalToPlanet::planet($pdo_db, $lang, $rowo3['planet_id'], $tkireg, $playerinfo, $langvars);
                         }
                         else
                         {

@@ -30,9 +30,12 @@ class KabalHunt
     {
         $langvars = Translate::load($pdo_db, $lang, array('main'));
         $targetinfo = array();
-        $rescount = $old_db->Execute("SELECT COUNT(*) AS num_players FROM {$old_db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1");
-        \Tki\Db::logDbErrors($pdo_db, $rescount, __LINE__, __FILE__);
-        $rowcount = $rescount->fields;
+
+        $sql = "SELECT COUNT(*) AS num_players FROM ::prefix::ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $playerinfo['sector'], \PDO::PARAM_INT);
+        $stmt->execute();
+        $rowcount = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $topnum = min(10, $rowcount['num_players']);
 
         // If we have killed all the players in the game then stop here.
@@ -157,7 +160,7 @@ class KabalHunt
 
             if ($targetinfo['planet_id'] > 0) // Is player target on a planet?
             {
-                \Tki\KabalToPlanet::planet($pdo_db, $lang, $old_db, $targetinfo['planet_id'], $tkireg, $playerinfo); // Yes, so move to that planet
+                \Tki\KabalToPlanet::planet($pdo_db, $lang, $targetinfo['planet_id'], $tkireg, $playerinfo); // Yes, so move to that planet
             }
             else
             {

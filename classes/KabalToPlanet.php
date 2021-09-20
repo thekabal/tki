@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalToPlanet
 {
-    public static function planet(\PDO $pdo_db, string $lang, $old_db, int $planet_id, Registry $tkireg, array $playerinfo): void
+    public static function planet(\PDO $pdo_db, string $lang, int $planet_id, Registry $tkireg, array $playerinfo): void
     {
         // Get planetinfo from database
         $planets_gateway = new \Tki\Planets\PlanetsGateway($pdo_db);
@@ -345,16 +345,18 @@ class KabalToPlanet
             $planetinfo['torps'] = $targettorps;
 
             // Now we must attack all ships on the planet one by one
-            $resultps = $old_db->Execute("SELECT ship_id,ship_name FROM {$old_db->prefix}ships WHERE planet_id = ? AND on_planet = 'Y'", array($planetinfo['planet_id']));
-            \Tki\Db::logDbErrors($pdo_db, $resultps, __LINE__, __FILE__);
-            $shipsonplanet = $resultps->RecordCount();
-            if ($shipsonplanet > 0)
+            $sql = "SELECT ship_id, ship_name FROM ::prefix::ships WHERE planet_id = :planetinfo_planet_id AND on_planet = 'Y'";
+            $stmt = $pdo_db->prepare($sql);
+            $stmt->bindParam(':planetinfo_planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
+            $stmt->execute();
+            $shiplist = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (is_array($shiplist))
             {
-                while (!$resultps->EOF)
+                foreach ($shiplist as $onplanet)
                 {
-                    $onplanet = $resultps->fields;
-                    \Tki\KabalToShip::ship($pdo_db, $lang, $onplanet['ship_id'], $tkireg, $playerinfo);
-                    $resultps->MoveNext();
+                    \Tki\KabalToShip::ship($pdo_db, $lang, $onplanet[$i]['ship_id'], $tkireg, $playerinfo);
+                    $i++;
                 }
             }
 
