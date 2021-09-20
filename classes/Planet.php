@@ -26,7 +26,7 @@ namespace Tki;
 
 class Planet
 {
-    public static function getOwner(\PDO $pdo_db, int $planet_id, array $owner_info): bool
+    public static function getOwner(\PDO $pdo_db, int $planet_id, array $owner_info): ?array
     {
         $owner_info = null;
         if ($planet_id > 0)
@@ -42,11 +42,10 @@ class Planet
             if ($result !== false)
             {
                 $owner_info = (array) $stmt->fetch(\PDO::FETCH_ASSOC);
-                return true;
             }
         }
 
-        return false;
+        return $owner_info;
     }
 
     public static function bombing(
