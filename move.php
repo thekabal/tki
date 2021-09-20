@@ -98,7 +98,7 @@ if ($flag == 1)
     }
 
     // Enter code for checking dangers in new sector
-    Tki\CheckDefenses::mines($pdo_db, $old_db, $lang, $sector, $title, $playerinfo, $tkireg);
+    Tki\CheckDefenses::mines($pdo_db, $lang, $sector, $title, $playerinfo, $tkireg);
     header("Location: main.php");
 }
 else

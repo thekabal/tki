@@ -205,7 +205,7 @@ else
                 $langvars['l_rs_ready'] = str_replace("[triptime]", number_format($triptime, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                 $langvars['l_rs_ready'] = str_replace("[energy]", number_format($energyscooped, 0, $langvars['local_number_dec_point'], $langvars['local_number_thousands_sep']), $langvars['l_rs_ready']);
                 echo $langvars['l_rs_ready'] . "<br><br>";
-                Tki\CheckDefenses::mines($pdo_db, $old_db, $lang, $sector, $title, $playerinfo, $tkireg);
+                Tki\CheckDefenses::mines($pdo_db, $lang, $sector, $title, $playerinfo, $tkireg);
             }
         }
     }

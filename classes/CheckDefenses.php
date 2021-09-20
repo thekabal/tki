@@ -478,7 +478,7 @@ class CheckDefenses
         }
     }
 
-    public static function mines(\PDO $pdo_db, $old_db, string $lang, int $sector, string $title, array $playerinfo, \Tki\Registry $tkireg): void
+    public static function mines(\PDO $pdo_db, string $lang, int $sector, string $title, array $playerinfo, \Tki\Registry $tkireg): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('combat',
