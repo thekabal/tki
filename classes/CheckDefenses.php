@@ -244,9 +244,7 @@ class CheckDefenses
                                          'regional', 'universal'));
 
         // Put the defense information into the array defenses
-        $num_defenses = 0;
         $total_sec_fighters = 0;
-        $owner = true;
 
         // Detect if this variable exists, and filter it.
         // Returns false if anything wasn't right.
@@ -257,7 +255,6 @@ class CheckDefenses
             $response = false;
         }
 
-        $defenses = array();
         $destination = null;
         if (array_key_exists('destination', $_REQUEST) === true)
         {
@@ -273,13 +270,8 @@ class CheckDefenses
         // Get sector defense info from database
         $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db);
         $defenses_present = $defenses_gateway->selectFighterDefenses($sector);
-
-        // Correct the targetship bug to reflect the player info
-        $targetship = $playerinfo;
-
         $defenses = array();
         $num_defenses = 0;
-        $total_sector_mines = 0;
         $owner = true;
         $i = 0;
 
@@ -502,8 +494,6 @@ class CheckDefenses
         $num_defenses = 0;
         $total_sector_mines = 0;
         $owner = true;
-        $i = 0;
-
         if (!empty($defenses_present))
         {
             foreach ($defenses_present as $current_defense)
