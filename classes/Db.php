@@ -69,7 +69,6 @@ class Db
             $db_host .= ":$db_port";
         }
 
-        $old_db = new \stdClass();
         // Attempt to connect to the database
         try
         {
@@ -107,6 +106,7 @@ class Db
             throw new \Exception($err_msg);
         }
 
+        $old_db->prefix = null;
         $old_db->prefix = $db_prefix;
         // End of database work
         return $old_db;

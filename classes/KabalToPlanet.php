@@ -352,7 +352,7 @@ class KabalToPlanet
             $shiplist = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             $i = 0;
 
-            if (is_array($shiplist))
+            if ($shiplist !== false)
             {
                 foreach ($shiplist as $onplanet)
                 {

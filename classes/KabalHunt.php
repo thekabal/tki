@@ -29,7 +29,6 @@ class KabalHunt
     public static function hunt(\PDO $pdo_db, string $lang, array $playerinfo, int $kabalisdead, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('main'));
-        $targetinfo = array();
 
         $sql = "SELECT COUNT(*) AS num_players FROM ::prefix::ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1";
         $stmt = $pdo_db->prepare($sql);
