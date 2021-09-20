@@ -350,6 +350,7 @@ class KabalToPlanet
             $stmt->bindParam(':planetinfo_planet_id', $planetinfo['planet_id'], \PDO::PARAM_INT);
             $stmt->execute();
             $shiplist = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $i = 0;
 
             if (is_array($shiplist))
             {
@@ -368,6 +369,10 @@ class KabalToPlanet
             if (is_array($ships_present))
             {
                 $shipsonplanet = count($ships_present);
+            }
+            else
+            {
+                $shipsonplanet = 0;
             }
 
             if ($shipsonplanet == 0)
