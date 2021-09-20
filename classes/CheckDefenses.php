@@ -35,6 +35,7 @@ class CheckDefenses
                                          'sector_fighters', 'universal'));
         echo $langvars['l_sf_attacking'] . "<br>";
         $targetfighters = $total_sec_fighters;
+
         $playerbeams = \Tki\CalcLevels::abstractLevels($playerinfo['beams'], $tkireg);
         $playerenergy = $playerinfo['ship_energy'];
 
@@ -49,13 +50,6 @@ class CheckDefenses
         }
 
         $playerenergy = $playerenergy - $playerbeams;
-        $playershields = \Tki\CalcLevels::abstractLevels($playerinfo['shields'], $tkireg);
-
-        if ($playershields > $playerenergy)
-        {
-            $playershields = $playerenergy;
-        }
-
         $playertorpnum = round(pow($tkireg->level_factor, $playerinfo['torp_launchers'])) * 2;
 
         if ($playertorpnum > $playerinfo['torps'])
@@ -153,7 +147,7 @@ class CheckDefenses
             }
         }
 
-        $fighterslost = $total_sec_fighters - $targetfighters;
+        $fighterslost = (int) $total_sec_fighters - $targetfighters;
         \Tki\Fighters::destroy($pdo_db, $sector, $fighterslost);
         $langvars['l_sf_sendlog'] = str_replace("[player]", $playerinfo['character_name'], $langvars['l_sf_sendlog']);
         $langvars['l_sf_sendlog'] = str_replace("[lost]", (string) $fighterslost, $langvars['l_sf_sendlog']);
