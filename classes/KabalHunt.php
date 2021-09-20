@@ -52,7 +52,6 @@ class KabalHunt
         $top_players = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Choose a target from the top player list
-        $counter = 1;
         $targetnum = random_int(1, $topnum);
         $targetinfo = $top_players[$targetnum];
 
@@ -95,7 +94,7 @@ class KabalHunt
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
             if (!$result)
             {
-                $error = '';
+                $error = null;
                 // $error = $old_db->ErrorMsg();
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");
 
