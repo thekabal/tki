@@ -26,7 +26,7 @@ namespace Tki;
 
 class KabalHunt
 {
-    public static function hunt(\PDO $pdo_db, string $lang, $old_db, array $playerinfo, int $kabalisdead, Registry $tkireg): void
+    public static function hunt(\PDO $pdo_db, string $lang, array $playerinfo, int $kabalisdead, Registry $tkireg): void
     {
         $langvars = Translate::load($pdo_db, $lang, array('main'));
         $targetinfo = array();
@@ -44,22 +44,17 @@ class KabalHunt
             return;
         }
 
-        $res = $old_db->SelectLimit("SELECT * FROM {$old_db->prefix}ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1 ORDER BY score DESC", $topnum);
-        \Tki\Db::logDbErrors($pdo_db, $res, __LINE__, __FILE__);
+        /// Select top players
+        $sql = "SELECT * FROM ::prefix::ships WHERE ship_destroyed='N' AND email NOT LIKE '%@kabal' AND ship_id > 1 ORDER BY score DESC";
+        $stmt = $pdo_db->prepare($sql);
+        $stmt->execute();
+        Db::logDbErrors($pdo_db, $stmt, __LINE__, __FILE__);
+        $top_players = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         // Choose a target from the top player list
         $counter = 1;
         $targetnum = random_int(1, $topnum);
-        while (!$res->EOF)
-        {
-            if ($counter == $targetnum)
-            {
-                $targetinfo = $res->fields;
-            }
-
-            $counter++;
-            $res->MoveNext();
-        }
+        $targetinfo = $top_players[$targetnum];
 
         // Make sure we have a target
         if (!$targetinfo)
@@ -100,7 +95,7 @@ class KabalHunt
             \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Kabal used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
             if (!$result)
             {
-                $error = $old_db->ErrorMsg();
+                // $error = $old_db->ErrorMsg();
                 \Tki\PlayerLog::writeLog($pdo_db, $playerinfo['ship_id'], LogEnums::RAW, "Move failed with error: $error ");
 
                 return;
