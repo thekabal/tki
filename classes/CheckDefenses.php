@@ -484,13 +484,10 @@ class CheckDefenses
         $langvars = \Tki\Translate::load($pdo_db, $lang, array('combat',
                                          'common', 'check_defenses',
                                          'insignias', 'footer', 'news'));
-        // Get sectorinfo from database
-        //$sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
-        //$sectorinfo = $sectors_gateway->selectSectorInfo($sector);
 
-        // Put the defense information into the array defenseinfo
-        $result3 = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE sector_id = ? and defense_type ='M'", array($sector));
-        \Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
+        // Get sector defense info from database
+        $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db);
+        $defenses_present = $defenses_gateway->selectMineDefenses($sector);
 
         // Correct the targetship bug to reflect the player info
         $targetship = $playerinfo;
@@ -499,18 +496,21 @@ class CheckDefenses
         $num_defenses = 0;
         $total_sector_mines = 0;
         $owner = true;
-        while (!$result3->EOF)
-        {
-            $row = $result3->fields;
-            $defenses[$num_defenses] = $row;
-            $total_sector_mines += $defenses[$num_defenses]['quantity'];
-            if ($defenses[$num_defenses]['ship_id'] != $playerinfo['ship_id'])
-            {
-                $owner = false;
-            }
+        $i = 0;
 
-            $num_defenses++;
-            $result3->MoveNext();
+        if (!empty($defenses_present))
+        {
+            foreach ($defenses_present as $current_defense)
+            {
+                $defenses[$num_defenses] = $current_defense;
+                $total_sector_mines += $current_defense['quantity'];
+                if ($defenses[$num_defenses]['ship_id'] != $playerinfo['ship_id'])
+                {
+                    $owner = false;
+                }
+
+                $num_defenses++;
+            }
         }
 
         // Compute the ship average. If it's too low then the ship will not hit mines.
