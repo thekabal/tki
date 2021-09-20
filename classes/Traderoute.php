@@ -302,7 +302,7 @@ class Traderoute
                     $stmt->execute();
                     $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                    if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
+                    if (($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0) || ($playerinfo['team'] != $ownerinfo['team']))
                     {
                         \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_tradesrcportoutsider']);
                     }
@@ -343,7 +343,7 @@ class Traderoute
                     $stmt->execute();
                     $ownerinfo = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                    if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
+                    if (($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0) || ($playerinfo['team'] != $ownerinfo['team']))
                     {
                         \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_tradedestportoutsider']);
                     }
@@ -702,7 +702,7 @@ class Traderoute
                     $stmt->bindParam(':goods_buy', $goods_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':organics_buy', $organics_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':sector_id', $source['sector_id'], \PDO::PARAM_INT);
-                    $result = $stmt->execute();
+                    $stmt->execute();
                     \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
 
@@ -740,7 +740,7 @@ class Traderoute
                     $stmt->bindParam(':goods_buy', $goods_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':organics_buy', $organics_buy, \PDO::PARAM_INT);
                     $stmt->bindParam(':sector_id', $source['sector_id'], \PDO::PARAM_INT);
-                    $result = $stmt->execute();
+                    $stmt->execute();
                     \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
 
@@ -767,7 +767,7 @@ class Traderoute
                     $stmt->bindParam(':ship_organics', $playerinfo['ship_organics'], \PDO::PARAM_INT);
                     $stmt->bindParam(':ship_energy', $dist['ship_energy'], \PDO::PARAM_INT);
                     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], \PDO::PARAM_INT);
-                    $result = $stmt->execute();
+                    $stmt->execute();
                     \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
                 }
             }
@@ -856,7 +856,7 @@ class Traderoute
                 $stmt->bindParam(':goods_buy', $goods_buy, \PDO::PARAM_INT);
                 $stmt->bindParam(':organics_buy', $organics_buy, \PDO::PARAM_INT);
                 $stmt->bindParam(':planet_id', $source['planet_id'], \PDO::PARAM_INT);
-                $result = $stmt->execute();
+                $stmt->execute();
                 \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);
             }
             // Destination is a planet, so load colonists and weapons

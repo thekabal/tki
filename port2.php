@@ -68,7 +68,7 @@ if (!empty($zoneinfo))
             $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
             $ownerinfo = $players_gateway->selectPlayerInfoById($zoneinfo['owner']);
 
-            if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team'])
+            if (($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0) || ($playerinfo['team'] != $ownerinfo['team']))
             {
                 $title = $langvars['l_no_trade'];
                 echo "<h1>" . $title . "</h1>\n";

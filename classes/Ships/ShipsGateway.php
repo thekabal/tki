@@ -51,7 +51,7 @@ class ShipsGateway // Gateway for SQL calls related to Ships
         $stmt = $this->pdo_db->prepare($sql);
         $stmt->bindParam(':ship_id', $ship_id, \PDO::PARAM_INT);
         $stmt->bindParam(':rating', $rating, \PDO::PARAM_INT);
-        $result = $stmt->execute();
+        $stmt->execute();
         \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__);
     }
 }

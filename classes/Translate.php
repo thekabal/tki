@@ -64,7 +64,7 @@ class Translate
         {
             $ini_file = './languages/' . $language . '.ini';
             $ini_keys = parse_ini_file($ini_file, true, INI_SCANNER_TYPED);
-            if (is_array($ini_keys))
+            if ($ini_keys !== false)
             {
                 foreach ($ini_keys as $config_line)
                 {
