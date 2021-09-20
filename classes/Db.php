@@ -69,7 +69,7 @@ class Db
             $db_host .= ":$db_port";
         }
 
-        $old_db = null;
+        $old_db = new \stdClass();
         // Attempt to connect to the database
         try
         {
