@@ -98,14 +98,14 @@ class PlanetReportCE
     public static function takeCredits(\PDO $pdo_db, string $lang, int $planet_id): string
     {
         $langvars = Translate::load($pdo_db, $lang, array('common', 'planet_report', 'regional'));
-        $playerinfo = array();
-        $planetinfo = array();
 
         // Get playerinfo from database
+        $playerinfo = array();
         $players_gateway = new \Tki\Players\PlayersGateway($pdo_db);
         $playerinfo = $players_gateway->selectPlayerInfo($_SESSION['username']);
 
         // Get planetinfo from database
+        $planetinfo = array();
         $sql = "SELECT * FROM ::prefix::planets WHERE planet_id = :planet_id LIMIT 1";
         $stmt = $pdo_db->prepare($sql);
         $sql_test = \Tki\Db::logDbErrors($pdo_db, $sql, __LINE__, __FILE__);

@@ -218,7 +218,7 @@ class Registry
         // Which ini file is hard-coded for now
         // FUTURE: When we get multiple game support, we may need to change it
         $ini_keys = parse_ini_file('config/classic_config.ini', true, INI_SCANNER_TYPED);
-        if (is_array($ini_keys))
+        if ($ini_keys !== false)
         {
             foreach ($ini_keys as $config_line)
             {
