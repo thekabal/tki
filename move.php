@@ -80,7 +80,7 @@ while (!$result3->EOF)
 if ($flag == 1)
 {
     $calledfrom = "move.php";
-    Tki\CheckDefenses::fighters($pdo_db, $old_db, $lang, $sector, $playerinfo, $tkireg, $title, $calledfrom);
+    Tki\CheckDefenses::fighters($pdo_db, $lang, $sector, $playerinfo, $tkireg, $title, $calledfrom);
 
     $cur_time_stamp = date("Y-m-d H:i:s");
     Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $sector);

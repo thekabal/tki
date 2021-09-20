@@ -235,21 +235,13 @@ class CheckDefenses
         }
     }
 
-    public static function fighters(\PDO $pdo_db, $old_db, string $lang, int $sector, array $playerinfo, \Tki\Registry $tkireg, string $title, string $calledfrom): void
+    public static function fighters(\PDO $pdo_db, string $lang, int $sector, array $playerinfo, \Tki\Registry $tkireg, string $title, string $calledfrom): void
     {
         // Database driven language entries
         $langvars = \Tki\Translate::load($pdo_db, $lang, array(
                                          'check_defenses', 'combat', 'common',
                                          'footer', 'insignias', 'news',
                                          'regional', 'universal'));
-        /*
-        // Get sectorinfo from database
-        $sectors_gateway = new \Tki\Sectors\SectorsGateway($pdo_db);
-        $sectorinfo = $sectors_gateway->selectSectorInfo($sector);
-        */
-
-        $result3 = $old_db->Execute("SELECT * FROM {$old_db->prefix}sector_defense WHERE sector_id = ? and defense_type ='F' ORDER BY quantity DESC;", array($sector));
-        \Tki\Db::logDbErrors($pdo_db, $result3, __LINE__, __FILE__);
 
         // Put the defense information into the array defenses
         $num_defenses = 0;
@@ -278,18 +270,32 @@ class CheckDefenses
             $engage = $_REQUEST['engage'];
         }
 
-        while (!$result3->EOF)
-        {
-            $row = $result3->fields;
-            $defenses[$num_defenses] = $row;
-            $total_sec_fighters += $defenses[$num_defenses]['quantity'];
-            if ($defenses[$num_defenses]['ship_id'] != $playerinfo['ship_id'])
-            {
-                $owner = false;
-            }
+        // Get sector defense info from database
+        $defenses_gateway = new \Tki\Defenses\DefensesGateway($pdo_db);
+        $defenses_present = $defenses_gateway->selectFighterDefenses($sector);
 
-            $num_defenses++;
-            $result3->MoveNext();
+        // Correct the targetship bug to reflect the player info
+        $targetship = $playerinfo;
+
+        $defenses = array();
+        $num_defenses = 0;
+        $total_sector_mines = 0;
+        $owner = true;
+        $i = 0;
+
+        if (!empty($defenses_present))
+        {
+            foreach ($defenses_present as $current_defense)
+            {
+                $defenses[$num_defenses] = $current_defense;
+                $total_sec_fighters += $current_defense['quantity'];
+                if ($defenses[$num_defenses]['ship_id'] != $playerinfo['ship_id'])
+                {
+                    $owner = false;
+                }
+
+                $num_defenses++;
+            }
         }
 
         if ($num_defenses > 0 && $total_sec_fighters > 0 && !$owner)

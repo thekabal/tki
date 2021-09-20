@@ -186,7 +186,7 @@ else
             {
                 $sector = $destination;
                 $calledfrom = "rsmove.php";
-                Tki\CheckDefenses::fighters($pdo_db, $old_db, $lang, $sector, $playerinfo, $tkireg, $title, $calledfrom);
+                Tki\CheckDefenses::fighters($pdo_db, $lang, $sector, $playerinfo, $tkireg, $title, $calledfrom);
 
                 // Output:
                 // You are now in sector X. You used Y turns, and gained Z energy units.

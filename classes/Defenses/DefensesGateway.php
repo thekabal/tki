@@ -33,6 +33,26 @@ class DefensesGateway // Gateway for SQL calls related to Defenses
         $this->pdo_db = $pdo_db;
     }
 
+    public function selectFighterDefenses(int $sector_id): ?array
+    {
+        $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type ='F' ORDER BY quantity DESC";
+        $stmt = $this->pdo_db->prepare($sql);
+        $stmt->bindParam(':sector_id', $sector_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        \Tki\Db::logDbErrors($this->pdo_db, $sql, __LINE__, __FILE__); // Log any errors, if there are any
+        // A little magic here. If it couldn't select a defense in the sector, the following call will return false - which is what we want for "no defenses found".
+        $defense_present = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if ($defense_present !== false)
+        {
+            return $defense_present; // FUTURE: Eventually we want this to return a defense object instead, for now, defensesinfo array or false for no defense found.
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public function selectMineDefenses(int $sector_id): ?array
     {
         $sql = "SELECT * FROM ::prefix::sector_defense WHERE sector_id = :sector_id AND defense_type ='M'";
