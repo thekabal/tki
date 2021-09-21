@@ -1,7 +1,0 @@
-component_depth: 5
-languages:
-- php
-- javascript
-exclude:
-- /vendor/.*
-- /templates/.*
