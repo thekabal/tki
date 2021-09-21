@@ -1,0 +1,9 @@
+component_depth: 1
+languages:
+- php
+- javascript
+- css
+exclude:
+- vendor
+- templates
+- languages
