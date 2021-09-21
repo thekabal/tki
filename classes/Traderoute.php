@@ -285,7 +285,7 @@ class Traderoute
 
             if (empty($zoneinfo))
             {
-                die("Empty zone info");
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_empty_zone_info']);
             }
 
             if ($zoneinfo['allow_trade'] == 'N')
@@ -326,7 +326,7 @@ class Traderoute
 
             if (empty($zoneinfo))
             {
-                die("Empty zone info");
+                \Tki\TraderouteDie::die($pdo_db, $lang, $tkireg, $tkitimer, $template, $langvars['l_tdr_empty_zone_info']);
             }
 
             if ($zoneinfo['allow_trade'] == 'N')
