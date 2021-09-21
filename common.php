@@ -23,8 +23,8 @@
  */
 
 require_once './vendor/autoload.php';               // Load the auto-loader
-mb_http_output('UTF-8');                            // Our output should be served in UTF-8 no matter what.
 mb_internal_encoding('UTF-8');                      // We are explicitly UTF-8, with Unicode language variables.
+mb_http_output('UTF-8');                            // Our output should be served in UTF-8 no matter what.
 ini_set('include_path', '.');                       // Set include path to avoid issues on a few platforms
 ini_set('session.use_strict_mode', '1');            // Ensure that PHP will not accept uninitialized session ID
 ini_set('session.use_only_cookies', '1');           // Ensure that sessions will only be stored in a cookie
