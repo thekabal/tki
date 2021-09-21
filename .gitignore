@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 /vendor/**/.git
+>>>>>>> develop
 vendor/*
 !vendor/bin
 vendor/bin/*
