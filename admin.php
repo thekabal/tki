@@ -66,7 +66,7 @@ if ($swordfish == \Tki\SecureConfig::ADMIN_PASS)
 
             if ($langvars[$option_title] !== null)
             {
-                // The language translated title for option
+                // The language translated title for options
                 $filename[$file_count]['option_title'] = $langvars[$option_title];
             }
             else
