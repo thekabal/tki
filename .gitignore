@@ -1,3 +1,4 @@
+/vendor/**/.git
 vendor/*
 !vendor/bin
 vendor/bin/*
