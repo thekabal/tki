@@ -29,7 +29,7 @@ The Kabal Invasion is a web-based 4X space game. It is coded in PHP/HTML/JS/SQL.
     curious developers are encouraged to download, install, and play as the admin user to find issues
     and report them. When we get to a point where the game is stable for players,
     we will make an announcement, change this note, and release!
-    
+
 ## License: [Affero GPL v 3](https://www.gnu.org/licenses/agpl-3.0.en.html)
 
 ## Credits:
