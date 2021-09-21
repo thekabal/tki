@@ -83,8 +83,6 @@ if ($tkireg->game_closed)
 }
 
 $title = $langvars['l_login_title2'];
-
-// Check Banned
 $banned = 0;
 
 if (!empty($playerinfo) && $playerfound !== false)
