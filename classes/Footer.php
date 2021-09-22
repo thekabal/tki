@@ -63,7 +63,7 @@ class Footer
         // Last run is the (int) count of the numbers of players currently
         // logged in via SQL select or false if DB is not active
         $last_run = $scheduler_gateway->selectSchedulerLastRun();
-        if (!is_null($last_run))
+        if ($last_run !== null)
         {
             $seconds_left = ($tkireg->sched_ticks * 60) - (time() - $last_run);
             $show_update_ticker = true;
