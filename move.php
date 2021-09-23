@@ -84,9 +84,12 @@ if ($flag == 1)
 
     $cur_time_stamp = date("Y-m-d H:i:s");
     Tki\LogMove::writeLog($pdo_db, $playerinfo['ship_id'], $sector);
-    $move_result = $old_db->Execute("UPDATE {$old_db->prefix}ships SET last_login = ?," .
-                                "turns = turns - 1, turns_used = turns_used + 1," .
-                                "sector = ? WHERE ship_id = ?;", array($cur_time_stamp, $sector, $playerinfo['ship_id']));
+    $move_result = $old_db->Execute("UPDATE {$old_db->prefix}ships " .
+                                "SET last_login = ?, " .
+                                "turns = turns - 1, " .
+                                "turns_used = turns_used + 1, " .
+                                "sector = ? WHERE ship_id = ?;",
+                                array($cur_time_stamp, $sector, $playerinfo['ship_id']));
     Tki\Db::logDbErrors($pdo_db, $move_result, __LINE__, __FILE__);
     if (!$move_result)
     {
