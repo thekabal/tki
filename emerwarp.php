@@ -42,7 +42,8 @@ if ($playerinfo['dev_emerwarp'] > 0)
     // Start at sector 1, as we no longer use sector 0.
     $dest_sector = random_int(1, (int) $tkireg->max_sectors - 1);
 
-    $sql = "UPDATE ::prefix::ships SET sector = :sector, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = :ship_id";
+    $sql = "UPDATE ::prefix::ships SET sector = :sector, " .
+           "dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = :ship_id";
     $stmt = $pdo_db->prepare($sql);
     $stmt->bindParam(':sector', $dest_sector, PDO::PARAM_INT);
     $stmt->bindParam(':ship_id', $playerinfo['ship_id'], PDO::PARAM_INT);
@@ -54,15 +55,17 @@ if ($playerinfo['dev_emerwarp'] > 0)
 $variables['body_class'] = 'tki'; // No special css used for this page yet
 $variables['playerinfo_dev_emerwarp'] = $playerinfo['dev_emerwarp'];
 $variables['title'] = $langvars['l_ewd_title'];
+$variables['linkback'] = array(
+    "fulltext" => $langvars['l_universal_main_menu'],
+    "link" => "main.php"
+);
 
-$variables['linkback'] = array("fulltext" => $langvars['l_universal_main_menu'], "link" => "main.php");
 $header = new Tki\Header();
 $header->display($pdo_db, $lang, $template, $variables['title'], $variables['body_class']);
 
 $template->addVariables('langvars', $langvars);
 $template->addVariables('variables', $variables);
 $template->display('emerwarp.tpl');
-
 
 $footer = new Tki\Footer();
 $footer->display($pdo_db, $lang, $tkireg, $tkitimer, $template);
