@@ -45,11 +45,11 @@ The Kabal Invasion forked from [Blacknova Traders](https://sourceforge.net/proje
 - `pdo` PHP extension.
 
 ### Web:
-- Chrome v50+ or Firefox v40+ (recommended).
-- Safari `v9.1.2+`.
+- Chrome v92+ or Firefox v92+ (recommended).
+- Safari `v15+`.
 
 ### Notes:
-- TKI will likely run on `lighttpd` and `nginix`, however htaccess will not work out of the box - potentially causing security risks. It has not been tested on either. 
+- TKI will likely run on `lighttpd` and `nginx`, however htaccess will not work out of the box - potentially causing security risks. It has not been tested on either. 
 - **IIS and Windows is NOT supported, please do not ask!** (But we welcome code to make it work on either)
 - Development "Snapshots" are intended only for developers that are actively involved in the development process, and require additional effort to work (composer, etc).
 - We make use of [Smarty templates](http://www.smarty.net/), [HTML Purifier](http://htmlpurifier.org/), [Swiftmailer](http://swiftmailer.org/), and [Adodb](http://adodb.org/dokuwiki/doku.php) (although we are working to replace adodb with PDO).
