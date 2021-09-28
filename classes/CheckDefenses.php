@@ -147,7 +147,7 @@ class CheckDefenses
             }
         }
 
-        $fighterslost = (int) $total_sec_fighters - $targetfighters;
+        $fighterslost = $total_sec_fighters - $targetfighters;
         \Tki\Fighters::destroy($pdo_db, $sector, $fighterslost);
         $langvars['l_sf_sendlog'] = str_replace("[player]", $playerinfo['character_name'], $langvars['l_sf_sendlog']);
         $langvars['l_sf_sendlog'] = str_replace("[lost]", (string) $fighterslost, $langvars['l_sf_sendlog']);
